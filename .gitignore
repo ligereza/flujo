@@ -28,3 +28,7 @@ _quarantine_frames/
 
 # Ejecutables locales
 *.exe
+
+# Airdrop temporal
+_airdrop/
+_airdrop_backups/
