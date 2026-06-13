@@ -1,0 +1,19 @@
+{
+  "tool": "flyer_eventos",
+  "name": "evento prueba",
+  "date": "2026-06-12",
+  "status": "created",
+  "input": {
+    "main_image": "",
+    "event_name": "evento prueba",
+    "event_date": "",
+    "format": "",
+    "notes": ""
+  },
+  "steps": {
+    "photoshop": "pending",
+    "blender": "pending",
+    "export": "pending"
+  },
+  "outputs": []
+}
