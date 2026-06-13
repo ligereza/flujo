@@ -68,6 +68,13 @@ Ver estado general:
 bash scripts/orden_status.sh
 ```
 
+Aplicar paquete de mejoras airdrop:
+
+```bash
+bash scripts/apply_airdrop.sh --dry-run
+bash scripts/apply_airdrop.sh --apply
+```
+
 Guardar avance:
 
 ```bash
@@ -86,6 +93,7 @@ bash scripts/checkpoint.sh "mensaje"
 - Extrae links de Instagram.
 - Crea un proyecto por cada link.
 - Marca esos proyectos como `from_email_pending_download`.
+- Permite aplicar mejoras completas mediante `_airdrop/`.
 
 ## Qué NO hace todavía
 
@@ -97,9 +105,32 @@ bash scripts/checkpoint.sh "mensaje"
 - No abre Blender.
 - No borra archivos.
 
+## Sistema airdrop
+
+Para acelerar cambios:
+
+1. Crear archivos dentro de `_airdrop/` respetando rutas.
+2. Probar:
+
+```bash
+bash scripts/apply_airdrop.sh --dry-run
+```
+
+3. Aplicar:
+
+```bash
+bash scripts/apply_airdrop.sh --apply
+```
+
+4. Guardar:
+
+```bash
+bash scripts/checkpoint.sh "aplicar mejoras airdrop"
+```
+
 ## Próximo paso recomendado
 
-Documentar y mejorar `flyer_from_email.py`.
+Mejorar `flyer_from_email.py`.
 
 Siguiente mejora lógica:
 
