@@ -1,0 +1,36 @@
+name: Pedido de impresión / Illustrator
+description: Crear etiquetas, flyers, stickers u otros archivos vectoriales
+title: "[Impresión] "
+labels: ["piezas-vectoriales", "impresion"]
+body:
+  - type: textarea
+    id: correo
+    attributes:
+      label: Correo o pedido original
+      description: Pega aquí el mensaje completo del jefe/cliente.
+      placeholder: "Pegar correo..."
+    validations:
+      required: true
+  - type: input
+    id: medida
+    attributes:
+      label: Medida final
+      placeholder: "Ej: 14 x 10 cm"
+  - type: dropdown
+    id: orientacion
+    attributes:
+      label: Orientación
+      options:
+        - horizontal
+        - vertical
+        - cuadrada
+        - no especificada
+  - type: input
+    id: entrega
+    attributes:
+      label: Entrega requerida
+      placeholder: "Ej: SVG editable + SVG vectorizado + ZIP"
+  - type: textarea
+    id: notas
+    attributes:
+      label: Notas adicionales

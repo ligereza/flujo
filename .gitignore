@@ -32,3 +32,10 @@ _quarantine_frames/
 # Airdrop temporal
 _airdrop/
 _airdrop_backups/
+
+# Outputs generados por piezas vectoriales
+projects/piezas_vectoriales/*/salida_generada/
+projects/piezas_vectoriales/*/02_editables_svg/
+projects/piezas_vectoriales/*/03_final_vectorizado_svg/
+projects/piezas_vectoriales/*/04_preview/
+projects/piezas_vectoriales/*/05_exports/

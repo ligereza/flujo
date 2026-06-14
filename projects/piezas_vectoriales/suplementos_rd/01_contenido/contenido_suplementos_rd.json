@@ -1,0 +1,169 @@
+{
+  "project": {
+    "name": "Suplementos RD",
+    "brand": "Reduciendo Daño",
+    "website": "@ REDUCIENDODANO.CL",
+    "footer": "VISITA NUESTRA WEB Y SÍGUENOS EN NUESTRAS REDES SOCIALES",
+    "canvas_px": { "width": 2800, "height": 2000 },
+    "real_size_cm": { "width": 14, "height": 10 },
+    "notes": "Texto maestro aprobado para generar flyers horizontales 2800x2000 px. Post Fiesta solo está incluido en el resumen general; falta ficha individual."
+  },
+  "palette": {
+    "cream": "#F6EFE3",
+    "paper": "#FFF8ED",
+    "ink": "#161513",
+    "muted": "#675F55",
+    "green": "#173F2F",
+    "green2": "#2B6B4E",
+    "orange": "#EF7B2D",
+    "yellow": "#F5C54D",
+    "blue": "#315EE8",
+    "purple": "#7650D8",
+    "red": "#D95436",
+    "brown": "#9A6B3D",
+    "line": "#D9CEC0",
+    "white": "#FFFFFF"
+  },
+  "flyers": [
+    {
+      "id": "01_linea_suplementos_rd",
+      "type": "general",
+      "title": "Línea de Suplementos RD",
+      "tag": "Información general",
+      "accent": "green",
+      "description": [
+        "Suplementos alimenticios desarrollados por Reduciendo Daño para acompañar al organismo desde una perspectiva de reducción de daños.",
+        "Cada producto tiene un perfil diferenciado de nutrientes, pensado para contextos concretos de la vida cotidiana."
+      ],
+      "section_title": "Productos",
+      "items": [
+        "Pre Fiesta: Apoya el metabolismo energético y la respuesta al estrés antes de situaciones de alta demanda. Vitaminas, Taurina, L-teanina y Rhodiola.",
+        "Post Fiesta: Complementa la recuperación nutricional tras contextos de alta exigencia fisiológica. Electrolitos, vitaminas, NAC, cardo mariano y CoQ10.",
+        "Impulso: Contribuye al estado de alerta y la concentración en actividades que requieren foco sostenido, sin el nerviosismo que genera la cafeína por sí sola. Cafeína, L-teanina y vitamina B12.",
+        "Hongos Adaptógenos: Acompaña procesos de regulación y bienestar en rutinas exigentes. Cordyceps, melena de león, reishi, L-teanina y vitamina B12.",
+        "Citrato y Bisglicinato de Magnesio: Complementa la ingesta diaria de magnesio, mineral esencial para el sistema nervioso, la función muscular y el metabolismo energético.",
+        "Creatina: La molécula más estudiada en suplementación nutricional, involucrada en la producción de energía celular. Disponible en polvo (1 kg) y en gomitas.",
+        "Proteína: Suplemento en polvo de proteína de suero de leche para apoyar la recuperación muscular y el aporte proteico diario."
+      ]
+    },
+    {
+      "id": "02_impulso",
+      "type": "product",
+      "title": "IMPULSO",
+      "tag": "Foco sostenido",
+      "accent": "blue",
+      "description_title": "Descripción",
+      "description": [
+        "Suplemento alimenticio en gomitas con Cafeína y L-teanina, la combinación más respaldada para lograr foco sostenido sin el nerviosismo que genera la cafeína por sí sola.",
+        "Producto diseñado específicamente para momentos de alta demanda cognitiva, que busca ser una alternativa comprobada para afrontar el estudio, trabajo o jornadas prolongadas."
+      ],
+      "section_title": "Nutrientes",
+      "items": [
+        "Cafeína anhidra: contribuye al estado de alerta y a la concentración.",
+        "L-teanina: aminoácido asociado a estados de relajación sin sedación.",
+        "Vitamina B12: contribuye al funcionamiento normal del sistema nervioso y al metabolismo energético."
+      ]
+    },
+    {
+      "id": "03_hongos_adaptogenos",
+      "type": "product",
+      "title": "Hongos Adaptógenos",
+      "tag": "Adaptógenos",
+      "accent": "purple",
+      "description_title": "Descripción",
+      "description": [
+        "Suplemento alimenticio en gomitas con tres hongos funcionales — Cordyceps, Melena de León y Reishi — más L-teanina y vitamina B12.",
+        "Fórmula diseñada para acompañar procesos de regulación y adaptación al estrés, desde un enfoque natural y funcional, para quienes buscan apoyo en rutinas exigentes."
+      ],
+      "section_title": "Nutrientes",
+      "items": [
+        "Cordyceps: hongo tradicionalmente asociado a energía y vitalidad.",
+        "Melena de León (Hericium erinaceus): relacionado con funciones cognitivas y salud neuronal.",
+        "Reishi: utilizado tradicionalmente en contextos de adaptación al estrés.",
+        "L-teanina: aminoácido asociado a estados de relajación sin sedación.",
+        "Vitamina B12: contribuye al funcionamiento normal del sistema nervioso y al metabolismo energético."
+      ]
+    },
+    {
+      "id": "04_pre_fiesta",
+      "type": "product",
+      "title": "PRE FIESTA",
+      "tag": "Antes de la exigencia",
+      "accent": "orange",
+      "description_title": "Descripción",
+      "description": [
+        "Pre Fiesta es un suplemento en gomitas formulado para preparar tu cuerpo antes de que llegue la exigencia física, mental y/o social.",
+        "Con vitaminas C y complejo B, taurina, L-teanina y extracto de rhodiola — activos que apoyan el metabolismo energético, la función neuromuscular, la claridad mental y la respuesta al estrés.",
+        "Porque cuidarse antes también cuenta."
+      ],
+      "section_title": "Nutrientes",
+      "items": [
+        "Vitamina C y complejo B (B1, B6, B12): contribuyen al metabolismo energético normal y al funcionamiento del sistema nervioso.",
+        "Taurina: aminoácido involucrado en múltiples procesos fisiológicos, incluyendo la función muscular y neurológica.",
+        "L-teanina: asociada a estados de relajación sin sedación.",
+        "Rhodiola: adaptógeno de uso tradicional en contextos de fatiga y estrés."
+      ]
+    },
+    {
+      "id": "05_magnesio",
+      "type": "product",
+      "title": "Magnesio",
+      "subtitle": "Citrato y Bisglicinato",
+      "tag": "Mineral esencial",
+      "accent": "green2",
+      "description_title": "Descripción",
+      "description": [
+        "Suplemento alimenticio en gomitas a base de magnesio.",
+        "El magnesio es un mineral esencial que participa en más de 300 procesos fisiológicos, incluyendo la función muscular, el sistema nervioso y el metabolismo energético."
+      ],
+      "section_title": "Formatos disponibles",
+      "items": [
+        "Citrato de magnesio: contribuye al funcionamiento normal del sistema nervioso y la función muscular. Favorece el sueño y puede apoyar el tránsito intestinal.",
+        "Bisglicinato de magnesio: contribuye al funcionamiento normal del sistema nervioso y la función muscular. Favorece el sueño y tiene alta tolerancia digestiva."
+      ]
+    },
+    {
+      "id": "06_creatina_monohidratada",
+      "type": "product",
+      "title": "Creatina Monohidratada",
+      "tag": "Polvo y gomitas",
+      "accent": "brown",
+      "description_title": "Descripción",
+      "description": [
+        "Suplemento alimenticio de creatina monohidratada, la molécula más estudiada en suplementación nutricional. Involucrada en la producción de energía celular en tejidos de alta demanda como el músculo esquelético y el sistema nervioso.",
+        "Disponible en dos formatos para adaptarse a cualquier rutina: polvo para quien prefiere dosificar con precisión, y gomitas para quien busca practicidad sin preparación."
+      ],
+      "section_title": "Formatos disponibles",
+      "items": [
+        "En polvo — 1 kg: 5 g por porción (1 scoop). Permite ajustar la dosificación según necesidad. Para su consumo, mezclar en agua u otro líquido.",
+        "En gomitas — 60 gomitas: 5 g por porción (2 gomitas). Formato práctico, sin preparación, fácil de incorporar a la rutina diaria."
+      ]
+    },
+    {
+      "id": "07_proteina",
+      "type": "protein",
+      "title": "Proteína",
+      "subtitle": "Whey Protein e Iso Protein",
+      "tag": "Proteína en polvo",
+      "accent": "red",
+      "description_title": "Descripción",
+      "description": [
+        "Suplemento alimenticio en polvo de proteína de suero de leche (whey), diseñado para apoyar la recuperación muscular y complementar el aporte proteico diario.",
+        "Disponible en dos versiones con distintos perfiles de procesamiento, para adaptarse a diferentes objetivos y tolerancias digestivas."
+      ],
+      "versions_title": "Versiones disponibles",
+      "versions": [
+        {
+          "title": "Whey Protein (concentrado)",
+          "body": "Proteína concentrada de suero de leche con un perfil nutricional completo. Aporta proteínas, vitaminas y minerales en cada porción, con mayor contenido de grasas y carbohidratos respecto al aislado. Opción versátil para quienes buscan apoyar su rutina de entrenamiento o aumentar su ingesta proteica diaria sin requerimientos dietéticos específicos."
+        },
+        {
+          "title": "Iso Protein (aislado)",
+          "body": "Proteína aislada de suero de leche con mayor porcentaje de proteína por porción y mínimo contenido de grasas y lactosa. Proceso de filtración adicional que resulta en una fórmula más depurada, orientada a quienes buscan optimizar el aporte proteico o tienen sensibilidad a la lactosa."
+        }
+      ],
+      "usage_title": "Modo de uso",
+      "usage": "Mezclar 1 scoop (33 g) en 200 cc de agua o leche. Ingerir inmediatamente. Puede consumirse antes o después del entrenamiento, o en cualquier momento del día como complemento proteico."
+    }
+  ]
+}

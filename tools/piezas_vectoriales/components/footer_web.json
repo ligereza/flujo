@@ -1,0 +1,4 @@
+[
+  { "type": "line", "x1": 120, "y1": 1840, "x2": 2680, "y2": 1840, "stroke": "line", "stroke_width": 4 },
+  { "type": "text", "content": "{website}", "x": 120, "y": 1885, "size": 42, "fill": "accent", "weight": "bold" }
+]

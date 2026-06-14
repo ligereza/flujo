@@ -1,0 +1,74 @@
+{
+  "formatos": [
+    {
+      "id": "etiqueta_horizontal_165x65",
+      "tipo": "etiqueta",
+      "template": "tools/piezas_vectoriales/plantillas/etiqueta_horizontal_165x65.config.json",
+      "real_size_cm": {
+        "width": 16.5,
+        "height": 6.5
+      },
+      "canvas": {
+        "width": 3300,
+        "height": 1300
+      },
+      "descripcion": "Etiqueta horizontal basada en referencia RELIEVE/COMROESS."
+    },
+    {
+      "id": "etiqueta_horizontal_140x100",
+      "tipo": "etiqueta",
+      "template": "tools/piezas_vectoriales/plantillas/etiqueta_horizontal_2800x2000.config.json",
+      "real_size_cm": {
+        "width": 14,
+        "height": 10
+      },
+      "canvas": {
+        "width": 2800,
+        "height": 2000
+      },
+      "descripcion": "Etiqueta/flyer horizontal 14 x 10 cm."
+    },
+    {
+      "id": "flyer_horizontal_minimo",
+      "tipo": "flyer",
+      "template": "tools/piezas_vectoriales/plantillas/flyer_horizontal_minimo.config.json",
+      "real_size_cm": {
+        "width": 14,
+        "height": 10
+      },
+      "canvas": {
+        "width": 2800,
+        "height": 2000
+      },
+      "descripcion": "Flyer horizontal mínimo."
+    },
+    {
+      "id": "one_page_propuesta_a4",
+      "tipo": "one_page propuesta dossier",
+      "template": "tools/piezas_vectoriales/plantillas/one_page_propuesta_210x297.config.json",
+      "real_size_cm": {
+        "width": 21,
+        "height": 29.7
+      },
+      "canvas": {
+        "width": 2100,
+        "height": 2970
+      },
+      "descripcion": "One-page vertical A4 para propuesta de servicio."
+    },
+    {
+      "id": "carrusel_cuadrado_1080",
+      "tipo": "carrusel instagram digital",
+      "template": "tools/piezas_vectoriales/plantillas/carrusel_cuadrado_1080.config.json",
+      "real_size_cm": {
+        "width": 10.8,
+        "height": 10.8
+      },
+      "canvas": {
+        "width": 1080,
+        "height": 1080
+      },
+      "descripcion": "Slide cuadrado para carrusel digital."
+    }
+  ]
+}

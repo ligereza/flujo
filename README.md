@@ -120,6 +120,41 @@ bash scripts/flyer_status_latest.sh
 bash scripts/checkpoint.sh "mensaje"
 ```
 
+
+
+## Herramienta adicional: piezas vectoriales / archivos de impresión
+
+Para etiquetas, flyers de impresión, SVG editables, SVG vectorizados y archivos para Illustrator:
+
+```txt
+tools/piezas_vectoriales/SPEC.md
+```
+
+Generar proyecto genérico desde JSON:
+
+```bash
+py scripts/piezas_generar.py "projects/piezas_vectoriales/etiquetas_ejemplo/config.json"
+```
+
+Generar proyecto real Suplementos RD:
+
+```bash
+cd projects/piezas_vectoriales/suplementos_rd
+py scripts/generar_flyers.py
+```
+
+Validar salidas vectoriales:
+
+```bash
+py scripts/piezas_check_outputs.py
+```
+
+Para pedirle trabajo a otra IA con un correo del jefe, usar:
+
+```txt
+briefs/PROMPT_PARA_OTRA_IA_ARCHIVOS_IMPRESION.md
+```
+
 ## Reglas
 
 - Avanzar paso a paso.

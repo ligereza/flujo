@@ -125,6 +125,52 @@ bash scripts/checkpoint.sh "mensaje"
 - Genera índice JSON en `data/flyer_index.json`.
 - Genera reporte de duplicados en `data/flyer_duplicates_report.json`.
 
+
+
+## Nueva herramienta disponible: piezas_vectoriales
+
+Además de `flyer_eventos`, existe una herramienta para pedidos de impresión/Illustrator:
+
+```txt
+tools/piezas_vectoriales/SPEC.md
+```
+
+Usarla cuando el usuario pegue un correo o pida:
+
+- etiquetas,
+- flyers impresos,
+- stickers,
+- SVG editables,
+- SVG vectorizados,
+- letras convertidas a trazados,
+- archivos listos para Illustrator/imprenta.
+
+Flujo:
+
+```txt
+brief/correo → config JSON → SVG editable → SVG vectorizado → ZIP/export
+```
+
+Comandos:
+
+```bash
+py scripts/piezas_generar.py "projects/piezas_vectoriales/etiquetas_ejemplo/config.json"
+py scripts/piezas_check_outputs.py
+```
+
+Proyecto real incluido:
+
+```txt
+projects/piezas_vectoriales/suplementos_rd/
+```
+
+Para ese proyecto:
+
+```bash
+cd projects/piezas_vectoriales/suplementos_rd
+py scripts/generar_flyers.py
+```
+
 ## Qué NO hace todavía
 
 - No descarga Instagram automáticamente.
