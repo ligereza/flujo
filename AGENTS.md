@@ -202,3 +202,97 @@ Documentación:
 ```txt
 docs/MANTENIMIENTO_REPO.md
 ```
+
+## Flujo rápido pedido → job preparado
+
+Desde un correo `.txt`:
+
+```bash
+py scripts/job_from_text.py "nombre pedido" inbox/correo.txt
+py scripts/job_prepare.py "jobs/YYYY-MM-DD_nombre-pedido"
+py scripts/job_next_actions.py
+```
+
+Documentación:
+
+```txt
+docs/FLUJO_PEDIDO_A_JOB.md
+```
+
+## Comando unificado
+
+Preferir atajos:
+
+```bash
+py scripts/flujo.py health
+py scripts/flujo.py clean
+py scripts/flujo.py job-from-text "nombre" inbox/correo.txt
+py scripts/flujo.py job-prepare jobs/NOMBRE
+py scripts/flujo.py job-next
+```
+
+Ver:
+
+```txt
+docs/COMANDO_UNIFICADO.md
+```
+
+## Respuestas estándar
+
+Usar plantillas:
+
+```txt
+briefs/RESPUESTA_IA_TRABAJO_COMPLETADO.md
+briefs/RESPUESTA_IA_FALTAN_DATOS.md
+```
+
+Para issues:
+
+```txt
+docs/ISSUE_A_JOB.md
+```
+
+## Activar job y renderizar proyecto
+
+```bash
+py scripts/job_activate.py "jobs/NOMBRE"
+py scripts/project_render.py "projects/piezas_vectoriales/NOMBRE/config.json"
+```
+
+Documentación:
+
+```txt
+docs/JOB_A_PROYECTO_RENDER.md
+```
+
+## Operador rápido
+
+Resumen operativo:
+
+```txt
+docs/OPERADOR_IA_RAPIDO.md
+```
+
+Nuevos comandos:
+
+```bash
+py scripts/job_validate.py "jobs/NOMBRE"
+py scripts/project_new_from_template.py "nombre" plantilla.json
+py scripts/project_delivery_manifest.py "projects/piezas_vectoriales/NOMBRE"
+```
+
+## Comandos extra de inspección
+
+```bash
+py scripts/flujo.py components
+py scripts/flujo.py inspect projects/piezas_vectoriales/NOMBRE
+py scripts/flujo.py backlog
+py scripts/project_clone_variant.py projects/piezas_vectoriales/origen "nuevo nombre"
+py scripts/job_complete.py jobs/NOMBRE
+```
+
+Quality gates:
+
+```txt
+docs/QUALITY_GATES.md
+```
