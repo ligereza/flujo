@@ -1,3 +1,9 @@
+# Checkpoint — fase 7: pipeline correo a job a proyecto
+
+Fecha: 2026-06-16_17-12
+
+## Estado
+
 # Estado del proyecto
 
 Última actualización: 2026-06-16
@@ -63,3 +69,11 @@ No importar scripts viejos automáticamente. Usar `reference_old` solo como refe
 - [x] Integrar `flujo_daily` con `flujo.py`.
 - [ ] Agregar test para `flujo_daily.py`.
 - [ ] Considerar si mover/eliminar `reference_old`.
+
+## Cambios realizados
+
+-
+
+## Próximo paso
+
+-

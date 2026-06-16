@@ -163,3 +163,21 @@ def test_flujo_cli():
     )
     assert result.returncode == 0, result.stderr
     assert "OK: health check" in result.stdout
+
+
+def test_flujo_daily_genera_reporte(tmp_path, monkeypatch):
+    """flujo_daily.py genera un reporte con los items encontrados."""
+    import shutil
+
+    scripts_dir = str(ROOT / "scripts")
+    if scripts_dir not in sys.path:
+        sys.path.insert(0, scripts_dir)
+    from _common import repo_root
+    from flujo_daily import collect_items, render_report
+
+    # Usar el repo real para datos
+    monkeypatch.chdir(ROOT)
+    items = collect_items()
+    report = render_report(items)
+    assert "Prioridad" in report
+    assert "Total items" in report
