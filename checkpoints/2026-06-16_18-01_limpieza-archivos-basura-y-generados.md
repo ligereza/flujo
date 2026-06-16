@@ -1,6 +1,6 @@
-# Checkpoint — fase 9: instagram, dashboard, docs y CI badge
+# Checkpoint — limpieza: archivos basura y generados
 
-Fecha: 2026-06-16_17-52
+Fecha: 2026-06-16_18-01
 
 ## Estado
 
