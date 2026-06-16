@@ -28,7 +28,7 @@ Reglas:
 - No inventar textos legales o claims nutricionales.
 - Preguntar máximo 3 cosas si falta información crítica.
 - Validar con `python3 scripts/piezas_check_outputs.py`.
-- Mantener compatibilidad con Git Bash/Windows; usar `py` o `python3` según entorno.
+- Mantener compatibilidad con Git Bash/Windows: la documentación usa `python3`, pero en Windows nativo reemplazar por `py`.
 
 ## Flujo de jobs para pedidos nuevos
 
@@ -193,8 +193,9 @@ py scripts/piezas_project_summary.py
 Antes de proponer commit/push:
 
 ```bash
-py scripts/flujo_clean_generated.py
-py scripts/flujo_health.py
+python3 scripts/flujo_clean_generated.py
+python3 scripts/flujo_health.py
+python3 -m pytest tests/ -q
 ```
 
 Documentación:
@@ -224,11 +225,12 @@ docs/FLUJO_PEDIDO_A_JOB.md
 Preferir atajos:
 
 ```bash
-py scripts/flujo.py health
-py scripts/flujo.py clean
-py scripts/flujo.py job-from-text "nombre" inbox/correo.txt
-py scripts/flujo.py job-prepare jobs/NOMBRE
-py scripts/flujo.py job-next
+python3 scripts/flujo.py health
+python3 scripts/flujo.py clean
+python3 scripts/flujo.py new-flyer "nombre evento"
+python3 scripts/flujo.py job-from-text "nombre" inbox/correo.txt
+python3 scripts/flujo.py job-prepare jobs/NOMBRE
+python3 scripts/flujo.py job-next
 ```
 
 Ver:

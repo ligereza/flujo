@@ -1,3 +1,9 @@
+# Checkpoint — fase 5: CI, docs de agentes y workflows
+
+Fecha: 2026-06-16_11-42
+
+## Estado
+
 # Estado del proyecto
 
 Última actualización: 2026-06-16
@@ -56,3 +62,11 @@ No importar scripts viejos automáticamente. Usar `reference_old` solo como refe
 - [x] Workflows de CI/health/tests.
 - [ ] Considerar si mover/eliminar `reference_old`.
 - [ ] Mejorar README con badge de CI.
+
+## Cambios realizados
+
+-
+
+## Próximo paso
+
+-

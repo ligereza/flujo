@@ -32,6 +32,12 @@ Crear proyecto manual:
 bash scripts/new_flyer_evento.sh "nombre evento"
 ```
 
+O con el comando unificado:
+
+```bash
+py scripts/flujo.py new-flyer "nombre evento"
+```
+
 Crear proyectos desde correo con links de Instagram:
 
 ```bash
@@ -124,6 +130,10 @@ bash scripts/checkpoint.sh "mensaje"
 - Permite aplicar mejoras completas mediante `_airdrop/`.
 - Genera índice JSON en `data/flyer_index.json`.
 - Genera reporte de duplicados en `data/flyer_duplicates_report.json`.
+- Tiene helpers comunes en `scripts/_common.py`.
+- Tiene comando unificado en `scripts/flujo.py`.
+- Tiene tests de smoke en `tests/test_smoke.py`.
+- Tiene pre-commit hooks para validar cambios.
 
 
 
@@ -180,6 +190,19 @@ py scripts/generar_flyers.py
 - No abre Blender.
 - No borra archivos.
 - No limpia duplicados automáticamente.
+
+## Comando unificado
+
+Atajos para operaciones comunes:
+
+```bash
+py scripts/flujo.py health
+py scripts/flujo.py clean
+py scripts/flujo.py new-flyer "nombre evento"
+py scripts/flujo.py job-from-text "nombre pedido" inbox/correo.txt
+py scripts/flujo.py job-prepare jobs/NOMBRE
+py scripts/flujo.py job-next
+```
 
 ## Sistema airdrop
 
