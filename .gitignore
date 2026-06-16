@@ -45,6 +45,11 @@ projects/flyer_eventos/*/analysis/*.json
 projects/flyer_eventos/*/ai/*.json
 data/*.json
 
+# Reportes diarios generados
+context/DAILY.md
+context/PIPELINE_RESULT.md
+context/dashboard.html
+
 # Outputs generados por piezas vectoriales
 projects/piezas_vectoriales/*/salida_generada/
 projects/piezas_vectoriales/*/02_editables_svg/

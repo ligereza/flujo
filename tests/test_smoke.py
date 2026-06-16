@@ -173,11 +173,27 @@ def test_flujo_daily_genera_reporte(tmp_path, monkeypatch):
     if scripts_dir not in sys.path:
         sys.path.insert(0, scripts_dir)
     from _common import repo_root
-    from flujo_daily import collect_items, render_report
+    from flujo_daily import collect_items, render_report, render_html
 
     # Usar el repo real para datos
     monkeypatch.chdir(ROOT)
     items = collect_items()
     report = render_report(items)
+    html = render_html(items)
     assert "Prioridad" in report
     assert "Total items" in report
+    assert "<html" in html
+    assert "Flujo — Dashboard" in html
+
+
+def test_ig_download_extract_shortcode():
+    """ig_download extrae correctamente el shortcode de URLs."""
+    scripts_dir = str(ROOT / "scripts")
+    if scripts_dir not in sys.path:
+        sys.path.insert(0, scripts_dir)
+    from ig_download import extract_shortcode
+
+    assert extract_shortcode("https://www.instagram.com/p/ABC123/") == "ABC123"
+    assert extract_shortcode("https://www.instagram.com/reel/XYZ789/") == "XYZ789"
+    assert extract_shortcode("https://www.instagram.com/tv/FOObar/") == "FOObar"
+    assert extract_shortcode("https://www.instagram.com/") is None

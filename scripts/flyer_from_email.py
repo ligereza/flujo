@@ -7,6 +7,11 @@ from datetime import datetime
 
 from _common import repo_root, slugify, load_json, write_json, create_flyer_project
 
+try:
+    from ig_download import download_post
+except ImportError:
+    download_post = None
+
 IG_RE = re.compile(
     r"https?://(?:www\.)?instagram\.com/(?P<kind>p|reel|tv)/(?P<code>[A-Za-z0-9_-]+)/*[^\s]*"
 )
@@ -106,6 +111,23 @@ def update_manifest(project_dir, item, index, total):
 
     if kind in ["reel", "tv"]:
         data["notes"].append("Link parece video. Puede requerir descarga manual o captura de frame.")
+
+    if download_post:
+        try:
+            result = download_post(url, project_dir / "input")
+            data["instagram"]["download_result"] = result
+            if result["status"] == "downloaded":
+                data["instagram"]["download_status"] = "downloaded"
+                data["instagram"]["manual_download_possible"] = False
+                data["status"] = "downloaded_pending_review"
+                data["notes"].append(f"Descarga automática exitosa: {result.get('media_type', 'unknown')}")
+                data["notes"].append(f"Archivos: {', '.join(result.get('files', []))}")
+                if result.get("caption"):
+                    data["extracted_info"]["caption_from_ig"] = result["caption"]
+            else:
+                data["notes"].append(f"Descarga automática falló: {result.get('reason', 'unknown')}")
+        except Exception as e:
+            data["notes"].append(f"Error en descarga automática: {e}")
 
     write_json(manifest, data)
 

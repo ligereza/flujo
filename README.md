@@ -1,5 +1,8 @@
 # flujo — Dimensiones del Orden
 
+![CI](https://github.com/ligereza/flujo/actions/workflows/ci.yml/badge.svg)
+![Render](https://github.com/ligereza/flujo/actions/workflows/render_piezas_vectoriales.yml/badge.svg)
+
 Repositorio para ordenar proyectos creativos, automatizaciones e IAs.
 
 Funciona como una **zapatilla/alargador organizador**: conecta proyectos, herramientas, contexto y checkpoints en un solo lugar.

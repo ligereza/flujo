@@ -191,18 +191,23 @@ py scripts/generar_flyers.py
 - No borra archivos.
 - No limpia duplicados automáticamente.
 
-## Comando unificado
+)
 
-Atajos para operaciones comunes:
+## Descarga automática de Instagram
+
+`flyer_from_email.py` ahora intenta descargar posts públicos de Instagram automáticamente usando `instaloader`. Si falla (privado, login, shadowban), marca el proyecto para descarga manual.
+
+## Dashboard diario
+
+Generar reporte y dashboard visual:
 
 ```bash
-py scripts/flujo.py health
-py scripts/flujo.py clean
-py scripts/flujo.py new-flyer "nombre evento"
-py scripts/flujo.py job-from-text "nombre pedido" inbox/correo.txt
-py scripts/flujo.py job-prepare jobs/NOMBRE
-py scripts/flujo.py job-next
+py scripts/flujo.py daily
 ```
+
+Salidas:
+- `context/DAILY.md` — resumen en Markdown.
+- `context/dashboard.html` — dashboard visual para abrir en el navegador.
 
 ## Sistema airdrop
 

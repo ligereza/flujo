@@ -231,6 +231,29 @@ python3 scripts/flujo.py new-flyer "nombre evento"
 python3 scripts/flujo.py job-from-text "nombre" inbox/correo.txt
 python3 scripts/flujo.py job-prepare jobs/NOMBRE
 python3 scripts/flujo.py job-next
+python3 scripts/flujo.py daily
+python3 scripts/flujo.py pipeline "nombre pedido" inbox/correo.txt
+python3 scripts/flujo.py pipeline "nombre pedido" inbox/correo.txt --confirm
+```
+
+## Pipeline automático
+
+Desde un correo de pedido, ejecutar todo el flujo:
+
+```bash
+python3 scripts/flujo_pipeline.py "nombre pedido" inbox/correo.txt
+```
+
+El pipeline intenta inferir tipo de pieza y medidas desde el correo. Si es seguro, crea el proyecto y genera SVGs.
+
+## Descarga automática de Instagram
+
+Cuando `flyer_from_email.py` detecta un link de Instagram, intenta descargar el post automáticamente con `instaloader`. Si falla, marca `manual_required`.
+
+También se puede usar directamente:
+
+```bash
+python3 scripts/ig_download.py <url> <output_dir>
 ```
 
 Ver:

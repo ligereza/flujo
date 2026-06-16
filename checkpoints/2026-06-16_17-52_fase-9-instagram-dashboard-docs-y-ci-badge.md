@@ -1,3 +1,9 @@
+# Checkpoint — fase 9: instagram, dashboard, docs y CI badge
+
+Fecha: 2026-06-16_17-52
+
+## Estado
+
 # Estado del proyecto
 
 Última actualización: 2026-06-16
@@ -78,3 +84,11 @@ No importar scripts viejos automáticamente. Usar `reference_old` solo como refe
 - [x] Tests para `ig_download` y dashboard.
 - [ ] Considerar si mover/eliminar `reference_old`.
 - [ ] Considerar si mover/eliminar `projects/tapiz`.
+
+## Cambios realizados
+
+-
+
+## Próximo paso
+
+-
