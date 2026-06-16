@@ -1,6 +1,6 @@
-# Checkpoint — clean start
+# Checkpoint — crear importador simple desde correo
 
-Fecha: 2026-06-12_21-54
+Fecha: 2026-06-13_02-44
 
 ## Estado
 
@@ -29,8 +29,8 @@ Elegir primera herramienta mínima: `flyer_eventos` o `slowmo_blender_ae`.
 
 ## Cambios realizados
 
-- 
+-
 
 ## Próximo paso
 
-- 
+-

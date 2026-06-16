@@ -1,6 +1,6 @@
-# Checkpoint — crear sistema airdrop
+# Checkpoint — crear herramienta base flyer eventos
 
-Fecha: 2026-06-13_03-23
+Fecha: 2026-06-12_21-59
 
 ## Estado
 
@@ -29,8 +29,8 @@ Elegir primera herramienta mínima: `flyer_eventos` o `slowmo_blender_ae`.
 
 ## Cambios realizados
 
-- 
+-
 
 ## Próximo paso
 
-- 
+-

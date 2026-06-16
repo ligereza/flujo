@@ -8,18 +8,18 @@ import time  # <-- Necesario para la pausa
 CARPETA_BASE = r"C:\rd\AUTOMATIZACION"
 RUTA_DROPLET = os.path.join(CARPETA_BASE, "Droplet_Flyer.exe")
 ARCHIVO_PSD = os.path.join(CARPETA_BASE, "historia.psd")
-ARCHIVO_INPUT = os.path.join(CARPETA_BASE, "input_ig.jpg") 
+ARCHIVO_INPUT = os.path.join(CARPETA_BASE, "input_ig.jpg")
 # ---------------------------
 
 def automatizar_flyer():
     os.chdir(CARPETA_BASE)
-    
+
     if os.path.exists("temp_flyer"):
         shutil.rmtree("temp_flyer", ignore_errors=True)
 
     print("=== AUTOMATIZADOR DE FLYERS ===")
     url = input("SUELTALO XUXATUMAREEE:\n> ")
-    
+
     try:
         if "/p/" in url:
             shortcode = url.split("/p/")[1].split("/")[0]
@@ -34,7 +34,7 @@ def automatizar_flyer():
 
     print("\nDescargando flyer crudo desde Instagram...")
     L = instaloader.Instaloader(download_video_thumbnails=False, download_comments=False, save_metadata=False)
-    
+
     try:
         post = instaloader.Post.from_shortcode(L.context, shortcode)
         L.download_post(post, target="temp_flyer")
@@ -46,7 +46,7 @@ def automatizar_flyer():
     if not archivos_jpg:
         print("\nNo se encontró ninguna imagen.")
         return
-        
+
     imagen_descargada = os.path.abspath(archivos_jpg[0])
 
     print("Actualizando input_ig.jpg...")
@@ -59,13 +59,13 @@ def automatizar_flyer():
     time.sleep(2)
 
     print("\nAbriendo Photoshop...")
-    
+
     # 2. EL TRUCO MAESTRO: Usar 'start' simula que tú mismo arrastraste el archivo con el mouse
     comando_magico = f'start "" "{RUTA_DROPLET}" "{ARCHIVO_PSD}"'
     os.system(comando_magico)
-    
+
     print("\n¡ÉXITO! Proceso terminado.")
-        
+
     shutil.rmtree("temp_flyer", ignore_errors=True)
 
 if __name__ == "__main__":

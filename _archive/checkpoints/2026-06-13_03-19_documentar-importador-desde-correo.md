@@ -1,6 +1,6 @@
-# Checkpoint — agregar carpetas base flyer evento
+# Checkpoint — documentar importador desde correo
 
-Fecha: 2026-06-12_21-59
+Fecha: 2026-06-13_03-19
 
 ## Estado
 
@@ -29,8 +29,8 @@ Elegir primera herramienta mínima: `flyer_eventos` o `slowmo_blender_ae`.
 
 ## Cambios realizados
 
-- 
+-
 
 ## Próximo paso
 
-- 
+-

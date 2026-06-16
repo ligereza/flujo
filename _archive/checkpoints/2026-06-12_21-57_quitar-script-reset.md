@@ -1,6 +1,6 @@
-# Checkpoint — arreglar importador correo sin bash interno
+# Checkpoint — quitar script reset
 
-Fecha: 2026-06-13_02-49
+Fecha: 2026-06-12_21-57
 
 ## Estado
 
@@ -29,8 +29,8 @@ Elegir primera herramienta mínima: `flyer_eventos` o `slowmo_blender_ae`.
 
 ## Cambios realizados
 
-- 
+-
 
 ## Próximo paso
 
-- 
+-

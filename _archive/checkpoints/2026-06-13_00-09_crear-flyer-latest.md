@@ -1,6 +1,6 @@
-# Checkpoint — probar set input flyer
+# Checkpoint — crear flyer latest
 
-Fecha: 2026-06-12_22-20
+Fecha: 2026-06-13_00-09
 
 ## Estado
 
@@ -29,8 +29,8 @@ Elegir primera herramienta mínima: `flyer_eventos` o `slowmo_blender_ae`.
 
 ## Cambios realizados
 
-- 
+-
 
 ## Próximo paso
 
-- 
+-

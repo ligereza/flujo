@@ -1,0 +1,31 @@
+# Hooks básicos para flujo
+# Instalar: pip install pre-commit && pre-commit install
+
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.6.0
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-json
+      - id: check-added-large-files
+        args: ["--maxkb=500"]
+      - id: check-case-conflict
+      - id: mixed-line-ending
+
+  - repo: local
+    hooks:
+      - id: flujo-health
+        name: Flujo health check
+        entry: bash -c 'python3 scripts/flujo_health.py 2>/dev/null || py scripts/flujo_health.py'
+        language: system
+        pass_filenames: false
+        always_run: true
+
+      - id: flujo-tests
+        name: Flujo smoke tests
+        entry: bash -c 'python3 -m pytest tests/ -q 2>/dev/null || py -m pytest tests/ -q'
+        language: system
+        pass_filenames: false
+        always_run: true

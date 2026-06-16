@@ -1,6 +1,6 @@
-# Checkpoint — probar sistema airdrop
+# Checkpoint — agregar indice flyer y abrir ultimo proyecto
 
-Fecha: 2026-06-13_03-25
+Fecha: 2026-06-13_03-36
 
 ## Estado
 
@@ -29,8 +29,8 @@ Elegir primera herramienta mínima: `flyer_eventos` o `slowmo_blender_ae`.
 
 ## Cambios realizados
 
-- 
+-
 
 ## Próximo paso
 
-- 
+-

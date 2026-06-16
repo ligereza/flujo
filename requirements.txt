@@ -2,3 +2,4 @@
 # Instalar con: python -m pip install -r requirements.txt
 
 matplotlib>=3.7.0
+pyyaml>=6.0

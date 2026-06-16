@@ -1,6 +1,6 @@
-# Checkpoint — crear comando demo set input
+# Checkpoint — agregar comandos latest flyer faltantes
 
-Fecha: 2026-06-12_22-22
+Fecha: 2026-06-13_02-31
 
 ## Estado
 
@@ -29,8 +29,8 @@ Elegir primera herramienta mínima: `flyer_eventos` o `slowmo_blender_ae`.
 
 ## Cambios realizados
 
-- 
+-
 
 ## Próximo paso
 
-- 
+-

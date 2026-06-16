@@ -1,6 +1,6 @@
-# Checkpoint — evitar duplicados y agregar reporte cleanup
+# Checkpoint — crear sistema airdrop
 
-Fecha: 2026-06-13_03-46
+Fecha: 2026-06-13_03-23
 
 ## Estado
 
@@ -29,8 +29,8 @@ Elegir primera herramienta mínima: `flyer_eventos` o `slowmo_blender_ae`.
 
 ## Cambios realizados
 
-- 
+-
 
 ## Próximo paso
 
-- 
+-

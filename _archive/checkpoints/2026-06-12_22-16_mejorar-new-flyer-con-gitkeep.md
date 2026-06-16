@@ -1,6 +1,6 @@
-# Checkpoint — crear listado de proyectos flyer
+# Checkpoint — mejorar new flyer con gitkeep
 
-Fecha: 2026-06-12_22-23
+Fecha: 2026-06-12_22-16
 
 ## Estado
 
@@ -29,8 +29,8 @@ Elegir primera herramienta mínima: `flyer_eventos` o `slowmo_blender_ae`.
 
 ## Cambios realizados
 
-- 
+-
 
 ## Próximo paso
 
-- 
+-

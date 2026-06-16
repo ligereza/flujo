@@ -1,6 +1,6 @@
-# Checkpoint — crear status flyer
+# Checkpoint — respaldar reference old y quitar exe
 
-Fecha: 2026-06-12_22-24
+Fecha: 2026-06-13_02-42
 
 ## Estado
 
@@ -29,8 +29,8 @@ Elegir primera herramienta mínima: `flyer_eventos` o `slowmo_blender_ae`.
 
 ## Cambios realizados
 
-- 
+-
 
 ## Próximo paso
 
-- 
+-

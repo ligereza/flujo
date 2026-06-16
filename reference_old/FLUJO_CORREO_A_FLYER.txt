@@ -11,10 +11,10 @@
 
 2️⃣  BUSCA Y COPIA correo con link
     ↓ Ejemplo de correo:
-    
+
     From: isidora@empresa.com
     Subject: Evento Viernes 28 - Fiesta Neon
-    
+
     Hola, aqui va el link del evento:
     https://www.instagram.com/p/C7k1234567890/
     Gracias!
@@ -35,7 +35,7 @@
 
 7️⃣  CLICK "Descargar + preparar + abrir droplet"
     ↓ Proceso automático:
-    
+
     ┌─────────────────────────────────┐
     │ 1. Descarga de Instagram        │
     │    ↓ TEMP/ (con reintentos)     │
@@ -55,12 +55,12 @@
     └─────────────────────────────────┘
 
 8️⃣  RESULTADO EN CARPETAS:
-    
+
     RESULTADOS/
     ├─ input_ig.jpg (imagen descargada)
     ├─ color_predominante_1.png (color principal)
     └─ color_predominante_2.png (color secundario)
-    
+
     OBJETOS_INTELIGENTES/evento_2026_02_28_Fiesta_Neon/
     ├─ colores.json (RGB valores)
     └─ RD.blend (proyecto Blender con colores aplicados)

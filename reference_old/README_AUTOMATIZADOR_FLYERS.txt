@@ -42,7 +42,7 @@ Input (generado):   C:\rd\AUTOMATIZACION\input_ig.jpg
 Para distribuir sin depender de Python:
     → Doble click en: crear_exe.bat
     → El resultado estará en: dist\AutomatizadorFlyers.exe
-    
+
 Ventajas del .exe:
     ✓ Portable (no necesita Python instalado)
     ✓ Se lanza desde doble click fácilmente
@@ -103,7 +103,7 @@ PROBLEMA: "ModuleNotFoundError: No module named 'instaloader'"
 SOLUCIÓN: Ejecuta instalar_dependencias.bat nuevamente
 
 PROBLEMA: El .exe no inicia o es muy lento
-SOLUCIÓN: 
+SOLUCIÓN:
    • Primera ejecución es normal que sea lenta (descompresión)
    • Intenta ejecutar desde terminal: crear_exe.bat
    • Verifica que tienes espacio suficiente en C:\
@@ -112,7 +112,7 @@ PROBLEMA: Instagram rechaza descargas ("error de autenticación")
 SOLUCIÓN: Usa el flujo manual (descarga la imagen tú en el navegador)
 
 PROBLEMA: Input_ig.jpg no se actualiza
-SOLUCIÓN: 
+SOLUCIÓN:
    • Cierra Photoshop si está abierto
    • Verifica que la imagen descargada es válida
    • Revisa el log en C:\Users\[TU_USUARIO]\.automatizador_flyers.log

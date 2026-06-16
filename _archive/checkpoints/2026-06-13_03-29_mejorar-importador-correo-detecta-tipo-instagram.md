@@ -1,6 +1,6 @@
-# Checkpoint — AGREGAR OLD
+# Checkpoint — mejorar importador correo detecta tipo instagram
 
-Fecha: 2026-06-12_22-02
+Fecha: 2026-06-13_03-29
 
 ## Estado
 
@@ -29,8 +29,8 @@ Elegir primera herramienta mínima: `flyer_eventos` o `slowmo_blender_ae`.
 
 ## Cambios realizados
 
-- 
+-
 
 ## Próximo paso
 
-- 
+-

@@ -1,6 +1,6 @@
-# Checkpoint — refe old
+# Checkpoint — probar sistema airdrop
 
-Fecha: 2026-06-13_02-38
+Fecha: 2026-06-13_03-25
 
 ## Estado
 
@@ -29,8 +29,8 @@ Elegir primera herramienta mínima: `flyer_eventos` o `slowmo_blender_ae`.
 
 ## Cambios realizados
 
-- 
+-
 
 ## Próximo paso
 
-- 
+-

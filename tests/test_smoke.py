@@ -100,6 +100,50 @@ def test_flyer_create_project(tmp_path, monkeypatch):
     assert manifest["source"]["type"] == "test"
 
 
+def test_flyer_from_email_crea_proyectos(tmp_path, monkeypatch):
+    """El importador crea un proyecto por cada link nuevo."""
+    import shutil
+    import sys
+
+    scripts_dir = str(ROOT / "scripts")
+    if scripts_dir not in sys.path:
+        sys.path.insert(0, scripts_dir)
+    from _common import repo_root
+
+    # Copiar estructura base a tmp para no tocar el repo real
+    base = tmp_path / "flyer_eventos"
+    base.mkdir()
+    monkeypatch.setenv("FLYER_BASE", str(base))
+
+    email = tmp_path / "correo_test.txt"
+    email.write_text(
+        "Hola, mira estos eventos:\n"
+        "https://www.instagram.com/p/TEST001example\n"
+        "https://www.instagram.com/reel/TEST002example\n",
+        encoding="utf-8",
+    )
+
+    # Sobrescribir BASE temporalmente en el script
+    script = ROOT / "scripts" / "flyer_from_email.py"
+    source = script.read_text(encoding="utf-8").replace(
+        "BASE = repo_root() / \"projects\" / \"flyer_eventos\"",
+        f"BASE = Path(r'{base.as_posix()}').resolve()",
+    )
+    temp_script = tmp_path / "flyer_from_email_test.py"
+    temp_script.write_text(source, encoding="utf-8")
+
+    # Copiar helper al mismo tmp para que el script lo importe
+    shutil.copy(ROOT / "scripts" / "_common.py", tmp_path / "_common.py")
+
+    monkeypatch.chdir(ROOT)
+    subprocess.run([sys.executable, str(temp_script), str(email)], check=True)
+
+    proyectos = [p for p in base.iterdir() if p.is_dir()]
+    assert len(proyectos) == 2, f"Esperaba 2 proyectos, encontré {len(proyectos)}"
+    for p in proyectos:
+        assert (p / "manifest.json").exists()
+
+
 def test_flujo_cli():
     """El comando unificado flujo.py responde sin errores."""
     result = subprocess.run(

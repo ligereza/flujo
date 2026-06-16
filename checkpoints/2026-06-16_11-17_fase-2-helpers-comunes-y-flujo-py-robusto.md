@@ -47,8 +47,8 @@ No importar scripts viejos automáticamente. Usar `reference_old` solo como refe
 
 ## Cambios realizados
 
-- 
+-
 
 ## Próximo paso
 
-- 
+-

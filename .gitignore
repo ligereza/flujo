@@ -54,6 +54,7 @@ __pycache__/
 
 # Metadata de instalación Python
 *.egg-info/
+projects/tapiz/vibecode.egg-info/
 
 # Imágenes raster comunes
 *.jpg

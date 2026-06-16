@@ -1,3 +1,9 @@
+# Checkpoint — fase 4: gitattributes, licencia, tapiz limpio
+
+Fecha: 2026-06-16_11-37
+
+## Estado
+
 # Estado del proyecto
 
 Última actualización: 2026-06-16
@@ -51,3 +57,11 @@ No importar scripts viejos automáticamente. Usar `reference_old` solo como refe
 - [x] Script para archivar checkpoints antiguos.
 - [ ] Mejorar documentación de agentes (`AGENTS.md`, `PARA_IA.md`).
 - [ ] Considerar si mover/eliminar `reference_old`.
+
+## Cambios realizados
+
+-
+
+## Próximo paso
+
+-

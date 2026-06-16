@@ -17,11 +17,11 @@ $(cat context/ESTADO.md 2>/dev/null || echo "Sin context/ESTADO.md")
 
 ## Cambios realizados
 
-- 
+-
 
 ## Próximo paso
 
-- 
+-
 EOF2
 git add -A
 if git diff --cached --quiet; then echo "No hay cambios"; else git commit -m "checkpoint: $MSG"; fi

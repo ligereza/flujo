@@ -46,8 +46,8 @@ tools/piezas_vectoriales/SPEC.md
 
 ## Cambios realizados
 
-- 
+-
 
 ## Próximo paso
 
-- 
+-

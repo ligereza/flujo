@@ -1,6 +1,6 @@
-# Checkpoint — definir dimensiones del orden
+# Checkpoint — crear comando demo set input
 
-Fecha: 2026-06-13_02-24
+Fecha: 2026-06-12_22-22
 
 ## Estado
 
@@ -29,8 +29,8 @@ Elegir primera herramienta mínima: `flyer_eventos` o `slowmo_blender_ae`.
 
 ## Cambios realizados
 
-- 
+-
 
 ## Próximo paso
 
-- 
+-

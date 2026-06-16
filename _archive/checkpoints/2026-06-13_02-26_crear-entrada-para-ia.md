@@ -1,6 +1,6 @@
-# Checkpoint — mejorar new flyer con gitkeep
+# Checkpoint — crear entrada para IA
 
-Fecha: 2026-06-12_22-16
+Fecha: 2026-06-13_02-26
 
 ## Estado
 
@@ -29,8 +29,8 @@ Elegir primera herramienta mínima: `flyer_eventos` o `slowmo_blender_ae`.
 
 ## Cambios realizados
 
-- 
+-
 
 ## Próximo paso
 
-- 
+-

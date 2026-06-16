@@ -1,6 +1,6 @@
-# Checkpoint — crear herramienta base flyer eventos
+# Checkpoint — evitar duplicados y agregar reporte cleanup
 
-Fecha: 2026-06-12_21-59
+Fecha: 2026-06-13_03-46
 
 ## Estado
 
@@ -29,8 +29,8 @@ Elegir primera herramienta mínima: `flyer_eventos` o `slowmo_blender_ae`.
 
 ## Cambios realizados
 
-- 
+-
 
 ## Próximo paso
 
-- 
+-

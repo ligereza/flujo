@@ -1,6 +1,6 @@
-# Checkpoint — agregar comandos latest flyer faltantes
+# Checkpoint — arreglar importador correo sin bash interno
 
-Fecha: 2026-06-13_02-31
+Fecha: 2026-06-13_02-49
 
 ## Estado
 
@@ -29,8 +29,8 @@ Elegir primera herramienta mínima: `flyer_eventos` o `slowmo_blender_ae`.
 
 ## Cambios realizados
 
-- 
+-
 
 ## Próximo paso
 
-- 
+-

@@ -1,6 +1,6 @@
-# Checkpoint — crear entrada para IA
+# Checkpoint — actualizar readme como entrada principal
 
-Fecha: 2026-06-13_02-26
+Fecha: 2026-06-13_02-30
 
 ## Estado
 
@@ -29,8 +29,8 @@ Elegir primera herramienta mínima: `flyer_eventos` o `slowmo_blender_ae`.
 
 ## Cambios realizados
 
-- 
+-
 
 ## Próximo paso
 
-- 
+-

@@ -1,3 +1,9 @@
+# Checkpoint — fase 3: pre-commit, health mejorado y tests
+
+Fecha: 2026-06-16_11-31
+
+## Estado
+
 # Estado del proyecto
 
 Última actualización: 2026-06-16
@@ -30,24 +36,19 @@ No importar scripts viejos automáticamente. Usar `reference_old` solo como refe
 - [x] Mejorar portabilidad de scripts entre Windows, macOS y Linux.
 - [x] Dependencias documentadas en `requirements.txt`.
 
-## Próximos pasos (fase 2 completada)
+## Próximos pasos (fase 2 en progreso)
 
 - [x] Crear helpers comunes en `scripts/_common.py`.
 - [x] Unificar creación de proyectos flyer con `scripts/flyer_create_project.py`.
 - [x] Mejorar `scripts/flujo.py` como comando unificado robusto.
-
-## Próximos pasos (fase 3 completada)
-
-- [x] Pre-commit hooks.
-- [x] Health check mejorado.
-- [x] Más tests de smoke.
-
-## Próximos pasos (fase 4 en progreso)
-
-- [x] `.gitattributes` para controlar finales de línea y marcar documentación.
-- [x] Limpiar `projects/tapiz` de `egg-info`.
-- [x] Agregar licencia MIT.
-- [x] Agregar `CONTRIBUTING.md`.
-- [x] Script para archivar checkpoints antiguos.
+- [ ] Reducir ruido de `checkpoints/` y `reference_old`.
 - [ ] Mejorar documentación de agentes (`AGENTS.md`, `PARA_IA.md`).
-- [ ] Considerar si mover/eliminar `reference_old`.
+- [ ] Agregar licencia.
+
+## Cambios realizados
+
+-
+
+## Próximo paso
+
+-

@@ -93,7 +93,7 @@ RUTA_BLEND_OPCIONAL = ""
 class App:
     MAX_RETRIES = 3
     RETRY_DELAY = 2
-    
+
     def __init__(self, root):
         self.root = root
         self.root.title("Automatizador de Flyers")
@@ -109,7 +109,7 @@ class App:
 
         self._build_ui()
         self.validar_rutas_inicio()
-        
+
         logging.info("Aplicación iniciada")
 
     def _build_ui(self):
@@ -224,14 +224,14 @@ class App:
             (RUTA_DROPLET, "Droplet"),
             (ARCHIVO_PSD, "Archivo PSD"),
         ]
-        
+
         for ruta, nombre in rutas_criticas:
             if not os.path.exists(ruta):
                 self.log_msg(f"⚠ ADVERTENCIA: no se encuentra {nombre}: {ruta}")
 
         _load_instaloader()
         _load_pil()
-        
+
         if instaloader is None:
             self.log_msg("⚠ ADVERTENCIA: falta instaloader. Instala con: pip install -r requirements.txt")
         if Image is None:
@@ -353,7 +353,7 @@ class App:
                         time.sleep(self.RETRY_DELAY)
                     else:
                         raise
-            
+
             imagen = self.buscar_mejor_imagen(TEMP_FLYER)
             if not imagen:
                 raise FileNotFoundError("No se encontró ninguna imagen descargada en temp_flyer.")
@@ -433,7 +433,7 @@ class App:
             with Image.open(imagen_origen) as im:
                 # Verificar que es una imagen válida
                 im.verify()
-                
+
             with Image.open(imagen_origen) as im:
                 im = im.convert("RGB")
                 im.save(ARCHIVO_INPUT, "JPEG", quality=95)

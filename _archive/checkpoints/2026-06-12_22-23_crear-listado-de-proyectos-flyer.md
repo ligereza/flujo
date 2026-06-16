@@ -1,6 +1,6 @@
-# Checkpoint — crear importador simple desde correo
+# Checkpoint — crear listado de proyectos flyer
 
-Fecha: 2026-06-13_02-44
+Fecha: 2026-06-12_22-23
 
 ## Estado
 
@@ -29,8 +29,8 @@ Elegir primera herramienta mínima: `flyer_eventos` o `slowmo_blender_ae`.
 
 ## Cambios realizados
 
-- 
+-
 
 ## Próximo paso
 
-- 
+-
