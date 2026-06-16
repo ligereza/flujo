@@ -5,20 +5,13 @@ import json
 from pathlib import Path
 from datetime import datetime
 
-from _repo import repo_root
+from _common import repo_root, slugify, load_json, write_json, create_flyer_project
 
 IG_RE = re.compile(
     r"https?://(?:www\.)?instagram\.com/(?P<kind>p|reel|tv)/(?P<code>[A-Za-z0-9_-]+)/*[^\s]*"
 )
 
-BASE = repo_root() / "projects/flyer_eventos"
-
-
-def slugify(text):
-    text = text.lower()
-    text = re.sub(r"[^a-z0-9]+", "-", text)
-    text = re.sub(r"-+", "-", text).strip("-")
-    return text or "evento"
+BASE = repo_root() / "projects" / "flyer_eventos"
 
 
 def detect_media_guess(kind):
@@ -31,13 +24,6 @@ def detect_media_guess(kind):
 
 def normalize_url(kind, code):
     return f"https://www.instagram.com/{kind}/{code}"
-
-
-def load_json(path):
-    try:
-        return json.loads(path.read_text(encoding="utf-8"))
-    except Exception:
-        return None
 
 
 def existing_instagram_keys():
@@ -70,76 +56,9 @@ def existing_instagram_keys():
     return keys
 
 
-def create_project(name):
-    date = datetime.now().strftime("%Y-%m-%d")
-    safe = slugify(name)
-
-    project = BASE / f"{date}_{safe}"
-
-    n = 2
-    original = project
-    while project.exists():
-        project = Path(f"{original}-{n:02d}")
-        n += 1
-
-    for folder in ["input", "working", "exports", "refs", "analysis", "ai"]:
-        d = project / folder
-        d.mkdir(parents=True, exist_ok=True)
-        (d / ".gitkeep").touch()
-
-    manifest = {
-        "tool": "flyer_eventos",
-        "name": name,
-        "date": date,
-        "status": "created",
-        "input": {
-            "main_image": "",
-            "event_name": name,
-            "event_date": "",
-            "format": "",
-            "notes": ""
-        },
-        "steps": {
-            "photoshop": "pending",
-            "blender": "pending",
-            "export": "pending"
-        },
-        "outputs": []
-    }
-
-    (project / "manifest.json").write_text(
-        json.dumps(manifest, ensure_ascii=False, indent=2),
-        encoding="utf-8"
-    )
-
-    (project / "README.md").write_text(
-        f"""# Flyer evento — {name}
-
-Fecha: {date}
-
-## Objetivo
-
-Crear flyer para evento importado desde correo.
-
-## Estado
-
-- [ ] Revisar link Instagram
-- [ ] Descargar imagen/video
-- [ ] Completar datos del evento
-- [ ] Análisis
-- [ ] Photoshop
-- [ ] Blender
-- [ ] Export final
-""",
-        encoding="utf-8"
-    )
-
-    return project
-
-
 def update_manifest(project_dir, item, index, total):
     manifest = project_dir / "manifest.json"
-    data = json.loads(manifest.read_text(encoding="utf-8"))
+    data = load_json(manifest) or {}
 
     kind = item["kind"]
     code = item["code"]
@@ -147,12 +66,12 @@ def update_manifest(project_dir, item, index, total):
     media_guess = detect_media_guess(kind)
 
     data["status"] = "from_email_pending_download"
-
-    data.setdefault("source", {})
-    data["source"]["type"] = "email"
-    data["source"]["email_imported_at"] = datetime.now().isoformat(timespec="seconds")
-    data["source"]["link_index"] = index
-    data["source"]["link_total"] = total
+    data["source"] = {
+        "type": "email",
+        "email_imported_at": datetime.now().isoformat(timespec="seconds"),
+        "link_index": index,
+        "link_total": total,
+    }
 
     data["instagram"] = {
         "url": url,
@@ -160,15 +79,17 @@ def update_manifest(project_dir, item, index, total):
         "shortcode": code,
         "media_guess": media_guess,
         "download_status": "pending",
-        "manual_download_possible": True
+        "manual_download_possible": True,
     }
 
     data.setdefault("extracted_info", {})
-    data["extracted_info"]["event_name"] = ""
-    data["extracted_info"]["producer"] = ""
-    data["extracted_info"]["venue"] = ""
-    data["extracted_info"]["event_date"] = ""
-    data["extracted_info"]["needs_manual_review"] = True
+    data["extracted_info"].update({
+        "event_name": "",
+        "producer": "",
+        "venue": "",
+        "event_date": "",
+        "needs_manual_review": True,
+    })
 
     data["manual_review"] = {
         "required": True,
@@ -176,8 +97,8 @@ def update_manifest(project_dir, item, index, total):
         "notes": [
             "Revisar si el post es imagen, carrusel o video.",
             "Si el perfil es privado, shadowban o requiere login, descargar manualmente.",
-            "Completar nombre evento, productora, lugar y fecha desde el flyer."
-        ]
+            "Completar nombre evento, productora, lugar y fecha desde el flyer.",
+        ],
     }
 
     data.setdefault("notes", [])
@@ -186,10 +107,7 @@ def update_manifest(project_dir, item, index, total):
     if kind in ["reel", "tv"]:
         data["notes"].append("Link parece video. Puede requerir descarga manual o captura de frame.")
 
-    manifest.write_text(
-        json.dumps(data, ensure_ascii=False, indent=2),
-        encoding="utf-8"
-    )
+    write_json(manifest, data)
 
 
 def extract_instagram_links(text):
@@ -272,7 +190,7 @@ def main():
         print(f"Tipo: {kind}")
         print(f"Media guess: {media_guess}")
 
-        project = create_project(name)
+        project = create_flyer_project(BASE, name, source_type="email")
         update_manifest(project, item, i, len(items))
 
         existing[key_shortcode] = str(project).replace("\\", "/")

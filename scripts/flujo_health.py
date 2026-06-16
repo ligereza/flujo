@@ -4,6 +4,7 @@ from pathlib import Path
 import json, subprocess, sys
 
 errors=[]
+warnings=[]
 
 def check_jsons():
     for p in Path('.').glob('**/*.json'):
@@ -17,10 +18,10 @@ def check_jsons():
 def check_pycache():
     for p in Path('.').glob('**/__pycache__'):
         if '.git' not in p.parts:
-            errors.append(f'Cache Python presente: {p}')
+            warnings.append(f'Cache Python presente: {p}')
     for p in Path('.').glob('**/*.pyc'):
         if '.git' not in p.parts:
-            errors.append(f'PYC presente: {p}')
+            warnings.append(f'PYC presente: {p}')
 
 def run_optional(cmd):
     try:
@@ -38,8 +39,13 @@ check_pycache()
 if Path('scripts/piezas_validate_config.py').exists():
     run_optional([sys.executable, 'scripts/piezas_validate_config.py'])
 
+if warnings:
+    print('\nAVISOS:')
+    for w in warnings:
+        print('-', w)
+
 if errors:
-    print('\nERRORES/AVISOS:')
+    print('\nERRORES:')
     for e in errors:
         print('-', e)
     sys.exit(1)

@@ -13,7 +13,7 @@ help:
 install:
 	$(PYTHON) -m pip install -r requirements.txt
 
-health:
+health: clean
 	$(PYTHON) scripts/flujo_health.py
 
 clean:
@@ -24,3 +24,6 @@ test:
 
 render:
 	$(PYTHON) scripts/piezas_generar.py projects/piezas_vectoriales/etiquetas_ejemplo/config.json
+
+new-flyer:
+	$(PYTHON) scripts/flyer_create_project.py "$(NAME)"

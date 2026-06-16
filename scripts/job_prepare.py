@@ -3,7 +3,7 @@
 from pathlib import Path
 import re, subprocess, sys
 
-from _repo import repo_root
+from _common import repo_root
 
 ROOT = repo_root()
 

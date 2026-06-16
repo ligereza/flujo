@@ -1,3 +1,9 @@
+# Checkpoint — fase 2: helpers comunes y flujo.py robusto
+
+Fecha: 2026-06-16_11-17
+
+## Estado
+
 # Estado del proyecto
 
 Última actualización: 2026-06-16
@@ -38,3 +44,11 @@ No importar scripts viejos automáticamente. Usar `reference_old` solo como refe
 - [ ] Reducir ruido de `checkpoints/` y `reference_old`.
 - [ ] Mejorar documentación de agentes (`AGENTS.md`, `PARA_IA.md`).
 - [ ] Agregar licencia.
+
+## Cambios realizados
+
+- 
+
+## Próximo paso
+
+- 

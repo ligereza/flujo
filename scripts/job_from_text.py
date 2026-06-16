@@ -4,7 +4,7 @@ from pathlib import Path
 from datetime import date
 import re, shutil, sys
 
-from _repo import repo_root
+from _common import repo_root
 
 
 def slugify(s):

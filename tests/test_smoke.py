@@ -77,3 +77,45 @@ def test_flyer_from_email_detecta_duplicados():
     )
     assert result.returncode == 0, result.stderr
     assert "DUPLICADO" in result.stdout or "Creados: 0" in result.stdout
+
+
+def test_flyer_create_project(tmp_path, monkeypatch):
+    """Crea un proyecto flyer con la estructura esperada."""
+    import sys
+    scripts_dir = str(ROOT / "scripts")
+    if scripts_dir not in sys.path:
+        sys.path.insert(0, scripts_dir)
+    from _common import create_flyer_project
+
+    monkeypatch.chdir(ROOT)
+    project = create_flyer_project(tmp_path, "fiesta de prueba", source_type="test")
+    assert project.exists()
+    assert (project / "manifest.json").exists()
+    assert (project / "README.md").exists()
+    for folder in ["input", "working", "exports", "refs", "analysis", "ai"]:
+        assert (project / folder / ".gitkeep").exists()
+
+    manifest = json.loads((project / "manifest.json").read_text(encoding="utf-8"))
+    assert manifest["tool"] == "flyer_eventos"
+    assert manifest["source"]["type"] == "test"
+
+
+def test_flujo_cli():
+    """El comando unificado flujo.py responde sin errores."""
+    result = subprocess.run(
+        [sys.executable, str(ROOT / "scripts" / "flujo.py")],
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    assert result.returncode == 1
+    assert "Comandos disponibles" in result.stdout
+
+    result = subprocess.run(
+        [sys.executable, str(ROOT / "scripts" / "flujo.py"), "health"],
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    assert result.returncode == 0, result.stderr
+    assert "OK: health check" in result.stdout
