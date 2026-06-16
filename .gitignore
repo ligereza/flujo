@@ -50,6 +50,12 @@ context/DAILY.md
 context/PIPELINE_RESULT.md
 context/dashboard.html
 
+# Temporales de descargas
+*.tmp
+*.temp
+tmp_*/
+ig_*/
+
 # Outputs generados por piezas vectoriales
 projects/piezas_vectoriales/*/salida_generada/
 projects/piezas_vectoriales/*/02_editables_svg/

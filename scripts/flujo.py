@@ -12,7 +12,7 @@ PY = sys.executable
 
 COMMANDS = {
     "health": ([PY, str(ROOT / "scripts" / "flujo_health.py")], []),
-    "clean": ([PY, str(ROOT / "scripts" / "flujo_clean_generated.py")], []),
+    "clean": (["bash", str(ROOT / "scripts" / "limpiar_basura.sh")], []),
     "job-from-text": ([PY, str(ROOT / "scripts" / "job_from_text.py")], ["name", "email_path"]),
     "job-prepare": ([PY, str(ROOT / "scripts" / "job_prepare.py")], ["job_path"]),
     "job-next": ([PY, str(ROOT / "scripts" / "job_next_actions.py")], []),

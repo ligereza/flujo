@@ -1,23 +1,23 @@
-.PHONY: help install health clean test
+.PHONY: help install clean test render new-flyer daily dashboard pipeline
 
 PYTHON := python3
 
 help:
 	@echo "Comandos disponibles:"
-	@echo "  make install    Instalar dependencias"
-	@echo "  make health     Ejecutar health check"
-	@echo "  make clean      Limpiar outputs generados"
-	@echo "  make test       Ejecutar tests mínimos"
-	@echo "  make render     Generar piezas vectoriales de ejemplo"
+	@echo "  make install     Instalar dependencias"
+	@echo "  make clean       Limpiar basura"
+	@echo "  make test        Ejecutar tests"
+	@echo "  make render      Generar piezas de ejemplo"
+	@echo "  make new-flyer   Crear flyer (NAME=\"nombre\")"
+	@echo "  make daily       Generar dashboard"
+	@echo "  make dashboard   Abrir dashboard"
+	@echo "  make pipeline    Ejecutar pipeline (NAME=\"nombre\" EMAIL=inbox/correo.txt)"
 
 install:
-	$(PYTHON) -m pip install -r requirements.txt
-
-health: clean
-	$(PYTHON) scripts/flujo_health.py
+	bash scripts/setup.sh
 
 clean:
-	$(PYTHON) scripts/flujo_clean_generated.py
+	bash scripts/limpiar_basura.sh
 
 test:
 	$(PYTHON) -m pytest tests/ -q
@@ -27,3 +27,12 @@ render:
 
 new-flyer:
 	$(PYTHON) scripts/flyer_create_project.py "$(NAME)"
+
+daily:
+	$(PYTHON) scripts/flujo_daily.py
+
+dashboard:
+	bash scripts/abrir_dashboard.sh
+
+pipeline:
+	$(PYTHON) scripts/flujo_pipeline.py "$(NAME)" "$(EMAIL)" --confirm

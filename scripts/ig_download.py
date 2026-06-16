@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
 """Descarga posts públicos de Instagram para proyectos flyer.
 
+Primero intenta yt-dlp. Si falla, marca manual_required sin dejar residuos.
+
 Uso:
   py scripts/ig_download.py <url> <output_dir>
-
-Ejemplo:
-  py scripts/ig_download.py https://www.instagram.com/p/ABC123/ projects/flyer_eventos/2026-06-16_evento/input
 """
 import re
 import sys
@@ -31,16 +30,11 @@ def extract_shortcode(url: str) -> str | None:
     return None
 
 
-def download_post(url: str, output_dir: Path) -> dict:
-    """Descarga un post público de Instagram. Devuelve metadata del resultado."""
-    shortcode = extract_shortcode(url)
-    if not shortcode:
-        return {"status": "error", "reason": "shortcode_no_detectado", "url": url}
-
+def download_with_ytdlp(url: str, output_dir: Path) -> dict:
     try:
-        import instaloader
+        import yt_dlp
     except ImportError:
-        return {"status": "error", "reason": "instaloader_no_instalado", "url": url}
+        return {"status": "error", "reason": "yt_dlp_no_instalado", "url": url}
 
     output_dir = Path(output_dir)
     output_dir.mkdir(parents=True, exist_ok=True)
@@ -48,65 +42,64 @@ def download_post(url: str, output_dir: Path) -> dict:
     # Limpiar archivos anteriores
     for f in output_dir.glob("input_ig.*"):
         f.unlink()
+    for f in output_dir.glob("input_ig_video.*"):
+        f.unlink()
 
     tmp = Path(tempfile.mkdtemp(prefix="ig_"))
-
     try:
-        L = instaloader.Instaloader(
-            download_video_thumbnails=False,
-            download_comments=False,
-            save_metadata=False,
-            download_geotags=False,
-            filename_pattern="{shortcode}",
-        )
-        post = instaloader.Post.from_shortcode(L.context, shortcode)
+        ydl_opts = {
+            "outtmpl": str(tmp / "%(id)s.%(ext)s"),
+            "format": "best",
+            "quiet": True,
+            "no_warnings": True,
+            "writethumbnail": False,
+            "writeinfojson": False,
+            "writesubtitles": False,
+            "skip_download": False,
+        }
+        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+            info = ydl.extract_info(url, download=True)
 
-        L.download_post(post, target=str(tmp))
-
-        # Buscar archivos descargados
-        images = sorted(tmp.glob("*.jpg"))
-        videos = sorted(tmp.glob("*.mp4"))
         files = sorted(tmp.glob("*"))
+        images = [f for f in files if f.suffix.lower() in (".jpg", ".jpeg", ".png", ".webp")]
+        videos = [f for f in files if f.suffix.lower() in (".mp4", ".mov", ".webm")]
 
         if not images and not videos:
-            return {"status": "error", "reason": "sin_archivos", "url": url}
-
-        # Priorizar imagen; si es video, copiar ambos
-        media_type = "image"
-        if not images and videos:
-            media_type = "video"
-        elif images and videos:
-            media_type = "carousel_or_video"
+            return {"status": "manual_required", "reason": "sin_archivos_descargables", "url": url}
 
         copied = []
+        media_type = "image"
         if images:
-            src = images[0]
             dst = output_dir / "input_ig.jpg"
-            shutil.copy2(src, dst)
+            shutil.copy2(images[0], dst)
             copied.append(str(dst))
         if videos:
-            src = videos[0]
+            media_type = "video" if not images else "carousel_or_video"
             dst = output_dir / "input_ig_video.mp4"
-            shutil.copy2(src, dst)
+            shutil.copy2(videos[0], dst)
             copied.append(str(dst))
 
         return {
             "status": "downloaded",
-            "shortcode": shortcode,
+            "shortcode": extract_shortcode(url),
             "url": url,
             "media_type": media_type,
             "files": copied,
-            "caption": post.caption or "",
+            "title": info.get("title", "") if info else "",
         }
-
-    except instaloader.exceptions.LoginRequiredException:
-        return {"status": "manual_required", "reason": "login_requerido", "url": url}
-    except instaloader.exceptions.ProfileNotExistsException:
-        return {"status": "manual_required", "reason": "perfil_no_existe", "url": url}
     except Exception as e:
         return {"status": "manual_required", "reason": str(e), "url": url}
     finally:
         shutil.rmtree(tmp, ignore_errors=True)
+
+
+def download_post(url: str, output_dir: Path) -> dict:
+    """Descarga un post público de Instagram. Sin instaloader."""
+    shortcode = extract_shortcode(url)
+    if not shortcode:
+        return {"status": "error", "reason": "shortcode_no_detectado", "url": url}
+
+    return download_with_ytdlp(url, output_dir)
 
 
 def main():

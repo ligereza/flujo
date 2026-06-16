@@ -1,3 +1,9 @@
+# Checkpoint — fase 10: listo para produccion
+
+Fecha: 2026-06-16_18-33
+
+## Estado
+
 # Estado del proyecto
 
 Última actualización: 2026-06-16
@@ -73,3 +79,11 @@ No importar scripts viejos automáticamente. Usar `reference_old` solo como refe
   - [x] Guía `docs/PRIMER_DIA.md` para uso diario.
   - [ ] Considerar si mover/eliminar `reference_old`.
   - [ ] Considerar si mover/eliminar `projects/tapiz`.
+
+## Cambios realizados
+
+-
+
+## Próximo paso
+
+-
