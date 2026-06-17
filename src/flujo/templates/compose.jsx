@@ -1,12 +1,13 @@
 // compose.jsx — Flujo v0.15
 // Script para Photoshop (doble clic)
-// Coloca input_ig.jpg como Smart Object + paleta de colores
+// Coloca input_ig.jpg como Smart Object + paleta REAL desde analysis/palette.json
 
 #target photoshop
 
 function main() {
     var baseFolder = Folder.current;
     var inputFile = new File(baseFolder + "/input/input_ig.jpg");
+    var paletteFile = new File(baseFolder + "/analysis/palette.json");
 
     if (!inputFile.exists) {
         alert("No se encontró input/input_ig.jpg");
@@ -27,6 +28,7 @@ function main() {
     layer.resize(scale, scale, AnchorPosition.MIDDLECENTER);
     executeAction(stringIDToTypeID("newPlacedLayer"), undefined, DialogModes.NO);
 
+    // === Cargar paleta real desde analysis/palette.json ===
     var palette = [
         [255, 0, 127],
         [0, 255, 200],
@@ -36,9 +38,25 @@ function main() {
     ];
     var names = ["Principal", "Acento", "Fondo", "Texto", "Secundario"];
 
+    if (paletteFile.exists) {
+        try {
+            paletteFile.open("r");
+            var content = paletteFile.read();
+            paletteFile.close();
+
+            var data = eval("(" + content + ")");
+            if (data && data.colors && data.colors.length > 0) {
+                palette = [];
+                for (var i = 0; i < Math.min(data.colors.length, 5); i++) {
+                    palette.push(data.colors[i].rgb);
+                }
+            }
+        } catch(e) {}
+    }
+
     for (var i = 0; i < palette.length; i++) {
         var colorLayer = doc.artLayers.add();
-        colorLayer.name = "Color " + names[i];
+        colorLayer.name = "Color " + (names[i] || "Color " + (i+1));
 
         var solid = new SolidColor();
         solid.rgb.red = palette[i][0];
@@ -69,7 +87,7 @@ function main() {
     textLayer.textItem.color.rgb.blue = 255;
     textLayer.textItem.position = [80, 1700];
 
-    alert("Documento listo para Photoshop");
+    alert("Documento listo para Photoshop\n(Paleta cargada desde analysis/palette.json)");
 }
 
 main();

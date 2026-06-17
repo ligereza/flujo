@@ -4,7 +4,7 @@ from pathlib import Path
 from datetime import datetime
 
 def export_flyer(project_dir: Path, output_dir: Path | None = None) -> Path:
-    """Exporta flyer a ZIP incluyendo scripts JSX de integración directa"""
+    """Exporta flyer a ZIP incluyendo scripts JSX que leen palette.json real"""
     project_dir = Path(project_dir)
     if not (project_dir / "manifest.json").exists():
         raise FileNotFoundError(f"No es un proyecto flyer válido: {project_dir}")
@@ -53,15 +53,15 @@ def export_flyer(project_dir: Path, output_dir: Path | None = None) -> Path:
         email = _generar_email_draft(project_dir)
         z.writestr("exports/respuesta_jefe.txt", email)
 
-        info = f"""FLUJO v0.15 — Export con integración directa
+        info = f"""FLUJO v0.15 — Export con integración directa (paleta real)
 Proyecto: {project_dir.name}
 Fecha: {ts}
 
 Contenido:
 - input/
-- analysis/
-- working/compose.jsx (Photoshop)
-- ai/compose_ai.jsx (Illustrator)
+- analysis/ (palette.json + .aco + .ase)
+- working/compose.jsx (Photoshop - lee palette.json)
+- ai/compose_ai.jsx (Illustrator - lee palette.json)
 """
         z.writestr("LEEME.txt", info)
 
@@ -70,20 +70,31 @@ Contenido:
 
 def _get_compose_jsx() -> str:
     return """// compose.jsx — Flujo v0.15
-#target photoshop
-function main() {
-    var base = Folder.current;
-    var img = new File(base + "/input/input_ig.jpg");
-    if (!img.exists) { alert("Falta input"); return; }
+// Script para Photoshop (doble clic)
+// Coloca input_ig.jpg como Smart Object + paleta REAL desde analysis/palette.json
 
-    var doc = app.documents.add(1080, 1920, 72, base.name, NewDocumentMode.RGB);
-    var idPlc = charIDToTypeID("Plc ");
-    var d = new ActionDescriptor();
-    d.putPath(charIDToTypeID("null"), img);
-    executeAction(idPlc, d, DialogModes.NO);
+#target photoshop
+
+function main() {
+    var baseFolder = Folder.current;
+    var inputFile = new File(baseFolder + "/input/input_ig.jpg");
+    var paletteFile = new File(baseFolder + "/analysis/palette.json");
+
+    if (!inputFile.exists) {
+        alert("No se encontró input/input_ig.jpg");
+        return;
+    }
+
+    var doc = app.documents.add(1080, 1920, 72, baseFolder.name, NewDocumentMode.RGB);
+
+    var idplace = charIDToTypeID("Plc ");
+    var desc = new ActionDescriptor();
+    desc.putPath(charIDToTypeID("null"), inputFile);
+    executeAction(idplace, desc, DialogModes.NO);
 
     var layer = doc.activeLayer;
-    layer.name = "Imagen IG";
+    layer.name = "Imagen IG (Smart Object)";
+
     var scale = (1920 / layer.bounds[3].value) * 100;
     layer.resize(scale, scale, AnchorPosition.MIDDLECENTER);
     executeAction(stringIDToTypeID("newPlacedLayer"), undefined, DialogModes.NO);
@@ -91,9 +102,24 @@ function main() {
     var palette = [[255,0,127],[0,255,200],[25,25,25],[255,255,255],[140,90,220]];
     var names = ["Principal","Acento","Fondo","Texto","Secundario"];
 
+    if (paletteFile.exists) {
+        try {
+            paletteFile.open("r");
+            var content = paletteFile.read();
+            paletteFile.close();
+            var data = eval("(" + content + ")");
+            if (data && data.colors && data.colors.length > 0) {
+                palette = [];
+                for (var i = 0; i < Math.min(data.colors.length, 5); i++) {
+                    palette.push(data.colors[i].rgb);
+                }
+            }
+        } catch(e) {}
+    }
+
     for (var i = 0; i < palette.length; i++) {
-        var cLayer = doc.artLayers.add();
-        cLayer.name = "Color " + names[i];
+        var colorLayer = doc.artLayers.add();
+        colorLayer.name = "Color " + (names[i] || "Color " + (i+1));
         var solid = new SolidColor();
         solid.rgb.red = palette[i][0];
         solid.rgb.green = palette[i][1];
@@ -121,7 +147,7 @@ function main() {
     txt.textItem.color.rgb.blue = 255;
     txt.textItem.position = [80, 1700];
 
-    alert("Listo para Photoshop");
+    alert("Documento listo para Photoshop\\n(Paleta cargada desde analysis/palette.json)");
 }
 main();
 """
@@ -129,18 +155,27 @@ main();
 
 def _get_compose_ai_jsx() -> str:
     return """// compose_ai.jsx — Flujo v0.15
+// Script para Adobe Illustrator (doble clic)
+// Coloca input_ig.jpg como imagen linked + swatches REALES
+
 #target illustrator
+
 function main() {
-    var base = Folder.current;
-    var img = new File(base + "/input/input_ig.jpg");
-    if (!img.exists) { alert("Falta input"); return; }
+    var baseFolder = Folder.current;
+    var inputFile = new File(baseFolder + "/input/input_ig.jpg");
+    var paletteFile = new File(baseFolder + "/analysis/palette.json");
+
+    if (!inputFile.exists) {
+        alert("No se encontró input/input_ig.jpg");
+        return;
+    }
 
     var doc = app.documents.add(DocumentColorSpace.RGB, 1080, 1920);
-    doc.artboards[0].name = base.name;
+    doc.artboards[0].name = baseFolder.name;
 
     var placed = doc.placedItems.add();
-    placed.file = img;
-    placed.name = "Imagen IG";
+    placed.file = inputFile;
+    placed.name = "Imagen IG (Linked)";
 
     var scale = (1920 / placed.height) * 100;
     placed.resize(scale, scale);
@@ -149,15 +184,30 @@ function main() {
     var palette = [[255,0,127],[0,255,200],[25,25,25],[255,255,255],[140,90,220]];
     var names = ["Principal","Acento","Fondo","Texto","Secundario"];
 
+    if (paletteFile.exists) {
+        try {
+            paletteFile.open("r");
+            var content = paletteFile.read();
+            paletteFile.close();
+            var data = eval("(" + content + ")");
+            if (data && data.colors && data.colors.length > 0) {
+                palette = [];
+                for (var i = 0; i < Math.min(data.colors.length, 5); i++) {
+                    palette.push(data.colors[i].rgb);
+                }
+            }
+        } catch(e) {}
+    }
+
     for (var i = 0; i < palette.length; i++) {
         var c = new RGBColor();
         c.red = palette[i][0]; c.green = palette[i][1]; c.blue = palette[i][2];
         var sw = doc.swatches.add();
-        sw.name = names[i];
+        sw.name = names[i] || ("Color " + (i+1));
         sw.color = c;
     }
 
-    alert("Listo para Illustrator");
+    alert("Documento listo para Illustrator\\n(Swatches cargados desde analysis/palette.json)");
 }
 main();
 """
@@ -176,8 +226,8 @@ Post: @{ig.get('owner','?')} / {ig.get('shortcode','')}
 
 Archivos listos:
 - Imagen original
-- Paleta (.aco + .ase)
-- Scripts directos para Photoshop e Illustrator
+- Paleta real (.aco + .ase + JSON)
+- Scripts directos para Photoshop e Illustrator (leen palette.json)
 
 ¿Ajustes?
 

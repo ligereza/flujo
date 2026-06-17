@@ -9,7 +9,7 @@ Sistema de automatización para flujos creativos.
 - CLI unificado (`flujo`)
 - Descarga Instagram con instaloader
 - Análisis de colores + OCR opcional
-- Export ZIP con integración directa para Photoshop e Illustrator
+- Export ZIP con integración directa para Photoshop e Illustrator (lee palette.json real)
 - Sistema de airdrop
 
 ## Flujo principal
@@ -40,4 +40,4 @@ src/flujo/                # CLI moderno
 
 ---
 
-**Versión:** v0.15 — Track M iniciado
+**Versión:** v0.15 — Track M (paleta real)

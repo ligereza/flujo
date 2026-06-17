@@ -1,12 +1,13 @@
 // compose_ai.jsx — Flujo v0.15
 // Script para Adobe Illustrator (doble clic)
-// Coloca input_ig.jpg como imagen linked + swatches
+// Coloca input_ig.jpg como imagen linked + swatches REALES
 
 #target illustrator
 
 function main() {
     var baseFolder = Folder.current;
     var inputFile = new File(baseFolder + "/input/input_ig.jpg");
+    var paletteFile = new File(baseFolder + "/analysis/palette.json");
 
     if (!inputFile.exists) {
         alert("No se encontró input/input_ig.jpg");
@@ -24,6 +25,7 @@ function main() {
     placed.resize(scale, scale);
     placed.position = [(1080 - placed.width) / 2, 1920 - placed.height];
 
+    // === Cargar paleta real ===
     var palette = [
         [255, 0, 127],
         [0, 255, 200],
@@ -33,6 +35,22 @@ function main() {
     ];
     var names = ["Principal", "Acento", "Fondo", "Texto", "Secundario"];
 
+    if (paletteFile.exists) {
+        try {
+            paletteFile.open("r");
+            var content = paletteFile.read();
+            paletteFile.close();
+
+            var data = eval("(" + content + ")");
+            if (data && data.colors && data.colors.length > 0) {
+                palette = [];
+                for (var i = 0; i < Math.min(data.colors.length, 5); i++) {
+                    palette.push(data.colors[i].rgb);
+                }
+            }
+        } catch(e) {}
+    }
+
     for (var i = 0; i < palette.length; i++) {
         var c = new RGBColor();
         c.red = palette[i][0];
@@ -40,11 +58,11 @@ function main() {
         c.blue = palette[i][2];
 
         var sw = doc.swatches.add();
-        sw.name = names[i];
+        sw.name = names[i] || ("Color " + (i+1));
         sw.color = c;
     }
 
-    alert("Documento listo para Illustrator");
+    alert("Documento listo para Illustrator\n(Swatches cargados desde analysis/palette.json)");
 }
 
 main();

@@ -1,3 +1,9 @@
+# Checkpoint — flujo v0.15 - Track M con paleta real (scripts JSX leen analysis/palette.json)
+
+Fecha: 2026-06-17_16-01
+
+## Estado
+
 # Estado del proyecto — flujo
 
 **Última actualización:** Junio 2026
@@ -23,3 +29,11 @@ Completar Track M y estabilizar integración directa.
 - No automatizar herramientas de diseño
 - Solo instaloader
 - Mantener contexto y checkpoints
+
+## Cambios realizados
+
+-
+
+## Próximo paso
+
+-
