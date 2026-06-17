@@ -1,5 +1,6 @@
 # Dependencias de flujo
-# Instalar con: python -m pip install -r requirements.txt
+# Instalar con: py -m pip install -r requirements.txt
+# Linux/macOS: python3 -m pip install -r requirements.txt
 
 matplotlib>=3.7.0
 pyyaml>=6.0

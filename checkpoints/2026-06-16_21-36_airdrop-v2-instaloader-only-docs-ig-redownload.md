@@ -1,3 +1,9 @@
+# Checkpoint — airdrop v2: instaloader-only + docs + ig_redownload
+
+Fecha: 2026-06-16_21-36
+
+## Estado
+
 # Estado del proyecto
 
 Última actualización: 2026-06-16
@@ -73,3 +79,11 @@ Sin yt-dlp, sin ffmpeg, sin venvs de 400 MB.
 - Instalación: `py -m pip install -r requirements.txt`
 - Interfaz web: `py scripts/app.py` o `bash start.sh`
 - Después de cada mejora: `bash scripts/checkpoint.sh "mensaje"`
+
+## Cambios realizados
+
+-
+
+## Próximo paso
+
+-

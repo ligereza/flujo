@@ -101,6 +101,7 @@ def download_with_instaloader(url: str, output_dir: Path) -> dict:
             "url": url,
             "media_type": media_type,
             "files": copied,
+            "file_count": len(copied),
             "caption": caption,
             "owner": post.owner_username,
             "date": post.date_utc.isoformat() if post.date_utc else "",
@@ -114,6 +115,8 @@ def download_with_instaloader(url: str, output_dir: Path) -> dict:
             err = "login_requerido_o_privado"
         elif "not found" in err.lower() or "does not exist" in err.lower():
             err = "post_no_encontrado"
+        elif "429" in err or "Too Many Requests" in err:
+            err = "rate_limit"
         return {"status": "manual_required", "reason": err, "url": url}
 
     finally:

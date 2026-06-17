@@ -1,6 +1,6 @@
 # Herramienta — flyer_eventos
 
-Estado: flujo base funcional / en mejora gradual
+Estado: flujo base funcional / descarga automática activa
 Prioridad: alta
 
 ## Objetivo
@@ -11,11 +11,12 @@ El flujo real parte muchas veces desde un correo del jefe que contiene uno o var
 
 ## Idea
 
-```txt
+```
 correo con links Instagram
 > extraer links
 > crear proyecto por link
-> guardar manifest
+> descargar automáticamente con instaloader
+> guardar manifest + caption
 > marcar revisión manual
 > preparar input
 > Photoshop manual/semi-automático
@@ -26,12 +27,13 @@ correo con links Instagram
 ## Información que interesa rescatar
 
 - nombre del evento
-- productora / usuario que publicó
+- productora / usuario que publicó (owner de IG)
 - lugar o venue
 - fecha
 - tipo de publicación: post, reel, tv
 - si parece imagen/carrusel/video
-- si requiere descarga manual
+- caption completo
+- archivos descargados
 
 ## Casos especiales
 
@@ -39,16 +41,23 @@ correo con links Instagram
 - Reel `/reel/`: probablemente video.
 - TV `/tv/`: probablemente video.
 - Perfil privado / shadowban / login requerido: descarga manual.
+- Rate limit Instagram: reintentar más tarde con `ig_redownload.py`
 - Flyer sin ubicación escrita: queda pendiente para revisión manual.
 
 ## Estructura de proyecto
 
-```txt
-projects/flyer_eventos/YYYY-MM-DD_nombre/
+```
+projects/flyer_eventos/YYYY-MM-DD_ig_SHORTCODE/
 ├─ input/
+│  ├─ input_ig.jpg
+│  ├─ input_ig_2.jpg ... (carrusel)
+│  ├─ input_ig_video.mp4
+│  └─ ig_caption.txt
 ├─ working/
 ├─ exports/
 ├─ refs/
+├─ analysis/
+├─ ai/
 ├─ manifest.json
 └─ README.md
 ```
@@ -57,50 +66,69 @@ projects/flyer_eventos/YYYY-MM-DD_nombre/
 
 Crear proyecto manual:
 
-```bash
+```
 bash scripts/new_flyer_evento.sh "nombre evento"
 ```
 
-Crear proyectos desde correo:
+Crear proyectos desde correo (con descarga automática):
 
-```bash
+```
 py scripts/flyer_from_email.py "inbox/correo_prueba.txt"
+```
+
+Reintentar descargas fallidas:
+
+```
+py scripts/ig_redownload.py
+py scripts/ig_redownload.py --all
 ```
 
 Listar proyectos:
 
-```bash
+```
 bash scripts/flyer_list.sh
 ```
 
 Último proyecto:
 
-```bash
+```
 bash scripts/flyer_latest.sh
 ```
 
 Setear imagen demo en último proyecto:
 
-```bash
+```
 bash scripts/flyer_set_input_latest_demo.sh
 ```
 
 Ver estado del último proyecto:
 
-```bash
+```
 bash scripts/flyer_status_latest.sh
 ```
 
 Generar índice de proyectos:
 
-```bash
+```
 bash scripts/flyer_index.sh
+```
+
+Detectar duplicados:
+
+```
+bash scripts/flyer_duplicates_report.sh
 ```
 
 Abrir último proyecto en Explorer:
 
-```bash
+```
 bash scripts/flyer_open_latest.sh
+```
+
+Descarga directa IG:
+
+```
+py scripts/ig_download.py "https://www.instagram.com/p/XXXX/" ./output
 ```
 
 ## Estado actual
@@ -117,11 +145,22 @@ bash scripts/flyer_open_latest.sh
 - [x] Guardar `media_guess`.
 - [x] Marcar revisión manual.
 - [x] Aplicar mejoras por `_airdrop/`.
-- [ ] Evitar duplicados por URL/shortcode.
-- [ ] Preparar descarga manual guiada.
+- [x] Evitar duplicados por URL/shortcode.
+- [x] Descarga automática con instaloader.
+- [x] Guardar carrusel completo + caption.
+- [x] Reintento de descargas fallidas `ig_redownload.py`.
 - [ ] Extraer colores dominantes.
+- [ ] Extraer texto OCR del flyer.
 - [ ] Preparar salida Photoshop.
 - [ ] Preparar integración Blender.
+
+## Descarga Instagram
+
+- Solo **instaloader**, sin yt-dlp.
+- Soporta posts, reels, carruseles.
+- Archivos: `input_ig.jpg`, `input_ig_2.jpg`..., `input_ig_video.mp4`, `ig_caption.txt`
+- Manifest guarda: owner, date_utc, media_type, file_count
+- Ver `docs/INSTALOADER.md`
 
 ## Reglas
 
@@ -130,3 +169,4 @@ bash scripts/flyer_open_latest.sh
 - No intentar saltar privacidad/login de Instagram.
 - Si una publicación no se puede descargar, marcar `manual_download_needed`.
 - Cada cambio debe terminar en checkpoint.
+- Solo instaloader. No volver a yt-dlp.

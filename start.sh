@@ -1,7 +1,5 @@
 #!/usr/bin/env bash
 # Lanzador rápido para flujo.
-# Evita tener que activar el venv manualmente.
-
 set -euo pipefail
 
 # Ubicarse en la raíz del proyecto
@@ -9,5 +7,13 @@ cd "$(dirname "$0")"
 
 echo "🚀 Iniciando FLUJO // Dimensiones del Orden..."
 
-# Ejecutar la app usando el python del entorno virtual directamente
-./.venv/Scripts/python scripts/app.py
+# Detectar python
+if command -v py >/dev/null 2>&1; then
+  PY=py
+elif command -v python3 >/dev/null 2>&1; then
+  PY=python3
+else
+  PY=python
+fi
+
+$PY scripts/app.py
