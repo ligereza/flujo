@@ -1,82 +1,85 @@
-.DS_Store
-Thumbs.db
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+ENV/
+*.egg-info/
+dist/
+build/
+
+# Env / secrets
 .env
 *.key
 *.pem
 credentials.json
 token.json
-*.psd
-*.psb
-*.ai
-*.indd
-*.aep
-*.blend
-*.exr
-*.tif
-*.tiff
-*.mp4
-*.mov
-*.avi
-*.mkv
-*.zip
-*.rar
-*.7z
-_local/
-_originales/
-_exports_pesados/
-_quarantine_frames/
 
-# Ejecutables locales
-*.exe
+# OS
+.DS_Store
+Thumbs.db
 
-# Airdrop temporal
+# Airdrop
 _airdrop/
 _airdrop_backups/
 
-# Imágenes/video de input de proyectos (se mantienen .gitkeep para la estructura)
+# === Media de proyectos (NO ignorar imágenes del repo/docs) ===
+# Solo ignorar outputs de proyectos flyer
 projects/flyer_eventos/*/input/*
 projects/flyer_eventos/*/working/*
 projects/flyer_eventos/*/exports/*
 projects/flyer_eventos/*/refs/*
 !projects/flyer_eventos/*/*/.gitkeep
 
-# Data generada por scripts
-projects/flyer_eventos/*/analysis/*.json
-projects/flyer_eventos/*/ai/*.json
+# Data generada
 data/*.json
-
-# Reportes diarios generados
 context/DAILY.md
 context/PIPELINE_RESULT.md
 context/dashboard.html
 
-# Temporales de descargas
+# Temporales
 *.tmp
 *.temp
 tmp_*/
 ig_*/
 
-# Outputs generados por piezas vectoriales
+# Piezas vectoriales - salidas generadas
 projects/piezas_vectoriales/*/salida_generada/
 projects/piezas_vectoriales/*/02_editables_svg/
 projects/piezas_vectoriales/*/03_final_vectorizado_svg/
 projects/piezas_vectoriales/*/04_preview/
 projects/piezas_vectoriales/*/05_exports/
 
-# Python cache
-__pycache__/
-*.py[cod]
-*$py.class
+# Archivos pesados de diseño (solo en proyectos, no en docs)
+projects/**/*.psd
+projects/**/*.psb
+projects/**/*.ai
+projects/**/*.indd
+projects/**/*.aep
+projects/**/*.blend
+projects/**/*.exr
+projects/**/*.tif
+projects/**/*.tiff
+projects/**/*.mp4
+projects/**/*.mov
+projects/**/*.avi
+projects/**/*.mkv
 
-# Python venv
-.venv/
-venv/
-ENV/
+# Permitir imágenes en docs/ y raíz (para README, banners, etc)
+!docs/**/*.png
+!docs/**/*.jpg
+!docs/**/*.jpeg
+!docs/**/*.gif
+!docs/**/*.webp
+!*.png
+!*.jpg
+!*.jpeg
+!*.gif
+!*.webp
 
-# Imágenes raster comunes
-*.jpg
-*.jpeg
-*.png
-*.gif
-*.webp
-*.bmp
+# Zips locales (permitir en docs si se necesita)
+*.zip
+*.rar
+*.7z
+!docs/**/*.zip

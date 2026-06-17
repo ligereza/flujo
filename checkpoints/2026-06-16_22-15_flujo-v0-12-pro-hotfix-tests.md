@@ -1,3 +1,9 @@
+# Checkpoint — flujo v0.12 pro - hotfix tests
+
+Fecha: 2026-06-16_22-15
+
+## Estado
+
 # Estado del proyecto
 
 Última actualización: 2026-06-16 — flujo v0.12 pro
@@ -55,3 +61,11 @@ flujo app
 ```
 
 Ver `docs/AGENT_GUIDE.md`
+
+## Cambios realizados
+
+-
+
+## Próximo paso
+
+-

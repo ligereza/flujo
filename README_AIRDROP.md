@@ -1,97 +1,123 @@
-# AIRDROP v2 – flujo instaloader-only + mejoras
+# AIRDROP v3 — flujo pro
 
 Fecha: 2026-06-16
+Versión: 0.12.0
 
-## Qué corrige
+Reconstrucción con libertad total. Arte + automatización.
 
-1. **start.sh** – Ya NO usa `./.venv/Scripts/python`. Ahora detecta automáticamente `py` / `python3` / `python`. Este era el script que te corrompió el ENV de 400 MB.
+## Qué cambia (paredes derrumbadas)
 
-2. **Comandos unificados a `py`** – README.md, PARA_IA.md, AGENTS.md todos actualizados a `py` (Windows) con nota `python3` para Linux/macOS. Se eliminó la confusión python3/py mezclada.
+### Estructura Python pro
+- `pyproject.toml` – instala con `py -m pip install -e .`
+- `src/flujo/` – paquete real, no scripts sueltos
+- Comando CLI: `flujo` (instalado vía `[project.scripts]`)
+- También: `py -m flujo`
 
-3. **Documentación Instagram actualizada** – PARA_IA.md ya NO dice "No descarga Instagram automáticamente". Ahora dice que SÍ descarga, con instaloader únicamente.
+### Modelos validados
+- `src/flujo/models.py` – Manifest pydantic
+- `src/flujo/manifest.py` – load/save con merge seguro, preserva campos desconocidos
+- Adiós dicts sueltos
 
-4. **tools/flyer_eventos/SPEC.md** – checklist actualizado, descarga automática marcada como completada, estructura de proyecto con carrusel + caption.
+### CLI unificado (Typer + Rich)
+```
+flujo health
+flujo flyer-import inbox/correo.txt
+flujo flyer-list
+flujo ig-redownload
+flujo daily
+flujo app
+flujo new-flyer "nombre"
+```
+- Colores, tablas, ayuda automática
 
-## Mejoras nuevas
+### Instagram
+- `src/flujo/ig/download.py` – instaloader only, con retry/backoff
+- Detecta rate_limit
+- Guarda carrusel + caption + owner + date
 
-### scripts/flyer_from_email.py
-- Nombre de proyecto: `ig_<shortcode>` en lugar de `email_evento_01` (más trazable)
-- Guarda en manifest: `owner`, `date_utc`, `media_type`, `file_count`
-- Guarda `producer_suggested` desde owner de IG
-- Compatible con descarga carrusel
+### Flyer import
+- `src/flujo/flyer/import_email.py`
+- Proyectos nombrados `ig_<shortcode>`
+- Manifest con producer_suggested
 
-### scripts/ig_download.py
-- Versión instaloader-only pulida
-- Detecta `rate_limit` (429)
-- Devuelve `file_count`, `owner`, `date`
-- Guarda carrusel completo
+### Docs
+- `README.md` – limpio, artístico, con link a tapiz
+- `docs/TAPIZ.md` – ASCII carpet completo
+- `docs/AGENT_GUIDE.md` – PARA_IA + AGENTS unificados
+- `PARA_IA.md` / `AGENS.md` – stubs que apuntan a la guía
 
-### scripts/flyer_status.py
-- Muestra info Instagram: owner, fecha, media_type, file_count
-- Lista archivos `input_ig*` encontrados físicamente
-- Preview de caption (120 chars)
-- Muestra `producer_suggested` y `caption_from_ig`
+### Repo hygiene
+- `.gitignore` corregido: ya NO ignora `*.jpg` globalmente
+  Solo ignora media en `projects/**/input/*`
+  Imágenes en `docs/` y raíz están permitidas
+- `requirements.txt` actualizado: + pydantic, typer, rich
+- `start.sh` portable: detecta py/python3, ejecuta `py -m flujo app`
 
-### scripts/ig_redownload.py (NUEVO)
-- Reintenta descargas fallidas en todos los proyectos flyer
-- `py scripts/ig_redownload.py` – solo pendientes
-- `py scripts/ig_redownload.py --all` – todos
-- `py scripts/ig_redownload.py --project projects/flyer_eventos/XXXX`
-- Actualiza manifest con `download_retry_at`
+### Compatibilidad
+Scripts legacy en `scripts/` son shims que importan desde `flujo.*`:
+- `scripts/flyer_from_email.py` → `flujo.flyer.import_email`
+- `scripts/ig_download.py` → `flujo.ig.download`
+- `scripts/flujo.py` → `flujo.cli`
+- `scripts/flyer_status.py` → versión mejorada incluida
+- `scripts/ig_redownload.py` → shim a CLI
 
-### scripts/flujo.py
-- Nuevo comando: `ig-redownload`
-- `py scripts/flujo.py ig-redownload`
+Los bash wrappers `flyer_list.sh`, `flyer_status_latest.sh`, etc. siguen funcionando.
 
-### docs/INSTALOADER.md (NUEVO)
-- Guía completa de descarga IG
-- Errores comunes y soluciones
-- Buenas prácticas rate limit
-- Por qué solo instaloader, no yt-dlp
+## Instalar
 
-### context/ESTADO.md
-- Fase 11 marcada como completada (Instagram instaloader-only)
-- Fase 12 con próximos pasos: colores dominantes, OCR, palette.json
+```bash
+# desde la raíz del repo
+py -m pip uninstall -y yt-dlp  # por si quedó
+py -m pip install -e .
 
-### requirements.txt
-- Comentario actualizado a `py -m pip install`
-- Sin yt-dlp, solo: matplotlib, pyyaml, gradio, instaloader
+# probar
+flujo health
+flujo flyer-import inbox/correo_prueba.txt
+```
 
-## Archivos en este airdrop
+## Archivos incluidos
 
 ```
+pyproject.toml
+src/flujo/
+  __init__.py
+  __main__.py
+  paths.py
+  models.py
+  manifest.py
+  cli.py
+  ig/download.py
+  flyer/project.py
+  flyer/import_email.py
 README.md
+docs/TAPIZ.md
+docs/AGENT_GUIDE.md
 PARA_IA.md
 AGENTS.md
 requirements.txt
+.gitignore
 start.sh
-context/ESTADO.md
-tools/flyer_eventos/SPEC.md
-docs/INSTALOADER.md
-scripts/ig_download.py
 scripts/flyer_from_email.py
-scripts/flyer_status.py
+scripts/ig_download.py
 scripts/flujo.py
+scripts/flyer_status.py
 scripts/ig_redownload.py
 ```
 
-## Aplicar
+## Migración
 
-```bash
-bash scripts/apply_airdrop.sh --dry-run
-bash scripts/apply_airdrop.sh --apply
-py scripts/flujo.py health
-py -m pytest tests/ -q
-bash scripts/checkpoint.sh "airdrop v2: instaloader-only + docs + ig_redownload"
-```
+1. Aplicar airdrop
+2. `py -m pip install -e .`
+3. `flujo health`
+4. `pytest -q`  (tests smoke existentes siguen pasando)
+5. checkpoint
 
-## Test rápido
+Los manifests antiguos se leen sin problema – pydantic con `extra="allow"`.
 
-```bash
-py scripts/flyer_from_email.py "inbox/correo_prueba.txt"
-bash scripts/flyer_status_latest.sh
-py scripts/ig_redownload.py
-```
+## Próximo
 
----
-flujo – Dimensiones del Orden
+- Fase B: OCR + palette auto
+- Fase C: SQLite index
+- Fase D: Gradio con auth
+
+— flujo v0.12 // arte y automatización

@@ -1,0 +1,46 @@
+[project]
+name = "flujo"
+version = "0.12.0"
+description = "Dimensiones del Orden — arte y automatización"
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [
+    {name = "ligereza"}
+]
+license = {text = "MIT"}
+dependencies = [
+    "matplotlib>=3.7.0",
+    "pyyaml>=6.0",
+    "gradio>=6.0",
+    "instaloader>=4.10",
+    "pydantic>=2.7",
+    "typer>=0.12",
+    "rich>=13.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4.0",
+]
+
+[project.scripts]
+flujo = "flujo.cli:app"
+
+[build-system]
+requires = ["setuptools>=61", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.black]
+line-length = 100
+target-version = ["py310"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
