@@ -1,0 +1,10 @@
+{
+  "nombre": "Festival Ejemplo 2026",
+  "duracion_horas": 6,
+  "voluntarios": 7,
+  "asistentes_estimados": 2500,
+  "incluye_testeo": true,
+  "masivo": true,
+  "ubicacion": "Aire libre",
+  "notas": "Evento masivo con stand de testeo. Probar reglas: >5h alimentación, >5 voluntarios mesa extra, masivo zona contención."
+}

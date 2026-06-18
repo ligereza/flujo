@@ -1,40 +1,38 @@
-# AIRDROP 2026-06-18 — flujo v0.30.2 — IG: usuario + descarga + paleta
+# AIRDROP 2026-06-18 — flujo v0.31.0 — Proyecto satélite `plano`
 
-**Tipo:** Fix + features (amplía el 0.30.2 previo no aplicado). Con tests. Retrocompatible.
+**Tipo:** Proyecto nuevo "por desarrollar" (estilo `tapiz`). No toca el core.
 
 ## TL;DR
-- **Fix:** detecta `instagram.com/<usuario>/p/CODE/` (el formato que reportaste).
-- **Nuevo:** la pestaña INSTAGRAM ahora **descarga el post** (instaloader),
-  **extrae la paleta** de colores y permite **aplicarla a la pieza** del editor.
+Agrega `projects/plano/`: un generador paramétrico de planos de stands para
+eventos por **constantes de realidad** (sin AutoCAD), con rider derivado por
+reglas. Incluye el generador radial de teatro original como referencia.
 
-👉 Contexto: **`HANDOFF_2026-06-18_ig_descarga.md`** · Guía: `docs/EDITOR_INSTAGRAM.md`.
+👉 Contexto: **`HANDOFF_2026-06-18_plano.md`** · Concepto: `projects/plano/README.md`.
 
 ## Archivos
 ```
 _airdrop/
-├── HANDOFF_2026-06-18_ig_descarga.md
+├── HANDOFF_2026-06-18_plano.md
 ├── README_AIRDROP.md
-├── pyproject.toml                          # 0.30.1 → 0.30.2
-├── src/flujo/
-│   ├── version.py                          # 0.30.2 + changelog
-│   ├── intake/email_parser.py              # regex IG con <usuario>
-│   └── web/editor.py                       # descarga + paleta + pestaña ampliada
-├── tests/
-│   ├── test_ig_usuario.py                  # 7 tests del regex
-│   └── test_ig_download_palette.py         # 7 tests (descarga mock + paleta)
-└── docs/
-    └── EDITOR_INSTAGRAM.md                  # NUEVO
+├── pyproject.toml                          # 0.30.2 → 0.31.0
+├── src/flujo/version.py                     # 0.31.0 + changelog
+└── projects/plano/
+    ├── README.md
+    ├── feedback.md
+    ├── plano_stands.py                      # motor headless (prototipo)
+    ├── referencia_plano_teatro.py           # generador radial original (referencia)
+    └── ejemplos/evento_ejemplo.json
 ```
 
 ## Aplicar
 ```bash
-flujo airdrop apply "v0.30.2 - IG usuario + descarga + paleta"
+flujo airdrop apply "v0.31.0 - proyecto plano (por desarrollar)"
 py -m pip install -e .
-flujo version            # 0.30.2
-flujo serve              # INSTAGRAM: Analizar → Descargar → Aplicar paleta
-py -m pytest tests/ -q   # 168 passed, 1 skipped
+flujo version            # 0.31.0
+cd projects/plano && python plano_stands.py ejemplos/evento_ejemplo.json --rider
+py -m pytest tests/ -q
 ```
 
 ## Compatibilidad
-- Descarga solo con instaloader (ya era dependencia). Sin libs nuevas.
-- Retrocompatible.
+- No modifica nada del core. `plano_stands.py` es headless (stdlib).
+- `referencia_plano_teatro.py` requiere customtkinter (solo si lo ejecutás; es referencia).
