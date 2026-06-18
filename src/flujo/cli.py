@@ -773,6 +773,69 @@ def render_formats(
             console.print(f"  · {f}")
 
 
+@render_app.command("rescale")
+def render_rescale(
+    config: Path = typer.Argument(..., help="ruta al config.json"),
+    dpi: Optional[float] = typer.Option(None, "--dpi", help="resolución objetivo (ej. 300)"),
+    width: Optional[float] = typer.Option(None, "--width", "-w", help="nuevo ancho en cm (cambio de proporción)"),
+    height: Optional[float] = typer.Option(None, "--height", "-h", help="nuevo alto en cm (cambio de proporción)"),
+    scale_elements: Optional[bool] = typer.Option(
+        None, "--scale-elements/--no-scale-elements",
+        help="reposicionar elementos al nuevo tamaño (por defecto: sí en --dpi, no en proporción)",
+    ),
+    out: Optional[Path] = typer.Option(None, "--out", help="archivo de salida (por defecto sobrescribe)"),
+    dry_run: bool = typer.Option(False, "--dry-run", help="solo mostrar el cálculo, no escribir"),
+):
+    """Reescalar proporción (medida cm) o resolución (DPI) de un config.json.
+
+    Ejemplos:
+      flujo render rescale c.json --dpi 300            # subir resolución (anti-pixelado)
+      flujo render rescale c.json -w 14 -h 10          # cambiar proporción a 14x10 cm
+    """
+    from .render.rescale import load_config, set_dpi, set_real_size, save_config, current_dpi
+
+    if not config.exists():
+        _err(f"No existe: {config}")
+    if dpi is None and (width is None or height is None):
+        _err("Indica --dpi, o bien --width y --height (cm).")
+
+    try:
+        cfg = load_config(config)
+    except Exception as e:
+        _err(f"No se pudo leer el config: {e}")
+
+    try:
+        if width is not None and height is not None:
+            se = bool(scale_elements) if scale_elements is not None else False
+            new_cfg, info = set_real_size(cfg, width, height, dpi=dpi, scale_elements=se)
+        else:
+            se = bool(scale_elements) if scale_elements is not None else True
+            new_cfg, info = set_dpi(cfg, dpi, scale_elements=se)
+    except ValueError as e:
+        _err(str(e))
+
+    _section(f"Rescale ({info['modo']}) — {config.name}")
+    ca, cd = info["canvas_antes"], info["canvas_despues"]
+    console.print(f"  canvas: [yellow]{ca[0]}x{ca[1]}px[/] → [green]{cd[0]}x{cd[1]}px[/]")
+    if info["modo"] == "dpi":
+        da = info["dpi_antes"]
+        console.print(f"  dpi:    [yellow]{da:.0f}[/] → [green]{info['dpi_despues']:.0f}[/]" if da else f"  dpi:    → [green]{info['dpi_despues']:.0f}[/]")
+    else:
+        ra, rd = info["real_antes"], info["real_despues"]
+        console.print(f"  medida: [yellow]{ra[0]}x{ra[1]}cm[/] → [green]{rd[0]}x{rd[1]}cm[/] @ {info['dpi_usado']:.0f}dpi")
+    console.print(f"  elementos reescalados: {'sí' if info['elementos_reescalados'] else 'no'}")
+    if info.get("aviso"):
+        _warn(info["aviso"])
+
+    if dry_run:
+        _ok("Dry-run: no se escribió nada.")
+        return
+
+    target = out or config
+    save_config(new_cfg, target)
+    _ok(f"Guardado: {target}")
+
+
 # Alias: `flujo render` sin subcomando → render_run
 @render_app.callback(invoke_without_command=True)
 def render_default(ctx: typer.Context):

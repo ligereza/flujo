@@ -211,6 +211,60 @@ Medidas de referencia (heurística en `intake/pipeline.py`):
 
 ---
 
+## 3.7 Pedidos de MODIFICACIÓN (bloque `modificacion`)
+
+Cuando el pedido no es nuevo sino un **cambio sobre una pieza existente**
+(la queja típica: *"cámbiame la proporción"* o *"se ve pixelado"*), se incluye
+el bloque opcional `pedido.modificacion`. Su presencia hace que `tipo_pieza` y
+`contenido.titulo` basten como mínimos (no hace falta repetir medidas/formato).
+
+```json
+"modificacion": {
+  "pieza_existente": "projects/piezas_vectoriales/<slug>/config.json",
+  "tipo_cambio": ["proporcion", "resolucion"],
+  "proporcion": { "ancho_cm": 14, "alto_cm": 10 },
+  "resolucion": { "dpi": 300, "motivo": "se veía pixelado en la imprenta" },
+  "detalle": "Texto libre con la instrucción."
+}
+```
+
+`tipo_cambio` admite: `proporcion | resolucion | texto | color | imagen | otro`.
+
+### Cómo se resuelve cada cambio (importante)
+
+| tipo_cambio | Qué es | Cómo lo resuelve flujo |
+|---|---|---|
+| `proporcion` | Cambiar la medida/aspecto (ej. 16.5×6.5 → 14×10) | `flujo render rescale <config> -w 14 -h 10`. Recalcula el canvas px. **No reposiciona los elementos** (cambiar proporción deforma el encuadre): hay que reacomodar en Illustrator o regenerar desde plantilla. |
+| `resolucion` | "Se ve pixelado", subir DPI | `flujo render rescale <config> --dpi 300`. Mantiene la medida física y sube los px. Reescala los elementos para que el diseño se vea idéntico. |
+| `texto` / `color` / `imagen` | Cambiar contenido | Se edita el `config.json` (texto vivo) y se re-renderiza. |
+
+> **Proporción vs. resolución — la distinción clave:**
+> - *Pixelado* = problema de **resolución** → más px, misma medida (`--dpi`).
+>   Como las piezas se renderizan en **SVG (vectorial)**, el pixelado real solo
+>   aparece si hay una **imagen raster** incrustada de baja resolución; ahí la
+>   solución es reemplazar/vectorizar ese recurso, no tocar el canvas.
+> - *Otra medida/aspecto* = cambio de **proporción** → `-w/-h` (es un cambio de
+>   formato, no de calidad).
+
+### Comando `flujo render rescale`
+
+```bash
+# Subir resolución (anti-pixelado), mantiene 16.5x6.5 cm:
+flujo render rescale projects/.../config.json --dpi 300
+
+# Cambiar proporción a 14x10 cm (avisa que hay que reposicionar):
+flujo render rescale projects/.../config.json -w 14 -h 10
+
+# Opciones útiles:
+#   --out otro.json          guardar en otro archivo (no sobrescribir)
+#   --dry-run                solo mostrar el cálculo
+#   --scale-elements/--no-scale-elements   forzar o no el reescalado de elementos
+```
+
+La relación px ↔ cm es `px = cm / 2.54 × dpi`. Para imprenta, apuntar a **≥300 DPI**.
+
+---
+
 ## 4. Validación
 
 El esquema JSON formal está en
@@ -230,6 +284,7 @@ Ejemplos completos y válidos en `schemas/ejemplos/`:
 - `etiqueta_miel.json`
 - `flyer_evento.json`
 - `carrusel_ig.json`
+- `modificacion_etiqueta.json` (pedido de cambio: proporción + resolución)
 
 ---
 
@@ -263,6 +318,11 @@ Para la siguiente IA que retome esto. Pasos sugeridos, de menor a mayor esfuerzo
    cron/Task Scheduler. (Decisión del dueño sobre el canal — ver README.)
 5. **Formulario web** (opcional) que genere el JSON válido para evitar errores
    del colega.
+
+### ✅ Ya implementado
+- **`flujo render rescale`** (módulo `src/flujo/render/rescale.py`): resuelve los
+  cambios de `proporcion` y `resolucion` del bloque `modificacion`. Cuando se
+  implemente `flujo intake json`, debe enrutar `tipo_cambio` a este comando.
 
 > Mantener el contrato: **todo canal produce el mismo JSON `intake_version 1.0`**.
 > Si el esquema cambia, subir `intake_version` y versionar este documento.

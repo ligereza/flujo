@@ -1,6 +1,6 @@
 # flujo — Dimensiones del Orden
 
-**arte + automatización · v0.25.0**
+**arte + automatización · v0.26.0**
 
 Sistema personal de automatización para flujos creativos (diseño gráfico:
 flyers, etiquetas, riders, one-pagers, carruseles). Convierte un **pedido**
@@ -435,6 +435,8 @@ flujo render formats                       # listar plantillas
 flujo render formats -w 16.5 -h 6.5 -t etiqueta   # sugerir
 flujo render validate <config.json>
 flujo render run <config.json>
+flujo render rescale <config.json> --dpi 300        # subir resolución (anti-pixelado)
+flujo render rescale <config.json> -w 14 -h 10      # cambiar proporción/medida
 
 # Flyers desde Instagram
 flujo flyer-import <correo.txt>
