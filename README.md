@@ -1,17 +1,17 @@
 # flujo — Dimensiones del Orden
 
-**arte + automatización · v0.18**
+**arte + automatización · v0.20**
 
 Sistema de automatización para flujos creativos. CLI unificada para manejar
 jobs, flyers, privacidad, render de piezas vectoriales y dashboard.
 
-## Estado actual (v0.18)
+## Estado actual (v0.20)
 
-- CLI unificada `flujo` con 17+ comandos
+- CLI unificada `flujo` con 20+ comandos
+- **Airdrop Zero-Friction:** Actualizaciones automatizadas con auto-checkpoint y push integrado.
 - Pipeline completo de jobs: correo → brief → proyecto → render
 - Intake inteligente de correos con parseo de links de Instagram
 - Track M (integración directa PS/AI desde `analysis/palette.json`)
-- Sistema de airdrop profesional
 - Privacidad integrada (escaneo PII + sanitización)
 - Dashboard diario con scoring de prioridades
 
@@ -65,9 +65,9 @@ flujo render run projects/.../config.json
 
 ```
 src/flujo/        # paquete Python (CLI + módulos)
-  cli.py          # CLI unificada Typer (17+ comandos)
+  cli.py          # CLI unificada Typer (20+ comandos)
   jobs/           # lifecycle de jobs
-  privacy/        # escaneo PII
+  privacy/         # escaneo PII
   render/         # piezas vectoriales
   dashboard/      # reporte diario
   intake/         # parseo de correos
@@ -76,6 +76,7 @@ src/flujo/        # paquete Python (CLI + módulos)
   export/         # ZIP + scripts JSX
   index/          # SQLite flyers
   ig/             # descarga Instagram
+  airdrop/        # motor de actualizaciones (v0.20)
 scripts/          # utilidades (checkpoint, airdrop, app.py)
 tests/            # pytest (60+ tests)
 docs/             # documentación
@@ -105,16 +106,14 @@ flujo daily
 flujo serve           # interfaz web Gradio
 flujo clean [--generated]
 flujo init
+flujo airdrop {list,dry-run,apply,rollback,finish}
 ```
 
-## Airdrop
+## Airdrop (v0.20+)
 
 ```bash
-# Aplicar actualización
-bash scripts/apply_airdrop.sh --dry-run
-bash scripts/apply_airdrop.sh --apply
-pip install -e .
-py -m pytest tests/ -v
+# Aplicar actualización (Ahora automatiza Backup -> Apply -> Checkpoint -> Push)
+flujo airdrop apply v0.XX
 ```
 
 ## Licencia

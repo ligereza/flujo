@@ -17,7 +17,3 @@ Se ha implementado el sistema **Zero-Friction Airdrop**.
 
 ## 🗺️ Mapa del Pipeline actual
 Intake (Correo/IG) $\rightarrow$ Privacy Scan $\rightarrow$ Brief Extraction $\rightarrow$ Project Creation $\rightarrow$ Vector Render.
-
-## 🎯 Próximos Pasos Sugeridos
-- Implementar descarga automática de ZIPs de airdrop desde una URL remota.
-- Mejorar el sistema de scoring del dashboard diario.
