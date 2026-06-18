@@ -1,0 +1,42 @@
+{
+  "project": {
+    "name": "2026-06-18_etiquetas-acme-04",
+    "slug": "2026-06-18-etiquetas-acme-04",
+    "brand": "Cliente",
+    "website": "",
+    "source_job": "C:/IA/flujo/jobs/2026-06-18_etiquetas-acme-04",
+    "note": "Proyecto base creado desde brief.yaml. Diseño pendiente de ajustar."
+  },
+  "canvas": {
+    "width": 3300,
+    "height": 1300,
+    "real_size_cm": { "width": 16.5, "height": 6.5 },
+    "safe_margin_px": 120
+  },
+  "palette": {
+    "cream": "#F6EFE3",
+    "paper": "#FFF8ED",
+    "white": "#FFFFFF",
+    "ink": "#161513",
+    "muted": "#675F55",
+    "line": "#D9CEC0",
+    "accent": "#173F2F"
+  },
+  "background": "cream",
+  "global_elements": [
+    { "type": "rect", "x": 80, "y": 80, "w": 3140, "h": 1140, "radius": 60, "fill": "none", "stroke": "line", "stroke_width": 5 },
+    { "type": "text", "content": "{brand}", "x": 120, "y": 120, "size": 44, "fill": "ink", "weight": "bold" }
+  ],
+  "documents": [
+    {
+      "id": "01_base_2026-06-18-etiquetas-acme-04",
+      "title": "2026-06-18_etiquetas-acme-04",
+      "tipo": "etiqueta",
+      "elements": [
+        { "type": "text", "content": "2026-06-18_etiquetas-acme-04", "x": 120, "y": 300, "size": 96, "fill": "ink", "weight": "bold", "max_width": 3060 },
+        { "type": "panel", "x": 120, "y": 520, "w": 3060, "h": 540, "radius": 44, "fill": "white", "stroke": "line", "stroke_width": 3, "opacity": 0.72 },
+        { "type": "paragraph", "content": "Base creada desde brief. Reemplazar por estructura final de diseño.", "x": 190, "y": 610, "size": 44, "fill": "muted", "max_width": 2920, "line_height": 60 }
+      ]
+    }
+  ]
+}

@@ -1,14 +1,17 @@
 # flujo — Dimensiones del Orden
 
-**arte + automatización · v0.20**
+**arte + automatización · v0.24**
 
 Sistema de automatización para flujos creativos. CLI unificada para manejar
 jobs, flyers, privacidad, render de piezas vectoriales y dashboard.
 
-## Estado actual (v0.20)
+> La versión se centraliza en `src/flujo/version.py`. Consulta la actual con
+> `flujo version`.
+
+## Estado actual (v0.24)
 
 - CLI unificada `flujo` con 20+ comandos
-- **Airdrop Zero-Friction:** Actualizaciones automatizadas con auto-checkpoint y push integrado.
+- **Airdrop Zero-Friction:** Actualizaciones automatizadas con auto-checkpoint y push integrado (reparado en v0.24).
 - Pipeline completo de jobs: correo → brief → proyecto → render
 - Intake inteligente de correos con parseo de links de Instagram
 - Track M (integración directa PS/AI desde `analysis/palette.json`)
@@ -109,11 +112,16 @@ flujo init
 flujo airdrop {list,dry-run,apply,rollback,finish}
 ```
 
-## Airdrop (v0.20+)
+## Airdrop (v0.24+)
+
+El airdrop es **sin versiones**: deja los archivos a aplicar dentro de
+`_airdrop/` respetando la estructura del repo (ej. `_airdrop/src/flujo/cli.py`).
 
 ```bash
-# Aplicar actualización (Ahora automatiza Backup -> Apply -> Checkpoint -> Push)
-flujo airdrop apply v0.XX
+flujo airdrop list                 # archivos pendientes en _airdrop/
+flujo airdrop dry-run              # simula sin aplicar
+flujo airdrop apply "mensaje"      # backup -> apply -> checkpoint -> push
+flujo airdrop rollback             # restaura el último backup
 ```
 
 ## Licencia

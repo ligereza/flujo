@@ -44,7 +44,8 @@ def scan_airdrop() -> List[Dict]:
         rel = src.relative_to(base)
         dest = repo_root() / rel
         status = "REPLACE" if dest.exists() else "NEW"
-        changes.append({"src": src, "dest": dest, "rel": str(rel), "status": status})
+        # rel.as_posix() => siempre con "/" (consistente en Windows y Linux/macOS)
+        changes.append({"src": src, "dest": dest, "rel": rel.as_posix(), "status": status})
     return changes
 
 

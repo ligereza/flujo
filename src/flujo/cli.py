@@ -1,6 +1,7 @@
 """CLI unificada de flujo — Typer.
 
-v0.16: completa, con jobs, privacy, render, dashboard, intake, flyer, etc.
+Completa: jobs, privacy, render, dashboard, intake, flyer, airdrop, etc.
+La versión se centraliza en `flujo.version` (ver `flujo version`).
 
 Comandos disponibles (ejecutar `flujo --help`):
   salud / info
@@ -48,9 +49,11 @@ from rich.table import Table
 from rich.panel import Panel
 
 
+from .version import get_version as _get_pkg_version
+
 app = typer.Typer(
     add_completion=False,
-    help="flujo — Dimensiones del Orden · v0.16",
+    help=f"flujo — Dimensiones del Orden · v{_get_pkg_version()}",
     no_args_is_help=True,
 )
 console = Console()
@@ -109,29 +112,30 @@ def airdrop_status():
 
 @airdrop_app.command("list")
 def airdrop_list():
-    """Lista versiones de airdrop disponibles."""
-    from .airdrop import list_versions
-    versions = list_versions()
-    if not versions:
-        _warn("No hay airdrops disponibles en _airdrop/")
+    """Lista los archivos pendientes de aplicar en _airdrop/."""
+    from .airdrop import list_airdrop_files
+    files = list_airdrop_files()
+    if not files:
+        _warn("No hay archivos pendientes en _airdrop/")
         return
-    _section("Airdrops Disponibles")
-    for v in versions:
-        console.print(f"  · [bold cyan]{v}[/]")
+    _section("Archivos en _airdrop/ (pendientes de aplicar)")
+    for rel in files:
+        console.print(f"  · [bold cyan]{rel}[/]")
 
 
 @airdrop_app.command("dry-run")
-def airdrop_dry_run(
-    version: str = typer.Argument(..., help="Versión del airdrop a simular"),
-):
-    """Simula la aplicación de un airdrop sin realizar cambios."""
+def airdrop_dry_run():
+    """Simula la aplicación del airdrop sin realizar cambios."""
     from .airdrop import scan_airdrop
     try:
-        changes = scan_airdrop(version)
-        _section(f"Simulación Airdrop: {version}")
+        changes = scan_airdrop()
+        if not changes:
+            _warn("No hay archivos pendientes en _airdrop/")
+            return
+        _section("Simulación de Airdrop (_airdrop/)")
         for c in changes:
             color = "green" if c["status"] == "NEW" else "yellow"
-            console.print(f"  [{color}] {c['status']:<8}[/] {c['rel']}")
+            console.print(f"  [{color}]{c['status']:<8}[/] {c['rel']}")
         console.print(f"\n[bold]Total: {len(changes)} archivos serían afectados.[/]")
     except Exception as e:
         _err(str(e))
@@ -139,31 +143,33 @@ def airdrop_dry_run(
 
 @airdrop_app.command("apply")
 def airdrop_apply(
-    version: str = typer.Argument(..., help="Versión del airdrop a aplicar"),
+    message: Optional[str] = typer.Argument(
+        None, help="Mensaje del checkpoint (ej. 'fix airdrop cli')"
+    ),
 ):
-    """Aplica un airdrop específico, crea backup y realiza auto-checkpoint + push."""
+    """Aplica los archivos de _airdrop/, crea backup y dispara checkpoint + push."""
     from .airdrop import apply_airdrop, run_auto_checkpoint
     try:
-        changes = apply_airdrop(version)
+        changes = apply_airdrop()
         if not changes:
-            _warn(f"No hay cambios para aplicar en la versión {version}")
+            _warn("No hay archivos pendientes en _airdrop/")
             return
 
-        _section(f"Airdrop {version} Aplicado")
+        _section("Airdrop Aplicado")
         for c in changes:
             console.print(f"  [green]✓[/] {c['rel']}")
 
-        _ok(f"Archivos aplicados exitosamente.")
+        _ok("Archivos aplicados exitosamente.")
 
-        # --- AUTOMATIZACIÓN SUSTANCIAL ---
+        # --- AUTOMATIZACIÓN: backup -> apply -> checkpoint -> push ---
         console.print("\n[cyan]Ejecutando auto-checkpoint y push...[/]")
-        if run_auto_checkpoint(version):
-            _ok(f"Checkpoint creado y cambios subidos al servidor.")
+        if run_auto_checkpoint(message):
+            _ok("Checkpoint creado y cambios subidos al servidor.")
         else:
             _warn("No se pudo realizar el auto-checkpoint. Por favor, hazlo manualmente.")
 
         _section("Proceso Completado")
-        console.print(f"[bold green]Airdrop {version} está activo y sincronizado.[/]")
+        console.print("[bold green]Airdrop está activo y sincronizado.[/]")
 
     except Exception as e:
         _err(str(e))
