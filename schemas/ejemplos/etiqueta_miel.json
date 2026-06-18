@@ -1,0 +1,47 @@
+{
+  "intake_version": "1.0",
+  "pedido": {
+    "id_externo": "WA-2026-06-18-001",
+    "solicitante": {
+      "nombre": "Juan Pérez",
+      "canal": "whatsapp",
+      "contacto": "+56 9 1234 5678"
+    },
+    "tipo_pieza": "etiqueta",
+    "formato_sugerido": "etiqueta_horizontal_165x65",
+    "medidas": {
+      "ancho_cm": 16.5,
+      "alto_cm": 6.5,
+      "orientacion": "horizontal",
+      "sangrado_mm": 3
+    },
+    "productos": ["Miel orgánica 500g"],
+    "contenido": {
+      "titulo": "MIEL ORGÁNICA",
+      "subtitulo": "Cosecha 2026",
+      "cuerpo": "Producto natural de la cordillera. Sin aditivos.",
+      "extras": {
+        "lote": "L-2026-06",
+        "contenido_neto": "500g",
+        "vencimiento": "2027-06",
+        "qr": "https://mimarca.cl/miel"
+      }
+    },
+    "marca": {
+      "nombre": "Apícola del Sur",
+      "web": "mimarca.cl",
+      "paleta_preferida": ["#173F2F", "#F6EFE3", "#161513"]
+    },
+    "entrega": {
+      "formatos": ["editable_svg", "vectorizado_svg", "zip"],
+      "fecha_limite": "2026-06-25",
+      "destino": "imprenta"
+    },
+    "restricciones": {
+      "no_inventar_claims": true,
+      "texto_vectorizado": true,
+      "editable_para_illustrator": true
+    },
+    "notas": "Usar tonos tierra. NO inventar claims de salud."
+  }
+}

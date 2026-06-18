@@ -1,64 +1,45 @@
-# AIRDROP 2026-06-18 — flujo v0.24.0 — Fix crítico del sistema Airdrop
+# AIRDROP 2026-06-18 — flujo v0.25.0 — README maestro + Intake JSON
 
-**Fecha:** 2026-06-18
-**Versión objetivo:** 0.24.0
-**Tipo:** Fix crítico (sin breaking changes en la API pública)
-
----
+**Tipo:** Documentación + contrato de datos (sin cambios de lógica ejecutable).
 
 ## TL;DR
+Reescribe el `README.md` como guía definitiva para que cualquier IA sepa cómo
+trabajar aquí (sobre todo el sistema de airdrops/ZIPs), y establece la
+**estructura JSON** con la que los colegas entregarán pedidos por formato.
 
-El comando `flujo airdrop` (list / dry-run / apply) **estaba roto**: `cli.py`
-llamaba a una API que `airdrop.py` ya no tenía. Este airdrop lo repara,
-sincroniza la versión (estaba en 3 valores distintos) y agrega tests de
-regresión + un script de limpieza seguro.
+👉 Contexto completo: **`HANDOFF_2026-06-18_docs.md`**.
 
-> 👉 Para el contexto completo y el handoff, lee **`HANDOFF_2026-06-18.md`**.
-
----
-
-## Archivos incluidos
-
+## Archivos
 ```
 _airdrop/
-├── HANDOFF_2026-06-18.md          # contexto completo para la próxima IA (LEER)
-├── README_AIRDROP.md             # este archivo
-├── pyproject.toml                # versión 0.16.0 → 0.24.0
-├── src/flujo/
-│   ├── cli.py                    # FIX: comandos airdrop + versión dinámica en --help
-│   └── version.py                # 0.24.0 + changelog
-├── tests/
-│   └── test_airdrop.py           # NUEVO: 9 tests de regresión del airdrop
-└── scripts/
-    └── cleanup_safe.sh           # NUEVO: limpieza reversible de scripts legacy
+├── HANDOFF_2026-06-18_docs.md      # contexto para la próxima IA (LEER)
+├── README_AIRDROP.md              # este archivo
+├── README.md                      # guía maestra reescrita
+├── PARA_IA_CONTEXT.md             # handover corto v0.25.0
+├── pyproject.toml                 # 0.24.1 → 0.25.0
+├── src/flujo/version.py           # 0.25.0 + changelog
+├── docs/INTAKE_JSON.md            # spec de intake por JSON
+└── schemas/
+    ├── intake.schema.json         # JSON Schema draft-07 (validable)
+    └── ejemplos/
+        ├── etiqueta_miel.json
+        ├── flyer_evento.json
+        └── carrusel_ig.json
 ```
 
 ## Aplicar
-
 ```bash
-# Opción A — con la CLI (este fix la repara):
-flujo airdrop apply "v0.24 - fix airdrop cli + version sync"
-
-# Opción B — flujo manual (siempre funciona):
-bash scripts/apply_airdrop.sh --dry-run
+flujo airdrop apply "v0.25.0 - README maestro + intake JSON"
+# o manual:
 bash scripts/apply_airdrop.sh --apply
+bash scripts/checkpoint.sh "v0.25.0 - README maestro + intake JSON"
 
-# Después, en ambos casos:
-py -m pip install -e .
-flujo version            # 0.24.0
-flujo airdrop list       # ya no lanza ImportError
-py -m pytest tests/ -q   # 69 passed, 1 skipped
-```
-
-## Limpieza opcional de legacy
-
-```bash
-bash scripts/cleanup_safe.sh           # dry-run
-bash scripts/cleanup_safe.sh --apply   # archiva 10 scripts huérfanos en _archive/
+py -m pip install -e .      # para refrescar la versión
+flujo version               # 0.25.0
+py -m pytest tests/ -q      # 69 passed, 1 skipped
 ```
 
 ## Compatibilidad
-
-- **Sin breaking changes**: la firma pública de `airdrop.py` no cambió.
-- **Dependencias**: ninguna nueva.
-- **Python**: 3.10+ (sin cambios).
+- Sin breaking changes. No agrega dependencias en runtime.
+- `jsonschema` solo se necesita si más adelante se valida el JSON en código (no
+  requerido por este airdrop).

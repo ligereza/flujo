@@ -1,128 +1,463 @@
 # flujo — Dimensiones del Orden
 
-**arte + automatización · v0.24**
+**arte + automatización · v0.25.0**
 
-Sistema de automatización para flujos creativos. CLI unificada para manejar
-jobs, flyers, privacidad, render de piezas vectoriales y dashboard.
+Sistema personal de automatización para flujos creativos (diseño gráfico:
+flyers, etiquetas, riders, one-pagers, carruseles). Convierte un **pedido**
+(correo, mensaje o JSON) en un **proyecto renderizable** sin que el dueño
+tenga que estar presente para acusar recibo o iniciar el trabajo.
 
-> La versión se centraliza en `src/flujo/version.py`. Consulta la actual con
-> `flujo version`.
+> La versión se centraliza en `src/flujo/version.py`. Consúltala con `flujo version`.
 
-## Estado actual (v0.24)
+---
 
-- CLI unificada `flujo` con 20+ comandos
-- **Airdrop Zero-Friction:** Actualizaciones automatizadas con auto-checkpoint y push integrado (reparado en v0.24).
-- Pipeline completo de jobs: correo → brief → proyecto → render
-- Intake inteligente de correos con parseo de links de Instagram
-- Track M (integración directa PS/AI desde `analysis/palette.json`)
-- Privacidad integrada (escaneo PII + sanitización)
-- Dashboard diario con scoring de prioridades
+## 📖 Índice
 
-## Quick start
+1. [Para quién es este README](#-para-quién-es-este-readme)
+2. [Qué es flujo y para qué sirve](#-qué-es-flujo-y-para-qué-sirve)
+3. [Cómo trabaja otra IA aquí (LECTURA OBLIGATORIA)](#-cómo-trabaja-otra-ia-aquí-lectura-obligatoria)
+4. [El sistema de Airdrops (cómo se entregan mejoras)](#-el-sistema-de-airdrops-cómo-se-entregan-mejoras)
+5. [Quick start](#-quick-start)
+6. [El pipeline: de pedido a pieza](#-el-pipeline-de-pedido-a-pieza)
+7. [Intake por JSON (para colegas)](#-intake-por-json-para-colegas)
+8. [Catálogo de formatos](#-catálogo-de-formatos)
+9. [La app / recepción automática (estado y plan)](#-la-app--recepción-automática-estado-y-plan)
+10. [Reglas innegociables](#-reglas-innegociables)
+11. [Estructura del repo](#-estructura-del-repo)
+12. [Referencia de comandos CLI](#-referencia-de-comandos-cli)
+
+---
+
+## 👤 Para quién es este README
+
+Este repo lo usan **dos tipos de operador**:
+
+- **El dueño (humano):** recibe pedidos de diseño de jefes/clientes/colegas y
+  los produce. Trabaja en Windows con Git Bash (`py` como intérprete).
+- **Agentes de IA (tú, si estás leyendo esto):** ayudan a mejorar el código,
+  procesar pedidos, y mantener el sistema. **No tienes acceso de escritura
+  directa al repo**: entregas tu trabajo como un **airdrop** (ver más abajo).
+
+Si eres una IA, lee la sección [Cómo trabaja otra IA aquí](#-cómo-trabaja-otra-ia-aquí-lectura-obligatoria)
+de principio a fin antes de tocar nada.
+
+---
+
+## 🎯 Qué es flujo y para qué sirve
+
+El dueño es diseñador. Recibe pedidos por correo / WhatsApp / Instagram y debe:
+acusar recibo, entender qué se pide, definir formato y medidas, producir el
+arte y entregarlo. **flujo automatiza todo lo que rodea al diseño manual** para
+que el dueño pueda:
+
+- **Recibir un pedido aunque esté ausente** y que quede registrado y ordenado.
+- **No perder información** (medidas, productos, links, datos sensibles).
+- **Arrancar el proyecto** con la plantilla y medidas correctas, listo para
+  abrir en Illustrator/Photoshop.
+
+> **Lo que flujo NO hace:** no automatiza Photoshop / Illustrator / Blender.
+> El diseño fino es manual. flujo prepara, ordena, valida y entrega el andamiaje.
+
+**Pipeline mental:**
+
+```
+Pedido (correo / mensaje / JSON)
+   → Privacy scan (PII)
+   → Brief (qué, medidas, formato, productos)
+   → Job (carpeta de trabajo con estado)
+   → Proyecto (config.json + plantilla de formato)
+   → Render (SVG/preview) → Export (ZIP para PS/AI)
+```
+
+---
+
+## 🤖 Cómo trabaja otra IA aquí (LECTURA OBLIGATORIA)
+
+Si eres una IA mejorando este repo, este es **exactamente** tu protocolo:
+
+### 1. Entiende antes de tocar
+Lee, en orden: este README → `PARA_IA_CONTEXT.md` → `docs/AGENT_GUIDE.md` →
+`docs/CLI.md`. Clona el repo y corre `py -m pytest tests/ -q` y `flujo health`
+para conocer el estado real (no asumas que la doc está 100% al día).
+
+### 2. Trabaja en tu propio clon, no en el repo del dueño
+Haces tus cambios, los **pruebas** (`pytest`, `compileall`, prueba manual de
+los comandos afectados).
+
+### 3. Entrega TODO como un airdrop dentro de un ZIP
+El dueño NO te da push. Tu único canal de entrega es un **ZIP** que contiene
+una carpeta `_airdrop/` que **replica la estructura del repo**. Reglas:
+
+- **Cada archivo que crees, modifiques o quieras reemplazar** va dentro de
+  `_airdrop/` en su ruta final. Ej: si arreglas `src/flujo/cli.py`, lo pones en
+  `_airdrop/src/flujo/cli.py`.
+- **Sin subcarpetas de versión.** No uses `_airdrop/v0.24/...`. El diseño es
+  "drop directo": `_airdrop/<ruta exacta en el repo>`.
+- **Incluye SIEMPRE un documento de handoff** (`_airdrop/HANDOFF_<fecha>.md` o
+  `HOTFIX_<fecha>.md`) explicando: qué arreglaste, por qué, cómo probarlo, y
+  qué deuda queda. Es lo que permite a la **siguiente** IA continuar.
+- **Actualiza la doc relevante** (este README, changelog en `version.py`,
+  `PARA_IA_CONTEXT.md`) dentro del mismo airdrop.
+- **Bump de versión** en `src/flujo/version.py` Y `pyproject.toml` (deben
+  coincidir). Agrega entrada al changelog en `version.py`.
+- Entrega el resultado como **un ZIP**, ubicado en una carpeta `_airdrop/`
+  (ej. `_airdrop/airdrop_<fecha>.zip`). El dueño lo descomprime en la raíz.
+
+### 4. El dueño aplica tu airdrop así
+```bash
+# opción A (manual, siempre funciona):
+bash scripts/apply_airdrop.sh --dry-run   # ver qué cambiaría
+bash scripts/apply_airdrop.sh --apply     # copiar + backup
+bash scripts/checkpoint.sh "mensaje"      # commit + push (en UNA corrida)
+
+# opción B (integrado en la CLI):
+flujo airdrop apply "mensaje"             # backup → apply → checkpoint → push
+```
+
+### 5. Qué NO hacer
+- ❌ No uses `yt-dlp` (solo `instaloader` para Instagram).
+- ❌ No crees venvs pesados ni dependencias nuevas sin justificarlo.
+- ❌ No mandes datos a IAs externas sin pasar `flujo privacy` primero.
+- ❌ No borres archivos por las malas: el airdrop solo COPIA. Para limpiar usa
+  `scripts/cleanup_safe.sh` (mueve a `_archive/`, reversible).
+- ❌ No dejes mensajes de commit vacíos ni placeholder.
+
+> **Checklist de calidad antes de entregar un airdrop**
+> `compileall` OK · `pytest` verde · comando afectado probado a mano ·
+> versión bumpeada y sincronizada · handoff escrito · doc actualizada.
+
+---
+
+## 📦 El sistema de Airdrops (cómo se entregan mejoras)
+
+El "airdrop" es el mecanismo central de colaboración. Resuelve: *"una IA no
+tiene push, ¿cómo le hace llegar cambios al repo de forma segura y trazable?"*
+
+### Cómo funciona el motor (`src/flujo/airdrop.py`)
+1. **Escanea** `_airdrop/` recursivamente (ignora `.gitkeep`, dotfiles).
+2. Para cada archivo, calcula su **destino** = misma ruta relativa en la raíz.
+   Marca `NEW` (no existe) o `REPLACE` (ya existe).
+3. Al **aplicar**: hace **backup** de cada `REPLACE` en
+   `_airdrop_backups/<timestamp>/`, copia el archivo a su destino, da permiso
+   de ejecución a los `.sh`.
+4. Dispara **auto-checkpoint** (commit + push) si se usó `flujo airdrop apply`.
+5. **Rollback**: `flujo airdrop rollback` restaura el último backup.
+
+> Las rutas se normalizan con `/` (`rel.as_posix()`) para que funcione igual en
+> Windows y Linux/macOS.
+
+### Anatomía de un ZIP de airdrop bien hecho
+```
+airdrop_2026-06-18.zip
+└── _airdrop/
+    ├── HANDOFF_2026-06-18.md        # contexto para la próxima IA (OBLIGATORIO)
+    ├── README.md                    # doc actualizada (si aplica)
+    ├── pyproject.toml               # versión bumpeada (si aplica)
+    ├── src/flujo/
+    │   ├── cli.py                   # archivo modificado, ruta exacta
+    │   └── version.py               # versión + changelog
+    ├── tests/
+    │   └── test_xxx.py              # tests nuevos/actualizados
+    └── scripts/
+        └── algo.sh                  # scripts nuevos
+```
+
+`_airdrop/` y `_airdrop_backups/` están en `.gitignore`: **no se commitean**.
+Solo se commitea el resultado de aplicarlos (los archivos en sus rutas reales).
+
+---
+
+## 🚀 Quick start
 
 ```bash
 py -m pip install -e .
 
-# Crear job desde correo
-flujo job new "etiquetas acme" --email inbox/correo.txt
+flujo health                 # chequeo general del repo
+flujo version                # versión + changelog
 
-# Pipeline completo
-flujo job prepare jobs/2026-06-17_etiquetas-acme
-flujo job activate jobs/2026-06-17_etiquetas-acme
+# Procesar un pedido por correo/texto:
+flujo job new "etiquetas acme" --email inbox/correo.txt
+flujo job prepare jobs/2026-06-17_etiquetas-acme      # privacy → brief → estado
+flujo job activate jobs/2026-06-17_etiquetas-acme     # brief → proyecto
+
+# Renderizar:
 flujo render run projects/piezas_vectoriales/etiquetas-acme/config.json
 
-# Dashboard diario
+# Panorama del día:
 flujo daily
 
-# Interfaz web local
+# Interfaz web local (Gradio):
 flujo serve
 ```
 
-## Flujos principales
+---
 
-```bash
-# Flyers desde Instagram (vía correo)
-flujo flyer-import inbox/correo.txt
-flujo analyze
-flujo export <proyecto>
+## 🔄 El pipeline: de pedido a pieza
 
-# Privacidad
-flujo privacy scan inbox/correo.txt
-flujo privacy sanitize inbox/correo.txt --out inbox/correo_sanitizado.txt
-
-# Piezas vectoriales
-flujo render formats                          # listar plantillas
-flujo render formats -w 16.5 -h 6.5 -t etiqueta  # sugerir
-flujo render validate projects/.../config.json
-flujo render run projects/.../config.json
+```
+                 ┌─────────────────────────────────────────────┐
+   PEDIDO  ──►   │ inbox/correo.txt   o   intake JSON (colegas) │
+                 └───────────────────────┬─────────────────────┘
+                                         │
+                 ┌───────────────────────▼─────────────────────┐
+   PRIVACY  ──►  │ flujo privacy scan → riesgo bajo/medio/alto  │
+                 │ (PII: email, RUT, teléfono, tarjeta, dirección)│
+                 └───────────────────────┬─────────────────────┘
+                                         │
+                 ┌───────────────────────▼─────────────────────┐
+   BRIEF    ──►  │ brief.yaml: tipo_pieza, medidas, productos,  │
+                 │ entrega, restricciones, pendientes           │
+                 └───────────────────────┬─────────────────────┘
+                                         │
+                 ┌───────────────────────▼─────────────────────┐
+   JOB      ──►  │ jobs/YYYY-MM-DD_slug/ con estado (lifecycle) │
+                 │ borrador → brief_extraido → listo → en_diseno│
+                 │ → generado → entregado                       │
+                 └───────────────────────┬─────────────────────┘
+                                         │
+                 ┌───────────────────────▼─────────────────────┐
+   PROYECTO ──►  │ projects/piezas_vectoriales/<slug>/config.json│
+                 │ (elige plantilla de formato por medida/tipo) │
+                 └───────────────────────┬─────────────────────┘
+                                         │
+                 ┌───────────────────────▼─────────────────────┐
+   RENDER   ──►  │ SVG / preview  →  export ZIP para PS/AI      │
+                 └─────────────────────────────────────────────┘
 ```
 
-## Reglas
+**Estados del job** (`EstadoJob` en `src/flujo/jobs/brief.py`):
+`borrador → brief_extraido_pendiente_revision → pendiente_datos →
+listo_para_disenar → en_diseno → generado → entregado`
+(+ `pausado`, `cancelado`). Las transiciones válidas están codificadas en
+`TRANSICIONES_VALIDAS`.
 
-- No automatizar Photoshop / Illustrator / Blender
-- Solo instaloader para descarga de IG
-- Mantener checkpoints
-- Privacidad primero antes de IAs externas
+---
 
-## Estructura
+## 📨 Intake por JSON (para colegas)
+
+**Objetivo:** que jefes/colegas entreguen los pedidos en un **JSON estructurado**
+en vez de texto libre. Así el sistema sabe exactamente el formato, medidas y
+contenido sin adivinar, y el dueño se independiza de responder mensajes.
+
+👉 **La especificación completa, el esquema validable y los ejemplos por formato
+están en [`docs/INTAKE_JSON.md`](docs/INTAKE_JSON.md) y en `schemas/`.**
+
+### Idea en 30 segundos
+Un colega llena un JSON como este y lo manda (correo adjunto, o lo deja en
+`inbox/`):
+
+```json
+{
+  "intake_version": "1.0",
+  "pedido": {
+    "id_externo": "WA-2026-06-18-001",
+    "solicitante": { "nombre": "Juan", "canal": "whatsapp" },
+    "tipo_pieza": "etiqueta",
+    "formato_sugerido": "etiqueta_horizontal_165x65",
+    "medidas": { "ancho_cm": 16.5, "alto_cm": 6.5, "orientacion": "horizontal" },
+    "productos": ["Miel orgánica 500g"],
+    "contenido": {
+      "titulo": "MIEL ORGÁNICA",
+      "subtitulo": "Cosecha 2026",
+      "cuerpo": "Producto natural de la cordillera.",
+      "extras": { "lote": "L-2026-06", "qr": "https://..." }
+    },
+    "entrega": { "formatos": ["editable_svg", "vectorizado_svg", "zip"], "fecha_limite": "2026-06-25" },
+    "notas": "Usar tonos tierra. No inventar claims de salud."
+  }
+}
+```
+
+flujo lo recibe, **acusa recibo automáticamente**, lo valida contra el esquema,
+escanea PII, crea el brief + job, y elige la plantilla de formato. El dueño solo
+revisa y diseña.
+
+> **Estado:** la estructura JSON está **definida y documentada** (este airdrop).
+> El comando `flujo intake json <archivo>` que la consume end-to-end es el
+> **siguiente paso de implementación** (ver roadmap en `docs/INTAKE_JSON.md`).
+> Hoy ya existe el intake desde texto: `flujo job new --email`.
+
+---
+
+## 🎨 Catálogo de formatos
+
+Los formatos viven en `tools/piezas_vectoriales/plantillas/INDEX_FORMATOS.json`.
+Cada uno define **medida real (cm)**, **canvas (px)** y una **plantilla
+`config.json`** base. Consúltalos con `flujo render formats`.
+
+| id | tipo | medida real | canvas px | uso |
+|---|---|---|---|---|
+| `etiqueta_horizontal_165x65` | etiqueta | 16.5 × 6.5 cm | 3300 × 1300 | etiqueta de producto horizontal |
+| `etiqueta_horizontal_140x100` | etiqueta | 14 × 10 cm | 2800 × 2000 | etiqueta/flyer horizontal |
+| `flyer_horizontal_minimo` | flyer | 14 × 10 cm | 2800 × 2000 | flyer horizontal mínimo |
+| `one_page_propuesta_a4` | one_page / dossier | 21 × 29.7 cm | 2100 × 2970 | propuesta de servicio A4 |
+| `carrusel_cuadrado_1080` | carrusel IG | 10.8 × 10.8 cm | 1080 × 1080 | slide cuadrado digital |
+| `rider_eventos_a4_horizontal` | rider / layout | 29.7 × 21 cm | 2970 × 2100 | rider técnico de evento |
+
+> **Sugerencia automática:** `flujo render formats -w 16.5 -h 6.5 -t etiqueta`
+> puntúa por proporción + cercanía de medida + tipo y devuelve el mejor match.
+> Si una medida no coincide con ninguna plantilla, el sistema crea una base
+> proporcional universal usando `canvas` + `real_size_cm`.
+
+**Cómo se compone una pieza** (estructura de `config.json`):
+- `project`: nombre, slug, marca, web, nota.
+- `canvas`: `width`/`height` (px), `real_size_cm`, `safe_margin_px`.
+- `palette`: colores con nombre (`ink`, `accent`, `paper`...).
+- `background`: color de fondo (nombre de la paleta).
+- `global_elements`: elementos repetidos en todos los documentos (marco, marca).
+- `documents[]`: cada documento tiene `id`, `title` y `elements[]`
+  (`text`, `paragraph`, `rect`, `panel`, ...) con coordenadas, tamaño y color.
+
+La estructura JSON específica que debe entregar un colega por cada tipo de
+pieza está en [`docs/INTAKE_JSON.md`](docs/INTAKE_JSON.md).
+
+---
+
+## 🌐 La app / recepción automática (estado y plan)
+
+Pregunta clave del dueño: *"¿la app será Gradio, o se integrará con mi correo /
+una API para recibir pedidos aunque esté ausente?"*
+
+### Hoy (estado real)
+- `flujo serve` levanta una **app local de Gradio** (`scripts/app.py`,
+  http://localhost:7860). Sirve para operar el pipeline a mano: pegar un correo,
+  crear pedido, generar pieza, ver dashboard, health, limpiar.
+- Es **local y manual**: hay que tenerla corriendo y estar presente. No recibe
+  nada por sí sola.
+
+### Plan recomendado (para "recibir aunque esté ausente")
+La arquitectura objetivo separa **recepción** de **operación**:
+
+```
+   Colega/Jefe                 RECEPCIÓN (24/7)            OPERACIÓN
+ ┌─────────────┐         ┌───────────────────────┐     ┌──────────────┐
+ │ Correo +    │  ──►    │ Webhook / poll buzón   │ ──► │ inbox/*.json │
+ │ JSON adjunto│         │  · valida esquema      │     │ + brief+job  │
+ │  o formulario│        │  · ACUSA RECIBO (auto) │     │  creados     │
+ └─────────────┘         │  · privacy scan        │     └──────┬───────┘
+                         └───────────────────────┘            │
+                                                        ┌──────▼───────┐
+                                                        │ dueño revisa │
+                                                        │ y diseña     │
+                                                        └──────────────┘
+```
+
+Opciones técnicas (a decidir; ninguna implementada aún):
+- **Correo (recomendado para empezar):** un poller IMAP lee un buzón dedicado,
+  extrae JSON adjunto o cuerpo, y responde automáticamente *"pedido recibido,
+  folio #…"*. Cero infraestructura nueva, funciona aunque el dueño duerma.
+- **Formulario web + API:** una página simple genera el JSON válido (evita que
+  el colega se equivoque en el esquema) y lo postea a un endpoint.
+- **Webhook de WhatsApp/Telegram:** para canales de mensajería.
+
+> **Decisión pendiente del dueño.** Mientras tanto, el formato de intercambio
+> (JSON) ya queda fijado, así cualquier canal que se elija después solo tiene
+> que producir ese JSON. Ver opciones y trade-offs en `docs/INTAKE_JSON.md`.
+
+---
+
+## 🔒 Reglas innegociables
+
+1. **Instagram:** descargas SOLO con `instaloader`. Prohibido `yt-dlp`.
+2. **Entorno:** sin venvs pesados; usar `py` (Windows) / `python3` (Linux/mac).
+3. **Privacidad primero:** `flujo privacy scan/sanitize` antes de enviar texto a
+   IAs externas.
+4. **No automatizar** Photoshop / Illustrator / Blender.
+5. **Checkpoints:** cada avance se registra (commit + push). Sin mensajes vacíos.
+6. **Borrado:** nunca destructivo a mano; usar `scripts/cleanup_safe.sh`.
+7. **Lógica nueva** → como módulo en `src/flujo/` **con tests**.
+
+---
+
+## 🗂️ Estructura del repo
 
 ```
 src/flujo/        # paquete Python (CLI + módulos)
   cli.py          # CLI unificada Typer (20+ comandos)
-  jobs/           # lifecycle de jobs
-  privacy/         # escaneo PII
-  render/         # piezas vectoriales
-  dashboard/      # reporte diario
-  intake/         # parseo de correos
-  flyer/          # importación flyers IG
-  analyze/        # colores + OCR
-  export/         # ZIP + scripts JSX
-  index/          # SQLite flyers
-  ig/             # descarga Instagram
-  airdrop/        # motor de actualizaciones (v0.20)
-scripts/          # utilidades (checkpoint, airdrop, app.py)
-tests/            # pytest (60+ tests)
-docs/             # documentación
-jobs/             # trabajos creativos (no commitear)
+  airdrop.py      # motor de airdrops (apply/rollback/checkpoint)
+  version.py      # versión + changelog (FUENTE DE VERDAD de la versión)
+  paths.py        # resolución de rutas del repo
+  jobs/           # lifecycle de jobs + modelo Brief
+  privacy/        # escaneo y sanitización de PII
+  render/         # formatos + render de piezas vectoriales
+  intake/         # parseo de correos + pipeline
+  flyer/          # importación de flyers desde Instagram
+  analyze/        # colores dominantes + OCR
+  export/         # ZIP + scripts JSX para PS/AI
+  index/          # índice SQLite de flyers
+  ig/             # descarga Instagram (instaloader)
+  dashboard/      # reporte diario con scoring
+  templates/      # plantillas base de jobs + JSX
+tools/piezas_vectoriales/plantillas/   # INDEX_FORMATOS.json + config.json base
+scripts/          # utilidades: checkpoint.sh, apply_airdrop.sh, app.py (Gradio), cleanup_safe.sh
+tests/            # pytest (69+ tests)
+docs/             # documentación detallada (CLI, formatos, intake JSON, etc.)
+schemas/          # esquema JSON de intake + ejemplos
+jobs/             # trabajos creativos (gitignored, salvo _template)
 projects/         # proyectos generados
-inbox/            # bandeja de entrada
-data/             # índice SQLite
-context/          # reportes diarios
+inbox/            # bandeja de entrada de pedidos
+context/          # reportes diarios / estado
+_airdrop/         # (gitignored) zona de aterrizaje de airdrops
+_airdrop_backups/ # (gitignored) backups automáticos al aplicar airdrops
+_archive/         # material legacy archivado (reversible)
 ```
 
-## Comandos CLI
+---
+
+## 🛠️ Referencia de comandos CLI
 
 ```bash
-flujo health          # chequeo general
-flujo version         # versión y changelog
-flujo job {new,prepare,list,status,next,activate,report}
-flujo privacy {scan,sanitize,check}
-flujo brief {extract,to-project,show}
-flujo render {run,validate,formats}
-flujo analyze [--all] [--force-ocr]
-flujo index [--rebuild|--duplicates]
-flujo flyer-list
+flujo health                  # chequeo general
+flujo version                 # versión y changelog
+flujo init                    # inicializa estructura de carpetas
+
+# Jobs (pedidos de diseño)
+flujo job new "<nombre>" --email inbox/correo.txt
+flujo job prepare jobs/<job>  # privacy → brief → estado
+flujo job list                # listar jobs y estados
+flujo job status <path>       # estado de un job
+flujo job next                # próximas acciones sugeridas
+flujo job activate jobs/<job> # brief → proyecto
+flujo job report <path>       # reporte detallado
+
+# Brief
+flujo brief extract <job>
+flujo brief to-project <brief.yaml>
+flujo brief show <brief.yaml>
+
+# Privacidad
+flujo privacy scan <archivo>
+flujo privacy sanitize <archivo> --out <salida>
+flujo privacy check <job>
+
+# Render / formatos
+flujo render formats                       # listar plantillas
+flujo render formats -w 16.5 -h 6.5 -t etiqueta   # sugerir
+flujo render validate <config.json>
+flujo render run <config.json>
+
+# Flyers desde Instagram
 flujo flyer-import <correo.txt>
+flujo flyer-list
 flujo ig-redownload [--all]
+flujo analyze [--all] [--force-ocr]
 flujo export <proyecto>
-flujo daily
-flujo serve           # interfaz web Gradio
+flujo index [--rebuild | --duplicates]
+
+# Operación diaria
+flujo daily                   # dashboard del día
+flujo serve                   # interfaz web Gradio (local)
 flujo clean [--generated]
-flujo init
-flujo airdrop {list,dry-run,apply,rollback,finish}
+
+# Airdrops (colaboración / mejoras)
+flujo airdrop list            # archivos pendientes en _airdrop/
+flujo airdrop dry-run         # simular sin aplicar
+flujo airdrop apply "mensaje" # backup → apply → checkpoint → push
+flujo airdrop rollback        # restaurar último backup
+flujo airdrop status          # versión actual
 ```
 
-## Airdrop (v0.24+)
-
-El airdrop es **sin versiones**: deja los archivos a aplicar dentro de
-`_airdrop/` respetando la estructura del repo (ej. `_airdrop/src/flujo/cli.py`).
-
-```bash
-flujo airdrop list                 # archivos pendientes en _airdrop/
-flujo airdrop dry-run              # simula sin aplicar
-flujo airdrop apply "mensaje"      # backup -> apply -> checkpoint -> push
-flujo airdrop rollback             # restaura el último backup
-```
+---
 
 ## Licencia
 
