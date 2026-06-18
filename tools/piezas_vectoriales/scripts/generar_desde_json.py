@@ -128,7 +128,60 @@ def color(value, palette):
     return palette.get(value, value)
 
 
+def _autofit_size(el):
+    """Ajusta el tamaño de fuente para que el texto entre en la caja.
+
+    Solo si el elemento pide autofit y no está locked. Usa la medición real
+    (text_width / TextPath) para decidir. Respeta min_size y max_height.
+    """
+    if el.get("locked") or not el.get("autofit"):
+        return el
+    max_width = el.get("max_width")
+    if not max_width:
+        return el
+    size = float(el.get("size", 40))
+    weight = el.get("weight", "regular")
+    lh_ratio = (el["line_height"] / size) if el.get("line_height") and size else 1.28
+    min_size = float(el.get("min_size") or max(8.0, size * 0.5))
+    max_height = el.get("max_height")
+    content = str(el.get("content", ""))
+    cur = size
+    step = 2.0
+
+    def longest_word_fits(s):
+        for word in content.replace("\n", " ").split():
+            if max_width and text_width(word, s, weight) > max_width:
+                return False
+        return True
+
+    while cur > min_size and not longest_word_fits(cur):
+        cur -= step
+
+    if max_height and max_height > 0:
+        while cur > min_size:
+            # alto envuelto a tamaño cur
+            total = 0.0
+            for para in content.split("\n"):
+                para = para.strip()
+                if not para:
+                    total += cur * lh_ratio * 0.55
+                    continue
+                lines = wrap_line(para, max_width, cur, weight) if max_width else [para]
+                total += len(lines) * cur * lh_ratio
+            if total <= max_height:
+                break
+            cur -= step
+        cur = max(cur, min_size)
+
+    if cur != size:
+        el = dict(el)
+        el["size"] = round(cur, 2)
+        el["line_height"] = round(cur * lh_ratio, 2)
+    return el
+
+
 def add_text(svg, el, palette, mode):
+    el = _autofit_size(el)
     fill = color(el.get("fill", "ink"), palette)
     size = el.get("size", 40)
     weight = el.get("weight", "regular")

@@ -130,6 +130,25 @@ def load_format_state(fmt_id: str) -> Tuple[Dict, str, Dict[str, str]]:
     return cfg, render_svg(cfg, show_safe_area=True), _first_text_fields(cfg)
 
 
+def _mark_autofit(config: Dict, enable: bool) -> Dict:
+    """Activa/desactiva la bandera `autofit` en los text/paragraph que tengan max_width.
+
+    Respeta `locked` (datos exactos nunca se reescalan). Añade un max_height
+    estimado si falta, para que el autofit pueda limitar por alto.
+    """
+    cfg = copy.deepcopy(config)
+    for doc in cfg.get("documents", []) or []:
+        for el in doc.get("elements", []) or []:
+            if not isinstance(el, dict) or el.get("type") not in ("text", "paragraph"):
+                continue
+            if el.get("locked"):
+                el["autofit"] = False
+                continue
+            if el.get("max_width"):
+                el["autofit"] = bool(enable)
+    return cfg
+
+
 def update_state(
     config: Dict,
     titulo: str,
@@ -138,8 +157,9 @@ def update_state(
     dpi: Optional[float],
     width_cm: Optional[float],
     height_cm: Optional[float],
+    autofit: bool = True,
 ) -> Tuple[Dict, str, str]:
-    """Aplica ediciones de texto + proporción/DPI. Devuelve (config, svg, info_msg)."""
+    """Aplica ediciones de texto + proporción/DPI + autofit. Devuelve (config, svg, info_msg)."""
     cfg = _apply_text_fields(config, titulo, subtitulo, cuerpo)
     msgs = []
     try:
@@ -153,6 +173,9 @@ def update_state(
             msgs.append(f"DPI → {info['dpi_despues']:.0f} (canvas {info['canvas_despues'][0]}x{info['canvas_despues'][1]}px)")
     except ValueError as e:
         msgs.append(f"Error: {e}")
+    cfg = _mark_autofit(cfg, autofit)
+    if autofit:
+        msgs.append("autofit activo")
     return cfg, render_svg(cfg, show_safe_area=True), "  ·  ".join(msgs) or "Actualizado."
 
 
@@ -170,6 +193,100 @@ def export_files(config: Dict, slug: str = "") -> Tuple[str, str]:
     svg_path = out_dir / "preview.svg"
     svg_path.write_text(render_svg(config), encoding="utf-8")
     return str(svg_path), str(cfg_path)
+
+
+# ============================================================
+# Avisos de Instagram (reusa intake.email_parser)
+# ============================================================
+
+def analizar_instagram(texto: str) -> str:
+    """Analiza un correo/texto con links de IG y devuelve un resumen con avisos.
+
+    Reutiliza la detección ya existente en intake.email_parser:
+    perfil privado, video en carrusel, sin links.
+    """
+    from ..intake.email_parser import parse_email_content, generate_warnings
+
+    if not texto or not texto.strip():
+        return "Pega el correo/texto con los links de Instagram."
+
+    parsed = parse_email_content(texto)
+    parsed["warnings"] = generate_warnings(parsed)
+
+    lines: List[str] = []
+    links = parsed.get("instagram_links", [])
+    lines.append(f"Links de Instagram detectados: {len(links)}")
+    for l in links:
+        lines.append(f"  · {l}")
+    lines.append(f"Tipo de pieza inferido: {parsed.get('project_type', '?')}")
+
+    warnings = parsed.get("warnings", [])
+    if warnings:
+        lines.append("")
+        lines.append("AVISOS:")
+        for w in warnings:
+            lines.append(f"  {w}")
+    else:
+        lines.append("")
+        lines.append("✓ Sin avisos: parece descargable.")
+
+    secciones = parsed.get("sections", {})
+    if secciones:
+        lines.append("")
+        lines.append("Datos detectados:")
+        for k, v in secciones.items():
+            lines.append(f"  {k}: {v}")
+    return "\n".join(lines)
+
+
+# ============================================================
+# Acuse de recibo (mailto / Gmail prellenado)
+# ============================================================
+
+def construir_acuse(config: Dict, solicitante: str = "", canal: str = "correo",
+                    folio: str = "") -> Dict[str, str]:
+    """Construye el texto + enlaces (mailto y Gmail web) para acusar recibo.
+
+    Semiautomático: el dueño da un clic y se abre el correo prellenado con el
+    folio y el resumen de lo entendido. Devuelve dict con: asunto, cuerpo,
+    mailto, gmail.
+    """
+    import urllib.parse
+
+    proj = config.get("project", {}) if config else {}
+    canvas = config.get("canvas", {}) if config else {}
+    real = canvas.get("real_size_cm", {})
+    nombre = proj.get("name", "tu pedido")
+    folio = folio or proj.get("slug", "")
+
+    medida = ""
+    if real.get("width") and real.get("height"):
+        medida = f"{real['width']}x{real['height']} cm"
+
+    asunto = f"Pedido recibido: {nombre}" + (f" (folio {folio})" if folio else "")
+    cuerpo_lineas = [
+        f"Hola{(' ' + solicitante) if solicitante else ''},",
+        "",
+        "Confirmo la recepción de tu pedido. Esto es lo que entendí:",
+        f"  · Pieza: {nombre}",
+    ]
+    if folio:
+        cuerpo_lineas.append(f"  · Folio: {folio}")
+    if medida:
+        cuerpo_lineas.append(f"  · Medida: {medida}")
+    cuerpo_lineas += [
+        "",
+        "Si algo no coincide, respóndeme este correo.",
+        "Quedo trabajando en ello.",
+        "",
+        "Saludos.",
+    ]
+    cuerpo = "\n".join(cuerpo_lineas)
+
+    qs = urllib.parse.urlencode({"subject": asunto, "body": cuerpo})
+    mailto = f"mailto:?{qs}"
+    gmail = f"https://mail.google.com/mail/?view=cm&fs=1&{urllib.parse.urlencode({'su': asunto, 'body': cuerpo})}"
+    return {"asunto": asunto, "cuerpo": cuerpo, "mailto": mailto, "gmail": gmail}
 
 
 # ============================================================
@@ -195,38 +312,58 @@ def build_app():
     with gr.Blocks(title="flujo · editor") as demo:
         gr.HTML(f"<style>{_CSS}</style>")
         gr.Markdown("# FLUJO // Editor de piezas")
-        gr.Markdown("Catálogo de la ONG → editar datos y proporción → preview SVG → exportar.")
 
         state = gr.State({})
 
-        with gr.Row():
-            with gr.Column(scale=1):
-                gr.Markdown("### 1. Elegir formato")
-                f_area = gr.Dropdown(["", "eventos", "suplementos"], value="", label="Área")
-                f_medio = gr.Dropdown(["", "impresion", "digital"], value="", label="Medio")
-                fmt = gr.Dropdown(choices=catalog_choices(), label="Formato", value=None)
+        with gr.Tab("EDITOR"):
+            gr.Markdown("Catálogo de la ONG → editar datos y proporción → preview SVG → exportar.")
+            with gr.Row():
+                with gr.Column(scale=1):
+                    gr.Markdown("### 1. Elegir formato")
+                    f_area = gr.Dropdown(["", "eventos", "suplementos"], value="", label="Área")
+                    f_medio = gr.Dropdown(["", "impresion", "digital"], value="", label="Medio")
+                    fmt = gr.Dropdown(choices=catalog_choices(), label="Formato", value=None)
 
-                gr.Markdown("### 2. Datos")
-                titulo = gr.Textbox(label="Título")
-                subtitulo = gr.Textbox(label="Subtítulo")
-                cuerpo = gr.Textbox(label="Cuerpo", lines=3)
+                    gr.Markdown("### 2. Datos")
+                    titulo = gr.Textbox(label="Título")
+                    subtitulo = gr.Textbox(label="Subtítulo")
+                    cuerpo = gr.Textbox(label="Cuerpo", lines=3)
+                    autofit = gr.Checkbox(label="Auto-ajustar texto a la caja (autofit)", value=True)
 
-                gr.Markdown("### 3. Proporción / Resolución")
-                with gr.Row():
-                    width_cm = gr.Number(label="Ancho cm", value=None)
-                    height_cm = gr.Number(label="Alto cm", value=None)
-                dpi = gr.Number(label="DPI (anti-pixelado)", value=None)
+                    gr.Markdown("### 3. Proporción / Resolución")
+                    with gr.Row():
+                        width_cm = gr.Number(label="Ancho cm", value=None)
+                        height_cm = gr.Number(label="Alto cm", value=None)
+                    dpi = gr.Number(label="DPI (anti-pixelado)", value=None)
 
-                with gr.Row():
-                    btn_update = gr.Button("Actualizar preview", variant="primary")
-                    btn_export = gr.Button("Exportar SVG + config", variant="secondary")
-                info = gr.Textbox(label="Estado", interactive=False)
+                    with gr.Row():
+                        btn_update = gr.Button("Actualizar preview", variant="primary")
+                        btn_export = gr.Button("Exportar SVG + config", variant="secondary")
+                    info = gr.Textbox(label="Estado", interactive=False)
 
-            with gr.Column(scale=2):
-                gr.Markdown("### Preview")
-                preview = gr.HTML()
+                with gr.Column(scale=2):
+                    gr.Markdown("### Preview")
+                    preview = gr.HTML()
 
-        # --- callbacks ---
+        with gr.Tab("INSTAGRAM"):
+            gr.Markdown("## Analizar links de Instagram")
+            gr.Markdown("Pega el correo/mensaje con links. Detecta perfil privado, "
+                        "video en carrusel y datos del pedido **antes** de descargar.")
+            ig_in = gr.Textbox(label="Correo / texto con links", lines=8)
+            ig_btn = gr.Button("Analizar", variant="primary")
+            ig_out = gr.Textbox(label="Resultado", lines=12, interactive=False)
+            ig_btn.click(analizar_instagram, ig_in, ig_out)
+
+        with gr.Tab("ACUSE DE RECIBO"):
+            gr.Markdown("## Acusar recibo (semiautomático)")
+            gr.Markdown("Genera un correo prellenado con folio + resumen. Un clic y se abre tu correo.")
+            ac_solic = gr.Textbox(label="Nombre del solicitante (opcional)")
+            ac_folio = gr.Textbox(label="Folio (opcional; por defecto el slug)")
+            ac_btn = gr.Button("Generar acuse", variant="primary")
+            ac_cuerpo = gr.Textbox(label="Mensaje", lines=10, interactive=False)
+            ac_links = gr.HTML()
+
+        # --- callbacks EDITOR ---
         def on_filter(area, medio):
             return gr.Dropdown(choices=catalog_choices(area, medio))
 
@@ -241,13 +378,13 @@ def build_app():
 
         fmt.change(on_select, fmt, [state, preview, titulo, subtitulo, cuerpo, info])
 
-        def on_update(cfg, t, s, c, d, w, h):
+        def on_update(cfg, t, s, c, af, d, w, h):
             if not cfg:
                 return {}, "", "Primero elige un formato."
-            new_cfg, svg, msg = update_state(cfg, t, s, c, d, w, h)
+            new_cfg, svg, msg = update_state(cfg, t, s, c, d, w, h, autofit=af)
             return new_cfg, _svg_html(svg), msg
 
-        btn_update.click(on_update, [state, titulo, subtitulo, cuerpo, dpi, width_cm, height_cm],
+        btn_update.click(on_update, [state, titulo, subtitulo, cuerpo, autofit, dpi, width_cm, height_cm],
                          [state, preview, info])
 
         def on_export(cfg):
@@ -257,6 +394,21 @@ def build_app():
             return f"Exportado:\n  {cfg_path}\n  {svg_path}\n\nLuego: flujo render run {cfg_path}"
 
         btn_export.click(on_export, state, info)
+
+        # --- callbacks ACUSE ---
+        def on_acuse(cfg, solic, folio):
+            if not cfg:
+                return "Primero elige un formato en la pestaña EDITOR.", ""
+            ac = construir_acuse(cfg, solicitante=solic or "", folio=folio or "")
+            links = (
+                f'<div style="display:flex;gap:12px">'
+                f'<a href="{ac["mailto"]}" style="color:#00f0ff">📧 Abrir en tu correo (mailto)</a>'
+                f'<a href="{ac["gmail"]}" target="_blank" style="color:#00f0ff">✉️ Abrir en Gmail</a>'
+                f'</div>'
+            )
+            return ac["cuerpo"], links
+
+        ac_btn.click(on_acuse, [state, ac_solic, ac_folio], [ac_cuerpo, ac_links])
 
     return demo
 

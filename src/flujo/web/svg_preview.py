@@ -118,9 +118,16 @@ def _render_element(out: List[str], el: Dict, palette: Dict) -> None:
 
 
 def _render_text(out: List[str], el: Dict, palette: Dict) -> None:
+    # Auto-fit: ajusta el size/line_height si el elemento lo pide (autofit + max_width)
+    try:
+        from ..render.autofit import autofit_element, approx_measure
+        el = autofit_element(el, approx_measure)
+    except Exception:
+        pass
     fill = _color(el.get("fill", "ink"), palette)
     size = float(el.get("size", 40))
-    weight = "700" if el.get("weight") == "bold" else "400"
+    weight_raw = el.get("weight")
+    weight = "700" if weight_raw == "bold" else "400"
     line_height = float(el.get("line_height", size * 1.28))
     max_width = el.get("max_width")
     x = el.get("x", 0)
