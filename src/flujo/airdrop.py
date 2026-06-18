@@ -82,23 +82,77 @@ def apply_airdrop(dry_run: bool = False) -> List[Dict]:
     return changes
 
 
+def _git(args: List[str], cwd: Path) -> "subprocess.CompletedProcess":
+    """Ejecuta git directamente (sin shell). Funciona en Windows/Linux/macOS."""
+    return subprocess.run(
+        ["git", *args], cwd=str(cwd), capture_output=True, text=True
+    )
+
+
+def _write_checkpoint_file(repo: Path, msg: str) -> Path:
+    """Crea checkpoints/<fecha>_<slug>.md (equivalente a checkpoint.sh, en Python)."""
+    import re
+
+    checkpoints = repo / "checkpoints"
+    checkpoints.mkdir(parents=True, exist_ok=True)
+    date = datetime.now().strftime("%Y-%m-%d_%H-%M")
+    slug = re.sub(r"[^a-z0-9]+", "-", msg.lower()).strip("-") or "avance"
+    cp = checkpoints / f"{date}_{slug}.md"
+    estado_path = repo / "context" / "ESTADO.md"
+    estado = estado_path.read_text(encoding="utf-8") if estado_path.exists() else "Sin context/ESTADO.md"
+    cp.write_text(
+        f"# Checkpoint — {msg}\n\nFecha: {date}\n\n## Estado\n\n{estado}\n\n"
+        f"## Cambios realizados\n\n-\n\n## Próximo paso\n\n-\n",
+        encoding="utf-8",
+    )
+    return cp
+
+
 def run_auto_checkpoint(message: Optional[str] = None) -> bool:
-    """Ejecuta `scripts/checkpoint.sh` (genera checkpoint + commit + push)."""
-    script = repo_root() / "scripts" / "checkpoint.sh"
-    if not script.exists():
+    """Crea checkpoint + commit + push usando git directamente (Python puro).
+
+    No depende de `bash` ni de `scripts/checkpoint.sh`, por lo que funciona en
+    Windows (Git Bash) sin chocar con el bash de WSL. Reintenta el commit si un
+    pre-commit hook modifica archivos y aborta el primer intento.
+    """
+    repo = repo_root()
+    if not (repo / ".git").exists():
+        print("No es un repo git (.git no existe).")
         return False
+
     msg = message or f"airdrop aplicado {datetime.now().strftime('%Y-%m-%d_%H-%M')}"
+
     try:
-        subprocess.run(
-            ["bash", str(script), msg],
-            cwd=repo_root(),
-            check=True,
-            capture_output=True,
-            text=True,
-        )
+        _write_checkpoint_file(repo, msg)
+
+        # commit robusto frente a pre-commit hooks (hasta 3 intentos)
+        committed = False
+        for _ in range(3):
+            _git(["add", "-A"], repo)
+            staged = _git(["diff", "--cached", "--quiet"], repo)
+            if staged.returncode == 0:
+                print("No hay cambios para commitear.")
+                committed = True
+                break
+            res = _git(["commit", "-m", f"checkpoint: {msg}"], repo)
+            if res.returncode == 0:
+                committed = True
+                break
+            # un hook pudo modificar archivos: re-agregar y reintentar
+        if not committed:
+            print("No se pudo commitear tras 3 intentos (revisar hooks / git status).")
+            return False
+
+        # push a la rama actual
+        if _git(["remote", "get-url", "origin"], repo).returncode == 0:
+            branch = _git(["rev-parse", "--abbrev-ref", "HEAD"], repo).stdout.strip() or "main"
+            push = _git(["push", "-u", "origin", branch], repo)
+            if push.returncode != 0:
+                print(push.stderr or push.stdout)
+                return False
         return True
-    except subprocess.CalledProcessError as e:
-        print(e.stderr or e.stdout)
+    except Exception as e:  # noqa: BLE001
+        print(f"Error en auto-checkpoint: {e}")
         return False
 
 

@@ -1,0 +1,24 @@
+id: 2026-06-18_etiquetas-acme-12
+estado: pendiente_datos
+origen: correo_jefe
+tipo_pieza: etiqueta
+medidas:
+  ancho_cm: 16.5
+  alto_cm: 6.5
+  orientacion: horizontal
+entrega:
+  editable_svg: true
+  vectorizado_svg: true
+  pdf_impresion: false
+  zip: true
+productos:
+  - Impulso
+contenido:
+  fuente: correo_original
+  texto_aprobado: false
+restricciones:
+  no_inventar_claims: true
+  texto_vectorizado: true
+  editable_para_illustrator: true
+pendientes:
+  - Confirmar formato de entrega.
