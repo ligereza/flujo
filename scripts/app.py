@@ -60,7 +60,6 @@ def listar_configs():
     configs = sorted((ROOT / "projects" / "piezas_vectoriales").glob("*/config.json"))
     return [str(c) for c in configs]
 
-# Gradio 6.0 compatible: CSS passed to launch(), not Blocks()
 CSS = """
 :root { --bg: #0a0a0a; --panel: #111111; --border: #222222; --text: #e0e0e0; --muted: #888888; --cyan: #00f0ff; --magenta: #ff00aa; }
 body { background-color: var(--bg) !important; color: var(--text) !important; font-family: 'Inter', system-ui, sans-serif !important; }
