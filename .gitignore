@@ -24,6 +24,12 @@ Thumbs.db
 _airdrop/
 _airdrop_backups/
 
+# Jobs de trabajo (NO commitear, excepto _template)
+jobs/*
+!jobs/_template/
+!jobs/_template/*
+!jobs/.gitkeep
+
 # === Media de proyectos (NO ignorar imágenes del repo/docs) ===
 # Solo ignorar outputs de proyectos flyer
 projects/flyer_eventos/*/input/*
@@ -51,7 +57,7 @@ projects/piezas_vectoriales/*/03_final_vectorizado_svg/
 projects/piezas_vectoriales/*/04_preview/
 projects/piezas_vectoriales/*/05_exports/
 
-# Archivos pesados de diseño (solo en proyectos, no en docs)
+# Archivos pesados de diseño
 projects/**/*.psd
 projects/**/*.psb
 projects/**/*.ai
@@ -66,7 +72,7 @@ projects/**/*.mov
 projects/**/*.avi
 projects/**/*.mkv
 
-# Permitir imágenes en docs/ y raíz (para README, banners, etc)
+# Permitir imágenes en docs/ y raíz
 !docs/**/*.png
 !docs/**/*.jpg
 !docs/**/*.jpeg
@@ -78,7 +84,7 @@ projects/**/*.mkv
 !*.gif
 !*.webp
 
-# Zips locales (permitir en docs si se necesita)
+# Zips locales
 *.zip
 *.rar
 *.7z
