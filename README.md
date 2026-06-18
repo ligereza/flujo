@@ -1,6 +1,6 @@
 # flujo — Dimensiones del Orden
 
-**arte + automatización · v0.27.0**
+**arte + automatización · v0.28.0**
 
 Sistema personal de automatización para flujos creativos (diseño gráfico:
 flyers, etiquetas, riders, one-pagers, carruseles). Convierte un **pedido**
@@ -337,11 +337,16 @@ Pregunta clave del dueño: *"¿la app será Gradio, o se integrará con mi corre
 una API para recibir pedidos aunque esté ausente?"*
 
 ### Hoy (estado real)
-- `flujo serve` levanta una **app local de Gradio** (`scripts/app.py`,
-  http://localhost:7860). Sirve para operar el pipeline a mano: pegar un correo,
-  crear pedido, generar pieza, ver dashboard, health, limpiar.
-- Es **local y manual**: hay que tenerla corriendo y estar presente. No recibe
-  nada por sí sola.
+- `flujo serve` levanta el **editor visual** propio (`src/flujo/web/`,
+  http://127.0.0.1:7860). Flujo: elegir formato del catálogo (filtrable por área)
+  → editar datos (título/subtítulo/cuerpo) → ajustar **proporción/DPI** →
+  **preview SVG en vivo** → **exportar SVG + config.json** a
+  `projects/piezas_vectoriales/<slug>/`. Luego `flujo render run` produce el SVG
+  de producción (editable + vectorizado) para Illustrator.
+  - Opciones: `flujo serve --port 7860 --host 0.0.0.0` (red local),
+    `flujo serve --legacy` (usa el antiguo `scripts/app.py`).
+- Es **local y manual**: hay que tenerlo corriendo. No recibe pedidos por sí
+  solo (la recepción automática es el plan de abajo).
 
 ### Plan recomendado (para "recibir aunque esté ausente")
 La arquitectura objetivo separa **recepción** de **operación**:

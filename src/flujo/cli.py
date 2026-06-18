@@ -898,19 +898,37 @@ def daily(
 # ============================================================
 
 @app.command()
-def serve():
-    """Iniciar interfaz web local (Gradio)."""
+def serve(
+    port: int = typer.Option(7860, "--port", "-p", help="puerto del servidor"),
+    host: str = typer.Option("127.0.0.1", "--host", help="host (0.0.0.0 para red local)"),
+    legacy: bool = typer.Option(False, "--legacy", help="usar el script antiguo scripts/app.py"),
+):
+    """Iniciar el editor visual local (Gradio).
+
+    Editor propio en src/flujo/web/ (catálogo → editar datos/proporción →
+    preview SVG → exportar). Con --legacy usa el antiguo scripts/app.py.
+    """
     import importlib.util
     if importlib.util.find_spec("gradio") is None:
         _err("Falta gradio. Instalar con: pip install gradio")
-    # delegar al script legacy para mantener compatibilidad
+
+    if not legacy:
+        try:
+            from .web.editor import launch
+            console.print(f"[cyan]Editor flujo en http://{host}:{port}[/]")
+            launch(server_name=host, server_port=port)
+            return
+        except Exception as e:
+            _warn(f"No se pudo iniciar el editor nuevo ({e}). Probando script legacy...")
+
+    # fallback: script legacy
     import subprocess
     from .paths import repo_root
     root = repo_root()
     script = root / "scripts" / "app.py"
     if not script.exists():
-        _err(f"No existe: {script}")
-    console.print("[cyan]Iniciando Gradio app...[/]")
+        _err(f"No existe el editor legacy: {script}")
+    console.print("[cyan]Iniciando Gradio app (legacy)...[/]")
     subprocess.run([sys.executable, str(script)], cwd=root)
 
 
