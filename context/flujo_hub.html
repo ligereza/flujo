@@ -54,12 +54,12 @@
 
 <header>
   <h1>FLUJO</h1>
-  <span class="badge">Workspace</span>
+  <span class="badge">Workspace • Menú principal</span>
   <div class="spacer"></div>
   <a class="nav-link" href="svg_visualizer.html" target="_blank">Visualizador SVG</a>
   <a class="nav-link" href="plano_demo.html" target="_blank">Plano Demo</a>
   <a class="nav-link" href="../docs/AGENT_OPERATING_MANUAL.md" target="_blank">Manual Agentes</a>
-  <button class="btn-sec" onclick="copyCmd('py -m flujo daily')">Daily</button>
+  <button class="btn-sec" onclick="copyCmd('py -m flujo daily', this)">Daily</button>
 </header>
 
 <!-- STATUS -->
@@ -72,7 +72,7 @@
     </div>
     <div class="card">
       <div class="pro-label">ESTADO</div>
-      <div class="status-val" style="color:#2ecc71">Listo</div>
+      <div class="status-val" style="color:var(--green)">Listo</div>
       <div class="small muted">Health OK • Tests OK</div>
     </div>
     <div class="card">
@@ -91,11 +91,12 @@
 <div class="section" style="margin-top:8px">
   <div class="section-title">Entradas rápidas del flujo</div>
   <div class="row" style="gap:10px; flex-wrap:wrap">
-    <a class="btn" href="svg_visualizer.html" target="_blank">Abrir Visualizador SVG completo</a>
-    <a class="btn btn-sec" href="plano_demo.html" target="_blank">Abrir Plano Demo interactivo</a>
+    <a class="btn" href="svg_visualizer.html" target="_blank">Abrir Visualizador SVG completo →</a>
+    <a class="btn btn-sec" href="plano_demo.html" target="_blank">Abrir Plano Demo interactivo →</a>
     <button class="btn btn-sec" onclick="window.open('../projects/aistetic/aistetic.json','_blank')">aistetic.json</button>
     <button class="btn btn-sec" onclick="window.open('../svg/','_blank')">Carpeta svg/</button>
   </div>
+  <div class="small muted" style="margin-top:4px">Los visualizadores se abren en nueva pestaña. Usa los botones «Volver al Hub» dentro de ellos para regresar al menú principal.</div>
 </div>
 
 <!-- INTAKE PRO (USUARIO) -->
@@ -122,7 +123,7 @@
       <div style="font-weight:600">Eventos / Flyers / Riders</div>
       <div class="small muted">flyer_horizontal_minimo • prueba-rd • rider intervencion • etiquetas</div>
       <div class="preview" style="margin:8px 0; height:92px">
-        <svg width="200" height="70" viewBox="0 0 200 70"><rect x="4" y="4" width="192" height="62" rx="3" fill="#f8f1e3" stroke="#2d5a4a" stroke-width="2"/><text x="14" y="28" fill="#1f2a24" font-size="11" font-weight="700">FLYER EVENTO</text><rect x="14" y="36" width="90" height="18" rx="2" fill="#fff" stroke="#173F2F"/><text x="20" y="49" fill="#1f2a24" font-size="9">10x14 • editable</text></svg>
+        <svg width="200" height="70" viewBox="0 0 200 70"><rect x="4" y="4" width="192" height="62" rx="3" fill="#111" stroke="#2d5a4a" stroke-width="2"/><text x="14" y="28" fill="#e8e8e8" font-size="11" font-weight="700">FLYER EVENTO</text><rect x="14" y="36" width="90" height="18" rx="2" fill="#1a1a1a" stroke="#173F2F"/><text x="20" y="49" fill="#00f0ff" font-size="9">10x14 • editable</text></svg>
       </div>
       <div class="small" style="color:var(--cyan)">Abrir visualizador completo →</div>
     </div>
@@ -156,7 +157,7 @@
       </div>
       <div>
         <a class="btn" href="plano_demo.html" target="_blank">Abrir Plano Demo</a>
-        <button onclick="copyCmd('py -m flujo plano projects/plano/ejemplos/evento_ejemplo.json --rider --costs')" class="btn btn-sec" style="margin-left:6px">Copiar comando CLI</button>
+        <button onclick="copyCmd('py -m flujo plano projects/plano/ejemplos/evento_ejemplo.json --rider --costs', this)" class="btn btn-sec" style="margin-left:6px">Copiar comando CLI</button>
       </div>
     </div>
   </div>
@@ -166,15 +167,15 @@
 <div class="section">
   <div class="section-title">Herramientas (CLI)</div>
   <div class="grid">
-    <div onclick="copyCmd('py -m flujo job new \"etiquetas acme\" --email inbox/correo.txt')" class="tool-btn">job new</div>
-    <div onclick="copyCmd('py -m flujo job prepare jobs/...')" class="tool-btn">job prepare</div>
-    <div onclick="copyCmd('py -m flujo render run projects/piezas_vectoriales/.../config.json --for illustrator')" class="tool-btn">render --for illustrator</div>
-    <div onclick="copyCmd('py -m flujo render run ... --for blender')" class="tool-btn">render --for blender</div>
-    <div onclick="copyCmd('py -m flujo cotizaciones <json> --para productora')" class="tool-btn">cotizaciones productora</div>
-    <div onclick="copyCmd('py -m flujo cotizaciones <json> --para interno')" class="tool-btn">cotizaciones interno</div>
-    <div onclick="copyCmd('py -m flujo aistetic analyze mi-ejemplo')" class="tool-btn">aistetic analyze</div>
-    <div onclick="copyCmd('py -m flujo daily')" class="tool-btn">daily</div>
-    <div onclick="copyCmd('python -m src.flujo.templates.blender_setup projects/plano/ejemplos/evento_ejemplo.json')" class="tool-btn">blender_setup</div>
+    <div onclick="copyCmd('py -m flujo job new \"etiquetas acme\" --email inbox/correo.txt', this)" class="tool-btn">job new</div>
+    <div onclick="copyCmd('py -m flujo job prepare jobs/...', this)" class="tool-btn">job prepare</div>
+    <div onclick="copyCmd('py -m flujo render run projects/piezas_vectoriales/.../config.json --for illustrator', this)" class="tool-btn">render --for illustrator</div>
+    <div onclick="copyCmd('py -m flujo render run ... --for blender', this)" class="tool-btn">render --for blender</div>
+    <div onclick="copyCmd('py -m flujo cotizaciones <json> --para productora', this)" class="tool-btn">cotizaciones productora</div>
+    <div onclick="copyCmd('py -m flujo cotizaciones <json> --para interno', this)" class="tool-btn">cotizaciones interno</div>
+    <div onclick="copyCmd('py -m flujo aistetic analyze mi-ejemplo', this)" class="tool-btn">aistetic analyze</div>
+    <div onclick="copyCmd('py -m flujo daily', this)" class="tool-btn">daily</div>
+    <div onclick="copyCmd('python -m src.flujo.templates.blender_setup projects/plano/ejemplos/evento_ejemplo.json', this)" class="tool-btn">blender_setup</div>
     <div onclick="window.open('plano_demo.html','_blank')" class="tool-btn">plano demo</div>
   </div>
   <div class="small muted" style="margin-top:8px">Windows: siempre <code>py -m flujo ...</code>. Resultados listos para Illustrator / Photoshop / Blender.</div>
@@ -256,35 +257,41 @@ Punto de entrada único: este hub. No leas todo el repo.
     <div class="card">
       <div style="font-weight:600">Illustrator</div>
       <div class="small muted">render --for illustrator → abre SVG editable + vectorizado. Swatches desde aistetic.</div>
-      <button onclick="copyCmd('py -m flujo render run projects/piezas_vectoriales/suplementos_rd/config.json --for illustrator')" class="btn btn-sec" style="margin-top:8px">Copiar comando</button>
+      <button onclick="copyCmd('py -m flujo render run projects/piezas_vectoriales/suplementos_rd/config.json --for illustrator', this)" class="btn btn-sec" style="margin-top:8px">Copiar comando</button>
     </div>
     <div class="card">
       <div style="font-weight:600">Photoshop</div>
       <div class="small muted">export → ZIP working/ + compose.jsx + paleta aistetic.</div>
-      <button onclick="copyCmd('py -m flujo export projects/flyer_eventos/ultimo --for photoshop')" class="btn btn-sec" style="margin-top:8px">Copiar export</button>
+      <button onclick="copyCmd('py -m flujo export projects/flyer_eventos/ultimo --for photoshop', this)" class="btn btn-sec" style="margin-top:8px">Copiar export</button>
     </div>
     <div class="card">
       <div style="font-weight:600">Blender</div>
       <div class="small muted">plano + blender_setup.py → meshes + materiales aistetic.</div>
-      <button onclick="copyCmd('python -m src.flujo.templates.blender_setup projects/plano/ejemplos/evento_ejemplo.json')" class="btn btn-sec" style="margin-top:8px">Copiar blender_setup</button>
+      <button onclick="copyCmd('python -m src.flujo.templates.blender_setup projects/plano/ejemplos/evento_ejemplo.json', this)" class="btn btn-sec" style="margin-top:8px">Copiar blender_setup</button>
     </div>
   </div>
 </div>
 
 <footer>
-  Abre este archivo al empezar el día. <b>Hub = fuente de verdad visual + intake + agente.</b><br>
-  Conectados: <a href="svg_visualizer.html" style="color:var(--cyan)">Visualizador SVG</a> • <a href="plano_demo.html" style="color:var(--cyan)">Plano Demo</a> • <a href="../docs/AGENT_OPERATING_MANUAL.md" style="color:var(--cyan)">Manual Agentes</a>
+  Abre este archivo al empezar el día. <b>Hub = fuente de verdad visual + intake + agente (menú principal del flujo).</b><br>
+  Conectados: <a href="svg_visualizer.html" style="color:var(--cyan)">Visualizador SVG</a> • <a href="plano_demo.html" style="color:var(--cyan)">Plano Demo</a> • <a href="../docs/AGENT_OPERATING_MANUAL.md" style="color:var(--cyan)">Manual Agentes</a><br>
+  <span class="small">Desde los visualizadores usa siempre «← Volver al Hub principal» para regresar al menú.</span>
 </footer>
 
 </div>
 
 <script>
 // ============ UTILS ============
-function copyCmd(cmd) {
+function copyCmd(cmd, el) {
+  const btn = el || ((typeof event !== 'undefined' && event.currentTarget) ? event.currentTarget : null);
+  const origText = btn ? btn.innerText : '';
   navigator.clipboard.writeText(cmd).then(() => {
-    const orig = (event && event.target) ? event.target.innerText : '';
-    if (event && event.target) event.target.innerText = 'Copiado!';
-    setTimeout(() => { if (event && event.target) event.target.innerText = orig || 'Copiar'; }, 1400);
+    if (btn) {
+      btn.innerText = 'Copiado!';
+      setTimeout(() => { if (btn) btn.innerText = origText || 'Copiar'; }, 1400);
+    } else {
+      alert('Copiado al portapapeles:\n' + cmd);
+    }
   }).catch(() => alert('Ejecuta en terminal:\n' + cmd));
 }
 
@@ -296,15 +303,15 @@ function generatePreview() {
   p.style.marginTop = '10px';
   const n = data.nombre || 'Evento';
   const v = data.voluntarios || 5;
-  const ink = '#1f2a24', accent = '#2d5a4a', paper = '#f8f1e3';
+  const ink = '#e8e8e8', accent = '#00f0ff', paper = '#111';
   p.innerHTML = `
     <svg width="240" height="120" viewBox="0 0 240 120">
       <rect x="8" y="8" width="224" height="104" rx="4" fill="${paper}" stroke="${accent}" stroke-width="2"/>
       <text x="18" y="32" fill="${ink}" font-size="12" font-weight="700">${n}</text>
-      <rect x="18" y="44" width="72" height="40" rx="2" fill="#fff" stroke="${accent}"/>
+      <rect x="18" y="44" width="72" height="40" rx="2" fill="#1a1a1a" stroke="${accent}"/>
       <text x="26" y="68" fill="${ink}" font-size="9">stand</text>
       ${Array.from({length:Math.min(v,5)}).map((_,i)=>`<rect x="${110+i*18}" y="78" width="14" height="14" fill="#e63946" rx="1"/>`).join('')}
-      <text x="18" y="104" fill="${accent}" font-size="8">aistetic aplicado</text>
+      <text x="18" y="104" fill="${accent}" font-size="8">aistetic aplicado (dark)</text>
     </svg>`;
   const res = document.getElementById('pedido-result');
   res.style.display = 'block';

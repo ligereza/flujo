@@ -18,6 +18,7 @@
   .nav { display: flex; gap: 8px; margin-left: auto; }
   .nav a, .nav button { background: var(--panel2); color: var(--text); border: 1px solid var(--border); padding: 6px 12px; border-radius: 4px; font-size: 12px; text-decoration: none; cursor: pointer; }
   .nav a:hover, .nav button:hover { border-color: var(--cyan); }
+  .nav .nav-link { font-weight: 600; }
   .main { max-width: 1400px; margin: 0 auto; padding: 20px; }
   .section-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin: 16px 0 10px; display: flex; align-items: center; gap: 6px; }
   .section-title::before { content: ''; width: 3px; height: 14px; background: var(--cyan); border-radius: 2px; }
@@ -42,18 +43,18 @@
 </head>
 <body>
 <header>
-  <h1>FLUJO • Visualizador SVG</h1>
-  <span class="badge">Base Works</span>
+  <h1>FLUJO</h1>
+  <span class="badge">Visualizador SVG</span>
   <div class="nav">
-    <a href="flujo_hub.html">← Volver al Hub</a>
-    <a href="../svg/">Abrir carpeta svg/</a>
+    <a class="nav-link" href="flujo_hub.html">← Volver al Hub principal (menú)</a>
+    <a href="../svg/">Carpeta svg/</a>
     <button onclick="location.reload()">Recargar</button>
   </div>
 </header>
 
 <div class="main">
 
-  <p class="hint">Visualizador nativo. Cada pieza muestra el SVG editable/vectorizado embebido. Usa "Usar como base" para copiar ruta y comando listo para nuevo trabajo.</p>
+  <p class="hint">Visualizador nativo. Los <b>SVGs originales</b> pueden tener tonos paper claros de aistetic (eso es correcto para Illustrator). El chrome es full dark. Usa "Usar como base" para copiar ruta y comando listo para nuevo trabajo.</p>
 
   <!-- EVENTOS / FLYERS / RIDERS / ETIQUETAS -->
   <div class="group">
@@ -205,7 +206,8 @@
   <div class="footer">
     Todos los SVGs son editables en Illustrator. Vectorizados listos para producción. <br>
     <b>Tip agente:</b> Copia la ruta + úsala en config.json de un nuevo proyecto piezas_vectoriales o como referencia para aistetic analyze.
-    <br><a href="flujo_hub.html" style="color:var(--cyan)">Volver al Hub principal</a>
+    <br><a href="flujo_hub.html" style="color:var(--cyan); font-weight:600">← Volver al Hub principal / menú del flujo</a>
+    &nbsp;•&nbsp; <a href="plano_demo.html" style="color:var(--cyan)">Ir a Plano Demo</a>
   </div>
 
 </div>

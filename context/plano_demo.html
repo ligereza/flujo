@@ -36,16 +36,18 @@
   .mono { font-family: ui-monospace, monospace; font-size: 12px; white-space: pre-wrap; background: var(--panel2); padding: 10px; border-radius: 4px; border:1px solid var(--border); max-height: 240px; overflow:auto; }
   .actions { display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; }
   .nav { margin-left:auto; display:flex; gap:8px; }
-  .nav a { color:var(--cyan); text-decoration:none; font-size:12px; }
+  .nav a, .nav button { background: var(--panel2); color: var(--text); border: 1px solid var(--border); padding: 5px 10px; border-radius: 4px; font-size: 12px; text-decoration: none; cursor: pointer; }
+  .nav a:hover, .nav button:hover { border-color: var(--cyan); }
+  .nav .back { font-weight: 600; }
 </style>
 </head>
 <body>
 <header>
-  <h1>plano • demo</h1>
-  <span class="badge">Stands + Riders + Costos</span>
+  <h1>FLUJO</h1>
+  <span class="badge">Plano Demo</span>
   <div class="nav">
-    <a href="flujo_hub.html">← Hub</a>
-    <a href="svg_visualizer.html">SVG Visualizer</a>
+    <a class="back" href="flujo_hub.html">← Volver al Hub principal (menú)</a>
+    <a href="svg_visualizer.html">Visualizador SVG</a>
     <a href="../projects/plano/">Carpeta plano</a>
   </div>
 </header>
@@ -84,8 +86,8 @@
 
     <div class="section-title" style="margin-top:16px">Acciones flujo</div>
     <div class="actions">
-      <button class="btn btn-sec" onclick="copyCmd('py -m flujo plano projects/plano/ejemplos/evento_ejemplo.json --rider --costs')">py plano --rider --costs</button>
-      <button class="btn btn-sec" onclick="copyCmd('python -m src.flujo.templates.blender_setup projects/plano/ejemplos/evento_ejemplo.json')">Blender setup</button>
+      <button class="btn btn-sec" onclick="copyCmd('py -m flujo plano projects/plano/ejemplos/evento_ejemplo.json --rider --costs', this)">py plano --rider --costs</button>
+      <button class="btn btn-sec" onclick="copyCmd('python -m src.flujo.templates.blender_setup projects/plano/ejemplos/evento_ejemplo.json', this)">Blender setup</button>
       <button class="btn btn-sec" onclick="window.open('../projects/plano/plano_editor.html','_blank')">Editor antiguo</button>
     </div>
     <div class="hint" style="font-size:11px;margin-top:10px;color:var(--muted)">Aplica paleta aistetic automáticamente. Listo para export a AI/PS/Blender.</div>
@@ -123,6 +125,12 @@
     </div>
   </div>
 
+</div>
+
+<div style="max-width:1200px;margin:20px auto 30px;padding:0 20px;font-size:11px;color:var(--muted);border-top:1px solid var(--border);padding-top:10px;">
+  <a href="flujo_hub.html" style="color:var(--cyan);font-weight:600">← Volver al Hub principal (menú del flujo)</a>
+  &nbsp;•&nbsp; <a href="svg_visualizer.html" style="color:var(--cyan)">Visualizador SVG</a>
+  &nbsp;•&nbsp; Abre el hub para intake de pedidos y comandos.
 </div>
 
 <script>
@@ -243,8 +251,11 @@ function simularBlender() {
   alert('Blender setup:\n\nEjecuta en terminal:\npython -m src.flujo.templates.blender_setup projects/plano/ejemplos/evento_ejemplo.json\n\nEsto crea meshes + materiales con aistetic.');
 }
 
-function copyCmd(cmd) {
-  navigator.clipboard.writeText(cmd).then(() => alert('Copiado: ' + cmd));
+function copyCmd(cmd, el) {
+  navigator.clipboard.writeText(cmd).then(() => {
+    if (el) { const o = el.innerText; el.innerText = 'Copiado!'; setTimeout(()=> el.innerText=o, 1200); }
+    else alert('Copiado: ' + cmd);
+  });
 }
 
 function init() {
