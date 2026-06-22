@@ -9,10 +9,12 @@ Mantener este archivo **corto** (< 120 líneas ideal, < 180 máximo). Actualizar
 
 **Fecha:** 2026-06-22  
 **Versión actual:** 0.34.10  
-**Última sesión:** hub + aistetic poblado + cotizaciones integrado + intake manual en hub. Push hecho.
+**Última sesión:** Mejora completa del flujo. Hub parser ahora hace matching real + "nueva sección o tarea". Cotizaciones genera archivos reales (txt + html con aistetic). Render aplica aistetic por defecto. AGENT_OPERATING_MANUAL.md + hub = única fuente para agentes.
 
 ## Objetivo actual / tarea en curso
-(1-2 frases. Ej: "Mejorar el motor de planos para soportar layouts en grilla + constraints simples, y reducir tokens de handoff para nuevas IAs.")
+Fortalecer los dos flujos de agentes:
+1. Pedido reciente + repo → procesar con herramientas y decidir si usar formato existente o proponer nuevo.
+2. Repo completo → continuar mejoras (priorizando integración con AI/PS/Blender y soporte a agentes).
 
 ## Estado del mundo (crítico)
 - **Activo:** Hub diario (flujo_hub.html) como entrada. aistetic con paleta real. cotizaciones dual integrado a planos.
@@ -27,19 +29,25 @@ Mantener este archivo **corto** (< 120 líneas ideal, < 180 máximo). Actualizar
 - Recepción automática (IMAP/webhook) no implementada.
 
 ## Tareas simples para agentes (low token - una por vez)
-1. Pega email/WhatsApp en hub "Pedidos" → copia estructura a job.
-2. Agrega ejemplo real a aistetic/ejemplos/ + `flujo aistetic analyze`.
-3. Prueba `flujo cotizaciones --para productora` (Windows: py).
-4. Actualiza este archivo con 1 tarea + nota plataforma.
-5. Agrega 1 regla a aistetic.json (ej. comunicaciones).
-6. Sugiere mejora pequeña en hub para texto→imagen.
+**Para Flujo Pedido:**
+- Pega un correo real en el hub y genera la estructura + comando correcto.
+- Revisa si el pedido calza en INDEX_FORMATOS o aistetic. Si no, propone nueva sección mínima.
 
-## Próximas (prioridad)
-1. Integrar aistetic en outputs reales (cotizaciones HTML/ infografía).
-2. Mejorar hub con previews reales de renders.
-3. (Usuario) Intake manual → estructura (ya en hub).
-4. Airdrop más robusto para Windows + auto TODO.
-5. Mantener hub + LAST_HANDOFF actualizados.
+**Para Flujo Mejoras:**
+- Implementa una pequeña mejora al hub (mejor matching de formatos o preview de export).
+- Actualiza FOR_EXTERNAL_AI.md o este archivo con instrucciones más claras para los dos flujos.
+
+**General:**
+- Agrega 1 ejemplo a aistetic/ejemplos/ + genera su json.
+- Prueba render + export con --for illustrator o blender.
+- Actualiza este LAST_HANDOFF con estado actual + tareas pendientes.
+
+## Próximas (prioridad para agentes)
+1. Hacer que el hub detecte mejor si un pedido calza en formatos existentes (aistetic + INDEX).
+2. Mejorar el parser del hub para generar output más estructurado (brief.yaml listo).
+3. Agregar soporte claro en hub para "crear nueva sección" cuando no hay match.
+4. Fortalecer integración de export con AI/PS/Blender (ya iniciado con --for).
+5. Mantener documentación de los dos flujos actualizada (FOR_EXTERNAL_AI + este archivo).
 
 ## Cómo verificar rápido el estado
 ```bash

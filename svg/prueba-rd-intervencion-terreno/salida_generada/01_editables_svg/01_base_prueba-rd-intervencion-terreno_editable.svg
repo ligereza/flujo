@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2100px" height="2970px" viewBox="0 0 2100 2970">
+<metadata>Propuesta de Servicio – Intervención en Terreno / 01_base_prueba-rd-intervencion-terreno / editable</metadata>
+<g id="fondo_editable"><rect x="0" y="0" width="2100" height="2970" fill="#F6EFE3"/></g>
+<g id="elementos_globales">
+<rect x="70" y="70" width="1960" height="2830" rx="46" fill="none" stroke="#D9CEC0" stroke-width="4"/>
+<text class="txt" x="120" y="162" fill="#161513" font-family="DejaVu Sans, Arial, Helvetica, sans-serif" font-size="42" font-weight="700">Reduciendo Daño Chile</text>
+</g>
+<g id="elementos_documento">
+<text class="txt" x="120" y="392" fill="#161513" font-family="DejaVu Sans, Arial, Helvetica, sans-serif" font-size="92" font-weight="700">TÍTULO PROPUESTA</text>
+<text class="txt" x="130" y="604" fill="#675F55" font-family="DejaVu Sans, Arial, Helvetica, sans-serif" font-size="44" font-weight="400">Resumen ejecutivo / bajada principal.</text>
+<rect x="120" y="760" width="1860" height="760" rx="38" fill="#FFFFFF" stroke="#D9CEC0" stroke-width="3" opacity="0.72"/>
+<text class="txt" x="190" y="888" fill="#173F2F" font-family="DejaVu Sans, Arial, Helvetica, sans-serif" font-size="48" font-weight="700">Bloque 1</text>
+<rect x="120" y="1610" width="900" height="680" rx="38" fill="#FFFFFF" stroke="#D9CEC0" stroke-width="3" opacity="0.72"/>
+<rect x="1080" y="1610" width="900" height="680" rx="38" fill="#FFFFFF" stroke="#D9CEC0" stroke-width="3" opacity="0.72"/>
+<text class="txt" x="130" y="2514" fill="#173F2F" font-family="DejaVu Sans, Arial, Helvetica, sans-serif" font-size="44" font-weight="700">Contacto / cierre</text>
+</g>
+</svg>

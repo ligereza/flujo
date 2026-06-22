@@ -34,6 +34,14 @@ Cuando una IA reciba el repo, debe empezar por el hub + este archivo + `projects
 4. Actualizar `docs/REPO_MAP.md`
 5. (Ideal) Crear referencia en `aistetic/` si afecta identidad visual.
 
+**Export a tus herramientas:**
+Usa `flujo render ... --for illustrator|photoshop|blender` o `flujo export ... --for ...`
+Los archivos salen listos para abrir en AI, PS o Blender (con aistetic aplicado). 
+
+En el hub (context/flujo_hub.html) verás la sección "Piezas vectoriales ya creadas" (carpeta svg/ en root) con links a SVGs editables/vectorizados para basar o editar trabajos (más común que crear de cero).
+
+Ver hub para flujo completo y AGENT_OPERATING_MANUAL.md.
+
 ## Para IAs externas que reciban el repo completo
 
 Si te mandaron este repositorio para extraer información (ej. para crear la línea editorial "aistetic"):

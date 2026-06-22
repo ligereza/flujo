@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2800px" height="2000px" viewBox="0 0 2800 2000">
+<metadata>07_proteina / editable / 2800x2000 px</metadata>
+<g id="fondo_editable">
+<rect x="0" y="0" width="2800" height="2000" rx="0" fill="#F6EFE3"/>
+<circle cx="390" cy="240" r="380" fill="#D95436" opacity=".16"/>
+<circle cx="2480" cy="120" r="330" fill="#315EE8" opacity=".08"/>
+<circle cx="2730" cy="1880" r="410" fill="none" stroke="#173F2F" stroke-width="90" opacity=".14"/>
+<circle cx="-40" cy="1660" r="230" fill="#D95436" opacity=".10"/>
+</g>
+<g id="marco_y_decoracion_editable">
+<rect x="70" y="70" width="2660" height="1860" rx="70" fill="none" stroke="#CFC2B2" stroke-width="4" opacity=".7"/>
+<rect x="2380" y="210" width="210" height="92" rx="46" fill="#D95436" stroke="#161513" stroke-width="6" transform="rotate(-14 2485 256)" opacity=".92"/>
+<rect x="2215" y="315" width="158" height="76" rx="38" fill="#F5C54D" stroke="#161513" stroke-width="5" transform="rotate(18 2294 353)" opacity=".86"/>
+</g>
+<g id="header_marca">
+<rect x="120" y="105" width="74" height="74" rx="24" fill="#173F2F"/>
+<text class="txt" x="136" y="153" fill="#FFFFFF" font-family="DejaVu Sans, Arial, Helvetica, sans-serif" font-size="34" font-weight="700">RD</text>
+<text class="txt" x="215" y="161" fill="#161513" font-family="DejaVu Sans, Arial, Helvetica, sans-serif" font-size="42" font-weight="700">Reduciendo Daño</text>
+<rect x="2320" y="116" width="360" height="60" rx="30" fill="#FFFFFF" stroke="#D9CEC0" stroke-width="2" opacity=".7"/>
+<text class="txt" x="2355" y="148" fill="#D95436" font-family="DejaVu Sans, Arial, Helvetica, sans-serif" font-size="24" font-weight="700">PROTEÍNA EN POLVO</text>
+</g>
+<g id="titulo">
+<text class="txt" x="120" y="287" fill="#D95436" font-family="DejaVu Sans, Arial, Helvetica, sans-serif" font-size="27" font-weight="700">PRODUCTO</text>
+<text class="txt" x="120" y="413" fill="#161513" font-family="DejaVu Sans, Arial, Helvetica, sans-serif" font-size="108" font-weight="700">Proteína</text>
+<text class="txt" x="120" y="564" fill="#D95436" font-family="DejaVu Sans, Arial, Helvetica, sans-serif" font-size="54" font-weight="700">Whey Protein e Iso Protein</text>
+</g>
+<g id="cajas_editables">
+<rect x="120" y="660" width="2560" height="300" rx="44" fill="#FFFFFF" stroke="#D9CEC0" stroke-width="3" opacity=".64"/>
+<rect x="120" y="1010" width="1240" height="690" rx="44" fill="#FFFFFF" stroke="#D9CEC0" stroke-width="3" opacity=".64"/>
+<rect x="1440" y="1010" width="1240" height="690" rx="44" fill="#FFFFFF" stroke="#D9CEC0" stroke-width="3" opacity=".64"/>
+<rect x="120" y="1740" width="2560" height="82" rx="34" fill="#173F2F" opacity=".96"/>
+</g>
+<g id="contenido_texto">
+<text class="txt" x="185" y="744" fill="#D95436" font-family="DejaVu Sans, Arial, Helvetica, sans-serif" font-size="34" font-weight="700">Descripción</text>
+<text class="txt" x="185" y="801" fill="#161513" font-family="DejaVu Sans, Arial, Helvetica, sans-serif" font-size="31" font-weight="400">Suplemento alimenticio en polvo de proteína de suero de leche (whey), diseñado para apoyar la recuperación muscular y complementar el aporte</text>
+<text class="txt" x="185" y="842" fill="#161513" font-family="DejaVu Sans, Arial, Helvetica, sans-serif" font-size="31" font-weight="400">proteico diario.</text>
+<text class="txt" x="185" y="903" fill="#161513" font-family="DejaVu Sans, Arial, Helvetica, sans-serif" font-size="31" font-weight="400">Disponible en dos versiones con distintos perfiles de procesamiento, para adaptarse a diferentes objetivos y tolerancias digestivas.</text>
+<text class="txt" x="185" y="1104" fill="#D95436" font-family="DejaVu Sans, Arial, Helvetica, sans-serif" font-size="34" font-weight="700">Whey Protein (concentrado)</text>
+<text class="txt" x="185" y="1169" fill="#161513" font-family="DejaVu Sans, Arial, Helvetica, sans-serif" font-size="29" font-weight="400">Proteína concentrada de suero de leche con un perfil nutricional completo.</text>
+<text class="txt" x="185" y="1208" fill="#161513" font-family="DejaVu Sans, Arial, Helvetica, sans-serif" font-size="29" font-weight="400">Aporta proteínas, vitaminas y minerales en cada porción, con mayor</text>
+<text class="txt" x="185" y="1247" fill="#161513" font-family="DejaVu Sans, Arial, Helvetica, sans-serif" font-size="29" font-weight="400">contenido de grasas y carbohidratos respecto al aislado. Opción versátil</text>
+<text class="txt" x="185" y="1286" fill="#161513" font-family="DejaVu Sans, Arial, Helvetica, sans-serif" font-size="29" font-weight="400">para quienes buscan apoyar su rutina de entrenamiento o aumentar su</text>
+<text class="txt" x="185" y="1325" fill="#161513" font-family="DejaVu Sans, Arial, Helvetica, sans-serif" font-size="29" font-weight="400">ingesta proteica diaria sin requerimientos dietéticos específicos.</text>
+<text class="txt" x="1505" y="1104" fill="#D95436" font-family="DejaVu Sans, Arial, Helvetica, sans-serif" font-size="34" font-weight="700">Iso Protein (aislado)</text>
+<text class="txt" x="1505" y="1169" fill="#161513" font-family="DejaVu Sans, Arial, Helvetica, sans-serif" font-size="29" font-weight="400">Proteína aislada de suero de leche con mayor porcentaje de proteína por</text>
+<text class="txt" x="1505" y="1208" fill="#161513" font-family="DejaVu Sans, Arial, Helvetica, sans-serif" font-size="29" font-weight="400">porción y mínimo contenido de grasas y lactosa. Proceso de filtración</text>
+<text class="txt" x="1505" y="1247" fill="#161513" font-family="DejaVu Sans, Arial, Helvetica, sans-serif" font-size="29" font-weight="400">adicional que resulta en una fórmula más depurada, orientada a quienes</text>
+<text class="txt" x="1505" y="1286" fill="#161513" font-family="DejaVu Sans, Arial, Helvetica, sans-serif" font-size="29" font-weight="400">buscan optimizar el aporte proteico o tienen sensibilidad a la lactosa.</text>
+<text class="txt" x="170" y="1784" fill="#F5C54D" font-family="DejaVu Sans, Arial, Helvetica, sans-serif" font-size="28" font-weight="700">Modo de uso</text>
+<text class="txt" x="490" y="1780" fill="#FFFFFF" font-family="DejaVu Sans, Arial, Helvetica, sans-serif" font-size="24" font-weight="400">Mezclar 1 scoop (33 g) en 200 cc de agua o leche. Ingerir inmediatamente. Puede consumirse antes o después del entrenamiento, o en cualquier momento del día como</text>
+<text class="txt" x="490" y="1809" fill="#FFFFFF" font-family="DejaVu Sans, Arial, Helvetica, sans-serif" font-size="24" font-weight="400">complemento proteico.</text>
+</g>
+<g id="footer">
+<line x1="120" y1="1840" x2="2680" y2="1840" stroke="#D9CEC0" stroke-width="5"/>
+<text class="txt" x="120" y="1916" fill="#173F2F" font-family="DejaVu Sans, Arial, Helvetica, sans-serif" font-size="46" font-weight="700">@ REDUCIENDODANO.CL</text>
+<text class="txt" x="1760" y="1898" fill="#675F55" font-family="DejaVu Sans, Arial, Helvetica, sans-serif" font-size="22" font-weight="700">VISITA NUESTRA WEB Y SÍGUENOS EN NUESTRAS REDES SOCIALES</text>
+</g>
+</svg>

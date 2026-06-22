@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2800px" height="2000px" viewBox="0 0 2800 2000">
+<metadata>04_pre_fiesta / editable / 2800x2000 px</metadata>
+<g id="fondo_editable">
+<rect x="0" y="0" width="2800" height="2000" rx="0" fill="#F6EFE3"/>
+<circle cx="390" cy="240" r="380" fill="#EF7B2D" opacity=".16"/>
+<circle cx="2480" cy="120" r="330" fill="#315EE8" opacity=".08"/>
+<circle cx="2730" cy="1880" r="410" fill="none" stroke="#173F2F" stroke-width="90" opacity=".14"/>
+<circle cx="-40" cy="1660" r="230" fill="#EF7B2D" opacity=".10"/>
+</g>
+<g id="marco_y_decoracion_editable">
+<rect x="70" y="70" width="2660" height="1860" rx="70" fill="none" stroke="#CFC2B2" stroke-width="4" opacity=".7"/>
+<rect x="2380" y="210" width="210" height="92" rx="46" fill="#EF7B2D" stroke="#161513" stroke-width="6" transform="rotate(-14 2485 256)" opacity=".92"/>
+<rect x="2215" y="315" width="158" height="76" rx="38" fill="#F5C54D" stroke="#161513" stroke-width="5" transform="rotate(18 2294 353)" opacity=".86"/>
+</g>
+<g id="header_marca">
+<rect x="120" y="105" width="74" height="74" rx="24" fill="#173F2F"/>
+<text class="txt" x="136" y="153" fill="#FFFFFF" font-family="DejaVu Sans, Arial, Helvetica, sans-serif" font-size="34" font-weight="700">RD</text>
+<text class="txt" x="215" y="161" fill="#161513" font-family="DejaVu Sans, Arial, Helvetica, sans-serif" font-size="42" font-weight="700">Reduciendo Daño</text>
+<rect x="2281.15125" y="116" width="398.84875" height="60" rx="30" fill="#FFFFFF" stroke="#D9CEC0" stroke-width="2" opacity=".7"/>
+<text class="txt" x="2316.15125" y="148" fill="#EF7B2D" font-family="DejaVu Sans, Arial, Helvetica, sans-serif" font-size="24" font-weight="700">ANTES DE LA EXIGENCIA</text>
+</g>
+<g id="titulo">
+<text class="txt" x="120" y="287" fill="#EF7B2D" font-family="DejaVu Sans, Arial, Helvetica, sans-serif" font-size="27" font-weight="700">PRODUCTO</text>
+<text class="txt" x="120" y="413" fill="#161513" font-family="DejaVu Sans, Arial, Helvetica, sans-serif" font-size="108" font-weight="700">PRE FIESTA</text>
+</g>
+<g id="cajas_editables">
+<rect x="120" y="660" width="1240" height="1000" rx="44" fill="#FFFFFF" stroke="#D9CEC0" stroke-width="3" opacity=".64"/>
+<rect x="1440" y="660" width="1240" height="1000" rx="44" fill="#FFFFFF" stroke="#D9CEC0" stroke-width="3" opacity=".64"/>
+</g>
+<g id="contenido_texto">
+<text class="txt" x="185" y="768" fill="#EF7B2D" font-family="DejaVu Sans, Arial, Helvetica, sans-serif" font-size="38" font-weight="700">Descripción</text>
+<text class="txt" x="185" y="847" fill="#161513" font-family="DejaVu Sans, Arial, Helvetica, sans-serif" font-size="37" font-weight="400">Pre Fiesta es un suplemento en gomitas formulado para</text>
+<text class="txt" x="185" y="898.06" fill="#161513" font-family="DejaVu Sans, Arial, Helvetica, sans-serif" font-size="37" font-weight="400">preparar tu cuerpo antes de que llegue la exigencia física,</text>
+<text class="txt" x="185" y="949.1199999999999" fill="#161513" font-family="DejaVu Sans, Arial, Helvetica, sans-serif" font-size="37" font-weight="400">mental y/o social.</text>
+<text class="txt" x="185" y="1032.1799999999998" fill="#161513" font-family="DejaVu Sans, Arial, Helvetica, sans-serif" font-size="37" font-weight="400">Con vitaminas C y complejo B, taurina, L-teanina y extracto</text>
+<text class="txt" x="185" y="1083.2399999999998" fill="#161513" font-family="DejaVu Sans, Arial, Helvetica, sans-serif" font-size="37" font-weight="400">de rhodiola — activos que apoyan el metabolismo</text>
+<text class="txt" x="185" y="1134.2999999999997" fill="#161513" font-family="DejaVu Sans, Arial, Helvetica, sans-serif" font-size="37" font-weight="400">energético, la función neuromuscular, la claridad mental y</text>
+<text class="txt" x="185" y="1185.3599999999997" fill="#161513" font-family="DejaVu Sans, Arial, Helvetica, sans-serif" font-size="37" font-weight="400">la respuesta al estrés.</text>
+<text class="txt" x="185" y="1268.4199999999996" fill="#161513" font-family="DejaVu Sans, Arial, Helvetica, sans-serif" font-size="37" font-weight="400">Porque cuidarse antes también cuenta.</text>
+<text class="txt" x="1505" y="768" fill="#EF7B2D" font-family="DejaVu Sans, Arial, Helvetica, sans-serif" font-size="38" font-weight="700">Nutrientes</text>
+<text x="1505" y="845" fill="#161513" font-family="DejaVu Sans, Arial, Helvetica, sans-serif" font-size="30" font-weight="700">•</text>
+<text class="txt" x="1547" y="845" fill="#161513" font-family="DejaVu Sans, Arial, Helvetica, sans-serif" font-size="30" font-weight="400">Vitamina C y complejo B (B1, B6, B12): contribuyen al metabolismo</text>
+<text class="txt" x="1547" y="885.5" fill="#161513" font-family="DejaVu Sans, Arial, Helvetica, sans-serif" font-size="30" font-weight="400">energético normal y al funcionamiento del sistema nervioso.</text>
+<text x="1505" y="961.0" fill="#161513" font-family="DejaVu Sans, Arial, Helvetica, sans-serif" font-size="30" font-weight="700">•</text>
+<text class="txt" x="1547" y="961.0" fill="#161513" font-family="DejaVu Sans, Arial, Helvetica, sans-serif" font-size="30" font-weight="400">Taurina: aminoácido involucrado en múltiples procesos fisiológicos,</text>
+<text class="txt" x="1547" y="1001.5" fill="#161513" font-family="DejaVu Sans, Arial, Helvetica, sans-serif" font-size="30" font-weight="400">incluyendo la función muscular y neurológica.</text>
+<text x="1505" y="1077.0" fill="#161513" font-family="DejaVu Sans, Arial, Helvetica, sans-serif" font-size="30" font-weight="700">•</text>
+<text class="txt" x="1547" y="1077.0" fill="#161513" font-family="DejaVu Sans, Arial, Helvetica, sans-serif" font-size="30" font-weight="400">L-teanina: asociada a estados de relajación sin sedación.</text>
+<text x="1505" y="1152.5" fill="#161513" font-family="DejaVu Sans, Arial, Helvetica, sans-serif" font-size="30" font-weight="700">•</text>
+<text class="txt" x="1547" y="1152.5" fill="#161513" font-family="DejaVu Sans, Arial, Helvetica, sans-serif" font-size="30" font-weight="400">Rhodiola: adaptógeno de uso tradicional en contextos de fatiga y</text>
+<text class="txt" x="1547" y="1193.0" fill="#161513" font-family="DejaVu Sans, Arial, Helvetica, sans-serif" font-size="30" font-weight="400">estrés.</text>
+</g>
+<g id="footer">
+<line x1="120" y1="1840" x2="2680" y2="1840" stroke="#D9CEC0" stroke-width="5"/>
+<text class="txt" x="120" y="1916" fill="#173F2F" font-family="DejaVu Sans, Arial, Helvetica, sans-serif" font-size="46" font-weight="700">@ REDUCIENDODANO.CL</text>
+<text class="txt" x="1760" y="1898" fill="#675F55" font-family="DejaVu Sans, Arial, Helvetica, sans-serif" font-size="22" font-weight="700">VISITA NUESTRA WEB Y SÍGUENOS EN NUESTRAS REDES SOCIALES</text>
+</g>
+</svg>

@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FLUJO Studio · Prototipo</title>
+<style>
+  :root {
+    --bg: #0a0a0a; --panel: #141414; --panel2: #1a1a1a;
+    --border: #2a2a2a; --text: #e8e8e8; --muted: #888;
+    --cyan: #00f0ff; --accent: #173F2F; --green: #2ecc71;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'Inter', system-ui, sans-serif; font-size: 14px; }
+  .app { display: flex; flex-direction: column; height: 100vh; }
+  /* Header */
+  header { background: var(--panel); border-bottom: 1px solid var(--border); padding: 10px 20px; display: flex; align-items: center; gap: 16px; }
+  header h1 { font-size: 18px; font-weight: 700; letter-spacing: -0.02em; }
+  header .badge { background: var(--accent); color: #fff; padding: 3px 10px; border-radius: 4px; font-size: 11px; font-weight: 600; }
+  header .spacer { flex: 1; }
+  /* Format bar */
+  .formats { display: flex; gap: 8px; padding: 10px 20px; background: var(--panel2); border-bottom: 1px solid var(--border); overflow-x: auto; }
+  .fmt-card { background: var(--panel); border: 1px solid var(--border); border-radius: 6px; padding: 10px 14px; cursor: pointer; min-width: 140px; transition: all .15s; }
+  .fmt-card:hover { border-color: var(--cyan); }
+  .fmt-card.active { border-color: var(--cyan); background: rgba(0,240,255,.08); }
+  .fmt-card .tipo { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.05em; }
+  .fmt-card .nombre { font-size: 13px; font-weight: 600; margin-top: 3px; }
+  .fmt-card .medida { font-size: 11px; color: var(--cyan); margin-top: 3px; }
+  /* Main layout */
+  .main { display: flex; flex: 1; overflow: hidden; }
+  .sidebar { width: 340px; background: var(--panel); border-right: 1px solid var(--border); overflow-y: auto; padding: 16px; }
+  .preview-area { flex: 1; display: flex; flex-direction: column; overflow: hidden; }
+  /* Sections */
+  .section { margin-bottom: 20px; }
+  .section-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
+  .section-title::before { content: ''; width: 3px; height: 14px; background: var(--cyan); border-radius: 2px; }
+  /* Inputs */
+  label { display: block; font-size: 12px; color: var(--muted); margin-bottom: 4px; }
+  input[type=text], input[type=number], textarea, select { width: 100%; background: var(--panel2); border: 1px solid var(--border); border-radius: 4px; padding: 8px 10px; color: var(--text); font-size: 13px; font-family: inherit; }
+  input:focus, textarea:focus, select:focus { outline: none; border-color: var(--cyan); }
+  .row { display: flex; gap: 8px; }
+  .row > div { flex: 1; }
+  .checkbox-row { display: flex; align-items: center; gap: 8px; font-size: 12px; color: var(--text); cursor: pointer; margin: 8px 0; }
+  .checkbox-row input { width: auto; }
+  /* Palette */
+  .palette-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+  .color-input { display: flex; align-items: center; gap: 6px; background: var(--panel2); border: 1px solid var(--border); border-radius: 4px; padding: 4px 8px; }
+  .color-input input[type=color] { width: 28px; height: 28px; border: none; border-radius: 3px; cursor: pointer; background: none; }
+  .color-input input[type=color]::-webkit-color-swatch-wrapper { padding: 0; }
+  .color-input input[type=color]::-webkit-color-swatch { border: none; border-radius: 3px; }
+  .color-input .name { font-size: 11px; color: var(--muted); }
+  .color-input .hex { font-size: 11px; color: var(--text); font-family: monospace; }
+  /* Preview */
+  .preview-toolbar { padding: 8px 16px; background: var(--panel2); border-bottom: 1px solid var(--border); display: flex; gap: 8px; align-items: center; }
+  .preview-toolbar span { font-size: 12px; color: var(--muted); }
+  .zoom-btn { background: var(--panel); border: 1px solid var(--border); color: var(--text); padding: 4px 10px; border-radius: 4px; cursor: pointer; font-size: 13px; }
+  .zoom-btn:hover { border-color: var(--cyan); }
+  .preview-canvas { flex: 1; overflow: auto; display: flex; align-items: center; justify-content: center; padding: 30px; background: #0d0d0d; background-image: radial-gradient(circle, #1a1a1a 1px, transparent 1px); background-size: 20px 20px; }
+  .preview-canvas svg { box-shadow: 0 8px 40px rgba(0,0,0,.5); max-width: 100%; max-height: 100%; }
+  /* Text editors */
+  .text-edit { background: var(--panel2); border: 1px solid var(--border); border-radius: 4px; padding: 8px; margin-bottom: 8px; }
+  .text-edit label { font-size: 10px; }
+  /* Buttons */
+  .btn { background: linear-gradient(135deg, var(--cyan), #7000ff); color: #000; border: none; border-radius: 4px; padding: 8px 16px; font-weight: 700; font-size: 12px; cursor: pointer; text-transform: uppercase; letter-spacing: 0.05em; }
+  .btn:hover { opacity: .9; }
+  .btn-sec { background: var(--panel); color: var(--text); border: 1px solid #333; }
+  .btn-sec:hover { border-color: var(--cyan); }
+  .btn-bar { display: flex; gap: 8px; margin-top: 16px; }
+  /* JSON modal */
+  .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,.8); display: none; z-index: 100; }
+  .modal-overlay.show { display: flex; align-items: center; justify-content: center; }
+  .modal { background: var(--panel); border: 1px solid var(--border); border-radius: 8px; width: 90%; max-width: 700px; max-height: 80vh; display: flex; flex-direction: column; }
+  .modal-header { padding: 14px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+  .modal-header h3 { font-size: 15px; }
+  .modal-body { padding: 16px 20px; overflow-y: auto; flex: 1; }
+  .modal-body textarea { width: 100%; height: 400px; font-family: monospace; font-size: 12px; }
+  .modal-footer { padding: 12px 20px; border-top: 1px solid var(--border); display: flex; gap: 8px; justify-content: flex-end; }
+  .close-x { cursor: pointer; color: var(--muted); font-size: 20px; }
+  .close-x:hover { color: var(--text); }
+  .tab-bar { display: flex; gap: 0; margin-bottom: 12px; border-bottom: 1px solid var(--border); }
+  .tab { padding: 8px 16px; font-size: 12px; font-weight: 600; color: var(--muted); cursor: pointer; border-bottom: 2px solid transparent; text-transform: uppercase; letter-spacing: 0.04em; }
+  .tab.active { color: var(--cyan); border-bottom-color: var(--cyan); }
+  .tab-content { display: none; }
+  .tab-content.active { display: block; }
+  .hint { font-size: 11px; color: var(--muted); margin-top: 4px; font-style: italic; }
+  .doc-tabs { display: flex; gap: 6px; margin-bottom: 10px; flex-wrap: wrap; }
+  .doc-tab { padding: 4px 12px; border-radius: 4px; font-size: 12px; cursor: pointer; background: var(--panel2); border: 1px solid var(--border); }
+  .doc-tab.active { border-color: var(--cyan); color: var(--cyan); }
+</style>
+</head>
+<body>
+<div class="app">
+  <!-- HEADER -->
+  <header>
+    <h1>FLUJO Studio</h1>
+    <span class="badge">Prototipo</span>
+    <span class="spacer"></span>
+    <button class="btn-sec btn" onclick="openJSON('import')">Importar JSON</button>
+    <button class="btn-sec btn" onclick="openJSON('export')">Exportar JSON</button>
+    <button class="btn-sec btn" onclick="openJSON('canva')">Canva ↕</button>
+  </header>
+
+  <!-- FORMAT PICKER -->
+  <div class="formats" id="formatBar"></div>
+
+  <!-- MAIN -->
+  <div class="main">
+    <!-- SIDEBAR -->
+    <div class="sidebar">
+
+      <div class="tab-bar">
+        <div class="tab active" onclick="switchTab('lienzo')">Lienzo</div>
+        <div class="tab" onclick="switchTab('paleta')">Paleta</div>
+        <div class="tab" onclick="switchTab('datos')">Datos</div>
+        <div class="tab" onclick="switchTab('json')">JSON</div>
+      </div>
+
+      <!-- TAB: LIENZO -->
+      <div class="tab-content active" id="tab-lienzo">
+        <div class="section">
+          <div class="section-title">Resolución y proporción</div>
+          <div class="row">
+            <div><label>Ancho (px)</label><input type="number" id="canvasW" onchange="updateCanvas()"></div>
+            <div><label>Alto (px)</label><input type="number" id="canvasH" onchange="updateCanvas()"></div>
+          </div>
+          <label class="checkbox-row"><input type="checkbox" id="lockRatio" checked> 🔒 Mantener proporción</label>
+          <div class="row" style="margin-top:8px">
+            <div><label>Ancho real (cm)</label><input type="number" step="0.1" id="cmW" onchange="updateCanvas()"></div>
+            <div><label>Alto real (cm)</label><input type="number" step="0.1" id="cmH" onchange="updateCanvas()"></div>
+          </div>
+          <div class="hint">Proporción actual: <span id="ratioDisplay">—</span></div>
+        </div>
+        <div class="section">
+          <div class="section-title">Margen seguro</div>
+          <label>Safe margin (px)</label>
+          <input type="number" id="safeMargin" onchange="updateCanvas()">
+        </div>
+        <div class="section">
+          <div class="section-title">Fondo</div>
+          <select id="bgSelect" onchange="updateBg()"></select>
+        </div>
+        <div class="section">
+          <div class="section-title">Info del proyecto</div>
+          <label>Nombre</label>
+          <input type="text" id="projName" onchange="updateProject()">
+          <label style="margin-top:8px">Marca / Brand</label>
+          <input type="text" id="projBrand" onchange="updateProject()">
+          <label style="margin-top:8px">Website</label>
+          <input type="text" id="projWeb" onchange="updateProject()">
+        </div>
+      </div>
+
+      <!-- TAB: PALETA -->
+      <div class="tab-content" id="tab-paleta">
+        <div class="section">
+          <div class="section-title">Colores de la paleta</div>
+          <div class="palette-grid" id="paletteGrid"></div>
+          <div class="hint" style="margin-top:8px">Los elementos usan estos nombres (ink, accent, etc.)</div>
+        </div>
+      </div>
+
+      <!-- TAB: DATOS -->
+      <div class="tab-content" id="tab-datos">
+        <div class="section">
+          <div class="section-title">Documentos</div>
+          <div class="doc-tabs" id="docTabs"></div>
+          <div id="textEditors"></div>
+        </div>
+      </div>
+
+      <!-- TAB: JSON -->
+      <div class="tab-content" id="tab-json">
+        <div class="section">
+          <div class="section-title">Config JSON en vivo</div>
+          <textarea id="jsonView" style="height:400px" readonly></textarea>
+          <div class="btn-bar">
+            <button class="btn" onclick="copyJSON()">Copiar JSON</button>
+            <button class="btn-sec btn" onclick="downloadJSON()">Descargar config.json</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PREVIEW -->
+    <div class="preview-area">
+      <div class="preview-toolbar">
+        <button class="zoom-btn" onclick="zoom(-0.1)">−</button>
+        <span id="zoomLabel">100%</span>
+        <button class="zoom-btn" onclick="zoom(0.1)">+</button>
+        <button class="zoom-btn" onclick="zoomFit()">Fit</button>
+        <span style="margin-left:auto" id="canvasInfo">—</span>
+      </div>
+      <div class="preview-canvas" id="previewCanvas"></div>
+    </div>
+  </div>
+</div>
+
+<!-- JSON MODAL -->
+<div class="modal-overlay" id="jsonModal">
+  <div class="modal">
+    <div class="modal-header">
+      <h3 id="modalTitle">JSON</h3>
+      <span class="close-x" onclick="closeJSON()">&times;</span>
+    </div>
+    <div class="modal-body">
+      <textarea id="modalTextarea"></textarea>
+    </div>
+    <div class="modal-footer">
+      <button class="btn-sec btn" onclick="closeJSON()">Cancelar</button>
+      <button class="btn" id="modalAction" onclick="applyModal()">Aplicar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ============================================================
+// TEMPLATES — los 6 formatos reales de tu repo
+// ============================================================
+const TEMPLATES = {
+  etiqueta_165x65: {
+    nombre: "Etiqueta 16.5×6.5", tipo: "etiqueta", medida: "16.5 × 6.5 cm",
+    config: {"project":{"name":"Etiqueta horizontal","slug":"etiqueta_165x65","brand":"Marca","website":""},"canvas":{"width":3300,"height":1300,"real_size_cm":{"width":16.5,"height":6.5},"safe_margin_px":100},"palette":{"cream":"#F6EFE3","paper":"#FFF8ED","white":"#FFFFFF","ink":"#161513","muted":"#675F55","line":"#D9CEC0","accent":"#173F2F"},"background":"cream","global_elements":[{"type":"rect","x":60,"y":60,"w":3180,"h":1180,"radius":44,"fill":"none","stroke":"line","stroke_width":4},{"type":"text","content":"{brand}","x":110,"y":95,"size":42,"fill":"ink","weight":"bold"}],"documents":[{"id":"01_etiqueta","title":"Etiqueta base","elements":[{"type":"text","content":"NOMBRE PRODUCTO","x":110,"y":260,"size":118,"fill":"ink","weight":"bold"},{"type":"text","content":"Subtítulo / descripción corta","x":120,"y":430,"size":52,"fill":"accent","weight":"bold"},{"type":"panel","x":120,"y":570,"w":1950,"h":520,"radius":36,"fill":"white","stroke":"line","stroke_width":3,"opacity":0.72},{"type":"paragraph","content":"Descripción o información principal. Ajustar desde el editor.","x":180,"y":640,"size":38,"fill":"muted","max_width":1800,"line_height":52},{"type":"panel","x":2220,"y":570,"w":860,"h":520,"radius":36,"fill":"white","stroke":"line","stroke_width":3,"opacity":0.72},{"type":"text","content":"QR / LOTE","x":2380,"y":750,"size":58,"fill":"muted","weight":"bold"}]}]}
+  },
+  etiqueta_140x100: {
+    nombre: "Etiqueta 14×10", tipo: "etiqueta", medida: "14 × 10 cm",
+    config: {"project":{"name":"Etiqueta 14×10","slug":"etiqueta_140x100","brand":"Marca","website":""},"canvas":{"width":2800,"height":2000,"real_size_cm":{"width":14,"height":10},"safe_margin_px":100},"palette":{"cream":"#F6EFE3","paper":"#FFF8ED","white":"#FFFFFF","ink":"#161513","muted":"#675F55","line":"#D9CEC0","accent":"#173F2F"},"background":"cream","global_elements":[{"type":"rect","x":60,"y":60,"w":2680,"h":1880,"radius":44,"fill":"none","stroke":"line","stroke_width":4},{"type":"text","content":"{brand}","x":110,"y":95,"size":42,"fill":"ink","weight":"bold"}],"documents":[{"id":"01_etiqueta","title":"Etiqueta base","elements":[{"type":"text","content":"NOMBRE PRODUCTO","x":110,"y":280,"size":130,"fill":"ink","weight":"bold"},{"type":"text","content":"Subtítulo / línea secundaria","x":120,"y":460,"size":56,"fill":"accent","weight":"bold"},{"type":"panel","x":120,"y":600,"w":2560,"h":800,"radius":36,"fill":"white","stroke":"line","stroke_width":3,"opacity":0.72},{"type":"paragraph","content":"Información principal del producto. Editar desde el panel de datos.","x":190,"y":690,"size":42,"fill":"muted","max_width":2400,"line_height":58}]}]}
+  },
+  flyer_minimo: {
+    nombre: "Flyer mínimo", tipo: "flyer", medida: "14 × 10 cm",
+    config: {"project":{"name":"Flyer horizontal mínimo","slug":"flyer_minimo","brand":"Marca","website":""},"canvas":{"width":2800,"height":2000,"real_size_cm":{"width":14,"height":10},"safe_margin_px":100},"palette":{"cream":"#F6EFE3","paper":"#FFF8ED","white":"#FFFFFF","ink":"#161513","muted":"#675F55","line":"#D9CEC0","accent":"#173F2F"},"background":"cream","global_elements":[{"type":"rect","x":60,"y":60,"w":2680,"h":1880,"radius":44,"fill":"none","stroke":"line","stroke_width":4},{"type":"text","content":"{brand}","x":110,"y":95,"size":42,"fill":"ink","weight":"bold"}],"documents":[{"id":"01_flyer","title":"Flyer base","elements":[{"type":"text","content":"TÍTULO DEL FLYER","x":110,"y":300,"size":100,"fill":"ink","weight":"bold","max_width":2500},{"type":"paragraph","content":"Bajada / descripción principal del flyer.","x":130,"y":520,"size":48,"fill":"muted","max_width":2400,"line_height":64},{"type":"panel","x":120,"y":700,"w":2560,"h":1000,"radius":36,"fill":"white","stroke":"line","stroke_width":3,"opacity":0.72},{"type":"text","content":"Contacto / cierre","x":150,"y":780,"size":48,"fill":"accent","weight":"bold"}]}]}
+  },
+  one_page_a4: {
+    nombre: "One Page A4", tipo: "one_page", medida: "21 × 29.7 cm",
+    config: {"project":{"name":"One page propuesta","slug":"one_page_a4","brand":"Marca","website":""},"canvas":{"width":2100,"height":2970,"real_size_cm":{"width":21,"height":29.7},"safe_margin_px":120},"palette":{"cream":"#F6EFE3","paper":"#FFF8ED","white":"#FFFFFF","ink":"#161513","muted":"#675F55","line":"#D9CEC0","accent":"#173F2F"},"background":"cream","global_elements":[{"type":"rect","x":70,"y":70,"w":1960,"h":2830,"radius":46,"fill":"none","stroke":"line","stroke_width":4},{"type":"text","content":"{brand}","x":120,"y":120,"size":42,"fill":"ink","weight":"bold"}],"documents":[{"id":"01_one_page","title":"One page base","elements":[{"type":"text","content":"TÍTULO PROPUESTA","x":120,"y":300,"size":92,"fill":"ink","weight":"bold","max_width":1780},{"type":"paragraph","content":"Resumen ejecutivo / bajada principal.","x":130,"y":560,"size":44,"fill":"muted","max_width":1760,"line_height":62},{"type":"panel","x":120,"y":760,"w":1860,"h":760,"radius":38,"fill":"white","stroke":"line","stroke_width":3,"opacity":0.72},{"type":"text","content":"Bloque 1","x":190,"y":840,"size":48,"fill":"accent","weight":"bold"}]}]}
+  },
+  carrusel_1080: {
+    nombre: "Carrusel 1080", tipo: "carrusel", medida: "10.8 × 10.8 cm",
+    config: {"project":{"name":"Carrusel cuadrado","slug":"carrusel_1080","brand":"Marca","website":""},"canvas":{"width":1080,"height":1080,"real_size_cm":{"width":10.8,"height":10.8},"safe_margin_px":70},"palette":{"cream":"#F6EFE3","paper":"#FFF8ED","white":"#FFFFFF","ink":"#161513","muted":"#675F55","line":"#D9CEC0","accent":"#173F2F"},"background":"cream","global_elements":[{"type":"rect","x":45,"y":45,"w":990,"h":990,"radius":44,"fill":"none","stroke":"line","stroke_width":3},{"type":"text","content":"{brand}","x":70,"y":70,"size":28,"fill":"ink","weight":"bold"}],"documents":[{"id":"01_slide","title":"Slide base","elements":[{"type":"text","content":"TÍTULO","x":70,"y":240,"size":74,"fill":"ink","weight":"bold","max_width":900},{"type":"paragraph","content":"Texto principal del slide.","x":76,"y":430,"size":42,"fill":"muted","max_width":850,"line_height":56},{"type":"text","content":"01","x":850,"y":900,"size":52,"fill":"accent","weight":"bold"}]}]}
+  },
+  rider_a4: {
+    nombre: "Rider A4 H", tipo: "rider", medida: "29.7 × 21 cm",
+    config: {"project":{"name":"Rider eventos A4","slug":"rider_a4","brand":"Marca","website":""},"canvas":{"width":2970,"height":2100,"real_size_cm":{"width":29.7,"height":21},"safe_margin_px":120},"palette":{"cream":"#F6EFE3","paper":"#FFF8ED","white":"#FFFFFF","ink":"#161513","muted":"#675F55","line":"#D9CEC0","accent":"#173F2F","blue":"#315EE8","orange":"#EF7B2D","yellow":"#F5C54D"},"background":"cream","global_elements":[{"type":"rect","x":70,"y":70,"w":2830,"h":1960,"radius":46,"fill":"none","stroke":"line","stroke_width":4},{"type":"text","content":"{brand}","x":120,"y":120,"size":42,"fill":"ink","weight":"bold"}],"documents":[{"id":"01_requerimientos","title":"Requerimientos","elements":[{"type":"text","content":"Rider técnico de intervención","x":120,"y":280,"size":82,"fill":"ink","weight":"bold","max_width":2450},{"type":"paragraph","content":"Documento base para coordinar stand informativo en eventos.","x":130,"y":460,"size":42,"fill":"muted","max_width":2500,"line_height":58},{"type":"panel","x":120,"y":650,"w":820,"h":920,"radius":36,"fill":"white","stroke":"line","stroke_width":3,"opacity":0.72},{"type":"text","content":"Espacio","x":180,"y":720,"size":44,"fill":"accent","weight":"bold"}]}]}
+  }
+};
+
+// ============================================================
+// STATE
+// ============================================================
+let state = null;       // current config.json
+let activeFormat = null;
+let activeDoc = 0;
+let zoomLevel = 1;
+
+// ============================================================
+// INIT
+// ============================================================
+function init() {
+  const bar = document.getElementById('formatBar');
+  Object.entries(TEMPLATES).forEach(([id, fmt]) => {
+    const card = document.createElement('div');
+    card.className = 'fmt-card';
+    card.id = 'fmt-' + id;
+    card.onclick = () => loadFormat(id);
+    card.innerHTML = `<div class="tipo">${fmt.tipo}</div><div class="nombre">${fmt.nombre}</div><div class="medida">${fmt.medida}</div>`;
+    bar.appendChild(card);
+  });
+  loadFormat('etiqueta_165x65');
+}
+
+function loadFormat(id) {
+  activeFormat = id;
+  // deep clone template
+  state = JSON.parse(JSON.stringify(TEMPLATES[id].config));
+  activeDoc = 0;
+  // update format bar
+  document.querySelectorAll('.fmt-card').forEach(c => c.classList.remove('active'));
+  document.getElementById('fmt-' + id).classList.add('active');
+  populateFields();
+  renderPreview();
+}
+
+// ============================================================
+// POPULATE UI FROM STATE
+// ============================================================
+function populateFields() {
+  // Lienzo
+  document.getElementById('canvasW').value = state.canvas.width;
+  document.getElementById('canvasH').value = state.canvas.height;
+  document.getElementById('cmW').value = state.canvas.real_size_cm.width;
+  document.getElementById('cmH').value = state.canvas.real_size_cm.height;
+  document.getElementById('safeMargin').value = state.canvas.safe_margin_px;
+  updateRatioDisplay();
+  // Background
+  const bgSel = document.getElementById('bgSelect');
+  bgSel.innerHTML = '';
+  Object.keys(state.palette).forEach(k => {
+    const opt = document.createElement('option');
+    opt.value = k; opt.textContent = k;
+    bgSel.appendChild(opt);
+  });
+  bgSel.value = state.background;
+  // Project
+  document.getElementById('projName').value = state.project.name || '';
+  document.getElementById('projBrand').value = state.project.brand || '';
+  document.getElementById('projWeb').value = state.project.website || '';
+  // Palette
+  renderPalette();
+  // Docs
+  renderDocTabs();
+  renderTextEditors();
+  // JSON
+  updateJSONView();
+}
+
+function updateRatioDisplay() {
+  const r = (state.canvas.width / state.canvas.height).toFixed(3);
+  document.getElementById('ratioDisplay').textContent = r + ' : 1';
+}
+
+function renderPalette() {
+  const grid = document.getElementById('paletteGrid');
+  grid.innerHTML = '';
+  Object.entries(state.palette).forEach(([name, hex]) => {
+    const div = document.createElement('div');
+    div.className = 'color-input';
+    div.innerHTML = `
+      <input type="color" value="${hex}" onchange="setPalette('${name}', this.value)">
+      <div><div class="name">${name}</div><div class="hex" id="hex-${name}">${hex}</div></div>`;
+    grid.appendChild(div);
+  });
+}
+
+function renderDocTabs() {
+  const tabs = document.getElementById('docTabs');
+  tabs.innerHTML = '';
+  state.documents.forEach((doc, i) => {
+    const t = document.createElement('div');
+    t.className = 'doc-tab' + (i === activeDoc ? ' active' : '');
+    t.textContent = doc.title || doc.id;
+    t.onclick = () => { activeDoc = i; renderDocTabs(); renderTextEditors(); };
+    tabs.appendChild(t);
+  });
+}
+
+function renderTextEditors() {
+  const container = document.getElementById('textEditors');
+  container.innerHTML = '';
+  const doc = state.documents[activeDoc];
+  if (!doc) return;
+  let textIdx = 0;
+  doc.elements.forEach((el, i) => {
+    if (el.type === 'text' || el.type === 'paragraph') {
+      const isLong = el.type === 'paragraph';
+      const div = document.createElement('div');
+      div.className = 'text-edit';
+      div.innerHTML = `
+        <label>${el.type.toUpperCase()} — fill: ${el.fill} · size: ${el.size}</label>
+        <textarea rows="${isLong ? 3 : 1}" onchange="setText(${i}, this.value)" 
+          placeholder="contenido...">${(el.content || '').replace(/&/g,'&amp;').replace(/</g,'&lt;')}</textarea>`;
+      container.appendChild(div);
+      textIdx++;
+    }
+  });
+  if (textIdx === 0) {
+    container.innerHTML = '<div class="hint">Este documento no tiene elementos de texto editables.</div>';
+  }
+}
+
+// ============================================================
+// UPDATES FROM UI → STATE
+// ============================================================
+function updateCanvas() {
+  const w = parseFloat(document.getElementById('canvasW').value);
+  const h = parseFloat(document.getElementById('canvasH').value);
+  const cmW = parseFloat(document.getElementById('cmW').value);
+  const cmH = parseFloat(document.getElementById('cmH').value);
+  const locked = document.getElementById('lockRatio').checked;
+
+  if (locked && state.canvas.width && state.canvas.height) {
+    const ratio = state.canvas.width / state.canvas.height;
+    // only handle direct dimension edits
+  }
+  state.canvas.width = w;
+  state.canvas.height = h;
+  state.canvas.real_size_cm.width = cmW;
+  state.canvas.real_size_cm.height = cmH;
+  state.canvas.safe_margin_px = parseInt(document.getElementById('safeMargin').value);
+  updateRatioDisplay();
+  renderPreview();
+  updateJSONView();
+}
+
+function updateBg() {
+  state.background = document.getElementById('bgSelect').value;
+  renderPreview();
+  updateJSONView();
+}
+
+function updateProject() {
+  state.project.name = document.getElementById('projName').value;
+  state.project.brand = document.getElementById('projBrand').value;
+  state.project.website = document.getElementById('projWeb').value;
+  // update {brand} placeholders
+  renderPreview();
+  updateJSONView();
+}
+
+function setPalette(name, hex) {
+  state.palette[name] = hex;
+  document.getElementById('hex-' + name).textContent = hex;
+  renderPreview();
+  updateJSONView();
+}
+
+function setText(elemIdx, value) {
+  state.documents[activeDoc].elements[elemIdx].content = value;
+  renderPreview();
+  updateJSONView();
+}
+
+// ============================================================
+// SVG RENDERER
+// ============================================================
+function resolveColor(val) {
+  if (!val || val === 'none') return 'none';
+  if (val.startsWith('#')) return val;
+  return state.palette[val] || val;
+}
+
+function escapeXml(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function renderElement(el) {
+  const fill = resolveColor(el.fill);
+  const stroke = resolveColor(el.stroke);
+  switch (el.type) {
+    case 'rect':
+    case 'panel': {
+      const op = el.opacity != null ? ` opacity="${el.opacity}"` : '';
+      const r = el.radius ? ` rx="${el.radius}" ry="${el.radius}"` : '';
+      return `<rect x="${el.x}" y="${el.y}" width="${el.w}" height="${el.h}"${r} fill="${fill}" stroke="${stroke}" stroke-width="${el.stroke_width||0}"${op}/>`;
+    }
+    case 'circle':
+      return `<circle cx="${el.cx}" cy="${el.cy}" r="${el.r}" fill="${fill}" stroke="${stroke}" stroke-width="${el.stroke_width||0}"/>`;
+    case 'line':
+      return `<line x1="${el.x1}" y1="${el.y1}" x2="${el.x2}" y2="${el.y2}" stroke="${stroke}" stroke-width="${el.stroke_width||1}"/>`;
+    case 'text': {
+      const content = (el.content || '').replace('{brand}', state.project.brand || '');
+      const weight = el.weight === 'bold' ? ` font-weight="bold"` : '';
+      const mw = el.max_width ? ` textLength="${Math.min(el.max_width, content.length * el.size * 0.55)}"` : '';
+      return `<text x="${el.x}" y="${el.y}" font-size="${el.size}" fill="${fill}"${weight}>${escapeXml(content)}</text>`;
+    }
+    case 'paragraph': {
+      const lines = (el.content || '').split('\n');
+      let tspans = '';
+      lines.forEach((line, i) => {
+        const dy = i === 0 ? 0 : (el.line_height || el.size * 1.3);
+        tspans += `<tspan x="${el.x}" dy="${dy}">${escapeXml(line)}</tspan>`;
+      });
+      return `<text x="${el.x}" y="${el.y}" font-size="${el.size}" fill="${fill}">${tspans}</text>`;
+    }
+    case 'list': {
+      let tspans = '';
+      (el.items || []).forEach((item, i) => {
+        const dy = i === 0 ? 0 : (el.line_height || el.size * 1.4) + (el.gap || 0);
+        const bullet = `• `;
+        tspans += `<tspan x="${el.x}" dy="${dy}">${bullet}${escapeXml(item)}</tspan>`;
+      });
+      return `<text x="${el.x}" y="${el.y}" font-size="${el.size}" fill="${fill}">${tspans}</text>`;
+    }
+    default:
+      return '';
+  }
+}
+
+function renderPreview() {
+  if (!state) return;
+  const w = state.canvas.width;
+  const h = state.canvas.height;
+  const bg = resolveColor(state.background);
+
+  let elements = '';
+  // global elements
+  (state.global_elements || []).forEach(el => { elements += renderElement(el); });
+  // current document
+  const doc = state.documents[activeDoc];
+  if (doc) {
+    (doc.elements || []).forEach(el => { elements += renderElement(el); });
+  }
+
+  // safe margin guide
+  const sm = state.canvas.safe_margin_px || 0;
+  const safeRect = sm > 0 ? `<rect x="${sm}" y="${sm}" width="${w - sm*2}" height="${h - sm*2}" fill="none" stroke="#00f0ff" stroke-width="2" stroke-dasharray="20,15" opacity="0.3"/>` : '';
+
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" style="max-width:${zoomLevel*100}%; max-height:${zoomLevel*100}%">
+    <rect width="${w}" height="${h}" fill="${bg}"/>
+    ${safeRect}
+    ${elements}
+  </svg>`;
+
+  document.getElementById('previewCanvas').innerHTML = svg;
+  document.getElementById('canvasInfo').textContent = `${w} × ${h} px · ${state.canvas.real_size_cm.width} × ${state.canvas.real_size_cm.height} cm`;
+  document.getElementById('zoomLabel').textContent = Math.round(zoomLevel * 100) + '%';
+}
+
+// ============================================================
+// ZOOM
+// ============================================================
+function zoom(delta) { zoomLevel = Math.max(0.1, Math.min(3, zoomLevel + delta)); renderPreview(); }
+function zoomFit() { zoomLevel = 1; renderPreview(); }
+
+// ============================================================
+// TABS
+// ============================================================
+function switchTab(name) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+  event.target.classList.add('active');
+  document.getElementById('tab-' + name).classList.add('active');
+  if (name === 'json') updateJSONView();
+}
+
+// ============================================================
+// JSON VIEW
+// ============================================================
+function updateJSONView() {
+  const el = document.getElementById('jsonView');
+  if (el) el.value = JSON.stringify(state, null, 2);
+}
+
+function copyJSON() {
+  const ta = document.getElementById('jsonView');
+  ta.select();
+  document.execCommand('copy');
+  alert('JSON copiado al portapapeles.');
+}
+
+function downloadJSON() {
+  const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'config.json';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+// ============================================================
+// JSON MODAL (import/export/canva)
+// ============================================================
+let modalMode = null;
+
+function openJSON(mode) {
+  modalMode = mode;
+  const ta = document.getElementById('modalTextarea');
+  const title = document.getElementById('modalTitle');
+  const btn = document.getElementById('modalAction');
+  if (mode === 'export') {
+    title.textContent = 'Exportar config.json';
+    ta.value = JSON.stringify(state, null, 2);
+    ta.readOnly = true;
+    btn.textContent = 'Descargar';
+    btn.onclick = () => { downloadJSON(); closeJSON(); };
+  } else if (mode === 'import') {
+    title.textContent = 'Importar JSON';
+    ta.value = '';
+    ta.readOnly = false;
+    ta.placeholder = 'Pega aquí el config.json completo...';
+    btn.textContent = 'Cargar';
+    btn.onclick = applyModal;
+  } else if (mode === 'canva') {
+    title.textContent = 'Canva — Intercambio JSON';
+    const canvaData = configToCanva(state);
+    ta.value = JSON.stringify(canvaData, null, 2);
+    ta.readOnly = false;
+    ta.placeholder = 'Edita o pega datos de Canva aquí...';
+    btn.textContent = 'Aplicar desde Canva';
+    btn.onclick = applyModal;
+  }
+  document.getElementById('jsonModal').classList.add('show');
+}
+
+function closeJSON() {
+  document.getElementById('jsonModal').classList.remove('show');
+}
+
+function applyModal() {
+  const ta = document.getElementById('modalTextarea');
+  try {
+    const data = JSON.parse(ta.value);
+    if (modalMode === 'import') {
+      state = data;
+      populateFields();
+      renderPreview();
+      closeJSON();
+    } else if (modalMode === 'canva') {
+      canvaToConfig(data);
+      populateFields();
+      renderPreview();
+      closeJSON();
+    }
+  } catch (e) {
+    alert('JSON inválido: ' + e.message);
+  }
+}
+
+// ============================================================
+// CANVA BRIDGE
+// ============================================================
+function configToCanva(cfg) {
+  // Extrae los datos editables en formato plano para Canva Bulk Create
+  const texts = [];
+  cfg.documents.forEach(doc => {
+    (doc.elements || []).forEach((el, i) => {
+      if (el.type === 'text' || el.type === 'paragraph') {
+        texts.push({
+          doc: doc.id,
+          field: `text_${i}`,
+          label: (el.content || '').substring(0, 30),
+          value: el.content || '',
+          size: el.size,
+          fill: el.fill
+        });
+      }
+    });
+  });
+  return {
+    format: 'flujo-canva-bridge-v1',
+    project: cfg.project,
+    canvas: cfg.canvas,
+    palette: cfg.palette,
+    background: cfg.background,
+    fields: texts
+  };
+}
+
+function canvaToConfig(canva) {
+  // Aplica los datos de vuelta al config
+  if (canva.fields) {
+    canva.fields.forEach(f => {
+      const [docId, idxStr] = [f.doc, f.field];
+      const idx = parseInt((idxStr || '').replace('text_', ''));
+      const doc = state.documents.find(d => d.id === docId);
+      if (doc && doc.elements[idx]) {
+        doc.elements[idx].content = f.value;
+      }
+    });
+  }
+  if (canva.palette) state.palette = { ...state.palette, ...canva.palette };
+  if (canva.project) state.project = { ...state.project, ...canva.project };
+}
+
+// ============================================================
+// START
+// ============================================================
+init();
+</script>
+</body>
+</html>
