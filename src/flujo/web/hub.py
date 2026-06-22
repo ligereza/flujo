@@ -59,6 +59,165 @@ from ..intake.pipeline import _infer_type_and_size  # reuse heuristics if needed
 from ..jobs.job import create_job, list_jobs  # real job creation / listing for hub API
 
 
+def derive_visual_traits(ptype: str, palette: list, desc: str, hints: dict) -> str:
+    traits = f"Pieza real terminada tipo {ptype}. "
+    if palette:
+        cols = [c.get("hex", "") for c in palette[:3] if isinstance(c, dict)]
+        cols_str = ", ".join(cols)
+        traits += f"Colores dominantes aprox: {cols_str}. "
+    if desc:
+        traits += f"Descripción: {desc[:120]}. "
+    if hints:
+        ks = list(hints.keys())[:3]
+        traits += f"Hints extraídos (OCR): {ks}. "
+    traits += "Patrón para IA: busca estos rasgos en briefs y generación para fidelidad a entregas reales."
+    return traits
+
+
+def build_for_future_ai(ptype: str, palette: list, desc: str, hints: dict, w: int, h: int) -> str:
+    """Rich teaching note so future AI (esp. when reviewing for linea_editorial) knows exactly what to look for in real delivered work."""
+    parts = []
+    parts.append(f"EJEMPLO REAL ENTREGADO ({ptype}, dims {w}x{h}): foto subida por usuario de pieza ya impresa/terminada.")
+    if palette:
+        cols = [c.get("hex", "") for c in palette[:3] if isinstance(c, dict)]
+        cols_str = ", ".join(cols)
+        parts.append(f"Paleta dominante extraída (usar como referencia fiel): {cols_str}. En flyers/etiquetas reales rave/ONG: acentos de alto contraste sobre fondos oscuros suelen dominar.")
+    if desc:
+        parts.append(f"User notes reales: {desc[:150]}.")
+    if hints:
+        sample = str(list(hints.items())[:2])
+        parts.append(f"OCR real reveló hints (fechas/mentions/textos): {sample}. Busca textos similares en briefs para matching.")
+    parts.append("QUÉ BUSCAR LA IA: deriva layouts densos, proporciones exactas, contraste, densidad de iconos/texto de estas fotos + manifest. Valida vs linea_editorial (v4) en lugar de asumir. Esto es ground-truth de entregas, no specs teóricas. Úsalo para mejorar matching y evitar drift en generación.")
+    return " ".join(parts)
+
+
+def scan_incoming_datadrops(root_path = None) -> dict:
+    from ..paths import datadrops_dir
+    from pathlib import Path
+    from datetime import datetime
+    import json
+    dd = datadrops_dir()
+    incoming = dd / "incoming"
+    incoming.mkdir(parents=True, exist_ok=True)
+
+    valid_exts = {".jpg", ".jpeg", ".png", ".webp"}
+    incoming_files = []
+    for f in sorted(incoming.iterdir()):
+        if f.is_file() and f.suffix.lower() in valid_exts:
+            incoming_files.append(f)
+
+    if not incoming_files:
+        return {"ok": True, "processed": 0, "files": [], "ids": []}
+
+    processed_count = 0
+    processed_files = []
+    processed_ids = []
+
+    try:
+        from PIL import Image
+    except Exception:
+        Image = None
+    try:
+        from ..analyze.colors import extract_palette
+    except Exception:
+        extract_palette = None
+    try:
+        from ..analyze.ocr import run_ocr, extract_hints_from_text
+    except Exception:
+        run_ocr = None
+        extract_hints_from_text = None
+
+    for i, img_file in enumerate(incoming_files):
+        fname = img_file.name
+        safe_name = "".join(c for c in fname if c.isalnum() or c in "._-") or "photo.jpg"
+        if not any(safe_name.lower().endswith(e) for e in (".jpg", ".jpeg", ".png", ".webp")):
+            safe_name += img_file.suffix.lower()
+
+        desc = f"Foto real escaneada: {fname}"
+        ptype = "flyer"
+        if "etiqueta" in fname.lower() or "label" in fname.lower():
+            ptype = "etiqueta"
+
+        ts = datetime.now().strftime("%Y-%m-%d_%H%M%S")
+        slug_src = fname.split(".")[0].replace(" ", "-").lower()
+        slug_src = "".join(c for c in slug_src if c.isalnum() or c == "-") or "photo"
+
+        # Unique directory
+        drop_dir = dd / f"{ts}_{i}_{slug_src}"
+        drop_dir.mkdir(parents=True, exist_ok=True)
+
+        dest_path = drop_dir / safe_name
+        try:
+            img_bytes = img_file.read_bytes()
+            dest_path.write_bytes(img_bytes)
+            img_file.unlink()
+        except Exception:
+            continue
+
+        w = h = 0
+        palette = []
+        ocr_text = ""
+        hints = {}
+        try:
+            if Image:
+                with Image.open(dest_path) as im:
+                    w, h = im.size
+            if extract_palette:
+                pal = extract_palette(dest_path, n_colors=5)
+                palette = pal.get("colors", [])
+            if run_ocr:
+                ocr_res = run_ocr(dest_path)
+                if ocr_res.get("available"):
+                    ocr_text = (ocr_res.get("text") or "")[:2000]
+                    if extract_hints_from_text:
+                        hints = extract_hints_from_text(ocr_text) or {}
+        except Exception:
+            pass
+
+        traits = derive_visual_traits(ptype, palette, desc, hints)
+        for_future_ai = build_for_future_ai(ptype, palette, desc, hints, w, h)
+
+        manifest = {
+            "id": drop_dir.name,
+            "uploaded_at": datetime.now().isoformat(timespec="seconds"),
+            "original_filename": fname,
+            "image_path": f"datadrops/{drop_dir.name}/{safe_name}",
+            "type": ptype,
+            "dimensions": {"width": w, "height": h},
+            "palette": palette,
+            "ocr_text_snippet": ocr_text[:300] if ocr_text else "",
+            "ocr_hints": hints,
+            "description": desc,
+            "linked_job": "",
+            "visual_traits": traits,
+            "tags": [ptype, "datadrop", "real-finished", "inverse-airdrop", "scanned"],
+            "analysis_source": "local (src/flujo/analyze colors+ocr; no external)",
+            "for_future_ai": for_future_ai,
+        }
+
+        (drop_dir / "manifest.json").write_text(json.dumps(manifest, indent=2, ensure_ascii=False), encoding="utf-8")
+        try:
+            (drop_dir / "analysis").mkdir(exist_ok=True)
+            if palette:
+                (drop_dir / "analysis" / "palette.json").write_text(json.dumps({"colors": palette}, indent=2, ensure_ascii=False), encoding="utf-8")
+            if ocr_text:
+                (drop_dir / "analysis" / "ocr.txt").write_text(ocr_text[:2000], encoding="utf-8")
+        except Exception:
+            pass
+
+        processed_count += 1
+        processed_files.append(fname)
+        processed_ids.append(drop_dir.name)
+
+    return {
+        "ok": True,
+        "processed": processed_count,
+        "files": processed_files,
+        "ids": processed_ids
+    }
+
+
+
 class HubRequestHandler(BaseHTTPRequestHandler):
     """Sirve estáticos + API ligera para hacer que el hub sea una app real.
     Endpoints reales conectan con intake, brand, svg scan y comandos seguros.
@@ -285,6 +444,14 @@ class HubRequestHandler(BaseHTTPRequestHandler):
         if p == "/api/datadrop-prepare-package":
             try:
                 result = self._prepare_datadrop_review_package()
+                self._send_json(result)
+            except Exception as e:
+                self._send_json({"error": str(e)}, status=400)
+            return
+
+        if p == "/api/datadrop-scan-incoming":
+            try:
+                result = scan_incoming_datadrops(self.root)
                 self._send_json(result)
             except Exception as e:
                 self._send_json({"error": str(e)}, status=400)
@@ -809,7 +976,7 @@ self.addEventListener('fetch', e => e.respondWith(fetch(e.request).catch(() => n
         """List uploaded datadrops (real finished work photos) for hub viewer + future AI review."""
         dd = datadrops_dir()
         drops = []
-        for d in sorted([p for p in dd.iterdir() if p.is_dir()], reverse=True):
+        for d in sorted([p for p in dd.iterdir() if p.is_dir() if p.name != "incoming" and not p.name.startswith(".")], reverse=True):
             manifest = d / "manifest.json"
             if manifest.exists():
                 try:
@@ -819,7 +986,15 @@ self.addEventListener('fetch', e => e.respondWith(fetch(e.request).catch(() => n
                     drops.append({"id": d.name, "path": str(d), "note": "manifest parse error"})
             else:
                 drops.append({"id": d.name, "path": str(d), "note": "no manifest (raw)"})
-        return {"datadrops": drops, "count": len(drops), "dir": str(dd)}
+
+        # calculate pending_incoming
+        incoming_dir = dd / "incoming"
+        pending_incoming = 0
+        if incoming_dir.exists() and incoming_dir.is_dir():
+            valid_exts = {".jpg", ".jpeg", ".png", ".webp"}
+            pending_incoming = sum(1 for f in incoming_dir.iterdir() if f.is_file() and f.suffix.lower() in valid_exts)
+
+        return {"datadrops": drops, "count": len(drops), "dir": str(dd), "pending_incoming": pending_incoming}
 
     def _handle_datadrop_upload(self, data: dict) -> dict:
         """Store photo of finished piece as datadrop (inverse airdrop).
@@ -966,32 +1141,10 @@ self.addEventListener('fetch', e => e.respondWith(fetch(e.request).catch(() => n
         }
 
     def _derive_visual_traits(self, ptype: str, palette: list, desc: str, hints: dict) -> str:
-        traits = f"Pieza real terminada tipo {ptype}. "
-        if palette:
-            cols = [c.get("hex", "") for c in palette[:3] if isinstance(c, dict)]
-            traits += f"Colores dominantes aprox: {', '.join(cols)}. "
-        if desc:
-            traits += f"Descripción: {desc[:120]}. "
-        if hints:
-            ks = list(hints.keys())[:3]
-            traits += f"Hints extraídos (OCR): {ks}. "
-        traits += "Patrón para IA: busca estos rasgos en briefs y generación para fidelidad a entregas reales."
-        return traits
+        return derive_visual_traits(ptype, palette, desc, hints)
 
     def _build_for_future_ai(self, ptype: str, palette: list, desc: str, hints: dict, w: int, h: int) -> str:
-        """Rich teaching note so future AI (esp. when reviewing for linea_editorial) knows exactly what to look for in real delivered work."""
-        parts = []
-        parts.append(f"EJEMPLO REAL ENTREGADO ({ptype}, dims {w}x{h}): foto subida por usuario de pieza ya impresa/terminada.")
-        if palette:
-            cols = [c.get("hex", "") for c in palette[:3] if isinstance(c, dict)]
-            parts.append(f"Paleta dominante extraída (usar como referencia fiel): {', '.join(cols)}. En flyers/etiquetas reales rave/ONG: acentos de alto contraste sobre fondos oscuros suelen dominar.")
-        if desc:
-            parts.append(f"User notes reales: {desc[:150]}.")
-        if hints:
-            sample = str(list(hints.items())[:2])
-            parts.append(f"OCR real reveló hints (fechas/mentions/textos): {sample}. Busca textos similares en briefs para matching.")
-        parts.append("QUÉ BUSCAR LA IA: deriva layouts densos, proporciones exactas, contraste, densidad de iconos/texto de estas fotos + manifest. Valida vs linea_editorial (v4) en lugar de asumir. Esto es ground-truth de entregas, no specs teóricas. Úsalo para mejorar matching y evitar drift en generación.")
-        return " ".join(parts)
+        return build_for_future_ai(ptype, palette, desc, hints, w, h)
 
     def log_message(self, format, *args):
         if os.environ.get("FLUJO_WEB_DEBUG"):

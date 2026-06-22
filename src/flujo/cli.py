@@ -482,7 +482,7 @@ def datadrop_list():
     """Lista datadrops (fotos reales de entregados) desde workspace/datadrops/."""
     from .paths import datadrops_dir
     dd = datadrops_dir()
-    drops = [p for p in sorted(dd.iterdir()) if p.is_dir()]
+    drops = [p for p in sorted(dd.iterdir()) if p.is_dir() if p.name != "incoming" and not p.name.startswith(".")]
     if not drops:
         _warn("No hay datadrops todavía. Usa el hub (`flujo app`) → sección Datadrop para subir fotos terminadas.")
         return
@@ -500,6 +500,24 @@ def datadrop_list():
             console.print(f"  {d.name} (raw)")
 
 
+@datadrop_app.command("scan")
+def datadrop_scan():
+    """Escanea la carpeta datadrops/incoming/ y procesa las fotos convirtiéndolas en datadrops."""
+    from .web.hub import scan_incoming_datadrops
+    _section("Datadrop Bulk Scan")
+    res = scan_incoming_datadrops()
+    if res.get("ok"):
+        processed = res.get("processed", 0)
+        if processed > 0:
+            _ok(f"Procesados {processed} datadrops exitosamente.")
+            for f in res.get("files", []):
+                console.print(f"  [green]✓[/green] {f}")
+        else:
+            _warn("No se encontraron fotos nuevas en datadrops/incoming/.")
+    else:
+        _err(f"Error durante el escaneo: {res.get('error', 'desconocido')}")
+
+
 @datadrop_app.command("prepare")
 def datadrop_prepare():
     """Genera paquete de revisión persistente (_review_package.txt) con manifests + notas 'for_future_ai'.
@@ -507,7 +525,7 @@ def datadrop_prepare():
     from .paths import datadrops_dir
     import json as jsonlib
     dd = datadrops_dir()
-    drops = [p for p in sorted(dd.iterdir()) if p.is_dir()]
+    drops = [p for p in sorted(dd.iterdir()) if p.is_dir() if p.name != "incoming" and not p.name.startswith(".")]
     if not drops:
         _warn("No hay datadrops. Usa `flujo app` → sección Datadrop en hub para subir fotos de entregados.")
         return
