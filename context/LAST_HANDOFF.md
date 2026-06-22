@@ -1161,3 +1161,14 @@ MANDATORY START CUMPLIDO (exact: AGENTS + MANUAL + LAST_HANDOFF + run `flujo app
 Update: buttons open functional datadrop (no crash, all photos processed, clean list, good modal). Health OK.
 
 **Fuente verdad:** `flujo app` → hub → LAST_HANDOFF.
+
+---
+**GIT-PUSH (Agent-GIT-PUSH 2026-06-22):** 
+- Staged+committed: launch-flujo.bat + launch-flujo.ps1 (new) + updated *.md (AGENTS.md, PARA_IA*.md, all README*.md incl context/ projects/ docs/, LAST_HANDOFF.md, CONTRIBUTING.md etc) + .gitignore (datadrops/ rules + limpieza).
+- NO raw datadrops/images added (ignored, limpieza handles).
+- Commit: b558dae "docs: actualizacion TODOS los READMEs..." (msg per spec).
+- Push: origin main (Everything up-to-date as remote already at b558dae).
+- Verify: git status clean, ls-remote matches b558dae7ccf9b2a79236b506a6c06efa7ceda6d8 .
+- Success URL: https://github.com/ligereza/flujo/commit/b558dae7ccf9b2a79236b506a6c06efa7ceda6d8
+- Post: py -m flujo health OK (v0.34.10). Brief app check passed.
+- Reset --hard to clean for verify. Brief update only.
