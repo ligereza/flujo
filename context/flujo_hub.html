@@ -260,44 +260,74 @@
       </div>
     </section>
 
-    <!-- Piezas Vectoriales ya creadas (de svg/) -->
+    <!-- Trabajos ya hechos (de svg/) -->
     <section class="section">
-      <h2 class="text-lg font-semibold mb-2">Piezas vectoriales ya creadas — Usa como base</h2>
-      <div class="text-xs text-[#675f55] mb-3">Editar es más común que crear desde cero. Abre el SVG editable en AI o copia para basar un nuevo trabajo (ajusta config según aistetic).</div>
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 text-sm">
-        <div class="card p-3">
-          <div class="font-semibold">etiquetas_ejemplo</div>
-          <div class="flex gap-2 mt-1 text-xs">
-            <a href="../svg/etiquetas_ejemplo/salida_generada/01_editables_svg/01_etiqueta_impulso_editable.svg" target="_blank" class="text-[#2d5a4a] underline">Editable</a>
-            <a href="../svg/etiquetas_ejemplo/salida_generada/02_vectorizados_svg/01_etiqueta_impulso_vectorizado.svg" target="_blank" class="text-[#2d5a4a] underline">Vectorizado</a>
+      <h2 class="text-lg font-semibold mb-2">Trabajos ya hechos — Usa como base o edita</h2>
+      <div class="text-xs text-[#888] mb-3">Editar y basarse en trabajos existentes es más común que crear desde cero. Los SVGs ya tienen el estilo aistetic aplicado.</div>
+
+      <!-- Eventos / Fiesta -->
+      <div class="mb-4">
+        <div class="section-title">Eventos / Fiesta</div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 text-sm">
+          <!-- flyer_horizontal_minimo -->
+          <div class="card pro-card fmt-card">
+            <div class="font-semibold">flyer_horizontal_minimo</div>
+            <div class="text-xs text-[#888] mb-2">Flyer base simple para eventos</div>
+            <div class="flex flex-wrap gap-1 text-xs">
+              <a href="../svg/flyer_horizontal_minimo/salida_generada/01_editables_svg/01_flyer_base_editable.svg" target="_blank" class="px-2 py-0.5 bg-[var(--cyan)] text-black rounded">Editar SVG</a>
+              <a href="../svg/flyer_horizontal_minimo/salida_generada/02_vectorizados_svg/01_flyer_base_vectorizado.svg" target="_blank" class="px-2 py-0.5 border rounded">Vectorizado</a>
+              <button onclick="usarComoBase('flyer_horizontal_minimo')" class="px-2 py-0.5 border rounded text-xs">Usar como base</button>
+            </div>
+          </div>
+
+          <!-- prueba-rd-intervencion-terreno -->
+          <div class="card pro-card fmt-card">
+            <div class="font-semibold">prueba-rd-intervencion-terreno</div>
+            <div class="text-xs text-[#888] mb-2">Flyer intervención en terreno</div>
+            <div class="flex flex-wrap gap-1 text-xs">
+              <a href="../svg/prueba-rd-intervencion-terreno/salida_generada/01_editables_svg/01_base_prueba-rd-intervencion-terreno_editable.svg" target="_blank" class="px-2 py-0.5 bg-[var(--cyan)] text-black rounded">Editar SVG</a>
+              <a href="../svg/prueba-rd-intervencion-terreno/salida_generada/02_vectorizados_svg/01_base_prueba-rd-intervencion-terreno_vectorizado.svg" target="_blank" class="px-2 py-0.5 border rounded">Vectorizado</a>
+              <button onclick="usarComoBase('prueba-rd-intervencion-terreno')" class="px-2 py-0.5 border rounded text-xs">Usar como base</button>
+            </div>
+          </div>
+
+          <!-- rider_rd_intervencion_terreno -->
+          <div class="card pro-card fmt-card">
+            <div class="font-semibold">rider_rd_intervencion_terreno</div>
+            <div class="text-xs text-[#888] mb-2">Rider técnico para eventos</div>
+            <div class="flex flex-wrap gap-1 text-xs">
+              <a href="../svg/rider_rd_intervencion_terreno/salida_generada/01_editables_svg/01_requerimientos_rider_editable.svg" target="_blank" class="px-2 py-0.5 bg-[var(--cyan)] text-black rounded">Editar SVG</a>
+              <a href="../svg/rider_rd_intervencion_terreno/salida_generada/02_vectorizados_svg/01_requerimientos_rider_vectorizado.svg" target="_blank" class="px-2 py-0.5 border rounded">Vectorizado</a>
+              <button onclick="usarComoBase('rider_rd_intervencion_terreno')" class="px-2 py-0.5 border rounded text-xs">Usar como base</button>
+            </div>
           </div>
         </div>
-        <div class="card p-3">
-          <div class="font-semibold">flyer_horizontal_minimo</div>
-          <div class="flex gap-2 mt-1 text-xs">
-            <a href="../svg/flyer_horizontal_minimo/salida_generada/01_editables_svg/01_flyer_base_editable.svg" target="_blank" class="text-[#2d5a4a] underline">Editable</a>
-            <a href="../svg/flyer_horizontal_minimo/salida_generada/02_vectorizados_svg/01_flyer_base_vectorizado.svg" target="_blank" class="text-[#2d5a4a] underline">Vectorizado</a>
+      </div>
+
+      <!-- Suplementos -->
+      <div>
+        <div class="section-title">Suplementos</div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 text-sm">
+          <!-- etiquetas_ejemplo -->
+          <div class="card pro-card fmt-card">
+            <div class="font-semibold">etiquetas_ejemplo</div>
+            <div class="text-xs text-[#888] mb-2">Línea de etiquetas</div>
+            <div class="flex flex-wrap gap-1 text-xs">
+              <a href="../svg/etiquetas_ejemplo/salida_generada/01_editables_svg/01_etiqueta_impulso_editable.svg" target="_blank" class="px-2 py-0.5 bg-[var(--cyan)] text-black rounded">Editar SVG</a>
+              <a href="../svg/etiquetas_ejemplo/salida_generada/02_vectorizados_svg/01_etiqueta_impulso_vectorizado.svg" target="_blank" class="px-2 py-0.5 border rounded">Vectorizado</a>
+              <button onclick="usarComoBase('etiquetas_ejemplo')" class="px-2 py-0.5 border rounded text-xs">Usar como base</button>
+            </div>
           </div>
-        </div>
-        <div class="card p-3">
-          <div class="font-semibold">prueba-rd-intervencion-terreno</div>
-          <div class="flex gap-2 mt-1 text-xs">
-            <a href="../svg/prueba-rd-intervencion-terreno/salida_generada/01_editables_svg/01_base_prueba-rd-intervencion-terreno_editable.svg" target="_blank" class="text-[#2d5a4a] underline">Editable</a>
-            <a href="../svg/prueba-rd-intervencion-terreno/salida_generada/02_vectorizados_svg/01_base_prueba-rd-intervencion-terreno_vectorizado.svg" target="_blank" class="text-[#2d5a4a] underline">Vectorizado</a>
-          </div>
-        </div>
-        <div class="card p-3">
-          <div class="font-semibold">rider_rd_intervencion_terreno</div>
-          <div class="flex gap-2 mt-1 text-xs">
-            <a href="../svg/rider_rd_intervencion_terreno/salida_generada/01_editables_svg/01_requerimientos_rider_editable.svg" target="_blank" class="text-[#2d5a4a] underline">Editable</a>
-            <a href="../svg/rider_rd_intervencion_terreno/salida_generada/02_vectorizados_svg/01_requerimientos_rider_vectorizado.svg" target="_blank" class="text-[#2d5a4a] underline">Vectorizado</a>
-          </div>
-        </div>
-        <div class="card p-3">
-          <div class="font-semibold">suplementos_rd</div>
-          <div class="flex gap-2 mt-1 text-xs">
-            <a href="../svg/suplementos_rd/02_editables_svg/" target="_blank" class="text-[#2d5a4a] underline">Editables</a>
-            <a href="../svg/suplementos_rd/03_final_vectorizado_svg/" target="_blank" class="text-[#2d5a4a] underline">Vectorizados</a>
+
+          <!-- suplementos_rd -->
+          <div class="card pro-card fmt-card">
+            <div class="font-semibold">suplementos_rd</div>
+            <div class="text-xs text-[#888] mb-2">Línea completa de suplementos (impulso, hongos, magnesio, creatina, proteína, pre-fiesta)</div>
+            <div class="flex flex-wrap gap-1 text-xs">
+              <a href="../svg/suplementos_rd/02_editables_svg/" target="_blank" class="px-2 py-0.5 bg-[var(--cyan)] text-black rounded">Editables</a>
+              <a href="../svg/suplementos_rd/03_final_vectorizado_svg/" target="_blank" class="px-2 py-0.5 border rounded">Vectorizados</a>
+              <button onclick="usarComoBase('suplementos_rd')" class="px-2 py-0.5 border rounded text-xs">Usar como base</button>
+            </div>
           </div>
         </div>
       </div>
@@ -612,6 +642,10 @@ notas: ${input}
       const pal = document.getElementById('aistetic-palette');
       if (pal) pal.style.display = 'block';
       alert('Usa aistetic para estilo en tus salidas.');
+    }
+
+    function usarComoBase(nombre) {
+      alert('Para basarte en ' + nombre + ':\n\n1. Copia el SVG editable de la carpeta svg/ a un nuevo proyecto en projects/piezas_vectoriales/.\n2. Ajusta el config.json usando los colores y reglas de projects/aistetic/aistetic.json.\n3. Usa el parser del hub para generar el brief si es un pedido similar.');
     }
   </script>
 </body>
