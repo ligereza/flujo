@@ -6,5 +6,6 @@
   "incluye_testeo": true,
   "masivo": true,
   "ubicacion": "Aire libre",
-  "notas": "Evento masivo con stand de testeo. Probar reglas: >5h alimentación, >5 voluntarios mesa extra, masivo zona contención."
+  "layout_mode": "grid_2x",
+  "notas": "Demo de layout_mode grid_2x + reglas de rider. Cambia a 'row' para el layout clásico en fila."
 }

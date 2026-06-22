@@ -48,7 +48,8 @@ Incluye en LAST_HANDOFF: tareas simples claras + nota "probado en Windows".
 
 Limpieza opcional:
 ```bash
-rm -rf _airdrop _airdrop_backups
+# Histórico movido a .archive/ - no rm en root
+# rm -rf .archive/_airdrop_backups   # solo si en archive
 find . -type d -name "__pycache__" -prune -exec rm -rf {} +
 rm -rf .pytest_cache
 git status --short

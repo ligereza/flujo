@@ -14,7 +14,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 
 SUGGESTIONS = [
-    "Root clutter: consider moving old checkpoints/ and _archive/ subdirs to .archive/ (see docs for policy).",
+    "Root clutter: DONE - moved to .archive/ (checkpoints, _archive, reference_old). Keep .archive clean too.",
     "Check _airdrop_backups/ — these are safe to prune after review (they are backups).",
     "Review docs/ for duplicates: many AGENT_*, CLEANUP, HIGIENE, MANTENIMIENTO files overlap.",
     "projects/*/salida_generada/ and working/ should stay ignored.",

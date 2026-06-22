@@ -9,18 +9,14 @@ Mantener este archivo **corto** (< 120 líneas ideal, < 180 máximo). Actualizar
 
 **Fecha:** 2026-06-22
 **Versión actual:** 0.34.10
-**Última sesión ("dale vamos con todo"):**
-- Cubierto casi todo el TODO no destructivo del repo general:
-  - Root hygiene guidance + .archive/README + actualizaciones en REPO_MAP/HIGIENE.
-  - Docs consolidation: actualizados FOR_EXTERNAL_AI, CLEANUP, MANTENIMIENTO, SCRIPTS_INVENTORY refs, COMANDOS, etc.
-  - Central workspace: context/README.md pulido + dashboard mejorado.
-  - Hygiene automation: suggest_repo_hygiene.py mejorado (escanea refs obsoletas).
-  - Polish HTMLs: banners en legacy + dark notes.
-  - Projects alignment: projects/README actualizado.
-  - Agent onboarding: AGENTS, PARA_IA* fully modern.
-  - Referencias: README, etc. apuntan solo al hub/visualizers/LAST_HANDOFF.
-- Commit d9da586 (y previos). Push hecho.
-- Deuda restante: mover checkpoints/_archive (estructural), reducir docs duplicados agresivamente.
+**Última sesión ("sii vamos" full structural):**
+- Root hygiene ejecutado: _archive -> .archive/old-archive, checkpoints -> .archive/checkpoints, reference_old -> .archive/reference_old (git mv).
+- .archive/README.md + actualizaciones en REPO_MAP, HIGIENE, README, LIMPIEZA etc.
+- Docs consolidation: notas de deprecación y redirects en FOR_EXTERNAL_AI, CLEANUP, MANTENIMIENTO, AIRDROP_REVIEW, AGENT_AIRDROP_PROTOCOL, etc.
+- Hygiene script mejorado.
+- Referencias actualizadas para que todo apunte al hub + visualizadores + LAST_HANDOFF como verdad.
+- Push hecho.
+- Deuda restante: reducción agresiva de duplicados en docs/ (puede hacerse en siguiente).
 
 ## Objetivo actual / tarea en curso
 Fortalecer los dos flujos de agentes:

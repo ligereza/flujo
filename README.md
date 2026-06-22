@@ -9,14 +9,15 @@ El hub + visualizadores es el **main del flujo**:
 - Export directo a Illustrator / Photoshop / Blender
 - Separación clara: parte PRO (usuario) + RAW para agentes IA (bajo token)
 
-**Nota de higiene:** La raíz tiene carpetas históricas (_archive, checkpoints, etc.). No uses esos archivos para trabajo actual. Todo lo vivo está en `context/`, `projects/` y `src/`.
+**Nota de higiene:** La raíz tiene carpetas históricas movidas a `.archive/` (_archive, checkpoints, reference_old, etc.). No uses esos archivos para trabajo actual. Todo lo vivo está en `context/`, `projects/` y `src/`. Ver `.archive/README.md`.
 
 **Estado actual (2026-06):**
 - Workspace principal: `context/flujo_hub.html` (hub), `svg_visualizer.html`, `plano_demo.html`
 - Agentes: LAST_HANDOFF + AGENT_OPERATING_MANUAL
 - Visualizadores reales para SVG y planos (no links crudos)
 - Todo alineado a aistetic + export AI/PS/Blender
-- Mejoras no destructivas aplicadas en docs, higiene y referencias.
+- Root hygiene ejecutado: histórico movido a `.archive/`
+- Docs consolidadas apuntando al hub como centro.
 
 **Dos flujos de trabajo para agentes:**
 1. Repo + pedido reciente → pega en hub → match o proponer nueva sección/tarea

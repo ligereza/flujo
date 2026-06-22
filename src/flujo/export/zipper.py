@@ -41,20 +41,41 @@ def export_flyer(project_dir: Path, output_dir: Path | None = None) -> Path:
 
         templates = Path(__file__).parent.parent / "templates"
 
+        # JSX para Photoshop
         compose_ps = working_dir / "compose.jsx"
         if not compose_ps.exists():
             compose_ps.write_text(_get_compose_jsx(), encoding="utf-8")
 
+        # JSX para Illustrator
         compose_ai = ai_dir / "compose_ai.jsx"
         if not compose_ai.exists():
             compose_ai.write_text(_get_compose_ai_jsx(), encoding="utf-8")
 
+        # Script para Blender (nuevo)
+        blender_script = working_dir / "blender_setup.py"
+        if not blender_script.exists():
+            blender_script.write_text(
+                (templates / "blender_setup.py").read_text(encoding="utf-8"),
+                encoding="utf-8"
+            )
+
         email = _generar_email_draft(project_dir)
         z.writestr("exports/respuesta_jefe.txt", email)
 
-        info = f"""FLUJO v0.15 — Intake + Track M
+        info = f"""FLUJO — Export para tu flujo
 Proyecto: {project_dir.name}
 Fecha: {ts}
+
+Incluye:
+- SVG editable + vectorizado (listo para Illustrator)
+- JSX para Photoshop e Illustrator
+- blender_setup.py (para Blender 3D)
+- Colores de aistetic.json para consistencia de marca
+
+Cómo usar:
+- Illustrator: abre SVG
+- Photoshop: corre compose.jsx desde working/
+- Blender: copia blender_setup.py y ejecútalo con tu json de plano
 """
         z.writestr("LEEME.txt", info)
 

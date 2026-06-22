@@ -67,11 +67,11 @@ El resto de docs son de soporte o histórico. No los leas primero.
 
 ## Histórico / referencia
 
-Histórico está (o debería estar) en `.archive/`.
+Todo histórico movido a `.archive/` (checkpoints, old _archive, reference_old, etc.).
 
 | Ruta | Rol | Regla |
 |---|---|---|
-| `.archive/` | Material archivado (checkpoints, _archive viejo, reference_old) | No usar como fuente primaria salvo investigación |
+| `.archive/` | Material archivado (checkpoints, _archive, reference_old, _airdrop_backups) | No usar como fuente primaria salvo investigación. Ver .archive/README.md |
 | `docs/handoffs/` | Notas de agentes (HANDOFF, HOTFIX, AUDITORIA, REVISION) | Ubicación consolidada para higiene de raíz. No agregar ruido de tareas a medias |
 
 **Nota de limpieza (2026-06):** Commits de v0.34.x con tareas parciales/fallidas fueron consolidados en un solo commit ("v0.34 consolidated"). El detalle queda en los archivos de handoffs/ y checkpoints/.

@@ -27,6 +27,8 @@ Desde el hub se accede a:
 - Plano Demo (`context/plano_demo.html`) — interactivo, aistetic, export.
 - Intake, comandos, RAW para agentes.
 
+Todos los proyectos satélite deben alinearse a `aistetic/`.
+
 Cuando una IA reciba el repo, debe empezar por el hub + este archivo + `projects/aistetic/`. No leas todo. Usa el hub para ver el estado real de trabajos SVG y planos.
 
 ## Cómo agregar un nuevo proyecto satélite

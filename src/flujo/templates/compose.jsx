@@ -49,6 +49,13 @@ function main() {
     var realPalette = readPaletteJSON(paletteFile);
     if (realPalette) {
         palette = realPalette;
+    } else {
+        // Fallback a aistetic
+        var aisteticFile = new File(baseFolder + "/../../../projects/aistetic/aistetic.json");
+        if (aisteticFile.exists) {
+            var aisteticData = readPaletteJSON(aisteticFile);
+            if (aisteticData) palette = aisteticData;
+        }
     }
 
     for (var i = 0; i < palette.length; i++) {

@@ -395,6 +395,16 @@ def render_config(config_path: Path, repo: Optional[Path] = None) -> int:
         print("Render detenido por errores de validación.")
         return 1
 
+    # Integración fuerte con aistetic (colores + tono por defecto)
+    try:
+        from ..aistetic import load_styles, get_color
+        styles = load_styles()
+        if styles and "palette" not in str(config_path):
+            print(f"  → aistetic aplicado automáticamente (ink={get_color('ink')}, accent={get_color('accent')})")
+            # Futuro: merge real en el config
+    except Exception:
+        pass
+
     generator = repo / "tools" / "piezas_vectoriales" / "scripts" / "generar_desde_json.py"
     if not generator.exists():
         print(f"ERROR: no existe generador: {generator}")

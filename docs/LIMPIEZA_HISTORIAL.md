@@ -76,7 +76,7 @@ git push --force-with-lease origin main
 - **Reescribe el historial**: todos los clones existentes deben borrarse y clonarse de nuevo.
 - **No mezclar**: no hacer `git pull` normal desde un clone antiguo; generaría commits duplicados.
 - **GitHub Actions / releases**: si hay releases adjuntos, revisar que no dependan de esos blobs.
-- **Checkpoints**: los archivos de `checkpoints/` quedan intactos, pero sus hashes de commit cambian.
+- **Checkpoints**: movidos a `.archive/checkpoints/`. Los archivos quedan como bitácora histórica.
 
 ## Alternativa más conservadora
 

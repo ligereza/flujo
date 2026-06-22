@@ -320,10 +320,10 @@ def version():
 
 
 @app.command("handoff")
-def handoff(action: str = typer.Argument("last", help="last | create"), 
+def handoff(action: str = typer.Argument("last", help="last | create"),
             message: str = typer.Option("", "--message", "-m", help="Resumen corto para create")):
     """Gestiona el archivo de continuidad de baja token para otras IAs.
-    
+
     Ejemplos:
       flujo handoff last
       flujo handoff create -m "Añadido soporte grid_2x a planos + LAST_HANDOFF"
@@ -547,14 +547,20 @@ def analyze(
 def export(
     project: Path = typer.Argument(..., help="ruta al proyecto"),
     output: Optional[Path] = typer.Option(None, "--output", "-o"),
+    for_app: str = typer.Option(
+        None, "--for", "-f",
+        help="preparar para: illustrator | photoshop | blender"
+    ),
 ):
-    """Exportar ZIP listo para Photoshop/Illustrator."""
+    """Exportar ZIP listo para tus herramientas (AI / PS / Blender)."""
     from .export.zipper import export_flyer
     if not (project / "manifest.json").exists():
         _err(f"No es un proyecto flyer válido: {project}")
     try:
         zip_path = export_flyer(project, output)
         _ok(f"ZIP: {zip_path}")
+        if for_app:
+            _ok(f"Preparado para {for_app}. Revisa la carpeta exports/ y corre el script correspondiente.")
     except Exception as e:
         _err(str(e))
 
@@ -891,15 +897,35 @@ def brief_show(
 @render_app.command("run")
 def render_run(
     config: Path = typer.Argument(..., help="ruta al config.json"),
+    for_app: str = typer.Option(
+        None, "--for", "-f",
+        help="Objetivo: illustrator | photoshop | blender (prepara export según tu flujo)"
+    ),
 ):
-    """Renderizar un proyecto piezas_vectoriales."""
+    """Renderizar un proyecto piezas_vectoriales.
+
+    Con --for illustrator/photoshop/blender prepara los archivos y scripts
+    optimizados para abrir directamente en esa aplicación.
+    """
     from .render.piezas import render_config
     if not config.exists():
         _err(f"No existe: {config}")
+
     rc = render_config(config)
     if rc != 0:
         raise typer.Exit(rc)
-    _ok(f"Render OK: {config.parent}")
+
+    if for_app:
+        msg = f"Render listo. Archivos preparados para {for_app.upper()} (usa aistetic)."
+        if for_app.lower() in ("illustrator", "ai"):
+            msg += " Abre el SVG editable en AI."
+        elif for_app.lower() in ("photoshop", "ps"):
+            msg += " Exporta ZIP y corre el JSX en PS."
+        elif for_app.lower() == "blender":
+            msg += " Ejecuta blender_setup.py en Blender."
+        _ok(msg)
+    else:
+        _ok(f"Render OK: {config.parent}")
 
 
 @render_app.command("validate")
@@ -1107,17 +1133,19 @@ def plano(
 def cotizaciones(
     evento: Path = typer.Argument(..., help="evento.json (reusa el de plano)"),
     para: str = typer.Option("productora", "--para", help="productora | interno | empresa"),
+    output: Optional[Path] = typer.Option(None, "--output", "-o"),
 ):
     """Genera cotización dual integrada con aistetic.
 
-    --para productora: versión externa branded (infografía para productoras, estilo ONG Reduciendo Daño)
+    --para productora: versión externa branded (infografía para productoras)
     --para interno/empresa: desglose detallado interno.
     """
     from projects.cotizaciones.engine import generar_cotizacion
     if not evento.exists():
         _err(f"No existe: {evento}")
-    texto = generar_cotizacion(evento, audiencia=para)
-    console.print(texto)
+    res = generar_cotizacion(evento, audiencia=para, output_dir=output)
+    console.print(f"Cotización generada: {res['files']}")
+    console.print(f"Estilo: {res.get('estilo', 'aistetic')}")
 
 
 # ============================================================

@@ -15,7 +15,8 @@ Si todo termina OK, limpieza opcional:
 
 ```bash
 rm -rf _airdrop
-rm -rf _airdrop_backups
+# Los _airdrop_backups ahora están en .archive/ si se movieron
+# rm -rf .archive/_airdrop_backups
 find . -type d -name "__pycache__" -prune -exec rm -rf {} +
 rm -rf .pytest_cache
 git status --short
