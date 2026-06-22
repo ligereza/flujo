@@ -50,9 +50,17 @@ context/PIPELINE_RESULT.md
 context/dashboard.html
 # context/ visualizers y hub SÍ se versionan (son el workspace principal)
 
-# Datadrops (raw media + analysis/ + manifests para datadrop MVP inverso/review;
-# limpieza los procesa, NUNCA commitear raw datadrops/images aquí - se ignoran)
-datadrops/
+# Datadrops (selective: ignore staging images for cleanliness; keep manifests + analysis json + review package useful for AI/linea)
+datadrops/incoming/
+datadrops/*/*.jpg
+datadrops/*/*.jpeg
+datadrops/*/*.png
+datadrops/*/*.gif
+datadrops/*/*.bmp
+datadrops/*/*.webp
+!datadrops/*/*.json
+!datadrops/*/analysis/*.json
+!datadrops/_review_package.txt
 
 # Temporales
 *.tmp
@@ -120,6 +128,3 @@ projects/**/*.mkv
 # Logs locales de validación/airdrops
 _logs/
 airdrop_*_apply_log.txt
-
-datadrops/incoming/
-datadrops/*/*.(jpg|jpeg|png|gif|bmp|webp)

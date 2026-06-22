@@ -248,6 +248,10 @@ flujo render run projects/piezas_vectoriales/<proyecto>/config.json --for illust
 flujo cotizaciones <json> --para productora
 flujo plano projects/plano/ejemplos/evento_ejemplo.json --rider --costs
 flujo daily
+# Datadrop (inverse airdrop):
+flujo datadrop scan
+flujo datadrop list
+flujo datadrop prepare
 ```
 
 ---
@@ -261,7 +265,8 @@ flujo daily
 - **SVG Works teaser + visual**: tarjetas por grupos (Eventos/Flyers/Riders vs Suplementos) con previews. Botón principal abre el visualizador completo con `<object>` embebido, botones "Usar como base", "Editar", "Vectorizado" y notas de mejoras por sección.
 - **Plano teaser**: link al plano_demo interactivo (genera SVG paramétrico + rider + costos en vivo, flujo integrado).
 - **Herramientas**: grid de comandos (copy-paste directo). Siempre con `py` en Windows.
-- **Delegación integrada** (first-class): sección "Delegar a Agentes Especializados" con guía práctica "Cómo delegar desde el hub", tarea editable, 5 roles (incl. Packaging), botones copiar prompts completos + multi "Delegar seleccionados (live API)".
+- **Delegación integrada** (first-class): sección "Delegar a Agentes Especializados" con guía práctica "Cómo delegar desde el hub", tarea editable, 5 roles (incl. Packaging), botones copiar prompts completos + multi "Delegar seleccionados (live API)". Recent parallel delegation (2+ agents + supervisor).
+- **Datadrop (en Herramientas)**: working buttons (upload, Escanear incoming, Refrescar, Preparar paquete review); header link "Datadrop (en Herramientas)" opens tab+section. Bulk drop to datadrops/incoming/ + scan → manifests with for_future_ai. Hub primero para linea v4.1 real examples.
 - **Separación usuario / agente**: arriba workspace pro; abajo RAW + datos para agentes (bajo token).
 - **Export bridge**: secciones para AI / PS / Blender + comandos + tokens.
 

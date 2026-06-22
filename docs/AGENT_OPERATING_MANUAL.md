@@ -67,7 +67,7 @@ Principal integra airdrops en orden + actualiza LAST_HANDOFF central.
 
 **Cómo delegar desde el hub (práctica diaria recomendada):**
 
-Abre **`flujo app`** (entrada obligatoria). Baja a **"Delegar a Agentes Especializados"** (guía práctica incluida en el hub):
+Abre **`flujo app`** (entrada obligatoria). Baja a **"Delegar a Agentes Especializados"** (guía práctica incluida en el hub) + usa sección Datadrop (botones working: upload/scan/list/prepare; header "Datadrop (en Herramientas)" abre tab+sección):
 
 1. Escribe **tarea específica** (usa ejemplos o edita).
 2. Selecciona 1 o varios roles (múltiples = delegación paralela real).
@@ -76,6 +76,8 @@ Abre **`flujo app`** (entrada obligatoria). Baja a **"Delegar a Agentes Especial
    - O "Delegar seleccionados (live API)" — llama /api/delegate en paralelo, resultados visibles + auto-copia prompt.
 4. Pega **cada prompt completo** en otro clon/terminal/IA.
 5. Cada sub-agente: `flujo app` + LAST_HANDOFF + su prompt + sigue reglas → airdrop.
+
+**Datadrop en protocolo agente:** usa hub Datadrop section (o `flujo datadrop scan/list/prepare`) para fotos terminadas → manifests + for_future_ai. Prepara auto-compact para parallel work; linea v4.1 usa datadrops como real examples.
 
 El hub genera prompts que **siempre incluyen** `flujo app` + LAST_HANDOFF + modelo de delegación. CLI equivalente: `flujo delegate <role> "tarea..."` (usa mismos templates centralizados).
 
@@ -191,4 +193,4 @@ El hub hace matching + es el centro de delegación paralela.
 
 Usa siempre salida del hub como base. Nunca carpetas crudas.
 
-**Estado actual:** UI = los tres HTMLs (app real con backend APIs). Brand = 'flujo'. App = free/local-first. **Hub + LAST_HANDOFF = source of truth para humano y IA.**
+**Estado actual:** UI = los tres HTMLs (app real con backend APIs). Brand = 'flujo'. App = free/local-first. Datadrop (inverse airdrop) ready (hub working buttons + CLI scan/list/prepare + for_future_ai). Parallel delegation (recent 2 agents + supervisor). **Hub + LAST_HANDOFF = source of truth para humano y IA.** Dirección: auto-compact prep + linea v4.1 usando datadrops como real examples.

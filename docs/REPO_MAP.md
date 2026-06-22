@@ -22,6 +22,7 @@ Este mapa existe para que humanos y agentes de IA entiendan rápido qué carpeta
 |---|---|---|
 | `jobs/_template/` | Plantilla versionada de jobs | Vivo |
 | `inbox/` | Ejemplos/entradas de prueba | Vivo con cuidado |
+| `datadrops/` (incl. incoming/) | Datadrop (inverse airdrop): bulk fotos terminadas → manifests + palette/ocr + for_future_ai (feed linea v4.1) | Vivo — usa hub (`flujo app` → Datadrop) o `flujo datadrop scan/list/prepare` |
 | `projects/flyer_eventos/` | Proyectos flyer de ejemplo/estructura | Mixto |
 | `projects/piezas_vectoriales/` | Proyectos y plantillas vectoriales | Vivo/ejemplos |
 | `tools/` | Especificaciones, componentes y plantillas base | Vivo |
@@ -44,18 +45,19 @@ Nota: `projects/tapiz/vibecode.egg-info/` está trackeado históricamente. No ag
 
 ## Documentación viva + entrada principal
 
-**Abre primero (siempre):** ejecuta `flujo app` (o abre `context/flujo_hub.html`)
+**Abre primero (siempre):** ejecuta `flujo app` (o `flujo app --desktop`; o abre `context/flujo_hub.html` como fallback).
 
 El hub es el **workspace principal pro** (HTMLs servidos por backend cuando usas la app):
 - Intake + match real
 - Visualizadores SVG/plano embebidos
+- Datadrop section (working buttons; header abre tab+sección) + comandos
 - Comandos + tokens live + Brand Validator
-- Sección "Delegar a Agentes Especializados" (guía práctica + prompts copiables para 5 roles) + RAW para agentes
+- Sección "Delegar a Agentes Especializados" (guía práctica + prompts copiables para 5 roles; parallel delegation reciente) + RAW para agentes
 - APIs + SSE + PWA cuando `flujo app` corre
 
 | Ruta | Rol |
 |---|---|
-| `flujo app` (o context/flujo_hub.html) | Entrada diaria obligatoria + hub pro workspace (UI + delegación) |
+| `flujo app` (o context/flujo_hub.html) | Entrada diaria obligatoria + hub pro workspace (UI + delegación + datadrop) |
 | `context/svg_visualizer.html` | Visualizador real de piezas SVG (embebido, grupos exactos) |
 | `context/plano_demo.html` | Demo de planos + riders + costos |
 | `context/LAST_HANDOFF.md` | Estado + tareas (bajo tokens) |
@@ -64,7 +66,7 @@ El hub es el **workspace principal pro** (HTMLs servidos por backend cuando usas
 
 El resto de docs son de soporte o histórico. No los leas primero.
 
-**Contexto para agentes:** Hub + LAST_HANDOFF + AGENT_OPERATING_MANUAL = única fuente necesaria.
+**Contexto para agentes:** Hub + LAST_HANDOFF + AGENT_OPERATING_MANUAL = única fuente necesaria. Dirección: prep auto-compact parallel work; linea v4.1 con datadrops reales.
 
 ## Histórico / referencia
 
