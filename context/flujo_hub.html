@@ -89,14 +89,15 @@
 
 <!-- NAV CONECTADO -->
 <div class="section" style="margin-top:8px">
-  <div class="section-title">Entradas rápidas del flujo</div>
+  <div class="section-title">Entradas rápidas del flujo (menú central)</div>
   <div class="row" style="gap:10px; flex-wrap:wrap">
-    <a class="btn" href="svg_visualizer.html" target="_blank">Abrir Visualizador SVG completo →</a>
-    <a class="btn btn-sec" href="plano_demo.html" target="_blank">Abrir Plano Demo interactivo →</a>
+    <a class="btn" href="svg_visualizer.html" target="_blank">Visualizador SVG (nueva pestaña)</a>
+    <a class="btn btn-sec" href="svg_visualizer.html">Visualizador SVG (esta pestaña)</a>
+    <a class="btn" href="plano_demo.html" target="_blank">Plano Demo (nueva pestaña)</a>
+    <a class="btn btn-sec" href="plano_demo.html">Plano Demo (esta pestaña)</a>
     <button class="btn btn-sec" onclick="window.open('../projects/aistetic/aistetic.json','_blank')">aistetic.json</button>
-    <button class="btn btn-sec" onclick="window.open('../svg/','_blank')">Carpeta svg/</button>
   </div>
-  <div class="small muted" style="margin-top:4px">Los visualizadores se abren en nueva pestaña. Usa los botones «Volver al Hub» dentro de ellos para regresar al menú principal.</div>
+  <div class="small muted" style="margin-top:4px">Usa los botones «← Volver al Hub principal (menú)» dentro de los visualizadores para regresar.</div>
 </div>
 
 <!-- INTAKE PRO (USUARIO) -->
@@ -244,7 +245,7 @@ Punto de entrada único: este hub. No leas todo el repo.
   <div class="card" style="font-family:monospace; font-size:12px">
     ink: <span style="color:#1f2a24;background:#111;padding:1px 4px">#1f2a24</span>
     accent: <span style="color:#2d5a4a;background:#111;padding:1px 4px">#2d5a4a</span>
-    paper: <span style="color:#111;background:#f8f1e3;padding:1px 4px">#f8f1e3</span>
+    paper: <span style="color:#e8e8e8;background:#1a1a1a;padding:1px 4px">#f8f1e3 (ver JSON real)</span>
     support: #675f55 • alert: #c2410f
     <br><a href="../projects/aistetic/aistetic.json" class="small" style="color:var(--cyan)">editar aistetic.json →</a>
   </div>
@@ -361,7 +362,7 @@ notas: ${input}
 # ${match}
 # Acción: ${formato ? 'Usar formato existente + aistetic' : 'Proponer NUEVA sección aistetic o tarea LAST_HANDOFF'}
 # Comando: ${cmd}
-# Estilo: aistetic (ink #1f2a24 • accent #2d5a4a • paper #f8f1e3)`;
+# Estilo: aistetic (ink #1f2a24 • accent #2d5a4a • paper #f8f1e3 - usa los valores reales del JSON)`;
 
   res.innerHTML = `<pre style="font-size:10px; white-space:pre-wrap; margin:0">${brief}</pre>`;
   if (!formato) {

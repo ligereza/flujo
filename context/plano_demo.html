@@ -46,7 +46,7 @@
   <h1>FLUJO</h1>
   <span class="badge">Plano Demo</span>
   <div class="nav">
-    <a class="back" href="flujo_hub.html">← Volver al Hub principal (menú)</a>
+    <a class="back" href="flujo_hub.html" style="background:#1f2a24;border-color:#2d5a4a;font-weight:600">← Volver al Hub principal (menú)</a>
     <a href="svg_visualizer.html">Visualizador SVG</a>
     <a href="../projects/plano/">Carpeta plano</a>
   </div>
@@ -152,49 +152,59 @@ function recalcular() {
   const testeo = document.getElementById('incluye_testeo').checked;
   const masivo = document.getElementById('masivo').checked;
 
-  // Simple parametric SVG demo (based on plano_stands logic)
-  const w = 620, h = 420;
+  const w = 620, h = 440;
   let html = `<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" style="background:#0d0d0d">`;
-  // fondo
   html += `<rect x="0" y="0" width="${w}" height="${h}" fill="#0f0f0f"/>`;
-  // stand principal (toldo 3x3 scaled)
-  const standW = Math.min(220, 3*scale);
-  const standH = Math.min(160, 2.5*scale);
-  html += `<rect x="40" y="60" width="${standW}" height="${standH}" rx="4" fill="#111" stroke="${A.accent}" stroke-width="2"/>`;
-  html += `<text x="50" y="82" fill="${A.paper}" font-size="13" font-weight="700">${nombre.substring(0,24)}</text>`;
-  html += `<text x="50" y="102" fill="${A.support}" font-size="10">Stand ${Math.round(standW/scale)}x${Math.round(standH/scale)}m</text>`;
 
-  // mesas
-  let mx = 60;
-  for (let i=0; i<Math.min(vol,6); i++) {
-    html += `<rect x="${mx}" y="${100 + standH - 50}" width="28" height="18" rx="2" fill="#222" stroke="${A.accent}" stroke-width="1"/>`;
-    mx += 36;
+  // Stand principal (toldo)
+  const standW = Math.min(240, Math.floor(3.2 * scale));
+  const standH = Math.min(170, Math.floor(2.7 * scale));
+  html += `<rect x="30" y="50" width="${standW}" height="${standH}" rx="6" fill="#111" stroke="${A.accent}" stroke-width="2.5"/>`;
+  html += `<text x="42" y="72" fill="${A.paper}" font-size="12" font-weight="700">${nombre.substring(0,28)}</text>`;
+  html += `<text x="42" y="90" fill="${A.support}" font-size="9">Stand ~${Math.round(standW/scale)}×${Math.round(standH/scale)} m</text>`;
+
+  // Mesas (mejor distribución)
+  const mesaY = 50 + standH - 42;
+  for (let i = 0; i < Math.min(vol, 5); i++) {
+    const mx = 44 + i * 38;
+    html += `<rect x="${mx}" y="${mesaY}" width="32" height="20" rx="2" fill="#1f1f1f" stroke="${A.accent}" stroke-width="1"/>`;
+    html += `<text x="${mx+4}" y="${mesaY+14}" fill="${A.support}" font-size="7">mesa</text>`;
   }
 
-  // sillas
-  for (let i=0; i<Math.min(vol,6); i++) {
-    html += `<rect x="${50 + i*34}" y="${standH + 70}" width="18" height="18" fill="#333" stroke="#444"/>`;
+  // Sillas / personas
+  const sillaY = 50 + standH + 8;
+  for (let i = 0; i < Math.min(vol, 7); i++) {
+    const sx = 38 + i * 32;
+    html += `<rect x="${sx}" y="${sillaY}" width="16" height="16" rx="2" fill="#222" stroke="#444"/>`;
   }
 
-  // pasillo
-  html += `<rect x="${standW + 70}" y="50" width="18" height="${standH + 40}" fill="none" stroke="#444" stroke-dasharray="4"/>`;
+  // Pasillo de circulación
+  html += `<rect x="${standW + 55}" y="45" width="14" height="${standH + 70}" fill="none" stroke="#555" stroke-width="1" stroke-dasharray="3 2"/>`;
+  html += `<text x="${standW + 72}" y="70" fill="${A.support}" font-size="8" transform="rotate(90 ${standW + 72} 70)">pasillo</text>`;
 
-  // zona testeo extra
+  // Testeo
   if (testeo) {
-    html += `<rect x="${standW + 110}" y="80" width="110" height="90" rx="3" fill="#0a1210" stroke="${A.accent}" stroke-width="1.5"/>`;
-    html += `<text x="${standW + 120}" y="102" fill="${A.paper}" font-size="10">TESTEO</text>`;
-  }
-  if (masivo || asistentes > 2000) {
-    html += `<rect x="40" y="${standH + 110}" width="${standW}" height="48" rx="3" fill="#151515" stroke="#444"/>`;
-    html += `<text x="50" y="${standH + 138}" fill="${A.support}" font-size="9">ZONA DESCANSO / CONTENCIÓN</text>`;
+    html += `<rect x="${standW + 85}" y="65" width="118" height="95" rx="4" fill="#0f1614" stroke="${A.accent}" stroke-width="1.5"/>`;
+    html += `<text x="${standW + 94}" y="85" fill="${A.paper}" font-size="10" font-weight="700">TESTEO</text>`;
+    html += `<rect x="${standW + 95}" y="95" width="28" height="18" fill="#222" stroke="#444"/>`;
+    html += `<rect x="${standW + 130}" y="95" width="28" height="18" fill="#222" stroke="#444"/>`;
+    html += `<text x="${standW + 95}" y="140" fill="${A.support}" font-size="8">reactivos + mesa</text>`;
   }
 
-  html += `<text x="40" y="${h-14}" fill="${A.support}" font-size="9">Escala ~${scale}px/m • Voluntarios ${vol} • Duración ${dur}h</text>`;
+  // Zona extra para masivo
+  if (masivo || asistentes > 1800) {
+    const extraY = 50 + standH + 35;
+    html += `<rect x="30" y="${extraY}" width="${standW}" height="52" rx="4" fill="#151515" stroke="#444"/>`;
+    html += `<text x="42" y="${extraY + 20}" fill="${A.support}" font-size="9">ZONA DESCANSO / CONTENCIÓN</text>`;
+    html += `<text x="42" y="${extraY + 36}" fill="#666" font-size="8">+${Math.floor(asistentes/400)} personas estimadas</text>`;
+  }
+
+  // Info footer
+  html += `<line x1="20" y1="${h-22}" x2="${w-20}" y2="${h-22}" stroke="#222"/>`;
+  html += `<text x="30" y="${h-8}" fill="${A.support}" font-size="8">Escala ≈${scale}px/m  •  Voluntarios: ${vol}  •  Duración: ${dur}h  •  Asistentes: ~${asistentes}</text>`;
   html += `</svg>`;
 
   document.getElementById('preview').innerHTML = html;
-
-  // auto fill rider preview lightly
   document.getElementById('rider').innerText = buildRider(nombre, dur, vol, asistentes, testeo, masivo);
 }
 

@@ -39,6 +39,13 @@
   .hint { font-size: 11px; color: var(--muted); }
   .footer { margin-top: 40px; font-size: 11px; color: var(--muted); border-top: 1px solid var(--border); padding-top: 12px; }
   .mejoras { font-size: 11px; background: var(--panel2); border: 1px solid var(--border); padding: 8px; border-radius: 4px; margin-top: 6px; }
+  .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.85); display: none; align-items: center; justify-content: center; z-index: 100; }
+  .modal.show { display: flex; }
+  .modal-content { background: var(--panel); border: 1px solid var(--border); border-radius: 8px; width: 92%; max-width: 1100px; max-height: 92vh; display: flex; flex-direction: column; overflow: hidden; }
+  .modal-header { padding: 10px 16px; background: var(--panel2); border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+  .modal-body { padding: 16px; flex: 1; overflow: auto; background: #0d0d0d; display: flex; align-items: center; justify-content: center; }
+  .modal-body object { width: 100%; max-height: 78vh; box-shadow: 0 10px 40px rgba(0,0,0,.6); }
+  .modal-footer { padding: 10px 16px; border-top: 1px solid var(--border); display: flex; gap: 8px; justify-content: flex-end; background: var(--panel); }
 </style>
 </head>
 <body>
@@ -46,7 +53,7 @@
   <h1>FLUJO</h1>
   <span class="badge">Visualizador SVG</span>
   <div class="nav">
-    <a class="nav-link" href="flujo_hub.html">← Volver al Hub principal (menú)</a>
+    <a class="nav-link" href="flujo_hub.html" style="background:#1f2a24;border-color:#2d5a4a;font-weight:600">← Volver al Hub principal (menú)</a>
     <a href="../svg/">Carpeta svg/</a>
     <button onclick="location.reload()">Recargar</button>
   </div>
@@ -55,6 +62,10 @@
 <div class="main">
 
   <p class="hint">Visualizador nativo. Los <b>SVGs originales</b> pueden tener tonos paper claros de aistetic (eso es correcto para Illustrator). El chrome es full dark. Usa "Usar como base" para copiar ruta y comando listo para nuevo trabajo.</p>
+
+  <div style="margin: 8px 0 14px;">
+    <input id="svgFilter" type="text" placeholder="Filtrar piezas (ej: flyer, suplemento, rider)" style="max-width:320px" onkeyup="filterSVGWorks()">
+  </div>
 
   <!-- EVENTOS / FLYERS / RIDERS / ETIQUETAS -->
   <div class="group">
@@ -75,6 +86,7 @@
           <a class="btn-sec btn" href="../svg/flyer_horizontal_minimo/salida_generada/02_vectorizados_svg/01_flyer_base_vectorizado.svg" target="_blank">Vectorizado</a>
           <button class="btn-sec btn" onclick="usarComoBase('../svg/flyer_horizontal_minimo/salida_generada/01_editables_svg/01_flyer_base_editable.svg', 'flyer_horizontal_minimo')">Usar como base</button>
           <button class="btn-sec btn" onclick="copyPath('../svg/flyer_horizontal_minimo/salida_generada/01_editables_svg/01_flyer_base_editable.svg')">Copiar ruta</button>
+          <button class="btn" onclick="showLargePreview('../svg/flyer_horizontal_minimo/salida_generada/01_editables_svg/01_flyer_base_editable.svg', 'flyer_horizontal_minimo')">Vista grande</button>
         </div>
         <div class="mejoras"><b>Mejoras sugeridas:</b> Agregar variantes vertical, soporte multi-idioma, integración directa con preview canvas del hub.</div>
       </div>
@@ -93,6 +105,7 @@
           <a class="btn-sec btn" href="../svg/prueba-rd-intervencion-terreno/salida_generada/02_vectorizados_svg/01_base_prueba-rd-intervencion-terreno_vectorizado.svg" target="_blank">Vectorizado</a>
           <button class="btn-sec btn" onclick="usarComoBase('../svg/prueba-rd-intervencion-terreno/salida_generada/01_editables_svg/01_base_prueba-rd-intervencion-terreno_editable.svg', 'prueba-rd-intervencion-terreno')">Usar como base</button>
           <button class="btn-sec btn" onclick="copyPath('../svg/prueba-rd-intervencion-terreno/salida_generada/01_editables_svg/01_base_prueba-rd-intervencion-terreno_editable.svg')">Copiar ruta</button>
+          <button class="btn" onclick="showLargePreview('../svg/prueba-rd-intervencion-terreno/salida_generada/01_editables_svg/01_base_prueba-rd-intervencion-terreno_editable.svg', 'prueba-rd-intervencion-terreno')">Vista grande</button>
         </div>
         <div class="mejoras"><b>Mejoras:</b> Añadir layout para múltiples eventos simultáneos, export directo a PDF print-ready.</div>
       </div>
@@ -110,6 +123,7 @@
           <a class="btn" href="../svg/rider_rd_intervencion_terreno/salida_generada/01_editables_svg/01_requerimientos_rider_editable.svg" target="_blank">Editar requerimientos</a>
           <a class="btn-sec btn" href="../svg/rider_rd_intervencion_terreno/salida_generada/01_editables_svg/02_layout_operativo_editable.svg" target="_blank">Layout operativo</a>
           <button class="btn-sec btn" onclick="usarComoBase('../svg/rider_rd_intervencion_terreno/salida_generada/01_editables_svg/01_requerimientos_rider_editable.svg', 'rider')">Usar como base</button>
+          <button class="btn" onclick="showLargePreview('../svg/rider_rd_intervencion_terreno/salida_generada/01_editables_svg/01_requerimientos_rider_editable.svg', 'rider_rd')">Vista grande</button>
         </div>
         <div class="mejoras"><b>Mejoras:</b> Generar desde plano_stands automáticamente + sync con cotizaciones.</div>
       </div>
@@ -152,6 +166,7 @@
           <a class="btn" href="../svg/suplementos_rd/02_editables_svg/01_linea_suplementos_rd_editable.svg" target="_blank">Editar línea</a>
           <a class="btn-sec btn" href="../svg/suplementos_rd/03_final_vectorizado_svg/01_linea_suplementos_rd_vectorizado.svg" target="_blank">Vectorizado</a>
           <button class="btn-sec btn" onclick="usarComoBase('../svg/suplementos_rd/02_editables_svg/01_linea_suplementos_rd_editable.svg', 'suplementos_linea')">Usar como base</button>
+          <button class="btn" onclick="showLargePreview('../svg/suplementos_rd/02_editables_svg/01_linea_suplementos_rd_editable.svg', 'linea_suplementos')">Vista grande</button>
         </div>
         <div class="mejoras"><b>Mejoras:</b> Separar en piezas individuales + grid export; auto-generar desde contenido JSON.</div>
       </div>
@@ -212,15 +227,82 @@
 
 </div>
 
+<!-- LARGE PREVIEW MODAL -->
+<div id="svgModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <strong id="modalTitle">Vista grande SVG</strong>
+      <button class="btn-sec" onclick="closeModal()" style="padding:4px 10px">Cerrar ✕</button>
+    </div>
+    <div class="modal-body" id="modalBody">
+      <!-- object injected by JS -->
+    </div>
+    <div class="modal-footer">
+      <button class="btn-sec btn" onclick="copyCurrentPath()">Copiar ruta</button>
+      <button class="btn-sec btn" onclick="useCurrentAsBase()">Usar como base</button>
+      <button class="btn" onclick="closeModal()">Cerrar</button>
+    </div>
+  </div>
+</div>
+
 <script>
 function usarComoBase(path, nombre) {
-  const msg = `USAR COMO BASE:\n\nRuta: ${path}\nNombre: ${nombre}\n\n1. Copia el editable a projects/piezas_vectoriales/<nuevo>/working/\n2. Actualiza config.json con medidas + aistetic\n3. En hub: pega pedido similar y haz match`;
+  const cmd = `py -m flujo render run projects/piezas_vectoriales/<tu-proyecto>/config.json --for illustrator`;
+  const msg = `USAR COMO BASE (SVG):\n\nRuta editable: ${path}\nPieza: ${nombre}\n\nPasos:\n1. Copia el archivo editable a un nuevo proyecto en projects/piezas_vectoriales/\n2. Ajusta config.json usando aistetic.json\n3. Desde el hub genera brief y usa: ${cmd}\n\nTip: abre el hub y pega un pedido similar para hacer match.`;
   navigator.clipboard.writeText(path + '\n' + msg).then(() => {
-    alert('Ruta + instrucciones copiadas al portapapeles.\n\n' + msg);
+    alert('Copiado al portapapeles (ruta + instrucciones + comando).\n\n' + msg);
   }).catch(() => alert(msg));
 }
 function copyPath(p) {
   navigator.clipboard.writeText(p).then(() => alert('Ruta copiada: ' + p));
+}
+
+let currentPath = '';
+let currentName = '';
+
+function showLargePreview(path, name) {
+  currentPath = path;
+  currentName = name || 'Pieza SVG';
+  const modal = document.getElementById('svgModal');
+  const body = document.getElementById('modalBody');
+  const title = document.getElementById('modalTitle');
+  title.textContent = 'Vista grande: ' + currentName;
+
+  body.innerHTML = `<object data="${path}" type="image/svg+xml" style="width:100%; height:78vh; max-height:78vh;"></object>`;
+  modal.classList.add('show');
+}
+
+function closeModal() {
+  const modal = document.getElementById('svgModal');
+  modal.classList.remove('show');
+  // optional cleanup
+}
+
+function copyCurrentPath() {
+  if (currentPath) copyPath(currentPath);
+}
+
+function useCurrentAsBase() {
+  if (currentPath) {
+    usarComoBase(currentPath, currentName);
+  }
+}
+
+// Optional: allow closing modal with Escape
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    const m = document.getElementById('svgModal');
+    if (m && m.classList.contains('show')) closeModal();
+  }
+});
+
+function filterSVGWorks() {
+  const q = (document.getElementById('svgFilter').value || '').toLowerCase().trim();
+  const cards = document.querySelectorAll('.svg-card');
+  cards.forEach(card => {
+    const txt = card.textContent.toLowerCase();
+    card.style.display = (!q || txt.includes(q)) ? '' : 'none';
+  });
 }
 </script>
 </body>
