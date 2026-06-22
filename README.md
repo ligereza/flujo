@@ -11,6 +11,13 @@ El hub + visualizadores es el **main del flujo**:
 
 **Nota de higiene:** La raíz tiene carpetas históricas (_archive, checkpoints, etc.). No uses esos archivos para trabajo actual. Todo lo vivo está en `context/`, `projects/` y `src/`.
 
+**Estado actual (2026-06):**
+- Workspace principal: `context/flujo_hub.html` (hub), `svg_visualizer.html`, `plano_demo.html`
+- Agentes: LAST_HANDOFF + AGENT_OPERATING_MANUAL
+- Visualizadores reales para SVG y planos (no links crudos)
+- Todo alineado a aistetic + export AI/PS/Blender
+- Mejoras no destructivas aplicadas en docs, higiene y referencias.
+
 **Dos flujos de trabajo para agentes:**
 1. Repo + pedido reciente → pega en hub → match o proponer nueva sección/tarea
 2. Repo + "continúa con las mejoras" → lee LAST_HANDOFF + AGENT_OPERATING_MANUAL → 1-2 tareas → actualiza handoff

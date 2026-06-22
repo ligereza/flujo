@@ -1,5 +1,7 @@
 # Mantenimiento del repo
 
+**Nota:** El workspace principal es `context/flujo_hub.html`. Usa los visualizadores y LAST_HANDOFF para trabajo diario.
+
 ## Limpiar generados locales
 
 ```bash

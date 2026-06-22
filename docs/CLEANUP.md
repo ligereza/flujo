@@ -2,6 +2,8 @@
 
 ## Política actual
 
+**Usa primero el workspace moderno:** `context/flujo_hub.html` + visualizadores. Muchos artefactos antiguos ya se manejan ignorando en .gitignore.
+
 El repo debe mantenerse chico y útil:
 
 - `jobs/_template/` sí se versiona.

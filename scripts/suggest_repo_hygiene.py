@@ -14,14 +14,34 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 
 SUGGESTIONS = [
-    "Root clutter: consider moving old checkpoints/ and _archive/ subdirs to .archive/ or git-annex if size is issue.",
+    "Root clutter: consider moving old checkpoints/ and _archive/ subdirs to .archive/ (see docs for policy).",
     "Check _airdrop_backups/ — these are safe to prune after review (they are backups).",
-    "Review docs/ for duplicates: AGENT_GUIDE.md vs AGENT_OPERATING_MANUAL.md, multiple CLEANUP/HIGIENE files.",
-    "projects/*/salida_generada/ and working/ should stay ignored (already in .gitignore).",
-    "context/DAILY.md and dashboard.html are ignored — use flujo_hub.html instead.",
-    "Update any remaining references to old commands (flyer-import, analyze) to point to hub intake.",
-    "For agents: always start with context/flujo_hub.html + context/LAST_HANDOFF.md.",
+    "Review docs/ for duplicates: many AGENT_*, CLEANUP, HIGIENE, MANTENIMIENTO files overlap.",
+    "projects/*/salida_generada/ and working/ should stay ignored.",
+    "context/DAILY.md and dashboard.html are ignored — use flujo_hub.html + visualizers instead.",
+    "For agents: always start with context/flujo_hub.html + context/LAST_HANDOFF.md + docs/AGENT_OPERATING_MANUAL.md.",
+    "Update remaining references to old docs (AGENT_GUIDE.md, CLI.md) to point to hub + OPERATING_MANUAL.",
+    "Add deprecation notes to legacy scripts in scripts/ and reference_old/.",
 ]
+
+def scan_outdated_refs():
+    outdated = []
+    patterns = ["AGENT_GUIDE.md", "CLI.md", "flujo flyer-import", "flujo analyze"]
+    for root, _, files in os.walk(ROOT):
+        if any(x in root for x in ["_archive", "checkpoints", ".git"]):
+            continue
+        for f in files:
+            if f.endswith((".md", ".txt", ".py")):
+                path = Path(root) / f
+                try:
+                    content = path.read_text(encoding="utf-8", errors="ignore")
+                    for pat in patterns:
+                        if pat in content:
+                            outdated.append(str(path.relative_to(ROOT)))
+                            break
+                except:
+                    pass
+    return set(outdated)
 
 def main():
     print("=== Non-destructive repo hygiene suggestions ===")
@@ -38,6 +58,16 @@ def main():
     print("\nRecommendations (no action taken):")
     for s in SUGGESTIONS:
         print(f" - {s}")
+
+    print("\nScanning for outdated references (non-destructive):")
+    bad = scan_outdated_refs()
+    if bad:
+        print("Found files still mentioning old docs/commands:")
+        for b in sorted(bad):
+            print(f"  - {b}")
+        print("Suggestion: update them to point to context/flujo_hub.html + visualizers + AGENT_OPERATING_MANUAL.md")
+    else:
+        print("No obvious outdated refs found in active files.")
 
     print("\nRun 'py -m flujo health' and review docs/HIGIENE_REPO.md for more.")
     print("To actually clean, use existing scripts/cleanup_* with --dry-run first.")

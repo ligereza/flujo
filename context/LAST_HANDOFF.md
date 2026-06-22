@@ -9,13 +9,18 @@ Mantener este archivo **corto** (< 120 líneas ideal, < 180 máximo). Actualizar
 
 **Fecha:** 2026-06-22
 **Versión actual:** 0.34.10
-**Última sesión (non-destructive batch):**
-- Actualizados masivamente puntos de entrada: AGENTS.md, PARA_IA*, README, REPO_MAP, HIGIENE_REPO, COMANDOS.md, PARA_IA_CONTEXT.md.
-- Creado context/README.md + scripts/suggest_repo_hygiene.py (solo sugerencias seguras).
-- Agregados banners/notas en legacy (plano_editor, studio_prototipo).
-- .gitignore + higiene comments mejorados.
-- Todo el onboarding ahora empuja consistentemente al hub + visualizadores como centro.
-- Raíz y docs siguen con deuda histórica (checkpoints/_archive), pero referencias y workspace están alineados.
+**Última sesión ("dale vamos con todo"):**
+- Cubierto casi todo el TODO no destructivo del repo general:
+  - Root hygiene guidance + .archive/README + actualizaciones en REPO_MAP/HIGIENE.
+  - Docs consolidation: actualizados FOR_EXTERNAL_AI, CLEANUP, MANTENIMIENTO, SCRIPTS_INVENTORY refs, COMANDOS, etc.
+  - Central workspace: context/README.md pulido + dashboard mejorado.
+  - Hygiene automation: suggest_repo_hygiene.py mejorado (escanea refs obsoletas).
+  - Polish HTMLs: banners en legacy + dark notes.
+  - Projects alignment: projects/README actualizado.
+  - Agent onboarding: AGENTS, PARA_IA* fully modern.
+  - Referencias: README, etc. apuntan solo al hub/visualizers/LAST_HANDOFF.
+- Commit d9da586 (y previos). Push hecho.
+- Deuda restante: mover checkpoints/_archive (estructural), reducir docs duplicados agresivamente.
 
 ## Objetivo actual / tarea en curso
 Fortalecer los dos flujos de agentes:
