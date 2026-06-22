@@ -1,14 +1,15 @@
-# # flujo — Dimensiones del Orden
+# # # flujo — Dimensiones del Orden (arte + automatización)
 
-**arte + automatización**
+**Uso diario:** abre `context/flujo_hub.html` (todo en un lugar: reportes, botones, visualizadores, pedidos manuales, aistetic, cómo trabajo).
 
-Sistema para convertir pedidos (texto/correo/JSON) en proyectos listos (imágenes, planos, cotizaciones).
+**Pedidos (manual por ahora):** pega WhatsApp/Gmail en el hub → genera estructura ordenada.
 
-**Inicio de jornada recomendado:** abre `context/flujo_hub.html` (reportes, botones, visualizadores y flujo texto↔imagen todo en un solo archivo).
+Proyectos alineados a aistetic (línea editorial):
+- piezas_vectoriales, flyer_eventos, plano, cotizaciones (dual: productora / interno), aistetic.
 
-Ver también:
-- `projects/README.md` (los satélites: piezas, plano, cotizaciones, aistetic…)
-- `docs/FOR_EXTERNAL_AI.md` (si recibes el repo como agente)
+Ver `projects/README.md` y `context/LAST_HANDOFF.md` (tareas claras para agentes).
+
+Windows: `py -m flujo ...` | Español prioritario para reducir errores.
 
 ---
 

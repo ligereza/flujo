@@ -123,10 +123,10 @@
           <div id="preview" class="preview mt-3 h-40 flex items-center justify-center text-xs text-[#675f55]">Preview aquí</div>
         </div>
         <div class="card p-4">
-          <div class="text-sm font-medium mb-2">Imagen → Descripción (para aistetic)</div>
-          <div class="border border-dashed h-28 flex items-center justify-center text-xs text-[#675f55]">Arrastra imagen aquí (demo)</div>
-          <button onclick="mockDescribe()" class="mt-2 px-3 py-1 border text-xs rounded">Extraer a JSON (aistetic)</button>
-          <div class="text-[10px] mt-2 text-[#675f55]">Los resultados van a aistetic/json/ para que agentes usen.</div>
+          <div class="text-sm font-medium mb-2">Imagen / Referencia → aistetic</div>
+          <div class="border border-dashed h-20 flex items-center justify-center text-xs text-[#675f55]">Pega nombre de archivo o descripción</div>
+          <button onclick="mockAistetic()" class="mt-1 px-2 py-0.5 border text-xs rounded">Generar entrada aistetic</button>
+          <div class="text-[10px] mt-1 text-[#675f55]">Úsalo para poblar aistetic.json o ejemplos.</div>
         </div>
       </div>
       <p class="text-xs text-[#675f55] mt-2">Desafío central: texto (WhatsApp/Gmail) → estructura ordenada (brief/JSON via aistetic) → imagen. Pega pedido abajo para mock.</p>
@@ -150,7 +150,32 @@
         <div onclick="copyCmd('flujo daily')" class="card p-3 cursor-pointer hover:bg-gray-50 text-xs">daily report</div>
         <div onclick="copyCmd('flujo serve')" class="card p-3 cursor-pointer hover:bg-gray-50 text-xs">editor web</div>
       </div>
-      <div class="text-xs mt-2 text-[#675f55]">Copia y pega en tu terminal. Todo está documentado para que agentes entiendan el flujo.</div>
+      <div class="text-xs mt-2 text-[#675f55]">Windows: 'py -m flujo ...' . Intake manual: pega email aquí arriba. Agentes: usa LAST_HANDOFF (tareas simples).</div>
+    </section>
+
+    <!-- Aistetic quick + TODOs -->
+    <section class="section">
+      <h2 class="text-lg font-semibold mb-3">Aistetic (línea editorial) + Tareas para agentes</h2>
+      <div class="grid md:grid-cols-2 gap-4">
+        <div class="card p-4">
+          <div class="text-sm font-medium">Paleta actual (de aistetic.json)</div>
+          <div id="aistetic-palette" style="display:block; margin-top:8px; font-size:0.7rem">
+            ink: #1f2a24 | accent: #2d5a4a | paper: #f8f1e3<br>
+            Usa en cotizaciones, planos, piezas.
+          </div>
+          <a href="../projects/aistetic/aistetic.json" class="text-xs underline">editar aistetic.json</a>
+        </div>
+        <div class="card p-4 text-xs">
+          <div class="font-medium mb-1">Tareas simples (low token - haz una):</div>
+          <ul class="list-disc pl-4">
+            <li>Agrega ejemplo real a aistetic/ejemplos/ + corre aistetic analyze</li>
+            <li>Prueba cotizaciones --para productora en Windows</li>
+            <li>Actualiza LAST_HANDOFF con 1 tarea nueva</li>
+            <li>Pega email en hub y genera brief ordenado</li>
+          </ul>
+          <div class="mt-1 text-[#675f55]">Ver LAST_HANDOFF.md para lista completa.</div>
+        </div>
+      </div>
     </section>
 
     <!-- Cómo trabajo (para agentes) -->
@@ -230,9 +255,14 @@
     function parsePedido() {
       const input = document.getElementById('pedido-input').value || 'flyer 10x14 evento Reduciendo Daño 7 voluntarios';
       const result = document.getElementById('pedido-result');
-      // Simple mock parse (optimiza orden: extrae clave de texto desordenado)
-      const brief = `tipo: flyer\nmedidas: 10x14\nproductos: ${input.includes('voluntarios') ? 'stand ONG' : 'general'}\npublico: productora\nnotas: ${input}`;
-      result.innerHTML = `Brief sugerido (copia a job):<br><pre class="text-[9px]">${brief}</pre>Usa aistetic para estilo. Luego 'flujo job new ...'`;
+      const brief = `tipo_pieza: flyer\nmedidas: 10x14 cm\npublico: productora\nvoluntarios: 7\nnotas: ${input}\n\n# Copia a job/brief.yaml o usa en aistetic`;
+      result.innerHTML = `Estructura ordenada (manual intake):<br><pre class="text-[9px] bg-white p-1">${brief}</pre>Envía a agente: "revisa repo, este mensaje: ${input.substring(0,60)}..."`;
+    }
+
+    function mockAistetic() {
+      const pal = document.getElementById('aistetic-palette');
+      if (pal) pal.style.display = 'block';
+      alert('Entrada sugerida para aistetic.json agregada. Revisa projects/aistetic/');
     }
   </script>
 </body>

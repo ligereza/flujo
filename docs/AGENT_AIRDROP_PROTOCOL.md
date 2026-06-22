@@ -37,22 +37,22 @@ src/_airdrop/...
 - Dependencias nuevas no justificadas.
 - Archivos generados: `__pycache__`, `.pytest_cache`, `.egg-info`, `data/*.db`, medios pesados, ZIPs, outputs.
 
-## Comandos finales que debe entregar el agente
+## Comandos finales (Windows: usa 'py'. Linux: python3)
 
 ```bash
 py scripts/validate_airdrop.py
-py scripts/run_airdrop_checks.py "vX.Y.Z - descripcion"
+py scripts/run_airdrop_checks.py "mensaje"
 ```
 
-Limpieza opcional si todo sale OK:
+Incluye en LAST_HANDOFF: tareas simples claras + nota "probado en Windows".
 
+Limpieza opcional:
 ```bash
-rm -rf _airdrop
-rm -rf _airdrop_backups
+rm -rf _airdrop _airdrop_backups
 find . -type d -name "__pycache__" -prune -exec rm -rf {} +
 rm -rf .pytest_cache
 git status --short
-git log --oneline -5
+git log --oneline -3
 ```
 
 ## Si algo falla

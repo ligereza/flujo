@@ -2,24 +2,17 @@
 
 **Repo:** `flujo` — arte + automatización · v0.34.10
 
-## Protocolo obligatorio para agentes
+## Protocolo (token-efficient, Windows primero)
 
-**Versión token-efficient (recomendada cuando el contexto es limitado):**
+1. Abre `context/flujo_hub.html` (entrada principal)
+2. `PARA_IA_CONTEXT.md` + `context/LAST_HANDOFF.md` (tareas simples + estado)
+3. `projects/README.md` (satélites + aistetic)
 
-1. `PARA_IA_CONTEXT.md`
-2. **`context/LAST_HANDOFF.md`** (esta es la clave para continuar trabajo de otra IA)
-3. `docs/AGENT_GUIDE.md` (este)
-4. `docs/REPO_MAP.md`
-5. Verificación rápida + `flujo daily` / `flujo job next`
+Verificación: `py -m flujo health` (usa py en Windows)
 
-**Lectura completa (solo cuando hay presupuesto de tokens):**
-- README completo + `docs/CLI.md` + `docs/SCRIPTS_INVENTORY.md`
+Trabaja en clon limpio. Entrega vía airdrop. Siempre actualiza LAST_HANDOFF con tareas claras + nota "Windows: py".
 
-6. Trabaja en un clon limpio del repo actual de GitHub.
-7. Prueba antes de entregar.
-8. Entrega cambios solo como airdrop ZIP con carpeta `_airdrop/`. 
-
-**Obligatorio al entregar:** Actualizar `context/LAST_HANDOFF.md` con el estado real y próximas acciones.
+Español prioritario. No asumas Linux paths.
 
 ## Stack
 

@@ -19,27 +19,34 @@ def _load_aistetic() -> Dict[str, Any]:
     return {}
 
 def generar_cotizacion(evento_path: Path, audiencia: str = "productora") -> str:
-    """Genera cotización según audiencia (integrado aistetic + formatos)."""
+    """Genera cotización según audiencia, usando aistetic para estilo."""
     ev = load_evento(evento_path)
     aistetic = _load_aistetic()
     costos = resumen_costos(ev)
-    paleta = aistetic.get("colors", {})
+    c = aistetic.get("colors", {})
+    ink, accent, paper = c.get("ink", "#1f2a24"), c.get("accent", "#2d5a4a"), c.get("paper", "#f8f1e3")
 
     if audiencia == "productora":
-        return f"""COTIZACIÓN — {ev.get('nombre', 'Evento')} (Reduciendo Daño, diseñador)
-Estilo aistetic: {paleta}
-Infografía: usa catálogo formatos (A4/rider) + aistetic para branded.
+        # Versión externa: branded para productoras (como diseñador ONG)
+        return f"""COTIZACIÓN — {ev.get('nombre', 'Evento')} | Reduciendo Daño
+Estilo: aistetic (ink:{ink} accent:{accent} paper:{paper})
+Formato recomendado: rider A4 o infografía del catálogo.
 
 {ev.get('notas', '')}
 
 {costos}
+
+Entrega lista. Usa aistetic para consistencia visual.
 """
     else:
-        return f"""COTIZACIÓN INTERNA — {ev.get('nombre')}
-Para ONG/trabajador/empresa (desglose real)
+        # Interno: detallado para ONG/trabajador/empresa
+        return f"""COTIZACIÓN INTERNA (ONG / empresa)
+{ev.get('nombre', 'Evento')}
+
 {costos}
 
-Ajustar precios. Integrar con infografías de aistetic.
+Notas internas: ajustar precios reales.
+No enviar a productoras. Referencia aistetic para tono.
 """
 
 if __name__ == "__main__":

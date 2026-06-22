@@ -9,19 +9,16 @@ Mantener este archivo **corto** (< 120 líneas ideal, < 180 máximo). Actualizar
 
 **Fecha:** 2026-06-22  
 **Versión actual:** 0.34.10  
-**Última IA / sesión:** (completar)
+**Última sesión:** hub + aistetic poblado + cotizaciones integrado + intake manual en hub. Push hecho.
 
 ## Objetivo actual / tarea en curso
 (1-2 frases. Ej: "Mejorar el motor de planos para soportar layouts en grilla + constraints simples, y reducir tokens de handoff para nuevas IAs.")
 
 ## Estado del mundo (crítico)
-- **Job / Proyecto activo:** Ninguno (o `jobs/xxxx`, `projects/piezas_vectoriales/xxxx`)
-- **Último trabajo completado:** Limpieza + consolidación de historial + handoffs organizados en docs/handoffs/. Push a web realizado.
-- **Estado de tests/health:** Verde (pytest + health OK después de limpieza).
-- **Contexto clave reciente:** 
-  - Historia consolidada (muchos commits parciales de v0.34 colapsados en uno).
-  - .git reducido drásticamente (filter-repo).
-  - Hand offs ahora viven en `docs/handoffs/`.
+- **Activo:** Hub diario (flujo_hub.html) como entrada. aistetic con paleta real. cotizaciones dual integrado a planos.
+- **Último:** Intake manual vía hub (pegar email → brief). Airdrop mejorado (Windows + español + TODOs).
+- **Salud:** OK (ver hub).
+- **Clave:** Usa hub para pedidos. Agentes: haz tareas simples del LAST_HANDOFF. Todo alineado a aistetic.
 
 ## Qué NO está hecho / bloqueos / riesgos
 - `flujo intake json` sigue pendiente (schema existe, implementación completa no).
@@ -29,20 +26,20 @@ Mantener este archivo **corto** (< 120 líneas ideal, < 180 máximo). Actualizar
 - LAST_HANDOFF es manual + auto-append básico; se puede hacer más inteligente (diff summary).
 - Recepción automática (IMAP/webhook) no implementada.
 
-## Tareas simples para otros agentes (low token, haz una a la vez)
-1. Windows: prueba `py -m flujo hub` o abre context/flujo_hub.html y reporta si algun link falla (usa rutas relativas).
-2. Agrega 1 ejemplo de cotizacion en projects/aistetic/ejemplos/mi-cotiz/ (copia de plano ejemplo) y genera su json con `flujo aistetic analyze`.
-3. Actualiza LAST_HANDOFF con 1 linea de "proximo paso" en español.
-4. En hub.html, agrega un mock simple para pegar texto de WhatsApp y convertir a brief basico (usa JS).
-5. Lee docs/FOR_EXTERNAL_AI.md y agrega nota: "Windows usa py, Linux python3. Prefiere español en respuestas".
-6. En aistetic/json/ crea un ejemplo simple de cotizacion usando el schema.
+## Tareas simples para agentes (low token - una por vez)
+1. Pega email/WhatsApp en hub "Pedidos" → copia estructura a job.
+2. Agrega ejemplo real a aistetic/ejemplos/ + `flujo aistetic analyze`.
+3. Prueba `flujo cotizaciones --para productora` (Windows: py).
+4. Actualiza este archivo con 1 tarea + nota plataforma.
+5. Agrega 1 regla a aistetic.json (ej. comunicaciones).
+6. Sugiere mejora pequeña en hub para texto→imagen.
 
-## Próximas acciones priorizadas (Top 5)
-1. Madurar Low-Token Continuation: hacer `flujo handoff create` más inteligente (generar summary desde git diff + handoff anterior).
-2. Profundizar layouts: usar `schemas/layout_primitives.schema.json` en el render de piezas y en plano (compartir estructuras).
-3. Completar intake JSON end-to-end (`flujo intake json`).
-4. Fortalecer autofit + sugerencia de formatos con awareness de layout.
-5. Mantener LAST_HANDOFF conciso en cada entrega.
+## Próximas (prioridad)
+1. Integrar aistetic en outputs reales (cotizaciones HTML/ infografía).
+2. Mejorar hub con previews reales de renders.
+3. (Usuario) Intake manual → estructura (ya en hub).
+4. Airdrop más robusto para Windows + auto TODO.
+5. Mantener hub + LAST_HANDOFF actualizados.
 
 ## Cómo verificar rápido el estado
 ```bash
