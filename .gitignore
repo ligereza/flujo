@@ -43,6 +43,7 @@ data/*.json
 context/DAILY.md
 context/PIPELINE_RESULT.md
 context/dashboard.html
+# context/ visualizers y hub SÍ se versionan (son el workspace principal)
 
 # Temporales
 *.tmp

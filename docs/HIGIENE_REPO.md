@@ -37,5 +37,7 @@ py scripts/run_airdrop_checks.py "mensaje"
 
 - `projects/tapiz/vibecode.egg-info/` está trackeado históricamente.
 - Historial de commits de v0.34 con tareas parciales/fallidas fue consolidado (ver REPO_MAP).
-- checkpoinsts/ y docs/handoffs/ se mantienen como bitácora (no agregar commits ruidosos de micro-tareas).
+- checkpoints/ y docs/handoffs/ se mantienen como bitácora (no agregar commits ruidosos de micro-tareas).
 - Se recomienda correr git filter-repo para reducir tamaño del .git (ver docs/LIMPIEZA_HISTORIAL.md).
+
+**Actual (2026-06):** `context/flujo_hub.html` + `svg_visualizer.html` + `plano_demo.html` + `LAST_HANDOFF.md` son la fuente de verdad diaria. Mantener el root limpio y priorizar estos archivos.

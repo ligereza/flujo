@@ -9,14 +9,13 @@ Mantener este archivo **corto** (< 120 líneas ideal, < 180 máximo). Actualizar
 
 **Fecha:** 2026-06-22
 **Versión actual:** 0.34.10
-**Última sesión (esfuerzo final):**
-- Hub completamente reescrito en dark theme 100% (vars #0a0a0a #141414 #00f0ff como studio_prototipo, cero partes claras: sin #675f55, #d4c5a9, bg-white, amber, gray-50 etc).
-- Creados visualizadores reales: `context/svg_visualizer.html` (grupos Eventos/Flyers vs Suplementos exactos de /svg, <object> embebidos, botones Usar base / Editar / Copiar + notas de mejoras por sección).
-- Mejorado plano: `context/plano_demo.html` (dark pro, SVG paramétrico vivo, rider, costos, aistetic, botones flujo + blender).
-- Hub = main del flujo: nav a los HTML conectados, secciones ordenadas (no vómito), separación clara Usuario Pro vs Agente RAW.
-- Intake + parser mejorado + previews oscuros con aistetic.
-- README.md raíz y projects/README actualizados fuertemente (hub central, visualizadores, dos flujos, instrucciones exactas).
-- Listo para commit + push.
+**Última sesión:**
+- Hub + visualizadores: modal "Vista grande", filtro, navegación "Volver al Hub principal (menú)", previews oscuros, "Usar como base" con comando listo, plano más rico.
+- **Repo general (big picture TODO ejecutado):**
+  - Actualizados AGENTS.md, PARA_IA.md, PARA_IA_CONTEXT.md, REPO_MAP, HIGIENE_REPO y README principal.
+  - Creado `context/README.md` como guía oficial del workspace.
+  - Reforzada la regla: abrir siempre `context/flujo_hub.html` primero.
+  - Mejoras en higiene de documentación y referencias (raíz sigue con deuda histórica pero ahora más clara).
 
 ## Objetivo actual / tarea en curso
 Fortalecer los dos flujos de agentes:

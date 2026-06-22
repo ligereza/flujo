@@ -6,15 +6,16 @@
 ## 👉 Empieza por aquí (AHORRO DE TOKENS)
 
 **Si tienes pocos tokens o es una sesión nueva / quieres continuar trabajo:**
-1. `PARA_IA_CONTEXT.md` (este archivo)
+1. `context/flujo_hub.html` (workspace principal)
 2. **`context/LAST_HANDOFF.md`** ← **LA PIEZA MÁS IMPORTANTE PARA CONTINUIDAD**
-3. Corre: `flujo daily && flujo job next && py -m flujo health`
+3. `docs/AGENT_OPERATING_MANUAL.md`
+4. `py -m flujo daily` + comandos que genera el hub
 
 **Solo si necesitas profundidad después de lo anterior:**
-- `README.md` (resumen general)
-- `docs/AGENT_GUIDE.md`
-- `docs/REPO_MAP.md`
-- `docs/CLI.md`
+- `context/flujo_hub.html` (el workspace principal: intake, visualizadores SVG y plano)
+- `context/svg_visualizer.html` y `context/plano_demo.html`
+- `README.md` + `docs/REPO_MAP.md`
+- `docs/AGENT_OPERATING_MANUAL.md` (dos flujos para agentes)
 
 **Nunca leas todos los handoffs/checkpoints antiguos al principio.** El `LAST_HANDOFF.md` + `flujo daily` deben bastar para continuar.
 

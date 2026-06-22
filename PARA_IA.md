@@ -1,33 +1,37 @@
 # PARA IA
 
-Este repo se llama **flujo** — arte y automatización. v0.34.7.
+Este repo se llama **flujo** — arte y automatización.
 
-Lee primero: `docs/AGENT_GUIDE.md` y `docs/CLI.md`.
+**Punto de entrada obligatorio para agentes:** `context/flujo_hub.html`
 
-Resumen rápido:
+Desde el hub podés:
+- Pegar pedidos y generar brief + match de formatos + comandos
+- Usar visualizadores reales de SVG (Eventos vs Suplementos) y Plano Demo
+- Ver el estado actual y tareas
+
+Lee en orden:
+1. `context/flujo_hub.html`
+2. `context/LAST_HANDOFF.md`
+3. `docs/AGENT_OPERATING_MANUAL.md`
+
+Comandos clave (Windows: `py -m flujo ...`):
 
 ```bash
 flujo version
 flujo health
-flujo flyer-import inbox/correo.txt
-flujo analyze
-flujo job new "pedido" --email inbox/correo.txt
-flujo job prepare jobs/<job>
-flujo job activate jobs/<job>
-flujo render run projects/piezas_vectoriales/<proyecto>/config.json
 flujo daily
-
-# Planos de stands (proyecto satélite plano)
-flujo plano projects/plano/ejemplos/evento_ejemplo.json
-flujo plano projects/plano/ejemplos/evento_ejemplo.json --rider
-flujo plano projects/plano/ejemplos/evento_ejemplo.json --costs
+flujo job new "..." --email inbox/correo.txt
+flujo job prepare jobs/<job>
+flujo render run projects/.../config.json --for illustrator|blender
+flujo cotizaciones <json> --para productora|interno
+flujo plano projects/plano/ejemplos/evento_ejemplo.json --rider --costs
 ```
 
-Herramienta activa: `flyer_eventos` — descarga Instagram con **instaloader únicamente**.
-Análisis automático: colores dominantes + OCR → `analysis/`
-Privacidad: `flujo privacy` antes de enviar texto a IAs externas.
+Herramientas activas: instaloader (solo), análisis de colores + OCR, export a AI/PS/Blender.
 
-Documentación completa en `docs/AGENT_GUIDE.md`, `docs/CLI.md`, `docs/JOB_PIPELINE.md`,
+Privacidad: `flujo privacy scan/sanitize` antes de IAs externas.
+
+Reglas: Español primero, aistetic siempre, Windows con `py`.
 `README.md`, `context/ESTADO.md`, `docs/RELEASE_v016.md`.
 
 **No uses yt-dlp. No crees venvs pesados. Usa `py`.**

@@ -44,16 +44,26 @@ Nota: `projects/tapiz/vibecode.egg-info/` está trackeado históricamente. No ag
 
 ## Documentación viva + entrada principal
 
-**Abre primero:** `context/flujo_hub.html` (hub con reportes, botones, visualizadores y flujo texto-imagen).
+**Abre primero (siempre):** `context/flujo_hub.html`
+
+Este es el **workspace principal**:
+- Intake de pedidos + parser de formatos
+- Visualizador SVG completo (embebido, grupos Eventos/Suplementos como en /svg)
+- Plano Demo interactivo (con aistetic)
+- Sección raw para agentes + links a visualizadores
 
 | Ruta | Rol |
 |---|---|
-| `context/flujo_hub.html` | Entrada diaria recomendada (todo integrado) |
-| `PARA_IA_CONTEXT.md` + `context/LAST_HANDOFF.md` | Para agentes (bajo tokens) |
-| `projects/README.md` | Satélites (piezas, plano, cotizaciones, aistetic...) |
-| `docs/REPO_MAP.md` | Solo si necesitas el mapa completo |
+| `context/flujo_hub.html` | Entrada diaria obligatoria |
+| `context/svg_visualizer.html` | Visualizador real de piezas SVG (no uses índices de carpeta) |
+| `context/plano_demo.html` | Demo de planos + riders + costos |
+| `context/LAST_HANDOFF.md` | Estado + tareas para agentes (bajo tokens) |
+| `docs/AGENT_OPERATING_MANUAL.md` | Los dos flujos de trabajo para IA |
+| `projects/README.md` | Satélites alineados a aistetic |
 
-El resto de docs son de soporte. Priorizamos entender el flujo texto ↔ imagen.
+El resto de docs son de soporte o histórico. No los leas primero.
+
+**Contexto para agentes:** Hub + LAST_HANDOFF + AGENT_OPERATING_MANUAL = única fuente necesaria.
 
 ## Histórico / referencia
 

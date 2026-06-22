@@ -2,12 +2,14 @@
 
 **Punto de entrada diario (OBLIGATORIO):** abre `context/flujo_hub.html`
 
-El hub es el **main del flujo**:
+El hub + visualizadores es el **main del flujo**:
 - Intake de pedidos (pega email/pedido → brief ordenado + match de formatos)
-- Visualizador SVG embebido (no links crudos) — agrupa **Eventos/Flyers/Riders** vs **Suplementos** tal como existen en `/svg`
-- Plano Demo interactivo (paramétrico con aistetic + export a Blender)
-- Herramientas CLI + export directo a Illustrator / Photoshop / Blender
+- `context/svg_visualizer.html` — visualizador embebido real (no links a índices)
+- `context/plano_demo.html` — plano interactivo con aistetic
+- Export directo a Illustrator / Photoshop / Blender
 - Separación clara: parte PRO (usuario) + RAW para agentes IA (bajo token)
+
+**Nota de higiene:** La raíz tiene carpetas históricas (_archive, checkpoints, etc.). No uses esos archivos para trabajo actual. Todo lo vivo está en `context/`, `projects/` y `src/`.
 
 **Dos flujos de trabajo para agentes:**
 1. Repo + pedido reciente → pega en hub → match o proponer nueva sección/tarea
