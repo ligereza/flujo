@@ -23,7 +23,20 @@ def get_backup_base_dir() -> Path:
 
 
 # archivos que se ignoran al escanear _airdrop/
+# .gitignore se permite explícitamente porque es un archivo legítimo de actualización
 _IGNORE = {".gitkeep", ".DS_Store"}
+
+
+def _is_ignored(src: Path) -> bool:
+    """Decide si un archivo de _airdrop/ debe ignorarse."""
+    if src.name in _IGNORE:
+        return True
+    # Permitir .gitignore (archivo de configuración real del repo)
+    if src.name == ".gitignore":
+        return False
+    if src.name.startswith("."):
+        return True
+    return False
 
 
 def scan_airdrop() -> List[Dict]:
@@ -39,7 +52,7 @@ def scan_airdrop() -> List[Dict]:
     for src in sorted(base.rglob("*")):
         if src.is_dir():
             continue
-        if src.name in _IGNORE or src.name.startswith("."):
+        if _is_ignored(src):
             continue
         rel = src.relative_to(base)
         dest = repo_root() / rel

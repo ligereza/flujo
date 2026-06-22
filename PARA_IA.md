@@ -1,6 +1,6 @@
 # PARA IA
 
-Este repo se llama **flujo** — arte y automatización. v0.16.
+Este repo se llama **flujo** — arte y automatización. v0.33.0.
 
 Lee primero: `docs/AGENT_GUIDE.md` y `docs/CLI.md`.
 
@@ -16,6 +16,11 @@ flujo job prepare jobs/<job>
 flujo job activate jobs/<job>
 flujo render run projects/piezas_vectoriales/<proyecto>/config.json
 flujo daily
+
+# Planos de stands (proyecto satélite plano)
+flujo plano projects/plano/ejemplos/evento_ejemplo.json
+flujo plano projects/plano/ejemplos/evento_ejemplo.json --rider
+flujo plano projects/plano/ejemplos/evento_ejemplo.json --costs
 ```
 
 Herramienta activa: `flyer_eventos` — descarga Instagram con **instaloader únicamente**.

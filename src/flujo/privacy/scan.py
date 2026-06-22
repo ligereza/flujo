@@ -7,13 +7,30 @@ from dataclasses import dataclass, field, asdict
 from typing import Dict, List, Any
 
 
+def _luhn_valid(number: str) -> bool:
+    """Algoritmo de Luhn para validar números de tarjeta."""
+    digits = [int(c) for c in number if c.isdigit()]
+    if len(digits) < 13:
+        return False
+    checksum = 0
+    reverse = digits[::-1]
+    for i, d in enumerate(reverse):
+        if i % 2 == 1:
+            d *= 2
+            if d > 9:
+                d -= 9
+        checksum += d
+    return checksum % 10 == 0
+
+
 # Patrones de PII (Personally Identifiable Information)
 PATTERNS: Dict[str, re.Pattern] = {
     "email": re.compile(r"\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b", re.I),
     "rut_chile": re.compile(r"\b\d{1,2}\.?\d{3}\.?\d{3}-[\dkK]\b"),
     "telefono_cl": re.compile(r"(?<!\d)(?:\+?56\s*)?(?:9\s*)?\d{4}\s*\d{4}(?!\d)"),
     "url": re.compile(r"https?://\S+|www\.\S+", re.I),
-    "tarjeta": re.compile(r"\b(?:\d[ -]?){13,19}\b"),
+    # Patrón más estricto: 13-19 dígitos con separadores opcionales, y se valida Luhn
+    "tarjeta": re.compile(r"\b(?:\d{4}[- ]?){3,4}\d{1,4}\b"),
     "direccion": re.compile(r"\b(?:calle|avenida|av\.|pasaje|psje)\s+[\w\s]+\d+", re.I),
 }
 
@@ -60,8 +77,13 @@ def scan_text(text: str, source: str = "") -> ScanResult:
         matches = pat.findall(text)
         if matches:
             # normalizar a strings y recortar
-            result.matches[name] = [str(m)[:80] for m in matches[:10]]
-            result.total_pii += len(matches)
+            clean_matches = [str(m)[:80] for m in matches[:10]]
+            # tarjeta: validar Luhn para reducir falsos positivos
+            if name == "tarjeta":
+                clean_matches = [m for m in clean_matches if _luhn_valid(m)]
+            if clean_matches:
+                result.matches[name] = clean_matches
+                result.total_pii += len(clean_matches)
 
     result.sensitive_keywords = sorted({
         kw for kw in SENSITIVE_KEYWORDS if kw.lower() in text.lower()

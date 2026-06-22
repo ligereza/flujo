@@ -30,7 +30,12 @@ def extract_palette(image_path: Path, n_colors: int = 5) -> Dict:
 
     # Contar frecuencia de cada color indexado
     from collections import Counter
-    counts = Counter(paletted.getdata())
+    # getdata() queda obsoleto en Pillow 14; get_flattened_data() es el reemplazo
+    try:
+        data = list(paletted.get_flattened_data())
+    except AttributeError:
+        data = list(paletted.getdata())
+    counts = Counter(data)
     total = sum(counts.values())
 
     colors = []

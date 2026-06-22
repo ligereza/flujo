@@ -1,6 +1,6 @@
 # flujo — Dimensiones del Orden
 
-**arte + automatización · v0.28.0**
+**arte + automatización · v0.33.0**
 
 Sistema personal de automatización para flujos creativos (diseño gráfico:
 flyers, etiquetas, riders, one-pagers, carruseles). Convierte un **pedido**
@@ -480,7 +480,15 @@ flujo airdrop dry-run         # simular sin aplicar
 flujo airdrop apply "mensaje" # backup → apply → checkpoint → push
 flujo airdrop rollback        # restaurar último backup
 flujo airdrop status          # versión actual
+
+# Planos de stands (proyecto satélite plano)
+flujo plano projects/plano/ejemplos/evento_ejemplo.json
+flujo plano projects/plano/ejemplos/evento_ejemplo.json --rider
+flujo plano projects/plano/ejemplos/evento_ejemplo.json --costs
+flujo plano <evento.json> -o plano.svg
 ```
+
+> Editor visual autocontenido: `projects/plano/plano_editor.html`.
 
 ---
 

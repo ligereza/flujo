@@ -36,6 +36,8 @@ Comandos disponibles (ejecutar `flujo --help`):
     formats [w h tipo]          Listar o sugerir formatos/plantillas
   dashboard
     daily                       Generar reporte diario (md + html)
+  plano
+    plano <evento.json>         Generar plano SVG/rider/costos de stands
 """
 from __future__ import annotations
 
@@ -891,6 +893,47 @@ def daily(
     media = sum(1 for i in items if i.priority.value == "media")
     baja = sum(1 for i in items if i.priority.value == "baja")
     console.print(f"  alta: {alta}  media: {media}  baja: {baja}")
+
+
+# ============================================================
+# Plano (stands de eventos)
+# ============================================================
+
+@app.command()
+def plano(
+    evento: Path = typer.Argument(..., help="ruta al JSON del evento"),
+    rider: bool = typer.Option(False, "--rider", help="imprimir rider de texto"),
+    costs: bool = typer.Option(False, "--costs", help="imprimir desglose de costos"),
+    output: Optional[Path] = typer.Option(None, "--output", "-o", help="archivo SVG de salida (solo sin --rider)"),
+    px_por_metro: float = typer.Option(90.0, "--scale", help="escala px por metro"),
+):
+    """Generar plano SVG, rider o costos de stands desde un JSON de evento.
+
+    Ejemplo:
+      flujo plano projects/plano/ejemplos/evento_ejemplo.json
+      flujo plano projects/plano/ejemplos/evento_ejemplo.json --rider
+      flujo plano projects/plano/ejemplos/evento_ejemplo.json --costs
+      flujo plano <evento.json> -o plano.svg
+    """
+    from .plano import load_evento, render_svg, render_rider, resumen_costos
+    if not evento.exists():
+        _err(f"No existe: {evento}")
+    try:
+        ev = load_evento(evento)
+    except Exception as e:
+        _err(f"No se pudo leer el evento: {e}")
+
+    if costs:
+        console.print(resumen_costos(ev))
+    elif rider:
+        console.print(render_rider(ev))
+    else:
+        svg = render_svg(ev, px_por_metro=px_por_metro)
+        if output:
+            output.write_text(svg, encoding="utf-8")
+            _ok(f"SVG guardado: {output}")
+        else:
+            console.print(svg)
 
 
 # ============================================================

@@ -1,6 +1,6 @@
 # AGENT_GUIDE — flujo
 
-**Repo:** `flujo` — arte + automatización · v0.16
+**Repo:** `flujo` — arte + automatización · v0.33.0
 
 ## Stack
 
@@ -24,6 +24,7 @@ flujo analyze                 # colores + OCR de flyers
 flujo privacy scan file.txt   # escanear PII
 flujo daily                   # dashboard
 flujo serve                   # interfaz web Gradio
+flujo plano <evento.json>     # plano de stands/rider/costos
 ```
 
 Ayuda siempre disponible:

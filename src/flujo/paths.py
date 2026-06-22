@@ -1,8 +1,13 @@
 from pathlib import Path
 import os
+from functools import lru_cache
 
+@lru_cache(maxsize=1)
 def repo_root() -> Path:
-    """Encuentra la raíz del repo subiendo hasta encontrar pyproject.toml o .git"""
+    """Encuentra la raíz del repo subiendo hasta encontrar pyproject.toml o .git.
+
+    Está cacheado porque se llama decenas de veces por comando.
+    """
     p = Path(__file__).resolve()
     for parent in [p] + list(p.parents):
         if (parent / "pyproject.toml").exists() or (parent / ".git").exists() or (parent / "scripts" / "flujo.py").exists():
@@ -29,6 +34,9 @@ def jobs_dir() -> Path:
 
 def piezas_base() -> Path:
     return repo_root() / "projects" / "piezas_vectoriales"
+
+def plano_base() -> Path:
+    return repo_root() / "projects" / "plano"
 
 def context_dir() -> Path:
     return repo_root() / "context"
