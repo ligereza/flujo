@@ -61,17 +61,25 @@ def listar_configs():
     return [str(c) for c in configs]
 
 CSS = """
-:root { --bg: #0a0a0a; --panel: #111111; --border: #222222; --text: #e0e0e0; --muted: #888888; --cyan: #00f0ff; --magenta: #ff00aa; }
+/* =====================================================================
+   BRAND ENFORCED — legacy Gradio (scripts/app.py) — from projects/flujo/flujo.json
+   =====================================================================
+   Dark pro ONLY. EXACT colors: ink #1f2a24, accent #2d5a4a, paper #f8f1e3 (print), support #675f55, alert #c2410f.
+   No neon/cyan/magenta/hacker/light outside paper. ALL UIs must pass Brand Validator in hub.
+   Legacy Gradio: marked; main pro experience = context/ HTMLs via `flujo app`.
+   Primary accent #2d5a4a. Generous pro spacing implicit via radius/panels.
+*/
+:root { --bg: #0a0a0a; --panel: #141414; --panel2: #1a1a1a; --border: #2a2a2a; --text: #e8e8e8; --muted: #888; --accent: #2d5a4a; --flujo-ink: #1f2a24; --flujo-accent: #2d5a4a; --flujo-paper: #f8f1e3; --flujo-support: #675f55; --flujo-alert: #c2410f; }
 body { background-color: var(--bg) !important; color: var(--text) !important; font-family: 'Inter', system-ui, sans-serif !important; }
 .gradio-container { background-color: var(--bg) !important; color: var(--text) !important; }
 .tabs { background-color: var(--panel) !important; border: 1px solid var(--border) !important; border-radius: 8px !important; }
 .tab-nav { background-color: #0d0d0d !important; border-bottom: 1px solid var(--border) !important; }
 .tab-nav button { color: var(--muted) !important; font-weight: 500 !important; letter-spacing: 0.05em; text-transform: uppercase; font-size: 0.75rem; }
-.tab-nav button.selected { color: var(--cyan) !important; border-bottom: 2px solid var(--cyan) !important; }
-button.primary { background: linear-gradient(135deg, var(--cyan) 0%, #7000ff 100%) !important; color: #000 !important; border: none !important; border-radius: 4px !important; font-weight: 700 !important; text-transform: uppercase !important; letter-spacing: 0.05em; }
-button.secondary { background-color: var(--panel) !important; color: var(--text) !important; border: 1px solid #333 !important; border-radius: 4px !important; }
-input, textarea, .textbox, .dropdown { background-color: var(--panel) !important; color: var(--text) !important; border: 1px solid #333 !important; border-radius: 4px !important; }
-input:focus, textarea:focus { border-color: var(--cyan) !important; outline: none !important; }
+.tab-nav button.selected { color: var(--accent) !important; border-bottom: 2px solid var(--accent) !important; }
+button.primary { background: linear-gradient(135deg, var(--accent), #1a3f2e) !important; color: #fff !important; border: none !important; border-radius: 5px !important; font-weight: 700 !important; text-transform: uppercase !important; letter-spacing: 0.05em; }
+button.secondary { background-color: var(--panel) !important; color: var(--text) !important; border: 1px solid var(--border) !important; border-radius: 5px !important; }
+input, textarea, .textbox, .dropdown { background-color: var(--panel2) !important; color: var(--text) !important; border: 1px solid var(--border) !important; border-radius: 5px !important; }
+input:focus, textarea:focus { border-color: var(--accent) !important; outline: none !important; }
 h1, h2, h3 { color: #fff !important; font-weight: 700 !important; letter-spacing: -0.02em; }
 .block { background-color: var(--panel) !important; border: 1px solid var(--border) !important; border-radius: 8px !important; }
 """
@@ -80,7 +88,7 @@ def build():
     with gr.Blocks(theme=gr.themes.Base()) as demo:
         gr.HTML(f"<style>{CSS}</style>")
         gr.Markdown("# FLUJO // Dimensiones del Orden")
-        gr.Markdown("Interfaz local para automatizar pedidos, flyers y piezas vectoriales.")
+        gr.Markdown("**LEGACY Gradio** — main pro workspace = `flujo app` → context/flujo_hub.html (brand enforced dark from projects/flujo/flujo.json). Este es fallback.")
 
         with gr.Tab("DASHBOARD"):
             gr.Markdown("## Estado actual")

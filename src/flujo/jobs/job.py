@@ -9,7 +9,7 @@ from datetime import date
 from pathlib import Path
 from typing import List, Optional
 
-from ..paths import repo_root
+from ..paths import repo_root, is_packaged, workspace_root
 from .brief import Brief, EstadoJob, load_brief
 
 
@@ -50,16 +50,18 @@ def _get_template_dir() -> Path:
 
     Se incluye en el paquete Python para que funcione out-of-the-box.
     Si el repo tiene un jobs/_template local, se prefiere ese.
+    En modo empaquetado (.exe), usa el workspace writable (al lado del exe).
     """
-    repo = repo_root()
-    local = repo / "jobs" / TEMPLATES_DIR
+    base = workspace_root() if is_packaged() else repo_root()
+    local = base / "jobs" / TEMPLATES_DIR
     if local.exists():
         return local
-    # fallback al template del paquete
-    pkg = Path(__file__).resolve().parents[2] / "templates" / "jobs_template"
+    # fallback al template del paquete (note: actual content ensured dynamically in _ensure_template;
+    # bundled via package cmd as jobs/_template + src/flujo/templates for other assets. This path updated post src-layout/rename.)
+    pkg = Path(__file__).resolve().parents[1] / "templates"   # from src/flujo/jobs/ -> src/flujo/templates
     if pkg.exists():
         return pkg
-    return local  # se creará vacío
+    return local  # se creará vacío ( _ensure_template provides content )
 
 
 def _ensure_template(repo: Path) -> Path:
@@ -126,8 +128,10 @@ def create_job(name: str, source_path: Optional[Path] = None, repo: Optional[Pat
     """Crea un nuevo job a partir de un nombre (y opcionalmente texto fuente).
 
     Retorna el path al directorio del job creado.
+    En .exe empaquetado: jobs se crean en flujo_workspace/ junto al exe (writable, sobrevive onefile).
     """
-    repo = repo or repo_root()
+    if repo is None:
+        repo = workspace_root() if is_packaged() else repo_root()
     tpl = _ensure_template(repo)
 
     slug = slugify(name)
@@ -154,7 +158,8 @@ def create_job(name: str, source_path: Optional[Path] = None, repo: Optional[Pat
 
 def list_jobs(repo: Optional[Path] = None, include_examples: bool = False) -> List[JobInfo]:
     """Lista todos los jobs en el repo."""
-    repo = repo or repo_root()
+    if repo is None:
+        repo = workspace_root() if is_packaged() else repo_root()
     base = repo / "jobs"
     if not base.exists():
         return []
@@ -189,7 +194,8 @@ def list_jobs(repo: Optional[Path] = None, include_examples: bool = False) -> Li
 
 def find_job(name_or_path: str, repo: Optional[Path] = None) -> Optional[Path]:
     """Encuentra un job por nombre o path."""
-    repo = repo or repo_root()
+    if repo is None:
+        repo = workspace_root() if is_packaged() else repo_root()
     p = Path(name_or_path)
     if p.is_absolute() and p.exists():
         return p

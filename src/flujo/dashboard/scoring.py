@@ -8,7 +8,7 @@ from enum import Enum
 from pathlib import Path
 from typing import List, Optional
 
-from ..paths import repo_root
+from ..paths import repo_root, is_packaged, workspace_root
 
 
 class Priority(str, Enum):
@@ -262,7 +262,8 @@ def score_pieza(config_path: Path) -> Optional[ItemScore]:
 
 def collect_items(repo: Optional[Path] = None) -> List[ItemScore]:
     """Recolecta y ordena items por prioridad."""
-    repo = repo or repo_root()
+    if repo is None:
+        repo = workspace_root() if is_packaged() else repo_root()
     items: List[ItemScore] = []
 
     jobs = repo / "jobs"

@@ -36,6 +36,10 @@ Comandos disponibles (ejecutar `flujo --help`):
     formats [w h tipo]          Listar o sugerir formatos/plantillas
   dashboard
     daily                       Generar reporte diario (md + html)
+  web
+    app                         ENTRADA DIARIA: lanza la app + hub pro workspace (con delegación)
+    serve                       (alias; --desktop para ventana nativa)
+    package                     Empaqueta .exe standalone gratis (PyInstaller) → flujo-hub.exe onefile noconsole con icono premium (rounded+F), lanza directo pywebview desktop hub, assets (context/svg/brand + jobs/_template + src/flujo/templates) bundled, workspace next-to-exe, visualizers fully working. (equiv `flujo app --desktop`)
   plano
     plano <evento.json>         Generar plano SVG/rider/costos de stands
   brand
@@ -105,7 +109,7 @@ def _warn(msg: str) -> None:
 
 def _section(title: str) -> None:
     console.print()
-    console.print(Panel(f"[bold cyan]{title}[/]", border_style="cyan"))
+    console.print(Panel(f"[bold green]{title}[/]", border_style="green"))  # brand accent-aligned (use green as proxy; prefer --accent in HTML)
 
 
 def _validate_airdrop_or_exit(allow_airdrop_engine: bool = False) -> None:
@@ -219,9 +223,9 @@ def airdrop_apply(
         # Mejora para continuidad de tokens: recordar/actualizar LAST_HANDOFF
         if message:
             try:
-                from pathlib import Path
                 from datetime import datetime
-                lh = Path("context/LAST_HANDOFF.md")
+                from .paths import context_dir
+                lh = context_dir() / "LAST_HANDOFF.md"
                 if lh.exists():
                     content = lh.read_text(encoding="utf-8")
                     append = f"\n\n**Post-airdrop {datetime.now().strftime('%Y-%m-%d %H:%M')}**: {message}\n(Actualiza manualmente las secciones 'Estado' y 'Próximas acciones'.)"
@@ -273,10 +277,7 @@ def airdrop_finish():
 def health():
     """Chequeo general del repo."""
     from .paths import repo_root
-    from .intake.email_parser import extract_instagram_links
     from .jobs.job import list_jobs
-    from .jobs.lifecycle import suggest_next_action
-    from .jobs.brief import load_brief
 
     root = repo_root()
     _section("flujo · health check")
@@ -328,10 +329,10 @@ def handoff(action: str = typer.Argument("last", help="last | create"),
       flujo handoff last
       flujo handoff create -m "Añadido soporte grid_2x a planos + LAST_HANDOFF"
     """
-    from pathlib import Path
     from datetime import datetime
+    from .paths import context_dir
 
-    p = Path("context/LAST_HANDOFF.md")
+    p = context_dir() / "LAST_HANDOFF.md"
 
     if action == "last" or action == "show":
         if p.exists():
@@ -359,6 +360,38 @@ def handoff(action: str = typer.Argument("last", help="last | create"),
     _warn("Acción desconocida. Usa 'last' o 'create -m ...'")
 
 
+@app.command("delegate")
+def delegate(
+    role: str = typer.Argument(..., help="visual-polish | pipeline | brand | future | packaging"),
+    task: str = typer.Argument(..., help="Descripción precisa de la tarea a delegar"),
+    log: bool = typer.Option(False, "--log", help="sugerir append a LAST_HANDOFF"),
+):
+    """Genera prompt preciso para delegar a agente especializado (5 roles; soporta paralelo via hub o clones).
+    Salida lista para copiar a otra sesión IA. Ideal para multi-agente workflow.
+
+    Ej:
+      flujo delegate future "Añadir WebSocket real-time previews al hub"
+      flujo delegate visual-polish "Pulir plano_demo.html con brand exacto"
+    """
+    # Reuse logic from web hub for consistency (single source)
+    try:
+        from .web.hub import HubRequestHandler
+        # Instantiate minimally for _handle_delegate
+        h = HubRequestHandler.__new__(HubRequestHandler)
+        h.root = None  # not needed
+        result = h._handle_delegate({"role_id": role, "task": task, "log_to_handoff": log})
+        role_info = result["role"]
+        console.print(Panel(f"[bold]{role_info['name']}[/]", border_style="cyan"))
+        console.print(f"[dim]Task:[/] {result['task']}")
+        console.print("\n[bold green]Prompt listo para pegar en sub-agente:[/]\n")
+        console.print(result["full_prompt"])
+        if result.get("log_cmd_suggested"):
+            console.print(f"\n[yellow]Sugerido:[/] {result['log_cmd_suggested']}")
+        console.print("\n[dim]Lanza sub-agentes en clones paralelos. Actualiza LAST_HANDOFF al final de cada entrega.[/dim]")
+    except Exception as e:
+        _err(f"No se pudo generar delegación: {e}")
+
+
 def _get_version() -> str:
     from .version import get_version
     return get_version()
@@ -372,8 +405,10 @@ def _get_version() -> str:
 def brand_list():
     """Lista ejemplos en projects/flujo/ejemplos/ y estado de sus JSON descriptivos."""
     from pathlib import Path
-    ejemplos = Path("projects/flujo/ejemplos")
-    jsons = Path("projects/flujo/json")
+    from .paths import repo_root
+    root = repo_root()
+    ejemplos = root / "projects" / "flujo" / "ejemplos"
+    jsons = root / "projects" / "flujo" / "json"
     if not ejemplos.exists():
         _warn("No existe projects/flujo/ejemplos/")
         return
@@ -398,7 +433,8 @@ def brand_analyze(
     import json as jsonlib
     from datetime import datetime
 
-    base = Path("projects/flujo")
+    from .paths import repo_root
+    base = repo_root() / "projects" / "flujo"
     ex_dir = base / "ejemplos" / example
     json_dir = base / "json"
     json_dir.mkdir(parents=True, exist_ok=True)
@@ -1140,7 +1176,23 @@ def cotizaciones(
     --para productora: versión externa branded (infografía para productoras)
     --para interno/empresa: desglose detallado interno.
     """
-    from projects.cotizaciones.engine import generar_cotizacion
+    # Robust import for cotizaciones (satellite, not in main pkg layout).
+    # Works after `pip install -e .` (flujo in path) + from repo root or packaged context.
+    # Note: projects/cotizaciones not bundled in `flujo package` (only projects/flujo brand).
+    try:
+        from projects.cotizaciones.engine import generar_cotizacion
+    except ImportError:
+        import sys
+        from pathlib import Path
+        try:
+            from .paths import repo_root
+            r = repo_root()
+            if str(r) not in sys.path:
+                sys.path.insert(0, str(r))
+            from projects.cotizaciones.engine import generar_cotizacion
+        except Exception:
+            def generar_cotizacion(*a, **k):
+                raise RuntimeError("cotizaciones engine unavailable (run from repo root after pip install -e .; not bundled in package)")
     if not evento.exists():
         _err(f"No existe: {evento}")
     res = generar_cotizacion(evento, audiencia=para, output_dir=output)
@@ -1159,20 +1211,25 @@ def serve(
     hub: bool = typer.Option(True, "--hub/--legacy", help="usar el nuevo workspace HTML (flujo_hub.html + visualizadores)"),
     desktop: bool = typer.Option(False, "--desktop", help="abrir en ventana nativa con pywebview (si está instalado)"),
 ):
-    """Iniciar el workspace local.
+    """Iniciar el workspace local (la nueva app profesional).
 
-    Por defecto lanza el nuevo hub pro (context/flujo_hub.html + visualizadores SVG/Plano)
-    en http://{host}:{port}.
+    Por defecto (`--hub`): lanza el hub pro workspace (`context/flujo_hub.html` + visualizadores SVG/Plano)
+    servido por servidor HTTP + API real en http://{host}:{port}.
+    APIs: parse intake real (parsePedido usa backend por defecto cuando server activo), list/create jobs, brand desde flujo.json, svg scan live, safe cmds, pywebview bridge + "CONECTADO" indicator.
+    `flujo app` (o serve --desktop) es la entrada diaria obligatoria (hub = pro workspace real).
 
-    --legacy (o --no-hub) usa el editor Gradio antiguo.
-    --desktop abre en una ventana de aplicación nativa (requiere `pip install pywebview`).
+    --desktop: ventana nativa premium sin chrome (pywebview gratis + js_api bridge directo Python<->JS + tray + icon).
+    --legacy (o --no-hub): usa editor Gradio antiguo (legacy, no primario).
     """
     if hub:
         try:
             from .web.hub import launch
+            from .paths import repo_root
+            r = repo_root()
             console.print(f"[cyan]flujo workspace (hub) en http://{host}:{port}[/]")
-            console.print("[dim]Abre el hub principal, visualizadores y herramientas.[/dim]")
-            launch(host=host, port=port, desktop=desktop)
+            console.print(f"[dim]Repo context: {r}[/dim]")
+            console.print("[dim]APIs reales + drag-drop en hub + auto-port + tray opcional.[/dim]")
+            launch(host=host, port=port, desktop=desktop, root=r)
             return
         except Exception as e:
             _warn(f"No se pudo iniciar el workspace nuevo ({e}).")
@@ -1206,8 +1263,199 @@ def app_alias(
     host: str = typer.Option("127.0.0.1", "--host"),
     desktop: bool = typer.Option(False, "--desktop"),
 ):
-    """Alias de serve. Lanza el workspace del hub (recomendado)."""
+    """Alias de serve. Lanza la nueva app (hub pro workspace recomendado como entrada diaria). Real backend + parse/create jobs live cuando activo."""
     serve(port=port, host=host, hub=True, desktop=desktop)
+
+
+# ============================================================
+# Packaging (free, PyInstaller focused, Windows .exe for daily designer use)
+# ============================================================
+
+@app.command("package")
+def package(
+    onefile: bool = typer.Option(True, "--onefile/--onedir", help="single .exe (recomendado) o carpeta"),
+    console: bool = typer.Option(False, "--console/--noconsole", help="mostrar consola (debug) o ventana limpia"),
+    output: str = typer.Option("dist", "--output", "-o", help="carpeta de salida"),
+):
+    """Empaqueta el hub pro como aplicación de escritorio real .exe (Windows).
+
+    Usa PyInstaller (gratis, en extra 'build').
+    Genera flujo-hub.exe (onefile recomendado) o carpeta:
+    - --noconsole por defecto (sin terminal visible)
+    - Icono profesional embebido (generado con Pillow gratis en build: rounded accent + F geométrico limpio)
+    - Assets incluidos: context/ (hub + visualizers), svg/ (visualizador carga SVGs), projects/flujo (brand),
+      jobs/_template, src/flujo/templates (internos)
+    - Launcher dedicado (entry point): abre SIEMPRE pywebview nativo premium + tray opcional + bridge directo
+      (equivalente a `flujo app --desktop` pero sin consola ni python feel)
+    - En runtime: jobs/data/inbox/piezas etc se crean en 'flujo_workspace/' sibling al exe (persistente, sobrevive onefile)
+    - Soporte onefile (simple dist) / onedir (más rápido)
+    - Frozen paths: asset_root para reads (HTML/brand/svg), workspace para writes.
+    - Servidor hub soporta servir assets bundled (/svg/* /projects/* etc) para que visualizers funcionen completos.
+
+    Instalación previa (gratis):
+      py -m pip install -e .[web,desktop-extras,build]
+
+    Uso:
+      flujo package
+      flujo package --onedir
+      flujo package -o mi-dist
+
+    Resultado se siente como app real (no script python). Doble clic → ventana pro "flujo • Workspace".
+    Para menú/instalador completo: Inno Setup (gratis, ver output hints).
+    """
+    try:
+        import PyInstaller.__main__ as pyi
+    except ImportError:
+        _err("PyInstaller no encontrado. Instala gratis: py -m pip install pyinstaller")
+        return
+
+    from .paths import repo_root, asset_root
+    root = repo_root()
+    # Use a generated launcher (temp, no repo pollution) so the .exe ALWAYS starts the premium desktop hub
+    # (pywebview window, no console, tray if avail, direct bridge). Double-click the exe feels like real app.
+    import tempfile
+    import os as _os
+
+    launcher_code = '''import os
+import sys
+from pathlib import Path
+
+# Signal packaged mode for paths.py (assets vs workspace separation)
+# This makes the standalone .exe write user data (jobs, data) to flujo_workspace/ next to exe.
+os.environ.setdefault("FLUJO_PACKAGED", "1")
+
+# When executed inside PyInstaller bundle, sys.frozen + _MEIPASS will be set automatically by bootloader.
+# Launcher forces desktop launch (native window + pro UX). No browser, no terminal.
+# All imports use the bundled package (PyInstaller collects via --collect-submodules + --paths src).
+
+from flujo.web.hub import launch
+from flujo.paths import asset_root, workspace_root
+
+# Silent prints in --noconsole mode; useful if console build for debug.
+print("[flujo packaged desktop] assets:", asset_root())
+print("[flujo packaged desktop] workspace next to exe:", workspace_root())
+
+# Force desktop=True, no auto browser (pywebview owns the window) -> direct `flujo app --desktop` equivalent.
+launch(
+    host="127.0.0.1",
+    port=8765,
+    desktop=True,
+    open_browser=False,
+    root=asset_root()
+)
+'''
+
+    # write temp launcher (deleted after build)
+    fd, launcher_path = tempfile.mkstemp(suffix="_flujo_desktop_launcher.py", text=True)
+    with _os.fdopen(fd, "w", encoding="utf-8") as f:
+        f.write(launcher_code)
+
+    spec_name = "flujo-hub"
+    dist_dir = Path(output)
+    dist_dir.mkdir(parents=True, exist_ok=True)
+
+    # Generate real .ico at build time (free, using Pillow if available) for the exe icon + pro feel.
+    icon_arg = ""
+    try:
+        from PIL import Image, ImageDraw
+        ico_path = dist_dir / "flujo-build-icon.ico"
+        # Professional dark + flujo accent rounded + clean geometric F (256 base)
+        accent = (45, 90, 74, 255)
+        img = Image.new("RGBA", (256, 256), (10, 10, 10, 255))
+        draw = ImageDraw.Draw(img)
+        draw.rounded_rectangle([24, 24, 232, 232], radius=28, fill=accent)
+        dark = (10, 10, 10, 255)
+        draw.rectangle([66, 58, 90, 198], fill=dark)   # F stem
+        draw.rectangle([90, 58, 188, 82], fill=dark)   # top bar
+        draw.rectangle([90, 112, 170, 136], fill=dark) # mid bar
+        sizes = [(16, 16), (32, 32), (48, 48), (64, 64), (128, 128), (256, 256)]
+        img.save(str(ico_path), format="ICO", sizes=sizes)
+        icon_arg = f"--icon={ico_path}"
+        console.print(f"[cyan]Icono generado: {ico_path}[/]")
+    except Exception as _e:
+        console.print(f"[yellow]Sin icono embebido (instala pillow para .ico en build): {_e}[/]")
+
+    # Collect data: only what hub needs for pro desktop (brand + visuals). Other projects stay out for size.
+    # Use os.pathsep ( ; on Windows, : on POSIX) for --add-data at build time. Targets Windows .exe but portable build.
+    # workspace is created at runtime next to exe.
+    # Bundle internal templates (for export blender etc) + jobs/_template (for create_job) under bundle so reads work in frozen.
+    # svg + projects/flujo + context are essential for visualizers + brand + hub HTMLs to work via server in packaged exe.
+    import os as _os_path
+    _sep = _os_path.pathsep
+    add_datas = [
+        f"--add-data={root / 'context'}{_sep}context",
+        f"--add-data={root / 'projects' / 'flujo'}{_sep}projects/flujo",
+        f"--add-data={root / 'svg'}{_sep}svg",
+        f"--add-data={root / 'jobs' / '_template'}{_sep}jobs/_template",
+        f"--add-data={root / 'src' / 'flujo' / 'templates'}{_sep}flujo/templates",
+    ]
+
+    args = [
+        "--clean",
+        "--noconfirm",
+        f"--{ 'onefile' if onefile else 'onedir' }",
+        f"--{ 'console' if console else 'windowed' }",
+        f"--name={spec_name}",
+        f"--distpath={output}",
+        "--paths", str(root / "src"),  # help PyInstaller find the src layout
+    ] + add_datas + [
+        "--hidden-import=webview",
+        "--hidden-import=PIL",
+        "--hidden-import=pystray",
+        "--hidden-import=yaml",
+        "--hidden-import=pydantic",
+        "--hidden-import=typer",
+        "--hidden-import=rich",
+        "--collect-submodules=flujo",
+        launcher_path,  # the entry that forces desktop app feel
+    ]
+    if icon_arg:
+        args.append(icon_arg)
+
+    console.print(f"[cyan]Construyendo .exe profesional con PyInstaller (100% gratis)...[/]")
+    console.print(f"[dim]Opciones: onefile={onefile} noconsole={not console} output={output}[/]")
+    console.print(f"[dim]Comando equiv (aprox): pyinstaller {' '.join(args)}[/]")
+
+    try:
+        pyi.run(args)  # programmatic = no extra shell
+        exe_name = spec_name + (".exe" if onefile else "")
+        exe_path = dist_dir / exe_name
+        if not onefile:
+            # onedir the binary is inside the folder
+            exe_path = dist_dir / spec_name / (spec_name + ".exe")
+        console.print(f"[green]✓[/] Empaquetado OK: {exe_path}")
+        console.print("")
+        console.print("[bold]Cómo usar la app de escritorio real (Windows):[/]")
+        console.print(f"  1. Prepara: py -m pip install -e .[web,desktop-extras,build]")
+        console.print(f"  2. Ejecuta: flujo package   (o con --onedir si prefieres carpeta)")
+        console.print(f"  3. Ve a {output}/  y lanza {spec_name}.exe (doble clic)")
+        console.print("     - Abre ventana nativa premium (pywebview) -- equivalente directo a flujo app --desktop")
+        console.print("     - Icono profesional + título 'flujo • Workspace' (sin feel de Python)")
+        console.print("     - Sin terminal visible (--noconsole / windowed)")
+        console.print("     - Tray icon (si pystray+pillow instalados en build)")
+        console.print("     - Todo el hub + intake real + delegación + visualizers SVG/plano + bridge (SVGs cargan)")
+        console.print("     - Crea jobs/ + data/ en 'flujo_workspace' (sibling al exe) -- persistente")
+        console.print("")
+        console.print("[bold]Para que se sienta aún más profesional (gratis):[/]")
+        console.print("  - Copia el exe (y flujo_workspace si usas) a un lugar fijo (ej. Desktop o C:\\flujo).")
+        console.print("  - Usa Inno Setup (https://jrsoftware.org - gratuito) para installer con Start Menu:")
+        console.print("      [Setup]  AppName=flujo  AppVersion=0.34.10 OutputDir=installer")
+        console.print("      [Files]  Source: dist\\flujo-hub.exe ; DestDir: {app}")
+        console.print("      [Icons]  Name: {autoprograms}\\flujo ; Filename: {app}\\flujo-hub.exe")
+        console.print("      (agrega .ico , asocia .json si quieres para proyectos)")
+        console.print("  - Resultado: entrada en Inicio, desinstalador, icono real en barra de tareas.")
+        console.print("")
+        console.print("[dim]Todo gratis (PyInstaller + Pillow), Python-native, sin pagar nada. El exe es standalone para el diseñador Windows.[/]")
+        console.print("[dim]Maneja paths frozen correctamente (asset vs workspace). Para actualizar: rebuild con flujo package después de cambios.[/]")
+    except Exception as e:
+        _err(f"PyInstaller falló: {e}")
+    finally:
+        # cleanup temp launcher
+        try:
+            if 'launcher_path' in locals() and Path(launcher_path).exists():
+                Path(launcher_path).unlink(missing_ok=True)
+        except Exception:
+            pass
 
 
 # ============================================================

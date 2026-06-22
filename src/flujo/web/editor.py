@@ -405,11 +405,16 @@ def construir_acuse(config: Dict, solicitante: str = "", canal: str = "correo",
 # ============================================================
 
 _CSS = """
-:root { --bg:#0a0a0a; --panel:#111; --border:#222; --text:#e0e0e0; --cyan:#00f0ff; }
-body, .gradio-container { background:var(--bg)!important; color:var(--text)!important; }
-h1,h2,h3 { color:#fff!important; }
-button.primary { background:linear-gradient(135deg,var(--cyan),#7000ff)!important; color:#000!important; font-weight:700!important; }
-.block { background:var(--panel)!important; border:1px solid var(--border)!important; }
+/* VISUAL QA / BRAND ENFORCEMENT — legacy editor (src/flujo/web/editor.py) from projects/flujo/flujo.json
+   Dark professional theme ONLY (no light). Exact colors: ink #1f2a24, accent #2d5a4a. No neon cyan.
+   Matches main hub, visualizers and tapiz. Generous, pro panels, Inter. */
+:root { --bg:#0a0a0a; --panel:#141414; --panel2:#1a1a1a; --border:#2a2a2a; --text:#e8e8e8; --muted:#888; --accent:#2d5a4a; --flujo-ink:#1f2a24; --flujo-accent:#2d5a4a; --flujo-paper:#f8f1e3; --flujo-support:#675f55; --flujo-alert:#c2410f; }
+body, .gradio-container { background:var(--bg)!important; color:var(--text)!important; font-family:'Inter',system-ui,sans-serif!important; }
+h1,h2,h3 { color:#fff!important; font-weight:700!important; letter-spacing:-0.02em; }
+button.primary { background:linear-gradient(135deg,var(--accent),#1a3f2e)!important; color:#fff!important; font-weight:700!important; border-radius:5px!important; text-transform:uppercase; letter-spacing:0.04em; }
+button.secondary { background:var(--panel)!important; color:var(--text)!important; border:1px solid var(--border)!important; border-radius:5px!important; }
+.block { background:var(--panel)!important; border:1px solid var(--border)!important; border-radius:8px!important; }
+input, textarea { background:var(--panel2)!important; color:var(--text)!important; border:1px solid var(--border)!important; border-radius:5px!important; }
 """
 
 

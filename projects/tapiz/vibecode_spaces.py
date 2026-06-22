@@ -1,19 +1,18 @@
 #!/usr/bin/env python3
 """
-VibeCode Spaces — CLI/librería para visualizar la topología del código
-mediante sus espacios vacíos.
+flujo Tapiz Spaces — CLI/librería para visualizar topología del código
+(espacios vacíos) usando paleta oficial de projects/flujo/flujo.json .
 
-La idea es no colorear el código, sino los huecos entre palabras, indentaciones
-y saltos de línea. Así la estructura se convierte en un patrón detectable a ojo,
-ligeramente psicodélico, sin ser invasivo.
+STRICT: Default SIEMPRE "flujo" (premium dark pro, high-end designer tool).
+Otras paletas (neon/cyber/etc) SOLO internal dev / experimentación. NUNCA en entregas.
 
 Uso:
-    python vibecode_spaces.py archivo.py -m flow -a
-    cat archivo.py | python vibecode_spaces.py -m drift
+    python projects/tapiz/vibecode_spaces.py archivo.py -m flow -a -p flujo
+    cat archivo.py | python ... -m drift -p flujo
 
 Como librería:
-    from vibecode_spaces import render_spaces
-    render_spaces(codigo, mode="flow", animate=True)
+    from projects.tapiz.vibecode_spaces import render_spaces
+    render_spaces(codigo, mode="flow", palette="flujo", animate=True)
 """
 
 import sys
@@ -37,14 +36,21 @@ def fg256(n: int) -> str:
     return f"\033[38;5;{n}m"
 
 
-# Paletas de 256 colores, todas oscilando en una misma familia
+# Paletas de 256 colores (ANSI 256).
+# STRICT BRAND: default MUST be "flujo" (from projects/flujo/flujo.json) for ALL pro outputs.
+# Other palettes: internal/experimental ONLY. Forbidden for client deliverables.
 PALETTES = {
+    "flujo": [fg256(c) for c in (235, 29, 58, 94, 130, 223, 252)],  # mapped approx: ink, accent, support, alert, darks, paper/cream, text
+    "ink": [fg256(c) for c in (232, 235, 240, 58, 94)],
+    "accent": [fg256(c) for c in (29, 22, 58, 94, 130)],
+    "support": [fg256(c) for c in (58, 232, 29, 94, 240)],
+    "deep": [fg256(c) for c in (232, 235, 238, 240, 58)],
+    # legacy/explore only - NEVER default, NEVER in client work
     "neon": [fg256(c) for c in (51, 198, 135, 226, 48, 87, 213)],
     "cyber": [fg256(c) for c in (87, 141, 219, 255, 117, 213)],
     "matrix": [fg256(c) for c in (22, 28, 34, 46, 82, 120, 154)],
     "fire": [fg256(c) for c in (52, 88, 124, 166, 202, 208, 226)],
     "rainbow": [fg256(c) for c in (196, 208, 226, 46, 51, 21, 129, 201)],
-    "deep": [fg256(c) for c in (17, 18, 19, 24, 29, 66, 96)],
     "glitch": [fg256(c) for c in (46, 196, 226, 201, 51, 255)],
 }
 
@@ -72,7 +78,7 @@ def tokenize_line(line: str) -> List[tuple]:
 def render_static(
     text: str,
     mode: str = "void",
-    palette_name: str = "neon",
+    palette_name: str = "flujo",
     fill_char: str = "·",
     ghost: bool = True,
 ) -> str:
@@ -84,7 +90,7 @@ def render_static(
       - length: el color del espacio depende de la longitud del bloque.
       - blocks: cada bloque de espacios es un bloque sólido.
     """
-    palette = PALETTES.get(palette_name, PALETTES["neon"])
+    palette = PALETTES.get(palette_name, PALETTES.get("flujo", list(PALETTES.values())[0]))  # BRAND ENFORCED default flujo (no neon)
     lines = text.splitlines()
     out_lines: List[str] = []
 
@@ -117,7 +123,7 @@ def render_static(
 def render_frame(
     text: str,
     mode: str = "flow",
-    palette_name: str = "neon",
+    palette_name: str = "flujo",
     t: int = 0,
     fill_char: str = "·",
     ghost: bool = True,
@@ -132,7 +138,7 @@ def render_frame(
       - pulse: bloques largos de espacios "pulsan" con intensidad.
       - rain:  líneas de color caen de arriba a abajo.
     """
-    palette = PALETTES.get(palette_name, PALETTES["neon"])
+    palette = PALETTES.get(palette_name, PALETTES.get("flujo", list(PALETTES.values())[0]))  # BRAND ENFORCED default flujo (no neon)
     lines = text.splitlines()
     out_lines: List[str] = []
     n_colors = len(palette)
@@ -182,9 +188,10 @@ def render_frame(
 
 
 def header(mode: str, palette: str, animated: bool) -> str:
+    # Brand reminder: all pro viz MUST use 'flujo' palette (projects/flujo/flujo.json). Premium only.
     return (
         f"\n\033[90m{'=' * 60}{RESET}\n"
-        f"\033[1;97m✨ VibeCode Spaces \033[0;90m| "
+        f"\033[1;97mflujo • Tapiz Spaces (pro) \033[0;90m| "
         f"modo: {mode} | paleta: {palette}{' | animado' if animated else ''}{RESET}\n"
         f"\033[90m{'=' * 60}{RESET}\n"
     )
@@ -200,7 +207,7 @@ def footer() -> str:
 def render_spaces(
     text: str,
     mode: str = "flow",
-    palette: str = "neon",
+    palette: str = "flujo",
     animate: bool = False,
     cycles: int = 200,
     speed: float = 0.08,
@@ -287,7 +294,7 @@ class Modelo:
 
 def main():
     parser = argparse.ArgumentParser(
-        description="Visualiza la topología de espacios de código como arte ANSI."
+        description="flujo Tapiz: visualiza espacios de código con paleta oficial (default: flujo from projects/flujo/flujo.json). Pro dark premium — estructura para diseñador serio. Solo 'flujo' para entregas."
     )
     parser.add_argument("file", nargs="?", help="Archivo de entrada (o pipe por stdin)")
     parser.add_argument(
@@ -301,8 +308,8 @@ def main():
         "-p",
         "--palette",
         choices=list(PALETTES.keys()),
-        default="neon",
-        help="Paleta de colores",
+        default="flujo",
+        help="Paleta de colores (default: flujo — OBLIGATORIO para pro/cliente)",
     )
     parser.add_argument("-a", "--animate", action="store_true", help="Activar animación")
     parser.add_argument(

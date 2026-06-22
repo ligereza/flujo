@@ -96,7 +96,7 @@ Hacer que el visualizador de texto/JSON use los colores reales de `flujo.json` (
 
 Añadir:
 ```js
-async function loadAistetic() {
+async function loadFlujoBrand() {
   // para uso local: mostrar los valores actuales
   // futuro: integrar con un pequeño servidor o leer del JSON
 }

@@ -9,8 +9,8 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Any, Dict
 
-from src.flujo.plano import load_evento, resumen_costos
-from src.flujo.brand import load_styles, get_color  # ← nuevo loader central de identidad flujo
+from flujo.plano import load_evento, resumen_costos
+from flujo.brand import load_styles, get_color  # ← loader central de identidad flujo (post rename, installed package)
 
 def generar_cotizacion(evento_path: Path, audiencia: str = "productora", output_dir: Path | None = None) -> dict:
     """Genera cotización real (archivos) según audiencia, usando flujo."""

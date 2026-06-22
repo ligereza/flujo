@@ -47,8 +47,8 @@ flujo render run projects/piezas_vectoriales/X/config.json
 flujo render formats
 flujo privacy scan archivo.txt
 flujo daily
-flujo serve
-flujo app
+flujo app          # entrada principal (nueva app + hub pro workspace)
+flujo serve        # alias (usa --legacy solo para Gradio viejo)
 flujo plano projects/plano/ejemplos/evento_ejemplo.json
 ```
 

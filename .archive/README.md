@@ -9,7 +9,7 @@ Todo lo vivo está en:
 - context/svg_visualizer.html
 - context/plano_demo.html
 - src/
-- projects/ (alineados a aistetic)
+- projects/flujo/ (brand source of truth)
 - docs/ (solo los recomendados: AGENT_OPERATING_MANUAL, REPO_MAP, HIGIENE...)
 
 Política: mover aquí lo viejo para mantener la raíz limpia (ver docs/HIGIENE_REPO.md).

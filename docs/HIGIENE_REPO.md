@@ -6,7 +6,7 @@ Versión: v0.34.10 (post consolidación de historia)
 
 El repo debe mantenerse útil para trabajo real y legible para agentes. No debe convertirse en un basurero de outputs, caches o pruebas locales.
 
-Ejecuta `py scripts/suggest_repo_hygiene.py` (100% no destructivo) para ver sugerencias actualizadas del estado actual.
+Ejecuta `py scripts/suggest_repo_hygiene.py` (100% no destructivo) + terminal safe rm SOLO generados (pycache/.pytest_cache) para ver sugerencias actualizadas del estado actual. Siempre empieza por `flujo app` + hub + LAST_HANDOFF (reinforces resumption and speeds daily designer flow: pedido → `flujo app`/hub → real actions/visualizers → export). **Punto de entrada: `flujo app` (lanza app real + hub) → usa hub + lee context/LAST_HANDOFF.md.**
 
 ## Nunca commitear
 

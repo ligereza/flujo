@@ -1,8 +1,13 @@
-# # # flujo — Dimensiones del Orden (arte + automatización)
+# flujo — Dimensiones del Orden (arte + automatización)
 
-**Punto de entrada diario (OBLIGATORIO):** `flujo app`  (o `flujo serve`)
+**Punto de entrada diario (OBLIGATORIO y ÚNICO):** `flujo app` (recomendado) o `flujo app --desktop`
 
-Esto lanza el workspace completo como aplicación local (servidor + hub pro + visualizadores). Con `--desktop` abre en ventana nativa.
+Esto lanza **la app real** local: servidor HTTP stdlib + APIs reales (brand, jobs, SVG, parse, delegate, SSE live, tokens) + sirve los HTMLs pro como UI (hub + visualizadores embebidos) + bridge pywebview/desktop.
+- **UI real = los tres HTMLs:** `context/flujo_hub.html` (hub principal), `context/svg_visualizer.html`, `context/plano_demo.html`. Cuando corres `flujo app` tienes datos live + acciones reales (jobs, delegate paralelo, etc.). Abrir HTML directo = fallback estático perfecto (sin backend).
+- El **hub** (`context/flujo_hub.html` servido por app) es el workspace pro principal (intake + visual + delegación).
+- `flujo app --desktop` abre en ventana nativa premium (pywebview + tray opcional).
+- `flujo serve --legacy` solo para Gradio antiguo (legacy, opcional).
+- Intake, visualización SVG/plano, comandos, export y prompts de delegación listos. `flujo app` = centro diario. Todo apunta al hub + LAST_HANDOFF.
 
 El hub + visualizadores es el **main del flujo**:
 - Intake de pedidos (pega email/pedido → brief ordenado + match de formatos)
@@ -14,12 +19,15 @@ El hub + visualizadores es el **main del flujo**:
 **Nota de higiene:** La raíz tiene carpetas históricas movidas a `.archive/` (_archive, checkpoints, reference_old, etc.). No uses esos archivos para trabajo actual. Todo lo vivo está en `context/`, `projects/` y `src/`. Ver `.archive/README.md`.
 
 **Estado actual (2026-06):**
-- Workspace principal: `context/flujo_hub.html` (hub), `svg_visualizer.html`, `plano_demo.html`
-- Agentes: LAST_HANDOFF + AGENT_OPERATING_MANUAL
-- Visualizadores reales para SVG y planos (no links crudos)
-- Todo alineado a flujo + export AI/PS/Blender
-- Root hygiene ejecutado: histórico movido a `.archive/`
-- Docs consolidadas apuntando al hub como centro.
+- App principal: `flujo app` (o `--desktop`) = entrada única diaria. Sirve backend real (APIs) + los tres HTMLs como UI completa (hub + svg_visualizer + plano_demo).
+- Los HTMLs **son la UI de la app real**: con conexión backend detectada ("CONECTADO (APIs reales + delegate)"), live jobs/SVG/brand/SSE, delegate multi-agente, parse real, create-job etc. Fallback estático cuando abres .html directo.
+- Workspace pro: usa `flujo app` → hub (intake + visual SVG/plano embebidos por grupos), abre `svg_visualizer.html` y `plano_demo.html` desde el hub.
+- Agentes: LAST_HANDOFF + AGENT_OPERATING_MANUAL (delegación paralela a 5 roles especializados incl. Packaging). Siempre `flujo app` primero.
+- Visualizadores reales (embebidos) para SVG y planos.
+- Todo alineado a flujo + export AI/PS/Blender. Fuente de verdad diaria: hub (vía app) + LAST_HANDOFF.
+- Root hygiene ejecutado: histórico movido a `.archive/`.
+- Caches fully cleaned (2026-06-22): 16 __pycache__ dirs + 123 *.pyc + .pytest_cache removed (only generated). Improves `flujo app` startup + hub nav + IA resumption.
+- Docs consolidadas: `flujo app` + hub como centro. Gradio = legacy.
 
 **Dos flujos de trabajo para agentes:**
 1. Repo + pedido reciente → pega en hub → match o proponer nueva sección/tarea
@@ -29,7 +37,7 @@ El hub + visualizadores es el **main del flujo**:
 
 **Proyectos** alineados a flujo (la fuente de verdad de paleta, tono y reglas).
 
-Ver también: `context/svg_visualizer.html`, `context/plano_demo.html`, `projects/README.md`, `context/LAST_HANDOFF.md`, `docs/AGENT_OPERATING_MANUAL.md`.
+Ver también: ejecuta `flujo app` (entrada diaria) → usa hub como workspace principal. `context/flujo_hub.html`, `context/svg_visualizer.html`, `context/plano_demo.html`, `projects/README.md`, `context/LAST_HANDOFF.md`, `docs/AGENT_OPERATING_MANUAL.md`. **Hub + LAST_HANDOFF = fuente de verdad para continuar.**
 
 Windows: `py -m flujo ...` | Español prioritario.
 
@@ -45,10 +53,11 @@ Windows: `py -m flujo ...` | Español prioritario.
 6. [El pipeline: de pedido a pieza](#-el-pipeline-de-pedido-a-pieza)
 7. [Intake por JSON (para colegas)](#-intake-por-json-para-colegas)
 8. [Catálogo de formatos](#-catálogo-de-formatos)
-9. [La app / recepción automática (estado y plan)](#-la-app--recepción-automática-estado-y-plan)
-10. [Reglas innegociables](#-reglas-innegociables)
-11. [Estructura del repo](#-estructura-del-repo)
-12. [Referencia de comandos CLI](#-referencia-de-comandos-cli)
+9. [La app (nueva realidad)](#-la-app-nueva-realidad-hub-pro-como-workspace-principal)
+10. [Delegating to Specialized Agents](#-delegating-to-specialized-agents)
+11. [Reglas innegociables](#-reglas-innegociables)
+12. [Estructura del repo](#-estructura-del-repo)
+13. [Referencia de comandos CLI](#-referencia-de-comandos-cli)
 
 ---
 
@@ -104,10 +113,10 @@ Pedido (correo / mensaje / JSON)
 Si eres una IA mejorando este repo, este es **exactamente** tu protocolo:
 
 ### 1. Entiende antes de tocar
-Abre primero `context/flujo_hub.html`.
+Ejecuta `flujo app` (o abre `context/flujo_hub.html`).
 Luego lee `PARA_IA_CONTEXT.md` + `context/LAST_HANDOFF.md` + `docs/AGENT_OPERATING_MANUAL.md`.
 Clona el repo y corre `py -m pytest tests/ -q` y `flujo health`
-para conocer el estado real. El hub + visualizadores son la fuente actualizada.
+para conocer el estado real. La app (`flujo app`) + hub + visualizadores + UI delegación son la fuente actualizada.
 
 ### 2. Trabaja en tu propio clon, no en el repo del dueño
 Haces tus cambios, los **pruebas** (`pytest`, `compileall`, prueba manual de
@@ -219,15 +228,16 @@ py -m pip install -e .
 flujo health
 flujo version
 
-# EL HUB ES EL MAIN DEL FLUJO
-# Abre context/flujo_hub.html  (punto de entrada diario)
-# - Intake de pedidos (pega texto)
-# - Visualizador SVG completo (Eventos + Suplementos embebidos)
-# - Plano Demo
-# - Comandos + raw para agentes
+# ENTRADA DIARIA OBLIGATORIA (ÚNICA): `flujo app` (o `flujo app --desktop`)
+# Lanza la app real: backend + APIs reales + sirve los tres HTMLs como UI (hub pro + visualizadores).
+# - Intake real + match formatos + crear jobs
+# - Visualizadores embebidos SVG (por grupos) + plano
+# - Comandos live, tokens export, SSE live updates
+# - Delegación multi-agente paralela (5 roles incl. Packaging): ingresa tarea en hub, copia prompts completos listos o usa "Delegar seleccionados (live API)"
+# (Todo gratis/local-first. `flujo app` + hub = centro. Fallback: abre context/flujo_hub.html directo.)
 
-# Intake manual (recomendado ahora):
-# Pega correo/pedido en el hub → brief + match formato + acción recomendada
+# Intake manual (recomendado):
+# Ejecuta `flujo app`, pega correo/pedido en hub → brief + match formato + acción
 
 # Ejemplos CLI
 flujo job new "etiquetas acme" --email inbox/correo.txt
@@ -241,25 +251,35 @@ flujo daily
 
 ---
 
-## 🖥️ El Hub (context/flujo_hub.html) — centro del flujo
+## 🖥️ El Hub (pro workspace dentro de la app `flujo app` — UI principal)
 
-El hub reemplaza la dispersión. Todo está organizado por secciones:
+`flujo app` (o --desktop) lanza el backend real + sirve los tres HTMLs como UI de la app (flujo_hub.html + visualizers embebidos). El hub (`context/flujo_hub.html`) es el workspace pro diario (intake, visual, delegación, comandos). Cuando app activa: live APIs. HTMLs directos: fallback estático completo. Brand = 'flujo' (projects/flujo/flujo.json).
 
 - **Status + nav**: enlaces directos a `svg_visualizer.html` y `plano_demo.html`
 - **Intake pro**: caja para pegar pedido. Genera brief estructurado + match contra formatos reales (svg + catálogos) + comando listo + decisión (MATCH / NUEVO).
 - **SVG Works teaser + visual**: tarjetas por grupos (Eventos/Flyers/Riders vs Suplementos) con previews. Botón principal abre el visualizador completo con `<object>` embebido, botones "Usar como base", "Editar", "Vectorizado" y notas de mejoras por sección.
 - **Plano teaser**: link al plano_demo interactivo (genera SVG paramétrico + rider + costos en vivo, flujo integrado).
 - **Herramientas**: grid de comandos (copy-paste directo). Siempre con `py` en Windows.
-- **Separación usuario / agente**:
-  - Arriba: workspace pro limpio (tarjetas fmt-card, botones cyan sobre dark).
-  - Abajo: sección RAW para agentes (monospace, datos puros, dos flujos, archivos clave, sin presentación).
-- **Export bridge**: secciones claras para AI / PS / Blender + comandos.
+- **Delegación integrada** (first-class): sección "Delegar a Agentes Especializados" con guía práctica "Cómo delegar desde el hub", tarea editable, 5 roles (incl. Packaging), botones copiar prompts completos + multi "Delegar seleccionados (live API)".
+- **Separación usuario / agente**: arriba workspace pro; abajo RAW + datos para agentes (bajo token).
+- **Export bridge**: secciones para AI / PS / Blender + comandos + tokens.
 
-**Visualizadores dedicados (conectados):**
+**Visualizadores dedicados (conectados, accesibles desde app/hub):**
 - `context/svg_visualizer.html` — visualizador completo de todas las piezas de `/svg`. Agrupado exactamente como las carpetas. Cada trabajo tiene preview embebido + acciones.
 - `context/plano_demo.html` — demo mejorado del motor de planos: controles, SVG vivo, rider, costos, simulación Blender.
 
 Nunca más links directos a carpetas que devuelven index feos. Todo tiene visual + acción inmediata.
+
+**Cómo usar la nueva app (guía corta):**
+1. **`flujo app`** (o `--desktop` para nativa sin browser/terminal).
+2. Hub pro aparece (HTMLs servidos + APIs activas o fallback estático).
+3. Intake → brief + match (real o local).
+4. Abre visualizadores embebidos (SVG/plano) desde hub.
+5. Comandos + export tokens (live cuando app activa).
+6. **Delegación:** usa sección "Delegar a Agentes Especializados" (tarea + 5 roles con prompts completos copiables y live paralelo). Lanza en clones.
+7. Para parar: Ctrl+C. Todo local-first y gratis.
+
+(Directo HTML = fallback útil. `flujo app` = APIs + delegación + live.)
 
 ---
 
@@ -402,21 +422,46 @@ pieza está en [`docs/INTAKE_JSON.md`](docs/INTAKE_JSON.md).
 
 ---
 
-## 🌐 La app / recepción automática (estado y plan)
+## 🌐 La app (nueva realidad: `flujo app` como entrada diaria única + UI real = HTMLs + backend)
 
-Pregunta clave del dueño: *"¿la app será Gradio, o se integrará con mi correo /
-una API para recibir pedidos aunque esté ausente?"*
+**Entrada diaria clara y obligatoria (única recomendada):** `flujo app` (o `flujo app --desktop`).
 
-### Hoy (estado real)
-- `flujo serve` / `flujo app` lanza el **workspace principal** (el hub pro en `context/flujo_hub.html` + visualizadores).
-  - Abre directamente el hub (intake + visualizadores + herramientas).
-  - `flujo app --desktop` usa pywebview para ventana tipo app nativa (sin barra de browser).
-  - `flujo serve --legacy` usa el editor Gradio antiguo.
-- Es local. El hub es el punto de entrada diario recomendado.
-- Recepción automática (webhook/email → job) es trabajo futuro.
+Lanza **la app real**: servidor Python (stdlib) + APIs reales + sirve los tres HTMLs de context/ como UI pro completa + bridge pywebview (desktop nativo, tray, JS↔Python directo).
+
+**Los tres HTMLs = la UI de la app real:**
+- `context/flujo_hub.html` — hub principal (intake, visual teaser, comandos, delegación).
+- `context/svg_visualizer.html` — visualizador embebido real de todas las piezas SVG por grupos exactos de /svg.
+- `context/plano_demo.html` — demo interactivo del motor de planos + rider + costos.
+
+Cuando `flujo app` corre: UI detecta backend → "CONECTADO (APIs reales + delegate)", carga brand/SVG/jobs live, permite crear jobs reales, delegate paralelo, SSE.
+Abrir cualquiera de los .html directo: funciona 100% (fallback estático, datos mock/local).
+
+Arquitectura:
+- UI = HTMLs pro dark brand-enforced (de projects/flujo/flujo.json).
+- Backend ligero (src/flujo/web/hub.py): /api/ping, /api/load-flujo-brand, /api/list-svg-works, /api/list-jobs, /api/parse-real-pedido, /api/run-safe-command, /api/create-job-draft, /api/delegate (5 roles), /api/events (SSE), /api/export-tokens, PWA on-the-fly.
+- Desktop y packaging gratis: `flujo package` → .exe (PyInstaller + icon + launcher desktop).
+- Fallback estático perfecto.
+
+El hub (`context/flujo_hub.html` servido) es el workspace pro principal diario.
+
+- `flujo serve --legacy`: solo Gradio antiguo (legacy).
+- Todo free, local-first, Windows-first (`py`).
+
+### Cómo usar la app (guía corta — usa el hub)
+1. `py -m pip install -e .` (una vez).
+2. **`flujo app`** (o `flujo app --desktop`) — **entrada diaria única obligatoria**.
+3. Hub aparece (con backend APIs live o fallback estático perfecto).
+4. **Intake rápido:** pega pedido en hub → "Generar brief ordenado + match" (real vía API o local) → copia + acción.
+5. Abre visualizadores embebidos **desde hub**: SVG (por grupos exactos) + Plano demo.
+6. Herramientas: botones copy (usa `py -m flujo ...` en Windows). Live cmds vía app.
+7. **Delegación multi-agente paralela (5 roles):** sección "Delegar a Agentes Especializados" en el hub. Ingresa tarea → copia prompt completo por rol o usa multi-select + "Delegar seleccionados (live API)". Lanza cada uno en clon git separado. Roles: Visual Polish, Pipeline & Integration, Brand Guardian, Future/Modern, **Packaging & Distribution**.
+8. Exporta con render/extract.
+9. Para parar: Ctrl+C. 100% local/gratis.
+
+**Siempre:** `flujo app` primero + lee hub + LAST_HANDOFF. Recepción auto es futuro. Intake hoy vía hub o `flujo job new --email`.
 
 ### Plan recomendado (para "recibir aunque esté ausente")
-La arquitectura objetivo separa **recepción** de **operación**:
+La arquitectura objetivo separa **recepción** de **operación** (igual que antes, JSON como contrato):
 
 ```
    Colega/Jefe                 RECEPCIÓN (24/7)            OPERACIÓN
@@ -433,16 +478,52 @@ La arquitectura objetivo separa **recepción** de **operación**:
 ```
 
 Opciones técnicas (a decidir; ninguna implementada aún):
-- **Correo (recomendado para empezar):** un poller IMAP lee un buzón dedicado,
-  extrae JSON adjunto o cuerpo, y responde automáticamente *"pedido recibido,
-  folio #…"*. Cero infraestructura nueva, funciona aunque el dueño duerma.
-- **Formulario web + API:** una página simple genera el JSON válido (evita que
-  el colega se equivoque en el esquema) y lo postea a un endpoint.
-- **Webhook de WhatsApp/Telegram:** para canales de mensajería.
+- **Correo (recomendado para empezar):** poller IMAP...
+- **Formulario web + API**...
+- **Webhook de WhatsApp/Telegram**...
 
-> **Decisión pendiente del dueño.** Mientras tanto, el formato de intercambio
-> (JSON) ya queda fijado, así cualquier canal que se elija después solo tiene
-> que producir ese JSON. Ver opciones y trade-offs en `docs/INTAKE_JSON.md`.
+> **Decisión pendiente.** El contrato JSON ya está fijado (ver `docs/INTAKE_JSON.md`). La app actual prepara el terreno.
+
+---
+
+## 🤝 Delegating to Specialized Agents
+
+**Modelo formal de delegación multi-agente (paralelo real en clones git separados).**
+
+Principal (dueño o IA) divide trabajo y lanza sub-agentes en **clones git independientes** (nunca escribir directo en repo principal).
+
+Cada sub-agente:
+- **Obligatorio:** ejecuta `flujo app` (o `--desktop`) como entrada diaria única.
+- Lee `context/LAST_HANDOFF.md` + `docs/AGENT_OPERATING_MANUAL.md`.
+- Usa el **hub** (dentro de la app) para intake/visual + delegación.
+- Entrega **su propio airdrop** independiente (con handoff propio).
+
+El principal integra airdrops + actualiza LAST_HANDOFF central. **Siempre referencia hub + LAST_HANDOFF como fuente.**
+
+**Coordinación (estricta):**
+- Visual Polish revisa **todos** outputs visuales finales.
+- Brand Guardian valida **antes** de tocar `projects/flujo/flujo.json` o linea editorial.
+- Packaging & Distribution coordina con Pipeline en paths, assets y launchers.
+- Future/Modern **nunca** toca core sin aprobación explícita Pipeline+Brand en su handoff.
+
+**Roles actuales (5 — nombres exactos):**
+- **Visual Polish Agent**: Pulido visual total + brand enforcement en todos los HTMLs, SVGs, previews, tapiz. Fuente única: `projects/flujo/flujo.json` + linea_editorial.md. Dark pro premium.
+- **Pipeline & Integration Agent**: CLI, jobs, intake, render, airdrop, hub backend (SSE, delegate, tokens), tests. Dueño de que `flujo app` sea sólido.
+- **Brand Guardian**: Custodio de `projects/flujo/` (flujo.json, linea_editorial, paletas). Valida todo lo que tocan los demás.
+- **Future/Modern Agent**: Nuevas integraciones (webhooks, tokens, live extendido, etc.). Prototipos solo; no core sin revisión.
+- **Packaging & Distribution Agent**: `flujo package` + PyInstaller (gratis), pywebview desktop, bundling de assets (context/svg/brand), paths frozen, launcher onefile/onedir, icono, tray, hints Inno Setup. Coordina con Pipeline/Brand.
+
+**Cómo delegar desde el hub (método recomendado diario — usa dentro de `flujo app`):**
+1. `flujo app` (o `--desktop`) — abre el workspace pro (UI HTMLs + backend APIs).
+2. Baja a sección **"Delegar a Agentes Especializados"** (incluye guía práctica copyable para humano/IA).
+3. Ingresa la tarea (usa botones de ejemplo o edita).
+4. Selecciona múltiples roles (checkboxes = paralelo real) y pulsa "Copiar prompt completo" o "Delegar seleccionados (live API)".
+5. Pega prompts en clones separados. Cada sub-agente: `flujo app` + LAST_HANDOFF primero.
+6. (CLI): `flujo delegate packaging "mejorar..."` (usa templates idénticos).
+
+Prompts listos-para-copiar (5 templates de alta calidad, incl Packaging) + modelo completo: **docs/AGENT_OPERATING_MANUAL.md**. Templates centralizados en hub.py y sincronizados con flujo_hub.html.
+
+Todo alineado al estado actual: los tres HTMLs = UI de la app real con backend. Brand = 'flujo'. App = gratis/local-first. **Fuente de verdad: `flujo app` → hub + context/LAST_HANDOFF.md**.
 
 ---
 
@@ -462,7 +543,7 @@ Opciones técnicas (a decidir; ninguna implementada aún):
 ## Entender el repo rápido
 
 Lee primero:
-- `context/flujo_hub.html` (tu punto de entrada diario)
+- Ejecuta `flujo app` (entrada diaria) / abre `context/flujo_hub.html` (pro workspace)
 - `projects/README.md`
 
 El resto (código, docs, herramientas) soporta el flujo texto → imagen. Ver `docs/REPO_MAP.md` solo si necesitas profundidad.
@@ -487,7 +568,8 @@ src/flujo/        # paquete Python (CLI + módulos)
   dashboard/      # reporte diario con scoring
   templates/      # plantillas base de jobs + JSX
 tools/piezas_vectoriales/plantillas/   # INDEX_FORMATOS.json + config.json base
-scripts/          # utilidades: checkpoint.sh, apply_airdrop.sh, app.py (Gradio), cleanup_safe.sh
+scripts/          # utilidades: checkpoint.sh, apply_airdrop.sh, app.py (legacy Gradio), cleanup_safe.sh
+# (app principal ahora en src/flujo/web/hub.py + CLI `flujo app`)
 tests/            # pytest (69+ tests)
 docs/             # documentación detallada (CLI, formatos, intake JSON, etc.)
 schemas/          # esquema JSON de intake + ejemplos
@@ -548,7 +630,8 @@ flujo index [--rebuild | --duplicates]
 
 # Operación diaria
 flujo daily                   # dashboard del día
-flujo app / flujo serve       # workspace principal (hub + visualizadores)
+flujo app                     # nueva app principal (hub pro workspace) — entrada diaria
+flujo serve                   # alias (usa --legacy solo para Gradio viejo)
 flujo clean [--generated]
 
 # Airdrops (colaboración / mejoras)

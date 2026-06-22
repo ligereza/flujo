@@ -44,21 +44,22 @@ Nota: `projects/tapiz/vibecode.egg-info/` está trackeado históricamente. No ag
 
 ## Documentación viva + entrada principal
 
-**Abre primero (siempre):** `context/flujo_hub.html`
+**Abre primero (siempre):** ejecuta `flujo app` (o abre `context/flujo_hub.html`)
 
-Este es el **workspace principal**:
-- Intake de pedidos + parser de formatos
-- Visualizador SVG completo (embebido, grupos Eventos/Suplementos como en /svg)
-- Plano Demo interactivo (con flujo)
-- Sección raw para agentes + links a visualizadores
+El hub es el **workspace principal pro** (HTMLs servidos por backend cuando usas la app):
+- Intake + match real
+- Visualizadores SVG/plano embebidos
+- Comandos + tokens live + Brand Validator
+- Sección "Delegar a Agentes Especializados" (guía práctica + prompts copiables para 5 roles) + RAW para agentes
+- APIs + SSE + PWA cuando `flujo app` corre
 
 | Ruta | Rol |
 |---|---|
-| `context/flujo_hub.html` | Entrada diaria obligatoria |
-| `context/svg_visualizer.html` | Visualizador real de piezas SVG (no uses índices de carpeta) |
+| `flujo app` (o context/flujo_hub.html) | Entrada diaria obligatoria + hub pro workspace (UI + delegación) |
+| `context/svg_visualizer.html` | Visualizador real de piezas SVG (embebido, grupos exactos) |
 | `context/plano_demo.html` | Demo de planos + riders + costos |
-| `context/LAST_HANDOFF.md` | Estado + tareas para agentes (bajo tokens) |
-| `docs/AGENT_OPERATING_MANUAL.md` | Los dos flujos de trabajo para IA |
+| `context/LAST_HANDOFF.md` | Estado + tareas (bajo tokens) |
+| `docs/AGENT_OPERATING_MANUAL.md` | Dos flujos + modelo delegación multi-agente (5 roles) |
 | `projects/README.md` | Satélites alineados a flujo |
 
 El resto de docs son de soporte o histórico. No los leas primero.

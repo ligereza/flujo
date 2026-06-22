@@ -13,7 +13,8 @@ from typing import Any, Dict, List, Tuple
 
 def _load_flujo_styles() -> Dict[str, Any]:
     """Carga estilos desde flujo si existe (integración con línea editorial)."""
-    flujo_path = Path("projects/flujo/flujo.json")
+    from ..paths import asset_root
+    flujo_path = asset_root() / "projects" / "flujo" / "flujo.json"
     if flujo_path.exists():
         try:
             data = json.loads(flujo_path.read_text(encoding="utf-8"))

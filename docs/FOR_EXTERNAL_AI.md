@@ -1,15 +1,15 @@
 # Guía para IAs externas que reciben este repositorio
 
 **Lee primero (en orden):**
-1. `context/flujo_hub.html` (el workspace principal con visualizadores, intake y datos crudos)
+1. Ejecuta `flujo app` (o abre `context/flujo_hub.html` — workspace principal con visualizadores, intake, UI de delegación a agentes y datos crudos)
 2. `context/LAST_HANDOFF.md`
-3. `docs/AGENT_OPERATING_MANUAL.md`
+3. `docs/AGENT_OPERATING_MANUAL.md` (incluye modelo de delegación a sub-agentes especializados)
 
 El resto solo si es necesario.
 
 ## Orden de lectura recomendado (ahorra tokens)
 
-1. Abre `context/flujo_hub.html` (hub con visualizadores SVG/Plano, intake de pedidos, comandos y sección raw para agentes).
+1. Ejecuta `flujo app` (o abre `context/flujo_hub.html` — hub con visualizadores SVG/Plano, intake de pedidos, sección delegación a agentes especializados + comandos/raw).
 2. `context/LAST_HANDOFF.md` (estado actual y tareas).
 3. `projects/flujo/` (con sus ejemplos/ y json/ para extraer estética real).
 4. Revisa ejemplos reales en los proyectos para entender el flujo texto ↔ imagen.

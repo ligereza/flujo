@@ -3,6 +3,7 @@
 ## Política actual
 
 **Usa primero el workspace moderno:** `context/flujo_hub.html` + visualizadores. Muchos artefactos antiguos ya se manejan ignorando en .gitignore.
+**Siempre empieza por `flujo app` + hub + LAST_HANDOFF** antes de limpiar o reanudar (optimiza flujo diseñador: pedido → `flujo app`/hub → real acciones/visualizadores → export). **Entrada obligatoria: ejecuta `flujo app` (o --desktop) que sirve el hub pro + APIs; abre hub y LAST_HANDOFF.md como fuente.**
 
 El repo debe mantenerse chico y útil:
 

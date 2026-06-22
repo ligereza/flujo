@@ -2,15 +2,15 @@
 
 Este repo se llama **flujo** — arte y automatización.
 
-**Punto de entrada obligatorio para agentes:** `context/flujo_hub.html`
+**Punto de entrada obligatorio (diario) para agentes:** `flujo app` (lanza app + hub pro).
 
-Desde el hub podés:
+Desde el hub (o abriendo context/flujo_hub.html):
 - Pegar pedidos y generar brief + match de formatos + comandos
-- Usar visualizadores reales de SVG (Eventos vs Suplementos) y Plano Demo
-- Ver el estado actual y tareas
+- Usar visualizadores reales de SVG y Plano Demo
+- Ver estado/tareas + copiar prompts listos para delegar a agentes especializados (5 roles: Visual Polish, Pipeline, Brand, Future, Packaging) desde sección práctica del hub
 
 Lee en orden:
-1. `context/flujo_hub.html`
+1. Ejecuta `flujo app` (o abre `context/flujo_hub.html`)
 2. `context/LAST_HANDOFF.md`
 3. `docs/AGENT_OPERATING_MANUAL.md`
 
@@ -32,7 +32,7 @@ Herramientas activas: instaloader (solo), análisis de colores + OCR, export a A
 Privacidad: `flujo privacy scan/sanitize` antes de IAs externas.
 
 Reglas: Español primero, flujo siempre, Windows con `py`.
-`README.md`, `context/ESTADO.md`, `docs/RELEASE_v016.md`.
+Para reanudación: usa `context/LAST_HANDOFF.md` + `docs/AGENT_OPERATING_MANUAL.md` (prioriza sobre legacy como ESTADO.md o RELEASE_v016.md).
 
 **No uses yt-dlp. No crees venvs pesados. Usa `py`.**
 

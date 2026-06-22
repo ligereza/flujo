@@ -126,3 +126,48 @@ def parse_email_file(filepath: Path) -> Dict:
         return parse_email_content(filepath.read_text(encoding='utf-8'))
     except Exception as e:
         return {'error': str(e)}
+
+
+# --- Pedido parser for hub API (real backend integration) ---
+# Returns structure compatible with hub JS fallback + enhanced match
+def parse_pedido_text(text: str) -> dict:
+    """Parse free text pedido into structured brief + match hints.
+    Used by flujo app hub API for real Python logic (vs pure JS fallback).
+    """
+    if not text or not text.strip():
+        return {"tipo": "desconocido", "error": "Empty input"}
+    low = text.lower()
+    # Reuse existing detectors where possible
+    project_type = detect_project_type(text)
+    sections = extract_sections(text)
+    vol_match = re.search(r'(\d+)', text)
+    vol = int(vol_match.group(1)) if vol_match else 7
+
+    # Map to formato/tool known in hub
+    tipo_map = {
+        'flyer': {'tipo': 'flyer', 'medidas': sections.get('medidas', '10x14'), 'formato': 'evt_flyer_fisico_10x14', 'tool': 'render'},
+        'etiqueta': {'tipo': 'etiqueta', 'medidas': sections.get('medidas', '16.5x6.5'), 'formato': 'sup_etiqueta_165x65', 'tool': 'render'},
+        'rider': {'tipo': 'rider', 'medidas': 'A4', 'formato': 'rider_eventos_a4', 'tool': 'plano'},
+        'plano': {'tipo': 'plano', 'medidas': 'según evento', 'formato': 'plano_stand', 'tool': 'plano'},
+        'stand': {'tipo': 'plano', 'medidas': 'según evento', 'formato': 'plano_stand', 'tool': 'plano'},
+        'cotizacion': {'tipo': 'cotizacion', 'medidas': '', 'formato': 'cotizaciones', 'tool': 'cotizaciones'},
+        'cartelera': {'tipo': 'cartelera', 'medidas': '1080x1920', 'formato': 'evt_cartelera', 'tool': 'render'},
+        'ig': {'tipo': 'post_ig', 'medidas': '1080x1350', 'formato': 'evt_post_ig', 'tool': 'render'},
+    }
+    match = tipo_map.get(project_type, {'tipo': project_type or 'desconocido', 'medidas': sections.get('medidas', ''), 'formato': '', 'tool': 'render'})
+
+    pub = 'interno' if ('interno' in low or 'empresa' in low) else 'productora'
+    formato = match['formato']
+    data = {
+        'tipo': match['tipo'],
+        'medidas': match.get('medidas') or sections.get('medidas', 'definir'),
+        'formato': formato,
+        'tool': match['tool'],
+        'pub': pub,
+        'vol': vol,
+        'notas': text.strip()[:300],
+        'sections': sections,
+    }
+    if not formato:
+        data['sugerencia'] = 'NO MATCH - proponer en projects/flujo/ o LAST_HANDOFF'
+    return data

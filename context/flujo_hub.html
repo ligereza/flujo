@@ -4,49 +4,71 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>FLUJO • Workspace</title>
+<link rel="manifest" href="/manifest.json">
 <style>
+  /*
+  =====================================================================
+  BRAND ENFORCED — flujo (projects/flujo/flujo.json) — STRICT VISUAL QA
+  =====================================================================
+  - EXACT colors ONLY: ink #1f2a24, accent #2d5a4a, paper #f8f1e3 (SVG print ONLY), support #675f55, alert #c2410f
+  - Dark pro theme EXCLUSIVELY: #0a0a0a bg, #141414 panels — ZERO light/paper/chrome outside intended SVG paper areas
+  - Typography: Inter / system sans, 700/600 weights for hierarchy, letter-spacing 0.04-0.08em controlled
+  - Layout: generous spacing (section 28px, card padding 18px+), pro cards (border-radius:8px), modular blocks, subtle frames, safe margins
+  - Motifs: accent left bars on .section-title, uppercase pro-labels, linear-gradient accent buttons, clean borders
+  - FORBIDDEN: any neon/cyan (#00f0ff etc), hacker/matrix/glitch, light UIs, tight spacing, vibecoding experimental, low contrast, non-Inter
+  All outputs (hub, svg_visualizer.html, plano_demo.html, tapiz/*.html, previews, SVGs, renders) MUST use this.
+  Run "VALIDAR BRAND AHORA" before EVERY export/deliverable. Designer trust depends on premium consistent feel.
+  Source of truth: projects/flujo/flujo.json — edit colors there + sync :root here.
+  */
   :root {
     --bg: #0a0a0a; --panel: #141414; --panel2: #1a1a1a;
     --border: #2a2a2a; --text: #e8e8e8; --muted: #888;
-    --cyan: #00f0ff; --accent: #173F2F; --green: #2ecc71; --orange:#c2410f;
+    /* flujo brand exact from projects/flujo/flujo.json (adapted for dark pro UI) — NO legacy cyan/neon */
+    --flujo-ink: #1f2a24;
+    --flujo-accent: #2d5a4a;
+    --flujo-paper: #f8f1e3;
+    --flujo-support: #675f55;
+    --flujo-alert: #c2410f;
+    --accent: #2d5a4a;
+    /* use --flujo-alert for orange, --flujo-support for muted greens if needed */
   }
   * { box-sizing: border-box; margin:0; padding:0; }
   body { background: var(--bg); color: var(--text); font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 14px; line-height: 1.5; }
   .app { max-width: 1280px; margin: 0 auto; padding-bottom: 40px; }
-  header { background: var(--panel); border-bottom: 1px solid var(--border); padding: 10px 20px; display: flex; align-items: center; gap: 14px; }
+  header { background: var(--panel); border-bottom: 1px solid var(--border); padding: 14px 24px; display: flex; align-items: center; gap: 14px; } /* generous header padding */
   header h1 { font-size: 18px; font-weight: 700; letter-spacing: -0.02em; }
-  .badge { background: var(--accent); color: #fff; padding: 3px 10px; border-radius: 4px; font-size: 11px; font-weight: 600; }
+  .badge { background: var(--flujo-accent); color: #fff; padding: 4px 12px; border-radius: 4px; font-size: 11px; font-weight: 600; letter-spacing: 0.04em; }
   .spacer { flex: 1; }
-  .nav-link { background: var(--panel2); border: 1px solid var(--border); color: var(--text); padding: 6px 12px; border-radius: 4px; font-size: 12px; text-decoration: none; }
-  .nav-link:hover { border-color: var(--cyan); }
-  .section { margin: 22px 20px; }
-  .section-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 10px; display: flex; align-items: center; gap: 6px; }
-  .section-title::before { content: ''; width: 3px; height: 14px; background: var(--cyan); border-radius: 2px; }
-  .card { background: var(--panel); border: 1px solid var(--border); border-radius: 6px; padding: 14px; transition: all .15s; }
-  .card:hover { border-color: var(--cyan); }
-  .fmt-card { background: var(--panel); border: 1px solid var(--border); border-radius: 6px; padding: 10px 12px; cursor: pointer; min-width: 132px; transition: all .15s; }
-  .fmt-card:hover { border-color: var(--cyan); }
-  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 10px; }
+  .nav-link { background: var(--panel2); border: 1px solid var(--border); color: var(--text); padding: 8px 14px; border-radius: 4px; font-size: 12px; text-decoration: none; }
+  .nav-link:hover { border-color: var(--accent); }
+  .section { margin: 28px 24px; } /* breathing room */
+  .section-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+  .section-title::before { content: ''; width: 3px; height: 14px; background: var(--accent); border-radius: 2px; }
+  .card { background: var(--panel); border: 1px solid var(--border); border-radius: 8px; padding: 18px; transition: all .15s; } /* pro padding, radius */
+  .card:hover { border-color: var(--accent); }
+  .fmt-card { background: var(--panel); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; cursor: pointer; min-width: 132px; transition: all .15s; }
+  .fmt-card:hover { border-color: var(--accent); }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 14px; } /* more space */
   .grid-3 { grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
-  .btn { background: linear-gradient(135deg, var(--cyan), #7000ff); color: #000; border: none; border-radius: 4px; padding: 7px 14px; font-weight: 700; font-size: 12px; cursor: pointer; text-transform: uppercase; letter-spacing: 0.05em; }
+  .btn { background: linear-gradient(135deg, var(--accent), #1a3f2e); color: #fff; border: none; border-radius: 5px; padding: 9px 16px; font-weight: 700; font-size: 12px; cursor: pointer; text-transform: uppercase; letter-spacing: 0.05em; }
   .btn:hover { opacity: .92; }
-  .btn-sec { background: var(--panel2); color: var(--text); border: 1px solid #333; }
-  .btn-sec:hover { border-color: var(--cyan); }
-  .tool-btn { background: var(--panel); border: 1px solid var(--border); color: var(--text); padding: 7px 10px; border-radius: 4px; font-size: 12px; cursor: pointer; text-align: center; transition: all .15s; }
-  .tool-btn:hover { border-color: var(--cyan); background: rgba(0,240,255,.06); }
-  .preview { border: 1px solid var(--border); background: #0d0d0d; border-radius: 6px; min-height: 140px; display:flex; align-items:center; justify-content:center; overflow:hidden; }
+  .btn-sec { background: var(--panel2); color: var(--text); border: 1px solid var(--border); }
+  .btn-sec:hover { border-color: var(--accent); background: rgba(45,90,74,.08); }
+  .tool-btn { background: var(--panel); border: 1px solid var(--border); color: var(--text); padding: 9px 12px; border-radius: 5px; font-size: 12px; cursor: pointer; text-align: center; transition: all .15s; }
+  .tool-btn:hover { border-color: var(--accent); background: rgba(45,90,74,.06); }
+  .preview { border: 1px solid var(--border); background: var(--bg); border-radius: 8px; min-height: 140px; display:flex; align-items:center; justify-content:center; overflow:hidden; padding: 8px; }
   .preview svg { max-width: 100%; max-height: 100%; box-shadow: 0 4px 20px rgba(0,0,0,.5); }
-  .agent-raw { background: var(--panel2); border: 1px solid var(--border); padding: 12px; border-radius: 4px; font-size: 11px; line-height: 1.35; font-family: ui-monospace, monospace; color: var(--text); }
+  .agent-raw { background: var(--panel2); border: 1px solid var(--border); padding: 14px; border-radius: 6px; font-size: 11px; line-height: 1.4; font-family: ui-monospace, monospace; color: var(--text); }
   .muted { color: var(--muted); font-size: 12px; }
-  .status-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px; }
-  .status-val { font-size: 21px; font-weight: 600; }
-  input, textarea, select { width: 100%; background: var(--panel2); border: 1px solid var(--border); border-radius: 4px; padding: 8px 10px; color: var(--text); font-size: 13px; font-family: inherit; }
-  input:focus, textarea:focus { border-color: var(--cyan); outline: none; }
-  .row { display: flex; gap: 8px; }
-  .pro-label { font-size: 10px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin-bottom: 3px; }
-  .sep { height: 1px; background: var(--border); margin: 18px 0; }
+  .status-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 14px; }
+  .status-val { font-size: 22px; font-weight: 600; letter-spacing: -0.01em; }
+  input, textarea, select { width: 100%; background: var(--panel2); border: 1px solid var(--border); border-radius: 5px; padding: 10px 12px; color: var(--text); font-size: 13px; font-family: inherit; }
+  input:focus, textarea:focus { border-color: var(--accent); outline: none; }
+  .row { display: flex; gap: 10px; }
+  .pro-label { font-size: 10px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin-bottom: 4px; }
+  .sep { height: 1px; background: var(--border); margin: 22px 0; }
   .small { font-size: 11px; }
-  footer { margin: 30px 20px 10px; font-size: 11px; color: var(--muted); border-top: 1px solid var(--border); padding-top: 10px; }
+  footer { margin: 36px 24px 12px; font-size: 11px; color: var(--muted); border-top: 1px solid var(--border); padding-top: 14px; }
 </style>
 </head>
 <body>
@@ -55,30 +77,34 @@
 <header>
   <h1>FLUJO</h1>
   <span class="badge">Workspace • Menú principal</span>
+  <span id="header-conn" class="small" style="margin-left:8px; padding:2px 8px; border-radius:3px; background:#1a1a1a; border:1px solid #2a2a2a; color:#888; font-size:10px;">Estático (fallback)</span>
   <div class="spacer"></div>
   <a class="nav-link" href="svg_visualizer.html" target="_blank">Visualizador SVG</a>
   <a class="nav-link" href="plano_demo.html" target="_blank">Plano Demo</a>
+  <a class="nav-link" href="../projects/tapiz/vibecode_spaces.html" target="_blank">Tapiz (estructura pro • brand)</a>
   <a class="nav-link" href="../docs/AGENT_OPERATING_MANUAL.md" target="_blank">Manual Agentes</a>
+  <a class="nav-link" href="LAST_HANDOFF.md" target="_blank">LAST_HANDOFF</a>
   <button class="btn-sec" onclick="copyCmd('py -m flujo daily', this)">Daily</button>
 </header>
+<div style="background: rgba(194,65,15,0.18); color: #c2410f; font-size:10px; padding:5px 24px; border-bottom:2px solid var(--flujo-alert); text-align:center; font-weight:700; letter-spacing:0.06em;">BRAND ENFORCED • TODAS SALIDAS VISUALES DEBEN PASAR "VALIDAR BRAND AHORA" ANTES DE EXPORTAR (paleta EXACTA projects/flujo/flujo.json). Paper #f8f1e3 SOLO en SVGs internos. NO neon/light/chrome. Violaciones = daño cliente. Ejecuta siempre + FORZAR GUARD. Legacy marcados (no usar para visuals pro). `flujo app` = entrada.</div>
 
 <!-- STATUS -->
 <div class="section">
   <div class="status-grid">
     <div class="card">
       <div class="pro-label">VERSIÓN</div>
-      <div class="status-val">0.34.10</div>
+      <div class="status-val" id="status-version">0.34.10</div>
       <div class="small muted">+ flujo + cotizaciones + visualizers</div>
     </div>
     <div class="card">
       <div class="pro-label">ESTADO</div>
-      <div class="status-val" style="color:var(--green)">Listo</div>
-      <div class="small muted">Health OK • Tests OK</div>
+      <div class="status-val" style="color:var(--accent)" id="status-state">Listo</div>
+      <div class="small muted" id="status-detail">Health OK • Tests OK</div>
     </div>
     <div class="card">
-      <div class="pro-label">ÚLTIMO HANDOFF</div>
-      <div class="small">Hub central + visualizadores SVG + plano pro + 2 flujos agentes</div>
-      <a href="LAST_HANDOFF.md" class="small" style="color:var(--cyan)">ver LAST_HANDOFF →</a>
+      <div class="pro-label">CONEXIÓN BACKEND</div>
+      <div class="small" id="conn-status" style="color:var(--accent);font-weight:600">Estático (fallback)</div>
+      <div class="small muted">APIs reales (parse/jobs/delegate/SSE) + live cuando <code>flujo app</code>. HTML directo = fallback estático perfecto. Los 3 HTMLs = UI de la app.</div>
     </div>
     <div class="card">
       <div class="pro-label">Flujo principal</div>
@@ -98,20 +124,29 @@
     <button class="btn btn-sec" onclick="window.open('../projects/flujo/flujo.json','_blank')">flujo.json</button>
   </div>
   <div class="small muted" style="margin-top:4px">Usa los botones «← Volver al Hub principal (menú)» dentro de los visualizadores para regresar.</div>
+  <div style="margin-top:6px;font-size:9px;color:#2d5a4a;font-weight:600;">BRAND ENFORCED: todos los visuals usan paleta exacta projects/flujo/flujo.json. Corre VALIDAR BRAND antes de export.</div>
 </div>
 
 <!-- INTAKE PRO (USUARIO) -->
 <div class="section">
   <div class="section-title">Intake rápido (pegado manual de pedido o email)</div>
   <div class="card">
-    <div class="pro-label">Pega aquí el pedido / correo / mensaje</div>
-    <textarea id="pedido-input" style="height:68px" placeholder="necesito flyer horizontal 10x14 para evento con 7 voluntarios, testeo incluido..."></textarea>
+    <div class="pro-label">Pega aquí el pedido / correo / mensaje <span class="small muted">(o arrastra .txt / .json / .md)</span></div>
+    <textarea id="pedido-input" style="height:68px" placeholder="necesito flyer horizontal 10x14 para evento con 7 voluntarios, testeo incluido..." ondrop="handleDrop(event)" ondragover="event.preventDefault()"></textarea>
     <div class="row" style="margin-top:8px; gap:8px">
       <button onclick="parsePedido()" class="btn">Generar brief ordenado + match</button>
       <button onclick="applyFlujoToBrief()" class="btn btn-sec">Aplicar flujo</button>
       <button onclick="generatePreview()" class="btn btn-sec">Generar preview visual</button>
+      <button onclick="runRealCommandFromInput()" class="btn btn-sec" title="Ejecuta via /api/run-safe-command (solo si backend activo)">Ejecutar en backend</button>
     </div>
     <div id="pedido-result" class="agent-raw" style="margin-top:10px; min-height:60px; display:none"></div>
+    <div class="small muted" style="margin-top:4px">Drag & drop funciona en modo app (flujo app). Los archivos se leen en cliente y pegan al textarea.</div>
+  </div>
+  <!-- Real backend actions (visible always; use /api when connected, safe no-op otherwise) -->
+  <div class="row" style="margin-top:6px; gap:8px; flex-wrap:wrap">
+    <button onclick="createDraftFromInput()" class="btn btn-sec" style="font-size:11px" title="Crea job real en disco vía /api/create-job-draft (solo con flujo app)">+ Crear job draft real</button>
+    <button onclick="refreshLiveJobsAndShow()" class="btn btn-sec" style="font-size:11px" title="Lista jobs live desde backend">Jobs live</button>
+    <button onclick="runSafeCommand('flujo job list', this)" class="btn btn-sec" style="font-size:11px" title="Ejecuta vía backend seguro">▶ job list (live)</button>
   </div>
 </div>
 
@@ -124,18 +159,18 @@
       <div style="font-weight:600">Eventos / Flyers / Riders</div>
       <div class="small muted">flyer_horizontal_minimo • prueba-rd • rider intervencion • etiquetas</div>
       <div class="preview" style="margin:8px 0; height:92px">
-        <svg width="200" height="70" viewBox="0 0 200 70"><rect x="4" y="4" width="192" height="62" rx="3" fill="#111" stroke="#2d5a4a" stroke-width="2"/><text x="14" y="28" fill="#e8e8e8" font-size="11" font-weight="700">FLYER EVENTO</text><rect x="14" y="36" width="90" height="18" rx="2" fill="#1a1a1a" stroke="#173F2F"/><text x="20" y="49" fill="#00f0ff" font-size="9">10x14 • editable</text></svg>
+        <svg width="200" height="70" viewBox="0 0 200 70"><rect x="4" y="4" width="192" height="62" rx="3" fill="#111" stroke="#2d5a4a" stroke-width="2"/><text x="14" y="28" fill="#e8e8e8" font-size="11" font-weight="700">FLYER EVENTO</text><rect x="14" y="36" width="90" height="18" rx="2" fill="#1a1a1a" stroke="#2d5a4a"/><text x="20" y="49" fill="#2d5a4a" font-size="9">10x14 • editable</text></svg>
       </div>
-      <div class="small" style="color:var(--cyan)">Abrir visualizador completo →</div>
+      <div class="small" style="color:var(--accent)">Abrir visualizador completo →</div>
     </div>
 
     <div class="card fmt-card" onclick="window.open('svg_visualizer.html','_blank')">
       <div style="font-weight:600">Suplementos RD</div>
       <div class="small muted">Línea completa: impulso, hongos, magnesio, creatina, proteína, pre-fiesta</div>
       <div class="preview" style="margin:8px 0; height:92px">
-        <svg width="200" height="70" viewBox="0 0 200 70"><rect x="2" y="2" width="196" height="66" rx="2" fill="#0d0d0d" stroke="#2d5a4a"/><circle cx="40" cy="34" r="22" fill="#173F2F" opacity=".3"/><circle cx="100" cy="34" r="18" fill="#315EE8" opacity=".25"/><text x="132" y="30" fill="#e8e8e8" font-size="9">7 productos</text><text x="132" y="44" fill="#888" font-size="8">2800×2000</text></svg>
+        <svg width="200" height="70" viewBox="0 0 200 70"><rect x="2" y="2" width="196" height="66" rx="2" fill="#0d0d0d" stroke="#2d5a4a"/><circle cx="40" cy="34" r="22" fill="#2d5a4a" opacity=".3"/><circle cx="100" cy="34" r="18" fill="#675f55" opacity=".35"/><text x="132" y="30" fill="#e8e8e8" font-size="9">7 productos</text><text x="132" y="44" fill="#888" font-size="8">2800×2000</text></svg>
       </div>
-      <div class="small" style="color:var(--cyan)">Ver todos los editables y vectorizados →</div>
+      <div class="small" style="color:var(--accent)">Ver todos los editables y vectorizados →</div>
     </div>
 
     <div class="card" style="display:flex; align-items:center; justify-content:center; flex-direction:column; text-align:center">
@@ -178,8 +213,14 @@
     <div onclick="copyCmd('py -m flujo daily', this)" class="tool-btn">daily</div>
     <div onclick="copyCmd('python -m src.flujo.templates.blender_setup projects/plano/ejemplos/evento_ejemplo.json', this)" class="tool-btn">blender_setup</div>
     <div onclick="window.open('plano_demo.html','_blank')" class="tool-btn">plano demo</div>
+    <!-- LIVE backend commands (only work when server running) -->
+    <div onclick="runSafeCommand('flujo health', this)" class="tool-btn" title="Ejecuta vía /api/run-safe-command">▶ health (live)</div>
+    <div onclick="runSafeCommand('flujo version', this)" class="tool-btn" title="Ejecuta vía /api/run-safe-command">▶ version (live)</div>
+    <div onclick="runSafeCommand('flujo daily', this)" class="tool-btn" title="Ejecuta vía /api/run-safe-command">▶ daily (live)</div>
+    <div onclick="runSafeCommand('flujo handoff last', this)" class="tool-btn" title="Ejecuta vía /api/run-safe-command">▶ handoff last (live)</div>
   </div>
   <div class="small muted" style="margin-top:8px">Windows: siempre <code>py -m flujo ...</code>. Resultados listos para Illustrator / Photoshop / Blender.</div>
+  <div class="small" style="margin-top:6px;color:#c2410f;font-size:10px;font-weight:600;">LEGACY (NO USAR VISUALES — light/amateur leaks): projects/plano/plano_editor.html • dashboard.html • studio_prototipo.html. USAR: context/* visualizers + tapiz (brand enforced desde flujo.json).</div>
 </div>
 
 <!-- SEPARADOR AGENTE -->
@@ -194,13 +235,80 @@
   <div class="grid">
     <div class="card">
       <div style="font-weight:600; margin-bottom:4px">FLUJO 1 — Pedido reciente</div>
-      <div class="small">1. Abre este hub<br>2. Pega correo/pedido en Intake<br>3. Pulsa "Generar brief ordenado + match"<br>4. Si MATCH → usa formato + flujo + comando<br>5. Si NO MATCH → propone nueva sección o agrega tarea LAST_HANDOFF</div>
+      <div class="small">1. `flujo app` (entrada única) abre este hub<br>2. Pega correo/pedido en Intake<br>3. Pulsa "Generar brief ordenado + match" (real o fallback)<br>4. Si MATCH → usa formato + flujo + comando<br>5. Si NO MATCH → propone nueva o tarea en LAST_HANDOFF</div>
     </div>
     <div class="card">
       <div style="font-weight:600; margin-bottom:4px">FLUJO 2 — Continúa mejoras</div>
-      <div class="small">1. Lee LAST_HANDOFF.md + AGENT_OPERATING_MANUAL.md<br>2. Elige 1-2 tareas atómicas<br>3. Ejecuta (usa hub + CLI)<br>4. Actualiza LAST_HANDOFF al terminar</div>
-      <div style="margin-top:8px"><a href="LAST_HANDOFF.md" class="small" style="color:var(--cyan)">→ LAST_HANDOFF actual</a></div>
+      <div class="small">1. `flujo app` + lee LAST_HANDOFF.md + AGENT_OPERATING_MANUAL.md<br>2. Elige 1-2 tareas (o usa sección Delegar abajo para split paralelo a 5 roles)<br>3. Ejecuta (hub + CLI). Lanza sub-agentes en clones.<br>4. Actualiza LAST_HANDOFF al terminar</div>
+      <div style="margin-top:8px"><a href="LAST_HANDOFF.md" class="small" style="color:var(--accent)">→ LAST_HANDOFF actual</a></div>
     </div>
+  </div>
+</div>
+
+<!-- DELEGACIÓN A AGENTES ESPECIALIZADOS (accionable — copia prompts completos) -->
+<div class="section">
+  <div class="section-title">Delegar a Agentes Especializados — prompts listos (usa `flujo app` primero + copia aquí). 5 roles paralelos (incl. Packaging). Lanza en clones. Guía + LAST_HANDOFF = verdad.</div>
+  <!-- PRACTICAL HOW-TO DELEGATE FROM HUB (first-class, copyable for designer + AI) -->
+  <div class="card" style="margin-bottom:12px; border-left:4px solid var(--accent);">
+    <div style="font-weight:700; margin-bottom:6px;">Cómo delegar desde el hub (guía práctica para humano y agentes IA)</div>
+    <div class="small" style="line-height:1.55;">
+      1. Ejecuta <b>`flujo app`</b> (o <b>`flujo app --desktop`</b>) — <b>entrada diaria obligatoria única</b>. El hub + APIs reales + live se activan (o usa fallback estático).
+      <br>2. En "Delegar...", escribe la <b>tarea específica</b> (usa botones ejemplo abajo o edita).
+      <br>3. Selecciona 1+ roles (checkboxes = delegación paralela real a los 5: Visual Polish / Pipeline / Brand / Future / <b>Packaging</b>).
+      <br>4. Pulsa "Copiar prompt completo" (por rol) <b>o</b> "Delegar seleccionados (live API)" → llama /api/delegate en paralelo, muestra resultados + auto-copia.
+      <br>5. <b>Lanza en clones separados</b> (git clone / terminal independiente). Cada sub-agente: `flujo app` + lee LAST_HANDOFF + sigue su prompt.
+      <br>6. Cada uno entrega <b>airdrop propio</b>. Principal integra + actualiza LAST_HANDOFF central.
+      <br><b>Coordinación estricta:</b> Visual Polish revisa outputs finales. Brand valida antes de flujo.json. Packaging coordina con Pipeline. Future nunca core sin ok.
+      <br><span class="muted">Prompts (backend/local) incluyen siempre: `flujo app` + LAST_HANDOFF + reglas + 5 roles. Ver docs/AGENT_OPERATING_MANUAL.md. Hub + LAST_HANDOFF = source of truth.</span>
+    </div>
+    <div class="small muted" style="margin-top:6px;">Tip: checkbox "log a handoff" + botón "Delegar seleccionados (live API)" para usar /api/delegate en paralelo (resultados visibles + auto-copia prompt). <b>Siempre inicia con `flujo app`.</b></div>
+  </div>
+  <div class="card" style="margin-bottom:12px">
+    <div class="pro-label">Tarea específica para delegar (común o personalizada; se inserta en todos los prompts)</div>
+    <textarea id="delegate-task" style="height:52px; font-size:12px" placeholder="e.g. Pulir consistencia visual del hub y visualizadores usando paleta exacta de projects/flujo/flujo.json. O: mejorar matching de formatos en parser intake. O: actualizar linea editorial con nuevos tonos.">Pulir UI del hub + visualizadores (dark pro, brand exacto, spacing). Revisar y alinear previews SVG y cards.</textarea>
+    <div class="row" style="margin-top:6px; gap:6px; flex-wrap:wrap">
+      <button onclick="useExampleTask(0)" class="btn btn-sec" style="font-size:10px;padding:4px 8px">Ej: Pulir visual</button>
+      <button onclick="useExampleTask(1)" class="btn btn-sec" style="font-size:10px;padding:4px 8px">Ej: Mejorar parser</button>
+      <button onclick="useExampleTask(2)" class="btn btn-sec" style="font-size:10px;padding:4px 8px">Ej: Validar brand</button>
+      <button onclick="useExampleTask(3)" class="btn btn-sec" style="font-size:10px;padding:4px 8px">Ej: Prototipo intake</button>
+      <button onclick="useExampleTask(4)" class="btn btn-sec" style="font-size:10px;padding:4px 8px">Ej: Mejorar package</button>
+      <button onclick="clearDelegateTask()" class="btn btn-sec" style="font-size:10px;padding:4px 8px">Limpiar</button>
+    </div>
+  </div>
+  <div id="delegate-ui" class="grid grid-3">
+    <!-- Dynamic from /api/agents-roles + live delegate buttons. Fallback to static below if no load. -->
+    <div class="card">
+      <div style="font-weight:600">Visual Polish Agent</div>
+      <div class="small muted">Pulido visual + brand enforcement en outputs</div>
+      <button onclick="copyDelegatePrompt('visual')" class="btn btn-sec" style="margin-top:6px; font-size:10px">Copiar prompt completo</button>
+    </div>
+    <div class="card">
+      <div style="font-weight:600">Pipeline &amp; Integration Agent</div>
+      <div class="small muted">CLI, backend, jobs, packaging, integración</div>
+      <button onclick="copyDelegatePrompt('pipeline')" class="btn btn-sec" style="margin-top:6px; font-size:10px">Copiar prompt completo</button>
+    </div>
+    <div class="card">
+      <div style="font-weight:600">Brand Guardian</div>
+      <div class="small muted">flujo.json + linea editorial (custodio identidad)</div>
+      <button onclick="copyDelegatePrompt('brand')" class="btn btn-sec" style="margin-top:6px; font-size:10px">Copiar prompt completo</button>
+    </div>
+    <div class="card">
+      <div style="font-weight:600">Future/Modern Agent</div>
+      <div class="small muted">Nuevas integraciones (sin tocar core sin revisión)</div>
+      <button onclick="copyDelegatePrompt('future')" class="btn btn-sec" style="margin-top:6px; font-size:10px">Copiar prompt completo</button>
+    </div>
+    <div class="card">
+      <div style="font-weight:600">Packaging &amp; Distribution Agent</div>
+      <div class="small muted">.exe gratis (PyInstaller, pywebview, icon, tray, assets)</div>
+      <button onclick="copyDelegatePrompt('packaging')" class="btn btn-sec" style="margin-top:6px; font-size:10px">Copiar prompt completo</button>
+    </div>
+  </div>
+  <div class="small" style="margin:6px 0"><button onclick="loadAgentRolesAndRender()" class="btn btn-sec" style="font-size:9px">Cargar roles live + botones handoff API</button> <span class="muted">(usa /api/agents-roles + /api/delegate)</span></div>
+  <div class="small muted" style="margin-top:4px">Lanza en clones separados paralelos. Cada uno hace airdrop propio. Principal integra. Ver modelo completo + prompts de referencia en docs/AGENT_OPERATING_MANUAL.md. Siempre empieza con <code>flujo app</code> + LAST_HANDOFF.</div>
+  <div id="delegate-results" class="agent-raw" style="margin-top:8px; display:none; max-height:140px; overflow:auto; font-size:10px"></div>
+  <div style="margin-top:4px">
+    <label style="font-size:10px"><input type="checkbox" id="delegate-log" checked style="vertical-align:middle" /> log a handoff</label>
+    <button onclick="delegateToSelected()" class="btn btn-sec" style="font-size:9px; margin-left:6px">Delegar seleccionados (live API)</button>
   </div>
 </div>
 
@@ -232,22 +340,81 @@ py -m flujo render run projects/.../config.json --for illustrator|photoshop|blen
 py -m flujo cotizaciones &lt;json&gt; --para productora|interno
 py -m flujo plano projects/plano/ejemplos/evento_ejemplo.json --rider --costs
 py -m flujo brand analyze
+py -m flujo delegate pipeline "mejorar X"
 
 Si no hay match: proponer nueva sección mínima en flujo/ o tarea en LAST_HANDOFF.md
 
-Punto de entrada único: este hub. No leas todo el repo.
+Punto de entrada único: `flujo app` + este hub. 5 roles (Visual Polish / Pipeline / Brand / Future / Packaging). No leas todo el repo. Delega vía sección "Delegar..." (guía práctica incluida) o `flujo delegate`.
   </div>
 </div>
 
-<!-- FLUJO BRAND PALETA -->
+<!-- FLUJO BRAND PALETA (BRAND ENFORCED — exact from projects/flujo/flujo.json) -->
 <div class="section">
-  <div class="section-title">flujo (paleta central)</div>
-  <div class="card" style="font-family:monospace; font-size:12px">
+  <div class="section-title">flujo (paleta central — fuente de verdad)</div>
+  <div class="card" style="font-family:monospace; font-size:12px; border-left:4px solid var(--flujo-accent);">
     ink: <span style="color:#1f2a24;background:#111;padding:1px 4px">#1f2a24</span>
     accent: <span style="color:#2d5a4a;background:#111;padding:1px 4px">#2d5a4a</span>
-    paper: <span style="color:#e8e8e8;background:#1a1a1a;padding:1px 4px">#f8f1e3 (ver JSON real)</span>
+    paper: <span style="color:#111;background:#f8f1e3;padding:1px 4px">#f8f1e3 (print-SVG only)</span>
     support: #675f55 • alert: #c2410f
-    <br><a href="../projects/flujo/flujo.json" class="small" style="color:var(--cyan)">editar flujo.json →</a>
+    <br><span style="font-size:10px;color:#c2410f;">BRAND ENFORCED: usa SOLO estos + vars --flujo-* en UI/SVG. Valida siempre.</span><br>
+    <a href="../projects/flujo/flujo.json" class="small" style="color:var(--accent)">editar flujo.json →</a> (fuente de verdad)
+  </div>
+</div>
+
+<!-- BRAND ENFORCEMENT — Visual QA section (STRONG + PROMINENT + ACTIONABLE — brand enforced) -->
+<!-- BRAND ENFORCED: This entire section + validator is the gatekeeper. Every designer-facing visual must pass before deliver. -->
+<div class="section" style="margin-top:12px">
+  <div class="section-title">Brand Enforcement — Visual QA (projects/flujo/flujo.json • OBLIGATORIO • GATEKEEPER)</div>
+  <div class="card" style="border: 4px solid var(--flujo-accent); background: rgba(45,90,74,0.12); box-shadow: 0 0 0 2px var(--accent) inset; padding:20px;">
+    <div style="font-size:14px; font-weight:800; margin-bottom:12px; color:#fff; letter-spacing:0.02em; line-height:1.3;">BRAND ENFORCED: TODOS los artefactos visuales (flujo_hub.html, svg_visualizer.html, plano_demo.html, projects/tapiz/*.html, previews SVG, SVGs exportados, renders) DEBEN usar EXACTAMENTE la identidad flujo derivada de projects/flujo/flujo.json. Cualquier amateur/vibecoding daña confianza del cliente. Usa SIEMPRE paleta exacta + pro spacing.</div>
+
+    <!-- Visible checklist grid (always shown, no hidden alert) -->
+    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(170px,1fr)); gap:8px; margin-bottom:12px; font-size:11px;">
+      <div style="background:var(--panel2); padding:8px 10px; border-radius:4px; border-left:3px solid var(--accent);">✓ Dark pro UI SOLO: #0a0a0a bg / #141414 panels — NUNCA paper/light en chrome</div>
+      <div style="background:var(--panel2); padding:8px 10px; border-radius:4px; border-left:3px solid var(--accent);">✓ Colores EXACTOS: ink #1f2a24, accent #2d5a4a, support #675f55, alert #c2410f</div>
+      <div style="background:var(--panel2); padding:8px 10px; border-radius:4px; border-left:3px solid var(--accent);">✓ paper #f8f1e3 SOLO dentro de SVGs para impresión (no chrome/UI)</div>
+      <div style="background:var(--panel2); padding:8px 10px; border-radius:4px; border-left:3px solid var(--accent);">✓ Inter/system-sans + uppercase labels + 0.06-0.08em spacing + generous padding ≥14-28px</div>
+      <div style="background:var(--panel2); padding:8px 10px; border-radius:4px; border-left:3px solid var(--accent);">✓ Pro cards radius 8px, controlled shadows, accent left bars on .section-title</div>
+      <div style="background:var(--panel2); padding:8px 10px; border-radius:4px; border-left:3px solid var(--flujo-alert);">✗ FORBIDDEN: neon/cyan #00f0ff, hacker/matrix/glitch, tight spacing, vibecoding experimental, Arial, low contrast</div>
+    </div>
+
+    <div style="display:flex; gap:6px; align-items:center; flex-wrap:wrap; margin-bottom:8px;">
+      <span style="background:#1f2a24;color:#e8e8e8;padding:3px 8px;border-radius:3px;font-size:10px;">ink</span>
+      <span style="background:#2d5a4a;color:#fff;padding:3px 8px;border-radius:3px;font-size:10px;">accent</span>
+      <span style="background:#675f55;color:#fff;padding:3px 8px;border-radius:3px;font-size:10px;">support</span>
+      <span style="background:#c2410f;color:#fff;padding:3px 8px;border-radius:3px;font-size:10px;">alert</span>
+      <span style="background:#f8f1e3;color:#111;padding:3px 8px;border-radius:3px;font-size:10px;">paper (print-SVG only)</span>
+    </div>
+
+    <div class="row" style="flex-wrap:wrap; gap:6px;">
+      <button class="btn btn-sec" onclick="copyBrandRules(this)">Copiar reglas brand</button>
+      <button class="btn btn-sec" onclick="showBrandChecklist()">Checklist QA detallado</button>
+      <button class="btn" onclick="window.open('../projects/flujo/flujo.json','_blank')">Abrir flujo.json</button>
+      <button class="btn" onclick="runBrandValidator()" style="background: linear-gradient(135deg, var(--flujo-alert), #7a2a0a); font-weight:800; padding:10px 18px;">VALIDAR BRAND AHORA (JS — EJECUTAR SIEMPRE)</button>
+      <button class="btn btn-sec" onclick="forceBrandGuard()">FORZAR GUARD BRAND (override UI)</button>
+      <a class="btn btn-sec" href="../projects/tapiz/vibecode_spaces.html" target="_blank" style="text-decoration:none;font-size:11px;">Tapiz con flujo (premium • default flujo)</a>
+    </div>
+
+    <div id="brand-note" class="small" style="margin-top:12px; color:#fff; font-weight:700; background:#1f2a24; padding:8px 10px; border-radius:4px; border-left:4px solid var(--flujo-alert);">
+      REGLA OBLIGATORIA (BRAND ENFORCED): Toda salida visual (SVG/HTML/preview/tapiz/render/export) DEBE pasar Brand Validator ANTES de entregar. Corre siempre desde aquí o desde visualizadores. Falla = NO exportar. Cada visual refuerza (o destruye) la credibilidad del diseñador. Paper #f8f1e3 SOLO dentro de SVGs print.
+    </div>
+  </div>
+</div>
+
+<!-- BRAND VALIDATOR (PROMINENT + ACTIONABLE — strengthened for strict enforcement; brand enforced) -->
+<!-- BRAND ENFORCED: Always run before export. This is the primary gate for designer-facing visuals. -->
+<div class="section" style="border:2px dashed var(--flujo-accent); padding:4px; border-radius:6px;">
+  <div class="section-title">Brand Validator — Ejecutar ANTES de cualquier export / entrega (gatekeeper integrado)</div>
+  <div class="card" style="background:#111;">
+    <div class="small" style="margin-bottom:10px; font-weight:600; color:#c2410f;">Escanea inline styles, fill/stroke, CSS, computed + previews/SVGs vs EXACT paleta projects/flujo/flujo.json. Detecta neon/cyan/paper-misuse/vibecoding. Corre aquí + en visualizers. Backend: /api/brand-validate + brand.py.</div>
+    <div id="validator-result" class="agent-raw" style="min-height:72px; display:none; white-space:pre-wrap; font-size:11px; border:1px solid var(--border);"></div>
+    <div class="row" style="gap:8px; margin-top:10px; flex-wrap:wrap;">
+      <button class="btn" onclick="runBrandValidator()" style="background:linear-gradient(135deg,#c2410f,#7a2a0a); font-weight:700;">VALIDAR BRAND AHORA (escanea todo)</button>
+      <button class="btn btn-sec" onclick="runBrandValidator(); setTimeout(()=>{const r=document.getElementById('validator-result'); if(r) r.scrollIntoView({behavior:'smooth'});},50);">Validar + Scroll a resultado</button>
+      <button class="btn btn-sec" onclick="forceBrandGuard(); runBrandValidator();">FORZAR + VALIDAR</button>
+      <button class="btn btn-sec" onclick="validatePreviewsOnly()" style="font-size:10px;">Validar solo previews/SVGs</button>
+    </div>
+    <div class="small muted" style="margin-top:8px;">Acción: si hay violaciones, usa FORZAR GUARD + revalida. Abre visualizadores, valida desde hub, NO entregues hasta ✅ CLEAN. Paper solo en SVG interiors.</div>
   </div>
 </div>
 
@@ -273,10 +440,30 @@ Punto de entrada único: este hub. No leas todo el repo.
   </div>
 </div>
 
+<!-- MODERN INTEGRATIONS: SSE LIVE + TOKENS EXPORT (free, designer daily) -->
+<div class="section">
+  <div class="section-title">Live updates + Design tokens (SSE / export gratis)</div>
+  <div class="card">
+    <div class="row" style="margin-bottom:8px; align-items:center; gap:8px; flex-wrap:wrap">
+      <div><span id="live-indicator" style="display:inline-block; width:10px; height:10px; background:#2d5a4a; border-radius:50%; margin-right:6px; vertical-align:middle;"></span><span class="small" style="font-weight:600">LIVE</span> <span class="small muted">(SSE conectado cuando app activa)</span></div>
+      <button onclick="tryRequestNotifications()" class="btn btn-sec" style="font-size:10px;padding:4px 8px">Activar notificaciones OS</button>
+      <button onclick="refreshAllLive()" class="btn btn-sec" style="font-size:10px;padding:4px 8px">Refrescar live ahora</button>
+    </div>
+    <div class="row" style="gap:8px; flex-wrap:wrap">
+      <button onclick="exportTokens('css')" class="tool-btn">📋 Copiar CSS vars (brand)</button>
+      <button onclick="exportTokens('json')" class="tool-btn">📋 Copiar JSON tokens (Figma/Framer)</button>
+      <button onclick="exportTokens('copyAll')" class="tool-btn">📋 Copiar todo como texto</button>
+      <div class="small muted" style="align-self:center">Fuente: /api/export-tokens desde flujo.json. Importa directo en plugins gratis de tokens.</div>
+    </div>
+    <div class="small muted" style="margin-top:6px">SSE entrega jobs/SVG/status en tiempo real. Cambios → UI auto + toast + notif (gratis, browser + tray desktop).</div>
+  </div>
+</div>
+
 <footer>
-  Abre este archivo al empezar el día. <b>Hub = fuente de verdad visual + intake + agente (menú principal del flujo).</b><br>
-  Conectados: <a href="svg_visualizer.html" style="color:var(--cyan)">Visualizador SVG</a> • <a href="plano_demo.html" style="color:var(--cyan)">Plano Demo</a> • <a href="../docs/AGENT_OPERATING_MANUAL.md" style="color:var(--cyan)">Manual Agentes</a><br>
-  <span class="small">Desde los visualizadores usa siempre «← Volver al Hub principal» para regresar al menú.</span>
+  <b>`flujo app` (o --desktop) = entrada diaria ÚNICA.</b> Sirve UI (estos 3 HTMLs: hub + svg_visualizer + plano_demo) + backend APIs reales (delegate 5 roles incl. Packaging, live, parse, SSE, tokens). HTML directo = fallback estático completo.<br>
+  <b>Hub + context/LAST_HANDOFF.md = fuente de verdad para humano + IA.</b> Intake, visual, delegar (paralelo), brand validator aquí. Vuelve al hub desde visualizadores.<br>
+  Conectados: <a href="svg_visualizer.html" style="color:var(--accent)">Visualizador SVG</a> • <a href="plano_demo.html" style="color:var(--accent)">Plano Demo</a> • <a href="../projects/tapiz/vibecode_spaces.html" style="color:var(--accent)">Tapiz (flujo pro)</a> • <a href="../docs/AGENT_OPERATING_MANUAL.md" style="color:var(--accent)">Manual Agentes</a><br>
+  <span class="small muted">App mode activa CONECTADO + live. Legacy (no usar para pro visuals): projects/plano/plano_editor.html • dashboard.html • studio. Usa siempre context/ + brand flujo.json.</span>
 </footer>
 
 </div>
@@ -296,6 +483,280 @@ function copyCmd(cmd, el) {
   }).catch(() => alert('Ejecuta en terminal:\n' + cmd));
 }
 
+// ============ AGENT DELEGATION PROMPT TEMPLATES (ready-to-use, full) ============
+const DELEGATE_TEMPLATES = {
+  visual: `Tu rol: Visual Polish Agent.
+
+Sigue docs/AGENT_OPERATING_MANUAL.md (dos flujos + modelo de delegación multi-agente) y las reglas.
+
+Punto de entrada OBLIGATORIO: ejecuta \`flujo app\` (o \`flujo app --desktop\`). Abre el hub pro. Lee context/LAST_HANDOFF.md + este manual primero (bajo token).
+
+[Tarea específica: %%TASK%%]
+
+Trabaja en tu clon separado. Entrega SOLO vía airdrop (incluye handoff actualizado + docs relevantes). Al final, actualiza LAST_HANDOFF con tareas pendientes. Usa siempre el flujo y brand. Revisa outputs de otros si aplica.`,
+
+  pipeline: `Tu rol: Pipeline & Integration Agent.
+
+Sigue docs/AGENT_OPERATING_MANUAL.md (dos flujos + modelo de delegación multi-agente) y las reglas.
+
+Punto de entrada OBLIGATORIO: ejecuta \`flujo app\`. Lee context/LAST_HANDOFF.md + este manual primero.
+
+[Tarea específica: %%TASK%%]
+
+Usa py en Windows. Prueba siempre: compileall, pytest -q, comandos manuales. Trabaja en clon. Entrega vía airdrop actualizando handoff, version.py si aplica y docs. Coordina con Brand si tocas UI/brand files.`,
+
+  brand: `Tu rol: Brand Guardian.
+
+Sigue docs/AGENT_OPERATING_MANUAL.md (dos flujos + modelo de delegación multi-agente) y las reglas.
+
+Punto de entrada OBLIGATORIO: ejecuta \`flujo app\`. Lee context/LAST_HANDOFF.md + este manual primero. Abre projects/flujo/flujo.json y linea_editorial.md.
+
+[Tarea específica: %%TASK%%]
+
+Fuente de verdad. Valida todo lo que otros agentes producen. No inventes; deriva de flujo.json. Entrega airdrop + actualiza handoff.`,
+
+  future: `Tu rol: Future/Modern Agent.
+
+Sigue docs/AGENT_OPERATING_MANUAL.md (dos flujos + modelo de delegación multi-agente) y las reglas.
+
+Punto de entrada OBLIGATORIO: ejecuta \`flujo app\`. Lee context/LAST_HANDOFF.md + este manual primero.
+
+[Tarea específica: %%TASK%%]
+
+Coordina explícitamente: menciona en handoff qué revisó Brand/Pipeline. Entrega airdrop con prototipo + recomendaciones. Prioriza gratis y compatible con Python core. NO toques core sin revisión explícita.`,
+
+  packaging: `Tu rol: Packaging & Distribution Agent.
+
+Sigue docs/AGENT_OPERATING_MANUAL.md (dos flujos + modelo de delegación multi-agente) y las reglas.
+
+Punto de entrada OBLIGATORIO: ejecuta \`flujo app\` (o \`flujo app --desktop\`). Lee context/LAST_HANDOFF.md + este manual primero.
+
+[Tarea específica: %%TASK%%]
+
+Usa PyInstaller (gratis) + pywebview. Nunca rompas paths o assets bundled. Trabaja en clon. Entrega airdrop con pruebas de build simulado + nota de UX desktop. Coordina con Pipeline (core) + Brand (icon/identidad en exe). Prioriza gratis y Windows-first. Actualiza LAST_HANDOFF.`
+};
+
+function getDelegateTask() {
+  const ta = document.getElementById('delegate-task');
+  return (ta && ta.value.trim()) || 'Realizar la tarea solicitada alineado a brand y flujo. Ver LAST_HANDOFF para contexto exacto.';
+}
+
+function useExampleTask(idx) {
+  const ta = document.getElementById('delegate-task');
+  if (!ta) return;
+  const examples = [
+    'Pulir UI del hub + visualizadores (dark pro, brand exacto, spacing). Revisar y alinear previews SVG y cards.',
+    'Mejorar el parser de intake en hub + /api/parse-real-pedido para mejor matching de formatos y generar brief.yaml listo. Agregar tests.',
+    'Actualizar o validar paleta/tono en projects/flujo/flujo.json y linea_editorial.md. Revisar que todos los outputs usen las vars exactas.',
+    'Explorar prototipo de intake automático (webhook simple sin deps pagas). Entregar spec + stub en docs/ + nota riesgos. No tocar producción.',
+    'Mejorar `flujo package` (PyInstaller, bundling assets, launcher desktop, paths frozen). Probar simulado y documentar UX Windows gratis.'
+  ];
+  ta.value = examples[idx] || examples[0];
+}
+
+function clearDelegateTask() {
+  const ta = document.getElementById('delegate-task');
+  if (ta) ta.value = '';
+}
+
+// ============ MODERN DELEGATION + HANDOFF SYSTEM (live via /api/delegate + SSE) ============
+let cachedRoles = null;
+
+function loadAgentRolesAndRender() {
+  const container = document.getElementById('delegate-ui') || document.querySelector('.section .grid.grid-3');
+  if (!container) return;
+  fetch('/api/agents-roles').then(r => r.json()).then(d => {
+    cachedRoles = d.roles || [];
+    container.innerHTML = '';
+    cachedRoles.forEach(role => {
+      const el = document.createElement('div');
+      el.className = 'card';
+      el.innerHTML = `
+        <label style="display:flex; align-items:flex-start; gap:6px">
+          <input type="checkbox" class="delegate-role-check" data-role="${role.id}" style="margin-top:2px" checked />
+          <div style="flex:1">
+            <div style="font-weight:600">${role.name}</div>
+            <div class="small muted">${role.short}</div>
+            <div style="margin-top:4px">
+              <button onclick="delegateSingleRole('${role.id}', this)" class="btn btn-sec" style="font-size:9px;padding:3px 6px">Hand-off via API</button>
+            </div>
+          </div>
+        </label>`;
+      container.appendChild(el);
+    });
+    console.log('[hub] roles loaded for delegation', cachedRoles.length);
+  }).catch(() => {
+    // keep static HTML cards; mark connected false implicitly
+  });
+}
+
+function getSelectedRoleIds() {
+  const checks = document.querySelectorAll('.delegate-role-check:checked');
+  if (checks.length) return Array.from(checks).map(c => c.dataset.role);
+  // fallback to all 5 if no dynamic
+  return ['visual-polish', 'pipeline', 'brand', 'future', 'packaging'];
+}
+
+async function delegateSingleRole(roleId, btn) {
+  const task = getDelegateTask();
+  const logIt = document.getElementById('delegate-log') ? document.getElementById('delegate-log').checked : true;
+  if (btn) btn.textContent = 'Enviando...';
+  try {
+    const res = await fetch('/api/delegate', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({role_id: roleId, task, log_to_handoff: logIt})});
+    const data = await res.json();
+    showDelegateResult(data, roleId);
+  } catch(e) {
+    showDelegateResult({error: 'Backend no disponible, usando template local', role: {name: roleId}, prompt: 'Usa CLI: flujo delegate ' + roleId + ' "' + task + '"'}, roleId);
+  } finally {
+    if (btn) btn.textContent = 'Hand-off via API';
+  }
+}
+
+async function delegateToSelected() {
+  const ids = getSelectedRoleIds();
+  const task = getDelegateTask();
+  const logIt = document.getElementById('delegate-log') ? document.getElementById('delegate-log').checked : true;
+  const resultsEl = document.getElementById('delegate-results');
+  if (resultsEl) { resultsEl.style.display='block'; resultsEl.innerHTML = 'Delegando a ' + ids.length + ' roles en paralelo...<br>'; }
+  for (const id of ids) {
+    try {
+      const r = await fetch('/api/delegate', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({role_id:id, task, log_to_handoff: logIt})});
+      const d = await r.json();
+      showDelegateResult(d, id, true /*append*/);
+    } catch(e) {
+      showDelegateResult({error:String(e), role:{name:id}, full_prompt: 'Fallback: flujo delegate '+id+' "'+task+'"' }, id, true);
+    }
+  }
+}
+
+function showDelegateResult(data, roleKey, appendOnly=false) {
+  const res = document.getElementById('delegate-results');
+  if (!res) return;
+  res.style.display = 'block';
+  const roleName = (data.role && data.role.name) || roleKey;
+  let html = `<div style="margin:4px 0;border-top:1px solid #222;padding-top:4px"><b>${roleName}</b><br>`;
+  if (data.error) html += `<span style="color:#c2410f">${data.error}</span>`;
+  else html += `<pre style="white-space:pre-wrap;font-size:9px;margin:2px 0">${(data.full_prompt || data.prompt || '').replace(/</g,'&lt;')}</pre>`;
+  if (data.log_cmd_suggested) html += `<span style="font-size:9px">Sugerido: <code>${data.log_cmd_suggested}</code></span>`;
+  html += `</div>`;
+  if (appendOnly) res.innerHTML += html;
+  else res.innerHTML = html;
+  // also auto copy the prompt if single
+  if (!appendOnly && data.full_prompt) {
+    navigator.clipboard.writeText(data.full_prompt).catch(()=>{});
+  }
+}
+
+function tryInstallPWA() {
+  // Trigger PWA install if possible (manifest served by hub server)
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js').then(() => console.log('[hub] SW registered for PWA')).catch(()=>{});
+  }
+  if (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) {
+    alert('Ya estás en modo app instalada.');
+    return;
+  }
+  alert('Para instalar como app: En Chrome/Edge (app mode): Menú > Instalar "flujo • Workspace". Usa `flujo app` para servir con manifest.');
+}
+
+function initRealtimeSSE() {
+  if (!isConnected) return;
+  try {
+    const es = new EventSource('/api/events');
+    es.addEventListener('status', ev => {
+      try { const d = JSON.parse(ev.data); updateLiveFromEvent('status', d); console.log('[SSE status]', d); } catch(_) {}
+    });
+    es.addEventListener('svg', ev => {
+      try { const d=JSON.parse(ev.data); updateLiveFromEvent('svg', d); } catch(_) {}
+    });
+    es.addEventListener('jobs', ev => {
+      try { const d=JSON.parse(ev.data); updateLiveFromEvent('jobs', d); } catch(_) {}
+    });
+    es.addEventListener('heartbeat', ev => {
+      try { updateLiveFromEvent('heartbeat', JSON.parse(ev.data)); } catch(_) {}
+    });
+    es.addEventListener('update', ev => {
+      try { const d=JSON.parse(ev.data); updateLiveFromEvent('update', d); } catch(_) {}
+    });
+    es.onmessage = ev => {
+      try { const d=JSON.parse(ev.data); if (d.type) updateLiveFromEvent(d.type, d); } catch(_){}
+    };
+    es.onerror = () => {
+      pulseLiveIndicator(false);
+      // auto-reconnect for persistent live (designer keeps tab open)
+      setTimeout(() => {
+        if (typeof isConnected !== 'undefined' && isConnected) {
+          try { initRealtimeSSE(); } catch(_) {}
+        }
+      }, 4500);
+    };
+    console.log('[hub] SSE real-time connected for live updates');
+    pulseLiveIndicator(true);
+    // initial refresh on connect
+    setTimeout(refreshAllLive, 800);
+  } catch(e) { /* no EventSource or blocked */ }
+}
+
+// Extend initLiveConnection to also load roles + realtime
+const _origInitLive = initLiveConnection;
+initLiveConnection = function() {
+  _origInitLive && _origInitLive();
+  setTimeout(() => {
+    loadAgentRolesAndRender();
+    if (isConnected) initRealtimeSSE();
+  }, 650);
+};
+
+function copyDelegatePrompt(role) {
+  const task = getDelegateTask();
+  const btnTextMap = {visual:'Visual Polish', pipeline:'Pipeline', brand:'Brand Guardian', future:'Future/Modern', packaging:'Packaging & Distribution'};
+  const roleMap = {visual: 'visual-polish', pipeline: 'pipeline', brand: 'brand', future: 'future', packaging: 'packaging'};
+
+  // Prefer live backend API when connected (uses exact same formal templates as CLI `flujo delegate`)
+  if (typeof isConnected !== 'undefined' && isConnected) {
+    const outEl = document.getElementById('pedido-result');
+    if (outEl) { outEl.style.display='block'; outEl.innerHTML = '<span class="muted">Generando prompt vía backend /api/delegate...</span>'; }
+    fetch('/api/delegate', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({role_id: roleMap[role] || role, task: task, log_to_handoff: false})
+    }).then(r => r.json()).then(data => {
+      const p = (data.full_prompt || data.prompt || '');
+      if (p) {
+        copyCmd(p);
+        if (outEl) outEl.innerHTML = `<span style="color:#2d5a4a">✓ Prompt ${btnTextMap[role]||role} copiado (backend)</span>`;
+      } else {
+        fallbackCopy();
+      }
+    }).catch(fallbackCopy);
+    return;
+
+    function fallbackCopy() {
+      let tpl = DELEGATE_TEMPLATES[role] || DELEGATE_TEMPLATES.visual;
+      const prompt = tpl.replace('%%TASK%%', task);
+      copyCmd(prompt);
+      if (outEl) outEl.innerHTML = `<span class="muted">Backend no disp. Usando plantilla local.</span>`;
+    }
+  }
+
+  // Static fallback (always works)
+  let tpl = DELEGATE_TEMPLATES[role] || DELEGATE_TEMPLATES.visual;
+  const prompt = tpl.replace('%%TASK%%', task);
+  copyCmd(prompt);
+  // small visual feedback
+  const note = document.createElement('span');
+  note.style.cssText = 'font-size:9px;color:#2d5a4a;margin-left:6px';
+  note.textContent = '✓ prompt listo para ' + (btnTextMap[role]||role) + ' (pegar en otro clon/IA)';
+  const titleEl = document.querySelector('.section-title');
+  if (titleEl && titleEl.parentNode) {
+    const old = titleEl.parentNode.querySelector('.delegate-feedback');
+    if (old) old.remove();
+    note.className = 'delegate-feedback';
+    titleEl.parentNode.appendChild(note);
+    setTimeout(() => note.remove(), 2200);
+  }
+}
+
 function generatePreview() {
   const inp = document.getElementById('pedido-input').value.trim() || '{"nombre":"Demo evento","voluntarios":7}';
   let data; try { data = JSON.parse(inp); } catch(e){ data = {nombre: inp}; }
@@ -304,15 +765,15 @@ function generatePreview() {
   p.style.marginTop = '10px';
   const n = data.nombre || 'Evento';
   const v = data.voluntarios || 5;
-  const ink = '#e8e8e8', accent = '#00f0ff', paper = '#111';
+  const ink = '#e8e8e8', accent = '#2d5a4a', paper = '#111', support='#675f55', alert='#c2410f'; /* exact brand from projects/flujo/flujo.json */
   p.innerHTML = `
     <svg width="240" height="120" viewBox="0 0 240 120">
       <rect x="8" y="8" width="224" height="104" rx="4" fill="${paper}" stroke="${accent}" stroke-width="2"/>
       <text x="18" y="32" fill="${ink}" font-size="12" font-weight="700">${n}</text>
       <rect x="18" y="44" width="72" height="40" rx="2" fill="#1a1a1a" stroke="${accent}"/>
       <text x="26" y="68" fill="${ink}" font-size="9">stand</text>
-      ${Array.from({length:Math.min(v,5)}).map((_,i)=>`<rect x="${110+i*18}" y="78" width="14" height="14" fill="#e63946" rx="1"/>`).join('')}
-      <text x="18" y="104" fill="${accent}" font-size="8">flujo aplicado (dark)</text>
+      ${Array.from({length:Math.min(v,5)}).map((_,i)=>`<rect x="${110+i*18}" y="78" width="14" height="14" fill="${alert}" rx="1"/>`).join('')}
+      <text x="18" y="104" fill="${support}" font-size="8">flujo aplicado (dark pro • brand exact)</text>
     </svg>`;
   const res = document.getElementById('pedido-result');
   res.style.display = 'block';
@@ -320,26 +781,303 @@ function generatePreview() {
   res.appendChild(p);
 }
 
+// ============ LIVE CONNECTION + REAL BACKEND (http + pywebview bridge) ============
+let isConnected = false;
+
+function getPywebviewApi() {
+  // Direct Python bridge in --desktop (premium seamless no roundtrip)
+  try { return (window.pywebview && window.pywebview.api) || null; } catch(e) { return null; }
+}
+
+function callApiOrFetch(endpoint, opts = {}) {
+  const api = getPywebviewApi();
+  if (api) {
+    // map common endpoints to bridge methods (no http) + connected indicator
+    if (endpoint.includes('ping') || endpoint.includes('connected')) return Promise.resolve(api.get_connected ? api.get_connected() : (api.ping ? api.ping() : {connected:true, via:'bridge'}));
+    if (endpoint.includes('brand') || endpoint.includes('load-flujo')) return Promise.resolve(api.load_brand ? api.load_brand() : fetch(endpoint,opts).then(r=>r.json()));
+    if (endpoint.includes('list-svg')) return Promise.resolve(api.list_svg_works ? api.list_svg_works() : fetch(endpoint,opts).then(r=>r.json()));
+    if (endpoint.includes('list-jobs')) return Promise.resolve(api.list_jobs ? api.list_jobs() : fetch(endpoint,opts).then(r=>r.json()));
+    if (endpoint.includes('export-tokens')) return Promise.resolve(api.export_tokens ? api.export_tokens() : fetch(endpoint,opts).then(r=>r.json()));
+    if (endpoint.includes('parse')) {
+      const text = (opts.body && JSON.parse(opts.body).text) || '';
+      return Promise.resolve(api.parse_pedido ? api.parse_pedido(text) : fetch(endpoint,opts).then(r=>r.json()));
+    }
+    if (endpoint.includes('create-job-draft')) {
+      const body = opts.body ? JSON.parse(opts.body) : {};
+      return Promise.resolve(api.create_job_draft ? api.create_job_draft(body.text||'', body.name||'') : fetch(endpoint,opts).then(r=>r.json()));
+    }
+    if (endpoint.includes('run-safe') || endpoint.includes('command')) {
+      const cmd = (opts.body && JSON.parse(opts.body).cmd) || '';
+      return Promise.resolve(api.run_command ? api.run_command(cmd) : fetch(endpoint,opts).then(r=>r.json()));
+    }
+    // default
+    return fetch(endpoint, opts).then(r=>r.json()).catch(() => (api.get_status ? api.get_status() : (api.get_connected ? api.get_connected() : {})));
+  }
+  return fetch(endpoint, opts).then(r => r.json());
+}
+
+function updateConnUI(connected, info = {}) {
+  isConnected = !!connected;
+  const el = document.getElementById('conn-status');
+  const ver = document.getElementById('status-version');
+  const det = document.getElementById('status-detail');
+  const headerEl = document.getElementById('header-conn');
+  if (el) {
+    el.textContent = connected ? 'CONECTADO (APIs reales + delegate)' : 'Estático (fallback)';
+    el.style.color = connected ? 'var(--accent)' : 'var(--flujo-alert)';
+  }
+  if (headerEl) {
+    headerEl.textContent = connected ? '● CONECTADO backend' : 'Estático (fallback)';
+    headerEl.style.color = connected ? 'var(--accent)' : '#888';
+    headerEl.style.borderColor = connected ? 'var(--accent)' : '#2a2a2a';
+  }
+  if (ver && info.version) ver.textContent = info.version;
+  if (det && info.root) det.textContent = `Backend: ${String(info.root || '').split(/[\\/]/).pop() || 'local'}`;
+}
+
+function initLiveConnection() {
+  const api = getPywebviewApi();
+  if (api) {
+    // desktop direct bridge — instant connect
+    try {
+      const data = api.get_connected ? api.get_connected() : (api.ping ? api.ping() : {connected: true});
+      updateConnUI(true, data);
+      loadFlujoBrand();
+      loadSvgWorks();
+      loadJobsList();
+      return;
+    } catch(e){}
+  }
+  // http path: if served by server (not file://), pre-mark trying real backend
+  const isServed = (location.protocol || '').startsWith('http');
+  if (isServed) {
+    const hc = document.getElementById('header-conn');
+    if (hc) { hc.textContent = '● conectando backend...'; hc.style.color = 'var(--accent)'; }
+  }
+  // http path
+  callApiOrFetch('/api/ping').then(data => {
+    if (data && (data.connected || data.status === 'ok')) {
+      updateConnUI(true, data);
+      loadFlujoBrand();
+      loadSvgWorks();
+      loadJobsList();
+    } else {
+      updateConnUI(false);
+    }
+  }).catch(() => updateConnUI(false));
+}
+
+function loadFlujoBrand() {
+  callApiOrFetch('/api/load-flujo-brand').then(d => {
+    if (d.error || !d.brand) throw new Error(d.error||'no brand');
+    const card = document.querySelector('.section:last-of-type .card[style*="monospace"]') || document.querySelector('#flujo-brand-card');
+    if (card) {
+      const b = d.brand;
+      card.innerHTML = `ink: <span style="color:#1f2a24;background:#111;padding:1px 4px">${b.ink||b["ink"]||'#1f2a24'}</span> ` +
+        `accent: <span style="color:#2d5a4a;background:#111;padding:1px 4px">${b.accent||b["accent"]||'#2d5a4a'}</span><br>` +
+        `paper: ${b.paper||b["paper"]||'#f8f1e3'} (from ${d.source ? d.source.split(/[\\/]/).pop() : 'flujo.json'})<br>` +
+        `<a href="../projects/flujo/flujo.json" class="small" style="color:var(--accent)">ver JSON real →</a>`;
+    }
+    console.log('[hub] brand loaded from backend', d);
+  }).catch(()=> {/* keep static */});
+}
+
+function loadSvgWorks() {
+  callApiOrFetch('/api/list-svg-works').then(d => {
+    if (!d.groups || Object.keys(d.groups).length === 0) return;
+    // Update teaser text or add small live summary in SVG section (non-destructive)
+    const teaser = document.querySelector('.section:nth-of-type(3) .grid');
+    if (teaser) {
+      let sum = teaser.parentNode.querySelector('.live-svg-summary');
+      if (!sum) {
+        sum = document.createElement('div');
+        sum.className = 'small muted live-svg-summary';
+        sum.style.marginTop = '6px';
+        teaser.parentNode.appendChild(sum);
+      }
+      const gcount = Object.keys(d.groups).length;
+      sum.textContent = `Live scan: ${gcount} grupos, ${d.count||0} SVGs (backend). Ver visualizador completo.`;
+    }
+    console.log('[hub] svg works live updated', d);
+  }).catch(()=>{});
+}
+
+function loadJobsList() {
+  callApiOrFetch('/api/list-jobs').then(d => {
+    const statusGrid = document.querySelector('.status-grid');
+    if (!statusGrid) return;
+    let card = document.getElementById('live-jobs');
+    const count = (d && d.count) || 0;
+    const summary = (d && d.jobs && d.jobs.length) ? d.jobs.slice(0,2).map(j=>j.name).join(', ') + (d.jobs.length>2?'…':'') : 'sin jobs';
+    const html = `<div class="pro-label">JOBS ACTIVOS <span class="small" style="color:var(--accent)">(live)</span></div><div class="small" style="font-weight:600">${count} jobs</div><div class="small muted">${summary}</div>`;
+    if (!card) {
+      card = document.createElement('div');
+      card.className = 'card';
+      card.id = 'live-jobs';
+      statusGrid.appendChild(card);
+    }
+    card.innerHTML = html;
+    console.log('[hub] jobs live updated', d);
+  }).catch(()=>{});
+}
+
+function refreshAllLive() {
+  loadJobsList();
+  loadSvgWorks();
+  // ping to confirm
+  callApiOrFetch('/api/ping').then(d => console.log('[live] refresh ping', d)).catch(()=>{});
+}
+
+let livePulseTimer = null;
+function pulseLiveIndicator(active=true) {
+  const dot = document.getElementById('live-indicator');
+  if (!dot) return;
+  dot.style.transition = 'all .2s';
+  if (active) {
+    dot.style.background = 'var(--accent)';
+    dot.style.boxShadow = '0 0 6px var(--accent)';
+    clearTimeout(livePulseTimer);
+    livePulseTimer = setTimeout(() => {
+      if (dot) { dot.style.boxShadow=''; dot.style.background='var(--accent)'; }
+    }, 1200);
+  } else {
+    dot.style.background = 'var(--muted, #888)';
+    dot.style.boxShadow = '';
+  }
+}
+
+function showToast(msg, timeout=2200) {
+  let t = document.getElementById('live-toast');
+  if (!t) {
+    t = document.createElement('div');
+    t.id = 'live-toast';
+    t.style.cssText = 'position:fixed;bottom:12px;right:12px;background:#141414;border:1px solid #2a2a2a;color:#e8e8e8;padding:8px 12px;border-radius:6px;font-size:12px;z-index:9999;box-shadow:0 4px 12px rgba(0,0,0,.6);max-width:260px';
+    document.body.appendChild(t);
+  }
+  t.textContent = msg;
+  t.style.opacity = '1';
+  setTimeout(() => { if (t) t.style.opacity = '0.02'; setTimeout(()=>{ if(t && t.parentNode) t.parentNode.removeChild(t); }, 300); }, timeout);
+}
+
+function tryRequestNotifications() {
+  if (!('Notification' in window)) { showToast('Notifications no soportadas en este browser'); return; }
+  if (Notification.permission === 'granted') { showToast('Notificaciones ya activas'); return; }
+  Notification.requestPermission().then(p => {
+    showToast(p === 'granted' ? 'Notificaciones OS activadas ✓' : 'Permiso denegado (usa toast)');
+  });
+}
+
+function notifyDesktop(msg, title='flujo') {
+  if ('Notification' in window && Notification.permission === 'granted') {
+    try { new Notification(title, { body: msg, icon: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiI+PHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iNCIgZmlsbD0iIzJhNWE0YSIvPjx0ZXh0IHg9IjE2IiB5PSIyMiIgZm9udC1zaXplPSIxNiIgZmlsbD0iI2ZmZiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC13ZWlnaHQ9IjcwMCI+RjwvdGV4dD48L3N2Zz4=' }); } catch(e){}
+  } else {
+    showToast(msg);
+  }
+  // also log for desktop bridge if any
+  console.log('[notify]', msg);
+}
+
+function updateLiveFromEvent(evType, payload) {
+  pulseLiveIndicator(true);
+  if (evType === 'jobs' || (payload && payload.type === 'jobs')) {
+    loadJobsList();
+    const cnt = (payload && payload.data && payload.data.count) || (payload && payload.count) || 0;
+    if (cnt > 0) console.log('[SSE live jobs]', cnt);
+  }
+  if (evType === 'svg' || (payload && payload.type && payload.type.includes('svg'))) {
+    loadSvgWorks();
+  }
+  if (evType === 'update' || (payload && payload.type === 'live-summary')) {
+    const p = payload || {};
+    if (p.jobs != null || p.count != null) loadJobsList();
+    const summary = `Live: ${p.jobs||0} jobs • ${p.svgs||p.count||0} SVGs`;
+    // only toast on significant change events
+    if (payload && (payload.type === 'job-change' || payload.type === 'svg-change' || payload.type==='live-summary')) {
+      showToast(summary);
+      notifyDesktop(summary);
+    }
+  }
+  if (evType === 'heartbeat') {
+    // silent pulse only
+  }
+}
+
+function exportTokens(kind) {
+  callApiOrFetch('/api/export-tokens').then(tok => {
+    if (tok.error) throw new Error(tok.error);
+    let text = '';
+    if (kind === 'css' || kind === 'copyAll') text += (tok.css || '') + '\n\n';
+    if (kind === 'json' || kind === 'copyAll') text += JSON.stringify(tok.json || {}, null, 2) + '\n\n';
+    if (kind === 'copyAll') text += (tok.scss || '') + '\n' + (tok.figma_note || '');
+    else if (kind === 'json') text = JSON.stringify(tok.json || {}, null, 2);
+    else if (kind === 'css') text = tok.css || '';
+    if (!text.trim()) text = JSON.stringify(tok);
+    navigator.clipboard.writeText(text.trim()).then(() => {
+      showToast('Tokens copiados ✓ (listo para Figma/Framer/CSS)');
+      notifyDesktop('Brand tokens exportados al portapapeles');
+    }).catch(() => {
+      // fallback
+      prompt('Copia manual:', text.trim());
+    });
+  }).catch(e => {
+    // static fallback using the :root already in page
+    const cssFallback = getComputedStyle(document.documentElement).cssText || ':root { --flujo-accent: #2d5a4a; /* ... */ }';
+    const fb = `/* fallback from current UI */\n${cssFallback}\n/* usa /api/export-tokens cuando app activa */`;
+    navigator.clipboard.writeText(fb).then(()=>showToast('Fallback tokens copiados')).catch(()=>alert(fb));
+  });
+}
+
+function runSafeCommand(cmd, targetEl) {
+  const outEl = targetEl || document.getElementById('pedido-result');
+  if (!outEl) return;
+  outEl.style.display = 'block';
+  outEl.innerHTML = `<span class="muted">Ejecutando (backend): ${cmd} ...</span>`;
+  callApiOrFetch('/api/run-safe-command', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({cmd})
+  }).then(data => {
+    let html = `<pre style="font-size:10px;white-space:pre-wrap;margin:0">${(data.stdout||data.stderr||JSON.stringify(data)).replace(/</g,'&lt;')}</pre>`;
+    if (data.error) html = `<span style="color:#c2410f">${data.error}</span>`;
+    outEl.innerHTML = html;
+    notifyDesktop(`Comando completado: ${cmd}`, 'flujo live');
+    pulseLiveIndicator(true);
+  }).catch(e => {
+    outEl.innerHTML = `<span class="muted">Backend no disponible. Ejecuta manualmente: ${cmd}</span>`;
+  });
+}
+
 // ============ PEDIDO PARSER (match real) ============
 function parsePedido() {
   const input = document.getElementById('pedido-input').value || 'necesito flyer 10x14 evento 7 voluntarios';
   const res = document.getElementById('pedido-result');
   res.style.display = 'block';
+  res.innerHTML = '<span class="muted">Procesando... intentando backend real (flujo app)...</span>';
 
-  // Primero intenta el backend real (cuando se corre como app)
-  fetch('/api/parse-pedido', {
+  // Real backend by default when server running (http served or pywebview bridge or successful fetch).
+  // Graceful fallback to pure JS local only if no server / direct file open.
+  const tryReal = () => callApiOrFetch('/api/parse-real-pedido', {
     method: 'POST',
     headers: {'Content-Type': 'application/json'},
     body: JSON.stringify({text: input})
-  })
-  .then(r => r.json())
+  });
+
+  tryReal()
   .then(data => {
     if (data.error) throw new Error(data.error);
+    // Mark as connected to real backend on success (works even if init ping missed)
+    if (!isConnected) {
+      updateConnUI(true, {source: 'parse-success'});
+      // trigger live loads now that we know backend is live
+      setTimeout(() => { try { loadJobsList(); loadSvgWorks(); } catch(_){} }, 50);
+    }
     showParsedResult(data, input);
   })
   .catch(() => {
-    // Fallback a parser JS puro (cuando se abre el HTML directamente)
-    showParsedResult(parseLocal(input), input);
+    // Fallback a parser JS puro (cuando se abre el HTML directamente como archivo estático)
+    const local = parseLocal(input);
+    local.source = 'local-fallback';
+    showParsedResult(local, input);
   });
 }
 
@@ -367,28 +1105,90 @@ function parseLocal(input) {
 
 function showParsedResult(data, original) {
   const res = document.getElementById('pedido-result');
-  const match = data.formato ? `MATCH: ${data.formato}` : 'NO MATCH';
+  const match = data.formato || data.match ? `MATCH: ${data.formato || data.match}` : 'NO MATCH';
   let cmd = '';
-  if (data.tool === 'cotizaciones') cmd = `py -m flujo cotizaciones <json> --para ${data.pub}`;
+  if (data.tool === 'cotizaciones') cmd = `py -m flujo cotizaciones <json> --para ${data.pub || 'productora'}`;
   else if (data.tool === 'plano') cmd = `py -m flujo plano projects/plano/ejemplos/evento_ejemplo.json --rider --costs`;
   else cmd = `py -m flujo render run projects/piezas_vectoriales/<proyecto>/config.json --for illustrator`;
 
   const brief = `tipo_pieza: ${data.tipo}
 medidas: ${data.medidas || 'definir'}
-publico: ${data.pub}
-voluntarios: ${data.vol}
+publico: ${data.pub || 'productora'}
+voluntarios: ${data.vol || data.voluntarios || '?'}
 formato_sugerido: ${data.formato || 'NUEVO'}
 notas: ${original}
 
 # ${match}
-# Acción: ${data.formato ? 'Usar formato existente + flujo' : 'Proponer NUEVA sección flujo o tarea LAST_HANDOFF'}
+# Acción: ${data.formato || data.match ? 'Usar formato existente + flujo' : 'Proponer NUEVA sección flujo o tarea LAST_HANDOFF'}
 # Comando: ${cmd}
-# Estilo: flujo (usa projects/flujo/flujo.json)`;
+# Estilo: flujo (usa projects/flujo/flujo.json)
+# source: ${data.source || (isConnected ? 'backend-real' : 'local-fallback')}`;
 
   res.innerHTML = `<pre style="font-size:10px; white-space:pre-wrap; margin:0">${brief}</pre>`;
-  if (!data.formato) {
+  if (!data.formato && !data.match) {
     res.innerHTML += `<button onclick="proponerNuevaSeccion()" class="btn btn-sec" style="margin-top:6px;font-size:10px">Proponer nueva sección o tarea</button>`;
   }
+  // Real create job draft always offered (API uses real backend when available; graceful in static)
+  res.innerHTML += ` <button onclick="createDraftFromCurrent('${(original||'').replace(/'/g,'&#39;')}')" class="btn" style="margin-top:6px;font-size:10px">Crear job draft real</button>`;
+  res.innerHTML += ` <button onclick="runSafeCommand('flujo health', this.parentNode)" class="btn-sec" style="margin-top:6px;font-size:10px">health (live)</button>`;
+}
+
+function createDraftFromCurrent(text) {
+  const res = document.getElementById('pedido-result');
+  if (!res) return;
+  res.innerHTML += `<div style="margin-top:6px"><span class="muted">Creando job draft en backend...</span></div>`;
+  callApiOrFetch('/api/create-job-draft', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({text: text || document.getElementById('pedido-input').value || ''})
+  }).then(d => {
+    if (d.created) {
+      res.innerHTML += `<div style="color:var(--accent);margin-top:4px;font-size:11px">✓ Job creado: ${d.name} <br><small>${d.job_path}</small><br>Next: <code>${d.next}</code></div>`;
+    } else {
+      res.innerHTML += `<div style="color:#c2410f;font-size:10px">Error: ${d.error||'no creado'}</div>`;
+    }
+  }).catch(e => {
+    res.innerHTML += `<div class="muted">No se pudo crear draft (usa 'flujo job new' manual).</div>`;
+  });
+}
+
+function createDraftFromInput() {
+  const inp = document.getElementById('pedido-input').value.trim();
+  const res = document.getElementById('pedido-result');
+  if (!res) return;
+  res.style.display = 'block';
+  if (!inp) { res.innerHTML = '<span class="muted">Pega pedido primero para crear draft.</span>'; return; }
+  res.innerHTML = `<span class="muted">Creando job draft real vía backend...</span>`;
+  callApiOrFetch('/api/create-job-draft', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({text: inp})
+  }).then(d => {
+    if (d.created) {
+      res.innerHTML = `<div style="color:var(--accent);font-size:11px">✓ Job draft creado: ${d.name}<br><small>${d.job_path}</small><br>Next: <code>${d.next}</code><br><span class="small muted">Job real en disco. Usa luego 'flujo job prepare'.</span></div>`;
+      // refresh live list
+      setTimeout(loadJobsList, 300);
+    } else {
+      res.innerHTML = `<span style="color:#c2410f">Error creando: ${d.error||'fallo'}</span>`;
+    }
+  }).catch(() => {
+    res.innerHTML = `<span class="muted">Backend no activo. Ejecuta <code>flujo app</code> para acciones reales. Fallback: copia 'flujo job new "..."'.</span>`;
+  });
+}
+
+function refreshLiveJobsAndShow() {
+  const res = document.getElementById('pedido-result');
+  if (res) { res.style.display='block'; res.innerHTML = '<span class="muted">Cargando jobs live...</span>'; }
+  callApiOrFetch('/api/list-jobs').then(d => {
+    const count = d.count || 0;
+    const list = (d.jobs || []).slice(0,5).map(j => `${j.name} [${j.estado}]`).join('\n') || '(ninguno)';
+    const html = `<pre style="font-size:10px;margin:0">Jobs activos (${count}):\n${list}\n\n(source: ${d.source||'jobs'})</pre>`;
+    if (res) res.innerHTML = html; else alert('Jobs:\n' + list);
+    // also ensure the status card updates
+    loadJobsList();
+  }).catch(() => {
+    if (res) res.innerHTML = '<span class="muted">Sin backend. Abre con `flujo app` para listar jobs reales.</span>';
+  });
 }
 
 function proponerNuevaSeccion() {
@@ -401,12 +1201,241 @@ function applyFlujoToBrief() {
   if (r) r.innerHTML += `<div style="margin-top:4px;color:#2d5a4a;font-size:10px">→ estilo flujo aplicado (usa paleta arriba)</div>`;
 }
 
+// Brand enforcement helpers (hub reminder)
+function copyBrandRules(el) {
+  const rules = `flujo BRAND RULES (projects/flujo/flujo.json) — BRAND ENFORCED STRICT:
+colors EXACT: ink #1f2a24, accent #2d5a4a, paper #f8f1e3 (SVG print interiors ONLY), support #675f55, alert #c2410f
+UI (flujo_hub + svg_visualizer + plano_demo + tapiz + legacy): dark pro ONLY — #0a0a0a bg / #141414 panels. Paper NEVER in chrome.
+typography: Inter/system-sans bold/regular. pro-labels uppercase 0.06-0.08em. generous rhythm.
+layout: breathing (section margin 28px, card padding >=16-18px), pro cards radius 8px, modular, high contrast, safe margins.
+motifs: accent left ::before bars, clean gradient buttons, subtle borders.
+FORBIDDEN: light/paper chrome, neon/cyan #00f0ff, hacker/glitch/matrix, tight/vibecoding, non-pro fonts/spacing.
+tapiz: DEFAULT + deliver "flujo" palette ONLY (pro structure viz, not experimental). Guard on export.
+VALIDATOR (prominent): runBrandValidator() / 'VALIDAR BRAND AHORA' / forceGuard MUST PASS before ANY visual export.
+Premium high-end designer tool feel daily. No exceptions. Revisa en hub antes de exportar.`;
+  navigator.clipboard.writeText(rules).then(() => {
+    const orig = el.innerText;
+    el.innerText = 'Copiado!';
+    setTimeout(() => el.innerText = orig, 1600);
+  });
+}
+function showBrandChecklist() {
+  const note = document.getElementById('brand-note');
+  if (note) note.style.display = 'block';
+  alert('flujo Brand Checklist (copia para usar en todo output):\n\n' +
+    '✓ :root vars exactos desde projects/flujo/flujo.json en TODO HTML/Gradio\n' +
+    '✓ Dark pro SOLO: #0a0a0a bg, #141414 panels — nunca paper/light en chrome\n' +
+    '✓ Colores exactos + swatches de brand visibles\n' +
+    '✓ Inter, mayúsculas + letter-spacing en labels, generous padding (≥14px)\n' +
+    '✓ Pro cards/panels: radius 8px, controlled shadows, accent bars\n' +
+    '✓ Buttons: gradient accent #2d5a4a → #1a3f2e, uppercase, pro\n' +
+    '✓ SVG previews: paper OK inside for print, dark container\n' +
+    '✓ Tapiz: default "flujo" palette, pro header/nav, export branded. Sin palettes neon\n' +
+    '✓ Legacy (Gradio/planos viejos): NO cyan/magenta — usar accent\n' +
+    '✓ Objetivo: cada visual = credibilidad pro. No "programmer side-project".');
+}
+
+// Force Brand Guard: injects strict overrides to make the current page 100% on-brand (for testing/rescue)
+function forceBrandGuard() {
+  const root = document.documentElement;
+  root.style.setProperty('--bg', '#0a0a0a');
+  root.style.setProperty('--panel', '#141414');
+  root.style.setProperty('--panel2', '#1a1a1a');
+  root.style.setProperty('--border', '#2a2a2a');
+  root.style.setProperty('--text', '#e8e8e8');
+  root.style.setProperty('--muted', '#888');
+  root.style.setProperty('--accent', '#2d5a4a');
+  root.style.setProperty('--flujo-ink', '#1f2a24');
+  root.style.setProperty('--flujo-accent', '#2d5a4a');
+  root.style.setProperty('--flujo-paper', '#f8f1e3');
+  root.style.setProperty('--flujo-support', '#675f55');
+  root.style.setProperty('--flujo-alert', '#c2410f');
+
+  // Force body + common containers
+  document.body.style.background = '#0a0a0a';
+  document.body.style.color = '#e8e8e8';
+  document.body.style.fontFamily = "'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif";
+
+  // Darken any accidental light panels + pro polish (BRAND ENFORCED)
+  document.querySelectorAll('.card, .panel, .svg-view, .preview, pre, .modal-content, .block').forEach(el => {
+    el.style.background = '#141414';
+    el.style.borderColor = '#2a2a2a';
+    el.style.color = '#e8e8e8';
+    if (el.classList.contains('card') || el.classList.contains('panel')) {
+      el.style.borderRadius = '8px';
+      el.style.padding = el.style.padding || '18px';
+    }
+  });
+
+  // Ensure generous spacing on sections if needed
+  document.querySelectorAll('.section').forEach(s => { s.style.margin = s.style.margin || '28px 24px'; });
+
+  const note = document.getElementById('brand-note');
+  if (note) {
+    note.textContent = '✓ BRAND GUARD FORZADO (dark pro + exact vars). Re-run validator. Fix source CSS for permanence.';
+    note.style.color = 'var(--accent)';
+    note.style.background = 'rgba(45,90,74,0.15)';
+  }
+  // Re-validate immediately
+  setTimeout(runBrandValidator, 80);
+}
+
+// Brand Validator: critical JS tool for hub. Run on any visual page before delivery.
+// BRAND ENFORCED — STRICT. Catches hardcodes that break designer trust.
+// Use on hub + embedded viz + tapiz BEFORE every export. Strengthened for pro actionability.
+function runBrandValidator() {
+  const resultEl = document.getElementById('validator-result');
+  if (resultEl) resultEl.style.display = 'block';
+  const forbiddenHex = ['#00f0ff', '#00ffff', '#0ff', '#ff00ff', '#f0f', '#ffff00', '#ff0', '#2ecc71', '#00ff00', '#ff0000', '#00f', '#0f0', '#0ff'];
+  const forbiddenWords = ['cyan', 'neon', 'hacker', 'matrix', 'glitch', 'vibecod', 'vibe code', 'vibecode', 'vibecoding'];
+  let violations = [];
+  let checked = 0;
+
+  // 1. Scan all elements for inline style, fill, stroke, color attrs + misuse
+  const all = document.querySelectorAll('*');
+  all.forEach(el => {
+    checked++;
+    const styleAttr = (el.getAttribute('style') || '').toLowerCase();
+    const fill = (el.getAttribute('fill') || '').toLowerCase();
+    const stroke = (el.getAttribute('stroke') || '').toLowerCase();
+    const bg = ((el.style && (el.style.background || el.style.backgroundColor)) || '').toLowerCase();
+    const col = ((el.style && el.style.color) || '').toLowerCase();
+    const txt = styleAttr + ' ' + fill + ' ' + stroke + ' ' + bg + ' ' + col;
+
+    forbiddenHex.forEach(f => {
+      if (txt.includes(f)) violations.push({tag: el.tagName.toLowerCase(), issue: f, loc: 'inline/attr'});
+    });
+    forbiddenWords.forEach(w => {
+      if (txt.includes(w) || ((el.textContent || '').toLowerCase().includes(w))) violations.push({tag: el.tagName.toLowerCase(), issue: w, loc: 'text/css'});
+    });
+
+    // Paper in chrome UI (non-SVG context) is violation
+    if ((bg.includes('#f8f1e3') || bg.includes('f8f1e3') || fill.includes('#f8f1e3')) && el.tagName.toLowerCase() !== 'svg' && !el.closest('svg')) {
+      violations.push({tag: el.tagName.toLowerCase(), issue: 'paper-in-chrome-ui', loc: 'misuse'});
+    }
+  });
+
+  // 2. Scan <style> tags for bad colors
+  document.querySelectorAll('style').forEach(s => {
+    const css = (s.textContent || '').toLowerCase();
+    forbiddenHex.forEach(f => { if (css.includes(f)) violations.push({tag:'style', issue:f, loc:'<style>'}); });
+    forbiddenWords.forEach(w => { if (css.includes(w)) violations.push({tag:'style', issue:w, loc:'<style>'}); });
+  });
+
+  // 3. Computed root + body (sample)
+  try {
+    const rootStyle = getComputedStyle(document.documentElement);
+    const bgc = rootStyle.getPropertyValue('--bg') || rootStyle.backgroundColor || '';
+    if (bgc && forbiddenHex.some(f => bgc.includes(f.replace('#','')) || bgc.includes('00f0ff'))) violations.push({tag:'root', issue:'bad computed bg', loc:'computed'});
+    const bodyBg = getComputedStyle(document.body).backgroundColor || '';
+    if (bodyBg.includes('rgb(248') || bodyBg.includes('#f8f1e3')) violations.push({tag:'body', issue:'light/paper chrome', loc:'computed'});
+  } catch(e){}
+
+  // 4. Specifically scan preview containers + embedded SVGs for brand adherence (fill/stroke on shapes)
+  document.querySelectorAll('.preview, .svg-view, #preview, svg').forEach(container => {
+    container.querySelectorAll('[fill],[stroke],rect,circle,path,text').forEach(s => {
+      const f = (s.getAttribute('fill')||'').toLowerCase();
+      const st = (s.getAttribute('stroke')||'').toLowerCase();
+      if (f && (f.includes('#00f') || f.includes('#2ecc') || f.includes('00ff00'))) violations.push({tag:'svg-shape', issue:f, loc:'preview-svg'});
+      if (st && (st.includes('#00f') || st.includes('#2ecc'))) violations.push({tag:'svg-shape', issue:st, loc:'preview-svg'});
+    });
+  });
+
+  // Report
+  const out = violations.length ?
+    `🚨 BRAND VIOLATIONS DETECTED (${violations.length}):\n` +
+    violations.slice(0,20).map(v => `  - <${v.tag}> ${v.issue} @ ${v.loc}`).join('\n') +
+    (violations.length > 20 ? `\n  ... +${violations.length-20} more` : '') +
+    `\n\nACTION: Fix to use --flujo-* / --accent / #1f2a24 / #2d5a4a from projects/flujo/flujo.json. Use FORZAR GUARD + re-run. Paper #f8f1e3 ONLY inside <svg> for print. NO deliver until clean.` :
+    `✅ BRAND CLEAN: ${checked} elements scanned. No forbidden neon/cyan/vibecoding/paper-in-UI.\nEXACT paleta flujo usada. Recuerda: paper #f8f1e3 SOLO en SVGs internos print. Listo para export.`;
+  if (resultEl) {
+    resultEl.innerHTML = out;
+    resultEl.style.borderColor = violations.length ? 'var(--flujo-alert)' : 'var(--accent)';
+    resultEl.style.background = violations.length ? 'rgba(194,65,15,0.1)' : 'var(--panel2)';
+  } else {
+    alert(out);
+  }
+  console.log('%c[flujo BrandValidator]', violations.length ? 'color:#c2410f' : 'color:#2d5a4a', out);
+  return violations.length === 0;
+}
+
+function validatePreviewsOnly() {
+  // Actionable helper: focus scan on preview areas (used in intake/plano/svg teasers)
+  const resultEl = document.getElementById('validator-result');
+  if (resultEl) resultEl.style.display = 'block';
+  let bad = [];
+  document.querySelectorAll('.preview, .svg-view, #preview, .card svg, svg').forEach(cont => {
+    cont.querySelectorAll('[fill],[stroke],rect,circle,path').forEach(s => {
+      const f = (s.getAttribute('fill')||'').toLowerCase();
+      const st = (s.getAttribute('stroke')||'').toLowerCase();
+      if (f && (f.includes('00f') || f.includes('2ecc') || f.includes('ff0') || f.includes('f0f'))) bad.push('preview fill: '+f);
+      if (st && (st.includes('00f') || st.includes('2ecc'))) bad.push('preview stroke: '+st);
+    });
+  });
+  const msg = bad.length ? '🚨 Preview violations:\n' + bad.slice(0,8).join('\n') + '\n\nFix with exact --flujo-accent etc + revalidate.' : '✅ Previews/SVGs clean (brand enforced).';
+  if (resultEl) resultEl.innerHTML = msg;
+  else alert(msg);
+  return bad.length === 0;
+}
+
 function usarComoBase(nombre) {
   const txt = `BASE: ${nombre}\nRuta: svg/... (ver visualizador)\nAcción: copiar editable a nuevo proyecto + actualizar config con flujo`;
   navigator.clipboard.writeText(txt).then(()=>alert('Instrucciones + nombre copiados.\n\n' + txt));
 }
 
 function mockFlujoBrand() { alert('Usa flujo.json como fuente de verdad de paleta y reglas.'); }
+
+// ============ DRAG & DROP + REAL CLI INTEGRATION (modern desktop UX) ============
+function handleDrop(ev) {
+  ev.preventDefault();
+  const dt = ev.dataTransfer;
+  if (!dt || !dt.files || !dt.files.length) return;
+  const f = dt.files[0];
+  if (!f) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const txt = e.target.result;
+    const ta = document.getElementById('pedido-input');
+    ta.value = txt;
+    // auto trigger parse when drop a pedido file
+    setTimeout(parsePedido, 120);
+  };
+  reader.readAsText(f);
+}
+
+function runRealCommandFromInput() {
+  const inp = document.getElementById('pedido-input').value.trim();
+  const resEl = document.getElementById('pedido-result');
+  resEl.style.display = 'block';
+  if (!inp) { resEl.innerHTML = '<span class="muted">Pega o drop un pedido primero.</span>'; return; }
+  // Derive a safe command from text heuristically (uses backend whitelist)
+  let cmd = 'flujo daily';
+  const low = inp.toLowerCase();
+  if (low.includes('job') || low.includes('pedido')) cmd = 'flujo job list';
+  else if (low.includes('plano') || low.includes('stand')) cmd = 'flujo plano projects/plano/ejemplos/evento_ejemplo.json --rider --costs';
+  else if (low.includes('render') || low.includes('pieza')) cmd = 'flujo render formats';
+  else if (low.includes('brand')) cmd = 'flujo brand analyze';
+  resEl.innerHTML = `<div>Comando derivado: <code>${cmd}</code><br>Ejecutando via backend...</div>`;
+
+  callApiOrFetch('/api/run-safe-command', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({cmd})
+  }).then(data => {
+    if (data.error) {
+      resEl.innerHTML += `<pre style="color:#c2410f;font-size:10px">${data.error}</pre>`;
+    } else {
+      resEl.innerHTML += `<pre style="font-size:10px;max-height:120px;overflow:auto">${(data.stdout||'').slice(0,800)}\n${data.success ? '✓ OK' : '⚠️ rc='+data.returncode}</pre>`;
+    }
+  }).catch(() => {
+    resEl.innerHTML += `<span class="muted">Backend no responde. Copia el cmd y ejecuta en terminal: ${cmd}</span>`;
+  });
+}
+
+function addAgentDelegationUI() {
+  // Called on init; injects if missing (for future proofing static html)
+  // The static HTML already has the cards below; this adds interactivity if needed.
+}
 
 // Auto hint preview
 setTimeout(() => {
@@ -415,6 +1444,32 @@ setTimeout(() => {
     // no auto spam
   }
 }, 800);
+
+// Bootstrap live connection + brand/svg loads on server mode
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initLiveConnection);
+} else {
+  initLiveConnection();
+}
+
+// Strong enforcement: log brand validation status on load (BRAND ENFORCED)
+// Designer trusts only when clean. Run full UI validator from Brand section (prominent) before any export.
+// Soft auto-log on previews for agents.
+setTimeout(() => {
+  try {
+    console.log('%c[flujo] BRAND ENFORCED active (projects/flujo/flujo.json). Run "VALIDAR BRAND AHORA" before any visual deliverable/export.', 'color:#2d5a4a;font-size:9px');
+    // non-intrusive: no auto popup. Pro tip: call runBrandValidator() or validatePreviewsOnly()
+    const previews = document.querySelectorAll('.preview, .svg-view');
+    if (previews.length) console.log('%c[flujo] Previews present — validate with hub Brand Validator before use.', 'color:#675f55;font-size:9px');
+  } catch(e){}
+}, 1400);
+
+// Auto-attempt to populate live delegation roles (non-blocking; falls back to static cards)
+setTimeout(() => { try { loadAgentRolesAndRender(); } catch(e){} }, 900);
+
+// Optional: refresh status on click of version
+const verEl = document.getElementById('status-version');
+if (verEl) verEl.onclick = () => { callApiOrFetch('/api/ping').then(d=>updateConnUI(!!(d&&d.connected),d)).catch(()=>updateConnUI(false)); };
 </script>
 </body>
 </html>

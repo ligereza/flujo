@@ -6,16 +6,16 @@
 ## 👉 Empieza por aquí (AHORRO DE TOKENS)
 
 **Si tienes pocos tokens o es una sesión nueva / quieres continuar trabajo:**
-1. `context/flujo_hub.html` (workspace principal)
+1. Ejecuta `flujo app` (o abre `context/flujo_hub.html` — workspace principal pro)
 2. **`context/LAST_HANDOFF.md`** ← **LA PIEZA MÁS IMPORTANTE PARA CONTINUIDAD**
-3. `docs/AGENT_OPERATING_MANUAL.md`
-4. `py -m flujo daily` + comandos que genera el hub
+3. `docs/AGENT_OPERATING_MANUAL.md` (flujos + modelo delegación a sub-agentes)
+4. `py -m flujo daily` + comandos/prompts que genera el hub
 
 **Solo si necesitas profundidad después de lo anterior:**
-- `context/flujo_hub.html` (el workspace principal: intake, visualizadores SVG y plano)
+- `context/flujo_hub.html` (el workspace principal: intake, visualizadores SVG/plano + UI delegación)
 - `context/svg_visualizer.html` y `context/plano_demo.html`
 - `README.md` + `docs/REPO_MAP.md`
-- `docs/AGENT_OPERATING_MANUAL.md` (dos flujos para agentes)
+- `docs/AGENT_OPERATING_MANUAL.md` (roles especializados + prompts listos)
 
 **Nunca leas todos los handoffs/checkpoints antiguos al principio.** El `LAST_HANDOFF.md` + `flujo daily` deben bastar para continuar.
 

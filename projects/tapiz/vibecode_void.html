@@ -3,15 +3,27 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>VibeCode Void — Patrón en negativo</title>
+  <title>flujo • Tapiz Void — Pro Pattern Analysis (brand enforced)</title>
   <style>
     :root {
-      --bg: #050505;
-      --panel: #0a0a0a;
-      --border: #1a1a1a;
-      --text: #555;
-      --accent: #777;
-      --void: #e0e0e0;
+      /*
+      =====================================================================
+      BRAND ENFORCED — flujo Tapiz Void (projects/flujo/flujo.json)
+      =====================================================================
+      Dark pro ONLY. EXACT: ink #1f2a24 / accent #2d5a4a / paper #f8f1e3 (sparing) / support #675f55 / alert #c2410f
+      Generous pro layout (padding 1.6rem+), Inter system, radius 8px, premium shadows.
+      FORBIDDEN: neon/cyber/hacker/light UIs/amateur spacing/experimental "vibecode".
+      Default for all pro outputs: flujo palette. Must pass hub Brand Validator.
+      */
+      --bg: #0a0a0a;
+      --panel: #141414;
+      --border: #2a2a2a;
+      --text: #e8e8e8;
+      --muted: #888;
+      --accent: #2d5a4a;
+      --flujo-ink: #1f2a24; --flujo-accent: #2d5a4a; --flujo-paper: #f8f1e3;
+      --flujo-support: #675f55; --flujo-alert: #c2410f;
+      --void: #e8e8e8;
     }
 
     * { box-sizing: border-box; }
@@ -20,7 +32,7 @@
       margin: 0;
       background: var(--bg);
       color: var(--text);
-      font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+      font-family: 'Inter', system-ui, sans-serif;
       font-size: 13px;
       line-height: 1.45;
       display: flex;
@@ -33,27 +45,27 @@
       min-width: 240px;
       background: var(--panel);
       border-right: 1px solid var(--border);
-      padding: 1.2rem;
+      padding: 1.6rem; /* generous breathing */
       display: flex;
       flex-direction: column;
-      gap: 1rem;
+      gap: 1.1rem;
       overflow-y: auto;
     }
 
-    h1 { margin: 0; font-size: 1.1rem; color: #aaa; letter-spacing: 0.02em; }
-    h1 span { color: var(--void); font-weight: 300; }
+    h1 { margin: 0; font-size: 1.1rem; color: #fff; letter-spacing: -0.01em; font-weight:700; }
+    h1 span { color: var(--accent); font-weight: 400; }
 
-    .hint { font-size: 0.75rem; color: #444; line-height: 1.4; }
+    .hint { font-size: 0.75rem; color: var(--muted); line-height: 1.4; }
 
-    .group { display: flex; flex-direction: column; gap: 0.3rem; }
-    label { font-size: 0.75rem; color: #666; text-transform: uppercase; letter-spacing: 0.05em; }
+    .group { display: flex; flex-direction: column; gap: 0.35rem; }
+    label { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; font-weight:600; }
 
     select, input[type="range"], button, textarea {
-      background: var(--bg);
-      color: #999;
+      background: var(--panel2,#1a1a1a);
+      color: var(--text);
       border: 1px solid var(--border);
-      border-radius: 4px;
-      padding: 0.5rem 0.6rem;
+      border-radius: 5px;
+      padding: 0.55rem 0.7rem;
       font-family: inherit;
       font-size: 0.85rem;
       outline: none;
@@ -61,19 +73,19 @@
 
     select:focus, input:focus, textarea:focus, button:focus { border-color: var(--accent); }
 
-    textarea { resize: vertical; min-height: 120px; line-height: 1.4; color: #777; }
+    textarea { resize: vertical; min-height: 120px; line-height: 1.4; color: var(--muted); font-family: ui-monospace, monospace; }
 
     .row { display: flex; gap: 0.5rem; align-items: center; }
     .row input[type="range"] { flex: 1; }
-    .row span { min-width: 2.5rem; text-align: right; font-size: 0.75rem; }
+    .row span { min-width: 2.5rem; text-align: right; font-size: 0.75rem; color:var(--muted); }
 
     button {
       cursor: pointer;
-      transition: background 0.15s, border-color 0.15s, color 0.15s;
-      font-weight: 500;
+      transition: all .15s;
+      font-weight: 600;
     }
-    button:hover { background: #111; border-color: var(--accent); color: #bbb; }
-    button.active { background: var(--void); color: #000; border-color: var(--void); }
+    button:hover { background: rgba(45,90,74,.1); border-color: var(--accent); color: var(--text); }
+    button.active { background: var(--accent); color: #fff; border-color: var(--accent); }
 
     #fileInput { display: none; }
 
@@ -89,18 +101,19 @@
     #canvas {
       background: var(--bg);
       border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 1.2rem 1.5rem;
+      border-radius: 8px;
+      padding: 1.8rem 2rem; /* generous */
       white-space: pre;
       font-size: 13px;
-      line-height: 1.45;
+      line-height: 1.5;
       overflow: hidden;
-      box-shadow: 0 0 60px rgba(255, 255, 255, 0.02);
+      box-shadow: 0 8px 40px rgba(0,0,0,.65);
+      font-family: ui-monospace, monospace;
     }
 
-    /* El texto es casi invisible; los espacios son luminosos */
-    #canvas .word { color: #1a1a1a; }
-    #canvas .word.ghost { color: #333; }
+    /* El texto es casi invisible; los espacios usan brand darks premium */
+    #canvas .word { color: #141414; }
+    #canvas .word.ghost { color: #2a2a2a; }
     #canvas .space {
       background: var(--void);
       color: var(--bg);
@@ -113,8 +126,9 @@
 </head>
 <body>
   <aside>
-    <h1>VibeCode <span>Void</span></h1>
-    <p class="hint">El código se vuelve invisible. Solo los espacios que la IA genera forman el patrón.</p>
+    <h1>flujo • Tapiz <span>Void</span></h1>
+    <p class="hint">BRAND ENFORCED: patrón profesional de espacios (estructura). Paleta flujo EXACTA (projects/flujo/flujo.json) por defecto. Dark pro premium — NADA experimental. Valida en hub antes de export.</p>
+    <div style="font-size:10px;color:#2d5a4a;margin-top:-4px;">Brand enforced • dark pro • estructura pro, no vibecoding</div>
 
     <div class="group">
       <label>Código fuente</label>
@@ -158,6 +172,7 @@
       <div class="row">
         <button id="playPause" class="active">⏸ Pausar</button>
       </div>
+      <div style="margin-top:8px;"><a href="../../context/flujo_hub.html" style="color:#2d5a4a;font-size:11px;font-weight:600;text-decoration:none;">← Volver al Hub principal (flujo)</a></div>
     </div>
 
     <div class="group">
@@ -172,7 +187,7 @@
   </main>
 
   <script>
-    // Paleta monocromática: negativo
+    // Paleta monocromática basada en flujo (brand enforced, dark pro) — negative pattern viz only. No experimental.
     const SAMPLE_CODE = `# --- Topología de IA: indentación y one-liners ---
 
 def procesar_tensores(matriz, factores):

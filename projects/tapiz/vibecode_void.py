@@ -1,20 +1,18 @@
 #!/usr/bin/env python3
 """
-VibeCode Void — Stream negativo de espacios de código.
+flujo Tapiz Void — Stream negativo de espacios de código (brand enforced).
 
-Visualiza el movimiento de la generación de código sin colorear el código.
-Solo los espacios, indentaciones y vacíos se vuelven visibles como un patrón
-en negativo. El texto se mantiene invisible o en gris fantasma.
+Visualiza patrones de estructura (indentación y vacíos) sin colorear el código.
+Solo los espacios se vuelven visibles como patrón en negativo. Premium dark pro.
 
 Diseñado para:
-- Sesiones largas de vibecoding en terminal (CMD / bash).
-- No acumular recursos: usa una ventana deslizante de líneas.
-- Auto-generación procedural de código para crear patrones continuos.
+- Análisis profesional de estructura de código / briefs.
+- No acumular recursos: ventana deslizante.
+- Auto-generación para patrones continuos (internal use).
 
-Uso:
-    python vibecode_void.py archivo.py
-    cat archivo.py | python vibecode_void.py
-    python vibecode_void.py --auto  # genera código y visualiza el vacío
+Uso (siempre con flujo brand en mente):
+    python projects/tapiz/vibecode_void.py archivo.py
+    ...
 """
 
 import sys
@@ -266,7 +264,7 @@ def draw(buffer: List[str], render_fn, width: int, height: int, ghost: bool):
 # ---------------------------------------------------------------------------
 def main():
     parser = argparse.ArgumentParser(
-        description="Visualizador en negativo de los espacios del código."
+        description="flujo Tapiz Void — visualizador pro de patrones en espacios (brand enforced desde projects/flujo/flujo.json). Dark premium, no experimental."
     )
     parser.add_argument("file", nargs="?", help="Archivo de código")
     parser.add_argument(

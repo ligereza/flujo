@@ -3,38 +3,46 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>plano — editor de stands</title>
+  <title>plano — editor de stands (LEGACY — usa context/plano_demo.html para pro brand)</title>
   <style>
-    :root { --ink: #1f6f4e; --accent: #7b5cff; --paper: #fbf8f1; --text: #2c2c2c; }
+    /*
+    VISUAL QA / BRAND ENFORCEMENT — legacy plano editor (DEPRECATED: use context/plano_demo.html + hub)
+    Dark pro + brand from projects/flujo/flujo.json. No light parts. No leaks.
+    */
+    :root {
+      --bg:#0a0a0a; --panel:#141414; --panel2:#1a1a1a; --border:#2a2a2a; --text:#e8e8e8; --muted:#888;
+      --flujo-ink:#1f2a24; --flujo-accent:#2d5a4a; --flujo-paper:#f8f1e3; --flujo-support:#675f55; --flujo-alert:#c2410f;
+      --accent:#2d5a4a;
+    }
     * { box-sizing: border-box; }
-    body { font-family: Inter, system-ui, sans-serif; margin: 0; background: var(--paper); color: var(--text); }
-    header { padding: 1rem 1.5rem; background: var(--ink); color: #fff; }
+    body { font-family: 'Inter', system-ui, sans-serif; margin: 0; background: var(--bg); color: var(--text); }
+    header { padding: 1rem 1.5rem; background: var(--flujo-ink); color: #fff; }
     header h1 { margin: 0; font-size: 1.25rem; }
     main { display: grid; grid-template-columns: 320px 1fr; gap: 1rem; padding: 1rem; }
     @media (max-width: 900px) { main { grid-template-columns: 1fr; } }
-    .panel { background: #fff; border-radius: 8px; padding: 1rem; box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
-    label { display: block; margin-bottom: 0.75rem; font-size: 0.9rem; font-weight: 600; }
+    .panel { background: var(--panel); border: 1px solid var(--border); border-radius: 8px; padding: 1rem; }
+    label { display: block; margin-bottom: 0.75rem; font-size: 0.9rem; font-weight: 600; color: var(--muted); }
     input[type="text"], input[type="number"], select, textarea {
-      width: 100%; padding: 0.5rem; margin-top: 0.25rem; border: 1px solid #ddd; border-radius: 4px; font-size: 0.95rem;
+      width: 100%; padding: 0.55rem; margin-top: 0.25rem; border: 1px solid var(--border); border-radius: 5px; font-size: 0.95rem; background:var(--panel2); color:var(--text);
     }
     input[type="checkbox"] { margin-right: 0.5rem; }
     .row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
-    button { background: var(--ink); color: #fff; border: none; border-radius: 4px; padding: 0.6rem 1rem; cursor: pointer; font-weight: 600; }
-    button.secondary { background: var(--accent); }
+    button { background: var(--flujo-accent); color: #fff; border: none; border-radius: 5px; padding: 0.65rem 1rem; cursor: pointer; font-weight: 600; }
+    button.secondary { background: var(--flujo-support); }
     button:hover { opacity: 0.9; }
     .actions { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 1rem; }
-    #preview { width: 100%; border: 1px solid #ddd; border-radius: 4px; background: #fff; min-height: 300px; }
-    #rider, #costs { white-space: pre-wrap; font-family: ui-monospace, SFMono-Regular, monospace; font-size: 0.85rem; background: #f5f5f5; padding: 1rem; border-radius: 4px; overflow: auto; max-height: 300px; }
+    #preview { width: 100%; border: 1px solid var(--border); border-radius: 6px; background: #0d0d0d; min-height: 300px; }
+    #rider, #costs { white-space: pre-wrap; font-family: ui-monospace, monospace; font-size: 0.85rem; background: var(--panel2); padding: 1rem; border-radius: 5px; overflow: auto; max-height: 300px; color:var(--text); border:1px solid var(--border); }
     .tabs { display: flex; gap: 0.5rem; margin-bottom: 0.5rem; }
-    .tab { padding: 0.4rem 0.8rem; border: 1px solid #ddd; border-radius: 4px; cursor: pointer; background: #fff; }
-    .tab.active { background: var(--ink); color: #fff; border-color: var(--ink); }
+    .tab { padding: 0.4rem 0.8rem; border: 1px solid var(--border); border-radius: 4px; cursor: pointer; background: var(--panel2); color:var(--text); }
+    .tab.active { background: var(--flujo-accent); color: #fff; border-color: var(--flujo-accent); }
     .tab-content { display: none; }
     .tab-content.active { display: block; }
   </style>
 </head>
 <body>
   <div style="background:#0a0a0a;color:#e8e8e8;padding:6px 12px;font-size:12px;border-bottom:1px solid #2a2a2a;text-align:center">
-    ⚠️ Este editor es legacy. Usa el nuevo: <a href="../../context/plano_demo.html" style="color:#00f0ff">context/plano_demo.html</a> (dark + interactivo + flujo)
+    ⚠️ Este editor es legacy. Usa el nuevo: <a href="../../context/plano_demo.html" style="color:#2d5a4a;font-weight:600">context/plano_demo.html</a> (dark pro + interactivo + flujo brand)
   </div>
   <header><h1>plano — editor de stands (legacy)</h1></header>
   <main>

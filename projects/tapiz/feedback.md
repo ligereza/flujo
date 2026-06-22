@@ -35,7 +35,8 @@ La animación no genera nuevos frames costosos: solo recolorea los espacios usan
 - **Opciones clave**: `--no-ghost` para ocultar el texto y ver solo los espacios, `-p` para paleta, `-f` para el carácter que rellena los espacios (por defecto `·`), `-s` para velocidad de animación, `-c` para ciclos.
 
 ### 5. Paletas
-Paleta de 256 colores por familia, sin depender de `colorama` si la terminal ya soporta ANSI. Paletas sugeridas: `neon`, `cyber`, `matrix`, `fire`, `rainbow`, `deep`, `glitch`. Cada una mantiene la coherencia para que el patrón sea agradable sin ser distractor.
+Paleta de 256 colores por familia (ANSI). **Default y para entregas: "flujo"** (mapeada desde projects/flujo/flujo.json: ink/accent etc).
+Otras (neon/cyber/matrix/glitch...) SOLO para exploración interna/dev. NUNCA en trabajo de cliente (regla brand enforcement). Usa -p flujo siempre para pro.
 
 ### 6. Próximo paso
 Dejar que la versión base funcione como CLI y librería. Luego, la animación se puede extender con:

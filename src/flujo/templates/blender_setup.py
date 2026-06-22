@@ -48,8 +48,8 @@ def setup_stand(evento_json: str):
         ev = json.load(f)
 
     styles = load_flujo()
-    paper_mat = create_material("Aistetic_Paper", styles["paper"])
-    accent_mat = create_material("Aistetic_Accent", styles["accent"])
+    paper_mat = create_material("Flujo_Paper", styles["paper"])
+    accent_mat = create_material("Flujo_Accent", styles["accent"])
 
     # Base stand (aprox 3m toldo)
     bpy.ops.mesh.primitive_cube_add(size=3, location=(0, 0, 1.5))

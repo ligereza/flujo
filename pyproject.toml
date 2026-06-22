@@ -22,6 +22,16 @@ dependencies = [
 dev = [
     "pytest>=7.4.0",
 ]
+web = [
+    "pywebview>=5.0",  # desktop window (BSD free); pip install pywebview
+]
+desktop-extras = [
+    "pystray>=0.19",   # optional tray icon for --desktop (free)
+    "Pillow>=10",      # for tray image gen (free)
+]
+build = [
+    "pyinstaller>=6.0",  # free packaging to .exe; 'flujo package'. Not runtime dep.
+]
 
 [project.scripts]
 flujo = "flujo.cli:app"

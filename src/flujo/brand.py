@@ -1,4 +1,8 @@
-"""Carga central de la identidad visual 'flujo'.
+"""Carga central de la identidad visual 'flujo' (BRAND ENFORCED).
+
+Fuente de verdad: projects/flujo/flujo.json
+Colores EXACTOS: ink, accent, paper (print-SVG only), support, alert.
+Usado por hub.py /api/load-flujo-brand, visualizers, tapiz, renders.
 
 Uso:
     from flujo.brand import load_styles, get_color
@@ -6,7 +10,8 @@ Uso:
     styles = load_styles()
     accent = get_color("accent")
 
-Esto permite que todos los proyectos hereden el mismo estilo sin duplicar.
+Todos los outputs visuales (HTML pro + SVGs) deben derivar de aquí + pasar Brand Validator JS.
+NO hardcode neon/light fuera de paper.
 """
 from __future__ import annotations
 
@@ -14,10 +19,12 @@ import json
 from pathlib import Path
 from typing import Any, Dict
 
+from .paths import asset_root, repo_root
+
 
 def load_styles() -> Dict[str, Any]:
     """Devuelve colores + tipografía + tono de flujo.json."""
-    path = Path("projects/flujo/flujo.json")
+    path = asset_root() / "projects" / "flujo" / "flujo.json"
     if not path.exists():
         return _defaults()
 

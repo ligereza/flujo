@@ -5,39 +5,50 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>FLUJO • Plano Demo (Stands & Riders)</title>
 <style>
+  /*
+  =====================================================================
+  BRAND ENFORCED — flujo (projects/flujo/flujo.json) — plano_demo
+  =====================================================================
+  EXACT colors in A const + CSS: ink #1f2a24, accent #2d5a4a, paper #f8f1e3 (SVG ONLY), support, alert.
+  Dark pro UI full. Generous panels (padding 16px), radius 8px, Inter, high contrast.
+  SVGs use brand for premium stand viz. No neon/light outside paper.
+  All must pass VALIDAR BRAND from hub. Legacy plano_editor marked.
+  */
   :root {
     --bg: #0a0a0a; --panel: #141414; --panel2: #1a1a1a;
     --border: #2a2a2a; --text: #e8e8e8; --muted: #888;
-    --cyan: #00f0ff; --accent: #173F2F; --green: #2ecc71;
+    --flujo-ink: #1f2a24; --flujo-accent: #2d5a4a; --flujo-paper: #f8f1e3;
+    --flujo-support: #675f55; --flujo-alert: #c2410f;
+    --accent: #2d5a4a;
   }
   * { box-sizing: border-box; }
   body { background: var(--bg); color: var(--text); font-family: 'Inter', system-ui, sans-serif; font-size: 14px; margin: 0; }
-  header { background: var(--panel); border-bottom: 1px solid var(--border); padding: 12px 20px; display: flex; gap: 12px; align-items: center; }
+  header { background: var(--panel); border-bottom: 1px solid var(--border); padding: 14px 24px; display: flex; gap: 12px; align-items: center; }
   header h1 { font-size: 18px; font-weight: 700; }
-  .badge { background: var(--accent); padding: 2px 8px; border-radius: 3px; font-size: 11px; }
-  .main { max-width: 1200px; margin: 0 auto; padding: 20px; display: grid; grid-template-columns: 340px 1fr; gap: 18px; }
+  .badge { background: var(--flujo-accent); padding: 3px 10px; border-radius: 4px; font-size: 11px; }
+  .main { max-width: 1200px; margin: 0 auto; padding: 24px; display: grid; grid-template-columns: 340px 1fr; gap: 20px; }
   @media (max-width: 900px) { .main { grid-template-columns: 1fr; } }
-  .panel { background: var(--panel); border: 1px solid var(--border); border-radius: 8px; padding: 14px; }
-  .section-title { font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin-bottom: 8px; border-left: 3px solid var(--cyan); padding-left: 6px; }
+  .panel { background: var(--panel); border: 1px solid var(--border); border-radius: 8px; padding: 16px; }
+  .section-title { font-size: 11px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin-bottom: 10px; border-left: 3px solid var(--accent); padding-left: 8px; }
   label { display: block; font-size: 12px; color: var(--muted); margin: 8px 0 3px; }
-  input, select, textarea { width: 100%; background: var(--panel2); border: 1px solid var(--border); color: var(--text); padding: 8px; border-radius: 4px; font-size: 13px; }
-  input:focus { border-color: var(--cyan); outline: none; }
-  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
-  .btn { background: linear-gradient(135deg, var(--cyan), #7000ff); color:#000; border: none; padding: 8px 14px; font-weight:700; font-size:12px; border-radius:4px; cursor:pointer; text-transform:uppercase; letter-spacing:.05em; }
+  input, select, textarea { width: 100%; background: var(--panel2); border: 1px solid var(--border); color: var(--text); padding: 9px; border-radius: 5px; font-size: 13px; }
+  input:focus { border-color: var(--accent); outline: none; }
+  .row { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .btn { background: linear-gradient(135deg, var(--accent), #1a3f2e); color:#fff; border: none; padding: 9px 16px; font-weight:700; font-size:12px; border-radius:5px; cursor:pointer; text-transform:uppercase; letter-spacing:.05em; }
   .btn:hover { opacity: .9; }
   .btn-sec { background: var(--panel2); color: var(--text); border: 1px solid var(--border); }
-  .preview-box { background: #0d0d0d; border: 1px solid var(--border); border-radius: 6px; min-height: 420px; display:flex; align-items:center; justify-content:center; overflow:auto; }
+  .preview-box { background: #0a0a0a; border: 1px solid var(--border); border-radius: 8px; min-height: 420px; display:flex; align-items:center; justify-content:center; overflow:auto; padding:12px; } /* pro dark */
   .preview-box svg { max-width: 96%; max-height: 400px; box-shadow: 0 8px 30px rgba(0,0,0,.6); }
   .tabs { display:flex; gap:4px; margin-bottom:8px; }
-  .tab { padding: 4px 10px; border:1px solid var(--border); background:var(--panel2); border-radius:4px; font-size:12px; cursor:pointer; }
+  .tab { padding: 5px 12px; border:1px solid var(--border); background:var(--panel2); border-radius:4px; font-size:12px; cursor:pointer; }
   .tab.active { background: var(--accent); color:#fff; border-color: var(--accent); }
   .tab-content { display:none; }
   .tab-content.active { display:block; }
-  .mono { font-family: ui-monospace, monospace; font-size: 12px; white-space: pre-wrap; background: var(--panel2); padding: 10px; border-radius: 4px; border:1px solid var(--border); max-height: 240px; overflow:auto; }
+  .mono { font-family: ui-monospace, monospace; font-size: 12px; white-space: pre-wrap; background: var(--panel2); padding: 12px; border-radius: 5px; border:1px solid var(--border); max-height: 240px; overflow:auto; }
   .actions { display:flex; flex-wrap:wrap; gap:8px; margin-top:12px; }
   .nav { margin-left:auto; display:flex; gap:8px; }
-  .nav a, .nav button { background: var(--panel2); color: var(--text); border: 1px solid var(--border); padding: 5px 10px; border-radius: 4px; font-size: 12px; text-decoration: none; cursor: pointer; }
-  .nav a:hover, .nav button:hover { border-color: var(--cyan); }
+  .nav a, .nav button { background: var(--panel2); color: var(--text); border: 1px solid var(--border); padding: 6px 12px; border-radius: 4px; font-size: 12px; text-decoration: none; cursor: pointer; }
+  .nav a:hover, .nav button:hover { border-color: var(--accent); }
   .nav .back { font-weight: 600; }
 </style>
 </head>
@@ -49,8 +60,10 @@
     <a class="back" href="flujo_hub.html" style="background:#1f2a24;border-color:#2d5a4a;font-weight:600">← Volver al Hub principal (menú)</a>
     <a href="svg_visualizer.html">Visualizador SVG</a>
     <a href="../projects/plano/">Carpeta plano</a>
+    <span id="plano-conn" class="small muted" style="margin-left:8px">• local</span>
   </div>
 </header>
+<div style="max-width:1200px;margin:0 auto;padding:4px 20px;font-size:10px;background:rgba(45,90,74,0.14);color:#2d5a4a;border-bottom:2px solid var(--flujo-accent);font-weight:600;">BRAND ENFORCED ✓ A const usa EXACT ink/accent/support de projects/flujo/flujo.json. Paper SOLO en SVGs. Ejecuta VALIDAR BRAND AHORA en hub antes de export. LEGACY: plano_editor.html (marcado) — usa este demo pro.</div>
 
 <div class="main">
 
@@ -88,9 +101,9 @@
     <div class="actions">
       <button class="btn btn-sec" onclick="copyCmd('py -m flujo plano projects/plano/ejemplos/evento_ejemplo.json --rider --costs', this)">py plano --rider --costs</button>
       <button class="btn btn-sec" onclick="copyCmd('python -m src.flujo.templates.blender_setup projects/plano/ejemplos/evento_ejemplo.json', this)">Blender setup</button>
-      <button class="btn btn-sec" onclick="window.open('../projects/plano/plano_editor.html','_blank')">Editor antiguo</button>
+      <button class="btn btn-sec" onclick="window.open('../projects/plano/plano_editor.html','_blank')">Editor antiguo (LEGACY — NO USAR para visuals pro; usa este demo)</button>
     </div>
-    <div class="hint" style="font-size:11px;margin-top:10px;color:var(--muted)">Aplica paleta flujo automáticamente. Listo para export a AI/PS/Blender.</div>
+    <div class="hint" style="font-size:11px;margin-top:10px;color:var(--muted)">Aplica paleta flujo automáticamente (vars exactas). Listo para export a AI/PS/Blender. <strong>Valida Brand en hub antes de entregar.</strong></div>
   </div>
 
   <!-- PREVIEW + OUTPUTS -->
@@ -114,12 +127,12 @@
     </div>
 
     <div class="panel" style="margin-top:14px">
-      <div class="section-title">Aistetic aplicado (demo)</div>
+      <div class="section-title">flujo brand aplicado (paleta projects/flujo/flujo.json)</div>
       <div style="font-size:12px; display:flex; gap:8px; flex-wrap:wrap;">
-        <span style="background:#1f2a24; padding:2px 6px; border-radius:2px;">ink #1f2a24</span>
+        <span style="background:#1f2a24; color:#e8e8e8; padding:2px 6px; border-radius:2px;">ink #1f2a24</span>
         <span style="background:#2d5a4a; color:#fff; padding:2px 6px; border-radius:2px;">accent #2d5a4a</span>
         <span style="background:#f8f1e3; color:#111; padding:2px 6px; border-radius:2px;">paper #f8f1e3</span>
-        <span style="background:#173F2F; color:#fff; padding:2px 6px; border-radius:2px;">UI accent</span>
+        <span style="background:#675f55; color:#fff; padding:2px 6px; border-radius:2px;">support</span>
       </div>
       <div class="hint">Los planos y riders usan estos colores + tipografía clara. Integrado en cotizaciones dual.</div>
     </div>
@@ -128,13 +141,18 @@
 </div>
 
 <div style="max-width:1200px;margin:20px auto 30px;padding:0 20px;font-size:11px;color:var(--muted);border-top:1px solid var(--border);padding-top:10px;">
-  <a href="flujo_hub.html" style="color:var(--cyan);font-weight:600">← Volver al Hub principal (menú del flujo)</a>
-  &nbsp;•&nbsp; <a href="svg_visualizer.html" style="color:var(--cyan)">Visualizador SVG</a>
+  <span style="color:#2d5a4a;font-weight:600;">BRAND ENFORCED: paleta exacta flujo.json. Valida siempre.</span><br>
+  <a href="flujo_hub.html" style="color:var(--accent);font-weight:600">← Volver al Hub principal (menú del flujo)</a>
+  &nbsp;•&nbsp; <a href="svg_visualizer.html" style="color:var(--accent)">Visualizador SVG</a>
   &nbsp;•&nbsp; Abre el hub para intake de pedidos y comandos.
 </div>
 
 <script>
-const A = { ink: '#1f2a24', accent: '#2d5a4a', paper: '#f8f1e3', support: '#675f55' };
+const A = {
+  ink: '#1f2a24', accent: '#2d5a4a', paper: '#f8f1e3', support: '#675f55', alert: '#c2410f',
+  // brand darks for premium pro look (use in SVGs)
+  dark0: '#0a0a0a', dark1: '#0d0d0d', dark2: '#111', dark3: '#151515', dark4: '#1f1f1f', dark5: '#222'
+};
 
 function setTab(t) {
   document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
@@ -153,13 +171,13 @@ function recalcular() {
   const masivo = document.getElementById('masivo').checked;
 
   const w = 620, h = 440;
-  let html = `<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" style="background:#0d0d0d">`;
-  html += `<rect x="0" y="0" width="${w}" height="${h}" fill="#0f0f0f"/>`;
+  let html = `<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" style="background:${A.dark0}">`;
+  html += `<rect x="0" y="0" width="${w}" height="${h}" fill="${A.dark1}"/>`;
 
   // Stand principal (toldo)
   const standW = Math.min(240, Math.floor(3.2 * scale));
   const standH = Math.min(170, Math.floor(2.7 * scale));
-  html += `<rect x="30" y="50" width="${standW}" height="${standH}" rx="6" fill="#111" stroke="${A.accent}" stroke-width="2.5"/>`;
+  html += `<rect x="30" y="50" width="${standW}" height="${standH}" rx="6" fill="${A.dark2}" stroke="${A.accent}" stroke-width="2.5"/>`;
   html += `<text x="42" y="72" fill="${A.paper}" font-size="12" font-weight="700">${nombre.substring(0,28)}</text>`;
   html += `<text x="42" y="90" fill="${A.support}" font-size="9">Stand ~${Math.round(standW/scale)}×${Math.round(standH/scale)} m</text>`;
 
@@ -167,7 +185,7 @@ function recalcular() {
   const mesaY = 50 + standH - 42;
   for (let i = 0; i < Math.min(vol, 5); i++) {
     const mx = 44 + i * 38;
-    html += `<rect x="${mx}" y="${mesaY}" width="32" height="20" rx="2" fill="#1f1f1f" stroke="${A.accent}" stroke-width="1"/>`;
+    html += `<rect x="${mx}" y="${mesaY}" width="32" height="20" rx="2" fill="${A.dark4}" stroke="${A.accent}" stroke-width="1"/>`;
     html += `<text x="${mx+4}" y="${mesaY+14}" fill="${A.support}" font-size="7">mesa</text>`;
   }
 
@@ -175,32 +193,32 @@ function recalcular() {
   const sillaY = 50 + standH + 8;
   for (let i = 0; i < Math.min(vol, 7); i++) {
     const sx = 38 + i * 32;
-    html += `<rect x="${sx}" y="${sillaY}" width="16" height="16" rx="2" fill="#222" stroke="#444"/>`;
+    html += `<rect x="${sx}" y="${sillaY}" width="16" height="16" rx="2" fill="${A.dark5}" stroke="${A.support}"/>`;
   }
 
   // Pasillo de circulación
-  html += `<rect x="${standW + 55}" y="45" width="14" height="${standH + 70}" fill="none" stroke="#555" stroke-width="1" stroke-dasharray="3 2"/>`;
+  html += `<rect x="${standW + 55}" y="45" width="14" height="${standH + 70}" fill="none" stroke="${A.support}" stroke-width="1" stroke-dasharray="3 2"/>`;
   html += `<text x="${standW + 72}" y="70" fill="${A.support}" font-size="8" transform="rotate(90 ${standW + 72} 70)">pasillo</text>`;
 
   // Testeo
   if (testeo) {
-    html += `<rect x="${standW + 85}" y="65" width="118" height="95" rx="4" fill="#0f1614" stroke="${A.accent}" stroke-width="1.5"/>`;
+    html += `<rect x="${standW + 85}" y="65" width="118" height="95" rx="4" fill="${A.dark2}" stroke="${A.accent}" stroke-width="1.5"/>`;
     html += `<text x="${standW + 94}" y="85" fill="${A.paper}" font-size="10" font-weight="700">TESTEO</text>`;
-    html += `<rect x="${standW + 95}" y="95" width="28" height="18" fill="#222" stroke="#444"/>`;
-    html += `<rect x="${standW + 130}" y="95" width="28" height="18" fill="#222" stroke="#444"/>`;
+    html += `<rect x="${standW + 95}" y="95" width="28" height="18" fill="${A.dark5}" stroke="${A.support}"/>`;
+    html += `<rect x="${standW + 130}" y="95" width="28" height="18" fill="${A.dark5}" stroke="${A.support}"/>`;
     html += `<text x="${standW + 95}" y="140" fill="${A.support}" font-size="8">reactivos + mesa</text>`;
   }
 
   // Zona extra para masivo
   if (masivo || asistentes > 1800) {
     const extraY = 50 + standH + 35;
-    html += `<rect x="30" y="${extraY}" width="${standW}" height="52" rx="4" fill="#151515" stroke="#444"/>`;
+    html += `<rect x="30" y="${extraY}" width="${standW}" height="52" rx="4" fill="${A.dark3}" stroke="${A.support}"/>`;
     html += `<text x="42" y="${extraY + 20}" fill="${A.support}" font-size="9">ZONA DESCANSO / CONTENCIÓN</text>`;
-    html += `<text x="42" y="${extraY + 36}" fill="#666" font-size="8">+${Math.floor(asistentes/400)} personas estimadas</text>`;
+    html += `<text x="42" y="${extraY + 36}" fill="${A.support}" font-size="8">+${Math.floor(asistentes/400)} personas estimadas</text>`;
   }
 
   // Info footer
-  html += `<line x1="20" y1="${h-22}" x2="${w-20}" y2="${h-22}" stroke="#222"/>`;
+  html += `<line x1="20" y1="${h-22}" x2="${w-20}" y2="${h-22}" stroke="${A.dark5}"/>`;
   html += `<text x="30" y="${h-8}" fill="${A.support}" font-size="8">Escala ≈${scale}px/m  •  Voluntarios: ${vol}  •  Duración: ${dur}h  •  Asistentes: ~${asistentes}</text>`;
   html += `</svg>`;
 
@@ -278,6 +296,21 @@ function init() {
   document.addEventListener('keydown', e => { if (e.key === 'Enter') recalcular(); });
 }
 init();
+
+// Minimal conn hint when served by flujo app (desktop bridge or http)
+(function(){
+  const c = document.getElementById('plano-conn');
+  if (!c) return;
+  try {
+    if (window.pywebview && window.pywebview.api) {
+      c.textContent = '• desktop bridge';
+      c.style.color = A.accent;
+    } else if (location.protocol.startsWith('http')) {
+      c.textContent = '• backend live';
+      c.style.color = A.accent;
+    }
+  } catch(e){}
+})();
 </script>
 </body>
 </html>

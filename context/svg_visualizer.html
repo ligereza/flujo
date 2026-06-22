@@ -5,47 +5,60 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>FLUJO • Visualizador SVG</title>
 <style>
+  /*
+  =====================================================================
+  BRAND ENFORCED — flujo (projects/flujo/flujo.json) — svg_visualizer
+  =====================================================================
+  EXACT colors: ink #1f2a24, accent #2d5a4a, paper #f8f1e3 (SVG print interiors ONLY), support #675f55, alert #c2410f
+  Dark pro: full #0a0a0a / #141414 — zero light/chrome outside paper SVGs.
+  Generous pro: card padding 16px+, grid gaps 16px, radius 8px, Inter, uppercase labels.
+  FORBIDDEN: neon, cyan, hacker, tight spacing, experimental. Paper misuse = violation.
+  All SVGs + chrome pass Brand Validator in hub. Use "Volver al Hub".
+  */
   :root {
     --bg: #0a0a0a; --panel: #141414; --panel2: #1a1a1a;
     --border: #2a2a2a; --text: #e8e8e8; --muted: #888;
-    --cyan: #00f0ff; --accent: #173F2F; --green: #2ecc71; --orange: #c2410f;
+    /* flujo brand exact from projects/flujo/flujo.json — no cyan legacy */
+    --flujo-ink: #1f2a24; --flujo-accent: #2d5a4a; --flujo-paper: #f8f1e3;
+    --flujo-support: #675f55; --flujo-alert: #c2410f;
+    --accent: #2d5a4a;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { background: var(--bg); color: var(--text); font-family: 'Inter', system-ui, sans-serif; font-size: 14px; }
-  header { background: var(--panel); border-bottom: 1px solid var(--border); padding: 12px 20px; display: flex; align-items: center; gap: 12px; }
+  header { background: var(--panel); border-bottom: 1px solid var(--border); padding: 14px 24px; display: flex; align-items: center; gap: 12px; }
   header h1 { font-size: 18px; font-weight: 700; letter-spacing: -0.02em; }
-  .badge { background: var(--accent); color: #fff; padding: 3px 10px; border-radius: 4px; font-size: 11px; font-weight: 600; }
+  .badge { background: var(--flujo-accent); color: #fff; padding: 4px 12px; border-radius: 4px; font-size: 11px; font-weight: 600; }
   .nav { display: flex; gap: 8px; margin-left: auto; }
-  .nav a, .nav button { background: var(--panel2); color: var(--text); border: 1px solid var(--border); padding: 6px 12px; border-radius: 4px; font-size: 12px; text-decoration: none; cursor: pointer; }
-  .nav a:hover, .nav button:hover { border-color: var(--cyan); }
+  .nav a, .nav button { background: var(--panel2); color: var(--text); border: 1px solid var(--border); padding: 8px 14px; border-radius: 5px; font-size: 12px; text-decoration: none; cursor: pointer; }
+  .nav a:hover, .nav button:hover { border-color: var(--accent); }
   .nav .nav-link { font-weight: 600; }
-  .main { max-width: 1400px; margin: 0 auto; padding: 20px; }
-  .section-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin: 16px 0 10px; display: flex; align-items: center; gap: 6px; }
-  .section-title::before { content: ''; width: 3px; height: 14px; background: var(--cyan); border-radius: 2px; }
-  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); gap: 14px; }
-  .svg-card { background: var(--panel); border: 1px solid var(--border); border-radius: 8px; padding: 12px; display: flex; flex-direction: column; }
-  .svg-card:hover { border-color: var(--cyan); }
+  .main { max-width: 1400px; margin: 0 auto; padding: 24px; }
+  .section-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin: 18px 0 12px; display: flex; align-items: center; gap: 8px; }
+  .section-title::before { content: ''; width: 3px; height: 14px; background: var(--accent); border-radius: 2px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); gap: 16px; }
+  .svg-card { background: var(--panel); border: 1px solid var(--border); border-radius: 8px; padding: 16px; display: flex; flex-direction: column; } /* generous pro */
+  .svg-card:hover { border-color: var(--accent); }
   .svg-card h3 { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
   .svg-card .meta { font-size: 11px; color: var(--muted); margin-bottom: 8px; }
-  .svg-view { background: #0d0d0d; border: 1px solid var(--border); border-radius: 6px; min-height: 220px; display: flex; align-items: center; justify-content: center; overflow: hidden; margin-bottom: 10px; position: relative; }
+  .svg-view { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; min-height: 220px; display: flex; align-items: center; justify-content: center; overflow: hidden; margin-bottom: 14px; position: relative; padding:8px; box-shadow: inset 0 1px 0 rgba(255,255,255,0.02); } /* premium dark */
   .svg-view object { width: 100%; height: 100%; max-height: 260px; }
   .svg-view .fallback { font-size: 11px; color: var(--muted); padding: 10px; text-align: center; }
-  .actions { display: flex; flex-wrap: wrap; gap: 6px; }
-  .btn { background: linear-gradient(135deg, var(--cyan), #7000ff); color: #000; border: none; border-radius: 4px; padding: 6px 12px; font-weight: 700; font-size: 11px; cursor: pointer; text-transform: uppercase; letter-spacing: 0.04em; }
+  .actions { display: flex; flex-wrap: wrap; gap: 8px; }
+  .btn { background: linear-gradient(135deg, var(--accent), #1a3f2e); color: #fff; border: none; border-radius: 5px; padding: 8px 14px; font-weight: 700; font-size: 11px; cursor: pointer; text-transform: uppercase; letter-spacing: 0.04em; }
   .btn:hover { opacity: 0.9; }
   .btn-sec { background: var(--panel2); color: var(--text); border: 1px solid var(--border); }
-  .btn-sec:hover { border-color: var(--cyan); }
-  .group { margin-bottom: 32px; }
+  .btn-sec:hover { border-color: var(--accent); }
+  .group { margin-bottom: 36px; }
   .hint { font-size: 11px; color: var(--muted); }
-  .footer { margin-top: 40px; font-size: 11px; color: var(--muted); border-top: 1px solid var(--border); padding-top: 12px; }
-  .mejoras { font-size: 11px; background: var(--panel2); border: 1px solid var(--border); padding: 8px; border-radius: 4px; margin-top: 6px; }
+  .footer { margin-top: 44px; font-size: 11px; color: var(--muted); border-top: 1px solid var(--border); padding-top: 14px; }
+  .mejoras { font-size: 11px; background: var(--panel2); border: 1px solid var(--border); padding: 10px; border-radius: 6px; margin-top: 8px; }
   .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.85); display: none; align-items: center; justify-content: center; z-index: 100; }
   .modal.show { display: flex; }
   .modal-content { background: var(--panel); border: 1px solid var(--border); border-radius: 8px; width: 92%; max-width: 1100px; max-height: 92vh; display: flex; flex-direction: column; overflow: hidden; }
-  .modal-header { padding: 10px 16px; background: var(--panel2); border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
-  .modal-body { padding: 16px; flex: 1; overflow: auto; background: #0d0d0d; display: flex; align-items: center; justify-content: center; }
+  .modal-header { padding: 12px 18px; background: var(--panel2); border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+  .modal-body { padding: 18px; flex: 1; overflow: auto; background: var(--bg); display: flex; align-items: center; justify-content: center; }
   .modal-body object { width: 100%; max-height: 78vh; box-shadow: 0 10px 40px rgba(0,0,0,.6); }
-  .modal-footer { padding: 10px 16px; border-top: 1px solid var(--border); display: flex; gap: 8px; justify-content: flex-end; background: var(--panel); }
+  .modal-footer { padding: 12px 18px; border-top: 1px solid var(--border); display: flex; gap: 8px; justify-content: flex-end; background: var(--panel); }
 </style>
 </head>
 <body>
@@ -53,7 +66,8 @@
   <h1>FLUJO</h1>
   <span class="badge">Visualizador SVG</span>
   <div class="nav">
-    <a class="nav-link" href="flujo_hub.html" style="background:#1f2a24;border-color:#2d5a4a;font-weight:600">← Volver al Hub principal (menú)</a>
+    <a class="nav-link" href="flujo_hub.html" style="background:var(--flujo-ink);border-color:var(--flujo-accent);font-weight:600">← Volver al Hub principal (menú)</a>
+    <span style="font-size:9px;color:#c2410f;align-self:center;font-weight:600">LEGACY paths (svg/ directos) — marcados, usa desde hub + validator. NO afectan main visuals.</span>
     <a href="../svg/">Carpeta svg/</a>
     <button onclick="location.reload()">Recargar</button>
   </div>
@@ -61,11 +75,16 @@
 
 <div class="main">
 
-  <p class="hint">Visualizador nativo. Los <b>SVGs originales</b> pueden tener tonos paper claros de flujo (eso es correcto para Illustrator). El chrome es full dark. Usa "Usar como base" para copiar ruta y comando listo para nuevo trabajo.</p>
+  <p class="hint">Visualizador nativo (brand enforced desde flujo.json). Los <b>SVGs originales</b> pueden tener tonos paper claros de flujo (correcto para Illustrator). El chrome UI es full dark pro. Usa "Usar como base" para flujo real. <strong>Corre Brand Validator desde hub ANTES de entregar.</strong> Ver Brand Enforcement en Hub (VALIDAR BRAND AHORA). <span id="live-hint" class="small muted"></span></p>
+  <div style="font-size:10px; background:rgba(45,90,74,0.15); padding:5px 8px; border-radius:4px; margin:4px 0; color:#2d5a4a; font-weight:600; border-left:3px solid var(--flujo-accent);">BRAND ENFORCED ✓ Paleta exacta projects/flujo/flujo.json. Paper SOLO en SVGs internos. Ejecuta VALIDAR BRAND AHORA desde hub. Legacy paths marcados.</div>
 
   <div style="margin: 8px 0 14px;">
     <input id="svgFilter" type="text" placeholder="Filtrar piezas (ej: flyer, suplemento, rider)" style="max-width:320px" onkeyup="filterSVGWorks()">
+    <button class="btn-sec" onclick="loadLiveSvgWorks()" style="margin-left:8px;font-size:11px">Recargar live desde backend</button>
   </div>
+
+  <!-- Live dynamic works injected here when flujo app running -->
+  <div id="live-svg-grid" class="grid" style="margin-bottom:20px;display:none"></div>
 
   <!-- EVENTOS / FLYERS / RIDERS / ETIQUETAS -->
   <div class="group">
@@ -219,10 +238,11 @@
   </div>
 
   <div class="footer">
+    BRAND ENFORCED: todos visuals usan identidad flujo exacta. Corre Brand Validator en hub antes de export. <br>
     Todos los SVGs son editables en Illustrator. Vectorizados listos para producción. <br>
     <b>Tip agente:</b> Copia la ruta + úsala en config.json de un nuevo proyecto piezas_vectoriales o como referencia para flujo analyze.
-    <br><a href="flujo_hub.html" style="color:var(--cyan); font-weight:600">← Volver al Hub principal / menú del flujo</a>
-    &nbsp;•&nbsp; <a href="plano_demo.html" style="color:var(--cyan)">Ir a Plano Demo</a>
+    <br><a href="flujo_hub.html" style="color:var(--accent); font-weight:600">← Volver al Hub principal / menú del flujo</a>
+    &nbsp;•&nbsp; <a href="plano_demo.html" style="color:var(--accent)">Ir a Plano Demo</a>
   </div>
 
 </div>
@@ -303,6 +323,54 @@ function filterSVGWorks() {
     const txt = card.textContent.toLowerCase();
     card.style.display = (!q || txt.includes(q)) ? '' : 'none';
   });
+}
+
+// Live backend integration (when launched via flujo app / --desktop)
+function getPywebviewApi() {
+  try { return (window.pywebview && window.pywebview.api) || null; } catch(e){return null;}
+}
+function callLive(endpoint) {
+  const api = getPywebviewApi();
+  if (api && endpoint.includes('svg')) {
+    return Promise.resolve(api.list_svg_works ? api.list_svg_works() : fetch(endpoint).then(r=>r.json()));
+  }
+  return fetch(endpoint).then(r=>r.json()).catch(()=> ({}));
+}
+
+function loadLiveSvgWorks() {
+  const container = document.getElementById('live-svg-grid');
+  const hint = document.getElementById('live-hint');
+  if (!container) return;
+  container.style.display = 'grid';
+  container.innerHTML = '<div class="small muted">Escaneando svg/ desde backend...</div>';
+  callLive('/api/list-svg-works').then(d => {
+    if (!d.groups || Object.keys(d.groups).length === 0) {
+      container.innerHTML = '<div class="small muted">Sin datos live (usa flujo app). Mostrando estáticos.</div>';
+      return;
+    }
+    let html = '';
+    Object.keys(d.groups).forEach(g => {
+      const its = d.groups[g] || [];
+      html += `<div class="svg-card"><h3>${g}</h3><div class="meta">live • ${its.length} piezas</div>`;
+      its.slice(0,3).forEach(it => {
+        const p = '../' + it.path;
+        html += `<div class="actions" style="margin:4px 0"><a class="btn-sec btn" href="${p}" target="_blank">${it.name}</a> <button class="btn-sec btn" onclick="usarComoBase('${p}','${it.name}')">Usar base</button></div>`;
+      });
+      html += '</div>';
+    });
+    container.innerHTML = html;
+    if (hint) hint.textContent = `Live: ${d.count} SVGs cargados desde backend.`;
+  }).catch(() => {
+    container.style.display = 'none';
+    if (hint) hint.textContent = '(sin backend live)';
+  });
+}
+
+// Auto attempt live load on desktop/app
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', () => setTimeout(loadLiveSvgWorks, 350));
+} else {
+  setTimeout(loadLiveSvgWorks, 350);
 }
 </script>
 </body>

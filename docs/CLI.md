@@ -1,7 +1,9 @@
 # flujo · CLI Reference (v0.34.10)
 
+**Entrada diaria principal:** `flujo app` (o `flujo app --desktop`) — lanza servidor + hub pro workspace.
+
 La CLI `flujo` es la entrada principal al sistema. Reemplaza la mayoría de los
-scripts sueltos de `scripts/` por comandos tipados y autodocumentados.
+scripts sueltos de `scripts/` por comandos tipados y autodocumentados. `flujo app` activa el hub como workspace central + APIs reales.
 
 ## Instalación
 
@@ -40,7 +42,7 @@ privacy         privacy scan, sanitize, check
 brief           brief extract, to-project, show
 render          render run, validate, formats, rescale
 diario          daily
-web             serve, app
+web             serve, app, package (build .exe desktop)
 airdrop         airdrop list, dry-run, apply, rollback, status, finish
 plano           plano <evento.json> [--rider] [--costs]
 varios          clean
@@ -84,10 +86,20 @@ flujo export projects/flyer_eventos/mi-flyer
 flujo index --rebuild
 flujo flyer-list
 
-# Dashboard / web
+# Dashboard / web + delegación
 flujo daily
-flujo serve
-flujo app
+flujo app                   # ENTRADA DIARIA: app + hub pro (recomendado)
+flujo app --desktop         # ventana nativa (pywebview)
+flujo package               # construye .exe standalone (PyInstaller gratis): doble clic abre flujo app --desktop sin consola
+flujo delegate visual-polish "tarea aquí"   # o pipeline | brand | future
+flujo serve                 # alias (usa --hub por defecto)
+
+# Packaging desktop (free, PyInstaller + pywebview)
+# Pre: py -m pip install -e .[web,desktop-extras,build]
+# Luego: flujo package   → dist/flujo-hub.exe  (onefile noconsole)
+# Doble clic: lanza directo "flujo • Workspace" nativo con icono, tray, assets bundled (context/svg/brand), jobs en flujo_workspace/ sibling.
+# Actualiza rebuild tras cambios en HTMLs/paths.
+# (Mantiene flujo app --desktop intacto en source; exe = standalone pro daily)
 
 # Plano
 flujo plano projects/plano/ejemplos/evento_ejemplo.json
@@ -154,4 +166,4 @@ Transiciones válidas y sugerencias viven en `flujo.jobs.brief.EstadoJob` y
 | `py scripts/privacy_sanitize_text.py` | `flujo privacy sanitize` |
 | `py scripts/piezas_formatos.py` | `flujo render formats` |
 | `py scripts/flujo_health.py` | `flujo health` |
-| `py scripts/app.py` | `flujo serve` / `flujo app` |
+| `py scripts/app.py` | `flujo serve` / `flujo app` (legacy Gradio: `flujo serve --legacy`) |
