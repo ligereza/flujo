@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FLUJO Studio · Prototipo</title>
+<title>FLUJO Studio · Prototipo (referencia de estilo)</title>
 <style>
   :root {
     --bg: #0a0a0a; --panel: #141414; --panel2: #1a1a1a;
@@ -89,6 +89,7 @@
 </style>
 </head>
 <body>
+<!-- Referencia de estilo dark (usada para hub y visualizadores). Ver context/flujo_hub.html para el workspace actual. -->
 <div class="app">
   <!-- HEADER -->
   <header>
@@ -355,7 +356,7 @@ function renderTextEditors() {
       div.className = 'text-edit';
       div.innerHTML = `
         <label>${el.type.toUpperCase()} — fill: ${el.fill} · size: ${el.size}</label>
-        <textarea rows="${isLong ? 3 : 1}" onchange="setText(${i}, this.value)" 
+        <textarea rows="${isLong ? 3 : 1}" onchange="setText(${i}, this.value)"
           placeholder="contenido...">${(el.content || '').replace(/&/g,'&amp;').replace(/</g,'&lt;')}</textarea>`;
       container.appendChild(div);
       textIdx++;

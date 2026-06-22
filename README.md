@@ -94,9 +94,10 @@ Pedido (correo / mensaje / JSON)
 Si eres una IA mejorando este repo, este es **exactamente** tu protocolo:
 
 ### 1. Entiende antes de tocar
-Lee, en orden: este README → `PARA_IA_CONTEXT.md` → `docs/AGENT_GUIDE.md` →
-`docs/CLI.md`. Clona el repo y corre `py -m pytest tests/ -q` y `flujo health`
-para conocer el estado real (no asumas que la doc está 100% al día).
+Abre primero `context/flujo_hub.html`.
+Luego lee `PARA_IA_CONTEXT.md` + `context/LAST_HANDOFF.md` + `docs/AGENT_OPERATING_MANUAL.md`.
+Clona el repo y corre `py -m pytest tests/ -q` y `flujo health`
+para conocer el estado real. El hub + visualizadores son la fuente actualizada.
 
 ### 2. Trabaja en tu propio clon, no en el repo del dueño
 Haces tus cambios, los **pruebas** (`pytest`, `compileall`, prueba manual de
@@ -529,13 +530,15 @@ flujo render run <config.json>
 flujo render rescale <config.json> --dpi 300        # subir resolución (anti-pixelado)
 flujo render rescale <config.json> -w 14 -h 10      # cambiar proporción/medida
 
-# Flyers desde Instagram
+# Flyers desde Instagram (legacy - usa el hub para intake moderno)
 flujo flyer-import <correo.txt>
 flujo flyer-list
 flujo ig-redownload [--all]
 flujo analyze [--all] [--force-ocr]
 flujo export <proyecto>
 flujo index [--rebuild | --duplicates]
+
+**Nota:** Para uso diario se recomienda el intake desde `context/flujo_hub.html` en vez de comandos legacy.
 
 # Operación diaria
 flujo daily                   # dashboard del día

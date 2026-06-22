@@ -51,6 +51,10 @@ context/dashboard.html
 tmp_*/
 ig_*/
 
+# Higiene de repo (no commitear ruído histórico)
+# Ver docs/HIGIENE_REPO.md y context/README.md
+# _airdrop_backups/, checkpoints/, _archive/ y reference_old/ son legacy y deben mantenerse mínimos en root.
+
 # Carpetas de descarga de Instagram con ruta de Windows (no commitear)
 C：*/
 *ig_*/

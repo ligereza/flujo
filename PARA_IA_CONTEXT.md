@@ -36,8 +36,7 @@ En Linux/macOS puedes usar `python3` o `python` en vez de `py`.
 
 - **v0.34.10:** hotfix del runner de airdrops: evita que `scripts/flujo.py` sombree al paquete `src/flujo` cuando se ejecuta `py scripts/run_airdrop_checks.py`.
 - **v0.34.9:** sincronización de documentación para agentes: este contexto,
-  `docs/AGENT_GUIDE.md`, `docs/CLI.md`, README y changelog quedan alineados con
-  el estado actual.
+  El hub (`context/flujo_hub.html`), visualizadores y LAST_HANDOFF quedan alineados con el estado actual.
 - **v0.34.8:** confiabilidad de airdrop y base universal: rollback con manifest
   (`REPLACE` se restaura, `NEW` se elimina), `flujo airdrop apply` valida antes
   de aplicar, alias real `flujo app`, base universal con `json.dumps`, setup más

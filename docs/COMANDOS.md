@@ -1,4 +1,6 @@
-# Comandos — flujo v0.16
+# Comandos — flujo
+
+**Nota importante:** Muchos comandos legacy de intake y flyers han sido reemplazados por el workspace moderno en `context/flujo_hub.html`. Usa el hub para pedidos y visualización. Los comandos CLI siguen disponibles para scripts.
 
 ## CLI unificada
 

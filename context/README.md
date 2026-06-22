@@ -28,6 +28,8 @@ Este es el **centro del repo** para trabajo diario.
 - `ESTADO.md` — Estado rápido (preferir el hub)
 - `dashboard.html` — Redirige al hub
 
+Ver también: `LAST_HANDOFF.md`, `../README.md`, `../docs/REPO_MAP.md` y `../docs/HIGIENE_REPO.md`.
+
 ## Flujo recomendado
 
 - Al empezar el día → abrir `flujo_hub.html`

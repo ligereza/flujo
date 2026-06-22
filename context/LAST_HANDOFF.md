@@ -9,13 +9,13 @@ Mantener este archivo **corto** (< 120 líneas ideal, < 180 máximo). Actualizar
 
 **Fecha:** 2026-06-22
 **Versión actual:** 0.34.10
-**Última sesión:**
-- Hub + visualizadores: modal "Vista grande", filtro, navegación "Volver al Hub principal (menú)", previews oscuros, "Usar como base" con comando listo, plano más rico.
-- **Repo general (big picture TODO ejecutado):**
-  - Actualizados AGENTS.md, PARA_IA.md, PARA_IA_CONTEXT.md, REPO_MAP, HIGIENE_REPO y README principal.
-  - Creado `context/README.md` como guía oficial del workspace.
-  - Reforzada la regla: abrir siempre `context/flujo_hub.html` primero.
-  - Mejoras en higiene de documentación y referencias (raíz sigue con deuda histórica pero ahora más clara).
+**Última sesión (non-destructive batch):**
+- Actualizados masivamente puntos de entrada: AGENTS.md, PARA_IA*, README, REPO_MAP, HIGIENE_REPO, COMANDOS.md, PARA_IA_CONTEXT.md.
+- Creado context/README.md + scripts/suggest_repo_hygiene.py (solo sugerencias seguras).
+- Agregados banners/notas en legacy (plano_editor, studio_prototipo).
+- .gitignore + higiene comments mejorados.
+- Todo el onboarding ahora empuja consistentemente al hub + visualizadores como centro.
+- Raíz y docs siguen con deuda histórica (checkpoints/_archive), pero referencias y workspace están alineados.
 
 ## Objetivo actual / tarea en curso
 Fortalecer los dos flujos de agentes:

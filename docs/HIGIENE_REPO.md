@@ -6,6 +6,8 @@ Versión: v0.34.10 (post consolidación de historia)
 
 El repo debe mantenerse útil para trabajo real y legible para agentes. No debe convertirse en un basurero de outputs, caches o pruebas locales.
 
+Ejecuta `py scripts/suggest_repo_hygiene.py` (100% no destructivo) para ver sugerencias actualizadas del estado actual.
+
 ## Nunca commitear
 
 - `_airdrop/`, `_airdrop_backups/`, `_logs/`
