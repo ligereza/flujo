@@ -353,7 +353,7 @@ def handoff(action: str = typer.Argument("last", help="last | create"),
         update = f"\n\n---\n\n**Actualización {now}**\n\n{message}\n\nActualiza la sección 'Próximas acciones' manualmente si es necesario."
         p.write_text(content.rstrip() + update, encoding="utf-8")
         _ok(f"LAST_HANDOFF.md actualizado con: {message}")
-        console.print("\nRecuerda: mantén el archivo corto y enfocado en 'qué sigue' para la próxima IA.")
+        console.print("Recuerda: agrega tareas simples claras + nota Windows (py) / Linux. Español primero.")
         return
 
     _warn("Acción desconocida. Usa 'last' o 'create -m ...'")

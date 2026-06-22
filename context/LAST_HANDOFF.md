@@ -29,6 +29,14 @@ Mantener este archivo **corto** (< 120 líneas ideal, < 180 máximo). Actualizar
 - LAST_HANDOFF es manual + auto-append básico; se puede hacer más inteligente (diff summary).
 - Recepción automática (IMAP/webhook) no implementada.
 
+## Tareas simples para otros agentes (low token, haz una a la vez)
+1. Windows: prueba `py -m flujo hub` o abre context/flujo_hub.html y reporta si algun link falla (usa rutas relativas).
+2. Agrega 1 ejemplo de cotizacion en projects/aistetic/ejemplos/mi-cotiz/ (copia de plano ejemplo) y genera su json con `flujo aistetic analyze`.
+3. Actualiza LAST_HANDOFF con 1 linea de "proximo paso" en español.
+4. En hub.html, agrega un mock simple para pegar texto de WhatsApp y convertir a brief basico (usa JS).
+5. Lee docs/FOR_EXTERNAL_AI.md y agrega nota: "Windows usa py, Linux python3. Prefiere español en respuestas".
+6. En aistetic/json/ crea un ejemplo simple de cotizacion usando el schema.
+
 ## Próximas acciones priorizadas (Top 5)
 1. Madurar Low-Token Continuation: hacer `flujo handoff create` más inteligente (generar summary desde git diff + handoff anterior).
 2. Profundizar layouts: usar `schemas/layout_primitives.schema.json` en el render de piezas y en plano (compartir estructuras).
@@ -56,14 +64,12 @@ py -m pytest tests/ -q --tb=no
   - Plano soporta `layout_mode` (row + grid_2x).
   - Ejemplo actualizado.
 
-## Notas para la próxima IA
-Si te quedaste sin tokens a mitad de algo:
-1. Lee `PARA_IA_CONTEXT.md`
-2. Lee **este archivo completo**
-3. Corre los comandos de "verificar rápido"
-4. Lee solo los handoffs recientes en `docs/handoffs/` si hace falta más detalle (la mayoría del detalle está aquí resumido).
+## Notas para la próxima IA (ahorra tokens)
+Lee solo: PARA_IA_CONTEXT.md + este LAST_HANDOFF.md + corre `flujo daily` + abre context/flujo_hub.html
 
-**Regla de oro de continuidad:** Si no actualizas este archivo al terminar, la próxima IA pierde el hilo.
+**Regla de oro:** Actualiza este archivo al final (agrega 1-2 lineas de "Tareas simples"). Usa español primero, nota Windows (`py`) vs Linux.
+
+El repo sirve para: "mira como trabajo (hub + ejemplos), ahora ayúdame (tareas claras arriba)". El desafío es ordenar pedidos (WhatsApp/Gmail) en estructuras claras.
 
 ---
 *Este archivo se actualiza manualmente o vía helper al final de cada airdrop/sesión. Mantenerlo conciso es responsabilidad de quien entrega.*

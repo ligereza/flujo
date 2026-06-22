@@ -129,7 +129,12 @@
           <div class="text-[10px] mt-2 text-[#675f55]">Los resultados van a aistetic/json/ para que agentes usen.</div>
         </div>
       </div>
-      <p class="text-xs text-[#675f55] mt-2">Este es el desafío central del repo. Usa ejemplos de aistetic + herramientas para pasar texto a imagen y viceversa de forma limpia.</p>
+      <p class="text-xs text-[#675f55] mt-2">Desafío central: texto (WhatsApp/Gmail) → estructura ordenada (brief/JSON via aistetic) → imagen. Pega pedido abajo para mock.</p>
+      <div class="mt-2">
+        <textarea id="pedido-input" class="w-full h-16 text-xs border p-1 rounded" placeholder="Pega aquí mensaje WhatsApp o Gmail: 'necesito flyer evento 10x14 para productora X, 7 voluntarios...'"></textarea>
+        <button onclick="parsePedido()" class="mt-1 px-2 py-0.5 bg-[#2d5a4a] text-white text-xs rounded">Parse a brief (mock) + sugerir aistetic</button>
+        <div id="pedido-result" class="text-[10px] mt-1 text-[#675f55]"></div>
+      </div>
     </section>
 
     <!-- Herramientas rápidas -->
@@ -221,6 +226,14 @@
       const p = document.getElementById('preview');
       if (p && p.innerText.includes('Preview')) generatePreview();
     }, 600);
+
+    function parsePedido() {
+      const input = document.getElementById('pedido-input').value || 'flyer 10x14 evento Reduciendo Daño 7 voluntarios';
+      const result = document.getElementById('pedido-result');
+      // Simple mock parse (optimiza orden: extrae clave de texto desordenado)
+      const brief = `tipo: flyer\nmedidas: 10x14\nproductos: ${input.includes('voluntarios') ? 'stand ONG' : 'general'}\npublico: productora\nnotas: ${input}`;
+      result.innerHTML = `Brief sugerido (copia a job):<br><pre class="text-[9px]">${brief}</pre>Usa aistetic para estilo. Luego 'flujo job new ...'`;
+    }
   </script>
 </body>
 </html>

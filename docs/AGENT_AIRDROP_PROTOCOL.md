@@ -20,14 +20,14 @@ src/_airdrop/...
 [cli.py](http://cli.py)
 ```
 
-## Obligatorio
+## Obligatorio (Windows primero, español prioritario)
 
 - ZIP con archivos reales dentro de `_airdrop/`.
-- `HANDOFF_*.md` o `HOTFIX_*.md` + **actualizar siempre `context/LAST_HANDOFF.md`** (esto es crítico para que otra IA pueda continuar con pocos tokens).
-- Rutas planas, sin links Markdown.
-- Comandos finales desde la raíz del repo, sin `cd` ni `unzip`.
-- Probar en clon limpio antes de entregar.
-- Mostrar lista de archivos del ZIP o confirmar que no está vacío.
+- `HANDOFF_*.md` o `HOTFIX_*.md` + **actualizar siempre `context/LAST_HANDOFF.md`** (incluye 1-2 tareas simples claras para otros agentes + nota plataforma: "Windows: py | Linux: python3").
+- Rutas planas (usa / ), sin links Markdown.
+- Comandos finales desde la raíz, usa `py` (Windows/Git Bash). Prueba en clon limpio.
+- Mostrar lista de archivos del ZIP.
+- En handoff: usa español primero para reducir malentendidos. Incluye sección "Tareas simples (low token)" como órdenes claras.
 
 ## Prohibido salvo autorización explícita
 
