@@ -27,6 +27,7 @@ El hub + visualizadores es el **main del flujo**:
 - Todo alineado a flujo + export AI/PS/Blender. Fuente de verdad diaria: hub (vía app) + LAST_HANDOFF.
 - Root hygiene ejecutado: histórico movido a `.archive/`.
 - Caches fully cleaned (2026-06-22): 16 __pycache__ dirs + 123 *.pyc + .pytest_cache removed (only generated). Improves `flujo app` startup + hub nav + IA resumption.
+- Delegación agentes completada (2026-06-22, restart + refresh): UI de `flujo app` optimizada (tabs para no todo en página principal; Brand consolidado a 1 solo botón + modal); plano_demo arreglado (recalcular reactivo + lógica real de stands/mesas desde engine); datadrop (airdrop inverso) listo para subir fotos reales de flyers/etiquetas terminados (manifests con for_future_ai para que IA "sepa qué buscar"); linea editorial v4 → v4.1.md con §10 validación datadrops + integración. Supervisor + scheduler cada 3min para evitar pérdida contexto/repetitions. Join datadrop + linea pendiente de uploads reales.
 - Docs consolidadas: `flujo app` + hub como centro. Gradio = legacy.
 
 **Dos flujos de trabajo para agentes:**

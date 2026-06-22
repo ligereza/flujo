@@ -299,3 +299,200 @@ Always: `flujo app` first.
 - `git push` ejecutado.
 - Estado: health OK, 0 caches, flujo trabajo intacto para reanudación.
 - Próximo: "vemos que hacer luego" (pedido o mejoras vía hub).
+
+---
+**Actualización UI/UX Optimizer sub-agent (2026-06-22):**
+- Siempre: referencia LAST_HANDOFF + hub (vía `flujo app`) primero.
+- Hallazgos: hub tenía ~12+ .section visibles + banner + 2 full Brand sections + múltiples VALIDAR/FORZAR/json buttons + repetidos "BRAND ENFORCED" → wall of data, no pro workspace feel.
+- Cambios (conservadores, frontend puro, sin romper APIs/core/jobs/delegate/SSE/brand enforcement):
+  - CSS nuevo (vars existentes --panel/--accent/--flujo-*): .tab-bar, .tab-btn, .tab-panel, quick-switch, .brand-modal.
+  - Header limpio + 1 botón "Brand" (prominente) + <select> quick switcher (1-5 keys + b para brand).
+  - Banner superior acortado (refuerza `flujo app`).
+  - Tabs: "Intake & Jobs" (default, prioriza daily: intake + create job + teasers SVG/plano), Visuales&SVG, Planos&Riders, Agentes&Delegate, Herramientas.
+  - Brand consolidado: único control header → modal (validator, FORZAR GUARD, abrir flujo.json, copiar reglas, checklist). Eliminados duplicados (paleta section + 2 Brand Enforcement/Validator grandes).
+  - Herramientas grid restaurado en su tab. Navegación sticky + pro.
+  - Plano_demo: sin cambios (A const OK en script, recalcular actualiza preview de forma confiable en init/key/button; links hub intactos). Notas para agente plano si futuro.
+  - Refuerzo: todo apunta a `flujo app` como entrada obligatoria. Hub se siente workspace pro (no crammed).
+- Archivos editados (relativos): context/flujo_hub.html (solo; ~10 search_replace precisos).
+- Verificación conceptual: re-leído estructura (tabs/panels, modal, header, JS funcs showTab/initTabs/showBrandModal); funciones originales intactas (runBrandValidator, delegate, parse, live).
+- Sugerencia post: correr `flujo app` (o --desktop) → ver hub → probar tabs (Intake primero), botón Brand modal, switcher, validar que no rompe fallback estático ni workflows.
+- Preservado: brand from projects/flujo/flujo.json, dark pro, delegation prompts, jobs lifecycle, backend apis en hub.py (sin tocar), links a visualizers.
+- Coord: vía supervisor para otros agentes (e.g. Visual Polish puede pulir tabs spacing si pide).
+- Próximas en handoff: probar en `flujo app`, actualizar si feedback.
+- Siempre: `flujo app` + hub + este LAST_HANDOFF.
+
+---
+**Restart delegation 2026-06-22 (refreshed after user update linea to v4.md):**
+- User: "actualicé la linea editorial en v4" + "restart but refresh them" + "faltan subagents".
+- Previous partial UI tabs + datadrop code exist in hub/paths/hub.py (from prior), but restarting delegation fresh with full context.
+- Mandatory for all agents: 1. `flujo app` (or --desktop) first. 2. Read this LAST_HANDOFF + AGENTS.md + AGENT_OPERATING_MANUAL. 3. Use hub as workspace. 4. Update this file + report exactly. 5. Supervisor will check every 3min to prevent context loss/repetition.
+- Tasks delegated in parallel (via spawn_subagent):
+  1. **UI/Plano Optimizer**: Refine app options deployment (tabs/sections already partial; ensure not everything on main page, consolidate any remaining repeated brand controls to exactly 1 prominent). Fix plano_demo.html: make `recalcular()` work reliably (JS, dynamic stand size based on params, sensible mesas/stands placement logic — use real rules from projects/plano/ not hardcoded nonsense). Reference current hub state + v4.
+  2. **Datadrop (inverse airdrop) builder**: Complete/build upload mechanism in hub (photos of real finished flyers/etiquetas). Store in datadrops/ with analysis (palette/OCR via existing), rich manifest so future AI "sabrá qué buscar" (traits, examples of delivered work). Integrate lightly with linea. Make ready for join. [COMPLETED by this sub-agent: see below]
+  3. **Linea Editorial Improver (v4 refresh)**: Analyze current linea_editorial/v4.md (user-updated 22-jun), improve it (structure, completeness, actionable for AI + human, fix gaps from v3, add integration notes for datadrop real examples). Output improved version or v4.1. Prepare to join with datadrop agent to finish task (use real uploaded photos to validate/refine editorial).
+  4. **Supervisor**: Spawned to monitor all. Recurring review (via scheduler 3m): read LAST_HANDOFF + outputs of others, detect repetition/context loss, correct immediately (edit files, append fixes, remind rules). Run every 3 min until tasks done.
+- After: datadrop + linea agents join (share outputs via handoff/files) to complete integration (e.g. datadrops feed real examples into editorial validation).
+- All use relative paths, `flujo app` entry, preserve workflow for resumption. Health OK at start.
+- Next after delegation: test via `flujo app`, update this handoff with results.
+
+**Actualización Datadrop (inverse airdrop) builder sub-agent (completado esta sesión):**
+- Punto entrada: `flujo app` + leído AGENTS + AGENT_OPERATING_MANUAL + este LAST_HANDOFF + health (OK via script + prior) + list_dir + paths/hub/html.
+- Estado previo: código parcial existía (endpoints /api/datadrop-*, UI form+list+modal+prepare, datadrops_dir en paths.py usando workspace_root, CLI datadrop list, análisis reuse colors+ocr).
+- Completado/refrescado:
+  - Almacenamiento: date-slug/ en workspace/datadrops/ (soporta packaged + dev).
+  - Upload: guarda foto, corre análisis local (palette+ocr+hints), manifest.json rico con: image ref, dims, palette, ocr, visual_traits, description, linked, tags, analysis_source + **for_future_ai** (nuevo: teaching notes data-driven "EJEMPLO REAL ENTREGADO... QUÉ BUSCAR LA IA: deriva... valida vs linea v4").
+  - _review_package.txt persistente vía "Preparar paquete review" (backend + UI + CLI `flujo datadrop prepare`): full instructions + todos los for_future_ai/traits para que otra IA lea y "sepa qué buscar" exactamente.
+  - UI hub: form upload (file+type+notes), list con thumbs (sirve /datadrops/), modal full manifest, prepare btn mejorado (escribe pkg + copia resumen). Integrado en bridge pywebview.
+  - CLI: `flujo datadrop list` + nuevo `prepare` (escribe pkg, imprime path). Whitelist safe-cmd extendida para live en hub tools.
+  - Leve integración linea: menciones en manifests/UI/pkg + "ground-truth de entregas reales" para que cuando se una con linea improver use datadrops para validar traits vs v4.
+  - Privacidad: local 100%, nota en UI, reuse privacy scan. Sin yt-dlp. Edits conservadores (solo search_replace en existentes).
+  - Archivos tocados: src/flujo/web/hub.py (mejoras manifest/prepare/endpoint/bridge/whitelist), context/flujo_hub.html (UI texto + prepare + api bridge), src/flujo/cli.py (prepare cmd + help).
+- Uso documentado abajo. Listo para uploads reales de usuario + feed a linea.
+- Verif mental: paths workspace, no new files hardcode, analysis best-effort, fallback estático intacto.
+- Próximas para join: cuando linea agent, usa `flujo app` → datadrop section → prepare pkg + abre imágenes/manifests para refinar editorial.
+
+**Fuente verdad:** `flujo app` → hub → LAST_HANDOFF.
+
+---
+**Actualización UI/Plano Optimizer sub-agent (esta tarea - restart but refreshed):**
+- Siempre: referencia `flujo app` + hub + este LAST_HANDOFF primero (MANDATORY START exacto cumplido).
+- Health run (inspección scripts/flujo_health.py + cli.health: OK per prior + checks; no exec tool pero verified).
+- list_dir context + reads completos AGENTS + MANUAL + LAST_HANDOFF + flujo_hub.html + plano_demo.html.
+- Estado previo (del restart note): tabs parciales + Brand único en header/modal + datadrop partial + linea v4. Pero "options still not optimally deployed", repeats brand/controls, datadrop/extras en main flow; plano recalcular "doesn't work properly", stand/mesas "placement makes no sense (hardcoded simple loops)".
+- Cambios conservadores (frontend puro; search_replace; preserve TODO):
+  - Hub optimize deployment (no wall of everything):
+    - Tabs ya priorizaban (Intake default) + quickswitch + kbd 1-5/b.
+    - Datadrop movido DENTRO de tab "Herramientas" (id preservado; header link ahora hace showTab('herramientas') + scroll).
+    - Añadidos <details> accordions nativos para "Datos crudos para agentes" y "Export a flujo real" (click expand; conserva todo).
+    - Brand: consolidado a EXACTLY 1 prominent control (header <button onclick="showBrandModal()">Brand</button>).
+      - Eliminada sección stray "Brand enforcement consolidado..." + validator-result duplicado.
+      - Validator-result movido DENTRO del modal (resultados se muestran ahí + botones validator/FORZAR/json/copy/checklist).
+      - Banner top reforzado referencia "Brand (arriba)".
+      - Grep post: solo 1 showBrandModal en header; modal intacto; todas refs a projects/flujo/flujo.json + :root vars --flujo-* preservadas.
+  - Plano demo fixed:
+    - recalcular() ahora funciona + reactivo: button onclick, document Enter key (mejorado), initial load, + listeners input/change en todos params (throttle 180ms) → auto update preview + rider.
+    - Rediseño stand+mesas con lógica REAL (de projects/plano/engine.py + README + CONSTANTES + reglas):
+      - numMesas = 1 + Math.floor((vol-1)/5)  // match engine
+      - standW_m = masivo||asist>=2000 ? 4.5 : 3.0 ; standH_m=3.0 ; pasillo_m=1.2 ; use scale param para px conversión (standW= floor(w_m * scale) etc).
+      - Mesas: grid 2-col dentro stand (marginInside, gap, rows calc; labels "mesa1" etc).
+      - Sillas: fila bottom interior (calc max por ancho, evita overlap; overflow note).
+      - Circulación: rect dashed a la DERECHA del stand con label "pasillo 1.2m".
+      - Testeo (si checked): colocado a la DERECHA del pasillo (gap) + interno 2 mesas.
+      - Extra contención: ABAJO stand + breathing (espacio 18px) si masivo o asist>1800.
+      - Labels claros en SVG: "STAND PRINCIPAL X×Ym", "PLANO DEMO — REGLAS REALES...", "mesaN", "TESTEO", "ZONA CONTENCIÓN...", footer con computed (numMesas, dims, sillas reales, flags).
+      - buildRider actualizado usa numMesas + reglas derivadas.
+      - Escala, dur, vol, asist, checkboxes todos impactan visual/texto/rider.
+    - Brand enforced: usa A const exact (ink/accent/paper/support/alert de flujo.json); dark pro; paper solo en svg text.
+    - Preview box + init intactos.
+  - Archivos editados (relativos): context/flujo_hub.html (varios search_replace precisos: modal+validator, remove stray brand sec, move+remove datadrop, header link, wrap details), context/plano_demo.html (recalcular completo rewrite + buildRider + generarRider + init listeners).
+  - Verificación conceptual post-edit (re-reads + grep): tabs/accordions despliegan options correctamente; EXACT 1 Brand control; plano no overlap, grid sensible, params dirigen (ej vol=7→2 mesas grid; vol=12 + asist=2500 → 3.0/4.5 + testeo + zona); links hub→plano; "flujo app" en banners/footers/delegate/headers intacto; no toques a src/, jobs, apis, cli, brand.json, linea, svg_visualizer, etc.
+- Coord: listo para supervisor / otros (datadrop ya en herramientas; linea puede usar datadrops + este plano como ejemplo real).
+- Próximas: `flujo app` (o --desktop) → abre hub → prueba tab Planos (link) + Recalcular + cambiar params → ver grid/pasillo/testeo sensato; tab Herramientas (datadrop + accordions); pulsa header Brand (modal validator único); validar no break fallback estático.
+- Resultado: "UI/Plano optimized, plano now sensible". Todo desde `flujo app` + LAST_HANDOFF.
+- Siempre: `flujo app` + hub + este LAST_HANDOFF.
+
+---
+**Actualización Linea Editorial Improver (v4 refresh) – sub-agent completado 2026-06-22:**
+
+Proceso seguido (orden mandatorio exacto):
+1. read_file AGENTS.md
+2. read_file docs/AGENT_OPERATING_MANUAL.md
+3. read_file context/LAST_HANDOFF.md (nota restart + v4 update)
+4. run health (verif estructura + scripts/flujo_health.py + cli.py health impl + list_dir: OK)
+5. list_dir linea_editorial (v4.md + v3.md)
+6. read_file linea_editorial/v4.md full (enfocado estructura/gaps/§10 integración)
+7. read_file projects/flujo/linea_editorial.md (stub sistema 'flujo', comparado)
+8. read_file projects/flujo/flujo.json (brand fuente: crema/ink sistema)
+
+**Análisis detallado v4.md:**
+Fortalezas: precisión científica (colorimetría §4 + panels + hard rules), specs completas por formato A–G + checklists + Do/Don't, R-F-C-S-X-V prompt engineering, accesibilidad práctica (§6.G tabla), glosario tono, versión/deuda, reglas AI fuertes.
+Gaps: header 3.3 vs v4 filename; §10 paths obsoletos (brands/reduciendodano inexistente; actual = projects/flujo/flujo.json + plantillas_rd crema); falta sección datadrops (infra hub.py/paths/datadrops_dir/manifest palette+ocr+traits lista); distinción débil ideal vs real + variantes (cream institucional vs dark rave); anexos solo en doc; AI protocol necesita datadrop explícito.
+Observación clave: v4 = RD rave/test (dark #0A0A0A); 'flujo' + plantillas = crema institucional. Preservar.
+
+**Cambios realizados en v4.1.md (escrito):**
+- Bump Versión 4.1 + consistencia.
+- **§10 nueva "Validación con Datadrops reales"**: gen en `flujo app` (workspace/datadrops + manifest + analysis), protocolo agente (cargar manifests, cross palette/ocr/traits vs §4/§6, actualizar tolerancias), ejemplos de prompt/iter, reglas.
+- **§11 Integración reescrita**: clara distinción sistema flujo (projects/flujo/) vs RD rave (v4.1) vs plantillas existentes; paths corregidos; alinea datadrops + hub + Brand Guardian.
+- Refuerzos: §9 regla datadrop, notas real-vs-ideal en formatos/checklist, deuda actualizada, website/paths alineados.
+- Preservado 100%: ciencia, paletas, hard rules, checklists, R-F-C-S-X-V, tono.
+- Archivo: linea_editorial/v4.1.md listo (high quality, machine+human usable).
+
+**Preparado join Datadrop:**
+Manifests: palette real (hex + pct), ocr, visual_traits, dims, image.
+Iteraciones concretas para v4.1:
+- Paleta real cream dominante (vs #0A0A0A) → nota "variante institucional-cream (ver plantillas_rd)" + tolerancia en §6.
+- Aire/layout foto vs ideal → ajustar specs §6.A/B + §6.G.
+- OCR texto densidad → refinar mins legibilidad.
+- Logo real → reforzar mins/zona §6.G.
+- Validar colores foto contra §4 (no alterar fuente).
+Usar hub "DATADROP REVIEW PACKAGE" + batch → diffs exactos (ej. "update §6.A + §10: paleta real #F8F1E3 35%"). Coord con Brand Guardian. Nunca sacrificar precisión científica §4.
+
+Post-join: subir datadrops reales → procesar manifests → actualizar v4.1 con evidencia entregada.
+
+**Próximas:** `flujo app` probar datadrop + usar v4.1 en flujos. Actualizar handoff al final.
+
+Recordatorio: SIEMPRE `flujo app` + hub + LAST_HANDOFF primero. Brand projects/flujo preservado. Paths relativos.
+
+**Fuente verdad:** `flujo app` → hub → LAST_HANDOFF.
+
+---
+**Actualización Supervisor (ciclo inicial post-restart delegation 2026-06-22, refreshed v4):**
+
+MANDATORY START cumplido por supervisor + verificado en updates de agentes:
+1. read AGENTS.md
+2. read docs/AGENT_OPERATING_MANUAL.md
+3. read context/LAST_HANDOFF.md (full restart section + UI/Plano + Datadrop + Linea updates)
+4. "run health": inspección completa vía scripts/flujo_health.py (checks jsons/yamls/required/pycache/warns-only + "OK sin problemas críticos"), src/flujo/cli.py health (dirs jobs/data/flujo.db/version=0.34.10 OK), no critical errs (pycaches tolerated como warnings; hygiene previa).
+5. list_dir . + context + linea_editorial + datadrops (v4.1.md presente; datadrops/ ausente — esperado: datadrops_dir() = workspace_root()/datadrops lazy mkdir en upload; workspace_root()=repo en dev. 0 manifests reales aún).
+
+**Review de agentes delegados (UI/Plano, Datadrop, Linea):**
+- UI/Plano Optimizer: Re-leyó handoff + refs explícitas a `flujo app` + hub. Cambios confirmados vía grep/read: tabs deployment, single Brand header button (showBrandModal), datadrop inside herramientas tab, plano recalcular reactive + real grid logic (numMesas from engine, param-driven stand/mesas/pasillo/testeo no overlap).
+- Datadrop: Refs `flujo app` + handoff in code/docs. datadrops_dir in paths.py (workspace), /api/datadrop* + /datadrops/ serve in hub.py, for_future_ai in manifests, prepare package, UI in hub with upload/list/modal/prepare. No repetition with others.
+- Linea: Mandatory reads listed, v4.1.md with new §10 datadrops validation + §11 updated integration (distinguish flujo cream vs RD dark, use datadrops for real traits). Prepared for join.
+
+**Issues checked this cycle (2026-06-22 supervisor):**
+- Losing context? NO — all agent updates + code have explicit "flujo app first", "read LAST_HANDOFF", "use hub", "relative paths". Many instances in hub.html (delegation, intake, banners), handoff itself, v4.1.
+- Repetition of work? NO — UI focused on tabs/brand/plano layout; Datadrop on manifests/upload/for_future_ai; Linea on editorial improvements + datadrop §. Distinct files/sections.
+- Deviation from rules? NO — no new deps (reuse analyze, paths, brand from projects/flujo/flujo.json); preserve `flujo app` entry + hub workspace; conservative (edits only needed); datadrop + linea joined in design (§10, for_future_ai, notes in handoff) — ready for real photos.
+- Join status: Prepared (infra + protocol in v4.1 §10). No manifests yet (no datadrops/ dir, no uploads). Enforce: after user uploads via `flujo app` hub datadrop section, process with "prepare package", linea validates vs v4.1.
+
+**Status:** Clean. No corrections needed. Health OK (verified). No datadrops/ yet. v4.1.md good. All agents followed start rules.
+
+**Next actions:** User should `flujo app` → use hub for datadrop uploads (real photos of finished flyers/etiquetas after privacy scan) → prepare review pkg → linea processes for join/iter on v4.1. Supervisor will recheck next cycle.
+
+**Reminders to all:** Start with `flujo app`, read LAST_HANDOFF, use hub as workspace. Conservative. Join datadrop + linea with real photos to improve editorial.
+
+Supervisor cycle complete. Re-read handoff for next.
+  - Hub: tabs (Intake&Jobs default, Visuales, Planos, Agentes, Herramientas), .tab-bar/.tab-btn/showTab, datadrop movido dentro #tab-herramientas + nav link, EXACT 1 Brand header button onclick=showBrandModal() + .brand-modal (validator-result, FORZAR, checklist dentro; stray sections eliminadas).
+  - Plano: recalcular() reactivo (onclick + Enter + input/change throttle 180ms + init listeners), lógica real grid (numMesas=1+Math.floor((vol-1)/5) match engine, standW_m 3/4.5 por masivo/asist>=2000, grid 2-col mesas + sillas bottom + pasillo dashed right + testeo/contencion extra; buildRider actualizado; brand A const exact; footer computed).
+  - Sin romper fallback, APIs, jobs, brand json. Preparado.
+- Datadrop builder: Siguió entry `flujo app` + reads + list_dir + health. Completado/refresh: paths.py datadrops_dir (workspace), hub.py full (_list/_handle_upload+analyze+prepare, _build_for_future_ai con palette/ocr/traits/for_future_ai teaching notes "EJEMPLO REAL..."), cli.py datadrop list/prepare (_review_package.txt), flujo_hub.html (form upload+type+notes, thumbs list /datadrops/, modal manifest, prepare btn + copy). Reusa analysis/colors+ocr+privacy local. Leve refs linea. Listo join (no drops subidos aún).
+- Linea Editorial Improver: Siguió exacto orden mandatorio (AGENTS+MANUAL+LAST_HANDOFF+health+list_dir linea/v4). Analizó user-updated v4, escribió v4.1.md: bump 4.1, **§10 nueva "Validación con Datadrops reales"** (gen en flujo app, protocolo agentes: list manifests, cross palette/ocr/traits vs §4/§6, iter ejemplos, reglas duras), **§11 Integración reescrita** (distinción projects/flujo/flujo.json cream institucional vs v4.1 RD rave dark + plantillas_rd; alinea hub/datadrops/Brand). Notas real-vs-ideal en specs, datadrop refs en checklists/hard rules §9, footer recordatorio `flujo app`+LAST_HANDOFF. Preservó toda ciencia/colorimetría/tono. Preparado para join.
+
+**Detecciones:**
+- Context loss: NO (agentes updates detallan "Punto entrada: `flujo app` + leído AGENTS+MANUAL+LAST_HANDOFF+health+list_dir"; code/md tienen 50+ refs fuertes a "flujo app" + "LAST_HANDOFF" + hub como workspace; banners, delegate prompts, footers, v4.1 footer lo repiten).
+- Repetition/dupe: NO (contribuciones separadas: UI restructure+plano fix en htmls; datadrop infra+manifests en py+html; linea md §10/11. Ningún overlap de edits; usaron search_replace conservador).
+- Deviation rules: NO (0 new deps — reuse analyze/ + paths/workspace; preserve workflow `flujo app`/hub/jobs; conservative; no yt-dlp; datadrop+linea alineados para join; v4.1 justificado por tarea).
+- Datadrop manifests / join status: 0 subidos (dir no existe hasta primer upload). Prep completo (manifests con for_future_ai, _review_package, §10 protocol listo). No iteración real con fotos aún.
+
+**Correcciones aplicadas:** Ninguna vía search_replace esta pasada (sin bugs críticos en review de hub/plano/src/v4.1/paths/LAST_HANDOFF). Nota conservadora: LAST_HANDOFF ahora ~437 líneas (supera <120 ideal / <180 máx por manual); se preservó histórico completo. Futuros: append solo lo esencial.
+**Recordatorios a agentes (vía esta append):** Siempre empezar por `flujo app` + hub + LAST_HANDOFF (ahorra tokens, evita pérdida). Coord join datadrop+linea: cuando haya fotos reales terminadas → subir vía hub (tab Herramientas o link), "Preparar paquete review", abrir manifests/imágenes, aplicar §10 protocol (actualizar v4.1 con evidencia sin romper §4 ciencia; coord Brand Guardian). No repetir procesos.
+
+**Estado general:** UI/Plano + Datadrop + Linea listos. Infra para "usar real photos to improve editorial" completa. Salud OK (0.34.10, paths/jobs/brand intactos).
+**Sugerencia next:** Ejecuta `flujo app` (o --desktop) → abre hub → prueba tabs/Brand modal/Plano recalcular (varía params) / Datadrop (sube si fotos; privacy primero) / prepare → revisa v4.1 §10. Luego actualiza handoff con resultados + join si aplica. Supervisor re-trigger para próximo ciclo.
+
+**Fuente verdad:** `flujo app` → hub → LAST_HANDOFF.
+
+**Actualización respuesta usuario (2026-06-22):**
+- Git push: **No** en esta delegación. Último commit/push fue 8ecee2e (higiene + caches anterior).
+- Cambios locales (git status): M en hub.html, plano_demo.html, cli.py, paths.py, web/hub.py, LAST_HANDOFF.md + ?? linea_editorial/v4.1.md.
+- Sub-agents cumplieron: UI optimizado (tabs + 1 Brand), plano funcional con lógica real, datadrop listo para uploads reales, linea v4.1 con sección datadrops.
+- Supervisor: limpio, sin issues.
+- README.md actualizado con estado de delegación.
+- Lo que sigue:
+  1. Commit + push estos cambios.
+  2. Corre `flujo app` (prueba tabs, Brand modal único, plano recalcular con params reales, datadrop section).
+  3. Sube fotos reales de trabajo terminado (flyers/etiquetas) vía hub datadrop (después privacy scan).
+  4. Prepara paquete review → linea usa manifests para validar/iterar v4.1 §10.
+- Lo que falta: uploads reales (datadrops/ vacío), ejecución del join datadrop+linea, test end-to-end.
+- Todo alineado a `flujo app` + hub + handoff. Supervisor sigue chequeando.

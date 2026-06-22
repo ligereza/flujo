@@ -170,72 +170,119 @@ function recalcular() {
   const testeo = document.getElementById('incluye_testeo').checked;
   const masivo = document.getElementById('masivo').checked;
 
-  const w = 620, h = 440;
+  // Realistic param-driven (mirrors projects/plano/engine.py + README rules)
+  const numMesas = 1 + Math.floor((vol - 1) / 5); // 1 base + 1 cada 5 vol
+  const standW_m = (masivo || asistentes >= 2000) ? 4.5 : 3.0;
+  const standH_m = 3.0;
+  const pasillo_m = 1.2;
+  const mesaW_m = 2.0, mesaH_m = 0.7;
+  const silla_m = 0.5;
+
+  // px sizes from scale (px/m) + param effect
+  const standW = Math.floor(standW_m * scale);
+  const standH = Math.floor(standH_m * scale);
+  const pasilloW = Math.max(12, Math.floor(pasillo_m * scale * 0.7));
+  const mesaW = Math.floor(mesaW_m * scale * 0.65);
+  const mesaH = Math.floor(mesaH_m * scale * 0.7);
+  const sillaSz = Math.floor(silla_m * scale * 0.8);
+
+  const w = 620, h = 460;
   let html = `<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" style="background:${A.dark0}">`;
   html += `<rect x="0" y="0" width="${w}" height="${h}" fill="${A.dark1}"/>`;
 
-  // Stand principal (toldo)
-  const standW = Math.min(240, Math.floor(3.2 * scale));
-  const standH = Math.min(170, Math.floor(2.7 * scale));
-  html += `<rect x="30" y="50" width="${standW}" height="${standH}" rx="6" fill="${A.dark2}" stroke="${A.accent}" stroke-width="2.5"/>`;
-  html += `<text x="42" y="72" fill="${A.paper}" font-size="12" font-weight="700">${nombre.substring(0,28)}</text>`;
-  html += `<text x="42" y="90" fill="${A.support}" font-size="9">Stand ~${Math.round(standW/scale)}×${Math.round(standH/scale)} m</text>`;
+  // Base positions (generous margins, no overlap)
+  let baseX = 28;
+  let baseY = 48;
 
-  // Mesas (mejor distribución)
-  const mesaY = 50 + standH - 42;
-  for (let i = 0; i < Math.min(vol, 5); i++) {
-    const mx = 44 + i * 38;
-    html += `<rect x="${mx}" y="${mesaY}" width="32" height="20" rx="2" fill="${A.dark4}" stroke="${A.accent}" stroke-width="1"/>`;
-    html += `<text x="${mx+4}" y="${mesaY+14}" fill="${A.support}" font-size="7">mesa</text>`;
+  // Stand principal (toldo) - size driven by params
+  html += `<rect x="${baseX}" y="${baseY}" width="${standW}" height="${standH}" rx="6" fill="${A.dark2}" stroke="${A.accent}" stroke-width="2.5"/>`;
+  html += `<text x="${baseX + 10}" y="${baseY + 18}" fill="${A.paper}" font-size="11" font-weight="700">${nombre.substring(0,26)}</text>`;
+  html += `<text x="${baseX + 10}" y="${baseY + 33}" fill="${A.support}" font-size="8">STAND PRINCIPAL ${standW_m}×${standH_m} m</text>`;
+  html += `<text x="${baseX + 10}" y="${baseY + 46}" fill="${A.support}" font-size="7">(escala ${scale}px/m)</text>`;
+
+  // Mesas: grid placement (2 columnas) inside stand, realistic margins/circ
+  const marginInside = 8;
+  const cols = 2;
+  const gapMesa = 6;
+  const mesasPerCol = Math.ceil(numMesas / cols);
+  let mIdx = 0;
+  for (let r = 0; r < mesasPerCol; r++) {
+    for (let c = 0; c < cols; c++) {
+      if (mIdx >= numMesas) break;
+      const mx = baseX + marginInside + c * (mesaW + gapMesa);
+      const my = baseY + 52 + r * (mesaH + 5);
+      html += `<rect x="${mx}" y="${my}" width="${mesaW}" height="${mesaH}" rx="2" fill="${A.dark4}" stroke="${A.accent}" stroke-width="1"/>`;
+      html += `<text x="${mx + 3}" y="${my + 11}" fill="${A.support}" font-size="6">mesa${mIdx + 1}</text>`;
+      mIdx++;
+    }
   }
 
-  // Sillas / personas
-  const sillaY = 50 + standH + 8;
-  for (let i = 0; i < Math.min(vol, 7); i++) {
-    const sx = 38 + i * 32;
-    html += `<rect x="${sx}" y="${sillaY}" width="16" height="16" rx="2" fill="${A.dark5}" stroke="${A.support}"/>`;
+  // Sillas: logical row(s) at bottom of stand interior, no overlap
+  const sillasY = baseY + standH - sillaSz - 8;
+  let sIdx = 0;
+  const maxSillas = Math.min(vol, Math.floor((standW - 2*marginInside) / (sillaSz + 4)));
+  for (let i = 0; i < maxSillas; i++) {
+    const sx = baseX + marginInside + i * (sillaSz + 4);
+    if (sx + sillaSz > baseX + standW - marginInside) break;
+    html += `<rect x="${sx}" y="${sillasY}" width="${sillaSz}" height="${sillaSz}" rx="1" fill="${A.dark5}" stroke="${A.support}" stroke-width="0.8"/>`;
+    sIdx++;
+  }
+  if (sIdx < vol) {
+    // overflow label
+    html += `<text x="${baseX + 8}" y="${sillasY - 4}" fill="${A.alert}" font-size="6">+${vol - sIdx} sillas</text>`;
   }
 
-  // Pasillo de circulación
-  html += `<rect x="${standW + 55}" y="45" width="14" height="${standH + 70}" fill="none" stroke="${A.support}" stroke-width="1" stroke-dasharray="3 2"/>`;
-  html += `<text x="${standW + 72}" y="70" fill="${A.support}" font-size="8" transform="rotate(90 ${standW + 72} 70)">pasillo</text>`;
+  // Circulación pasillo (logical to right of main stand)
+  const circX = baseX + standW + 6;
+  html += `<rect x="${circX}" y="${baseY - 4}" width="${pasilloW}" height="${standH + 28}" fill="none" stroke="${A.support}" stroke-width="1.5" stroke-dasharray="4 2"/>`;
+  html += `<text x="${circX + pasilloW/2 - 4}" y="${baseY + 14}" fill="${A.support}" font-size="6" transform="rotate(90 ${circX + pasilloW/2 - 4} ${baseY + 14})">pasillo ${pasillo_m}m</text>`;
 
-  // Testeo
+  // Testeo zone: logically placed to RIGHT of circulation (not overlapping)
   if (testeo) {
-    html += `<rect x="${standW + 85}" y="65" width="118" height="95" rx="4" fill="${A.dark2}" stroke="${A.accent}" stroke-width="1.5"/>`;
-    html += `<text x="${standW + 94}" y="85" fill="${A.paper}" font-size="10" font-weight="700">TESTEO</text>`;
-    html += `<rect x="${standW + 95}" y="95" width="28" height="18" fill="${A.dark5}" stroke="${A.support}"/>`;
-    html += `<rect x="${standW + 130}" y="95" width="28" height="18" fill="${A.dark5}" stroke="${A.support}"/>`;
-    html += `<text x="${standW + 95}" y="140" fill="${A.support}" font-size="8">reactivos + mesa</text>`;
+    const testX = circX + pasilloW + 8;
+    const testW = Math.min(118, Math.floor(2.2 * scale));
+    const testH = 92;
+    html += `<rect x="${testX}" y="${baseY + 6}" width="${testW}" height="${testH}" rx="4" fill="${A.dark2}" stroke="${A.accent}" stroke-width="1.5"/>`;
+    html += `<text x="${testX + 8}" y="${baseY + 22}" fill="${A.paper}" font-size="9" font-weight="700">TESTEO</text>`;
+    // internal mesas for reactivos
+    html += `<rect x="${testX + 8}" y="${baseY + 30}" width="${mesaW * 0.7}" height="${mesaH * 0.8}" rx="1" fill="${A.dark4}" stroke="${A.support}"/>`;
+    html += `<rect x="${testX + 8 + mesaW*0.7 + 6}" y="${baseY + 30}" width="${mesaW * 0.7}" height="${mesaH * 0.8}" rx="1" fill="${A.dark4}" stroke="${A.support}"/>`;
+    html += `<text x="${testX + 8}" y="${baseY + 78}" fill="${A.support}" font-size="6">reactivos + ${Math.max(1, Math.floor(vol/3))} mesas</text>`;
   }
 
-  // Zona extra para masivo
+  // Zona extra (contención/descanso) placed BELOW with breathing space (param driven)
   if (masivo || asistentes > 1800) {
-    const extraY = 50 + standH + 35;
-    html += `<rect x="30" y="${extraY}" width="${standW}" height="52" rx="4" fill="${A.dark3}" stroke="${A.support}"/>`;
-    html += `<text x="42" y="${extraY + 20}" fill="${A.support}" font-size="9">ZONA DESCANSO / CONTENCIÓN</text>`;
-    html += `<text x="42" y="${extraY + 36}" fill="${A.support}" font-size="8">+${Math.floor(asistentes/400)} personas estimadas</text>`;
+    const extraY = baseY + standH + 18;
+    const extraH = 46;
+    html += `<rect x="${baseX}" y="${extraY}" width="${standW}" height="${extraH}" rx="4" fill="${A.dark3}" stroke="${A.support}" stroke-width="1"/>`;
+    html += `<text x="${baseX + 8}" y="${extraY + 16}" fill="${A.support}" font-size="8">ZONA CONTENCIÓN / DESCANSO</text>`;
+    html += `<text x="${baseX + 8}" y="${extraY + 30}" fill="${A.support}" font-size="7">+${Math.floor(asistentes / 450)} pers. est. • dur ${dur}h</text>`;
   }
+
+  // Clear labels + legend
+  html += `<text x="30" y="24" fill="${A.accent}" font-size="9" font-weight="600">PLANO DEMO — REGLAS REALES (engine + params)</text>`;
+  html += `<text x="30" y="38" fill="${A.support}" font-size="7">Mesas: ${numMesas} (1+1/5vol) • Vol: ${vol} • Asist: ~${asistentes}</text>`;
 
   // Info footer
-  html += `<line x1="20" y1="${h-22}" x2="${w-20}" y2="${h-22}" stroke="${A.dark5}"/>`;
-  html += `<text x="30" y="${h-8}" fill="${A.support}" font-size="8">Escala ≈${scale}px/m  •  Voluntarios: ${vol}  •  Duración: ${dur}h  •  Asistentes: ~${asistentes}</text>`;
+  html += `<line x1="20" y1="${h-24}" x2="${w-20}" y2="${h-24}" stroke="${A.dark5}"/>`;
+  html += `<text x="28" y="${h-10}" fill="${A.support}" font-size="7">Escala ${scale}px/m • ${standW_m}×${standH_m}m stand • ${numMesas} mesas • ${Math.min(vol, Math.floor((standW-16)/ (sillaSz+4)))} sillas • pasillo ${pasillo_m}m • ${testeo ? ' +testeo' : ''}${masivo ? ' +masivo' : ''} • Dur: ${dur}h</text>`;
   html += `</svg>`;
 
   document.getElementById('preview').innerHTML = html;
-  document.getElementById('rider').innerText = buildRider(nombre, dur, vol, asistentes, testeo, masivo);
+  document.getElementById('rider').innerText = buildRider(nombre, dur, vol, asistentes, testeo, masivo, numMesas);
 }
 
-function buildRider(nombre, dur, vol, asistentes, testeo, masivo) {
+function buildRider(nombre, dur, vol, asistentes, testeo, masivo, numMesas) {
+  numMesas = numMesas || (1 + Math.floor((vol - 1) / 5));
   let r = `RIDER TÉCNICO — ${nombre}\n`;
   r += `Duración: ${dur}h | Voluntarios: ${vol} | Estimados: ${asistentes}\n\n`;
-  r += `• 1 Stand toldo 3x3m principal\n`;
-  r += `• ${Math.ceil(vol/2)} mesas 2x0.7 + ${vol} sillas\n`;
-  if (testeo) r += `• +1 stand contiguo para testeo (reactivos)\n`;
+  r += `• Stand principal ${ (masivo||asistentes>=2000)?'4.5x3':'3x3' }m toldo\n`;
+  r += `• ${numMesas} mesas 2.0×0.7m (1 base +1 por cada 5 vol) + ${vol} sillas\n`;
+  if (testeo) r += `• +1 stand contiguo TESTEO (reactivos + ventilación)\n`;
   if (dur > 5 || masivo) r += `• Colación + viáticos obligatorios (producción)\n`;
-  if (masivo || asistentes > 2000) r += `• Zona de descanso/contención\n`;
-  r += `• Pasillo circulación mín 1.2m\n\n`;
-  r += `Entregar impreso + digital (PDF + SVG)`;
+  if (masivo || asistentes > 2000) r += `• Zona de contención/descanso baja estimulación\n`;
+  r += `• Pasillo circulación mín ${1.2}m entre zonas\n\n`;
+  r += `Layout: grid mesas + circulación realista (ver preview). Entregar impreso + digital (PDF + SVG)`;
   return r;
 }
 
@@ -247,7 +294,8 @@ function generarRider() {
   const asistentes = parseInt(document.getElementById('asistentes').value);
   const testeo = document.getElementById('incluye_testeo').checked;
   const masivo = document.getElementById('masivo').checked;
-  document.getElementById('rider').innerText = buildRider(nombre, dur, vol, asistentes, testeo, masivo);
+  const numMesas = 1 + Math.floor((vol - 1) / 5);
+  document.getElementById('rider').innerText = buildRider(nombre, dur, vol, asistentes, testeo, masivo, numMesas);
 }
 
 function generarCostos() {
@@ -287,13 +335,34 @@ function copyCmd(cmd, el) {
 }
 
 function init() {
-  // init demo
+  // init demo (initial load triggers good visual)
   setTimeout(() => {
     recalcular();
     generarRider();
-  }, 120);
-  // keyboard
-  document.addEventListener('keydown', e => { if (e.key === 'Enter') recalcular(); });
+  }, 140);
+
+  // keyboard Enter triggers recalcular (as before)
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Enter' && !['INPUT','TEXTAREA','SELECT'].includes((e.target||{}).tagName)) recalcular();
+  });
+
+  // reactive to all params: inputs drive live update (button + enter + load still primary)
+  const paramIds = ['nombre','duracion','voluntarios','asistentes','scale','incluye_testeo','masivo'];
+  let t = null;
+  paramIds.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+      const handler = () => {
+        clearTimeout(t);
+        t = setTimeout(() => { recalcular(); generarRider(); }, 180);
+      };
+      el.addEventListener('input', handler);
+      el.addEventListener('change', handler);
+    }
+  });
+
+  // ensure button always works (onclick inline)
+  console.log('[plano_demo] recalcular reactive + realistic placement ready');
 }
 init();
 

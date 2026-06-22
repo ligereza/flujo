@@ -45,6 +45,9 @@ Comandos disponibles (ejecutar `flujo --help`):
   brand
     brand list               Lista ejemplos + estado de JSONs descriptivos
     brand analyze <ejemplo>  Genera stub JSON descriptivo desde carpeta de ejemplo
+  datadrop (inverse airdrop)
+    datadrop list            Lista datadrops subidos (fotos reales terminadas)
+    datadrop prepare         Escribe _review_package.txt con for_future_ai + traits (para IA futura/linea)
   cotizaciones
     cotizaciones <evento.json> --para productora|interno  Cotización dual (flujo + formatos)
 """
@@ -465,6 +468,79 @@ def brand_analyze(
     out.write_text(jsonlib.dumps(stub, indent=2, ensure_ascii=False), encoding="utf-8")
     _ok(f"JSON descriptivo generado: {out}")
     console.print("  Siguiente: edita el JSON o pídele al agente que lo complete con análisis estético.")
+
+
+# ============================================================
+# Datadrop (airdrop inverso) — UI principal en hub (`flujo app`). CLI mínimo.
+# ============================================================
+
+datadrop_app = typer.Typer(help="Datadrop: airdrop inverso para fotos de trabajos terminados (aprendizaje de estilos).", no_args_is_help=True)
+app.add_typer(datadrop_app, name="datadrop")
+
+@datadrop_app.command("list")
+def datadrop_list():
+    """Lista datadrops (fotos reales de entregados) desde workspace/datadrops/."""
+    from .paths import datadrops_dir
+    dd = datadrops_dir()
+    drops = [p for p in sorted(dd.iterdir()) if p.is_dir()]
+    if not drops:
+        _warn("No hay datadrops todavía. Usa el hub (`flujo app`) → sección Datadrop para subir fotos terminadas.")
+        return
+    _section("Datadrops (inverse airdrop)")
+    for d in drops:
+        m = d / "manifest.json"
+        if m.exists():
+            try:
+                import json as jsonlib
+                info = jsonlib.loads(m.read_text(encoding="utf-8"))
+                console.print(f"  {d.name}  [{info.get('type','?')}] {info.get('description','')[:40]}")
+            except:
+                console.print(f"  {d.name}")
+        else:
+            console.print(f"  {d.name} (raw)")
+
+
+@datadrop_app.command("prepare")
+def datadrop_prepare():
+    """Genera paquete de revisión persistente (_review_package.txt) con manifests + notas 'for_future_ai'.
+    Para que otra IA (linea_editorial) lea y sepa exactamente qué buscar en trabajos reales terminados."""
+    from .paths import datadrops_dir
+    import json as jsonlib
+    dd = datadrops_dir()
+    drops = [p for p in sorted(dd.iterdir()) if p.is_dir()]
+    if not drops:
+        _warn("No hay datadrops. Usa `flujo app` → sección Datadrop en hub para subir fotos de entregados.")
+        return
+    items = []
+    for d in drops:
+        mpath = d / "manifest.json"
+        if mpath.exists():
+            try:
+                it = jsonlib.loads(mpath.read_text(encoding="utf-8"))
+                items.append(it)
+            except:
+                items.append({"id": d.name, "type": "?", "description": "(manifest error)"})
+        else:
+            items.append({"id": d.name, "type": "raw", "description": ""})
+    instructions = (
+        "DATADROP REVIEW PACKAGE — Inverse airdrop for future AI review.\n"
+        "Fuente: fotos reales de flyers/etiquetas/etc ya entregados por usuario.\n"
+        "Usa: cada manifest.json (palette, ocr_hints, visual_traits, for_future_ai) + imagen real (datadrops/<id>/img).\n"
+        "Objetivo: 'sabrá qué buscar' en briefs/análisis — patrones de paletas reales, contraste, densidad de layouts, textos OCR de entregas.\n"
+        "Ej: si datadrops muestran magenta alto contraste en flyers rave oscuros + icon grids densos → valida que linea_editorial + generación lo use.\n"
+        "Privacidad: local only. Coordina Brand Guardian / linea. Copia o cat este archivo + manifests cuando te unas a linea task.\n"
+        "Generado via hub (`flujo app`) o CLI `py -m flujo datadrop prepare`.\n\n"
+    )
+    summary_lines = []
+    for it in items:
+        summary_lines.append(f"ID: {it.get('id')}\nType: {it.get('type')}\nDesc: {it.get('description','')}\nTraits: {(it.get('visual_traits') or '')[:200]}\nForAI: {(it.get('for_future_ai') or '')[:300]}\nPalette: {str((it.get('palette') or [])[:2])}\n---")
+    pkg_text = instructions + "\n".join(summary_lines) + f"\n\nTotal: {len(items)} datadrops. Dir: {str(dd)}\nRevisa imágenes directamente desde el hub o FS para ground truth visual."
+    pkg_path = dd / "_review_package.txt"
+    pkg_path.write_text(pkg_text, encoding="utf-8")
+    _ok(f"Paquete review: {pkg_path}")
+    console.print(f"  Datadrops: {len(items)}")
+    console.print("  Lee el .txt + imágenes + manifests para 'saber qué buscar' (paletas reales, patrones ground-truth).")
+    console.print("  Úsalo cuando mejores linea_editorial (feed real examples).")
 
 
 # ============================================================

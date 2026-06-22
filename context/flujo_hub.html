@@ -68,6 +68,21 @@
   .pro-label { font-size: 10px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin-bottom: 4px; }
   .sep { height: 1px; background: var(--border); margin: 22px 0; }
   .small { font-size: 11px; }
+  /* UI/UX Optimizer: tabs + modal + clean nav for pro workspace (uses existing --flujo-* / --accent vars; no new colors) */
+  .tab-bar { display: flex; gap: 4px; flex-wrap: wrap; background: var(--panel); border-bottom: 1px solid var(--border); padding: 8px 24px; position: sticky; top: 0; z-index: 50; }
+  .tab-btn { background: var(--panel2); color: var(--text); border: 1px solid var(--border); padding: 6px 12px; border-radius: 4px; font-size: 11px; font-weight: 600; letter-spacing: .04em; cursor: pointer; text-transform: uppercase; }
+  .tab-btn:hover { border-color: var(--accent); }
+  .tab-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+  .quick-switch { background: var(--panel2); color: var(--text); border: 1px solid var(--border); border-radius: 4px; padding: 4px 8px; font-size: 11px; }
+  /* Brand modal (single consolidated control) */
+  .brand-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.85); display: none; align-items: center; justify-content: center; z-index: 9999; padding: 20px; }
+  .brand-modal.open { display: flex; }
+  .brand-modal .modal-content { background: var(--panel); border: 1px solid var(--border); border-radius: 8px; max-width: 680px; width: 100%; max-height: 82vh; overflow: auto; padding: 18px; box-shadow: 0 10px 40px rgba(0,0,0,0.7); }
+  .brand-modal .modal-header { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+  .brand-modal .modal-header h3 { margin: 0; font-size: 14px; font-weight: 700; color: var(--accent); }
+  .brand-modal .close-btn { margin-left: auto; background: var(--panel2); border: 1px solid var(--border); color: var(--text); padding: 4px 10px; border-radius: 3px; cursor: pointer; font-size: 11px; }
   footer { margin: 36px 24px 12px; font-size: 11px; color: var(--muted); border-top: 1px solid var(--border); padding-top: 14px; }
 </style>
 </head>
@@ -79,14 +94,22 @@
   <span class="badge">Workspace • Menú principal</span>
   <span id="header-conn" class="small" style="margin-left:8px; padding:2px 8px; border-radius:3px; background:#1a1a1a; border:1px solid #2a2a2a; color:#888; font-size:10px;">Estático (fallback)</span>
   <div class="spacer"></div>
+  <button class="btn" onclick="showBrandModal()" title="Brand único: validator + FORZAR GUARD + flujo.json (proyecto)">Brand</button>
+  <select id="quick-switch" class="quick-switch" onchange="switchTabFromSelect(this.value)" title="Cambia de modo rápido (prioriza flujo diario)">
+    <option value="daily">Intake &amp; Jobs</option>
+    <option value="visuales">Visuales &amp; SVG</option>
+    <option value="planos">Planos &amp; Riders</option>
+    <option value="agentes">Agentes &amp; Delegate</option>
+    <option value="herramientas">Herramientas</option>
+  </select>
   <a class="nav-link" href="svg_visualizer.html" target="_blank">Visualizador SVG</a>
   <a class="nav-link" href="plano_demo.html" target="_blank">Plano Demo</a>
-  <a class="nav-link" href="../projects/tapiz/vibecode_spaces.html" target="_blank">Tapiz (estructura pro • brand)</a>
+  <a class="nav-link" href="#datadrop-section" onclick="showTab('herramientas'); setTimeout(()=>document.getElementById('datadrop-section')?.scrollIntoView({behavior:'smooth'}),120)">Datadrop (en Herramientas)</a>
   <a class="nav-link" href="../docs/AGENT_OPERATING_MANUAL.md" target="_blank">Manual Agentes</a>
   <a class="nav-link" href="LAST_HANDOFF.md" target="_blank">LAST_HANDOFF</a>
   <button class="btn-sec" onclick="copyCmd('py -m flujo daily', this)">Daily</button>
 </header>
-<div style="background: rgba(194,65,15,0.18); color: #c2410f; font-size:10px; padding:5px 24px; border-bottom:2px solid var(--flujo-alert); text-align:center; font-weight:700; letter-spacing:0.06em;">BRAND ENFORCED • TODAS SALIDAS VISUALES DEBEN PASAR "VALIDAR BRAND AHORA" ANTES DE EXPORTAR (paleta EXACTA projects/flujo/flujo.json). Paper #f8f1e3 SOLO en SVGs internos. NO neon/light/chrome. Violaciones = daño cliente. Ejecuta siempre + FORZAR GUARD. Legacy marcados (no usar para visuals pro). `flujo app` = entrada.</div>
+<div style="background: rgba(194,65,15,0.12); color: #c2410f; font-size:9px; padding:3px 24px; border-bottom:1px solid var(--flujo-alert); text-align:center; letter-spacing:0.04em;">BRAND ENFORCED — abre con <b>`flujo app`</b> • pulsa <b>Brand</b> (arriba) para validator único + flujo.json. Paper solo SVGs.</div>
 
 <!-- STATUS -->
 <div class="section">
@@ -123,10 +146,19 @@
     <a class="btn btn-sec" href="plano_demo.html">Plano Demo (esta pestaña)</a>
     <button class="btn btn-sec" onclick="window.open('../projects/flujo/flujo.json','_blank')">flujo.json</button>
   </div>
-  <div class="small muted" style="margin-top:4px">Usa los botones «← Volver al Hub principal (menú)» dentro de los visualizadores para regresar.</div>
-  <div style="margin-top:6px;font-size:9px;color:#2d5a4a;font-weight:600;">BRAND ENFORCED: todos los visuals usan paleta exacta projects/flujo/flujo.json. Corre VALIDAR BRAND antes de export.</div>
+  <div class="small muted" style="margin-top:4px">Usa los botones «← Volver al Hub principal (menú)» dentro de los visualizadores para regresar. Todo desde <b>`flujo app`</b> (hub pro).</div>
 </div>
 
+<!-- TAB NAV + PANELS (UI/UX opt: reorganize to not cram all; prioritize daily flow intake→job→visuals→delegate; uses brand vars only) -->
+<div class="tab-bar" role="tablist" aria-label="Modos hub">
+  <button class="tab-btn active" onclick="showTab('daily')" data-tab="daily">Intake &amp; Jobs</button>
+  <button class="tab-btn" onclick="showTab('visuales')" data-tab="visuales">Visuales &amp; SVG</button>
+  <button class="tab-btn" onclick="showTab('planos')" data-tab="planos">Planos &amp; Riders</button>
+  <button class="tab-btn" onclick="showTab('agentes')" data-tab="agentes">Agentes &amp; Delegate</button>
+  <button class="tab-btn" onclick="showTab('herramientas')" data-tab="herramientas">Herramientas</button>
+</div>
+
+<div id="tab-daily" class="tab-panel active">
 <!-- INTAKE PRO (USUARIO) -->
 <div class="section">
   <div class="section-title">Intake rápido (pegado manual de pedido o email)</div>
@@ -198,31 +230,36 @@
     </div>
   </div>
 </div>
+<!-- end of plano teaser inside daily -->
 
-<!-- HERRAMIENTAS PRO -->
-<div class="section">
-  <div class="section-title">Herramientas (CLI)</div>
-  <div class="grid">
-    <div onclick="copyCmd('py -m flujo job new \"etiquetas acme\" --email inbox/correo.txt', this)" class="tool-btn">job new</div>
-    <div onclick="copyCmd('py -m flujo job prepare jobs/...', this)" class="tool-btn">job prepare</div>
-    <div onclick="copyCmd('py -m flujo render run projects/piezas_vectoriales/.../config.json --for illustrator', this)" class="tool-btn">render --for illustrator</div>
-    <div onclick="copyCmd('py -m flujo render run ... --for blender', this)" class="tool-btn">render --for blender</div>
-    <div onclick="copyCmd('py -m flujo cotizaciones <json> --para productora', this)" class="tool-btn">cotizaciones productora</div>
-    <div onclick="copyCmd('py -m flujo cotizaciones <json> --para interno', this)" class="tool-btn">cotizaciones interno</div>
-    <div onclick="copyCmd('py -m flujo brand analyze mi-ejemplo', this)" class="tool-btn">flujo brand analyze</div>
-    <div onclick="copyCmd('py -m flujo daily', this)" class="tool-btn">daily</div>
-    <div onclick="copyCmd('python -m src.flujo.templates.blender_setup projects/plano/ejemplos/evento_ejemplo.json', this)" class="tool-btn">blender_setup</div>
-    <div onclick="window.open('plano_demo.html','_blank')" class="tool-btn">plano demo</div>
-    <!-- LIVE backend commands (only work when server running) -->
-    <div onclick="runSafeCommand('flujo health', this)" class="tool-btn" title="Ejecuta vía /api/run-safe-command">▶ health (live)</div>
-    <div onclick="runSafeCommand('flujo version', this)" class="tool-btn" title="Ejecuta vía /api/run-safe-command">▶ version (live)</div>
-    <div onclick="runSafeCommand('flujo daily', this)" class="tool-btn" title="Ejecuta vía /api/run-safe-command">▶ daily (live)</div>
-    <div onclick="runSafeCommand('flujo handoff last', this)" class="tool-btn" title="Ejecuta vía /api/run-safe-command">▶ handoff last (live)</div>
+</div><!-- /tab-daily -->
+
+<div id="tab-visuales" class="tab-panel">
+  <div class="section">
+    <div class="section-title">Visuales &amp; SVG — abre desde aquí o usa visualizador dedicado</div>
+    <div class="row" style="gap:8px; flex-wrap:wrap">
+      <a class="btn" href="svg_visualizer.html" target="_blank">Abrir Visualizador SVG completo</a>
+      <button class="btn btn-sec" onclick="window.open('svg_visualizer.html','_blank')">SVG en esta pestaña</button>
+    </div>
+    <div class="small muted" style="margin-top:8px">Usa previews en intake + valida brand. Todos usan paleta projects/flujo/flujo.json.</div>
   </div>
-  <div class="small muted" style="margin-top:8px">Windows: siempre <code>py -m flujo ...</code>. Resultados listos para Illustrator / Photoshop / Blender.</div>
-  <div class="small" style="margin-top:6px;color:#c2410f;font-size:10px;font-weight:600;">LEGACY (NO USAR VISUALES — light/amateur leaks): projects/plano/plano_editor.html • dashboard.html • studio_prototipo.html. USAR: context/* visualizers + tapiz (brand enforced desde flujo.json).</div>
 </div>
 
+<div id="tab-planos" class="tab-panel">
+  <div class="section">
+    <div class="section-title">Planos &amp; Riders</div>
+    <div class="card">
+      <div style="font-weight:600">plano • demo interactivo (paramétrico)</div>
+      <div class="small muted">Abre para recalcular + export SVG/rider/costos. Integrado en flujo.</div>
+      <div style="margin-top:8px">
+        <a class="btn" href="plano_demo.html" target="_blank">Abrir Plano Demo</a>
+        <button onclick="copyCmd('py -m flujo plano projects/plano/ejemplos/evento_ejemplo.json --rider --costs', this)" class="btn btn-sec" style="margin-left:6px">Copiar CLI</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="tab-agentes" class="tab-panel">
 <!-- SEPARADOR AGENTE -->
 <div class="sep"></div>
 <div class="section">
@@ -311,10 +348,84 @@
     <button onclick="delegateToSelected()" class="btn btn-sec" style="font-size:9px; margin-left:6px">Delegar seleccionados (live API)</button>
   </div>
 </div>
+<!-- end delegate section -->
 
-<!-- RAW DATA AGENT -->
+</div><!-- /tab-agentes -->
+
+<div id="tab-herramientas" class="tab-panel">
+<!-- HERRAMIENTAS PRO (restored condensed into tab) -->
 <div class="section">
-  <div class="section-title">Datos crudos para agentes (copia directa)</div>
+  <div class="section-title">Herramientas (CLI + live)</div>
+  <div class="grid">
+    <div onclick="copyCmd('py -m flujo job new \"etiquetas acme\" --email inbox/correo.txt', this)" class="tool-btn">job new</div>
+    <div onclick="copyCmd('py -m flujo job prepare jobs/...', this)" class="tool-btn">job prepare</div>
+    <div onclick="copyCmd('py -m flujo render run projects/piezas_vectoriales/.../config.json --for illustrator', this)" class="tool-btn">render --for illustrator</div>
+    <div onclick="copyCmd('py -m flujo render run ... --for blender', this)" class="tool-btn">render --for blender</div>
+    <div onclick="copyCmd('py -m flujo cotizaciones &lt;json&gt; --para productora', this)" class="tool-btn">cotizaciones productora</div>
+    <div onclick="copyCmd('py -m flujo cotizaciones &lt;json&gt; --para interno', this)" class="tool-btn">cotizaciones interno</div>
+    <div onclick="copyCmd('py -m flujo brand analyze mi-ejemplo', this)" class="tool-btn">flujo brand analyze</div>
+    <div onclick="copyCmd('py -m flujo daily', this)" class="tool-btn">daily</div>
+    <div onclick="copyCmd('python -m src.flujo.templates.blender_setup projects/plano/ejemplos/evento_ejemplo.json', this)" class="tool-btn">blender_setup</div>
+    <div onclick="window.open('plano_demo.html','_blank')" class="tool-btn">plano demo</div>
+    <div onclick="runSafeCommand('flujo health', this)" class="tool-btn" title="Ejecuta vía /api/run-safe-command">▶ health (live)</div>
+    <div onclick="runSafeCommand('flujo version', this)" class="tool-btn" title="Ejecuta vía /api/run-safe-command">▶ version (live)</div>
+    <div onclick="runSafeCommand('flujo daily', this)" class="tool-btn" title="Ejecuta vía /api/run-safe-command">▶ daily (live)</div>
+    <div onclick="runSafeCommand('flujo handoff last', this)" class="tool-btn" title="Ejecuta vía /api/run-safe-command">▶ handoff last (live)</div>
+  </div>
+  <div class="small muted" style="margin-top:8px">Windows: <code>py -m flujo ...</code>. `flujo app` para live real.</div>
+</div>
+
+<!-- Datadrop moved here inside tab (not always visible on main page flow; use tab or header link) -->
+<div class="section" id="datadrop-section" style="margin-top:16px">
+  <div class="section-title">Datadrop — Airdrop inverso (fotos de trabajos TERMINADOS)</div>
+  <div class="card" style="border-left:4px solid var(--accent)">
+    <div class="small" style="margin-bottom:8px; font-weight:600;">Sube fotos reales de flyers, etiquetas u otros ya entregados. Se almacenan como datadrops con análisis local (colores + OCR vía analysis/). Futuras IAs (ej. linea_editorial) leerán los manifests + imágenes + for_future_ai + _review_package para aprender patrones reales (qué buscar: paletas dominantes reales, contrastes, densidad, textos OCR de entregas). Ground-truth para validar/ mejorar editorial y briefs.</div>
+    <div style="font-size:10px; color:#c2410f; margin-bottom:8px;">PRIVACIDAD: Análisis 100% local. Si la foto contiene datos sensibles, ejecuta primero <code>flujo privacy scan</code> o revisa manualmente. Imágenes se quedan en workspace/datadrops/ (nunca a externas sin sanitize).</div>
+
+    <div class="row" style="gap:12px; flex-wrap:wrap; align-items:flex-start;">
+      <div style="flex:1; min-width:220px;">
+        <div class="pro-label">Foto de pieza terminada</div>
+        <input type="file" id="datadrop-file" accept="image/*" style="margin-bottom:6px;" />
+        <div style="margin:4px 0;">
+          <label class="small">Tipo de pieza: </label>
+          <select id="datadrop-type" style="width:auto; display:inline-block; padding:4px 8px;">
+            <option value="flyer">flyer</option>
+            <option value="etiqueta">etiqueta</option>
+            <option value="cartel">cartel / IG</option>
+            <option value="plano">plano / stand</option>
+            <option value="otro">otro</option>
+          </select>
+        </div>
+        <textarea id="datadrop-desc" placeholder="Descripción breve del trabajo terminado (ej: flyer evento 10x14 con 3 columnas, acentos verdes, logo arriba izq)" style="height:52px; font-size:11px;"></textarea>
+        <div style="margin-top:4px;">
+          <label class="small">Link a job (opcional, para contexto):</label>
+          <input id="datadrop-linked" placeholder="jobs/2026-... o dejar vacío" style="font-size:11px; padding:4px;" />
+        </div>
+      </div>
+      <div>
+        <button onclick="uploadDatadrop(this)" class="btn" style="margin-top:4px;">📤 Subir como Datadrop</button>
+        <button onclick="refreshDatadropsList()" class="btn btn-sec" style="margin-top:4px;">Refrescar lista</button>
+        <button onclick="runSafeCommand('flujo privacy scan', this)" class="btn btn-sec" style="font-size:10px;margin-top:4px;" title="Opcional previo">privacy scan</button>
+        <div id="datadrop-result" class="small muted" style="margin-top:6px; min-height:18px;"></div>
+      </div>
+    </div>
+
+    <div style="margin-top:14px;">
+      <div class="pro-label">Datadrops almacenados (date subdirs + manifest + análisis local)</div>
+      <div id="datadrops-list" class="card" style="background:#111; max-height:260px; overflow:auto; font-size:11px; padding:8px;"></div>
+      <div class="small muted">Haz clic en item para ver detalles / imagen grande (modal). Manifests + for_future_ai + _review_package.txt (usa "Preparar paquete") = fuente para que IA sepa exactamente qué buscar en trabajos reales terminados.</div>
+      <div class="row" style="margin-top:6px;">
+        <button onclick="prepareDatadropPackage()" class="btn btn-sec" style="font-size:10px;">Preparar paquete review (lista manifests para AI / linea_editorial)</button>
+        <button onclick="copyCmd('py -m flujo brand analyze ... (usa proyectos/flujo/ejemplos o mueve datadrop aquí)', this)" class="btn btn-sec" style="font-size:10px;">Nota: promover a ejemplos/ + brand analyze</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div><!-- /tab-herramientas -->
+
+<!-- RAW DATA AGENT (accordion to avoid wall of content) -->
+<details class="section">
+  <summary class="section-title" style="cursor:pointer; user-select:none;">Datos crudos para agentes (copia directa) — click para expandir</summary>
   <div class="agent-raw">
 FLUJOS (resumen):
 • Pedido: Intake → parser match vs svg/ + INDEX_FORMATOS → brief + comando + flujo
@@ -346,81 +457,13 @@ Si no hay match: proponer nueva sección mínima en flujo/ o tarea en LAST_HANDO
 
 Punto de entrada único: `flujo app` + este hub. 5 roles (Visual Polish / Pipeline / Brand / Future / Packaging). No leas todo el repo. Delega vía sección "Delegar..." (guía práctica incluida) o `flujo delegate`.
   </div>
-</div>
+</details>
 
-<!-- FLUJO BRAND PALETA (BRAND ENFORCED — exact from projects/flujo/flujo.json) -->
-<div class="section">
-  <div class="section-title">flujo (paleta central — fuente de verdad)</div>
-  <div class="card" style="font-family:monospace; font-size:12px; border-left:4px solid var(--flujo-accent);">
-    ink: <span style="color:#1f2a24;background:#111;padding:1px 4px">#1f2a24</span>
-    accent: <span style="color:#2d5a4a;background:#111;padding:1px 4px">#2d5a4a</span>
-    paper: <span style="color:#111;background:#f8f1e3;padding:1px 4px">#f8f1e3 (print-SVG only)</span>
-    support: #675f55 • alert: #c2410f
-    <br><span style="font-size:10px;color:#c2410f;">BRAND ENFORCED: usa SOLO estos + vars --flujo-* en UI/SVG. Valida siempre.</span><br>
-    <a href="../projects/flujo/flujo.json" class="small" style="color:var(--accent)">editar flujo.json →</a> (fuente de verdad)
-  </div>
-</div>
+<!-- BRAND: consolidated to EXACTLY 1 prominent control (header button + modal). No repeats. Use `flujo app` + hub. -->
 
-<!-- BRAND ENFORCEMENT — Visual QA section (STRONG + PROMINENT + ACTIONABLE — brand enforced) -->
-<!-- BRAND ENFORCED: This entire section + validator is the gatekeeper. Every designer-facing visual must pass before deliver. -->
-<div class="section" style="margin-top:12px">
-  <div class="section-title">Brand Enforcement — Visual QA (projects/flujo/flujo.json • OBLIGATORIO • GATEKEEPER)</div>
-  <div class="card" style="border: 4px solid var(--flujo-accent); background: rgba(45,90,74,0.12); box-shadow: 0 0 0 2px var(--accent) inset; padding:20px;">
-    <div style="font-size:14px; font-weight:800; margin-bottom:12px; color:#fff; letter-spacing:0.02em; line-height:1.3;">BRAND ENFORCED: TODOS los artefactos visuales (flujo_hub.html, svg_visualizer.html, plano_demo.html, projects/tapiz/*.html, previews SVG, SVGs exportados, renders) DEBEN usar EXACTAMENTE la identidad flujo derivada de projects/flujo/flujo.json. Cualquier amateur/vibecoding daña confianza del cliente. Usa SIEMPRE paleta exacta + pro spacing.</div>
-
-    <!-- Visible checklist grid (always shown, no hidden alert) -->
-    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(170px,1fr)); gap:8px; margin-bottom:12px; font-size:11px;">
-      <div style="background:var(--panel2); padding:8px 10px; border-radius:4px; border-left:3px solid var(--accent);">✓ Dark pro UI SOLO: #0a0a0a bg / #141414 panels — NUNCA paper/light en chrome</div>
-      <div style="background:var(--panel2); padding:8px 10px; border-radius:4px; border-left:3px solid var(--accent);">✓ Colores EXACTOS: ink #1f2a24, accent #2d5a4a, support #675f55, alert #c2410f</div>
-      <div style="background:var(--panel2); padding:8px 10px; border-radius:4px; border-left:3px solid var(--accent);">✓ paper #f8f1e3 SOLO dentro de SVGs para impresión (no chrome/UI)</div>
-      <div style="background:var(--panel2); padding:8px 10px; border-radius:4px; border-left:3px solid var(--accent);">✓ Inter/system-sans + uppercase labels + 0.06-0.08em spacing + generous padding ≥14-28px</div>
-      <div style="background:var(--panel2); padding:8px 10px; border-radius:4px; border-left:3px solid var(--accent);">✓ Pro cards radius 8px, controlled shadows, accent left bars on .section-title</div>
-      <div style="background:var(--panel2); padding:8px 10px; border-radius:4px; border-left:3px solid var(--flujo-alert);">✗ FORBIDDEN: neon/cyan #00f0ff, hacker/matrix/glitch, tight spacing, vibecoding experimental, Arial, low contrast</div>
-    </div>
-
-    <div style="display:flex; gap:6px; align-items:center; flex-wrap:wrap; margin-bottom:8px;">
-      <span style="background:#1f2a24;color:#e8e8e8;padding:3px 8px;border-radius:3px;font-size:10px;">ink</span>
-      <span style="background:#2d5a4a;color:#fff;padding:3px 8px;border-radius:3px;font-size:10px;">accent</span>
-      <span style="background:#675f55;color:#fff;padding:3px 8px;border-radius:3px;font-size:10px;">support</span>
-      <span style="background:#c2410f;color:#fff;padding:3px 8px;border-radius:3px;font-size:10px;">alert</span>
-      <span style="background:#f8f1e3;color:#111;padding:3px 8px;border-radius:3px;font-size:10px;">paper (print-SVG only)</span>
-    </div>
-
-    <div class="row" style="flex-wrap:wrap; gap:6px;">
-      <button class="btn btn-sec" onclick="copyBrandRules(this)">Copiar reglas brand</button>
-      <button class="btn btn-sec" onclick="showBrandChecklist()">Checklist QA detallado</button>
-      <button class="btn" onclick="window.open('../projects/flujo/flujo.json','_blank')">Abrir flujo.json</button>
-      <button class="btn" onclick="runBrandValidator()" style="background: linear-gradient(135deg, var(--flujo-alert), #7a2a0a); font-weight:800; padding:10px 18px;">VALIDAR BRAND AHORA (JS — EJECUTAR SIEMPRE)</button>
-      <button class="btn btn-sec" onclick="forceBrandGuard()">FORZAR GUARD BRAND (override UI)</button>
-      <a class="btn btn-sec" href="../projects/tapiz/vibecode_spaces.html" target="_blank" style="text-decoration:none;font-size:11px;">Tapiz con flujo (premium • default flujo)</a>
-    </div>
-
-    <div id="brand-note" class="small" style="margin-top:12px; color:#fff; font-weight:700; background:#1f2a24; padding:8px 10px; border-radius:4px; border-left:4px solid var(--flujo-alert);">
-      REGLA OBLIGATORIA (BRAND ENFORCED): Toda salida visual (SVG/HTML/preview/tapiz/render/export) DEBE pasar Brand Validator ANTES de entregar. Corre siempre desde aquí o desde visualizadores. Falla = NO exportar. Cada visual refuerza (o destruye) la credibilidad del diseñador. Paper #f8f1e3 SOLO dentro de SVGs print.
-    </div>
-  </div>
-</div>
-
-<!-- BRAND VALIDATOR (PROMINENT + ACTIONABLE — strengthened for strict enforcement; brand enforced) -->
-<!-- BRAND ENFORCED: Always run before export. This is the primary gate for designer-facing visuals. -->
-<div class="section" style="border:2px dashed var(--flujo-accent); padding:4px; border-radius:6px;">
-  <div class="section-title">Brand Validator — Ejecutar ANTES de cualquier export / entrega (gatekeeper integrado)</div>
-  <div class="card" style="background:#111;">
-    <div class="small" style="margin-bottom:10px; font-weight:600; color:#c2410f;">Escanea inline styles, fill/stroke, CSS, computed + previews/SVGs vs EXACT paleta projects/flujo/flujo.json. Detecta neon/cyan/paper-misuse/vibecoding. Corre aquí + en visualizers. Backend: /api/brand-validate + brand.py.</div>
-    <div id="validator-result" class="agent-raw" style="min-height:72px; display:none; white-space:pre-wrap; font-size:11px; border:1px solid var(--border);"></div>
-    <div class="row" style="gap:8px; margin-top:10px; flex-wrap:wrap;">
-      <button class="btn" onclick="runBrandValidator()" style="background:linear-gradient(135deg,#c2410f,#7a2a0a); font-weight:700;">VALIDAR BRAND AHORA (escanea todo)</button>
-      <button class="btn btn-sec" onclick="runBrandValidator(); setTimeout(()=>{const r=document.getElementById('validator-result'); if(r) r.scrollIntoView({behavior:'smooth'});},50);">Validar + Scroll a resultado</button>
-      <button class="btn btn-sec" onclick="forceBrandGuard(); runBrandValidator();">FORZAR + VALIDAR</button>
-      <button class="btn btn-sec" onclick="validatePreviewsOnly()" style="font-size:10px;">Validar solo previews/SVGs</button>
-    </div>
-    <div class="small muted" style="margin-top:8px;">Acción: si hay violaciones, usa FORZAR GUARD + revalida. Abre visualizadores, valida desde hub, NO entregues hasta ✅ CLEAN. Paper solo en SVG interiors.</div>
-  </div>
-</div>
-
-<!-- EXPORT BRIDGE -->
-<div class="section">
-  <div class="section-title">Export a flujo real (Illustrator / Photoshop / Blender)</div>
+<!-- EXPORT BRIDGE (accordion) -->
+<details class="section">
+  <summary class="section-title" style="cursor:pointer; user-select:none;">Export a flujo real (Illustrator / Photoshop / Blender) — click para expandir</summary>
   <div class="grid">
     <div class="card">
       <div style="font-weight:600">Illustrator</div>
@@ -438,7 +481,7 @@ Punto de entrada único: `flujo app` + este hub. 5 roles (Visual Polish / Pipeli
       <button onclick="copyCmd('python -m src.flujo.templates.blender_setup projects/plano/ejemplos/evento_ejemplo.json', this)" class="btn btn-sec" style="margin-top:8px">Copiar blender_setup</button>
     </div>
   </div>
-</div>
+</details>
 
 <!-- MODERN INTEGRATIONS: SSE LIVE + TOKENS EXPORT (free, designer daily) -->
 <div class="section">
@@ -456,6 +499,35 @@ Punto de entrada único: `flujo app` + este hub. 5 roles (Visual Polish / Pipeli
       <div class="small muted" style="align-self:center">Fuente: /api/export-tokens desde flujo.json. Importa directo en plugins gratis de tokens.</div>
     </div>
     <div class="small muted" style="margin-top:6px">SSE entrega jobs/SVG/status en tiempo real. Cambios → UI auto + toast + notif (gratis, browser + tray desktop).</div>
+  </div>
+</div>
+
+<!-- Brand Modal (ONE prominent control - all validator / guard / json consolidated here) -->
+<div id="brand-modal" class="brand-modal" onclick="if (event.target.id==='brand-modal') hideBrandModal()">
+  <div class="modal-content" onclick="event.stopImmediatePropagation()">
+    <div class="modal-header">
+      <h3>BRAND • flujo (projects/flujo/flujo.json)</h3>
+      <button class="close-btn" onclick="hideBrandModal()">Cerrar</button>
+    </div>
+    <div style="font-size:12px; line-height:1.4; margin-bottom:10px;">
+      Fuente de verdad. Dark pro UI. Paper #f8f1e3 SOLO en SVGs para print. Ejecuta siempre antes de export.
+    </div>
+    <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(160px,1fr)); gap:6px; margin-bottom:10px; font-size:10px;">
+      <div style="background:var(--panel2); padding:6px 8px; border-radius:3px; border-left:3px solid var(--accent);">✓ #0a0a0a / #141414 dark pro</div>
+      <div style="background:var(--panel2); padding:6px 8px; border-radius:3px; border-left:3px solid var(--accent);">✓ ink #1f2a24 • accent #2d5a4a</div>
+      <div style="background:var(--panel2); padding:6px 8px; border-radius:3px; border-left:3px solid var(--accent);">✓ support #675f55 • alert #c2410f</div>
+      <div style="background:var(--panel2); padding:6px 8px; border-radius:3px; border-left:3px solid var(--flujo-alert);">✗ NO neon/cyan/paper-chrome</div>
+    </div>
+    <div class="row" style="flex-wrap:wrap; gap:6px; margin:8px 0;">
+      <button class="btn btn-sec" onclick="copyBrandRules(this)">Copiar reglas brand</button>
+      <button class="btn btn-sec" onclick="showBrandChecklist()">Checklist QA</button>
+      <button class="btn" onclick="window.open('../projects/flujo/flujo.json','_blank')">Abrir flujo.json</button>
+      <button class="btn" onclick="runBrandValidator()" style="background: linear-gradient(135deg, var(--flujo-alert), #7a2a0a); font-weight:800;">VALIDAR BRAND AHORA</button>
+      <button class="btn btn-sec" onclick="forceBrandGuard()">FORZAR GUARD</button>
+      <button class="btn btn-sec" onclick="validatePreviewsOnly()">Validar previews</button>
+    </div>
+    <div id="validator-result" class="agent-raw" style="min-height:32px; margin-top:8px; font-size:10px; display:block;"></div>
+    <div class="small muted">Cierra modal y revalida desde aquí. Refuerza Brand Guardian. Siempre `flujo app` + hub. (EXACTLY 1 Brand control: este botón header.)</div>
   </div>
 </div>
 
@@ -809,6 +881,20 @@ function callApiOrFetch(endpoint, opts = {}) {
     if (endpoint.includes('run-safe') || endpoint.includes('command')) {
       const cmd = (opts.body && JSON.parse(opts.body).cmd) || '';
       return Promise.resolve(api.run_command ? api.run_command(cmd) : fetch(endpoint,opts).then(r=>r.json()));
+    }
+    if (endpoint.includes('list-datadrops') || endpoint.includes('datadrop')) {
+      if (endpoint.includes('upload')) {
+        const body = opts.body ? JSON.parse(opts.body) : {};
+        return Promise.resolve(api.datadrop_upload ? api.datadrop_upload(body) : fetch(endpoint,opts).then(r=>r.json()));
+      }
+      if (endpoint.includes('analyze')) {
+        const body = opts.body ? JSON.parse(opts.body) : {};
+        return Promise.resolve(api.datadrop_analyze ? api.datadrop_analyze(body) : fetch(endpoint,opts).then(r=>r.json()));
+      }
+      if (endpoint.includes('prepare-package')) {
+        return Promise.resolve(api.datadrop_prepare_package ? api.datadrop_prepare_package() : fetch(endpoint,opts).then(r=>r.json()));
+      }
+      return Promise.resolve(api.list_datadrops ? api.list_datadrops() : fetch(endpoint,opts).then(r=>r.json()));
     }
     // default
     return fetch(endpoint, opts).then(r=>r.json()).catch(() => (api.get_status ? api.get_status() : (api.get_connected ? api.get_connected() : {})));
@@ -1470,6 +1556,172 @@ setTimeout(() => { try { loadAgentRolesAndRender(); } catch(e){} }, 900);
 // Optional: refresh status on click of version
 const verEl = document.getElementById('status-version');
 if (verEl) verEl.onclick = () => { callApiOrFetch('/api/ping').then(d=>updateConnUI(!!(d&&d.connected),d)).catch(()=>updateConnUI(false)); };
+
+// ============ TABS + BRAND MODAL (UI/UX Optimizer: reorganize crammed options; single Brand control; prioritize daily flow) ============
+function showTab(tab) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  const panel = document.getElementById('tab-' + tab);
+  if (panel) panel.classList.add('active');
+  const btn = document.querySelector('.tab-btn[data-tab="' + tab + '"]');
+  if (btn) btn.classList.add('active');
+  // update quick switcher
+  const sw = document.getElementById('quick-switch');
+  if (sw) sw.value = tab;
+  // ensure validator result if any stays visible when needed
+}
+
+function switchTabFromSelect(val) {
+  if (val) showTab(val);
+}
+
+function showBrandModal() {
+  const m = document.getElementById('brand-modal');
+  if (m) {
+    m.classList.add('open');
+    // focus first actionable
+    setTimeout(() => { try { const b = m.querySelector('button'); if (b) b.focus(); } catch(e){} }, 50);
+  }
+}
+function hideBrandModal() {
+  const m = document.getElementById('brand-modal');
+  if (m) m.classList.remove('open');
+}
+
+// init default tab (daily priority) + ensure switcher
+function initTabs() {
+  // daily active by markup
+  const sw = document.getElementById('quick-switch');
+  if (sw) {
+    sw.value = 'daily';
+    sw.onchange = function(){ switchTabFromSelect(this.value); };
+  }
+  // keyboard: 1-5 for tabs quick
+  document.addEventListener('keydown', function(e){
+    if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA')) return;
+    if (e.key === '1') showTab('daily');
+    else if (e.key === '2') showTab('visuales');
+    else if (e.key === '3') showTab('planos');
+    else if (e.key === '4') showTab('agentes');
+    else if (e.key === '5') showTab('herramientas');
+    else if (e.key.toLowerCase() === 'b') { e.preventDefault(); showBrandModal(); }
+  });
+  console.log('[hub] tabs + brand modal ready (conservative frontend)');
+}
+
+// call on load
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initTabs);
+} else {
+  setTimeout(initTabs, 30);
+}
+
+// ============ DATADROP (inverse airdrop) UI + upload (local via /api + bridge) ============
+// Upload real finished photos → dated subdir in datadrops/ + manifest for future AI review (linea_editorial etc)
+async function uploadDatadrop(btn) {
+  const fileIn = document.getElementById('datadrop-file');
+  const resEl = document.getElementById('datadrop-result');
+  if (!fileIn || !fileIn.files.length) { if(resEl) resEl.textContent = 'Selecciona una foto primero.'; return; }
+  const f = fileIn.files[0];
+  const reader = new FileReader();
+  reader.onload = async function(ev) {
+    const b64 = ev.target.result; // full data: url base64
+    const payload = {
+      filename: f.name,
+      b64: b64,
+      piece_type: document.getElementById('datadrop-type')?.value || 'flyer',
+      description: document.getElementById('datadrop-desc')?.value || '',
+      linked_job: document.getElementById('datadrop-linked')?.value || ''
+    };
+    if (btn) btn.textContent = 'Subiendo...';
+    try {
+      const data = await callApiOrFetch('/api/datadrop-upload', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload)});
+      if (data && data.ok) {
+        if (resEl) resEl.innerHTML = `<span style="color:#2d5a4a">✓ Datadrop ${data.id} creado.</span>`;
+        setTimeout(refreshDatadropsList, 300);
+        // optional auto re-analyze hint
+      } else {
+        if (resEl) resEl.innerHTML = `<span style="color:#c2410f">${data?.error || 'Error en upload'}</span>`;
+      }
+    } catch(e) {
+      if (resEl) resEl.innerHTML = `<span class="muted">Backend no activo. (usa 'flujo app'). Fallback: copia manual a datadrops/.</span>`;
+    } finally {
+      if (btn) btn.textContent = '📤 Subir como Datadrop';
+    }
+  };
+  reader.readAsDataURL(f);
+}
+
+async function refreshDatadropsList() {
+  const listEl = document.getElementById('datadrops-list');
+  if (!listEl) return;
+  listEl.innerHTML = '<span class="small muted">Cargando datadrops...</span>';
+  try {
+    const d = await callApiOrFetch('/api/list-datadrops');
+    const items = (d && d.datadrops) || [];
+    if (!items.length) {
+      listEl.innerHTML = '<span class="small muted">Aún no hay datadrops. Sube fotos de trabajos terminados arriba.</span>';
+      return;
+    }
+    listEl.innerHTML = '';
+    items.forEach(it => {
+      const card = document.createElement('div');
+      card.style.cssText = 'border:1px solid #333; padding:6px; margin:4px 0; border-radius:4px; cursor:pointer; display:flex; gap:8px; align-items:center;';
+      const imgSrc = it.image_path ? `/${it.image_path}` : '';
+      const thumb = imgSrc ? `<img src="${imgSrc}" style="width:48px;height:48px;object-fit:cover;border-radius:3px;border:1px solid #444;" onerror="this.style.display='none'"/>` : '';
+      card.innerHTML = `${thumb}<div style="flex:1;min-width:0"><div><b>${it.id}</b> <span class="small muted">[${it.type||''}]</span></div><div class="small" style="opacity:.85">${(it.description||'').slice(0,70)}…</div><div class="small muted">${(it.palette||[]).slice(0,2).map(c=>c.hex||'').join(' ')} ${it.dimensions?.width||''}×${it.dimensions?.height||''}</div></div>`;
+      card.onclick = () => showDatadropModal(it);
+      listEl.appendChild(card);
+    });
+  } catch(e) {
+    listEl.innerHTML = '<span class="small muted">Lista no disponible (sin backend). Revisa workspace/datadrops/ manualmente.</span>';
+  }
+}
+
+function showDatadropModal(manifest) {
+  const modal = document.createElement('div');
+  modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.8);z-index:99999;display:flex;align-items:center;justify-content:center;padding:20px;';
+  const imgHtml = manifest.image_path ? `<img src="/${manifest.image_path}" style="max-width:70vw;max-height:60vh;border-radius:6px;border:2px solid var(--accent);margin-bottom:8px;"/>` : '';
+  modal.innerHTML = `
+    <div style="background:#141414;border:1px solid #333;border-radius:8px;max-width:820px;width:100%;padding:16px;color:#e8e8e8;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+        <b>Datadrop: ${manifest.id}</b>
+        <button onclick="this.closest('[style*=\'position:fixed\']').remove()" style="background:#222;border:1px solid #555;color:#e8e8e8;padding:2px 8px;border-radius:3px;">Cerrar</button>
+      </div>
+      ${imgHtml}
+      <pre style="white-space:pre-wrap;font-size:10px;background:#0a0a0a;padding:8px;border-radius:4px;max-height:220px;overflow:auto;">${JSON.stringify(manifest, null, 2).replace(/</g,'&lt;')}</pre>
+      <div class="small muted" style="margin-top:6px;">Este manifest + imagen permite a IA futura (linea_editorial + otros) saber "qué buscar" en briefs y generación. Usa traits visuales.</div>
+    </div>`;
+  document.body.appendChild(modal);
+}
+
+function prepareDatadropPackage() {
+  // Inverse airdrop: call backend to write persistent _review_package.txt (with full for_future_ai teaching notes)
+  // Other AI (linea improver) reviews this + images + manifests to know exactly what finished real work looks like.
+  callApiOrFetch('/api/datadrop-prepare-package').then(res => {
+    if (res && res.ok) {
+      const msg = `✓ Paquete review escrito: ${res.package_file}\n(${res.count} datadrops). Léelo + abre imágenes desde /datadrops/ para que IA sepa 'qué buscar' (paletas reales, patrones, ground-truth).`;
+      const r = document.getElementById('datadrop-result');
+      if (r) r.innerHTML = `<span style="color:#2d5a4a">${msg.replace(/\n/g,'<br>')}</span>`;
+      // also copy summary for immediate paste
+      const sum = 'DATADROP REVIEW PACKAGE:\n' + JSON.stringify(res.summary || [], null, 2) + '\nVer archivo: ' + (res.package_file||'');
+      navigator.clipboard.writeText(sum).catch(()=>{});
+      alert('Review package generado y copiado resumen. Revisa datadrops/_review_package.txt');
+    } else {
+      alert(res?.error || 'Error preparando paquete. Revisa datadrops/ manualmente.');
+    }
+  }).catch(() => {
+    // graceful: still useful info
+    alert('Prepara vía hub (`flujo app`). Revisa workspace/datadrops/ (o flujo_workspace/datadrops en packaged) para manifests + _review_package.txt + fotos. Fuente para saber qué buscar en linea.');
+  });
+}
+
+// initial load of datadrops list (when connected)
+const _origInit = initLiveConnection;
+initLiveConnection = function() {
+  _origInit && _origInit();
+  setTimeout(() => { try { refreshDatadropsList(); } catch(e){} }, 1400);
+};
 </script>
 </body>
 </html>

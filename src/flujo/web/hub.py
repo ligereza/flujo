@@ -31,9 +31,28 @@ from http.server import HTTPServer, BaseHTTPRequestHandler
 from pathlib import Path
 from threading import Thread
 import time
+import base64
+from datetime import datetime
+from io import BytesIO
 from urllib.parse import urlparse, parse_qs
 
-from ..paths import context_dir, repo_root, asset_root, workspace_root, is_packaged as _is_packaged
+from ..paths import context_dir, repo_root, asset_root, workspace_root, is_packaged as _is_packaged, datadrops_dir
+
+# analysis for datadrop metadata (colors + OCR via existing; privacy-safe local)
+try:
+    from ..analyze.colors import extract_palette
+except Exception:
+    extract_palette = None
+try:
+    from ..analyze.ocr import run_ocr, extract_hints_from_text
+except Exception:
+    run_ocr = None
+    extract_hints_from_text = None
+try:
+    from PIL import Image
+except Exception:
+    Image = None
+
 from ..brand import load_styles
 from ..intake.email_parser import parse_email_content, parse_pedido_text  # real parsers
 from ..intake.pipeline import _infer_type_and_size  # reuse heuristics if needed
@@ -142,6 +161,23 @@ class HubRequestHandler(BaseHTTPRequestHandler):
                 self._send_json({"error": str(e), "fallback": True}, status=200)
             return
 
+        # Datadrop (inverse airdrop) serving: user-uploaded finished work photos + manifests (from workspace/datadrops)
+        # Works in both dev and packaged (workspace sibling writable)
+        if path.startswith("/datadrops/"):
+            try:
+                dd = datadrops_dir()
+                relp = path[len("/datadrops/"):].lstrip("/")
+                # basic safety: no .. , allow subdirs like analysis/
+                if ".." not in relp:
+                    fpath = (dd / relp).resolve()
+                    if fpath.is_file() and str(fpath).startswith(str(dd.resolve())):
+                        self._serve_file(fpath)
+                        return
+            except Exception:
+                pass
+            self.send_error(404)
+            return
+
         # Servir archivos estáticos: context/ primero (hub + visualizers HTMLs), fallback a root/ (asset_root)
         # para assets bundled por `flujo package` (svg/, projects/flujo/ para brand json directo, etc).
         # Esto asegura que en el .exe standalone (pywebview desktop) los visualizadores cargan SVGs reales
@@ -207,6 +243,48 @@ class HubRequestHandler(BaseHTTPRequestHandler):
                 text = data.get("text", "") or data.get("pedido", "")
                 name = data.get("name", "")
                 result = self._create_job_draft(text, name)
+                self._send_json(result)
+            except Exception as e:
+                self._send_json({"error": str(e)}, status=400)
+            return
+
+        # Datadrop (airdrop inverso): upload finished real photos of delivered work
+        # POST json: {filename, b64: "data:image/jpeg;base64,....", description, piece_type, linked_job? }
+        # Stores to workspace/datadrops/<date>_/ with image + rich manifest.json (palette, ocr, traits)
+        # Privacy: analysis local only (colors+OCR optional). Suggest privacy scan for any text.
+        if p == "/api/list-datadrops":
+            try:
+                result = self._list_datadrops()
+                self._send_json(result)
+            except Exception as e:
+                self._send_json({"datadrops": [], "count": 0, "error": str(e)}, status=200)
+            return
+
+        if p == "/api/datadrop-upload":
+            content_length = int(self.headers.get("Content-Length", 0))
+            body = self.rfile.read(content_length).decode("utf-8")
+            try:
+                data = json.loads(body)
+                result = self._handle_datadrop_upload(data)
+                self._send_json(result)
+            except Exception as e:
+                self._send_json({"error": str(e)}, status=400)
+            return
+
+        if p == "/api/datadrop-analyze":
+            content_length = int(self.headers.get("Content-Length", 0))
+            body = self.rfile.read(content_length).decode("utf-8")
+            try:
+                data = json.loads(body)
+                result = self._handle_datadrop_analyze(data)
+                self._send_json(result)
+            except Exception as e:
+                self._send_json({"error": str(e)}, status=400)
+            return
+
+        if p == "/api/datadrop-prepare-package":
+            try:
+                result = self._prepare_datadrop_review_package()
                 self._send_json(result)
             except Exception as e:
                 self._send_json({"error": str(e)}, status=400)
@@ -629,8 +707,9 @@ self.addEventListener('fetch', e => e.respondWith(fetch(e.request).catch(() => n
         "flujo privacy", "flujo handoff last", "flujo delegate",
         "flujo job prepare", "flujo job new", "flujo render run",
         "flujo cotizaciones",
+        "flujo datadrop",
         "py -m flujo version", "py -m flujo health", "py -m flujo daily",
-        "py -m flujo job list", "py -m flujo delegate",
+        "py -m flujo job list", "py -m flujo delegate", "py -m flujo datadrop",
     ]
 
     def _is_safe_cmd(self, cmd: str) -> bool:
@@ -726,6 +805,194 @@ self.addEventListener('fetch', e => e.respondWith(fetch(e.request).catch(() => n
             "nota": "Fallback local (no backend)"
         }
 
+    def _list_datadrops(self) -> dict:
+        """List uploaded datadrops (real finished work photos) for hub viewer + future AI review."""
+        dd = datadrops_dir()
+        drops = []
+        for d in sorted([p for p in dd.iterdir() if p.is_dir()], reverse=True):
+            manifest = d / "manifest.json"
+            if manifest.exists():
+                try:
+                    m = json.loads(manifest.read_text(encoding="utf-8"))
+                    drops.append(m)
+                except Exception:
+                    drops.append({"id": d.name, "path": str(d), "note": "manifest parse error"})
+            else:
+                drops.append({"id": d.name, "path": str(d), "note": "no manifest (raw)"})
+        return {"datadrops": drops, "count": len(drops), "dir": str(dd)}
+
+    def _handle_datadrop_upload(self, data: dict) -> dict:
+        """Store photo of finished piece as datadrop (inverse airdrop).
+        Creates datadrops/<YYYY-MM-DD_HHMMSS-slug>/ + image + manifest.json with analysis.
+        """
+        if not data.get("b64"):
+            return {"error": "no image b64 provided (use JS FileReader base64)"}
+        fname = (data.get("filename") or "photo.jpg").strip()
+        safe_name = "".join(c for c in fname if c.isalnum() or c in "._-") or "photo.jpg"
+        if not any(safe_name.lower().endswith(e) for e in (".jpg", ".jpeg", ".png", ".webp")):
+            safe_name += ".jpg"
+        desc = (data.get("description") or "").strip()[:500]
+        ptype = (data.get("piece_type") or "flyer").strip()
+        linked = data.get("linked_job") or ""
+        ts = datetime.now().strftime("%Y-%m-%d_%H%M%S")
+        slug_src = (desc[:18] or safe_name.split(".")[0]).replace(" ", "-").lower()
+        drop_dir = datadrops_dir() / f"{ts}_{slug_src}"
+        drop_dir.mkdir(parents=True, exist_ok=True)
+        # decode (data: prefix or raw)
+        b64s = data["b64"]
+        if "," in b64s:
+            b64s = b64s.split(",", 1)[1]
+        try:
+            raw = base64.b64decode(b64s)
+        except Exception as e:
+            return {"error": f"bad base64: {e}"}
+        img_path = drop_dir / safe_name
+        img_path.write_bytes(raw)
+        # extract metadata using existing analysis (local, privacy safe)
+        w = h = 0
+        palette = []
+        ocr_text = ""
+        hints = {}
+        try:
+            if Image and extract_palette:
+                with BytesIO(raw) as bio:
+                    im = Image.open(bio).convert("RGB")
+                    w, h = im.size
+                pal = extract_palette(img_path, n_colors=5)
+                palette = pal.get("colors", [])
+            if run_ocr:
+                ocr_res = run_ocr(img_path)
+                if ocr_res.get("available"):
+                    ocr_text = (ocr_res.get("text") or "")[:2000]
+                    if extract_hints_from_text:
+                        hints = extract_hints_from_text(ocr_text) or {}
+        except Exception:
+            pass  # analysis best effort
+        manifest = {
+            "id": drop_dir.name,
+            "uploaded_at": datetime.now().isoformat(timespec="seconds"),
+            "original_filename": fname,
+            "image_path": f"datadrops/{drop_dir.name}/{safe_name}",
+            "type": ptype,
+            "dimensions": {"width": w, "height": h},
+            "palette": palette,
+            "ocr_text_snippet": ocr_text[:300] if ocr_text else "",
+            "ocr_hints": hints,
+            "description": desc or "Foto real de pieza terminada (datadrop).",
+            "linked_job": linked,
+            "visual_traits": self._derive_visual_traits(ptype, palette, desc, hints),
+            "tags": [ptype, "datadrop", "real-finished", "inverse-airdrop"],
+            "analysis_source": "local (src/flujo/analyze colors+ocr; no external)",
+            "for_future_ai": self._build_for_future_ai(ptype, palette, desc, hints, w, h),
+        }
+        (drop_dir / "manifest.json").write_text(json.dumps(manifest, indent=2, ensure_ascii=False), encoding="utf-8")
+        try:
+            (drop_dir / "analysis").mkdir(exist_ok=True)
+            if palette:
+                (drop_dir / "analysis" / "palette.json").write_text(json.dumps({"colors": palette}, indent=2, ensure_ascii=False), encoding="utf-8")
+            if ocr_text:
+                (drop_dir / "analysis" / "ocr.txt").write_text(ocr_text[:2000], encoding="utf-8")
+        except Exception:
+            pass
+        return {"ok": True, "id": drop_dir.name, "path": str(drop_dir), "manifest": manifest, "note": "Datadrop almacenado. Listo para revisión por IA futura."}
+
+    def _handle_datadrop_analyze(self, data: dict) -> dict:
+        did = data.get("id")
+        if not did:
+            return {"error": "id required"}
+        ddir = datadrops_dir() / did
+        if not ddir.exists():
+            return {"error": "datadrop not found"}
+        img = None
+        for c in list(ddir.glob("*.jpg")) + list(ddir.glob("*.jpeg")) + list(ddir.glob("*.png")):
+            img = c
+            break
+        if not img:
+            return {"error": "no image in datadrop"}
+        try:
+            pal = extract_palette(img, n_colors=5) if extract_palette else {}
+            ocr_res = run_ocr(img) if run_ocr else {}
+            mpath = ddir / "manifest.json"
+            m = json.loads(mpath.read_text(encoding="utf-8")) if mpath.exists() else {}
+            m["palette"] = pal.get("colors", m.get("palette", [])) if pal else m.get("palette", [])
+            if ocr_res.get("available"):
+                m["ocr_text_snippet"] = (ocr_res.get("text") or "")[:300]
+                if extract_hints_from_text:
+                    m["ocr_hints"] = extract_hints_from_text(m["ocr_text_snippet"]) or {}
+            m["reanalyzed_at"] = datetime.now().isoformat(timespec="seconds")
+            # refresh teaching note with fresh data
+            try:
+                pw = m.get("dimensions", {}).get("width", 0)
+                ph = m.get("dimensions", {}).get("height", 0)
+                m["for_future_ai"] = self._build_for_future_ai(m.get("type","flyer"), m.get("palette",[]), m.get("description",""), m.get("ocr_hints",{}), pw, ph)
+            except Exception:
+                pass
+            mpath.write_text(json.dumps(m, indent=2, ensure_ascii=False), encoding="utf-8")
+            return {"ok": True, "id": did, "manifest": m}
+        except Exception as e:
+            return {"error": str(e)}
+
+    def _prepare_datadrop_review_package(self) -> dict:
+        """Generate persistent review package (inverse airdrop) so other AI (linea_editorial improver etc) can read what real finished work looks like.
+        Writes datadrops/_review_package.txt (and returns summary). Use manifests + photos to know 'qué buscar'.
+        """
+        dd = datadrops_dir()
+        listed = self._list_datadrops()
+        items = listed.get("datadrops", [])
+        instructions = (
+            "DATADROP REVIEW PACKAGE — Inverse airdrop for future AI review.\n"
+            "Fuente: fotos reales de flyers/etiquetas/etc ya entregados por usuario.\n"
+            "Usa: cada manifest.json (palette, ocr_hints, visual_traits, for_future_ai) + imagen real (datadrops/<id>/img).\n"
+            "Objetivo: 'sabrá qué buscar' en briefs/análisis — patrones de paletas reales, contraste, densidad de layouts, textos que aparecen en entregas.\n"
+            "Ej: si datadrops muestran magenta alto contraste en flyers rave oscuros + icon grids densos → valida que linea_editorial + generación lo use.\n"
+            "Privacidad: local only. Coordina Brand Guardian / linea. Copia o cat este archivo + manifests cuando te unas a linea task.\n"
+            "Generado via hub (`flujo app`) o CLI `py -m flujo datadrop prepare`.\n\n"
+        )
+        summary_lines = []
+        for it in items:
+            summary_lines.append(f"ID: {it.get('id')}\nType: {it.get('type')}\nDesc: {it.get('description','')}\nTraits: {(it.get('visual_traits') or '')[:200]}\nForAI: {(it.get('for_future_ai') or '')[:300]}\nPalette: {str((it.get('palette') or [])[:2])}\n---")
+        pkg_text = instructions + "\n".join(summary_lines) + f"\n\nTotal: {len(items)} datadrops. Dir: {listed.get('dir')}\nRevisa imágenes directamente desde el hub o FS para ground truth visual."
+        pkg_path = dd / "_review_package.txt"
+        try:
+            pkg_path.write_text(pkg_text, encoding="utf-8")
+        except Exception:
+            pass
+        return {
+            "ok": True,
+            "package_file": str(pkg_path),
+            "count": len(items),
+            "summary": [ {"id": it.get("id"), "type": it.get("type"), "traits": (it.get("visual_traits") or "")[:80]} for it in items ],
+            "note": "Review package escrito. Léelo para saber patrones reales de entregas terminadas."
+        }
+
+    def _derive_visual_traits(self, ptype: str, palette: list, desc: str, hints: dict) -> str:
+        traits = f"Pieza real terminada tipo {ptype}. "
+        if palette:
+            cols = [c.get("hex", "") for c in palette[:3] if isinstance(c, dict)]
+            traits += f"Colores dominantes aprox: {', '.join(cols)}. "
+        if desc:
+            traits += f"Descripción: {desc[:120]}. "
+        if hints:
+            ks = list(hints.keys())[:3]
+            traits += f"Hints extraídos (OCR): {ks}. "
+        traits += "Patrón para IA: busca estos rasgos en briefs y generación para fidelidad a entregas reales."
+        return traits
+
+    def _build_for_future_ai(self, ptype: str, palette: list, desc: str, hints: dict, w: int, h: int) -> str:
+        """Rich teaching note so future AI (esp. when reviewing for linea_editorial) knows exactly what to look for in real delivered work."""
+        parts = []
+        parts.append(f"EJEMPLO REAL ENTREGADO ({ptype}, dims {w}x{h}): foto subida por usuario de pieza ya impresa/terminada.")
+        if palette:
+            cols = [c.get("hex", "") for c in palette[:3] if isinstance(c, dict)]
+            parts.append(f"Paleta dominante extraída (usar como referencia fiel): {', '.join(cols)}. En flyers/etiquetas reales rave/ONG: acentos de alto contraste sobre fondos oscuros suelen dominar.")
+        if desc:
+            parts.append(f"User notes reales: {desc[:150]}.")
+        if hints:
+            sample = str(list(hints.items())[:2])
+            parts.append(f"OCR real reveló hints (fechas/mentions/textos): {sample}. Busca textos similares en briefs para matching.")
+        parts.append("QUÉ BUSCAR LA IA: deriva layouts densos, proporciones exactas, contraste, densidad de iconos/texto de estas fotos + manifest. Valida vs linea_editorial (v4) en lugar de asumir. Esto es ground-truth de entregas, no specs teóricas. Úsalo para mejorar matching y evitar drift en generación.")
+        return " ".join(parts)
+
     def log_message(self, format, *args):
         if os.environ.get("FLUJO_WEB_DEBUG"):
             super().log_message(format, *args)
@@ -813,6 +1080,35 @@ class _HubDesktopApi:
         try:
             h = self._ensure_handler()
             return h._export_design_tokens()
+        except Exception as e:
+            return {"error": str(e)}
+
+    # Datadrop (inverse airdrop) bridge for desktop pywebview
+    def list_datadrops(self):
+        try:
+            h = self._ensure_handler()
+            return h._list_datadrops()
+        except Exception as e:
+            return {"datadrops": [], "error": str(e)}
+
+    def datadrop_upload(self, data: dict = None):
+        try:
+            h = self._ensure_handler()
+            return h._handle_datadrop_upload(data or {})
+        except Exception as e:
+            return {"error": str(e)}
+
+    def datadrop_analyze(self, data: dict = None):
+        try:
+            h = self._ensure_handler()
+            return h._handle_datadrop_analyze(data or {})
+        except Exception as e:
+            return {"error": str(e)}
+
+    def datadrop_prepare_package(self):
+        try:
+            h = self._ensure_handler()
+            return h._prepare_datadrop_review_package()
         except Exception as e:
             return {"error": str(e)}
 

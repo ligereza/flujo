@@ -125,3 +125,12 @@ def data_dir() -> Path:
     p = workspace_root() / "data"
     p.mkdir(parents=True, exist_ok=True)
     return p
+
+
+def datadrops_dir() -> Path:
+    """Writable user dir for datadrops (inverse airdrop): uploaded real photos of finished work.
+    Date-subdir structure inside. Used by hub UI + future AI review for styles/patterns.
+    """
+    p = workspace_root() / "datadrops"
+    p.mkdir(parents=True, exist_ok=True)
+    return p
