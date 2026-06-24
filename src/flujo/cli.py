@@ -331,6 +331,76 @@ def health():
         _warn("Index no existe. Ejecutar: flujo index --rebuild")
 
 
+
+@app.command("doctor")
+def doctor():
+    """Diagnóstico humano del entorno local: Python, Git, encoding, index, hub y airdrop.
+
+    A diferencia de `verify`, no ejecuta tests pesados. Sirve para saber rápido
+    si una máquina nueva / Windows / clon fresco está listo para trabajar.
+    """
+    import locale
+    import socket
+    import subprocess
+
+    from .paths import repo_root, workspace_root, inbox_dir, jobs_dir, datadrops_dir
+
+    root = repo_root()
+    workspace = workspace_root()
+    rows: list[tuple[str, str, str]] = []
+
+    def add(name: str, ok: bool, detail: str = "") -> None:
+        rows.append((name, "OK" if ok else "AVISO", detail))
+
+    _section("flujo · doctor")
+    add("versión", True, _get_version())
+    add("python", sys.version_info >= (3, 10), sys.executable)
+    enc = (getattr(sys.stdout, "encoding", None) or locale.getpreferredencoding(False) or "").lower()
+    add("encoding stdout", "utf" in enc, enc or "desconocido")
+    add("repo root", root.exists(), str(root))
+    add("workspace", workspace.exists(), str(workspace))
+    add("jobs/", jobs_dir().exists(), str(jobs_dir()))
+    add("inbox/", inbox_dir().exists(), str(inbox_dir()))
+    add("datadrops/", datadrops_dir().exists(), str(datadrops_dir()))
+    add("index db", (root / "data" / "flujo.db").exists(), "opcional; crear con `flujo index --rebuild`")
+    airdrop_dir = root / "_airdrop"
+    pending = airdrop_dir.exists() and any(p.is_file() for p in airdrop_dir.rglob("*"))
+    add("airdrop pendiente", not pending, "hay archivos en _airdrop/" if pending else "no")
+
+    try:
+        branch = subprocess.run(["git", "rev-parse", "--abbrev-ref", "HEAD"], cwd=root, capture_output=True, text=True, encoding="utf-8", errors="replace")
+        add("git branch", branch.returncode == 0, branch.stdout.strip() or branch.stderr.strip())
+        remote = subprocess.run(["git", "remote", "get-url", "origin"], cwd=root, capture_output=True, text=True, encoding="utf-8", errors="replace")
+        add("git origin", remote.returncode == 0, (remote.stdout or remote.stderr).strip())
+        status = subprocess.run(["git", "status", "--short"], cwd=root, capture_output=True, text=True, encoding="utf-8", errors="replace")
+        dirty = bool(status.stdout.strip())
+        add("git working tree", not dirty, "limpio" if not dirty else "hay cambios locales")
+    except Exception as e:
+        add("git", False, str(e))
+
+    try:
+        with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
+            sock.bind(("127.0.0.1", 0))
+            port = sock.getsockname()[1]
+        add("puertos locales", True, f"puerto libre detectado: {port}")
+    except Exception as e:
+        add("puertos locales", False, str(e))
+
+    table = Table(title="Diagnóstico local")
+    table.add_column("Check")
+    table.add_column("Estado")
+    table.add_column("Detalle")
+    for name, status, detail in rows:
+        style = "green" if status == "OK" else "yellow"
+        table.add_row(name, f"[{style}]{status}[/]", detail)
+    console.print(table)
+
+    if any(status != "OK" for _, status, _ in rows):
+        _warn("Doctor terminó con avisos (no necesariamente errores).")
+    else:
+        _ok("Doctor OK: entorno listo.")
+
+
 def _run_verify_subprocess(label: str, cmd: list[str], cwd: Path) -> None:
     import subprocess
 
@@ -1609,7 +1679,7 @@ launch(
         console.print("[bold]Para que se sienta aún más profesional (gratis):[/]")
         console.print("  - Copia el exe (y flujo_workspace si usas) a un lugar fijo (ej. Desktop o C:\\flujo).")
         console.print("  - Usa Inno Setup (https://jrsoftware.org - gratuito) para installer con Start Menu:")
-        console.print("      [Setup]  AppName=flujo  AppVersion=0.34.13 OutputDir=installer")
+        console.print("      [Setup]  AppName=flujo  AppVersion=0.35.0 OutputDir=installer")
         console.print("      [Files]  Source: dist\\flujo-hub.exe ; DestDir: {app}")
         console.print("      [Icons]  Name: {autoprograms}\\flujo ; Filename: {app}\\flujo-hub.exe")
         console.print("      (agrega .ico , asocia .json si quieres para proyectos)")
@@ -1665,14 +1735,42 @@ def clean(
 # ============================================================
 
 @app.command()
-def init():
-    """Inicializa carpetas del repo (jobs/_template, etc.)."""
+def init(
+    fresh: bool = typer.Option(False, "--fresh", help="prepara workspace completo: carpetas, datadrops e índice"),
+    rebuild_index: bool = typer.Option(True, "--rebuild-index/--no-rebuild-index", help="reconstruir índice SQLite en --fresh"),
+):
+    """Inicializa carpetas del repo/workspace (jobs/_template, data, inbox, datadrops)."""
     from .jobs.job import _ensure_template
-    from .paths import repo_root
+    from .paths import repo_root, workspace_root, inbox_dir, jobs_dir, data_dir, datadrops_dir
     root = repo_root()
-    tpl = _ensure_template(root)
+    workspace = workspace_root()
+    tpl = _ensure_template(workspace)
+    created = [
+        jobs_dir(),
+        inbox_dir(),
+        data_dir(),
+        datadrops_dir(),
+        datadrops_dir() / "incoming",
+    ]
+    for d in created:
+        d.mkdir(parents=True, exist_ok=True)
     _ok(f"Template: {tpl}")
-    _ok(f"Carpetas listas en {root}")
+    _ok(f"Workspace listo en {workspace}")
+
+    if fresh:
+        if rebuild_index:
+            try:
+                from .index.db import rebuild_index as _rebuild_index
+                res = _rebuild_index()
+                _ok(f"Índice reconstruido: {res.get('indexed', 0)} flyers")
+            except Exception as e:
+                _warn(f"No se pudo reconstruir índice: {e}")
+        lh = root / "context" / "LAST_HANDOFF.md"
+        if lh.exists():
+            _ok(f"LAST_HANDOFF presente: {lh}")
+        else:
+            _warn("No existe context/LAST_HANDOFF.md")
+        console.print("Siguiente recomendado: [cyan]flujo doctor[/] y luego [cyan]flujo app[/]")
 
 
 # ============================================================

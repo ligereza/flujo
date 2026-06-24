@@ -153,6 +153,39 @@ def _checkpoint(log, message: str) -> None:
     _write(log, "Checkpoint + push OK")
 
 
+
+def _capture(cmd: list[str]) -> str:
+    try:
+        proc = subprocess.run(
+            cmd,
+            cwd=ROOT,
+            capture_output=True,
+            text=True,
+            encoding="utf-8",
+            errors="replace",
+            timeout=20,
+        )
+        return (proc.stdout or proc.stderr or "").strip()
+    except Exception as exc:  # noqa: BLE001 - summary best effort
+        return f"? ({exc})"
+
+
+def _write_success_summary(log, message: str) -> None:
+    _ensure_src_first()
+    version = _capture([sys.executable, "-c", "from flujo.version import get_version; print(get_version())"])
+    commit = _capture(["git", "rev-parse", "--short", "HEAD"])
+    branch = _capture(["git", "rev-parse", "--abbrev-ref", "HEAD"])
+    status = _capture(["git", "status", "--short"]) or "limpio"
+    _write(log, "")
+    _write(log, "### RESUMEN FINAL")
+    _write(log, f"Versión: {version}")
+    _write(log, f"Rama: {branch}")
+    _write(log, f"Commit: {commit}")
+    _write(log, f"Mensaje: {message}")
+    _write(log, "Checks: pip install, compileall, pytest, health, version, changelog" + (", hub_smoke" if (ROOT / "scripts" / "hub_smoke.py").exists() else ""))
+    _write(log, f"Git status: {status}")
+    _write(log, "Próximo recomendado: py -m flujo app  (o py -m flujo doctor si es una máquina nueva)")
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser(description="Runner seguro de airdrop con log")
     parser.add_argument("message", help="Mensaje del checkpoint")
@@ -231,6 +264,8 @@ def main(argv: list[str] | None = None) -> int:
                 failed = True
                 break
 
+        if not failed:
+            _write_success_summary(log, args.message)
         _write(log, "")
         _write(log, f"### END {datetime.now().isoformat(timespec='seconds')}")
         _write(log, f"### RESULT {'FAILED' if failed else 'OK'}")

@@ -140,3 +140,13 @@ Fortalecer los dos flujos de agentes:
 - Hub static fallback endurecido: ya no expone `pyproject.toml`, `src/*.py`, `.env`, etc.; solo prefijos públicos.
 
 **Siguiente:** aplicar airdrop v0.34.13 y correr `py scripts/run_airdrop_checks.py "v0.34.13 - workflow hardening verify hub smoke windows ci resume"`. Si ya está aplicado y falló después: `py scripts/run_airdrop_checks.py --resume "v0.34.13 - workflow hardening verify hub smoke windows ci resume"`.
+
+---
+
+**Actualización 2026-06-23 — v0.35.0 avance inicial**
+- Nuevo `flujo doctor`: diagnóstico humano del entorno local (Python, encoding, Git, workspace, index, airdrop pendiente, puerto local) sin tests pesados.
+- `flujo init --fresh`: prepara workspace completo (`jobs/_template`, `inbox`, `data`, `datadrops/incoming`) y puede reconstruir índice.
+- `run_airdrop_checks.py`: resumen final con versión, rama, commit, checks y próximo paso.
+- Tests smoke agregados para doctor/init fresh.
+
+**Siguiente:** aplicar airdrop v0.35.0 y correr `py scripts/run_airdrop_checks.py "v0.35.0 - doctor init fresh airdrop summary"`. Luego probar `py -m flujo doctor` y `py -m flujo init --fresh`.

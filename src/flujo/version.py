@@ -1,8 +1,8 @@
 """Versión y changelog de flujo."""
 
-__version__ = "0.34.13"
+__version__ = "0.35.0"
 VERSION = __version__
-__version_info__ = (0, 34, 13)
+__version_info__ = (0, 35, 0)
 
 
 def get_version():
@@ -11,6 +11,16 @@ def get_version():
 
 def get_changelog():
     return {
+        "0.35.0": {
+            "titulo": "Doctor, init fresh y cierre de airdrops más claro",
+            "fecha": "2026-06-23",
+            "highlights": [
+                "Nuevo `flujo doctor` diagnostica entorno local sin correr tests pesados",
+                "`flujo init --fresh` prepara workspace, inbox, data, datadrops e índice opcional",
+                "run_airdrop_checks.py escribe un resumen final con versión, rama, commit, checks y próximo paso",
+                "Tests smoke cubren doctor e init fresh para flujo de primera instalación",
+            ],
+        },
         "0.34.13": {
             "titulo": "Workflow hardening: verify, hub smoke, Windows CI y resume",
             "fecha": "2026-06-23",
