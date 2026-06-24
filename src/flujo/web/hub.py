@@ -27,14 +27,14 @@ import socket
 import subprocess
 import sys
 import webbrowser
-from http.server import HTTPServer, BaseHTTPRequestHandler
+from http.server import ThreadingHTTPServer, BaseHTTPRequestHandler
 from pathlib import Path
 from threading import Thread
 import time
 import base64
 from datetime import datetime
 from io import BytesIO
-from urllib.parse import urlparse, parse_qs
+from urllib.parse import urlparse, parse_qs, unquote
 
 from ..paths import context_dir, repo_root, asset_root, workspace_root, is_packaged as _is_packaged, datadrops_dir
 
@@ -237,6 +237,48 @@ class HubRequestHandler(BaseHTTPRequestHandler):
             super().__init__(*args, **kwargs)
         # else: direct test/debug instantiation ok (attrs set)
 
+    def _resolve_under(self, base: Path, rel: str) -> Path | None:
+        """Resolve a URL-relative path under base, rejecting traversal.
+
+        The hub may be exposed on a LAN with `--host 0.0.0.0`; never allow
+        `../`, absolute paths, backslash traversal or encoded traversal to read
+        files outside the whitelisted static roots.
+        """
+        if base is None:
+            return None
+        try:
+            decoded = unquote(rel or "").replace("\\", "/")
+        except Exception:
+            return None
+        if "\x00" in decoded:
+            return None
+        decoded = decoded.lstrip("/")
+        parts = [part for part in decoded.split("/") if part and part != "."]
+        if any(part == ".." for part in parts):
+            return None
+        try:
+            base_resolved = Path(base).resolve()
+            candidate = (base_resolved / Path(*parts)).resolve()
+            candidate.relative_to(base_resolved)
+        except Exception:
+            return None
+        return candidate if candidate.is_file() else None
+
+    def _resolve_static_file(self, rel: str) -> Path | None:
+        """Resolve static assets from context first, then asset/repo root."""
+        seen: set[str] = set()
+        for base in (self.context_path, self.root):
+            if not base:
+                continue
+            key = str(Path(base).resolve())
+            if key in seen:
+                continue
+            seen.add(key)
+            candidate = self._resolve_under(Path(base), rel)
+            if candidate:
+                return candidate
+        return None
+
     def do_GET(self):
         parsed = urlparse(self.path)
         path = parsed.path
@@ -325,13 +367,11 @@ class HubRequestHandler(BaseHTTPRequestHandler):
         if path.startswith("/datadrops/"):
             try:
                 dd = datadrops_dir()
-                relp = path[len("/datadrops/"):].lstrip("/")
-                # basic safety: no .. , allow subdirs like analysis/
-                if ".." not in relp:
-                    fpath = (dd / relp).resolve()
-                    if fpath.is_file() and str(fpath).startswith(str(dd.resolve())):
-                        self._serve_file(fpath)
-                        return
+                relp = path[len("/datadrops/"):]
+                fpath = self._resolve_under(dd, relp)
+                if fpath:
+                    self._serve_file(fpath)
+                    return
             except Exception:
                 pass
             self.send_error(404)
@@ -339,18 +379,10 @@ class HubRequestHandler(BaseHTTPRequestHandler):
 
         # Servir archivos estáticos: context/ primero (hub + visualizers HTMLs), fallback a root/ (asset_root)
         # para assets bundled por `flujo package` (svg/, projects/flujo/ para brand json directo, etc).
-        # Esto asegura que en el .exe standalone (pywebview desktop) los visualizadores cargan SVGs reales
-        # y los links a brand/assets funcionan (sin 404). Soporta links legacy con ../ .
+        # Seguridad: no se permite traversal (`../`, encoded `%2e%2e`, ni rutas absolutas).
         rel = path.lstrip("/")
-        file_path = self.context_path / rel
-        if not file_path.is_file() and getattr(self, "root", None):
-            file_path = self.root / rel
-        if not file_path.is_file() and rel.startswith("../"):
-            rel2 = rel[3:].lstrip("/")
-            file_path = self.context_path / rel2
-            if not file_path.is_file() and getattr(self, "root", None):
-                file_path = self.root / rel2
-        if file_path.is_file():
+        file_path = self._resolve_static_file(rel)
+        if file_path:
             self._serve_file(file_path)
         else:
             self.send_error(404)
@@ -1308,7 +1340,7 @@ def run_server(host: str = "127.0.0.1", port: int = 8765, root: Path | None = No
         if actual_port != port:
             print(f"[flujo] Puerto {port} ocupado → usando {actual_port}")
 
-    server = HTTPServer((host, actual_port), HubRequestHandler)
+    server = ThreadingHTTPServer((host, actual_port), HubRequestHandler)
     print(f"[flujo] Workspace app en http://{host}:{actual_port}")
     print(f"  - Repo root: {r}")
     print("  - Hub:      /flujo_hub.html  (UI Delegar: input tarea + botones copian prompts completos por rol)")

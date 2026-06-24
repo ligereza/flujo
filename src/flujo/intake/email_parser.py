@@ -51,6 +51,11 @@ def detect_project_type(text: str) -> str:
     text_lower = text.lower()
     # order matters: more specific first
     checks = [
+        # order matters: operational/satellite tools before generic flyer
+        ('cotizacion', ['cotización', 'cotizacion', 'presupuesto', 'quote']),
+        ('cartelera', ['cartelera', 'historia evento', 'historia instagram', 'story evento']),
+        ('plano', ['plano', 'mapa de stand', 'mapa stand', 'layout stand', 'layout de stand']),
+        ('stand', ['stand', 'stands', 'toldo', 'toldos']),
         ('rider', ['rider', 'layout operativo', 'intervención en terreno', 'intervencion en terreno']),
         ('etiqueta', ['etiqueta', 'label', 'suplemento']),
         ('brief', ['brief', 'briefing']),
@@ -59,7 +64,8 @@ def detect_project_type(text: str) -> str:
         ('carrusel', ['carrusel', 'carrusel cuadrado']),
         ('tarjeta', ['tarjeta', 'card']),
         ('sticker', ['sticker']),
-        ('flyer', ['flyer']),
+        ('ig', ['post ig', 'post_ig', 'instagram post']),
+        ('flyer', ['flyer', 'afiche']),
     ]
     for tipo, keywords in checks:
         if any(kw in text_lower for kw in keywords):

@@ -23,6 +23,31 @@ def export_flyer(project_dir: Path, output_dir: Path | None = None) -> Path:
                 arcname = f"{arc_prefix}/{f.relative_to(src_dir)}"
                 zipf.write(f, arcname)
 
+    # Crear scripts de entrega ANTES de empaquetar. Antes se escribían después
+    # de añadir working/ y ai/ al zip, por lo que el ZIP final no los incluía.
+    working_dir = project_dir / "working"
+    ai_dir = project_dir / "ai"
+    working_dir.mkdir(exist_ok=True)
+    ai_dir.mkdir(exist_ok=True)
+
+    templates = Path(__file__).parent.parent / "templates"
+
+    compose_ps = working_dir / "compose.jsx"
+    if not compose_ps.exists():
+        compose_ps.write_text(_get_compose_jsx(), encoding="utf-8")
+
+    compose_ai = ai_dir / "compose_ai.jsx"
+    if not compose_ai.exists():
+        compose_ai.write_text(_get_compose_ai_jsx(), encoding="utf-8")
+
+    blender_script = working_dir / "blender_setup.py"
+    if not blender_script.exists():
+        template = templates / "blender_setup.py"
+        blender_script.write_text(
+            template.read_text(encoding="utf-8") if template.exists() else _get_blender_setup_fallback(),
+            encoding="utf-8",
+        )
+
     with zipfile.ZipFile(zip_path, "w", compression=zipfile.ZIP_DEFLATED) as z:
         add_dir(z, project_dir / "input", "input")
         add_dir(z, project_dir / "analysis", "analysis")
@@ -33,31 +58,6 @@ def export_flyer(project_dir: Path, output_dir: Path | None = None) -> Path:
             p = project_dir / name
             if p.exists():
                 z.write(p, name)
-
-        working_dir = project_dir / "working"
-        ai_dir = project_dir / "ai"
-        working_dir.mkdir(exist_ok=True)
-        ai_dir.mkdir(exist_ok=True)
-
-        templates = Path(__file__).parent.parent / "templates"
-
-        # JSX para Photoshop
-        compose_ps = working_dir / "compose.jsx"
-        if not compose_ps.exists():
-            compose_ps.write_text(_get_compose_jsx(), encoding="utf-8")
-
-        # JSX para Illustrator
-        compose_ai = ai_dir / "compose_ai.jsx"
-        if not compose_ai.exists():
-            compose_ai.write_text(_get_compose_ai_jsx(), encoding="utf-8")
-
-        # Script para Blender (nuevo)
-        blender_script = working_dir / "blender_setup.py"
-        if not blender_script.exists():
-            blender_script.write_text(
-                (templates / "blender_setup.py").read_text(encoding="utf-8"),
-                encoding="utf-8"
-            )
 
         email = _generar_email_draft(project_dir)
         z.writestr("exports/respuesta_jefe.txt", email)
@@ -234,6 +234,13 @@ function main() {
     alert("Documento listo para Illustrator\\n(Swatches cargados desde analysis/palette.json)");
 }
 main();
+"""
+
+
+def _get_blender_setup_fallback() -> str:
+    return """# blender_setup.py — fallback incluido por flujo
+# Ejecuta el script completo desde src/flujo/templates/blender_setup.py cuando esté disponible.
+print('flujo: blender_setup.py fallback cargado')
 """
 
 

@@ -53,9 +53,30 @@ Comandos disponibles (ejecutar `flujo --help`):
 """
 from __future__ import annotations
 
+import os
 import sys
 from pathlib import Path
 from typing import Optional
+
+
+def _configure_windows_stdio() -> None:
+    """Avoid UnicodeEncodeError on Windows/Git Bash cp1252 consoles.
+
+    Some Windows shells report cp1252 to Rich. CLI output contains symbols and
+    arrows used across the changelog, so force UTF-8 with replacement before
+    constructing the global Console.
+    """
+    if os.name != "nt":
+        return
+    for stream in (sys.stdout, sys.stderr):
+        try:
+            if hasattr(stream, "reconfigure"):
+                stream.reconfigure(encoding="utf-8", errors="replace")
+        except Exception:
+            pass
+
+
+_configure_windows_stdio()
 
 import typer
 from rich.console import Console
@@ -1533,7 +1554,7 @@ launch(
         console.print("[bold]Para que se sienta aún más profesional (gratis):[/]")
         console.print("  - Copia el exe (y flujo_workspace si usas) a un lugar fijo (ej. Desktop o C:\\flujo).")
         console.print("  - Usa Inno Setup (https://jrsoftware.org - gratuito) para installer con Start Menu:")
-        console.print("      [Setup]  AppName=flujo  AppVersion=0.34.10 OutputDir=installer")
+        console.print("      [Setup]  AppName=flujo  AppVersion=0.34.12 OutputDir=installer")
         console.print("      [Files]  Source: dist\\flujo-hub.exe ; DestDir: {app}")
         console.print("      [Icons]  Name: {autoprograms}\\flujo ; Filename: {app}\\flujo-hub.exe")
         console.print("      (agrega .ico , asocia .json si quieres para proyectos)")

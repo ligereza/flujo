@@ -1,6 +1,6 @@
 [project]
 name = "flujo"
-version = "0.34.10"
+version = "0.34.12"
 description = "Dimensiones del Orden — arte y automatización"
 readme = "README.md"
 requires-python = ">=3.10"
@@ -22,6 +22,7 @@ dependencies = [
 [project.optional-dependencies]
 dev = [
     "pytest>=7.4.0",
+    "pre-commit>=3.0",
 ]
 web = [
     "pywebview>=5.0",  # desktop window (BSD free); pip install pywebview

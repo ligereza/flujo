@@ -1,8 +1,8 @@
 """Versión y changelog de flujo."""
 
-__version__ = "0.34.10"
+__version__ = "0.34.12"
 VERSION = __version__
-__version_info__ = (0, 34, 10)
+__version_info__ = (0, 34, 12)
 
 
 def get_version():
@@ -11,6 +11,25 @@ def get_version():
 
 def get_changelog():
     return {
+        "0.34.12": {
+            "titulo": "Hotfix Windows UTF-8 en CLI",
+            "fecha": "2026-06-23",
+            "highlights": [
+                "Configura stdout/stderr en UTF-8 en Windows antes de crear la consola Rich",
+                "Evita UnicodeEncodeError en Git Bash/cp1252 al imprimir advertencias, símbolos y changelog",
+                "Desbloquea `flujo health` y `flujo version` dentro de run_airdrop_checks.py",
+            ],
+        },
+        "0.34.11": {
+            "titulo": "Hotfix seguridad hub, export ZIP e intake",
+            "fecha": "2026-06-23",
+            "highlights": [
+                "Bloquea path traversal en el servidor del hub y usa ThreadingHTTPServer para no congelar APIs con SSE",
+                "export_flyer incluye compose.jsx, compose_ai.jsx y blender_setup.py dentro del ZIP final",
+                "Parser de pedidos detecta plano/stand/cotización/cartelera y flyer-import soporta URLs IG con usuario/sin esquema",
+                "Índice SQLite inicializa esquema en consultas fresh, setup instala pre-commit y render preserva llaves literales en textos",
+            ],
+        },
         "0.34.10": {
             "titulo": "Hotfix runner airdrop: evitar sombra scripts/flujo.py",
             "fecha": "2026-06-22",

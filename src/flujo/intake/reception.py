@@ -1,4 +1,6 @@
 import os
+import sys
+import shutil
 import imaplib
 import email
 import zipfile
@@ -7,6 +9,19 @@ from pathlib import Path
 from datetime import datetime
 
 from ..paths import repo_root, workspace_root
+
+
+def _safe_extract_zip(zip_ref: zipfile.ZipFile, dest: Path) -> None:
+    """Extract a zip after rejecting traversal/absolute member names."""
+    dest = Path(dest).resolve()
+    for info in zip_ref.infolist():
+        name = info.filename.replace("\\", "/")
+        parts = [part for part in name.split("/") if part and part != "."]
+        if not parts or any(part == ".." for part in parts) or name.startswith("/"):
+            raise ValueError(f"Ruta insegura en ZIP: {info.filename}")
+        target = (dest / Path(*parts)).resolve()
+        target.relative_to(dest)
+    zip_ref.extractall(dest)
 
 def check_and_apply_email_airdrops() -> dict:
     """Se conecta al buzón IMAP especificado en variables de entorno,
@@ -77,30 +92,28 @@ def check_and_apply_email_airdrops() -> dict:
                     temp_zip = Path(workspace_root()) / "temp_airdrop.zip"
                     temp_zip.write_bytes(zip_data)
                     
-                    # Extraer en _airdrop/
+                    # Extraer en _airdrop/ de forma segura
                     airdrop_dir = Path(repo_root()) / "_airdrop"
+                    if airdrop_dir.exists():
+                        shutil.rmtree(airdrop_dir)
                     airdrop_dir.mkdir(parents=True, exist_ok=True)
-                    
-                    # Limpiar _airdrop antes de extraer
-                    for f in airdrop_dir.glob("**/*"):
-                        if f.is_file():
-                            f.unlink()
-                            
+
                     with zipfile.ZipFile(temp_zip, "r") as zip_ref:
-                        zip_ref.extractall(airdrop_dir)
-                        
+                        _safe_extract_zip(zip_ref, airdrop_dir)
+
                     try:
                         temp_zip.unlink()
-                    except:
+                    except Exception:
                         pass
-                        
-                    # Aplicar el airdrop usando el CLI mismo
-                    cmd = [
-                        "py", "-m", "flujo", "airdrop", "apply", 
-                        "--allow-airdrop-engine", 
-                        f"Auto-applied from email at {datetime.now().strftime('%Y-%m-%d %H:%M')}"
-                    ]
-                    
+
+                    # Aplicar el airdrop usando el Python actual. Cambios al motor
+                    # solo se permiten con opt-in explícito por variable de entorno.
+                    message = f"Auto-applied from email at {datetime.now().strftime('%Y-%m-%d %H:%M')}"
+                    cmd = [sys.executable, "-m", "flujo", "airdrop", "apply"]
+                    if os.getenv("FLUJO_IMAP_ALLOW_AIRDROP_ENGINE") == "1":
+                        cmd.append("--allow-airdrop-engine")
+                    cmd.append(message)
+
                     res = subprocess.run(cmd, cwd=str(repo_root()), capture_output=True, text=True)
                     
                     # Marcar correo como leído

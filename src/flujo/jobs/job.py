@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import os
 import re
 import shutil
 from dataclasses import dataclass
@@ -14,6 +15,17 @@ from .brief import Brief, EstadoJob, load_brief
 
 
 TEMPLATES_DIR = "_template"
+
+
+def _default_repo_root() -> Path:
+    """Repo/workspace for job data.
+
+    In development we historically used repo_root(), but tests and packaged runs
+    can set FLUJO_WORKSPACE_ROOT to keep mutable jobs outside the source tree.
+    """
+    if is_packaged() or os.getenv("FLUJO_WORKSPACE_ROOT"):
+        return workspace_root()
+    return repo_root()
 
 
 def slugify(s: str) -> str:
@@ -52,7 +64,7 @@ def _get_template_dir() -> Path:
     Si el repo tiene un jobs/_template local, se prefiere ese.
     En modo empaquetado (.exe), usa el workspace writable (al lado del exe).
     """
-    base = workspace_root() if is_packaged() else repo_root()
+    base = _default_repo_root()
     local = base / "jobs" / TEMPLATES_DIR
     if local.exists():
         return local
@@ -131,7 +143,7 @@ def create_job(name: str, source_path: Optional[Path] = None, repo: Optional[Pat
     En .exe empaquetado: jobs se crean en flujo_workspace/ junto al exe (writable, sobrevive onefile).
     """
     if repo is None:
-        repo = workspace_root() if is_packaged() else repo_root()
+        repo = _default_repo_root()
     tpl = _ensure_template(repo)
 
     slug = slugify(name)
@@ -159,7 +171,7 @@ def create_job(name: str, source_path: Optional[Path] = None, repo: Optional[Pat
 def list_jobs(repo: Optional[Path] = None, include_examples: bool = False) -> List[JobInfo]:
     """Lista todos los jobs en el repo."""
     if repo is None:
-        repo = workspace_root() if is_packaged() else repo_root()
+        repo = _default_repo_root()
     base = repo / "jobs"
     if not base.exists():
         return []
@@ -195,7 +207,7 @@ def list_jobs(repo: Optional[Path] = None, include_examples: bool = False) -> Li
 def find_job(name_or_path: str, repo: Optional[Path] = None) -> Optional[Path]:
     """Encuentra un job por nombre o path."""
     if repo is None:
-        repo = workspace_root() if is_packaged() else repo_root()
+        repo = _default_repo_root()
     p = Path(name_or_path)
     if p.is_absolute() and p.exists():
         return p

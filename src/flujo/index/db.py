@@ -73,6 +73,7 @@ def rebuild_index() -> dict:
 
 def list_flyers(status: str | None = None, limit: int = 100):
     conn = sqlite3.connect(db_path())
+    init_db(conn)
     conn.row_factory = sqlite3.Row
     if status:
         rows = conn.execute("SELECT * FROM flyers WHERE status = ? ORDER BY date_utc DESC LIMIT ?", (status, limit)).fetchall()
@@ -83,6 +84,7 @@ def list_flyers(status: str | None = None, limit: int = 100):
 
 def find_duplicates():
     conn = sqlite3.connect(db_path())
+    init_db(conn)
     conn.row_factory = sqlite3.Row
     rows = conn.execute("""
         SELECT shortcode, COUNT(*) as c, GROUP_CONCAT(project_path, '|') as paths

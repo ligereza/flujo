@@ -5,9 +5,9 @@ import time
 from pathlib import Path
 
 SHORTCODE_RE = [
-    re.compile(r"/p/([A-Za-z0-9_-]+)"),
-    re.compile(r"/reel/([A-Za-z0-9_-]+)"),
-    re.compile(r"/tv/([A-Za-z0-9_-]+)"),
+    re.compile(r"/(?:[A-Za-z0-9_.]+/)?p/([A-Za-z0-9_-]+)"),
+    re.compile(r"/(?:[A-Za-z0-9_.]+/)?reels?/([A-Za-z0-9_-]+)"),
+    re.compile(r"/(?:[A-Za-z0-9_.]+/)?tv/([A-Za-z0-9_-]+)"),
 ]
 
 def extract_shortcode(url: str) -> str | None:

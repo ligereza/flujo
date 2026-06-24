@@ -122,6 +122,24 @@ def esc(s):
     return html.escape(str(s), quote=True)
 
 
+class _SafeFormatDict(dict):
+    def __missing__(self, key):
+        # Keep unknown placeholders as literal text instead of crashing renders.
+        return "{" + str(key) + "}"
+
+
+def safe_format_template(value: str, mapping: dict) -> str:
+    """Format known placeholders while preserving normal human braces.
+
+    Config text often comes from briefs/correos. Strings like "Precio {especial}"
+    are legitimate copy, not necessarily Python format placeholders.
+    """
+    try:
+        return value.format_map(_SafeFormatDict(mapping))
+    except Exception:
+        return value
+
+
 def color(value, palette):
     if value is None:
         return "none"
@@ -276,9 +294,10 @@ def render_document(doc, cfg, out_dir: Path, mode: str):
         for el in elements:
             # variables simples por documento
             el = json.loads(json.dumps(el))
+            mapping = {**cfg.get("project", {}), **doc}
             for key, val in list(el.items()):
                 if isinstance(val, str):
-                    el[key] = val.format(**doc, **cfg.get("project", {}))
+                    el[key] = safe_format_template(val, mapping)
             render_element(svg, el, palette, mode)
         svg.append('</g>')
     svg.append('</svg>')

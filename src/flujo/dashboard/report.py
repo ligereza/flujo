@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 from datetime import datetime
+from html import escape
 from pathlib import Path
 from typing import List
 
@@ -74,13 +75,17 @@ def render_html(items: List[ItemScore]) -> str:
             pc = item.extra.get("pendientes_count", 0)
             if pc:
                 extra_html = f"<p class='muted'>{pc} pendientes</p>"
+        item_type = escape(item.type.upper())
+        item_name = escape(str(item.name))
+        item_reason = escape(str(item.reason))
+        item_path = escape(str(item.path))
         return f"""
         <article class='card' style='border-left-color:{color}'>
           <span class='badge' style='background:{color}'>{item.priority.value.upper()}</span>
-          <h3>{item.type.upper()} — {item.name}</h3>
-          <p>{item.reason}</p>
+          <h3>{item_type} — {item_name}</h3>
+          <p>{item_reason}</p>
           {extra_html}
-          <code>{item.path}</code>
+          <code>{item_path}</code>
         </article>
         """
 

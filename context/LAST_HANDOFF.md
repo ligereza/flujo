@@ -113,3 +113,19 @@ Fortalecer los dos flujos de agentes:
 **Regla:** Siempre `flujo app` primero. Lee este LAST_HANDOFF + hub. Actualiza solo esta sección al final. Mantén <150 líneas.
 
 **Fuente de verdad:** `flujo app` → hub → LAST_HANDOFF.md
+
+---
+
+**Actualización 2026-06-23 — v0.34.11 hotfix seguridad/export/intake**
+- Entregado `airdrop.zip` con carpeta `_airdrop/` lista para extraer en la raíz y aplicar.
+- Fixes: path traversal del hub bloqueado, `ThreadingHTTPServer` para SSE, export ZIP incluye JSX/Blender, intake detecta plano/stand/cotización/cartelera, IG parser unificado, DB index fresh, pre-commit dev, llaves literales en render, dashboard HTML escapado, recepción IMAP más segura, jobs respetan `FLUJO_WORKSPACE_ROOT`.
+- Validado: `compileall`, `pytest tests/ -q --tb=short`, `flujo health`; repros hub: traversal 404 y ping responde durante SSE.
+
+**Tareas simples siguientes:** aplicar el airdrop, correr `py scripts/validate_airdrop.py`, luego `py scripts/run_airdrop_checks.py "v0.34.11 - hotfix seguridad export intake"`. Windows: `py`; Linux/macOS: `python3`.
+
+---
+
+**Actualización 2026-06-23 — v0.34.12 hotfix Windows UTF-8 CLI**
+- v0.34.11 aplicó y pasó tests en Windows, pero `flujo health` falló en Git Bash/cp1252 al imprimir `⚠` vía Rich.
+- Hotfix: `src/flujo/cli.py` reconfigura stdout/stderr a UTF-8 en Windows antes de crear `Console`.
+- Aplicar encima de v0.34.11 y correr: `py scripts/run_airdrop_checks.py "v0.34.12 - hotfix windows utf8 cli"`.

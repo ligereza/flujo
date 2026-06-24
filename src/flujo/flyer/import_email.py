@@ -7,12 +7,20 @@ from ..manifest import load_json, write_json
 from .project import create_flyer_project
 from ..ig.download import download_post
 
-IG_RE = re.compile(r"https?://(?:www\.)?instagram\.com/(?P<kind>p|reel|tv)/(?P<code>[A-Za-z0-9_-]+)")
+IG_RE = re.compile(
+    r"(?:https?://)?(?:www\.)?instagram\.com/"
+    r"(?:[A-Za-z0-9_.]+/)?"
+    r"(?P<kind>p|reel|reels|tv)/(?P<code>[A-Za-z0-9_-]+)"
+    r"/?",
+    re.IGNORECASE,
+)
 
 def detect_media_guess(kind: str) -> str:
     return "video_possible" if kind in ("reel", "tv") else "image_or_carousel_possible"
 
 def normalize_url(kind: str, code: str) -> str:
+    # Instagram canonical route is /reel/ even if user pasted /reels/.
+    kind = "reel" if kind.lower() == "reels" else kind.lower()
     return f"https://www.instagram.com/{kind}/{code}"
 
 def extract_instagram_links(text: str):
@@ -20,6 +28,7 @@ def extract_instagram_links(text: str):
     seen = set()
     for m in IG_RE.finditer(text):
         kind, code = m.group("kind"), m.group("code")
+        kind = "reel" if kind.lower() == "reels" else kind.lower()
         url = normalize_url(kind, code)
         if url not in seen:
             found.append({"kind": kind, "code": code, "url": url})
