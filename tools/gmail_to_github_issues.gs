@@ -11,14 +11,17 @@
  * Optional Script Properties:
  * - GMAIL_LABEL_DONE: processed label, default: flujo-procesado
  * - MAX_THREADS: max threads per route/run, default: 10
+ * - GMAIL_LOOKBACK: Gmail newer_than window, default: 7d
  * - GMAIL_ROUTES: routing config.
  *
  * Recommended GMAIL_ROUTES format:
  * gmailSearchQuery|AREA|github_labels;gmailSearchQuery|AREA|github_labels
  *
  * Recommended default routes:
- * {subject:eventos subject:evento}|EVENTOS|pedido,area/eventos,estado/por-revisar,gmail,instagram,action/descargar-ig
- * {subject:suplementos subject:suplemento}|SUPLEMENTOS|pedido,area/suplementos,estado/por-revisar,gmail
+ * subject:eventos|EVENTOS|pedido,area/eventos,estado/por-revisar,gmail,instagram,action/descargar-ig
+ * subject:evento|EVENTOS|pedido,area/eventos,estado/por-revisar,gmail,instagram,action/descargar-ig
+ * subject:suplementos|SUPLEMENTOS|pedido,area/suplementos,estado/por-revisar,gmail
+ * subject:suplemento|SUPLEMENTOS|pedido,area/suplementos,estado/por-revisar,gmail
  *
  * This means: no "flujo" word is needed in the email subject.
  * A subject containing "eventos" routes to EVENTOS.
@@ -48,7 +51,7 @@ function setupFlujoGmailBridge() {
 
   ScriptApp.newTrigger('processFlujoPedidos')
     .timeBased()
-    .everyMinutes(10)
+    .everyHours(8)
     .create();
 
   Logger.log('OK: Gmail -> GitHub bridge configured. Routes: ' + JSON.stringify(getRoutes_()));
@@ -65,15 +68,16 @@ function processFlujoPedidos() {
   const doneLabelName = props.getProperty('GMAIL_LABEL_DONE') || 'flujo-procesado';
   const doneLabel = getOrCreateLabel_(doneLabelName);
   const maxThreads = Number(props.getProperty('MAX_THREADS') || '10');
+  const lookback = props.getProperty('GMAIL_LOOKBACK') || '7d';
   const routes = getRoutes_();
 
   routes.forEach(function (route) {
-    processRoute_(route, repo, token, doneLabelName, doneLabel, maxThreads);
+    processRoute_(route, repo, token, doneLabelName, doneLabel, maxThreads, lookback);
   });
 }
 
-function processRoute_(route, repo, token, doneLabelName, doneLabel, maxThreads) {
-  const query = route.gmailQuery + ' -label:"' + doneLabelName + '" newer_than:30d';
+function processRoute_(route, repo, token, doneLabelName, doneLabel, maxThreads, lookback) {
+  const query = route.gmailQuery + ' -label:"' + doneLabelName + '" newer_than:' + lookback;
   const threads = GmailApp.search(query, 0, maxThreads);
   Logger.log('Route ' + route.area + ' / query [' + query + '] threads: ' + threads.length);
 
@@ -132,13 +136,25 @@ function getRoutes_() {
 
   return [
     {
-      gmailQuery: '{subject:eventos subject:evento}',
+      gmailQuery: 'subject:eventos',
       sourceLabel: '',
       area: 'EVENTOS',
       githubLabels: ['pedido', 'area/eventos', 'estado/por-revisar', 'gmail', 'instagram', 'action/descargar-ig']
     },
     {
-      gmailQuery: '{subject:suplementos subject:suplemento}',
+      gmailQuery: 'subject:evento',
+      sourceLabel: '',
+      area: 'EVENTOS',
+      githubLabels: ['pedido', 'area/eventos', 'estado/por-revisar', 'gmail', 'instagram', 'action/descargar-ig']
+    },
+    {
+      gmailQuery: 'subject:suplementos',
+      sourceLabel: '',
+      area: 'SUPLEMENTOS',
+      githubLabels: ['pedido', 'area/suplementos', 'estado/por-revisar', 'gmail']
+    },
+    {
+      gmailQuery: 'subject:suplemento',
       sourceLabel: '',
       area: 'SUPLEMENTOS',
       githubLabels: ['pedido', 'area/suplementos', 'estado/por-revisar', 'gmail']

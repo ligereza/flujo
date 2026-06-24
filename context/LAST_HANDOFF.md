@@ -5,7 +5,7 @@ Do not use accents, enye, emoji, smart quotes, or special arrows here.
 Daily commands for owner on Windows/Git Bash must use `py`, not `python`.
 
 Date: 2026-06-24
-Current version: 0.35.10
+Current version: 0.35.13
 Main daily entry: `py -m flujo app`
 Desktop entry: `py -m flujo app --desktop`
 Verify on Windows: `py -m flujo verify`
@@ -83,10 +83,30 @@ Recommended free stack:
 
 ### v0.35.10 - Gmail subject routing and agent-first README
 - Gmail bridge no longer requires the word flujo in subjects.
-- Default routing: `{subject:eventos subject:evento}` -> EVENTOS and `{subject:suplementos subject:suplemento}` -> SUPLEMENTOS.
-- `GMAIL_ROUTES` now accepts full Gmail search queries, plus legacy `label:...` routes.
+- Default routing used grouped subject queries; v0.35.11 split them for reliability.
+- `GMAIL_ROUTES` accepts full Gmail search queries, plus legacy `label:...` routes.
 - README was simplified and now starts with the required agent manual reading order.
 - Removed explicit supplements brief details from README; it only links to operational docs.
+
+### v0.35.11 - Gmail hourly trigger and robust subject routes
+- Apps Script setup now creates trigger every 1 hour.
+- Added `GMAIL_LOOKBACK`, default `7d`, to avoid processing old email backlogs.
+- Recommended routes are now separate: `subject:eventos`, `subject:evento`, `subject:suplementos`, `subject:suplemento`.
+- This should catch subjects like `Suplementos - etiqueta Omega 3` more reliably than grouped Gmail search queries.
+
+### v0.35.12 - EVENTOS flyer auto command
+- Added `py -m flujo eventos flyer-auto <instagram_url>`.
+- Downloads Instagram with instaloader and updates `C:\\rd\\AUTOMATIZACION\\input_ig.jpg`.
+- Does not open Photoshop by default.
+- To authorize Photoshop droplet: add `--run-droplet`; command asks for confirmation.
+- Expected local files: `Droplet_Flyer.exe`, `historia.psd`, `input_ig.jpg`.
+
+### v0.35.13 - EVENTOS palette and Blender preview
+- Gmail Apps Script trigger changed to every 8 hours.
+- `eventos flyer-auto` now writes `palette_ig.png` and `palette_ig.json`.
+- Added `--render-blender` to render frame 1 of `cartelera.blend` into `preview_cartelera.png`.
+- Added `--open-blender` to open `cartelera.blend` after confirmation.
+- User will connect extracted colors/images inside Blender manually.
 
 ## Important Windows/Git Bash rules
 

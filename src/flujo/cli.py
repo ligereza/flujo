@@ -102,6 +102,7 @@ job_app = typer.Typer(help="Gestión de jobs y briefs.", no_args_is_help=True)
 privacy_app = typer.Typer(help="Privacidad para textos antes de IA externa.", no_args_is_help=True)
 brief_app = typer.Typer(help="Operaciones sobre briefs.", no_args_is_help=True)
 intake_app = typer.Typer(help="Intake estructurado de pedidos (JSON 1.0).", no_args_is_help=True)
+eventos_app = typer.Typer(help="Automatizaciones del area EVENTOS.", no_args_is_help=True)
 render_app = typer.Typer(help="Render y validación de piezas vectoriales.", no_args_is_help=True)
 airdrop_app = typer.Typer(help="Sistema de actualización profesional (airdrops).", no_args_is_help=True)
 
@@ -109,6 +110,7 @@ app.add_typer(job_app, name="job")
 app.add_typer(privacy_app, name="privacy")
 app.add_typer(brief_app, name="brief")
 app.add_typer(intake_app, name="intake")
+app.add_typer(eventos_app, name="eventos")
 app.add_typer(render_app, name="render")
 app.add_typer(airdrop_app, name="airdrop")
 
@@ -1110,6 +1112,72 @@ def privacy_check(
     console.print(f"  riesgo:    {scan.risk}")
     console.print(f"  sanitizado: {job / 'pedido_sanitizado.txt'}")
     console.print(f"  reporte:    {job / 'privacy_report.md'}")
+
+
+# ============================================================
+# Eventos
+# ============================================================
+
+@eventos_app.command("flyer-auto")
+def eventos_flyer_auto(
+    url: str = typer.Argument(..., help="Instagram /p/ or /reel/ URL"),
+    base_dir: Optional[Path] = typer.Option(None, "--base-dir", help="Carpeta base automatizacion (default Windows: C:\\rd\\AUTOMATIZACION)"),
+    run_droplet: bool = typer.Option(False, "--run-droplet", help="Autorizar apertura de Droplet_Flyer.exe con historia.psd"),
+    open_blender: bool = typer.Option(False, "--open-blender", help="Abrir cartelera.blend en Blender al final"),
+    render_blender: bool = typer.Option(False, "--render-blender", help="Renderizar frame 1 de cartelera.blend a preview_cartelera.png"),
+    blender_exe: str = typer.Option("blender", "--blender-exe", help="Comando o ruta a blender.exe"),
+    yes: bool = typer.Option(False, "--yes", "-y", help="No preguntar confirmacion para droplet/blender"),
+    keep_temp: bool = typer.Option(False, "--keep-temp", help="Conservar carpeta temp_flyer para debug"),
+):
+    """EVENTOS: descargar Instagram, crear palette_ig y opcionalmente lanzar Photoshop/Blender.
+
+    Por defecto NO abre droplet ni Blender. Eso deja autorizacion humana antes
+    de ejecutar programas externos. Para correr pasos extra, agrega flags.
+    """
+    from .eventos.flyer_auto import default_base_dir, run_eventos_flyer_auto
+
+    target_base = base_dir or default_base_dir()
+    if (run_droplet or open_blender or render_blender) and not yes:
+        console.print(f"Base dir: {target_base}")
+        if run_droplet:
+            console.print("This will launch Droplet_Flyer.exe with historia.psd.")
+        if render_blender:
+            console.print("This will render cartelera.blend frame 1 to preview_cartelera.png.")
+        if open_blender:
+            console.print("This will open cartelera.blend in Blender.")
+        if not typer.confirm("Authorize external app step(s) now?"):
+            _warn("Cancelled by user before external app launch.")
+            raise typer.Exit(1)
+
+    res = run_eventos_flyer_auto(
+        url=url,
+        base_dir=target_base,
+        run_droplet=run_droplet,
+        open_blender=open_blender,
+        render_blender=render_blender,
+        blender_exe=blender_exe,
+        keep_temp=keep_temp,
+    )
+    _section("EVENTOS flyer automation")
+    if not res.ok:
+        _err(res.error or "eventos flyer automation failed")
+    _ok(f"Shortcode: {res.shortcode}")
+    console.print(f"  base:            [cyan]{res.base_dir}[/]")
+    console.print(f"  input jpg:       [cyan]{res.input_image}[/]")
+    console.print(f"  palette png:     [cyan]{res.palette_image}[/]")
+    console.print(f"  palette json:    [cyan]{res.palette_json}[/]")
+    console.print(f"  droplet:         [cyan]{res.droplet_path}[/]")
+    console.print(f"  psd:             [cyan]{res.psd_path}[/]")
+    console.print(f"  blender file:    [cyan]{res.blender_file}[/]")
+    console.print(f"  blender preview: [cyan]{res.blender_render}[/]")
+    console.print(f"  droplet started: [bold]{'yes' if res.droplet_started else 'no'}[/]")
+    console.print(f"  blender opened:  [bold]{'yes' if res.blender_started else 'no'}[/]")
+    console.print(f"  blender render:  [bold]{'yes' if res.blender_rendered else 'no'}[/]")
+    if not (res.droplet_started or res.blender_started or res.blender_rendered):
+        console.print("\nNext examples:")
+        console.print(f"  py -m flujo eventos flyer-auto \"{url}\" --run-droplet")
+        console.print(f"  py -m flujo eventos flyer-auto \"{url}\" --render-blender")
+        console.print(f"  py -m flujo eventos flyer-auto \"{url}\" --render-blender --open-blender")
 
 
 # ============================================================

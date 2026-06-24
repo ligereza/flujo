@@ -1,8 +1,8 @@
 """Versión y changelog de flujo."""
 
-__version__ = "0.35.10"
+__version__ = "0.35.13"
 VERSION = __version__
-__version_info__ = (0, 35, 10)
+__version_info__ = (0, 35, 13)
 
 
 def get_version():
@@ -11,6 +11,36 @@ def get_version():
 
 def get_changelog():
     return {
+        "0.35.13": {
+            "titulo": "EVENTOS palette y preview Blender",
+            "fecha": "2026-06-24",
+            "highlights": [
+                "Revision Gmail automatica cambia a cada 8 horas",
+                "`eventos flyer-auto` genera `palette_ig.png` y `palette_ig.json` desde la imagen descargada",
+                "Agrega soporte `--render-blender` para renderizar frame 1 de `cartelera.blend` a `preview_cartelera.png`",
+                "Agrega soporte `--open-blender` para abrir `cartelera.blend` con autorizacion humana",
+            ],
+        },
+        "0.35.12": {
+            "titulo": "EVENTOS flyer auto con autorizacion droplet",
+            "fecha": "2026-06-24",
+            "highlights": [
+                "Nuevo comando `py -m flujo eventos flyer-auto <instagram_url>` descarga Instagram y actualiza `input_ig.jpg`",
+                "Integra ruta local Windows `C:\\rd\\AUTOMATIZACION` con `Droplet_Flyer.exe`, `historia.psd` e `input_ig.jpg`",
+                "Por defecto no abre Photoshop; requiere `--run-droplet` y confirmacion humana",
+                "Tests cubren extraccion de shortcode y copia de imagen sin tocar red ni Photoshop",
+            ],
+        },
+        "0.35.11": {
+            "titulo": "Gmail horario y rutas subject robustas",
+            "fecha": "2026-06-24",
+            "highlights": [
+                "Apps Script ahora crea trigger cada 1 hora en vez de cada pocos minutos",
+                "Agrega `GMAIL_LOOKBACK` configurable, default 7d, para evitar procesar correos muy antiguos",
+                "Rutas Gmail se separan en subject:eventos, subject:evento, subject:suplementos y subject:suplemento para reconocer asuntos como 'Suplementos - etiqueta Omega 3'",
+                "Docs de Gmail actualizadas con propiedades recomendadas y modo de prueba",
+            ],
+        },
         "0.35.10": {
             "titulo": "Gmail por asunto y README orientado a agentes",
             "fecha": "2026-06-24",

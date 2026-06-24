@@ -56,10 +56,44 @@ action/descargar-ig
 
 ### Trabajo local
 
-Si es link Instagram:
+Si es link Instagram, usar el flujo directo EVENTOS:
 
 ```bash
-py -m flujo flyer-import inbox/correo_evento.txt
+py -m flujo eventos flyer-auto "https://www.instagram.com/p/XXXX/"
+```
+
+Eso descarga con instaloader y actualiza:
+
+```txt
+C:\rd\AUTOMATIZACION\input_ig.jpg
+C:\rd\AUTOMATIZACION\palette_ig.png
+C:\rd\AUTOMATIZACION\palette_ig.json
+```
+
+Por defecto NO abre Photoshop ni Blender. Para autorizar el droplet:
+
+```bash
+py -m flujo eventos flyer-auto "https://www.instagram.com/p/XXXX/" --run-droplet
+```
+
+Para renderizar vista previa de Blender con `cartelera.blend`:
+
+```bash
+py -m flujo eventos flyer-auto "https://www.instagram.com/p/XXXX/" --render-blender
+```
+
+Para renderizar y abrir Blender:
+
+```bash
+py -m flujo eventos flyer-auto "https://www.instagram.com/p/XXXX/" --render-blender --open-blender
+```
+
+Rutas esperadas:
+
+```txt
+C:\rd\AUTOMATIZACION\Droplet_Flyer.exe
+C:\rd\AUTOMATIZACION\historia.psd
+C:\rd\AUTOMATIZACION\input_ig.jpg
 ```
 
 Luego sigue la automatizacion local de carpetas/Photoshop del usuario.
@@ -165,7 +199,8 @@ GITHUB_TOKEN = github_pat_...
 GITHUB_REPO = ligereza/vibecodeine
 GMAIL_LABEL_DONE = flujo-procesado
 MAX_THREADS = 10
-GMAIL_ROUTES = {subject:eventos subject:evento}|EVENTOS|pedido,area/eventos,estado/por-revisar,gmail,instagram,action/descargar-ig;{subject:suplementos subject:suplemento}|SUPLEMENTOS|pedido,area/suplementos,estado/por-revisar,gmail
+GMAIL_LOOKBACK = 7d
+GMAIL_ROUTES = subject:eventos|EVENTOS|pedido,area/eventos,estado/por-revisar,gmail,instagram,action/descargar-ig;subject:evento|EVENTOS|pedido,area/eventos,estado/por-revisar,gmail,instagram,action/descargar-ig;subject:suplementos|SUPLEMENTOS|pedido,area/suplementos,estado/por-revisar,gmail;subject:suplemento|SUPLEMENTOS|pedido,area/suplementos,estado/por-revisar,gmail
 ```
 
 Solo necesitas crear esta etiqueta Gmail:

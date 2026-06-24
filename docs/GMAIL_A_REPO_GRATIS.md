@@ -85,10 +85,16 @@ GITHUB_TOKEN = github_pat_...
 GITHUB_REPO = ligereza/vibecodeine
 GMAIL_LABEL_DONE = flujo-procesado
 MAX_THREADS = 10
-GMAIL_ROUTES = {subject:eventos subject:evento}|EVENTOS|pedido,area/eventos,estado/por-revisar,gmail,instagram,action/descargar-ig;{subject:suplementos subject:suplemento}|SUPLEMENTOS|pedido,area/suplementos,estado/por-revisar,gmail
+GMAIL_LOOKBACK = 7d
+GMAIL_ROUTES = subject:eventos|EVENTOS|pedido,area/eventos,estado/por-revisar,gmail,instagram,action/descargar-ig;subject:evento|EVENTOS|pedido,area/eventos,estado/por-revisar,gmail,instagram,action/descargar-ig;subject:suplementos|SUPLEMENTOS|pedido,area/suplementos,estado/por-revisar,gmail;subject:suplemento|SUPLEMENTOS|pedido,area/suplementos,estado/por-revisar,gmail
 ```
 
 La propiedad importante es `GMAIL_ROUTES`.
+
+`GMAIL_LOOKBACK = 7d` evita que tome correos muy antiguos. Si quieres probar solo correos de hoy, puedes poner temporalmente `1d`.
+
+Las rutas van separadas (eventos/evento y suplementos/suplemento) para que Gmail no falle con busquedas agrupadas y reconozca asuntos como `Suplementos - etiqueta Omega 3`.
+
 
 Significa:
 
@@ -109,7 +115,7 @@ setupFlujoGmailBridge
 
 Google pedira permisos para Gmail y llamadas externas.
 
-Eso crea un trigger cada 10 minutos para:
+Eso crea un trigger cada 8 horas para:
 
 ```txt
 processFlujoPedidos

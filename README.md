@@ -124,7 +124,8 @@ GITHUB_TOKEN = github_pat_...
 GITHUB_REPO = ligereza/vibecodeine
 GMAIL_LABEL_DONE = flujo-procesado
 MAX_THREADS = 10
-GMAIL_ROUTES = {subject:eventos subject:evento}|EVENTOS|pedido,area/eventos,estado/por-revisar,gmail,instagram,action/descargar-ig;{subject:suplementos subject:suplemento}|SUPLEMENTOS|pedido,area/suplementos,estado/por-revisar,gmail
+GMAIL_LOOKBACK = 7d
+GMAIL_ROUTES = subject:eventos|EVENTOS|pedido,area/eventos,estado/por-revisar,gmail,instagram,action/descargar-ig;subject:evento|EVENTOS|pedido,area/eventos,estado/por-revisar,gmail,instagram,action/descargar-ig;subject:suplementos|SUPLEMENTOS|pedido,area/suplementos,estado/por-revisar,gmail;subject:suplemento|SUPLEMENTOS|pedido,area/suplementos,estado/por-revisar,gmail
 ```
 
 Con esto no necesitas escribir "flujo" en el asunto.
@@ -228,12 +229,70 @@ py -m flujo brief paquete-cotizacion jobs/<job>
 
 ---
 
-## 8. EVENTOS: descarga Instagram
+## 8. EVENTOS: descarga Instagram + Photoshop local
 
-Para correos de EVENTOS con link Instagram:
+Para EVENTOS con link Instagram ahora hay un comando directo para tu PC:
 
 ```bash
-py -m flujo flyer-import inbox/correo_evento.txt
+py -m flujo eventos flyer-auto "https://www.instagram.com/p/XXXX/"
+```
+
+Hace esto:
+
+```txt
+descarga Instagram con instaloader
+copia la primera imagen a C:\rd\AUTOMATIZACION\input_ig.jpg
+genera C:\rd\AUTOMATIZACION\palette_ig.png
+genera C:\rd\AUTOMATIZACION\palette_ig.json
+NO abre Photoshop ni Blender por defecto
+```
+
+Cuando quieras autorizar el droplet:
+
+```bash
+py -m flujo eventos flyer-auto "https://www.instagram.com/p/XXXX/" --run-droplet
+```
+
+Para renderizar una vista previa de Blender:
+
+```bash
+py -m flujo eventos flyer-auto "https://www.instagram.com/p/XXXX/" --render-blender
+```
+
+Eso usa:
+
+```txt
+C:\rd\AUTOMATIZACION\cartelera.blend
+```
+
+y genera:
+
+```txt
+C:\rd\AUTOMATIZACION\preview_cartelera.png
+```
+
+Si quieres renderizar y abrir Blender:
+
+```bash
+py -m flujo eventos flyer-auto "https://www.instagram.com/p/XXXX/" --render-blender --open-blender
+```
+
+El comando pregunta antes de abrir apps externas:
+
+```txt
+Droplet_Flyer.exe + historia.psd
+cartelera.blend
+```
+
+Rutas esperadas en Windows:
+
+```txt
+C:\rd\AUTOMATIZACION\Droplet_Flyer.exe
+C:\rd\AUTOMATIZACION\historia.psd
+C:\rd\AUTOMATIZACION\cartelera.blend
+C:\rd\AUTOMATIZACION\input_ig.jpg
+C:\rd\AUTOMATIZACION\palette_ig.png
+C:\rd\AUTOMATIZACION\preview_cartelera.png
 ```
 
 Regla:
@@ -242,7 +301,7 @@ Regla:
 Usar instaloader. No usar yt-dlp.
 ```
 
-Luego la imagen descargada entra a la automatizacion local de Photoshop/carpetas del usuario.
+Tu automatizacion Photoshop queda local y bajo autorizacion humana.
 
 ---
 
