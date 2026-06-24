@@ -1,9 +1,9 @@
 # Intake por JSON — Especificación para colegas y agentes
 
 **Versión del esquema:** `1.0`
-**Estado:** estructura definida y validable. El comando que la consume
-(`flujo intake json`) es el siguiente paso de implementación (ver
-[Roadmap](#roadmap-de-implementación)).
+**Estado:** estructura definida, validable y consumible por CLI. El comando
+activo es `flujo intake json <archivo.json>`: valida contra el schema, crea job,
+`brief.yaml`, `estado.md` y acuse `resultado.md`.
 
 ---
 
@@ -296,39 +296,40 @@ Ejemplos completos y válidos en `schemas/ejemplos/`:
 
 ## 5. Acuse de recibo automático
 
-Cuando el intake JSON se procese (por el comando o por el poller de correo), el
-sistema debe:
-1. Validar el JSON contra el esquema.
-2. Asignar un **folio** (`id` del job, ej. `2026-06-18_miel-organica`).
-3. Ejecutar **privacy scan**.
-4. Crear el **brief** + **job** en estado `brief_extraido_pendiente_revision`.
-5. **Responder al solicitante** confirmando: folio, qué se entendió (tipo,
-   formato, medidas) y qué falta (pendientes). → Esto es lo que independiza al
-   dueño de responder mensajes.
+`flujo intake json <archivo.json>` ya genera un acuse local en
+`jobs/<folio>/resultado.md` con:
+1. validación del JSON contra el esquema;
+2. folio/job asignado;
+3. brief + estado inicial;
+4. resumen de tipo, formato, medidas y entrega;
+5. pendientes/warnings claros para responder al solicitante.
+
+Pendiente para automatización total: conectar ese acuse a IMAP/SMTP o al canal
+que use el equipo para responder automáticamente.
 
 ---
 
 ## 6. Roadmap de implementación
 
-Para la siguiente IA que retome esto. Pasos sugeridos, de menor a mayor esfuerzo:
-
-1. **`flujo intake json <archivo.json>`** (módulo `src/flujo/intake/json_intake.py`):
-   - Valida contra `schemas/intake.schema.json`.
-   - Mapea a `Brief` (reusar `brief_from_text` como fallback para campos libres).
-   - Crea job vía `create_job` + `prepare_job`. Añadir tests.
-2. **Selección de plantilla por `formato_sugerido`/medidas** reusando
-   `render/formats.py::suggest_format` y `find_format_by_id`.
-3. **Acuse de recibo:** generar un `resultado.md`/respuesta con folio + resumen.
-4. **Poller de correo (IMAP):** script o módulo que lee un buzón, extrae JSON
-   (adjunto o cuerpo), llama a `intake json`, y responde por SMTP. Correr por
-   cron/Task Scheduler. (Decisión del dueño sobre el canal — ver README.)
-5. **Formulario web** (opcional) que genere el JSON válido para evitar errores
-   del colega.
-
 ### ✅ Ya implementado
+- **`flujo intake json <archivo.json>`** (módulo `src/flujo/intake/json_parser.py`):
+  valida contra `schemas/intake.schema.json`, crea job, mapea a `brief.yaml`,
+  sugiere formatos por catálogo/medidas, escribe `estado.md` y genera acuse
+  `resultado.md`.
+- **Selección base de formato** por `formato_sugerido`/medidas usando
+  `render/formats.py::suggest_format` y `find_format_by_id`.
+- **Acuse de recibo local** con folio + resumen + pendientes/warnings.
 - **`flujo render rescale`** (módulo `src/flujo/render/rescale.py`): resuelve los
-  cambios de `proporcion` y `resolucion` del bloque `modificacion`. Cuando se
-  implemente `flujo intake json`, debe enrutar `tipo_cambio` a este comando.
+  cambios de `proporcion` y `resolucion` del bloque `modificacion`; el acuse del
+  intake JSON deja comandos sugeridos cuando corresponde.
+
+### Próximos pasos
+1. **Poller de correo (IMAP):** leer buzón, extraer JSON adjunto/cuerpo, llamar a
+   `flujo intake json` y responder por SMTP con `resultado.md`.
+2. **Formulario web** (opcional) que genere el JSON válido para evitar errores
+   del colega.
+3. **Activación más profunda por tipo**: mapear `contenido.extras` a documentos/
+   componentes concretos del `config.json` según cada plantilla.
 
 > Mantener el contrato: **todo canal produce el mismo JSON `intake_version 1.0`**.
 > Si el esquema cambia, subir `intake_version` y versionar este documento.

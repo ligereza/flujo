@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Portal de pedidos · flujo</title>
+<style>
+:root {
+  --bg:#12001f; --panel:#2b0a3d; --card:#f5e8ff; --ink:#17051f; --muted:#6b5b78;
+  --accent:#6d28d9; --warn:#f59e0b; --active:#a855f7; --review:#7c3aed; --done:#22c55e;
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:var(--bg);color:#fff}
+header{padding:28px 28px 18px;background:linear-gradient(135deg,#101412,#1b2822)}
+h1{margin:0;font-size:clamp(1.8rem,4vw,3.2rem);letter-spacing:-.04em}
+header p{margin:.4rem 0 0;color:#cfc7ba}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:18px}
+.actions a{background:var(--card);color:var(--ink);text-decoration:none;border-radius:999px;padding:10px 14px;font-weight:800}
+.actions a:first-child{background:#d8f3df}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(160px,1fr));gap:12px;padding:18px 28px;background:#0b0d0c}
+.stat{background:var(--panel);padding:16px;border-radius:18px;border:1px solid rgba(255,255,255,.07)}
+.stat b{display:block;font-size:2rem;color:#f6efe3}
+.board{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(290px,1fr);gap:14px;overflow-x:auto;padding:22px 28px 34px}
+.col{background:var(--panel);border:1px solid rgba(255,255,255,.08);border-radius:22px;padding:14px;min-height:420px}
+.col h2{margin:0 0 12px;font-size:1rem;text-transform:uppercase;letter-spacing:.08em;color:#e8dfd0}
+.col h2 small{color:#a9a195}
+.job{background:var(--card);color:var(--ink);border-radius:18px;padding:14px;margin:0 0 12px;border-left:7px solid #999;box-shadow:0 10px 30px rgba(0,0,0,.22)}
+.job.warn{border-left-color:var(--warn)} .job.active{border-left-color:var(--active)} .job.review{border-left-color:var(--review)} .job.done{border-left-color:var(--done)}
+.job-top{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.pill{font-size:.72rem;font-weight:900;background:#111;color:#fff;border-radius:999px;padding:4px 8px}
+.job-id{font-size:.72rem;color:var(--muted);word-break:break-all;text-align:right}
+.job h3{margin:10px 0 5px;font-size:1.05rem;letter-spacing:-.02em}
+.meta{margin:0 0 10px;color:var(--muted)}
+details{border-top:1px solid rgba(0,0,0,.1);padding-top:8px}
+summary{cursor:pointer;font-weight:800}
+ul{padding-left:1.1rem} .ok{color:#276b46;font-weight:800} .empty{color:#aaa}
+footer{padding:20px 28px;color:#aaa;border-top:1px solid rgba(255,255,255,.08)}
+</style>
+</head>
+<body>
+<header>
+  <h1>Portal de pedidos</h1>
+  <p>Vista simple para jefatura/solicitantes · actualizado 2026-06-24 10:55 · sin monday.com · fuente: jobs locales de flujo.</p>
+  <nav class='actions'><a href='https://github.com/ligereza/vibecodeine/issues/new?template=pedido_diseno.yml'>Nuevo pedido</a><a href='https://github.com/ligereza/vibecodeine/issues/new?template=cambio_diseno.yml'>Pedir cambio</a><a href='https://github.com/ligereza/vibecodeine/projects'>Ver tablero GitHub</a></nav>
+</header>
+<div class="stats">
+  <div class="stat"><b>0</b>Total pedidos</div>
+  <div class="stat"><b>0</b>Abiertos</div>
+  <div class="stat"><b>0</b>Con pendientes</div>
+  <div class="stat"><b>0</b>Entregados</div>
+</div>
+<main class="board">
+  <section class='col'><h2>Pendiente datos <small>0</small></h2><p class='empty'>Sin pedidos en esta etapa.</p></section><section class='col'><h2>Por revisar <small>0</small></h2><p class='empty'>Sin pedidos en esta etapa.</p></section><section class='col'><h2>Listo para diseñar <small>0</small></h2><p class='empty'>Sin pedidos en esta etapa.</p></section><section class='col'><h2>En diseño <small>0</small></h2><p class='empty'>Sin pedidos en esta etapa.</p></section><section class='col'><h2>Generado / revisión <small>0</small></h2><p class='empty'>Sin pedidos en esta etapa.</p></section><section class='col'><h2>Entregado <small>0</small></h2><p class='empty'>Sin pedidos en esta etapa.</p></section>
+</main>
+<footer>
+  Para cambios: usar “Pedir cambio” o comentar el issue del pedido. Este portal no muestra el texto original completo para reducir exposición de datos.
+</footer>
+</body>
+</html>

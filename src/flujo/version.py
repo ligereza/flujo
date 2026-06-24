@@ -1,8 +1,8 @@
 """Versión y changelog de flujo."""
 
-__version__ = "0.35.2"
+__version__ = "0.35.7"
 VERSION = __version__
-__version_info__ = (0, 35, 2)
+__version_info__ = (0, 35, 7)
 
 
 def get_version():
@@ -11,6 +11,54 @@ def get_version():
 
 def get_changelog():
     return {
+        "0.35.7": {
+            "titulo": "ASCII handoff y guardrails Windows Git Bash",
+            "fecha": "2026-06-24",
+            "highlights": [
+                "Reescribe `context/LAST_HANDOFF.md` en ASCII-only para evitar mojibake en Windows/Git Bash",
+                "Aclara que el usuario usa `py`, no `python`, en comandos y documentacion operativa",
+                "Deja reglas de encoding para futuras IAs: handoff sin acentos, codigo/logs en ingles/ASCII si conviene",
+            ],
+        },
+        "0.35.6": {
+            "titulo": "README limpio purple y brief suplementos RD",
+            "fecha": "2026-06-24",
+            "highlights": [
+                "README principal reescrito y simplificado alrededor de Gmail/GitHub/portal/jobs",
+                "Paleta PURPLE aplicada como línea visual del portal y documentación principal",
+                "Agrega `docs/BRIEF_SUPLEMENTOS_RD.md` como fuente operativa para área suplementos RD",
+                "Deja candidatos de limpieza identificados para aprobación antes de borrar",
+            ],
+        },
+        "0.35.5": {
+            "titulo": "Guía Gmail a GitHub Issues para pedidos",
+            "fecha": "2026-06-24",
+            "highlights": [
+                "Agrega `tools/gmail_to_github_issues.gs`, puente Google Apps Script para Gmail → GitHub Issues",
+                "Documenta configuración gratuita con etiquetas Gmail, PAT fino de GitHub y trigger cada 10 minutos",
+                "Integra Gmail en el flujo portal/jefatura sin guardar credenciales ni tokens en el repo",
+            ],
+        },
+        "0.35.4": {
+            "titulo": "Portal jefe gratuito y reemplazo de monday.com",
+            "fecha": "2026-06-24",
+            "highlights": [
+                "Nuevo `flujo portal` exporta `context/portal_jefe.html` con tablero visual de estados para jefatura",
+                "Issue Forms gratuitos para nuevo pedido y cambios/correcciones vía GitHub Issues",
+                "Documento `docs/PORTAL_JEFE_GRATIS.md` define flujo GitHub Issues + Projects + portal HTML",
+                "Tests cubren export del portal vacío y con jobs locales",
+            ],
+        },
+        "0.35.3": {
+            "titulo": "Intake JSON end-to-end con job, brief y acuse",
+            "fecha": "2026-06-24",
+            "highlights": [
+                "Nuevo comando `flujo intake json <archivo.json>` para validar schema 1.0 y crear jobs estructurados",
+                "El intake JSON escribe `brief.yaml`, `estado.md` y `resultado.md` con folio, resumen, warnings y pendientes",
+                "Mapea formato sugerido/medidas al catálogo local y conserva modificación/rescale con comandos sugeridos",
+                "Docs y tests cubren CLI, validación de schema y acuse end-to-end",
+            ],
+        },
         "0.35.2": {
             "titulo": "Hotfix Python 3.11 para paquete comercial multiformato",
             "fecha": "2026-06-24",

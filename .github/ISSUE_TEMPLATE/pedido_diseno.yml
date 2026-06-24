@@ -1,0 +1,69 @@
+name: Pedido de diseño
+description: Solicitar flyer, etiqueta, post, pendón, rider u otra pieza
+title: "[Pedido] "
+labels: ["pedido", "estado/por-revisar"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Completa lo mínimo posible. Si no sabes una medida, marca "no sé"; flujo dejará el pedido como pendiente de datos.
+  - type: input
+    id: cliente
+    attributes:
+      label: Cliente / área / solicitante
+      placeholder: "Ej: Productora Norte / Suplementos / Eventos"
+    validations:
+      required: true
+  - type: dropdown
+    id: tipo_pieza
+    attributes:
+      label: Tipo de pieza
+      options:
+        - flyer
+        - etiqueta
+        - post Instagram
+        - historia Instagram
+        - carrusel
+        - pendón
+        - rider
+        - cartelera
+        - otro / no sé
+    validations:
+      required: true
+  - type: input
+    id: medida
+    attributes:
+      label: Medida o formato
+      placeholder: "Ej: 14 x 10 cm, 1080x1350, A4, no sé"
+  - type: textarea
+    id: contenido
+    attributes:
+      label: Texto/contenido que debe aparecer
+      description: Pega títulos, fechas, lugares, productos, CTA y datos obligatorios.
+      placeholder: "Título: ...\nFecha: ...\nLugar: ..."
+    validations:
+      required: true
+  - type: textarea
+    id: referencias
+    attributes:
+      label: Referencias / links / archivos
+      description: Pega links o describe archivos adjuntos. No pegues datos sensibles innecesarios.
+  - type: dropdown
+    id: urgencia
+    attributes:
+      label: Urgencia
+      options:
+        - normal
+        - esta semana
+        - urgente 24-48h
+        - fecha fija
+  - type: input
+    id: fecha_limite
+    attributes:
+      label: Fecha límite si existe
+      placeholder: "YYYY-MM-DD"
+  - type: textarea
+    id: notas
+    attributes:
+      label: Notas adicionales
+      placeholder: "Estilo, colores, restricciones, qué NO inventar..."

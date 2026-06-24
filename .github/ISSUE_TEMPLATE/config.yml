@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Ver tablero de pedidos
+    url: https://github.com/ligereza/vibecodeine/projects
+    about: Vista tipo kanban gratuita para revisar estados y prioridades.

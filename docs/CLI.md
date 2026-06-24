@@ -1,4 +1,4 @@
-# flujo · CLI Reference (v0.34.10)
+# flujo · CLI Reference (v0.35.3)
 
 **Entrada diaria principal:** `flujo app` (o `flujo app --desktop`) — lanza servidor + hub pro workspace.
 
@@ -35,13 +35,13 @@ py -m flujo version
 
 ```txt
 salud/info      health, version, init
-intake/flyers   flyer-import, ig-redownload, analyze, export
+intake/flyers   intake json, flyer-import, ig-redownload, analyze, export
 index/db        index, flyer-list
 job             job new, prepare, list, status, next, activate, report
 privacy         privacy scan, sanitize, check
 brief           brief extract, to-project, show
 render          render run, validate, formats, rescale
-diario          daily
+diario/portal   daily, portal
 web             serve, app, package (build .exe desktop)
 airdrop         airdrop list, dry-run, apply, rollback, status, finish
 datadrop        datadrop scan/list/prepare  (inverse airdrop: bulk fotos terminadas → manifests + for_future_ai para linea v4.1)
@@ -57,6 +57,9 @@ varios          clean
 # Salud / versión
 flujo health
 flujo version
+
+# Intake JSON estructurado (valida + crea job/brief/acuse)
+flujo intake json schemas/ejemplos/flyer_evento.json
 
 # Crear job desde correo/texto
 flujo job new "etiquetas acme" --email inbox/correo.txt
@@ -89,8 +92,9 @@ flujo export projects/flyer_eventos/mi-flyer
 flujo index --rebuild
 flujo flyer-list
 
-# Dashboard / web + delegación
+# Dashboard / portal / web + delegación
 flujo daily
+flujo portal --repo-url https://github.com/ligereza/vibecodeine  # HTML visual para jefatura
 flujo app                   # ENTRADA DIARIA: app + hub pro (recomendado)
 flujo app --desktop         # ventana nativa (pywebview)
 flujo package               # construye .exe standalone (PyInstaller gratis): doble clic abre flujo app --desktop sin consola

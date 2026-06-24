@@ -101,12 +101,14 @@ console = Console()
 job_app = typer.Typer(help="Gestión de jobs y briefs.", no_args_is_help=True)
 privacy_app = typer.Typer(help="Privacidad para textos antes de IA externa.", no_args_is_help=True)
 brief_app = typer.Typer(help="Operaciones sobre briefs.", no_args_is_help=True)
+intake_app = typer.Typer(help="Intake estructurado de pedidos (JSON 1.0).", no_args_is_help=True)
 render_app = typer.Typer(help="Render y validación de piezas vectoriales.", no_args_is_help=True)
 airdrop_app = typer.Typer(help="Sistema de actualización profesional (airdrops).", no_args_is_help=True)
 
 app.add_typer(job_app, name="job")
 app.add_typer(privacy_app, name="privacy")
 app.add_typer(brief_app, name="brief")
+app.add_typer(intake_app, name="intake")
 app.add_typer(render_app, name="render")
 app.add_typer(airdrop_app, name="airdrop")
 
@@ -1111,6 +1113,48 @@ def privacy_check(
 
 
 # ============================================================
+# Intake JSON
+# ============================================================
+
+@intake_app.command("json")
+def intake_json(
+    source: Path = typer.Argument(..., help="archivo intake JSON 1.0"),
+    show_ack: bool = typer.Option(True, "--show-ack/--no-show-ack", help="mostrar acuse resultado.md al final"),
+):
+    """Validar intake JSON 1.0, crear job, brief y acuse de recibo.
+
+    Contrato: `schemas/intake.schema.json`. No inventa datos: si faltan
+    producto/entrega/catálogo, deja pendientes en `brief.yaml` y `resultado.md`.
+
+    Ejemplo:
+      flujo intake json schemas/ejemplos/flyer_evento.json
+    """
+    from .intake.json_parser import process_json_intake
+
+    res = process_json_intake(source)
+    if not res.get("ok"):
+        for err in res.get("errors", []) or [res.get("error", "error desconocido")]:
+            _warn(str(err))
+        _err("No se pudo procesar el intake JSON.")
+
+    _section("Intake JSON procesado")
+    _ok(f"Job: {res.get('job_dir')}")
+    console.print(f"  brief:     [cyan]{res.get('brief_path')}[/]")
+    console.print(f"  resultado: [cyan]{res.get('resultado_path')}[/]")
+    console.print(f"  estado:    [bold]{res.get('estado')}[/]")
+    for w in res.get("warnings", []) or []:
+        _warn(str(w))
+
+    if show_ack and res.get("resultado_path"):
+        p = Path(str(res["resultado_path"]))
+        if p.exists():
+            console.print("\n[bold]Acuse generado:[/]\n")
+            console.print(p.read_text(encoding="utf-8", errors="ignore"))
+
+    console.print("\nSiguiente: revisar brief.yaml; si está listo, `flujo job activate <job>`.")
+
+
+# ============================================================
 # Brief
 # ============================================================
 
@@ -1377,8 +1421,27 @@ def render_default(ctx: typer.Context):
 
 
 # ============================================================
-# Dashboard
+# Dashboard / Portal jefe
 # ============================================================
+
+@app.command("portal")
+def portal(
+    output: Optional[Path] = typer.Option(None, "--output", "-o", help="HTML de salida (default: context/portal_jefe.html)"),
+    repo_url: str = typer.Option("", "--repo-url", help="URL del repo GitHub para botones de nuevo pedido/cambio"),
+    titulo: str = typer.Option("Portal de pedidos", "--titulo", help="Título visible para jefatura"),
+):
+    """Exporta portal visual gratuito para jefatura: estados de jobs + links a GitHub Issues.
+
+    Alternativa local/free a monday.com: GitHub Issues/Projects para entrada y
+    seguimiento, más este HTML estático para una vista simple del avance.
+    """
+    from .portal import export_portal
+
+    out = export_portal(output=output, repo_url=repo_url, titulo=titulo)
+    _section("Portal jefe exportado")
+    _ok(f"HTML: {out}")
+    console.print("  Siguiente: compartir ese HTML, o publicarlo junto a un GitHub Project privado.")
+
 
 @app.command()
 def daily(
@@ -1724,7 +1787,7 @@ launch(
         console.print("[bold]Para que se sienta aún más profesional (gratis):[/]")
         console.print("  - Copia el exe (y flujo_workspace si usas) a un lugar fijo (ej. Desktop o C:\\flujo).")
         console.print("  - Usa Inno Setup (https://jrsoftware.org - gratuito) para installer con Start Menu:")
-        console.print("      [Setup]  AppName=flujo  AppVersion=0.35.2 OutputDir=installer")
+        console.print(f"      [Setup]  AppName=flujo  AppVersion={_get_version()} OutputDir=installer")
         console.print("      [Files]  Source: dist\\flujo-hub.exe ; DestDir: {app}")
         console.print("      [Icons]  Name: {autoprograms}\\flujo ; Filename: {app}\\flujo-hub.exe")
         console.print("      (agrega .ico , asocia .json si quieres para proyectos)")
