@@ -201,6 +201,30 @@ Goal:
 - Avoid copy/paste from GitHub to flujo app.
 - Apply privacy scan/sanitize before writing real request data into repo.
 
+## Next agent handoff - ambitious direction
+
+The current repo is no longer just a design workflow shell. It is becoming a compact operating system for creative production.
+The next agent should look beyond the current hub/job flow and explore a new layer: productization and reuse.
+
+Suggested direction:
+- Turn the current workflow into a reusable creative engine for multiple verticals, not only eventos/suplementos.
+- Create a modular system for templates, formats, and packaging so the same pipeline can serve flyers, labels, social posts, and future print products.
+- Move from "tooling" to "system design": define reusable patterns, metadata, and output contracts that make new formats easy to add.
+- Explore a more strategic area: AI-assisted review, brand compliance, and auto-generation quality gates.
+
+Concrete opportunities:
+- Add a generic format registry so the app can map a request to a template without hardcoding per area.
+- Introduce a lightweight review layer that checks brand, margins, contrast, and export readiness before delivery.
+- Build a bridge from jobs to reusable assets, so one job can produce multiple outputs from the same source brief.
+- Investigate how datadrops can become training and validation material for future auto-generation, not just reference storage.
+
+This is the moment to think bigger: the repo should feel like a creative operating platform, not only a set of scripts.
+The next agent should be bold, but keep the implementation grounded in the existing CLI, jobs, hub, and export architecture.
+
+Recommended first move:
+- Create a generic format/template registry and wire one new format through the same job->export flow.
+- Keep the implementation modular and reusable so future areas can plug in without rewriting the stack.
+
 ## Files added/changed in current airdrop line
 
 Key files:
