@@ -13,6 +13,7 @@ from flujo.dashboard import (
     ItemScore,
     Priority,
 )
+from flujo.web.hub import build_dashboard_summary
 
 
 @pytest.fixture
@@ -106,3 +107,12 @@ def test_render_html_contains_structure(repo):
     html = render_html(items)
     assert "<!doctype html>" in html.lower() or "<html" in html.lower()
     assert "Total items" in html
+
+
+def test_build_dashboard_summary_counts_priority_groups(repo):
+    items = collect_items()
+    summary = build_dashboard_summary(items)
+    assert summary["total_items"] >= 3
+    assert summary["alta"] >= 1
+    assert summary["media"] >= 0
+    assert summary["baja"] >= 0

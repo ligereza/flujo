@@ -1,8 +1,17 @@
 # flujo · pedidos, jobs y portal visual
 
-**flujo** ordena pedidos de diseno y los convierte en trabajo trazable: pedido -> job -> brief -> diseno -> revision -> entrega.
+**flujo** ordena pedidos de diseño y los convierte en trabajo trazable: pedido -> job -> brief -> diseño -> revisión -> entrega.
+
+Este repositorio funciona como un sistema creativo y operativo para recibir pedidos, delegar trabajo, revisar entregables y mantener una línea de marca coherente.
 
 Paleta visual actual: **PURPLE**.
+
+## Estado operativo actual
+
+- Hub pro en `flujo app` con intake, visualizadores, delegación y herramientas.
+- Rol de Creative Director integrado para estrategia, revisión final y coordinación.
+- Delegación especializada para visual, pipeline, brand, future y packaging.
+- Workflow listo para eventos, suplementos, briefs, jobs y entregas visuales.
 
 ```txt
 Gmail / WhatsApp / GitHub Issue

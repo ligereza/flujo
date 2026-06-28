@@ -57,6 +57,7 @@ from ..brand import load_styles
 from ..intake.email_parser import parse_email_content, parse_pedido_text  # real parsers
 from ..intake.pipeline import _infer_type_and_size  # reuse heuristics if needed
 from ..jobs.job import create_job, list_jobs  # real job creation / listing for hub API
+from ..dashboard import collect_items, render_markdown, render_html
 
 
 def derive_visual_traits(ptype: str, palette: list, desc: str, hints: dict) -> str:
@@ -89,6 +90,29 @@ def build_for_future_ai(ptype: str, palette: list, desc: str, hints: dict, w: in
         parts.append(f"OCR real reveló hints (fechas/mentions/textos): {sample}. Busca textos similares en briefs para matching.")
     parts.append("QUÉ BUSCAR LA IA: deriva layouts densos, proporciones exactas, contraste, densidad de iconos/texto de estas fotos + manifest. Valida vs linea_editorial (v4) en lugar de asumir. Esto es ground-truth de entregas, no specs teóricas. Úsalo para mejorar matching y evitar drift en generación.")
     return " ".join(parts)
+
+
+def build_dashboard_summary(items: list | None = None) -> dict:
+    """Build a compact summary from dashboard-scored items for the hub."""
+    from ..dashboard import Priority
+
+    if items is None:
+        items = collect_items()
+
+    groups = {p.value: 0 for p in Priority}
+    for item in items:
+        groups[item.priority.value] += 1
+
+    return {
+        "total_items": len(items),
+        "alta": groups["alta"],
+        "media": groups["media"],
+        "baja": groups["baja"],
+        "top_items": [
+            {"name": item.name, "priority": item.priority.value, "score": item.score, "reason": item.reason}
+            for item in items[:4]
+        ],
+    }
 
 
 def scan_incoming_datadrops(root_path = None) -> dict:
@@ -371,6 +395,12 @@ class HubRequestHandler(BaseHTTPRequestHandler):
         if path == "/api/status":
             self._send_json(self._get_status())
             return
+        if path == "/api/dashboard-summary":
+            try:
+                self._send_json(self._get_dashboard_summary())
+            except Exception as e:
+                self._send_json({"error": str(e), "total_items": 0}, status=200)
+            return
         if path == "/api/list-jobs":
             try:
                 self._send_json(self._list_jobs_api())
@@ -579,12 +609,22 @@ class HubRequestHandler(BaseHTTPRequestHandler):
             "time": time.time()
         }
 
+    def _get_dashboard_summary(self) -> dict:
+        return build_dashboard_summary(collect_items(self.root))
+
     def _get_agents_roles(self) -> dict:
         """Central definition of specialized agent roles for delegation system.
         Exposed to hub UI and CLI. Supports parallel delegation.
         """
         return {
             "roles": [
+                {
+                    "id": "creative-director",
+                    "name": "Creative Director",
+                    "short": "Estrategia + dirección creativa",
+                    "focus": "visión de marca, lanzamiento, narrativa visual y coordinación de especialistas",
+                    "prompt_template": "Tu rol: Creative Director.\n\nSigue docs/AGENT_OPERATING_MANUAL.md (dos flujos + modelo de delegación multi-agente) y las reglas.\n\nPunto de entrada OBLIGATORIO: ejecuta `flujo app` (o `flujo app --desktop`). Abre el hub pro. Lee context/LAST_HANDOFF.md + este manual primero (bajo token).\n\n[Tarea específica: {task}]\n\nDefine la Estrategia de lanzamiento, prioriza la narrativa visual y el impacto premium, y organiza la ejecución para que los subagentes trabajen con coherencia. Revisar outputs de otros agentes, proponer mejoras, revisar los entregables finales y dejar una decisión clara para la entrega final."
+                },
                 {
                     "id": "visual-polish",
                     "name": "Visual Polish Agent",

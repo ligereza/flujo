@@ -186,6 +186,15 @@ Implement:
 py -m flujo issue import <number-or-url>
 ```
 
+## New operational addition
+
+Added a Creative Director delegation role for multi-agent workflow.
+Use it when you need a premium launch strategy, brand narrative, and final review of specialist outputs.
+Command example:
+```bash
+py -m flujo delegate creative-director "Pulir la identidad visual del hub para un lanzamiento premium"
+```
+
 Goal:
 - Read a GitHub Issue created from Gmail or Issue Form.
 - Convert to intake JSON or job.

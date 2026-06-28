@@ -94,7 +94,7 @@
 
 <header>
   <h1>FLUJO</h1>
-  <span class="badge">Workspace • Menú principal</span>
+  <span class="badge">Workspace • Creative Direction</span>
   <span id="header-conn" class="small" style="margin-left:8px; padding:2px 8px; border-radius:3px; background:#1a1a1a; border:1px solid #2a2a2a; color:#888; font-size:10px;">Estático (fallback)</span>
   <div class="spacer"></div>
   <button class="btn" onclick="showBrandModal()" title="Brand único: validator + FORZAR GUARD + flujo.json (proyecto)">Brand</button>
@@ -116,6 +116,11 @@
 
 <!-- STATUS -->
 <div class="section">
+  <div class="card" style="margin-bottom:14px; border-left:4px solid var(--accent); background:linear-gradient(135deg, rgba(45,90,74,0.16), rgba(20,20,20,0.98));">
+    <div class="pro-label">Director creativo</div>
+    <div style="font-size:15px; font-weight:700; margin-bottom:6px; letter-spacing:-0.02em;">Estrategia, coordinación y revisión final en un solo workspace.</div>
+    <div class="small muted">Usa este hub para convertir pedidos en briefs, jobs y entregables con un flujo premium, claro y consistente. Prioriza marca, narrativa visual y calidad final.</div>
+  </div>
   <div class="status-grid">
     <div class="card">
       <div class="pro-label">VERSIÓN</div>
@@ -136,6 +141,34 @@
       <div class="pro-label">Flujo principal</div>
       <div class="small">Texto (brief/pedido) → Hub/CLI → Herramientas → SVG listo para AI/PS/Blender</div>
     </div>
+  </div>
+  <div class="section" style="margin:16px 0 0 0; padding:0">
+    <div class="section-title">Vista ejecutiva • prioridades del día</div>
+    <div class="grid grid-3">
+      <div class="card">
+        <div class="pro-label">Resumen</div>
+        <div id="dashboard-summary" style="font-size:14px; font-weight:700; margin-bottom:6px;">Cargando prioridades…</div>
+        <div class="small muted">Resumen de jobs, flyers y piezas con scoring real del workspace.</div>
+      </div>
+      <div class="card">
+        <div class="pro-label">Próximos pasos</div>
+        <div id="dashboard-next-actions" class="small" style="line-height:1.6">
+          • Revisar briefs y jobs<br>
+          • Delegar pulido visual y packaging<br>
+          • Validar consistencia de marca<br>
+          • Preparar entregables para export
+        </div>
+      </div>
+      <div class="card">
+        <div class="pro-label">Decisión operativa</div>
+        <div class="small" style="line-height:1.6">El hub es la fuente central. Delegar cuando el trabajo se vuelva repetitivo y revisar cuando la calidad crítica aumente.</div>
+      </div>
+    </div>
+  </div>
+  <div class="card" style="margin-top:14px; border-left:4px solid var(--accent); background:linear-gradient(135deg, rgba(45,90,74,0.12), rgba(20,20,20,0.98));">
+    <div class="pro-label">Operación diaria</div>
+    <div style="font-size:14px; font-weight:700; margin-bottom:8px;">Haz esto ahora: revisa el resumen, prioriza lo que está en alta, y delega el pulido cuando la tarea quede repetitiva.</div>
+    <div class="small muted">Si un job está bloqueado por datos, resuélvelo primero. Si un deliverable ya tiene forma, pasa a revisión final y packaging.</div>
   </div>
 </div>
 
@@ -287,14 +320,14 @@
 
 <!-- DELEGACIÓN A AGENTES ESPECIALIZADOS (accionable — copia prompts completos) -->
 <div class="section">
-  <div class="section-title">Delegar a Agentes Especializados — prompts listos (usa `flujo app` primero + copia aquí). 5 roles paralelos (incl. Packaging). Lanza en clones. Guía + LAST_HANDOFF = verdad.</div>
+  <div class="section-title">Delegar a Agentes Especializados — prompts listos (usa `flujo app` primero + copia aquí). 6 roles paralelos (incl. Creative Director + Packaging). Lanza en clones. Guía + LAST_HANDOFF = verdad.</div>
   <!-- PRACTICAL HOW-TO DELEGATE FROM HUB (first-class, copyable for designer + AI) -->
   <div class="card" style="margin-bottom:12px; border-left:4px solid var(--accent);">
     <div style="font-weight:700; margin-bottom:6px;">Cómo delegar desde el hub (guía práctica para humano y agentes IA)</div>
     <div class="small" style="line-height:1.55;">
       1. Ejecuta <b>`flujo app`</b> (o <b>`flujo app --desktop`</b>) — <b>entrada diaria obligatoria única</b>. El hub + APIs reales + live se activan (o usa fallback estático).
       <br>2. En "Delegar...", escribe la <b>tarea específica</b> (usa botones ejemplo abajo o edita).
-      <br>3. Selecciona 1+ roles (checkboxes = delegación paralela real a los 5: Visual Polish / Pipeline / Brand / Future / <b>Packaging</b>).
+      <br>3. Selecciona 1+ roles (checkboxes = delegación paralela real a los 6: <b>Creative Director</b> / Visual Polish / Pipeline / Brand / Future / <b>Packaging</b>).
       <br>4. Pulsa "Copiar prompt completo" (por rol) <b>o</b> "Delegar seleccionados (live API)" → llama /api/delegate en paralelo, muestra resultados + auto-copia.
       <br>5. <b>Lanza en clones separados</b> (git clone / terminal independiente). Cada sub-agente: `flujo app` + lee LAST_HANDOFF + sigue su prompt.
       <br>6. Cada uno entrega <b>airdrop propio</b>. Principal integra + actualiza LAST_HANDOFF central.
@@ -317,6 +350,11 @@
   </div>
   <div id="delegate-ui" class="grid grid-3">
     <!-- Dynamic from /api/agents-roles + live delegate buttons. Fallback to static below if no load. -->
+    <div class="card">
+      <div style="font-weight:600">Creative Director</div>
+      <div class="small muted">Estrategia de lanzamiento, revisión de outputs y coherencia premium</div>
+      <button onclick="copyDelegatePrompt('creative')" class="btn btn-sec" style="margin-top:6px; font-size:10px">Copiar prompt completo</button>
+    </div>
     <div class="card">
       <div style="font-weight:600">Visual Polish Agent</div>
       <div class="small muted">Pulido visual + brand enforcement en outputs</div>
@@ -581,6 +619,16 @@ function copyCmd(cmd, el) {
 
 // ============ AGENT DELEGATION PROMPT TEMPLATES (ready-to-use, full) ============
 const DELEGATE_TEMPLATES = {
+  creative: `Tu rol: Creative Director.
+
+Sigue docs/AGENT_OPERATING_MANUAL.md (dos flujos + modelo de delegación multi-agente) y las reglas.
+
+Punto de entrada OBLIGATORIO: ejecuta \`flujo app\` (o \`flujo app --desktop\`). Abre el hub pro. Lee context/LAST_HANDOFF.md + este manual primero (bajo token).
+
+[Tarea específica: %%TASK%%]
+
+Define la Estrategia de lanzamiento, prioriza la narrativa visual y el impacto premium, y organiza la ejecución para que los subagentes trabajen con coherencia. Revisar outputs de otros agentes, proponer mejoras, revisar entregables finales y dejar una decisión clara para la entrega final.`,
+
   visual: `Tu rol: Visual Polish Agent.
 
 Sigue docs/AGENT_OPERATING_MANUAL.md (dos flujos + modelo de delegación multi-agente) y las reglas.
@@ -805,8 +853,8 @@ initLiveConnection = function() {
 
 function copyDelegatePrompt(role) {
   const task = getDelegateTask();
-  const btnTextMap = {visual:'Visual Polish', pipeline:'Pipeline', brand:'Brand Guardian', future:'Future/Modern', packaging:'Packaging & Distribution'};
-  const roleMap = {visual: 'visual-polish', pipeline: 'pipeline', brand: 'brand', future: 'future', packaging: 'packaging'};
+  const btnTextMap = {creative:'Creative Director', visual:'Visual Polish', pipeline:'Pipeline', brand:'Brand Guardian', future:'Future/Modern', packaging:'Packaging & Distribution'};
+  const roleMap = {creative: 'creative-director', visual: 'visual-polish', pipeline: 'pipeline', brand: 'brand', future: 'future', packaging: 'packaging'};
 
   // Prefer live backend API when connected (uses exact same formal templates as CLI `flujo delegate`)
   if (typeof isConnected !== 'undefined' && isConnected) {
@@ -958,6 +1006,7 @@ function initLiveConnection() {
       loadFlujoBrand();
       loadSvgWorks();
       loadJobsList();
+      loadDashboardSummary();
       return;
     } catch(e){}
   }
@@ -974,6 +1023,7 @@ function initLiveConnection() {
       loadFlujoBrand();
       loadSvgWorks();
       loadJobsList();
+      loadDashboardSummary();
     } else {
       updateConnUI(false);
     }
@@ -1032,6 +1082,26 @@ function loadJobsList() {
     card.innerHTML = html;
     console.log('[hub] jobs live updated', d);
   }).catch(()=>{});
+}
+
+function loadDashboardSummary() {
+  callApiOrFetch('/api/dashboard-summary').then(d => {
+    const summaryEl = document.getElementById('dashboard-summary');
+    const nextEl = document.getElementById('dashboard-next-actions');
+    if (!summaryEl) return;
+    const total = d && typeof d.total_items !== 'undefined' ? d.total_items : 0;
+    const alta = d && typeof d.alta !== 'undefined' ? d.alta : 0;
+    const media = d && typeof d.media !== 'undefined' ? d.media : 0;
+    const baja = d && typeof d.baja !== 'undefined' ? d.baja : 0;
+    summaryEl.innerHTML = `${total} items • <span style="color:var(--flujo-alert)">${alta} alta</span> • ${media} media • ${baja} baja`;
+    if (nextEl && d && d.top_items && d.top_items.length) {
+      const topText = d.top_items.slice(0,3).map(item => `• ${item.name} (${item.priority}, ${item.score})`).join('<br>');
+      nextEl.innerHTML = topText;
+    }
+  }).catch(()=>{
+    const summaryEl = document.getElementById('dashboard-summary');
+    if (summaryEl) summaryEl.textContent = 'Sin datos de dashboard';
+  });
 }
 
 function refreshAllLive() {

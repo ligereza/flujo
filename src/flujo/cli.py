@@ -532,7 +532,7 @@ def handoff(action: str = typer.Argument("last", help="last | create"),
 
 @app.command("delegate")
 def delegate(
-    role: str = typer.Argument(..., help="visual-polish | pipeline | brand | future | packaging"),
+    role: str = typer.Argument(..., help="creative-director | visual-polish | pipeline | brand | future | packaging"),
     task: str = typer.Argument(..., help="Descripción precisa de la tarea a delegar"),
     log: bool = typer.Option(False, "--log", help="sugerir append a LAST_HANDOFF"),
 ):
