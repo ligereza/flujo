@@ -21,7 +21,7 @@ export default function IntakePanel() {
 
   const create = async () => {
     setBusy('create');
-    try { setCreated(await flujoApi.createJobDraft(text, name)); }
+    try { setCreated(await flujoApi.createJobDraft(text, name, parsed)); }
     catch (error) { setCreated({ created: false, error: error instanceof Error ? error.message : String(error) }); }
     finally { setBusy(null); }
   };

@@ -115,12 +115,12 @@ export const flujoApi = {
       body: JSON.stringify({ text }),
     });
   },
-  async createJobDraft(text: string, name = ''): Promise<CreateJobResponse> {
+  async createJobDraft(text: string, name = '', parsed?: ParsePedidoResponse | null): Promise<CreateJobResponse> {
     if (isFileMode()) return { created: false, error: 'Demo local: abre con py -m flujo app para crear jobs reales' };
     return request<CreateJobResponse>('/api/create-job-draft', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ text, name }),
+      body: JSON.stringify({ text, name, parsed }),
     });
   },
 };

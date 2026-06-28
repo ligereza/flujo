@@ -57,6 +57,8 @@ from ..intake.email_parser import parse_email_content, parse_pedido_text  # real
 from ..intake.pipeline import _infer_type_and_size  # reuse heuristics if needed
 from ..jobs.job import create_job, list_jobs  # real job creation / listing for hub API
 from ..dashboard import collect_items, render_markdown, render_html
+from ..eventos.presets import infer_event_preset, list_event_presets
+from ..serve.server import api_plano_render as render_plano_api
 try:
     from ..export.illustrator import prepare_supplement_job_assets
 except Exception:
@@ -370,6 +372,9 @@ class HubRequestHandler(BaseHTTPRequestHandler):
             except Exception as e:
                 self._send_json({"error": str(e), "groups": {}}, status=200)
             return
+        if path == "/api/event-presets":
+            self._send_json({"presets": list_event_presets(), "connected": True})
+            return
         if path == "/api/status":
             self._send_json(self._get_status())
             return
@@ -426,6 +431,17 @@ class HubRequestHandler(BaseHTTPRequestHandler):
         parsed = urlparse(self.path)
         p = parsed.path
 
+        if p == "/api/plano/render":
+            content_length = int(self.headers.get("Content-Length", 0))
+            body = self.rfile.read(content_length).decode("utf-8")
+            try:
+                data = json.loads(body or "{}")
+                result = render_plano_api(data.get("evento", data))
+                self._send_json(result)
+            except Exception as e:
+                self._send_json({"error": str(e)}, status=400)
+            return
+
         if p == "/api/parse-pedido" or p == "/api/parse-real-pedido":
             content_length = int(self.headers.get("Content-Length", 0))
             body = self.rfile.read(content_length).decode("utf-8")
@@ -468,7 +484,8 @@ class HubRequestHandler(BaseHTTPRequestHandler):
                 data = json.loads(body)
                 text = data.get("text", "") or data.get("pedido", "")
                 name = data.get("name", "")
-                result = self._create_job_draft(text, name)
+                parsed = data.get("parsed") if isinstance(data.get("parsed"), dict) else None
+                result = self._create_job_draft(text, name, parsed)
                 self._send_json(result)
             except Exception as e:
                 self._send_json({"error": str(e)}, status=400)
@@ -846,6 +863,9 @@ self.addEventListener('fetch', e => e.respondWith(fetch(e.request).catch(() => n
         base["warnings"] = base.get("warnings") or []
         base["parsed"] = base.get("parsed") or {}
         base["inferred"] = base.get("inferred")
+        if any(token in low for token in ("evento", "rider", "cartelera", "instagram", "espacio riesco", "festival")):
+            base["area"] = "eventos"
+            base["event_preset"] = infer_event_preset(text)
         base["connected"] = True
         base["source"] = "intake+hub"
         return base
@@ -868,7 +888,7 @@ self.addEventListener('fetch', e => e.respondWith(fetch(e.request).catch(() => n
         except Exception as e:
             return {"jobs": [], "count": 0, "error": str(e)}
 
-    def _create_job_draft(self, text: str, name: str = "") -> dict:
+    def _create_job_draft(self, text: str, name: str = "", parsed: dict | None = None) -> dict:
         """Real functionality: create a job draft folder using the real create_job.
         This turns the hub intake into an actual tool (creates jobs/YYYY-MM-DD_xxx/ + brief + pedido_original).
         """
@@ -882,10 +902,24 @@ self.addEventListener('fetch', e => e.respondWith(fetch(e.request).catch(() => n
                 low = text.lower()[:60]
                 nm = "pedido " + (re.findall(r'\b\w{3,}\b', low)[:3] or ["general"])[0]
             job_path = create_job(nm, source_path=None)
-            # write the original text into pedido_original.txt for traceability
+            # write the original text + parsed metadata for traceability
             try:
                 pedido_file = job_path / "pedido_original.txt"
                 pedido_file.write_text(text.strip() or nm, encoding="utf-8")
+                if parsed:
+                    (job_path / "intake.json").write_text(json.dumps(parsed, ensure_ascii=False, indent=2), encoding="utf-8")
+                    resumen = [
+                        "# Intake estructurado",
+                        "",
+                        f"- area: {parsed.get('area', '')}",
+                        f"- tipo: {parsed.get('tipo', '')}",
+                        f"- formato: {parsed.get('formato', '')}",
+                        f"- medidas: {parsed.get('medidas', '')}",
+                        f"- tool: {parsed.get('tool', '')}",
+                        f"- event_preset: {parsed.get('event_preset', '')}",
+                        "",
+                    ]
+                    (job_path / "resultado.md").write_text("\n".join(resumen), encoding="utf-8")
             except Exception:
                 pass
             if prepare_supplement_job_assets is not None:
@@ -1240,10 +1274,10 @@ class _HubDesktopApi:
         except Exception as e:
             return {"error": str(e), "tipo": "desconocido"}
 
-    def create_job_draft(self, text: str = "", name: str = ""):
+    def create_job_draft(self, text: str = "", name: str = "", parsed: dict = None):
         try:
             h = self._ensure_handler()
-            return h._create_job_draft(text or "", name or "")
+            return h._create_job_draft(text or "", name or "", parsed if isinstance(parsed, dict) else None)
         except Exception as e:
             return {"error": str(e), "created": False}
 

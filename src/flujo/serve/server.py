@@ -27,6 +27,8 @@ import os
 import sys
 import argparse
 import webbrowser
+
+from flujo.eventos.presets import apply_event_preset, infer_event_preset, list_event_presets
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from urllib.parse import urlparse
 
@@ -169,8 +171,11 @@ def api_parse_pedido(text):
         tipo = "plano"; formato = "plano_stand"; medidas = "segun evento"; tool = "plano"
     if "instagram" in low or "post" in low:
         tipo = "post_ig"; formato = "evt_post_ig"; medidas = "1080x1350"
+    preset = infer_event_preset(text) if ("evento" in low or "rider" in low or "cartelera" in low or "instagram" in low) else None
     return {
         "tipo": tipo, "medidas": medidas, "formato": formato, "tool": tool,
+        "area": "eventos" if preset else ("suplementos" if tipo == "etiqueta" else "comun"),
+        "event_preset": preset,
         "match": True, "warnings": ["Parser liviano de hub serve; usa py -m flujo app para parser completo"],
         "source": "serve-heuristic", "connected": True
     }
@@ -206,7 +211,7 @@ def api_list_svg_works():
 
 def api_plano_render(evento):
     """Misma forma que el demo del HTML: {layout, rider, costos}."""
-    ev = evento or {}
+    ev = apply_event_preset(evento or {})
     nombre = str(ev.get("nombre", "Evento"))
     dur = float(ev.get("duracion_horas", 6) or 6)
     vol = int(ev.get("voluntarios", 7) or 7)
@@ -237,17 +242,23 @@ def api_plano_render(evento):
     layout = {"w": 640, "h": 480,
               "title": "%s (%s)" % (nombre, layout_mode),
               "sub": "%gh . %d personas . ~%d asistentes" % (dur, vol, asis),
+              "preset": ev.get("preset"),
+              "preset_label": ev.get("preset_label"),
               "zones": zones}
 
     rider = "RIDER INTERVENCION RD - %s\n" % nombre
     rider += "=" * 56 + "\n\n"
+    rider += "Preset: %s\n" % ev.get("preset_label", "Evento BASE")
     rider += "Duracion: %gh | Voluntarios: %d | Asistentes ~%d\n\n" % (dur, vol, asis)
     rider += "SERVICIOS:\n- Stand Informativo: %gx%gm\n" % (stand_w, stand_h)
     if testeo:
         rider += "- Stand Testeo: analisis colorimetrico\n"
     if masivo:
         rider += "- Zona Contencion/Descanso\n"
-    rider += "\nMesas: %d unt.\n" % mesas
+    rider += "\nMesas: %d unt.\n" % int(ev.get("preset_operativo", {}).get("mesas", mesas))
+    rider += "Sillas: %d unt.\n" % int(ev.get("preset_operativo", {}).get("sillas", max(2, vol)))
+    rider += "Electricidad: %s\n" % ev.get("preset_operativo", {}).get("electricidad", "1 punto electrico")
+    rider += "Luz: %s\n" % ev.get("preset_operativo", {}).get("luz", "luz de apoyo")
     if dur > 5:
         rider += "Alimentacion: obligatoria\n"
 
@@ -260,7 +271,7 @@ def api_plano_render(evento):
         costos += "Alimentacion: ~$65.000\n"
     costos += "\nTOTAL ESTIMADO: desde $%s\n" % format(total, ",d").replace(",", ".")
 
-    return {"layout": layout, "rider": rider, "costos": costos, "total": total}
+    return {"layout": layout, "rider": rider, "costos": costos, "total": total, "preset": ev.get("preset"), "preset_operativo": ev.get("preset_operativo")}
 
 
 # ---------------- handler HTTP ----------------
@@ -298,6 +309,8 @@ class Handler(BaseHTTPRequestHandler):
             return self._json(api_materials())
         if path in ("/api/list-svg-works", "/api/svg-index"):
             return self._json(api_list_svg_works())
+        if path == "/api/event-presets":
+            return self._json({"presets": list_event_presets(), "connected": True})
         if path == "/api/list-jobs":
             return self._json(api_list_jobs())
         if path == "/api/dashboard-summary":

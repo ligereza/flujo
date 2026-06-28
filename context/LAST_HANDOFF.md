@@ -5,7 +5,7 @@ Do not use accents, enye, emoji, smart quotes, or special arrows here.
 Daily commands for owner on Windows/Git Bash must use `py`, not `python`.
 
 Date: 2026-06-28
-Current version: 0.41.0
+Current version: 0.41.1
 Main daily entry: `py -m flujo app`
 Desktop entry: `py -m flujo app --desktop`
 Verify on Windows: `py -m flujo verify`
@@ -13,7 +13,7 @@ Airdrop check on Windows: `py scripts/validate_airdrop.py` then `py scripts/run_
 
 ## Current state
 
-The repo is healthy after the v0.40 hub airdrop, v0.40.1 dispatcher fix, v0.40.2 Plano/Rider vanilla integration, and v0.40.3 React/Vite web layer for Plano Pro, and v0.40.4 React SVG Visualizer integration, and v0.40.5 real SVG API integration, and v0.41.0 unified React hub.
+The repo is healthy after the v0.40 hub airdrop, v0.40.1 dispatcher fix, v0.40.2 Plano/Rider vanilla integration, and v0.40.3 React/Vite web layer for Plano Pro, and v0.40.4 React SVG Visualizer integration, and v0.40.5 real SVG API integration, and v0.41.0 unified React hub, and v0.41.1 EVENTOS presets/intake metadata.
 
 Real package CLI:
 - `py -m flujo health`
@@ -80,6 +80,14 @@ Do not document them as top-level `py -m flujo index` or `py -m flujo route` unl
 - Jobs panel reads `/api/list-jobs`.
 - Intake panel uses `/api/parse-real-pedido` and `/api/create-job-draft` when served by `py -m flujo app`.
 - `src/flujo/serve/server.py` gained light `/api/list-jobs`, `/api/dashboard-summary`, `/api/parse-real-pedido`, and read-only `/api/create-job-draft` response for compatibility.
+
+### v0.41.1 - EVENTOS presets and intake metadata
+- Added `src/flujo/eventos/presets.py` with UNDER, BASE and MAINSTREAM presets.
+- Added `docs/EVENTOS_PRESETS_RIDER.md`.
+- `PlanoTool` now has preset cards and sends preset values to `/api/plano/render`.
+- `/api/plano/render` applies presets and returns preset metadata.
+- Event/rider/cartelera/Instagram parsing now suggests `event_preset`.
+- `create-job-draft` can store parsed metadata in `intake.json` and `resultado.md`.
 
 ## Airdrop model - keep this intact
 

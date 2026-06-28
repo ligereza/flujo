@@ -1,8 +1,8 @@
 """Versión y changelog de flujo."""
 
-__version__ = "0.41.0"
+__version__ = "0.41.1"
 VERSION = __version__
-__version_info__ = (0, 41, 0)
+__version_info__ = (0, 41, 1)
 
 
 def get_version():
@@ -11,6 +11,16 @@ def get_version():
 
 def get_changelog():
     return {
+        "0.41.1": {
+            "titulo": "Presets EVENTOS e intake con metadata",
+            "fecha": "2026-06-28",
+            "highlights": [
+                "Agrega presets UNDER, BASE y MAINSTREAM para estimar rider/plano desde flyers de eventos",
+                "PlanoTool permite seleccionar preset y enviarlo a `/api/plano/render`",
+                "El parser sugiere `event_preset` para correos de eventos, rider, cartelera e Instagram",
+                "Create job draft guarda `intake.json` y resumen de metadata parseada cuando existe",
+            ],
+        },
         "0.41.0": {
             "titulo": "Hub React operativo unificado",
             "fecha": "2026-06-28",

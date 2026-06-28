@@ -13,9 +13,9 @@ Este repositorio funciona como un hub local operativo para recibir pedidos, orga
 
 ## Estado operativo actual
 
-- Hub pro en `flujo app` con intake, visualizadores, delegación y herramientas.
-- Rol de Creative Director integrado para estrategia, revisión final y coordinación.
-- Delegación especializada para visual, pipeline, brand, future y packaging.
+- Hub React en `flujo app` con dashboard, jobs, intake, plano/rider y visualizador SVG.
+- Frontend en `web/` con React/Vite; build local con `npm run build:context`.
+- EVENTOS usa presets operativos UNDER / BASE / MAINSTREAM para rider/plano.
 - Workflow listo para eventos, suplementos, briefs, jobs y entregas visuales.
 
 ```txt
@@ -96,7 +96,7 @@ Correo con asunto que contiene "eventos" o "evento"
 Uso:
 
 ```txt
-EVENTOS -> link Instagram -> descarga con flujo/instaloader -> automatizacion Photoshop local
+EVENTOS -> link Instagram -> datos desde flyer/post -> preset rider/plano -> descarga con flujo/instaloader -> cartelera/flyer
 ```
 
 Tambien puede pedir:
@@ -106,6 +106,20 @@ brief / plano app / SVG / pieza visual
 ```
 
 En esos casos se crea job normal.
+
+Presets operativos para rider/plano:
+
+```txt
+UNDER       -> 2 voluntarios, 1 mesa, 2 sillas, electricidad/luz basica
+BASE        -> 4 voluntarios, 2 mesas, 4 sillas, stand + testeo
+MAINSTREAM  -> 8 voluntarios, 3 mesas, 8 sillas, alto flujo tipo Espacio Riesco
+```
+
+Documento:
+
+```txt
+docs/EVENTOS_PRESETS_RIDER.md
+```
 
 ### SUPLEMENTOS
 

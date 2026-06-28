@@ -108,6 +108,57 @@ const DEFAULT_ELEMENTS: PlanoElement[] = [
   { id: 'entrada', type: 'rect', x: 350, y: 470, width: 100, height: 30, label: 'Entrada Público', color: ZONE_COLORS.circulacion, rotation: 0, locked: false, visible: true, zoneType: 'circulacion' },
 ];
 
+type EventPresetId = 'under' | 'base' | 'mainstream';
+
+type EventPreset = {
+  id: EventPresetId;
+  label: string;
+  short: string;
+  volunteers: number;
+  assistants: number;
+  duration: number;
+  tables: number;
+  chairs: number;
+  power: string;
+  light: string;
+  testing: boolean;
+  massive: boolean;
+};
+
+const EVENT_PRESETS: Record<EventPresetId, EventPreset> = {
+  under: {
+    id: 'under', label: 'UNDER', short: 'Club chico / bajo flujo',
+    volunteers: 2, assistants: 350, duration: 4, tables: 1, chairs: 2,
+    power: '1 punto electrico basico', light: 'luz ambiente o 1 foco simple', testing: false, massive: false,
+  },
+  base: {
+    id: 'base', label: 'BASE', short: 'Evento mediano / testeo',
+    volunteers: 4, assistants: 1200, duration: 6, tables: 2, chairs: 4,
+    power: '1 punto electrico estable', light: 'iluminacion de mesa + stand', testing: true, massive: false,
+  },
+  mainstream: {
+    id: 'mainstream', label: 'MAINSTREAM', short: 'Espacio Riesco / festival',
+    volunteers: 8, assistants: 6000, duration: 8, tables: 3, chairs: 8,
+    power: '2 puntos electricos o circuito dedicado', light: 'iluminacion dedicada para stand y testeo', testing: true, massive: true,
+  },
+};
+
+function elementsForPreset(preset: EventPreset): PlanoElement[] {
+  const base: PlanoElement[] = [
+    { id: 'toldo', type: 'rect', x: 150, y: 100, width: 500, height: 330, label: 'Toldo / Carpa', color: '#2d5a4a20', rotation: 0, locked: false, visible: true },
+    { id: 'mesa-info', type: 'rect', x: 200, y: 145, width: 190, height: 75, label: 'Mesa Informativa', color: ZONE_COLORS.informativo, rotation: 0, locked: false, visible: true, zoneType: 'informativo' },
+    { id: 'entrada', type: 'rect', x: 350, y: 455, width: 100, height: 30, label: 'Entrada Público', color: ZONE_COLORS.circulacion, rotation: 0, locked: false, visible: true, zoneType: 'circulacion' },
+  ];
+  if (preset.testing) {
+    base.push({ id: 'mesa-testeo', type: 'rect', x: 425, y: 145, width: 190, height: 75, label: 'Mesa Testeo', color: ZONE_COLORS.testeo, rotation: 0, locked: false, visible: true, zoneType: 'testeo' });
+  }
+  if (preset.massive) {
+    base.push({ id: 'zona-contencion', type: 'rect', x: 190, y: 280, width: 180, height: 120, label: 'Contención', color: ZONE_COLORS.contencion, rotation: 0, locked: false, visible: true, zoneType: 'contencion' });
+    base.push({ id: 'zona-descanso', type: 'rect', x: 430, y: 280, width: 170, height: 120, label: 'Zona Descanso', color: ZONE_COLORS.descanso, rotation: 0, locked: false, visible: true, zoneType: 'descanso' });
+  }
+  return base;
+}
+
 export default function PlanoTool() {
   const [page, setPage] = useState<'requirements' | 'layout'>('layout');
   const [elements, setElements] = useState<PlanoElement[]>(DEFAULT_ELEMENTS);
@@ -121,8 +172,18 @@ export default function PlanoTool() {
   const [eventVenue, setEventVenue] = useState('Parque Bicentenario');
   const [showLegend, setShowLegend] = useState(true);
   const [backendStatus, setBackendStatus] = useState('');
+  const [eventPreset, setEventPreset] = useState<EventPresetId>('base');
 
   const svgRef = useRef<SVGSVGElement>(null);
+
+  const applyPresetLocal = (presetId: EventPresetId) => {
+    const preset = EVENT_PRESETS[presetId];
+    setEventPreset(presetId);
+    const next = elementsForPreset(preset);
+    setElements(next);
+    setSelectedId(next[0]?.id ?? null);
+    setBackendStatus(`Preset ${preset.label}: ${preset.volunteers} voluntarios, ${preset.tables} mesa(s), ${preset.chairs} sillas. Puedes ajustar si tu jefe pide cambios.`);
+  };
 
   const selectedElement = elements.find(e => e.id === selectedId);
 
@@ -194,9 +255,12 @@ export default function PlanoTool() {
     setSelectedId(dup.id);
   };
 
-  const loadFromBackend = async () => {
+  const loadFromBackend = async (presetId: EventPresetId = eventPreset) => {
+    const preset = EVENT_PRESETS[presetId];
+    setEventPreset(presetId);
     if (window.location.protocol === 'file:') {
-      setBackendStatus('Modo demo: abre con py -m flujo app para usar /api/plano/render.');
+      applyPresetLocal(presetId);
+      setBackendStatus(`Modo demo con preset ${preset.label}: abre con py -m flujo app para usar /api/plano/render.`);
       return;
     }
     setBackendStatus('Consultando motor Python...');
@@ -208,14 +272,15 @@ export default function PlanoTool() {
           evento: {
             nombre: eventName || 'Evento',
             fecha: eventDate,
-            duracion_horas: 6,
-            voluntarios: 7,
-            asistentes_estimados: 2500,
-            incluye_testeo: true,
-            masivo: true,
+            preset: preset.id,
+            duracion_horas: preset.duration,
+            voluntarios: preset.volunteers,
+            asistentes_estimados: preset.assistants,
+            incluye_testeo: preset.testing,
+            masivo: preset.massive,
             ubicacion: eventVenue || 'Por definir',
             layout_mode: 'manual',
-            notas: 'Base generada desde PlanoTool React',
+            notas: `Base generada desde preset ${preset.label}: ${preset.power}; ${preset.light}`,
           },
         }),
       });
@@ -243,7 +308,7 @@ export default function PlanoTool() {
         setElements(mapped);
         setSelectedId(mapped[0].id);
       }
-      setBackendStatus(`Motor Python OK: ${mapped.length} zonas cargadas.`);
+      setBackendStatus(`Motor Python OK con preset ${preset.label}: ${mapped.length} zonas cargadas.`);
     } catch (error) {
       setBackendStatus(`No se pudo usar /api/plano/render: ${error instanceof Error ? error.message : String(error)}`);
     }
@@ -305,7 +370,7 @@ export default function PlanoTool() {
             Plano Layout
           </button>
           <button
-            onClick={loadFromBackend}
+            onClick={() => loadFromBackend()}
             className="px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 bg-emerald-900/30 border border-emerald-800/60 text-emerald-200 hover:bg-emerald-800/40"
           >
             <RefreshCw className="w-4 h-4" />
