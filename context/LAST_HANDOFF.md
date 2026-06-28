@@ -299,6 +299,30 @@ Changes:
 - `scripts/run_airdrop_checks.py` adds `--skip-push`.
 - Tests cover skip-push and static runner behavior.
 
+## Added new guardrail - 2026-06-28 HERRAMIENTAS_VISUALES.md
+
+Problem:
+- Agents modified plano_demo.html and svg_visualizer.html without understanding their context/purpose.
+- Confused RIDER RD EVENTOS (operational) with visor de diseños SUPLEMENTOS (gallery).
+- No clear documentation on what each tool does, what references they use, what NOT to touch.
+
+Solution:
+- Created `docs/HERRAMIENTAS_VISUALES.md` — explicit guardrail document.
+- Maps each tool to its reference (Propuesta_Reduciendo_Dano.txt vs BRIEF_SUPLEMENTOS_RD.md).
+- Removed all BRAND references (was a tool, not for agent use).
+- Added 5-question checklist: before modifying, must answer these or READ FIRST.
+- Clear tables: what can modify, what NOT to touch.
+
+Structure:
+- `plano_demo.html` = RIDER RD EVENTOS (document, 2 pages: reqs + layout, for producers)
+- `svg_visualizer.html` = Visor SUPLEMENTOS (gallery, search/filter/zoom, for designers)
+- CSS internal only; paleta visual reference, not BRAND dependency
+
+Next agent MUST:
+1. Read docs/HERRAMIENTAS_VISUALES.md FIRST (before touching either HTML)
+2. Answer 5 questions before modifying
+3. Understand: RIDER != gallery. Context matters.
+
 Recommended recovery if a previous run already applied files:
 ```bash
 py scripts/run_airdrop_checks.py --resume "logo clean lab experimental" --skip-push
