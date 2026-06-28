@@ -1,0 +1,171 @@
+{
+  "_meta": {
+    "schema_version": "2.0",
+    "nota": "Catálogo oficial de formatos de la ONG. Campos nuevos en v2.0: area, medio, herramienta, parametrico, inferir. Retrocompatible: formats.py ignora los campos que no usa.",
+    "leyenda": {
+      "area": "eventos | suplementos | comun",
+      "medio": "impresion | digital | mixto",
+      "herramienta": "illustrator | photoshop | blender | svg  (cadena = pipeline; ej. 'svg+illustrator')",
+      "parametrico": "true => la medida la define cada pedido (no fija)",
+      "inferir": "campos que el sistema debe inferir desde la imagen de IG (productora, fecha, venue, logo)"
+    }
+  },
+  "formatos": [
+    {
+      "id": "evt_flyer_fisico_10x14",
+      "tipo": "flyer impresion evento",
+      "area": "eventos",
+      "medio": "impresion",
+      "herramienta": "svg+illustrator",
+      "template": "tools/piezas_vectoriales/plantillas/flyer_horizontal_minimo.config.json",
+      "real_size_cm": { "width": 10, "height": 14 },
+      "canvas": { "width": 2000, "height": 2800 },
+      "descripcion": "Flyer físico vertical 10x14 cm para eventos (impresión). Pasa por Illustrator.",
+      "origen_info": "correo"
+    },
+    {
+      "id": "evt_cartelera_individual_1080x1920",
+      "tipo": "cartelera historia evento individual digital",
+      "area": "eventos",
+      "medio": "digital",
+      "herramienta": "photoshop+blender",
+      "template": null,
+      "real_size_cm": { "width": 10.8, "height": 19.2 },
+      "canvas": { "width": 1080, "height": 1920 },
+      "descripcion": "Cartelera digital vertical (historia 9:16) de UN evento donde asistimos como stand. Usa foto descargada de IG enmarcada en Blender; droplet de Photoshop reemplaza y exporta.",
+      "origen_info": "correo",
+      "inferir": ["productora", "fecha", "venue"]
+    },
+    {
+      "id": "evt_cartelera_triple_1080x1920",
+      "tipo": "cartelera historia evento triple digital",
+      "area": "eventos",
+      "medio": "digital",
+      "herramienta": "photoshop+blender",
+      "template": null,
+      "real_size_cm": { "width": 10.8, "height": 19.2 },
+      "canvas": { "width": 1080, "height": 1920 },
+      "descripcion": "Cartelera digital vertical con 3 eventos del mes. Aquí SÍ se ven los logos (foto de perfil). Droplet triple PENDIENTE de crear.",
+      "origen_info": "correo",
+      "inferir": ["productora", "fecha", "venue", "logo"]
+    },
+    {
+      "id": "evt_post_ig_1080x1350",
+      "tipo": "post instagram evento digital",
+      "area": "eventos",
+      "medio": "digital",
+      "herramienta": "photoshop",
+      "template": null,
+      "real_size_cm": { "width": 10.8, "height": 13.5 },
+      "canvas": { "width": 1080, "height": 1350 },
+      "descripcion": "Post de Instagram vertical 4:5. Suele venir en 3 piezas: portada, info, intención.",
+      "origen_info": "correo",
+      "slots": ["portada", "info", "intencion"]
+    },
+    {
+      "id": "evt_brief_productora_pdf_universal",
+      "tipo": "brief dossier propuesta productora pdf",
+      "area": "eventos",
+      "medio": "impresion",
+      "herramienta": "svg+illustrator",
+      "template": "tools/piezas_vectoriales/plantillas/one_page_propuesta_210x297.config.json",
+      "real_size_cm": { "width": 21, "height": 29.7 },
+      "canvas": { "width": 2100, "height": 2970 },
+      "descripcion": "Brief con layouts para presentar a productoras. PDF. Tamaño sin definir pero debe ser universal: por defecto A4 vertical, escalable.",
+      "origen_info": "correo",
+      "universal": true
+    },
+    {
+      "id": "evt_historia_flexible_1080x1920",
+      "tipo": "historia instagram flexible evento",
+      "area": "eventos",
+      "medio": "digital",
+      "herramienta": "photoshop",
+      "template": null,
+      "real_size_cm": { "width": 10.8, "height": 19.2 },
+      "canvas": { "width": 1080, "height": 1920 },
+      "descripcion": "Historias varias de formato mixto/flexible según el tema. Lienzo base 9:16; el contenido manda.",
+      "origen_info": "correo",
+      "flexible": true
+    },
+
+    {
+      "id": "sup_etiqueta_165x65",
+      "tipo": "etiqueta suplemento",
+      "area": "suplementos",
+      "medio": "impresion",
+      "herramienta": "svg+illustrator",
+      "template": "tools/piezas_vectoriales/plantillas/etiqueta_horizontal_165x65.config.json",
+      "real_size_cm": { "width": 16.5, "height": 6.5 },
+      "canvas": { "width": 3300, "height": 1300 },
+      "descripcion": "Etiqueta horizontal 16.5x6.5 cm (referencia RELIEVE/COMROESS).",
+      "origen_info": "whatsapp"
+    },
+    {
+      "id": "sup_etiqueta_140x100",
+      "tipo": "etiqueta suplemento",
+      "area": "suplementos",
+      "medio": "impresion",
+      "herramienta": "svg+illustrator",
+      "template": "tools/piezas_vectoriales/plantillas/etiqueta_horizontal_2800x2000.config.json",
+      "real_size_cm": { "width": 14, "height": 10 },
+      "canvas": { "width": 2800, "height": 2000 },
+      "descripcion": "Etiqueta/flyer horizontal 14x10 cm.",
+      "origen_info": "whatsapp"
+    },
+    {
+      "id": "sup_flyer_informativo_a5",
+      "tipo": "flyer informativo suplemento proteina",
+      "area": "suplementos",
+      "medio": "impresion",
+      "herramienta": "svg+illustrator",
+      "template": "tools/piezas_vectoriales/plantillas/flyer_horizontal_minimo.config.json",
+      "real_size_cm": { "width": 14.8, "height": 21 },
+      "canvas": { "width": 1748, "height": 2480 },
+      "descripcion": "Flyer informativo por suplemento/proteína. A5 vertical por defecto (ajustable).",
+      "origen_info": "whatsapp"
+    },
+    {
+      "id": "sup_pendon_rectangular",
+      "tipo": "pendon impresion gran formato rectangular",
+      "area": "suplementos",
+      "medio": "impresion",
+      "herramienta": "illustrator",
+      "template": null,
+      "parametrico": true,
+      "real_size_cm": { "width": 80, "height": 200 },
+      "canvas": { "width": 0, "height": 0 },
+      "dpi_objetivo": 150,
+      "descripcion": "Pendón rectangular (roller/banner) de gran formato. Medida REAL en metros la define cada pedido. SÍ O SÍ pasa por Illustrator. Default 80x200 cm de referencia.",
+      "origen_info": "whatsapp"
+    },
+    {
+      "id": "sup_bandera_poligonal",
+      "tipo": "bandera stand poligono impresion gran formato",
+      "area": "suplementos",
+      "medio": "impresion",
+      "herramienta": "illustrator",
+      "template": null,
+      "parametrico": true,
+      "forma": "poligono",
+      "real_size_cm": { "width": 60, "height": 180 },
+      "canvas": { "width": 0, "height": 0 },
+      "dpi_objetivo": 150,
+      "descripcion": "Bandera / stand de puesto, forma poligonal (no rectangular). Gran formato, medida real variable por pedido. SÍ O SÍ Illustrator.",
+      "origen_info": "whatsapp"
+    },
+
+    {
+      "id": "rider_eventos_a4_horizontal",
+      "tipo": "rider layout operativo evento stand",
+      "area": "eventos",
+      "medio": "impresion",
+      "herramienta": "svg+illustrator",
+      "template": "tools/piezas_vectoriales/plantillas/rider_eventos_a4_horizontal.config.json",
+      "real_size_cm": { "width": 29.7, "height": 21 },
+      "canvas": { "width": 2970, "height": 2100 },
+      "descripcion": "Rider técnico A4 horizontal con requerimientos y plano operativo.",
+      "origen_info": "correo"
+    }
+  ]
+}

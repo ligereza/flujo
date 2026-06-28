@@ -1,0 +1,140 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+ENV/
+*.egg-info/
+dist/
+build/
+
+# Python caches (higiene)
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+
+# Env / secrets
+.env
+*.key
+*.pem
+credentials.json
+token.json
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Airdrop
+_airdrop/
+_airdrop_backups/
+
+# Jobs de trabajo (NO commitear, excepto _template)
+jobs/*
+!jobs/_template/
+!jobs/_template/*
+!jobs/.gitkeep
+
+# === Media de proyectos (NO ignorar imágenes del repo/docs) ===
+# Solo ignorar outputs de proyectos flyer
+projects/flyer_eventos/*/input/*
+projects/flyer_eventos/*/working/*
+projects/flyer_eventos/*/exports/*
+projects/flyer_eventos/*/refs/*
+!projects/flyer_eventos/*/*/.gitkeep
+
+# Data generada
+data/*.json
+context/DAILY.md
+context/PIPELINE_RESULT.md
+context/dashboard.html
+# context/ visualizers y hub SÍ se versionan (son el workspace principal)
+
+# Datadrops (selective: ignore staging images for cleanliness; keep manifests + analysis json + review package useful for AI/linea)
+datadrops/incoming/
+datadrops/*/*.jpg
+datadrops/*/*.jpeg
+datadrops/*/*.png
+datadrops/*/*.gif
+datadrops/*/*.bmp
+datadrops/*/*.webp
+!datadrops/*/*.json
+!datadrops/*/analysis/*.json
+!datadrops/_review_package.txt
+
+# Temporales
+*.tmp
+*.temp
+tmp_*/
+ig_*/
+
+# Higiene de repo (no commitear ruído histórico)
+# Ver docs/HIGIENE_REPO.md y context/README.md
+# _airdrop_backups/, checkpoints/, _archive/ y reference_old/ son legacy y deben mantenerse mínimos en root.
+
+# Carpetas de descarga de Instagram con ruta de Windows (no commitear)
+C：*/
+*ig_*/
+
+
+# Proyectos de piezas generados desde jobs (fecha-prefijo)
+projects/piezas_vectoriales/20*/
+
+# Piezas vectoriales - salidas generadas
+projects/piezas_vectoriales/*/salida_generada/
+projects/piezas_vectoriales/*/02_editables_svg/
+projects/piezas_vectoriales/*/03_final_vectorizado_svg/
+projects/piezas_vectoriales/*/04_preview/
+projects/piezas_vectoriales/*/05_exports/
+
+# Archivos pesados de diseño
+projects/**/*.psd
+projects/**/*.psb
+projects/**/*.ai
+projects/**/*.indd
+projects/**/*.aep
+projects/**/*.blend
+projects/**/*.exr
+projects/**/*.tif
+projects/**/*.tiff
+projects/**/*.mp4
+projects/**/*.mov
+projects/**/*.avi
+projects/**/*.mkv
+
+# Permitir imágenes en docs/ y raíz
+!docs/**/*.png
+!docs/**/*.jpg
+!docs/**/*.jpeg
+!docs/**/*.gif
+!docs/**/*.webp
+!*.png
+!*.jpg
+!*.jpeg
+!*.gif
+!*.webp
+
+
+# Proyectos locales pesados / 3D accidentales
+logo3d/
+logo3d*/
+*.fbx
+*.obj
+*.glb
+*.gltf
+*.stl
+
+# Zips locales
+*.zip
+*.rar
+*.7z
+!docs/**/*.zip
+
+# SQLite
+*.db
+*.db-journal
+*.sqlite
+*.sqlite3
+# Logs locales de validación/airdrops
+_logs/
+airdrop_*_apply_log.txt

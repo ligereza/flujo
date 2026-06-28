@@ -1,0 +1,7 @@
+# Placeholder - carpeta para ejemplos reales de trabajos terminados.
+
+Coloca aquí subcarpetas con los trabajos ya hechos (imágenes, configs, PDFs, SVGs, etc.).
+
+El agente usará estos archivos para generar JSON descriptivos en ../json/ .
+
+No eliminar este archivo si la carpeta queda vacía (para que Git la trackee).

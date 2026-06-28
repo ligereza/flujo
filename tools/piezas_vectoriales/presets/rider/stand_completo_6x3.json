@@ -1,0 +1,1 @@
+{ "id": "stand_completo_6x3", "nombre": "Stand completo 6×3 m", "ancho_m": 6, "alto_m": 3, "incluye": ["mesa_info", "mesa_testeo", "sillas_equipo", "rack", "basurero", "punto_electrico", "iluminacion"] }

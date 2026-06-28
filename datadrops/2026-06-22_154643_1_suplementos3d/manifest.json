@@ -1,0 +1,72 @@
+{
+  "id": "2026-06-22_154643_1_suplementos3d",
+  "uploaded_at": "2026-06-22T15:46:43",
+  "original_filename": "suplementos3d.jpg",
+  "image_path": "datadrops/2026-06-22_154643_1_suplementos3d/suplementos3d.jpg",
+  "type": "flyer",
+  "dimensions": {
+    "width": 3840,
+    "height": 2160
+  },
+  "palette": [
+    {
+      "hex": "#0d0e0d",
+      "rgb": [
+        13,
+        14,
+        13
+      ],
+      "pct": 0.8371
+    },
+    {
+      "hex": "#5a5b5b",
+      "rgb": [
+        90,
+        91,
+        91
+      ],
+      "pct": 0.0599
+    },
+    {
+      "hex": "#502e17",
+      "rgb": [
+        80,
+        46,
+        23
+      ],
+      "pct": 0.0367
+    },
+    {
+      "hex": "#585022",
+      "rgb": [
+        88,
+        80,
+        34
+      ],
+      "pct": 0.0358
+    },
+    {
+      "hex": "#9d9e9b",
+      "rgb": [
+        157,
+        158,
+        155
+      ],
+      "pct": 0.0306
+    }
+  ],
+  "ocr_text_snippet": "",
+  "ocr_hints": {},
+  "description": "Foto real escaneada: suplementos3d.jpg",
+  "linked_job": "",
+  "visual_traits": "Pieza real terminada tipo flyer. Colores dominantes aprox: #0d0e0d, #5a5b5b, #502e17. Descripción: Foto real escaneada: suplementos3d.jpg. Patrón para IA: busca estos rasgos en briefs y generación para fidelidad a entregas reales.",
+  "tags": [
+    "flyer",
+    "datadrop",
+    "real-finished",
+    "inverse-airdrop",
+    "scanned"
+  ],
+  "analysis_source": "local (src/flujo/analyze colors+ocr; no external)",
+  "for_future_ai": "EJEMPLO REAL ENTREGADO (flyer, dims 3840x2160): foto subida por usuario de pieza ya impresa/terminada. Paleta dominante extraída (usar como referencia fiel): #0d0e0d, #5a5b5b, #502e17. En flyers/etiquetas reales rave/ONG: acentos de alto contraste sobre fondos oscuros suelen dominar. User notes reales: Foto real escaneada: suplementos3d.jpg. QUÉ BUSCAR LA IA: deriva layouts densos, proporciones exactas, contraste, densidad de iconos/texto de estas fotos + manifest. Valida vs linea_editorial (v4) en lugar de asumir. Esto es ground-truth de entregas, no specs teóricas. Úsalo para mejorar matching y evitar drift en generación."
+}

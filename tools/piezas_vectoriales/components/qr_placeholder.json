@@ -1,0 +1,4 @@
+[
+  { "type": "rect", "x": 2380, "y": 1460, "w": 300, "h": 300, "radius": 24, "fill": "white", "stroke": "line", "stroke_width": 3 },
+  { "type": "text", "content": "QR", "x": 2472, "y": 1555, "size": 70, "fill": "muted", "weight": "bold" }
+]

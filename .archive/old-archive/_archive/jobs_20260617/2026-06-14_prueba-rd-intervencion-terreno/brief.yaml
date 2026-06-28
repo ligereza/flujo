@@ -1,0 +1,52 @@
+id: 2026-06-14_prueba-rd-intervencion-terreno
+estado: en_diseno
+origen: brief_usuario
+cliente: Reduciendo Daño Chile
+proyecto: Propuesta de Servicio – Intervención en Terreno
+tipo_pieza: pendiente_definir
+
+medidas:
+  ancho_cm:
+  alto_cm:
+  orientacion:
+  sangrado_mm:
+  area_segura_mm:
+
+entrega:
+  editable_svg: true
+  vectorizado_svg: true
+  pdf_impresion: false
+  zip: true
+  otro:
+
+contenido:
+  fuente: pedido_original.txt
+  texto_aprobado: pendiente_revision
+  jerarquia_sugerida:
+    - Quiénes Somos
+    - Objetivo del Servicio
+    - Modalidades de Intervención
+    - Coordinación Operativa
+    - Beneficios para el Evento
+    - Costos y Condiciones
+    - Consideraciones
+
+posibles_formatos:
+  - dossier_pdf
+  - flyer_comercial
+  - presentacion_servicio
+  - carrusel_informativo
+  - one_page_propuesta
+
+restricciones:
+  no_inventar_claims: true
+  mantener_tono_institucional: true
+  texto_vectorizado: true
+  editable_para_illustrator: true
+
+pendientes:
+  - Definir formato final: dossier, flyer, presentación, carrusel u otro.
+  - Definir medidas y orientación.
+  - Definir si requiere impresión o solo digital.
+  - Definir extensión final y nivel de resumen.
+  - Diseñar pendiente; no generar todavía.

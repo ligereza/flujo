@@ -1,0 +1,1 @@
+{ "id": "stand_basico_3x3", "nombre": "Stand básico 3×3 m", "ancho_m": 3, "alto_m": 3, "incluye": ["mesa_info", "sillas_equipo", "rack", "basurero", "senaletica"] }

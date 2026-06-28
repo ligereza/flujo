@@ -1,0 +1,1 @@
+[{ "type": "circle", "cx": 45, "cy": 45, "r": 44, "fill": "yellow", "stroke": "line", "stroke_width": 3 },{ "type": "text", "content": "Luz", "x": 12, "y": 105, "size": 22, "fill": "muted", "weight": "bold" }]

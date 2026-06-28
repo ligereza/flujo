@@ -1,0 +1,27 @@
+name: Revisión privacidad / datos personales
+description: Revisar un correo/documento antes de usar IA o subir al repo
+title: "[Privacidad] "
+labels: ["privacidad", "datos-personales"]
+body:
+  - type: textarea
+    id: contexto
+    attributes:
+      label: Contexto
+      description: Explica qué documento o flujo quieres revisar. No pegues datos sensibles si no es necesario.
+    validations:
+      required: true
+  - type: dropdown
+    id: tipo_datos
+    attributes:
+      label: Tipo de datos posibles
+      options:
+        - No sé
+        - Correos/teléfonos/nombres
+        - RUT/direcciones
+        - Salud/consumo/datos sensibles
+        - Menores de edad
+        - Otro
+  - type: textarea
+    id: notas
+    attributes:
+      label: Notas

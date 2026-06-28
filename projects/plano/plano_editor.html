@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>plano — editor de stands (LEGACY — usa context/plano_demo.html para pro brand)</title>
+  <style>
+    /*
+    VISUAL QA / BRAND ENFORCEMENT — legacy plano editor (DEPRECATED: use context/plano_demo.html + hub)
+    Dark pro + brand from projects/flujo/flujo.json. No light parts. No leaks.
+    */
+    :root {
+      --bg:#0a0a0a; --panel:#141414; --panel2:#1a1a1a; --border:#2a2a2a; --text:#e8e8e8; --muted:#888;
+      --flujo-ink:#1f2a24; --flujo-accent:#2d5a4a; --flujo-paper:#f8f1e3; --flujo-support:#675f55; --flujo-alert:#c2410f;
+      --accent:#2d5a4a;
+    }
+    * { box-sizing: border-box; }
+    body { font-family: 'Inter', system-ui, sans-serif; margin: 0; background: var(--bg); color: var(--text); }
+    header { padding: 1rem 1.5rem; background: var(--flujo-ink); color: #fff; }
+    header h1 { margin: 0; font-size: 1.25rem; }
+    main { display: grid; grid-template-columns: 320px 1fr; gap: 1rem; padding: 1rem; }
+    @media (max-width: 900px) { main { grid-template-columns: 1fr; } }
+    .panel { background: var(--panel); border: 1px solid var(--border); border-radius: 8px; padding: 1rem; }
+    label { display: block; margin-bottom: 0.75rem; font-size: 0.9rem; font-weight: 600; color: var(--muted); }
+    input[type="text"], input[type="number"], select, textarea {
+      width: 100%; padding: 0.55rem; margin-top: 0.25rem; border: 1px solid var(--border); border-radius: 5px; font-size: 0.95rem; background:var(--panel2); color:var(--text);
+    }
+    input[type="checkbox"] { margin-right: 0.5rem; }
+    .row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
+    button { background: var(--flujo-accent); color: #fff; border: none; border-radius: 5px; padding: 0.65rem 1rem; cursor: pointer; font-weight: 600; }
+    button.secondary { background: var(--flujo-support); }
+    button:hover { opacity: 0.9; }
+    .actions { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 1rem; }
+    #preview { width: 100%; border: 1px solid var(--border); border-radius: 6px; background: #0d0d0d; min-height: 300px; }
+    #rider, #costs { white-space: pre-wrap; font-family: ui-monospace, monospace; font-size: 0.85rem; background: var(--panel2); padding: 1rem; border-radius: 5px; overflow: auto; max-height: 300px; color:var(--text); border:1px solid var(--border); }
+    .tabs { display: flex; gap: 0.5rem; margin-bottom: 0.5rem; }
+    .tab { padding: 0.4rem 0.8rem; border: 1px solid var(--border); border-radius: 4px; cursor: pointer; background: var(--panel2); color:var(--text); }
+    .tab.active { background: var(--flujo-accent); color: #fff; border-color: var(--flujo-accent); }
+    .tab-content { display: none; }
+    .tab-content.active { display: block; }
+  </style>
+</head>
+<body>
+  <div style="background:#0a0a0a;color:#e8e8e8;padding:6px 12px;font-size:12px;border-bottom:1px solid #2a2a2a;text-align:center">
+    ⚠️ Este editor es legacy. Usa el nuevo: <a href="../../context/plano_demo.html" style="color:#2d5a4a;font-weight:600">context/plano_demo.html</a> (dark pro + interactivo + flujo brand)
+  </div>
+  <header><h1>plano — editor de stands (legacy)</h1></header>
+  <main>
+    <section class="panel">
+      <label>Nombre del evento
+        <input type="text" id="nombre" value="Festival Ejemplo 2026">
+      </label>
+      <div class="row">
+        <label>Duración (h)
+          <input type="number" id="duracion_horas" value="6" min="0" step="0.5">
+        </label>
+        <label>Voluntarios
+          <input type="number" id="voluntarios" value="7" min="0">
+        </label>
+      </div>
+      <div class="row">
+        <label>Asistentes estimados
+          <input type="number" id="asistentes_estimados" value="2500" min="0">
+        </label>
+        <label>Escala px/m
+          <input type="number" id="scale" value="90" min="10">
+        </label>
+      </div>
+      <label><input type="checkbox" id="incluye_testeo" checked> Incluye testeo</label>
+      <label><input type="checkbox" id="masivo"> Evento masivo (forzar)</label>
+      <label>Notas
+        <textarea id="notas" rows="3">Evento masivo con stand de testeo.</textarea>
+      </label>
+      <div class="actions">
+        <button onclick="recalcular()">Recalcular</button>
+        <button class="secondary" onclick="exportarSVG()">Descargar SVG</button>
+      </div>
+    </section>
+
+    <section class="panel">
+      <div class="tabs">
+        <div class="tab active" onclick="setTab('plano')">Plano</div>
+        <div class="tab" onclick="setTab('rider')">Rider</div>
+        <div class="tab" onclick="setTab('costos')">Costos</div>
+      </div>
+      <div id="tab-plano" class="tab-content active">
+        <div id="preview"></div>
+      </div>
+      <div id="tab-rider" class="tab-content">
+        <div id="rider"></div>
+      </div>
+      <div id="tab-costos" class="tab-content">
+        <div id="costs"></div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    // Motor mínimo embebido para que el editor funcione sin backend.
+    const CONSTANTES = {
+      mesa: {w: 2.0, h: 0.7},
+      silla: {w: 0.5, h: 0.5},
+      toldo_3x3: {w: 3.0, h: 3.0},
+      toldo_3x45: {w: 4.5, h: 3.0},
+      toldo_6x3: {w: 6.0, h: 3.0},
+      pasillo_min: 1.2,
+      asiento_area: 0.5
+    };
+
+    function modulosDesdeEvento(ev) {
+      const voluntarios = Number(ev.voluntarios || 0);
+      const testeo = !!ev.incluye_testeo;
+      const masivo = Number(ev.asistentes_estimados || 0) >= 2000 || !!ev.masivo;
+      const mods = [{tipo:'stand', nombre:'Stand Informativo', toldo:'toldo_3x3', mesas:1, sillas:Math.min(voluntarios,4)}];
+      if (testeo) mods.push({tipo:'stand', nombre:'Stand Testeo', toldo:'toldo_3x3', mesas:2, sillas:Math.min(Math.max(voluntarios-4,1),4)});
+      if (masivo) mods.push({tipo:'zona', nombre:'Contención / Descanso', toldo:'toldo_3x3', mesas:0, sillas:0});
+      return mods;
+    }
+
+    function reglasRider(ev) {
+      const req = [];
+      const horas = Number(ev.duracion_horas || 0);
+      const voluntarios = Number(ev.voluntarios || 0);
+      const asistentes = Number(ev.asistentes_estimados || 0);
+      const testeo = !!ev.incluye_testeo;
+      const masivo = asistentes >= 2000 || !!ev.masivo;
+      if (horas > 5) req.push('Jornada > 5 h: ALIMENTACIÓN obligatoria para el equipo.');
+      else if (horas > 4) req.push('Jornada > 4 h: agregar colación / viático.');
+      const mesas = 1 + Math.max(0, Math.floor((voluntarios - 1) / 5));
+      req.push(`${voluntarios} voluntarios → ${mesas} mesa(s).`);
+      if (testeo) req.push('Incluye testeo: +1 stand contiguo + mesa extra para reactivos.');
+      if (masivo) req.push('Evento masivo: agregar ZONA DE CONTENCIÓN/DESCANSO.');
+      if (asistentes) req.push(`${asistentes} asistentes estimados: dimensionar personal y material.`);
+      req.push('Coordinación previa con producción, seguridad y equipo médico.');
+      return req;
+    }
+
+    function solveLayout(ev) {
+      const mods = modulosDesdeEvento(ev);
+      const pasillo = CONSTANTES.pasillo_min;
+      let x = 0, maxH = 0;
+      const cajas = [];
+      for (const m of mods) {
+        const toldo = CONSTANTES[m.toldo];
+        const caja = {nombre: m.nombre, x, y:0, w:toldo.w, h:toldo.h, hijos:[], rol:m.tipo};
+        const mw = CONSTANTES.mesa.w, mh = CONSTANTES.mesa.h;
+        for (let i=0; i<m.mesas; i++) {
+          const my = 0.2 + i*(mh+0.15);
+          caja.hijos.push({nombre:'mesa', x:0.2, y:my, w:Math.min(mw, toldo.w-0.4), h:mh, rol:'mesa'});
+        }
+        const sa = CONSTANTES.asiento_area;
+        for (let i=0; i<m.sillas; i++) {
+          const sx = 0.2 + i*(sa+0.1);
+          if (sx+sa > toldo.w) break;
+          caja.hijos.push({nombre:'silla', x:sx, y:toldo.h-sa-0.2, w:sa, h:sa, rol:'silla'});
+        }
+        cajas.push(caja);
+        maxH = Math.max(maxH, toldo.h);
+        x += toldo.w + pasillo;
+      }
+      return [cajas, Math.max(0, x-pasillo), maxH];
+    }
+
+    function renderSVG(ev) {
+      const [cajas, Wm, Hm] = solveLayout(ev);
+      const s = Number(ev.scale || 90);
+      const margin = 0.8;
+      const W = (Wm + 2*margin) * s;
+      const H = (Hm + 2*margin + 1.2) * s;
+      const ox = margin*s, oy = (margin+0.8)*s;
+      let out = `<svg xmlns="http://www.w3.org/2000/svg" width="${W.toFixed(0)}" height="${H.toFixed(0)}" viewBox="0 0 ${W.toFixed(0)} ${H.toFixed(0)}">\n`;
+      out += `<rect width="${W.toFixed(0)}" height="${H.toFixed(0)}" fill="#fbf8f1"/>\n`;
+      out += `<text x="${ox}" y="${0.5*s}" font-family="Inter,Arial" font-size="${0.32*s}" font-weight="700" fill="#1f6f4e">PLANO — ${ev.nombre}</text>\n`;
+      out += `<text x="${ox}" y="${0.82*s}" font-family="Inter,Arial" font-size="${0.17*s}" fill="#5a6b62">Escala 1m = ${s}px · ${cajas.length} módulo(s) · generado por constantes</text>\n`;
+      for (const c of cajas) {
+        const cx = ox + c.x*s, cy = oy + c.y*s;
+        const col = c.rol === 'stand' ? '#1f6f4e' : '#7b5cff';
+        out += `<rect x="${cx.toFixed(0)}" y="${cy.toFixed(0)}" width="${(c.w*s).toFixed(0)}" height="${(c.h*s).toFixed(0)}" fill="rgba(31,111,78,0.05)" stroke="${col}" stroke-width="3" rx="6"/>\n`;
+        out += `<text x="${(cx+6).toFixed(0)}" y="${(cy+0.3*s).toFixed(0)}" font-family="Inter,Arial" font-size="${0.16*s}" font-weight="700" fill="${col}">${c.nombre}</text>\n`;
+        out += `<text x="${(cx+6).toFixed(0)}" y="${(cy+c.h*s-6).toFixed(0)}" font-family="Inter,Arial" font-size="${0.12*s}" fill="#5a6b62">${c.w}×${c.h} m</text>\n`;
+        for (const h of c.hijos) {
+          const hx = cx + h.x*s, hy = cy + h.y*s;
+          if (h.rol === 'mesa') {
+            out += `<rect x="${hx.toFixed(0)}" y="${hy.toFixed(0)}" width="${(h.w*s).toFixed(0)}" height="${(h.h*s).toFixed(0)}" fill="#d4b78f" stroke="#a8855a" stroke-width="1"/>\n`;
+          } else {
+            out += `<rect x="${hx.toFixed(0)}" y="${hy.toFixed(0)}" width="${(h.w*s).toFixed(0)}" height="${(h.h*s).toFixed(0)}" fill="#e63946" rx="2"/>\n`;
+          }
+        }
+      }
+      out += '</svg>';
+      return out;
+    }
+
+    function renderRider(ev) {
+      const lines = [`RIDER TÉCNICO — ${ev.nombre}`, '='.repeat(40), ''];
+      lines.push(`Duración: ${ev.duracion_horas} h · Voluntarios: ${ev.voluntarios} · Asistentes est.: ${ev.asistentes_estimados}`);
+      lines.push('');
+      lines.push('Requerimientos (derivados por reglas):');
+      for (const r of reglasRider(ev)) lines.push(`  • ${r}`);
+      return lines.join('\n');
+    }
+
+    function calcularCostos(ev) {
+      const horas = Number(ev.duracion_horas || 0);
+      const voluntarios = Number(ev.voluntarios || 0);
+      const testeo = !!ev.incluye_testeo;
+      const masivo = Number(ev.asistentes_estimados || 0) >= 2000 || !!ev.masivo;
+      const pHora = 8000, pAli = 6000, pCol = 3500, pStand = 35000, pMesa = 4000, pTest = 45000, pCont = 25000;
+      const personal = voluntarios * horas * pHora;
+      const alimentacion = horas > 5 ? voluntarios * pAli : (horas > 4 ? voluntarios * pCol : 0);
+      const mesas = (1 + Math.max(0, Math.floor((voluntarios - 1) / 5))) + (testeo ? 1 : 0);
+      const mobiliario = mesas * pMesa;
+      const stands = 1 + (testeo ? 1 : 0) + (masivo ? 1 : 0);
+      const infra = stands * pStand;
+      const extras = (testeo ? pTest : 0) + (masivo ? pCont : 0);
+      const total = personal + alimentacion + mobiliario + infra + extras;
+      return [
+        `COTIZACIÓN REFERENCIAL — ${ev.nombre}`, '='.repeat(40), '',
+        `Personal:        $${personal.toLocaleString()}`,
+        `Alimentación:    $${alimentacion.toLocaleString()}`,
+        `Mobiliario:      $${mobiliario.toLocaleString()}`,
+        `Infraestructura: $${infra.toLocaleString()}`,
+        `Extras:          $${extras.toLocaleString()}`, '',
+        `TOTAL:           $${total.toLocaleString()}`, '',
+        'Nota: valores referenciales. Ajustar con el dueño.'
+      ].join('\n');
+    }
+
+    function getEvento() {
+      return {
+        nombre: document.getElementById('nombre').value,
+        duracion_horas: Number(document.getElementById('duracion_horas').value),
+        voluntarios: Number(document.getElementById('voluntarios').value),
+        asistentes_estimados: Number(document.getElementById('asistentes_estimados').value),
+        incluye_testeo: document.getElementById('incluye_testeo').checked,
+        masivo: document.getElementById('masivo').checked,
+        notas: document.getElementById('notas').value,
+        scale: Number(document.getElementById('scale').value)
+      };
+    }
+
+    let currentSVG = '';
+    function recalcular() {
+      const ev = getEvento();
+      currentSVG = renderSVG(ev);
+      document.getElementById('preview').innerHTML = currentSVG;
+      document.getElementById('rider').textContent = renderRider(ev);
+      document.getElementById('costs').textContent = calcularCostos(ev);
+    }
+
+    function exportarSVG() {
+      const blob = new Blob([currentSVG || renderSVG(getEvento())], {type: 'image/svg+xml'});
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'plano.svg';
+      a.click();
+    }
+
+    function setTab(tab) {
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+      document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+      document.querySelector(`.tab:nth-child(${tab === 'plano' ? 1 : tab === 'rider' ? 2 : 3})`).classList.add('active');
+      document.getElementById('tab-' + (tab === 'costos' ? 'costos' : tab)).classList.add('active');
+    }
+
+    recalcular();
+  </script>
+</body>
+</html>

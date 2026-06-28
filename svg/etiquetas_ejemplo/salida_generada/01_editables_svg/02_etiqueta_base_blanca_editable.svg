@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2800px" height="2000px" viewBox="0 0 2800 2000">
+<metadata>Etiquetas RD · ejemplo base / 02_etiqueta_base_blanca / editable</metadata>
+<g id="fondo_editable"><rect x="0" y="0" width="2800" height="2000" fill="#FFFFFF"/></g>
+<g id="elementos_globales">
+<circle cx="180" cy="160" r="360" fill="#EF7B2D" opacity="0.12"/>
+<circle cx="2650" cy="1880" r="460" fill="#315EE8" opacity="0.1"/>
+<rect x="80" y="80" width="2640" height="1840" rx="70" fill="none" stroke="#D9CEC0" stroke-width="5"/>
+<rect x="120" y="120" width="88" height="88" rx="26" fill="#173F2F"/>
+<text class="txt" x="139" y="177" fill="#FFFFFF" font-family="DejaVu Sans, Arial, Helvetica, sans-serif" font-size="42" font-weight="700">RD</text>
+<text class="txt" x="235" y="184" fill="#161513" font-family="DejaVu Sans, Arial, Helvetica, sans-serif" font-size="42" font-weight="700">Reduciendo Daño</text>
+<line x1="120" y1="1745" x2="2680" y2="1745" stroke="#D9CEC0" stroke-width="5"/>
+<text class="txt" x="120" y="1854" fill="#173F2F" font-family="DejaVu Sans, Arial, Helvetica, sans-serif" font-size="44" font-weight="700">REDUCIENDODANO.CL</text>
+</g>
+<g id="elementos_documento">
+<rect x="120" y="300" width="2560" height="1250" rx="60" fill="#FFF8ED" stroke="#D9CEC0" stroke-width="4"/>
+<text class="txt" x="190" y="548" fill="#161513" font-family="DejaVu Sans, Arial, Helvetica, sans-serif" font-size="128" font-weight="700">NOMBRE PRODUCTO</text>
+<text class="txt" x="200" y="702" fill="#675F55" font-family="DejaVu Sans, Arial, Helvetica, sans-serif" font-size="52" font-weight="400">Descripción breve del producto. Cambia este texto desde el</text>
+<text class="txt" x="200" y="772" fill="#675F55" font-family="DejaVu Sans, Arial, Helvetica, sans-serif" font-size="52" font-weight="400">JSON y regenera los archivos.</text>
+<text x="200" y="920" fill="#161513" font-family="DejaVu Sans, Arial, Helvetica, sans-serif" font-size="40" font-weight="700">•</text>
+<text class="txt" x="246" y="920" fill="#161513" font-family="DejaVu Sans, Arial, Helvetica, sans-serif" font-size="40" font-weight="400">Ingrediente o activo 1.</text>
+<text x="200" y="992" fill="#161513" font-family="DejaVu Sans, Arial, Helvetica, sans-serif" font-size="40" font-weight="700">•</text>
+<text class="txt" x="246" y="992" fill="#161513" font-family="DejaVu Sans, Arial, Helvetica, sans-serif" font-size="40" font-weight="400">Ingrediente o activo 2.</text>
+<text x="200" y="1064" fill="#161513" font-family="DejaVu Sans, Arial, Helvetica, sans-serif" font-size="40" font-weight="700">•</text>
+<text class="txt" x="246" y="1064" fill="#161513" font-family="DejaVu Sans, Arial, Helvetica, sans-serif" font-size="40" font-weight="400">Ingrediente o activo 3.</text>
+<rect x="2000" y="610" width="420" height="420" rx="36" fill="#FFFFFF" stroke="#D9CEC0" stroke-width="4"/>
+<text class="txt" x="2158" y="850" fill="#675F55" font-family="DejaVu Sans, Arial, Helvetica, sans-serif" font-size="100" font-weight="700">QR</text>
+</g>
+</svg>

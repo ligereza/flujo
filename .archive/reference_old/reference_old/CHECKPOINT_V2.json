@@ -1,0 +1,71 @@
+{
+  "version": "2.1",
+  "status": "COMPLETADO - FLUJO EMAIL INTEGRADO",
+  "fecha": "2026-06-02",
+  "mejoras_aplicadas": [
+    "✓ Tema oscuro completo (fondo negro, header rojo, texto blanco)",
+    "✓ Funciones restauradas del original (buscar, abrir, etc)",
+    "✓ Flujo integrado de correos Gmail",
+    "✓ Botones: Pegar Correo + Extraer Link automático",
+    "✓ Búsqueda en Gmail de correos de 'isidora'",
+    "✓ Extracción automática de link de Instagram del correo",
+    "✓ Extracción de nombre de evento del correo",
+    "✓ Interfaz mejorada con 5 secciones claras"
+  ],
+  "flujo_correo_a_flyer": [
+    "1. Click 'Abrir Gmail - Buscar correos de Isidora'",
+    "2. Se abre Gmail con búsqueda 'from:isidora'",
+    "3. Copia correo completo",
+    "4. Regresa a la app",
+    "5. Click 'Pegar Correo'",
+    "6. Click 'Extraer Link'",
+    "7. Se rellena automáticamente el link de Instagram",
+    "8. Se rellena automáticamente el nombre del evento",
+    "9. Click 'Descargar + preparar + abrir droplet'",
+    "10. Proceso automático: descarga → colores → Blender → Droplet"
+  ],
+  "archivos_principales": {
+    "ejecutable": "automatizador_flyers_v2.pyw",
+    "modulos": [
+      "email_extractor.py",
+      "blender_manager.py",
+      "blender_colorizer.py"
+    ],
+    "utilidades": [
+      "configurar_v2.bat",
+      "test_app.py"
+    ]
+  },
+  "estructura_carpetas": {
+    "RECURSOS": "Plantillas (RD.blend, historia.psd, Droplet_Flyer.exe)",
+    "RESULTADOS": "Outputs (input_ig.jpg, colores)",
+    "TEMP": "Temporales (se limpia auto)",
+    "OBJETOS_INTELIGENTES": "Por evento",
+    "CONFIGURACION": "Logs y config"
+  },
+  "colores_tema": {
+    "fondo": "#1a1a1a (Negro)",
+    "texto": "#ffffff (Blanco)",
+    "header": "#d32f2f (Rojo)",
+    "acento": "#2196f3 (Azul)",
+    "seccion": "#262626 (Gris oscuro)"
+  },
+  "nuevas_funciones": [
+    "pegar_correo_completo() - Pega correo en memoria",
+    "extraer_link_de_correo_pegado() - Extrae link automático",
+    "abrir_gmail_isidora() - Abre Gmail con búsqueda"
+  ],
+  "requisitos": {
+    "python": "3.8+",
+    "dependencias": [
+      "instaloader",
+      "Pillow",
+      "tkinter (incluido)"
+    ],
+    "opcional": [
+      "Blender 3.6+",
+      "Photoshop + Droplet"
+    ]
+  },
+  "proximo_paso": "Ejecutar: python automatizador_flyers_v2.pyw"
+}

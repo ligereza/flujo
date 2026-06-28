@@ -1,0 +1,107 @@
+═══════════════════════════════════════════════════════════════════════════════
+                    AUTOMATIZADOR DE FLYERS v2 ✓
+═══════════════════════════════════════════════════════════════════════════════
+
+🎯 ESTADO: FUNCIONANDO ✓
+
+Ejecuta:
+  python automatizador_flyers_v2.pyw
+  O doble click en automatizador_flyers_v2.pyw
+
+═══════════════════════════════════════════════════════════════════════════════
+
+📋 FLUJO DESDE CORREO DE ISIDORA:
+
+1. Haz click en "Abrir Gmail - Buscar correos de Isidora"
+2. Se abre Gmail mostrando correos de tu jefa
+3. Copia el correo completo
+4. Regresa a la app
+5. Pega con "Pegar Correo"
+6. Haz click "Extraer Link" (extrae automáticamente el link de Instagram)
+7. Pasa al evento y procesa
+
+═══════════════════════════════════════════════════════════════════════════════
+
+📋 SECCIONES (Tema Oscuro):
+
+1️⃣  DESCARGAR DE INSTAGRAM
+   ✓ "Pegar Link" - Pega link directo de Instagram
+   ✓ "Pegar Correo" - Pega correo completo de Isidora
+   ✓ "Extraer Link" - Extrae link del correo pegado
+   ✓ Procesa automáticamente descarga y colores
+   ✓ Opción de abrir Droplet directamente
+
+2️⃣📧 IMAGEN MANUAL (Privada/Descargada)
+   ✓ Para flyers privados o descargados a mano
+   ✓ Buscar imagen en disco
+   ✓ Procesar sin descargar
+
+2B📧 CORREOS DE ISIDORA
+   ✓ Abre Gmail automáticamente
+   ✓ Busca solo correos de Isidora
+
+3️⃣  EVENTO + BLENDER
+   ✓ Ingresa nombre del evento (se llena automático)
+   ✓ Checkbox para incluir colores en Blender
+   ✓ Botones para abrir proyecto y carpeta
+
+4️⃣  BUSQUEDA RAPIDA PRODUCTORA
+   ✓ Busca productoras en Google
+   ✓ Busca en Instagram directo
+
+5️⃣  OPCIONES
+   ✓ Abrir Droplet automáticamente
+   ✓ Limpiar temporales
+   ✓ Botones para acceder a carpetas
+
+═══════════════════════════════════════════════════════════════════════════════
+
+🎨 TEMA OSCURO:
+
+✓ Fondo Negro (#1a1a1a)
+✓ Texto Blanco (#ffffff)
+✓ Header Rojo (#d32f2f)
+✓ Acentos Azul (#2196f3)
+
+═══════════════════════════════════════════════════════════════════════════════
+
+✨ TODAS LAS FUNCIONES RESTAURADAS:
+
+✓ descargar_y_procesar() - Descarga Instagram + procesa
+✓ manual_y_procesar() - Procesa imagen manual
+✓ buscar_google_eventos() - Busca en Google
+✓ buscar_instagram() - Abre perfil Instagram
+✓ abrir_droplet() - Abre Photoshop/Droplet
+✓ elegir_imagen() - Selecciona imagen manual
+✓ abrir_blender_evento() - Abre proyecto Blender
+✓ abrir_carpeta_evento() - Abre carpeta del evento
+✓ abrir_carpeta_base() - Abre RECURSOS
+✓ pegar_url() - Portapapeles
+
+═══════════════════════════════════════════════════════════════════════════════
+
+📂 ESTRUCTURA:
+
+BASE: c:\rd\AUTOMATIZACION\
+
+├── RECURSOS/                  (Templates: RD.blend, historia.psd, Droplet_Flyer.exe)
+├── RESULTADOS/               (Outputs: input_ig.jpg, colores)
+├── TEMP/                     (Temporales, se limpia auto)
+├── OBJETOS_INTELIGENTES/     (Por evento)
+└── CONFIGURACION/            (Logs, config)
+
+═══════════════════════════════════════════════════════════════════════════════
+
+⚙️ REQUISITOS:
+
+pip install -r requirements.txt
+
+Luego ejecuta:
+  configurar_v2.bat
+
+Y copia a RECURSOS/:
+  - RD.blend
+  - historia.psd
+  - Droplet_Flyer.exe
+
+═══════════════════════════════════════════════════════════════════════════════

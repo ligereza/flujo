@@ -1,0 +1,75 @@
+name: Render piezas vectoriales
+
+env:
+  FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: true
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'projects/piezas_vectoriales/**'
+      - 'tools/piezas_vectoriales/**'
+      - 'scripts/piezas_*.py'
+      - '.github/workflows/render_piezas_vectoriales.yml'
+  pull_request:
+    paths:
+      - 'projects/piezas_vectoriales/**'
+      - 'tools/piezas_vectoriales/**'
+      - 'scripts/piezas_*.py'
+      - '.github/workflows/render_piezas_vectoriales.yml'
+
+jobs:
+  render:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v5
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt
+          python -m pip install -r requirements-dev.txt
+
+      - name: Run repo health check
+        run: python scripts/flujo_health.py
+
+      - name: Generate generic piezas_vectoriales projects
+        shell: bash
+        run: |
+          shopt -s nullglob
+          for cfg in projects/piezas_vectoriales/*/config.json; do
+            echo "Generando $cfg"
+            python scripts/piezas_generar.py "$cfg"
+          done
+
+      - name: Generate Suplementos RD project if present
+        shell: bash
+        run: |
+          if [ -f "projects/piezas_vectoriales/suplementos_rd/scripts/generar_flyers.py" ]; then
+            cd projects/piezas_vectoriales/suplementos_rd
+            python scripts/generar_flyers.py
+          else
+            echo "No existe proyecto suplementos_rd; saltando."
+          fi
+
+      - name: Validate outputs
+        run: python scripts/piezas_check_outputs.py
+
+      - name: Upload generated outputs
+        uses: actions/upload-artifact@v4
+        with:
+          name: piezas-vectoriales-generadas
+          path: |
+            projects/piezas_vectoriales/*/salida_generada/**
+            projects/piezas_vectoriales/*/02_editables_svg/**
+            projects/piezas_vectoriales/*/03_final_vectorizado_svg/**
+            projects/piezas_vectoriales/*/04_preview/**
+            projects/piezas_vectoriales/*/05_exports/**
+          if-no-files-found: warn

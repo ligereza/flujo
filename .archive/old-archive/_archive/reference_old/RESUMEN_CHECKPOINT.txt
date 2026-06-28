@@ -1,0 +1,35 @@
+CHECKPOINT: AUTOMATIZADOR DE FLYERS v2
+═════════════════════════════════════════════════════════════════════════════════
+
+✅ COMPLETADO:
+• Estructura de carpetas (RECURSOS, RESULTADOS, TEMP, OBJETOS_INTELIGENTES, CONFIGURACION)
+• Lectura automática de correos Gmail (email_extractor.py)
+• Detección inteligente de Blender (blender_manager.py)
+• Aplicación de colores a materiales (blender_colorizer.py)
+• App mejorada v2 con UI moderna (automatizador_flyers_v2.pyw)
+• 4 scripts + 6 documentos de referencia
+
+FLUJO:
+Email/Link → Descarga IG → Extrae 2 Colores → Crea Proyecto Blender → Aplica Colores → Abre Blender
+
+INSTRUCCIONES:
+1. Ejecuta: configurar_v2.bat
+2. Copia a RECURSOS/: RD.blend, historia.psd, Droplet_Flyer.exe
+3. Ejecuta: automatizador_flyers_v2.pyw
+4. Pega link/correo → Procesa → Blender abre automáticamente
+
+ARCHIVOS PRINCIPALES:
+  • automatizador_flyers_v2.pyw (ejecutar esto)
+  • email_extractor.py (lectura de correos)
+  • blender_manager.py (detección Blender)
+  • blender_colorizer.py (aplicar colores)
+  • configurar_v2.bat (setup inicial)
+
+PRÓXIMAS MEJORAS POSIBLES:
+  • Render automático de Blender
+  • UI en web
+  • Sincronización con nube
+  • Sistema de presets
+
+ESTADO: LISTO PARA USAR
+═════════════════════════════════════════════════════════════════════════════════

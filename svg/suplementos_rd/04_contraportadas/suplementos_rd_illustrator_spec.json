@@ -1,0 +1,80 @@
+{
+  "document": {
+    "name": "Suplementos RD - Contraportadas",
+    "width": 2362,
+    "height": 1654,
+    "colorMode": "RGB"
+  },
+  "artboards": [
+    {
+      "name": "Pre Fiesta",
+      "title": "PRE FIESTA",
+      "body": [
+        "Apoya el metabolismo energético y la respuesta al estrés antes de situaciones de alta demanda.",
+        "Vitaminas, taurina, L-teanina y rhodiola."
+      ],
+      "cta": "Beneficio: energía + regulación",
+      "contact": "WhatsApp RD / QR"
+    },
+    {
+      "name": "Post Fiesta",
+      "title": "POST FIESTA",
+      "body": [
+        "Complementa la recuperación nutricional tras contextos de alta exigencia fisiológica.",
+        "Electrolitos, vitaminas, NAC, cardo mariano y CoQ10."
+      ],
+      "cta": "Beneficio: recuperación + hidratación",
+      "contact": "WhatsApp RD / QR"
+    },
+    {
+      "name": "Impulso",
+      "title": "IMPULSO",
+      "body": [
+        "Contribuye al estado de alerta y la concentración en actividades que requieren foco sostenido.",
+        "Cafeína, L-teanina y vitamina B12."
+      ],
+      "cta": "Beneficio: foco + alerta",
+      "contact": "WhatsApp RD / QR"
+    },
+    {
+      "name": "Hongos Adaptógenos",
+      "title": "HONGOS ADAPTÓGENOS",
+      "body": [
+        "Acompaña procesos de regulación y bienestar en rutinas exigentes.",
+        "Cordyceps, melena de león, reishi, L-teanina y vitamina B12."
+      ],
+      "cta": "Beneficio: regulación + bienestar",
+      "contact": "WhatsApp RD / QR"
+    },
+    {
+      "name": "Magnesio",
+      "title": "MAGNESIO",
+      "body": [
+        "Complementa la ingesta diaria de magnesio, mineral esencial para el sistema nervioso, la función muscular y el metabolismo energético.",
+        "Disponible en citrato y bisglicinato."
+      ],
+      "cta": "Beneficio: relajación + función muscular",
+      "contact": "WhatsApp RD / QR"
+    },
+    {
+      "name": "Creatina",
+      "title": "CREATINA",
+      "body": [
+        "Molécula ampliamente estudiada en suplementación nutricional, vinculada a la producción de energía celular.",
+        "Disponible en polvo y en gomitas."
+      ],
+      "cta": "Beneficio: energía + rendimiento",
+      "contact": "WhatsApp RD / QR"
+    },
+    {
+      "name": "Proteína",
+      "title": "PROTEÍNA",
+      "body": [
+        "Suplemento en polvo de proteína de suero de leche para apoyar la recuperación muscular y el aporte proteico diario.",
+        "Disponible en whey y iso protein."
+      ],
+      "cta": "Beneficio: recuperación + proteína",
+      "contact": "WhatsApp RD / QR"
+    }
+  ]
+}

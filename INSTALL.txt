@@ -1,0 +1,5 @@
+Instrucciones v0.20:
+1. Mueve la carpeta 'airdrop_v0_20_final' a '_airdrop/v0.20/'
+2. Ejecuta: bash scripts/apply_airdrop.sh --apply
+3. Haz un último checkpoint manual: bash scripts/checkpoint.sh "migración final a v0.20"
+4. A partir de ahora, usa solo: flujo airdrop apply <versión>

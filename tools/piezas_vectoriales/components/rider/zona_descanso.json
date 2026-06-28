@@ -1,0 +1,1 @@
+[{ "type": "rect", "x": 0, "y": 0, "w": 760, "h": 540, "radius": 24, "fill": "white", "stroke": "green", "stroke_width": 5, "opacity": 0.72 },{ "type": "text", "content": "Zona descanso público", "x": 150, "y": 50, "size": 36, "fill": "green", "weight": "bold" }]

@@ -1,0 +1,16 @@
+﻿**Últimos avances + hacia dónde vamos**
+
+**Avances:**
+- Datadrop listo: incoming/ bulk drop (fotos terminadas), scan procesa todo, manifests ricos con palette/ocr/for_future_ai/visual_traits, lista limpia (solo procesados, pending separado), modal usable, prepare package (_review_package.txt + ground truth).
+- Botones datadrop arreglados: header "Datadrop (en Herramientas)" abre tab + scroll vía robust showTab/rAF (requestAnimationFrame + retry + guards).
+- Delegación paralela maximizada: 2 agentes + 1 supervisor para datadrop fix; 5 roles en hub (Visual Polish, Pipeline & Integration, Brand Guardian, Future/Modern, Packaging & Distribution).
+- `flujo app` como única entrada diaria obligatoria + launchers root (launch-flujo.bat/ps1; py -m flujo app --desktop).
+- Hub tabs (Intake/Jobs, Visuales, Planos, Agentes, Herramientas) + brand enforcado (projects/flujo/flujo.json) + LAST_HANDOFF low token.
+- Higiene reciente: limpieza caches/pyc (16 dirs + 123 *.pyc + .pytest_cache), paths conservadora, docs reforzados, commits.
+
+**Hacia dónde:**
+- Auto-compact de sesiones (usa parallel delegation + LAST_HANDOFF como fuente única).
+- linea_editorial/v4.1.md con ground truth de datadrops reales (§10 Validación con Datadrops).
+- Full packaging (`flujo package` → .exe standalone desktop).
+- Daily via hub (flujo app).
+- Más paths robustos (frozen/asset_root vs workspace para packaged + dev).

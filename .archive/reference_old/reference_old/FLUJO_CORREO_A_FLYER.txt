@@ -1,0 +1,128 @@
+═══════════════════════════════════════════════════════════════════════════════
+           FLUJO: DE CORREO DE ISIDORA A FLYER PROCESADO
+═══════════════════════════════════════════════════════════════════════════════
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ OPCIÓN 1: FLUJO RÁPIDO DESDE GMAIL                                         │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+1️⃣  CLICK "📨 Abrir Gmail - Buscar correos de Isidora"
+    ↓ Se abre navegador con búsqueda: from:isidora
+
+2️⃣  BUSCA Y COPIA correo con link
+    ↓ Ejemplo de correo:
+
+    From: isidora@empresa.com
+    Subject: Evento Viernes 28 - Fiesta Neon
+
+    Hola, aqui va el link del evento:
+    https://www.instagram.com/p/C7k1234567890/
+    Gracias!
+
+3️⃣  REGRESA a la app
+
+4️⃣  CLICK "📧 Pegar Correo"
+    ↓ Se pega el correo en memoria
+
+5️⃣  CLICK "Extraer Link"
+    ↓ Se extrae automáticamente:
+       - Link de Instagram
+       - Nombre del evento (si está en asunto)
+
+6️⃣  SE RELLENAN AUTOMÁTICAMENTE:
+    ├─ Campo Link: https://www.instagram.com/p/C7k1234567890/
+    └─ Campo Evento: evento_2026_02_28_Fiesta_Neon
+
+7️⃣  CLICK "Descargar + preparar + abrir droplet"
+    ↓ Proceso automático:
+
+    ┌─────────────────────────────────┐
+    │ 1. Descarga de Instagram        │
+    │    ↓ TEMP/ (con reintentos)     │
+    │                                  │
+    │ 2. Extrae colores dominantes    │
+    │    ↓ RGB (0-255)                │
+    │    ↓ Guarda en RESULTADOS/      │
+    │                                  │
+    │ 3. Crea proyecto Blender        │
+    │    ↓ OBJETOS_INTELIGENTES/{ev}/ │
+    │    ↓ colores.json               │
+    │                                  │
+    │ 4. Abre Photoshop + Droplet     │
+    │    ↓ Automático (opcional)      │
+    │                                  │
+    │ 5. Limpia TEMP/                 │
+    └─────────────────────────────────┘
+
+8️⃣  RESULTADO EN CARPETAS:
+
+    RESULTADOS/
+    ├─ input_ig.jpg (imagen descargada)
+    ├─ color_predominante_1.png (color principal)
+    └─ color_predominante_2.png (color secundario)
+
+    OBJETOS_INTELIGENTES/evento_2026_02_28_Fiesta_Neon/
+    ├─ colores.json (RGB valores)
+    └─ RD.blend (proyecto Blender con colores aplicados)
+
+═══════════════════════════════════════════════════════════════════════════════
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ OPCIÓN 2: FLUJO MANUAL (Sin correo)                                        │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+1️⃣  Pega link manual
+2️⃣  O selecciona imagen manualmente
+3️⃣  Ingresa nombre del evento
+4️⃣  Procesa igual
+
+═══════════════════════════════════════════════════════════════════════════════
+
+┌─────────────────────────────────────────────────────────────────────────────┐
+│ BOTONES DISPONIBLES                                                         │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+SECCIÓN 1 - INSTAGRAM:
+  📋 Pegar Link       → Pega link directo de portapapeles
+  📧 Pegar Correo     → Pega correo completo
+  Extraer Link        → Extrae link del correo pegado
+
+SECCIÓN 2B - CORREOS:
+  📨 Abrir Gmail      → Abre Gmail buscando "from:isidora"
+
+SECCIÓN 3 - EVENTO:
+  🎬 Abrir Proyecto   → Abre archivo .blend del evento
+  📂 Carpeta Evento   → Abre carpeta del evento en Explorer
+
+SECCIÓN 4 - BÚSQUEDA:
+  🔍 Google          → Busca productora en Google
+  📱 Instagram       → Busca productora en Instagram
+
+SECCIÓN 5 - OPCIONES:
+  📂 Carpeta base    → Abre RECURSOS/
+  🖼️ input_ig.jpg    → Abre imagen procesada
+  📋 Colores         → Abre muestra de colores
+
+═══════════════════════════════════════════════════════════════════════════════
+
+🎨 TEMA OSCURO:
+  Fondo Negro (#1a1a1a)
+  Texto Blanco (#ffffff)
+  Header Rojo (#d32f2f)
+  Acentos Azul (#2196f3)
+
+═══════════════════════════════════════════════════════════════════════════════
+
+⚙️ REQUISITOS:
+  ✓ Python 3.8+
+  ✓ pip install -r requirements.txt
+  ✓ Blender (opcional)
+  ✓ Photoshop + Droplet (opcional)
+
+═══════════════════════════════════════════════════════════════════════════════
+
+EJECUTAR:
+  python automatizador_flyers_v2.pyw
+  O doble click en automatizador_flyers_v2.pyw
+
+═══════════════════════════════════════════════════════════════════════════════

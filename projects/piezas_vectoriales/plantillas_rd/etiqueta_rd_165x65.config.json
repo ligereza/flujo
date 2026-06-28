@@ -1,0 +1,41 @@
+{
+  "project": {
+    "name": "Etiqueta Reduciendo Daño",
+    "slug": "etiqueta_rd_165x65",
+    "brand": "Reduciendo Daño",
+    "website": "reduciendodano.org",
+    "note": "Plantilla institucional para etiquetas. Reemplazar producto, lote y vencimiento."
+  },
+  "canvas": {
+    "width": 3300,
+    "height": 1300,
+    "real_size_cm": {"width": 16.5, "height": 6.5},
+    "safe_margin_px": 80
+  },
+  "palette": {
+    "cream": "#F6EFE3",
+    "paper": "#FFF8ED",
+    "white": "#FFFFFF",
+    "ink": "#161513",
+    "muted": "#675F55",
+    "line": "#D9CEC0",
+    "accent": "#173F2F"
+  },
+  "background": "cream",
+  "global_elements": [
+    {"type": "rect", "x": 60, "y": 60, "w": 3180, "h": 1180, "radius": 40, "fill": "none", "stroke": "line", "stroke_width": 4},
+    {"type": "text", "content": "Reduciendo Daño", "x": 120, "y": 100, "size": 56, "fill": "ink", "weight": "bold", "max_width": 1200}
+  ],
+  "documents": [
+    {
+      "id": "01_etiqueta_rd",
+      "title": "Etiqueta producto",
+      "tipo": "etiqueta",
+      "elements": [
+        {"type": "text", "content": "NOMBRE PRODUCTO", "x": 120, "y": 280, "size": 120, "fill": "ink", "weight": "bold", "max_width": 2000},
+        {"type": "paragraph", "content": "Presentación: 60 cápsulas\nLote: 000000\nVencimiento: 0000-00", "x": 120, "y": 500, "size": 52, "fill": "muted", "max_width": 1800, "line_height": 80},
+        {"type": "text", "content": "reduciendodano.org", "x": 120, "y": 1100, "size": 44, "fill": "accent", "weight": "bold", "max_width": 1000}
+      ]
+    }
+  ]
+}

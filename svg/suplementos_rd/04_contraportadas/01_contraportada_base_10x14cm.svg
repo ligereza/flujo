@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1181" height="1654" viewBox="0 0 1181 1654">
+  <metadata>Contraportada suplementos RD / 10x14 cm / estilo Canva</metadata>
+  <rect width="1181" height="1654" fill="#F6EFE3"/>
+  <circle cx="140" cy="180" r="220" fill="#173F2F" opacity="0.15"/>
+  <circle cx="1010" cy="180" r="150" fill="#315EE8" opacity="0.08"/>
+  <circle cx="1090" cy="1520" r="250" fill="none" stroke="#173F2F" stroke-width="60" opacity="0.12"/>
+  <rect x="70" y="70" width="1041" height="1514" rx="46" fill="none" stroke="#CFC2B2" stroke-width="4" opacity="0.75"/>
+
+  <g id="header">
+    <rect x="120" y="110" width="86" height="86" rx="24" fill="#173F2F"/>
+    <text x="140" y="166" fill="#FFFFFF" font-family="DejaVu Sans, Arial, Helvetica, sans-serif" font-size="42" font-weight="700">RD</text>
+    <text x="225" y="162" fill="#161513" font-family="DejaVu Sans, Arial, Helvetica, sans-serif" font-size="34" font-weight="700">Reduciendo Daño</text>
+    <rect x="860" y="114" width="200" height="60" rx="30" fill="#FFFFFF" stroke="#D9CEC0" stroke-width="2"/>
+    <text x="892" y="150" fill="#173F2F" font-family="DejaVu Sans, Arial, Helvetica, sans-serif" font-size="20" font-weight="700">CONTRAPORTADA</text>
+  </g>
+
+  <g id="hero">
+    <rect x="120" y="240" width="941" height="500" rx="40" fill="#173F2F"/>
+    <text x="170" y="310" fill="#F5C54D" font-family="DejaVu Sans, Arial, Helvetica, sans-serif" font-size="28" font-weight="700">DESCRIPCIÓN</text>
+    <text x="170" y="390" fill="#FFFFFF" font-family="DejaVu Sans, Arial, Helvetica, sans-serif" font-size="68" font-weight="700">NOMBRE DEL</text>
+    <text x="170" y="470" fill="#FFFFFF" font-family="DejaVu Sans, Arial, Helvetica, sans-serif" font-size="68" font-weight="700">SUPLEMENTO</text>
+    <rect x="170" y="515" width="300" height="8" fill="#F5C54D"/>
+    <text x="170" y="565" fill="#F7EEE2" font-family="DejaVu Sans, Arial, Helvetica, sans-serif" font-size="26" font-weight="400">Beneficio principal o idea de campaña para la pieza.</text>
+    <text x="170" y="605" fill="#F7EEE2" font-family="DejaVu Sans, Arial, Helvetica, sans-serif" font-size="24" font-weight="400">Texto breve y claro para acompañar el producto.</text>
+  </g>
+
+  <g id="info_panel">
+    <rect x="120" y="780" width="941" height="520" rx="40" fill="#FFFFFF" stroke="#D9CEC0" stroke-width="2"/>
+    <text x="170" y="845" fill="#173F2F" font-family="DejaVu Sans, Arial, Helvetica, sans-serif" font-size="30" font-weight="700">INFORMACIÓN NUTRICIONAL</text>
+    <text x="170" y="900" fill="#161513" font-family="DejaVu Sans, Arial, Helvetica, sans-serif" font-size="24" font-weight="400">• Ingredientes o perfil principal del suplemento.</text>
+    <text x="170" y="940" fill="#161513" font-family="DejaVu Sans, Arial, Helvetica, sans-serif" font-size="24" font-weight="400">• Indicaciones de uso y contexto de consumo.</text>
+    <text x="170" y="980" fill="#161513" font-family="DejaVu Sans, Arial, Helvetica, sans-serif" font-size="24" font-weight="400">• Recomendación de seguimiento y responsabilidad.</text>
+
+    <rect x="170" y="1035" width="250" height="110" rx="28" fill="#173F2F"/>
+    <text x="205" y="1085" fill="#F5C54D" font-family="DejaVu Sans, Arial, Helvetica, sans-serif" font-size="24" font-weight="700">WHATSAPP RD</text>
+    <text x="205" y="1115" fill="#FFFFFF" font-family="DejaVu Sans, Arial, Helvetica, sans-serif" font-size="20" font-weight="400">texto o QR</text>
+
+    <rect x="455" y="1035" width="250" height="110" rx="28" fill="#F5C54D"/>
+    <text x="490" y="1085" fill="#161513" font-family="DejaVu Sans, Arial, Helvetica, sans-serif" font-size="24" font-weight="700">CONTACTO</text>
+    <text x="490" y="1115" fill="#161513" font-family="DejaVu Sans, Arial, Helvetica, sans-serif" font-size="20" font-weight="400">espacio editable</text>
+
+    <rect x="740" y="1035" width="250" height="110" rx="28" fill="#173F2F" opacity="0.95"/>
+    <text x="780" y="1085" fill="#FFFFFF" font-family="DejaVu Sans, Arial, Helvetica, sans-serif" font-size="24" font-weight="700">QR / LINK</text>
+    <text x="780" y="1115" fill="#FFFFFF" font-family="DejaVu Sans, Arial, Helvetica, sans-serif" font-size="20" font-weight="400">espacio editable</text>
+  </g>
+
+  <g id="brandline">
+    <line x1="120" y1="1490" x2="1061" y2="1490" stroke="#D9CEC0" stroke-width="3"/>
+    <text x="120" y="1545" fill="#173F2F" font-family="DejaVu Sans, Arial, Helvetica, sans-serif" font-size="24" font-weight="700">@ REDUCIENDODANO.CL</text>
+    <text x="760" y="1545" fill="#675F55" font-family="DejaVu Sans, Arial, Helvetica, sans-serif" font-size="20" font-weight="700">SIGUENOS EN REDES</text>
+  </g>
+</svg>

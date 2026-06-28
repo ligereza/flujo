@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="1181px" height="2362px" viewBox="0 0 1181 2362">
+<rect x="0" y="0" width="1181" height="2362" fill="#F6EFE3"/>
+<rect x="80" y="80" width="2640" height="1840" rx="70" fill="none" stroke="#D9CEC0" stroke-width="5"/>
+<text x="120" y="164.0" fill="#161513" font-family="Inter, Arial, sans-serif" font-size="44.0" font-weight="700">{brand}</text>
+<text x="120" y="1854.0" fill="#173F2F" font-family="Inter, Arial, sans-serif" font-size="44.0" font-weight="700">{website}</text>
+<text x="120" y="440.0" fill="#161513" font-family="Inter, Arial, sans-serif" font-size="130.0" font-weight="700">TÍTULO PRINCIPAL</text>
+<rect x="120" y="620" width="2560" height="980" rx="50" fill="#FFFFFF" stroke="#D9CEC0" stroke-width="3" opacity="0.7"/>
+<text x="200" y="774.0" fill="#675F55" font-family="Inter, Arial, sans-serif" font-size="54.0" font-weight="400">Aquí va la descripción principal. Cambia este texto desde el JSON.</text>
+</svg>

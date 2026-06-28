@@ -1,0 +1,45 @@
+{
+  "tool": "flyer_eventos",
+  "name": "email_evento_01",
+  "date": "2026-06-13",
+  "status": "from_email_pending_download",
+  "input": {
+    "main_image": "",
+    "event_name": "email_evento_01",
+    "event_date": "",
+    "format": "",
+    "notes": ""
+  },
+  "steps": {
+    "photoshop": "pending",
+    "blender": "pending",
+    "export": "pending"
+  },
+  "outputs": [],
+  "source": {
+    "type": "email",
+    "instagram_url": "https://www.instagram.com/p/ABC123test",
+    "email_imported_at": "2026-06-13T02:48:53",
+    "link_index": 1,
+    "link_total": 2
+  },
+  "extracted_info": {
+    "event_name": "",
+    "producer": "",
+    "venue": "",
+    "event_date": "",
+    "needs_manual_review": true
+  },
+  "download": {
+    "status": "pending",
+    "possible_types": [
+      "image",
+      "video",
+      "private_or_unavailable"
+    ],
+    "manual_download_needed": false
+  },
+  "notes": [
+    "Creado desde correo. Falta descargar/analizar flyer."
+  ]
+}

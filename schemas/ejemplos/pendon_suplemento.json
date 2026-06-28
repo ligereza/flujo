@@ -1,0 +1,38 @@
+{
+  "intake_version": "1.0",
+  "pedido": {
+    "id_externo": "WA-2026-06-20-005",
+    "area": "suplementos",
+    "solicitante": {
+      "nombre": "Marca Proteína",
+      "canal": "whatsapp"
+    },
+    "tipo_pieza": "pendon",
+    "formato_sugerido": "sup_pendon_rectangular",
+    "medidas": {
+      "ancho_cm": 80,
+      "alto_cm": 200,
+      "orientacion": "vertical"
+    },
+    "productos": ["Proteína Whey 1kg"],
+    "contenido": {
+      "titulo": "PROTEÍNA WHEY",
+      "subtitulo": "Rendimiento y recuperación",
+      "cuerpo": "Disponible en sabores chocolate y vainilla.",
+      "extras": {
+        "contenido_neto": "1kg",
+        "registro_sanitario": "RS-XXXXX"
+      }
+    },
+    "entrega": {
+      "formatos": ["pdf_impresion", "zip"],
+      "destino": "imprenta"
+    },
+    "restricciones": {
+      "no_inventar_claims": true,
+      "texto_vectorizado": true,
+      "editable_para_illustrator": true
+    },
+    "notas": "Gran formato: medida real en metros. SÍ O SÍ pasa por Illustrator. 150 DPI suficiente por distancia de lectura."
+  }
+}

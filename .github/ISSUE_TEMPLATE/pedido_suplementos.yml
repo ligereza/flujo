@@ -1,0 +1,77 @@
+name: SUPLEMENTOS - pedido / modificacion / cotizacion
+description: "Solicitud del area SUPLEMENTOS: nuevo pedido, modificacion, correccion o cotizacion"
+title: "[SUPLEMENTOS] "
+labels: ["pedido", "area/suplementos", "estado/por-revisar"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Usa este formulario para SUPLEMENTOS/RD. Separa texto, imagen-disenio, formato, fecha y prioridad.
+  - type: dropdown
+    id: tipo_trabajo
+    attributes:
+      label: Tipo de trabajo
+      options:
+        - Nuevo pedido
+        - Modificacion
+        - Correccion
+        - Cotizacion
+        - Paquete mensual
+        - Revision
+    validations:
+      required: true
+  - type: dropdown
+    id: tipo_pieza
+    attributes:
+      label: Tipo de pieza
+      options:
+        - Etiqueta
+        - Flyer
+        - Pendon
+        - Post Instagram
+        - Stickers
+        - Stand / evento
+        - Logo / sello linea suplementos
+        - Brief comercial
+        - Otro
+    validations:
+      required: true
+  - type: input
+    id: producto
+    attributes:
+      label: Producto o linea
+      placeholder: "Ej: Omega 3, Glicinato de Magnesio, Post Fiesta..."
+  - type: textarea
+    id: texto
+    attributes:
+      label: Texto / contenido
+      description: Textos finales, textos en revision, datos obligatorios o indicar que falta.
+      placeholder: "Titulo, ingredientes, tabla nutricional, CTA, WhatsApp, etc."
+  - type: textarea
+    id: imagen_diseno
+    attributes:
+      label: Imagen / disenio / referencias
+      description: Colores, referencias, fotos, logos, QR, estilo, linea visual, imprenta.
+  - type: input
+    id: formato_medida
+    attributes:
+      label: Formato o medida
+      placeholder: "Ej: 16.5 x 6.5 cm, 1080x1350, pendon 80x200 cm"
+  - type: dropdown
+    id: prioridad
+    attributes:
+      label: Prioridad
+      options:
+        - Alta
+        - Media
+        - Baja
+        - Fecha fija
+  - type: input
+    id: fecha
+    attributes:
+      label: Fecha ideal / deadline si existe
+      placeholder: "YYYY-MM-DD"
+  - type: textarea
+    id: notas
+    attributes:
+      label: Comentarios adicionales

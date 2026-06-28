@@ -1,0 +1,82 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Example Description for flujo",
+  "description": "JSON descriptivo de un trabajo ya hecho. Lo usa un agente de IA para analizar estética real y alimentar la línea editorial (flujo).",
+  "type": "object",
+  "required": ["example_id", "aesthetic_summary"],
+  "properties": {
+    "example_id": {
+      "type": "string",
+      "description": "Identificador único, usualmente igual al nombre de la carpeta en ejemplos/"
+    },
+    "source_paths": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Rutas relativas a los archivos o carpetas del ejemplo original (en ../ejemplos/)"
+    },
+    "aesthetic_summary": {
+      "type": "string",
+      "description": "Resumen corto en lenguaje natural de la estética observada"
+    },
+    "colors": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": { "type": "string" },
+          "hex": { "type": "string" },
+          "usage": { "type": "string" },
+          "role": { "enum": ["primary", "accent", "background", "text", "support", "other"] }
+        }
+      },
+      "description": "Colores observados con su rol"
+    },
+    "typography": {
+      "type": "object",
+      "properties": {
+        "families": { "type": "array", "items": { "type": "string" } },
+        "hierarchy": {
+          "type": "object",
+          "description": "Tamaños y usos para títulos, cuerpo, datos, etc."
+        },
+        "notes": { "type": "string" }
+      }
+    },
+    "layout": {
+      "type": "object",
+      "properties": {
+        "type": { "type": "string", "description": "row, grid, modular, free, etc." },
+        "margins": { "type": "string" },
+        "rhythm": { "type": "string" },
+        "density": { "type": "string" },
+        "structure_notes": { "type": "string" }
+      }
+    },
+    "motifs": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Elementos visuales recurrentes (marcos, iconos, texturas, patrones...)"
+    },
+    "composition_rules": {
+      "type": "string",
+      "description": "Reglas de composición observadas (alineación, jerarquía, respiración, etc.)"
+    },
+    "tone_visual": {
+      "type": "string",
+      "description": "Impresión visual general (limpio, orgánico, técnico, cálido...)"
+    },
+    "tags": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "references_to_flujo": {
+      "type": "array",
+      "items": { "type": "string" },
+      "description": "Qué partes de la línea editorial (flujo) se ven reflejadas en este ejemplo"
+    },
+    "ai_notes": {
+      "type": "string",
+      "description": "Observaciones adicionales útiles para refinar la línea editorial"
+    }
+  }
+}

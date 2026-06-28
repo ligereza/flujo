@@ -1,0 +1,1 @@
+{ "id": "stand_con_descanso_6x6", "nombre": "Stand + descanso 6×6 m", "ancho_m": 6, "alto_m": 6, "incluye": ["stand_completo", "zona_descanso", "circulacion", "hidratacion", "contencion"] }

@@ -1,0 +1,47 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Layout Primitives for flujo (piezas + planos)",
+  "description": "Declarative building blocks to describe layouts in a way that both vector pieces and parametric planos can use. Goal: make it easier and cheaper (in tokens) for AIs to understand and modify structures without reading lots of Python code.",
+  "type": "object",
+  "properties": {
+    "version": { "type": "string", "default": "1.0" },
+    "primitives": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "kind": {
+            "enum": ["panel", "text_block", "frame", "grid", "flow", "stand", "module", "constraint"]
+          },
+          "description": { "type": "string" },
+          "defaults": { "type": "object" },
+          "constraints": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "type": { "enum": ["min_gap", "max_width", "align", "padding", "aspect"] },
+                "value": {}
+              }
+            }
+          }
+        },
+        "required": ["id", "kind"]
+      }
+    },
+    "layout": {
+      "description": "A concrete layout using the primitives (used in piece config or plano event JSON)",
+      "type": "object",
+      "properties": {
+        "type": { "enum": ["row", "grid", "flow", "custom"] },
+        "gap": { "type": "number" },
+        "modules": {
+          "type": "array",
+          "items": { "type": "object" }
+        },
+        "constraints": { "type": "array", "items": { "type": "object" } }
+      }
+    }
+  }
+}

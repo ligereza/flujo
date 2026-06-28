@@ -1,0 +1,43 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2970px" height="2100px" viewBox="0 0 2970 2100">
+<metadata>rider rd intervencion terreno / 02_layout_operativo / editable</metadata>
+<g id="fondo_editable"><rect x="0" y="0" width="2970" height="2100" fill="#F6EFE3"/></g>
+<g id="elementos_globales">
+<rect x="70" y="70" width="2830" height="1960" rx="46" fill="none" stroke="#D9CEC0" stroke-width="4"/>
+<text class="txt" x="120" y="162" fill="#161513" font-family="DejaVu Sans, Arial, Helvetica, sans-serif" font-size="42" font-weight="700">Reduciendo Daño Chile</text>
+</g>
+<g id="elementos_documento">
+<text class="txt" x="120" y="332" fill="#161513" font-family="DejaVu Sans, Arial, Helvetica, sans-serif" font-size="82" font-weight="700">Layout operativo sugerido</text>
+<text class="txt" x="128" y="424" fill="#675F55" font-family="DejaVu Sans, Arial, Helvetica, sans-serif" font-size="34" font-weight="700">Escala conceptual: 1 m ≈ 180 px</text>
+<rect x="260" y="560" width="1080" height="540" rx="16" fill="#FFFFFF" stroke="#173F2F" stroke-width="6" opacity="0.82"/>
+<text class="txt" x="560" y="633" fill="#173F2F" font-family="DejaVu Sans, Arial, Helvetica, sans-serif" font-size="38" font-weight="700">TOLDO / STAND 6×3 m</text>
+<rect x="330" y="700" width="260" height="110" rx="12" fill="#FFF8ED" stroke="#D9CEC0" stroke-width="3"/>
+<text class="txt" x="405" y="760" fill="#161513" font-family="DejaVu Sans, Arial, Helvetica, sans-serif" font-size="30" font-weight="700">Rack</text>
+<rect x="650" y="700" width="300" height="120" rx="12" fill="#FFF8ED" stroke="#315EE8" stroke-width="4"/>
+<text class="txt" x="700" y="760" fill="#315EE8" font-family="DejaVu Sans, Arial, Helvetica, sans-serif" font-size="28" font-weight="700">Mesa testeo</text>
+<rect x="990" y="700" width="280" height="120" rx="12" fill="#FFF8ED" stroke="#EF7B2D" stroke-width="4"/>
+<text class="txt" x="1040" y="760" fill="#EF7B2D" font-family="DejaVu Sans, Arial, Helvetica, sans-serif" font-size="28" font-weight="700">Mesa info</text>
+<circle cx="720" cy="930" r="40" fill="#FFFFFF" stroke="#D9CEC0" stroke-width="3"/>
+<circle cx="860" cy="930" r="40" fill="#FFFFFF" stroke="#D9CEC0" stroke-width="3"/>
+<text class="txt" x="660" y="1018" fill="#675F55" font-family="DejaVu Sans, Arial, Helvetica, sans-serif" font-size="28" font-weight="700">Sillas equipo</text>
+<rect x="1160" y="930" width="80" height="80" rx="12" fill="#F5C54D" stroke="#D9CEC0" stroke-width="3"/>
+<text class="txt" x="1115" y="1054" fill="#675F55" font-family="DejaVu Sans, Arial, Helvetica, sans-serif" font-size="24" font-weight="700">Basurero</text>
+<rect x="1560" y="560" width="760" height="540" rx="24" fill="#FFFFFF" stroke="#173F2F" stroke-width="5" opacity="0.72"/>
+<text class="txt" x="1720" y="646" fill="#173F2F" font-family="DejaVu Sans, Arial, Helvetica, sans-serif" font-size="36" font-weight="700">Zona descanso público</text>
+<circle cx="1740" cy="800" r="48" fill="#FFF8ED" stroke="#D9CEC0" stroke-width="3"/>
+<circle cx="1900" cy="800" r="48" fill="#FFF8ED" stroke="#D9CEC0" stroke-width="3"/>
+<circle cx="2060" cy="800" r="48" fill="#FFF8ED" stroke="#D9CEC0" stroke-width="3"/>
+<text class="txt" x="1650" y="968" fill="#675F55" font-family="DejaVu Sans, Arial, Helvetica, sans-serif" font-size="28" font-weight="700">Menor estímulo / hidratación / contención</text>
+<line x1="1340" y1="830" x2="1560" y2="830" stroke="#675F55" stroke-width="5"/>
+<text class="txt" x="1370" y="786" fill="#675F55" font-family="DejaVu Sans, Arial, Helvetica, sans-serif" font-size="26" font-weight="700">Circulación</text>
+<rect x="250" y="1280" width="2070" height="420" rx="32" fill="#FFFFFF" stroke="#D9CEC0" stroke-width="3" opacity="0.72"/>
+<text class="txt" x="320" y="1392" fill="#173F2F" font-family="DejaVu Sans, Arial, Helvetica, sans-serif" font-size="42" font-weight="700">Puntos a confirmar</text>
+<text x="320" y="1470" fill="#161513" font-family="DejaVu Sans, Arial, Helvetica, sans-serif" font-size="30" font-weight="700">•</text>
+<text class="txt" x="354" y="1470" fill="#161513" font-family="DejaVu Sans, Arial, Helvetica, sans-serif" font-size="30" font-weight="400">Medidas disponibles del recinto.</text>
+<text x="320" y="1520" fill="#161513" font-family="DejaVu Sans, Arial, Helvetica, sans-serif" font-size="30" font-weight="700">•</text>
+<text class="txt" x="354" y="1520" fill="#161513" font-family="DejaVu Sans, Arial, Helvetica, sans-serif" font-size="30" font-weight="400">Si es interior/exterior y horario del evento.</text>
+<text x="320" y="1570" fill="#161513" font-family="DejaVu Sans, Arial, Helvetica, sans-serif" font-size="30" font-weight="700">•</text>
+<text class="txt" x="354" y="1570" fill="#161513" font-family="DejaVu Sans, Arial, Helvetica, sans-serif" font-size="30" font-weight="400">Cantidad de personas del equipo RD.</text>
+<text x="320" y="1620" fill="#161513" font-family="DejaVu Sans, Arial, Helvetica, sans-serif" font-size="30" font-weight="700">•</text>
+<text class="txt" x="354" y="1620" fill="#161513" font-family="DejaVu Sans, Arial, Helvetica, sans-serif" font-size="30" font-weight="400">Disponibilidad de electricidad, iluminación, calefacción y seguridad cercana.</text>
+</g>
+</svg>

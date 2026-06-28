@@ -1,0 +1,72 @@
+{
+  "id": "2026-06-22_154643_0_raveeditrdrealv5",
+  "uploaded_at": "2026-06-22T15:46:43",
+  "original_filename": "rave_edit_rd_real_v5.png",
+  "image_path": "datadrops/2026-06-22_154643_0_raveeditrdrealv5/rave_edit_rd_real_v5.png",
+  "type": "flyer",
+  "dimensions": {
+    "width": 928,
+    "height": 1152
+  },
+  "palette": [
+    {
+      "hex": "#d8d8d8",
+      "rgb": [
+        216,
+        216,
+        216
+      ],
+      "pct": 0.7623
+    },
+    {
+      "hex": "#a7a6a5",
+      "rgb": [
+        167,
+        166,
+        165
+      ],
+      "pct": 0.1699
+    },
+    {
+      "hex": "#646464",
+      "rgb": [
+        100,
+        100,
+        100
+      ],
+      "pct": 0.0253
+    },
+    {
+      "hex": "#d1926d",
+      "rgb": [
+        209,
+        146,
+        109
+      ],
+      "pct": 0.0216
+    },
+    {
+      "hex": "#d39e05",
+      "rgb": [
+        211,
+        158,
+        5
+      ],
+      "pct": 0.021
+    }
+  ],
+  "ocr_text_snippet": "",
+  "ocr_hints": {},
+  "description": "Foto real escaneada: rave_edit_rd_real_v5.png",
+  "linked_job": "",
+  "visual_traits": "Pieza real terminada tipo flyer. Colores dominantes aprox: #d8d8d8, #a7a6a5, #646464. Descripción: Foto real escaneada: rave_edit_rd_real_v5.png. Patrón para IA: busca estos rasgos en briefs y generación para fidelidad a entregas reales.",
+  "tags": [
+    "flyer",
+    "datadrop",
+    "real-finished",
+    "inverse-airdrop",
+    "scanned"
+  ],
+  "analysis_source": "local (src/flujo/analyze colors+ocr; no external)",
+  "for_future_ai": "EJEMPLO REAL ENTREGADO (flyer, dims 928x1152): foto subida por usuario de pieza ya impresa/terminada. Paleta dominante extraída (usar como referencia fiel): #d8d8d8, #a7a6a5, #646464. En flyers/etiquetas reales rave/ONG: acentos de alto contraste sobre fondos oscuros suelen dominar. User notes reales: Foto real escaneada: rave_edit_rd_real_v5.png. QUÉ BUSCAR LA IA: deriva layouts densos, proporciones exactas, contraste, densidad de iconos/texto de estas fotos + manifest. Valida vs linea_editorial (v4) en lugar de asumir. Esto es ground-truth de entregas, no specs teóricas. Úsalo para mejorar matching y evitar drift en generación."
+}

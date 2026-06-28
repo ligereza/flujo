@@ -1,0 +1,5 @@
+[
+  { "type": "panel", "x": 120, "y": 1580, "w": 760, "h": 190, "radius": 24, "fill": "white", "stroke": "line", "stroke_width": 2, "opacity": 0.72 },
+  { "type": "text", "content": "Lote:", "x": 160, "y": 1630, "size": 32, "fill": "muted", "weight": "bold" },
+  { "type": "text", "content": "Vencimiento:", "x": 160, "y": 1700, "size": 32, "fill": "muted", "weight": "bold" }
+]

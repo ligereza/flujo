@@ -1,0 +1,3 @@
+@echo off
+echo Launching flujo app --desktop from main folder...
+py -m flujo app --desktop

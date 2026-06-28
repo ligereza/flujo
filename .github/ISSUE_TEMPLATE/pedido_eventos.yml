@@ -1,0 +1,42 @@
+name: EVENTOS - Instagram / brief / plano / SVG
+description: "Solicitud del area EVENTOS: link de Instagram, brief, plano app o pieza SVG"
+title: "[EVENTOS] "
+labels: ["pedido", "area/eventos", "estado/por-revisar"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Usa este formulario para EVENTOS. Si es un flyer desde Instagram, pega el link. Si es brief/plano/SVG, explica el pedido.
+  - type: dropdown
+    id: tipo_evento
+    attributes:
+      label: Tipo de solicitud EVENTOS
+      options:
+        - Descargar link de Instagram
+        - Brief de evento
+        - Plano / Plano App
+        - SVG o pieza visual
+        - Otro
+    validations:
+      required: true
+  - type: input
+    id: instagram_url
+    attributes:
+      label: Link de Instagram si aplica
+      placeholder: "https://www.instagram.com/p/..."
+  - type: textarea
+    id: pedido
+    attributes:
+      label: Pedido / instrucciones
+      placeholder: "Pega aqui el correo o instrucciones del pedido."
+    validations:
+      required: true
+  - type: input
+    id: fecha
+    attributes:
+      label: Fecha ideal / deadline si existe
+      placeholder: "YYYY-MM-DD"
+  - type: textarea
+    id: notas
+    attributes:
+      label: Notas / referencias

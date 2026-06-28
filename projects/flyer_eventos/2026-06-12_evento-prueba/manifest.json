@@ -1,0 +1,20 @@
+{
+  "tool": "flyer_eventos",
+  "name": "evento prueba",
+  "date": "2026-06-12",
+  "status": "input_ready",
+  "input": {
+    "main_image": "projects/flyer_eventos/2026-06-12_evento-prueba/input/input_ig.jpg",
+    "event_name": "evento prueba",
+    "event_date": "",
+    "format": "",
+    "notes": "",
+    "updated_at": "2026-06-13T02:31:44"
+  },
+  "steps": {
+    "photoshop": "pending",
+    "blender": "pending",
+    "export": "pending"
+  },
+  "outputs": []
+}

@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FLUJO • Visualizador SVG</title>
+<style>
+  /*
+  =====================================================================
+  BRAND ENFORCED — flujo (projects/flujo/flujo.json) — svg_visualizer
+  =====================================================================
+  EXACT colors: ink #1f2a24, accent #2d5a4a, paper #f8f1e3 (SVG print interiors ONLY), support #675f55, alert #c2410f
+  Dark pro: full #0a0a0a / #141414 — zero light/chrome outside paper SVGs.
+  Generous pro: card padding 16px+, grid gaps 16px, radius 8px, Inter, uppercase labels.
+  FORBIDDEN: neon, cyan, hacker, tight spacing, experimental. Paper misuse = violation.
+  All SVGs + chrome pass Brand Validator in hub. Use "Volver al Hub".
+  */
+  :root {
+    --bg: #0a0a0a; --panel: #141414; --panel2: #1a1a1a;
+    --border: #2a2a2a; --text: #e8e8e8; --muted: #888;
+    /* flujo brand exact from projects/flujo/flujo.json — no cyan legacy */
+    --flujo-ink: #1f2a24; --flujo-accent: #2d5a4a; --flujo-paper: #f8f1e3;
+    --flujo-support: #675f55; --flujo-alert: #c2410f;
+    --accent: #2d5a4a;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: var(--bg); color: var(--text); font-family: 'Inter', system-ui, sans-serif; font-size: 14px; }
+  header { background: var(--panel); border-bottom: 1px solid var(--border); padding: 14px 24px; display: flex; align-items: center; gap: 12px; }
+  header h1 { font-size: 18px; font-weight: 700; letter-spacing: -0.02em; }
+  .badge { background: var(--flujo-accent); color: #fff; padding: 4px 12px; border-radius: 4px; font-size: 11px; font-weight: 600; }
+  .nav { display: flex; gap: 8px; margin-left: auto; }
+  .nav a, .nav button { background: var(--panel2); color: var(--text); border: 1px solid var(--border); padding: 8px 14px; border-radius: 5px; font-size: 12px; text-decoration: none; cursor: pointer; }
+  .nav a:hover, .nav button:hover { border-color: var(--accent); }
+  .nav .nav-link { font-weight: 600; }
+  .main { max-width: 1400px; margin: 0 auto; padding: 24px; }
+  .section-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin: 18px 0 12px; display: flex; align-items: center; gap: 8px; }
+  .section-title::before { content: ''; width: 3px; height: 14px; background: var(--accent); border-radius: 2px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); gap: 16px; }
+  .svg-card { background: var(--panel); border: 1px solid var(--border); border-radius: 8px; padding: 16px; display: flex; flex-direction: column; } /* generous pro */
+  .svg-card:hover { border-color: var(--accent); }
+  .svg-card h3 { font-size: 14px; font-weight: 600; margin-bottom: 4px; }
+  .svg-card .meta { font-size: 11px; color: var(--muted); margin-bottom: 8px; }
+  .svg-view { background: var(--bg); border: 1px solid var(--border); border-radius: 8px; min-height: 220px; display: flex; align-items: center; justify-content: center; overflow: hidden; margin-bottom: 14px; position: relative; padding:8px; box-shadow: inset 0 1px 0 rgba(255,255,255,0.02); } /* premium dark */
+  .svg-view object { width: 100%; height: 100%; max-height: 260px; }
+  .svg-view .fallback { font-size: 11px; color: var(--muted); padding: 10px; text-align: center; }
+  .actions { display: flex; flex-wrap: wrap; gap: 8px; }
+  .btn { background: linear-gradient(135deg, var(--accent), #1a3f2e); color: #fff; border: none; border-radius: 5px; padding: 8px 14px; font-weight: 700; font-size: 11px; cursor: pointer; text-transform: uppercase; letter-spacing: 0.04em; }
+  .btn:hover { opacity: 0.9; }
+  .btn-sec { background: var(--panel2); color: var(--text); border: 1px solid var(--border); }
+  .btn-sec:hover { border-color: var(--accent); }
+  .group { margin-bottom: 36px; }
+  .hint { font-size: 11px; color: var(--muted); }
+  .footer { margin-top: 44px; font-size: 11px; color: var(--muted); border-top: 1px solid var(--border); padding-top: 14px; }
+  .mejoras { font-size: 11px; background: var(--panel2); border: 1px solid var(--border); padding: 10px; border-radius: 6px; margin-top: 8px; }
+  .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.85); display: none; align-items: center; justify-content: center; z-index: 100; }
+  .modal.show { display: flex; }
+  .modal-content { background: var(--panel); border: 1px solid var(--border); border-radius: 8px; width: 92%; max-width: 1100px; max-height: 92vh; display: flex; flex-direction: column; overflow: hidden; }
+  .modal-header { padding: 12px 18px; background: var(--panel2); border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+  .modal-body { padding: 18px; flex: 1; overflow: auto; background: var(--bg); display: flex; align-items: center; justify-content: center; }
+  .modal-body object { width: 100%; max-height: 78vh; box-shadow: 0 10px 40px rgba(0,0,0,.6); }
+  .modal-footer { padding: 12px 18px; border-top: 1px solid var(--border); display: flex; gap: 8px; justify-content: flex-end; background: var(--panel); }
+</style>
+</head>
+<body>
+<header>
+  <h1>FLUJO</h1>
+  <span class="badge">Visualizador SVG</span>
+  <div class="nav">
+    <a class="nav-link" href="flujo_hub.html" style="background:var(--flujo-ink);border-color:var(--flujo-accent);font-weight:600">← Volver al Hub principal (menú)</a>
+    <span style="font-size:9px;color:#c2410f;align-self:center;font-weight:600">LEGACY paths (svg/ directos) — marcados, usa desde hub + validator. NO afectan main visuals.</span>
+    <a href="../svg/">Carpeta svg/</a>
+    <button onclick="location.reload()">Recargar</button>
+  </div>
+</header>
+
+<div class="main">
+
+  <p class="hint">Visualizador nativo (brand enforced desde flujo.json). Los <b>SVGs originales</b> pueden tener tonos paper claros de flujo (correcto para Illustrator). El chrome UI es full dark pro. Usa "Usar como base" para flujo real. <strong>Corre Brand Validator desde hub ANTES de entregar.</strong> Ver Brand Enforcement en Hub (VALIDAR BRAND AHORA). <span id="live-hint" class="small muted"></span></p>
+  <div style="font-size:10px; background:rgba(45,90,74,0.15); padding:5px 8px; border-radius:4px; margin:4px 0; color:#2d5a4a; font-weight:600; border-left:3px solid var(--flujo-accent);">BRAND ENFORCED ✓ Paleta exacta projects/flujo/flujo.json. Paper SOLO en SVGs internos. Ejecuta VALIDAR BRAND AHORA desde hub. Legacy paths marcados.</div>
+
+  <div style="margin: 8px 0 14px;">
+    <input id="svgFilter" type="text" placeholder="Filtrar piezas (ej: flyer, suplemento, rider, 3d)" style="max-width:320px" onkeyup="filterSVGWorks()">
+    <button class="btn-sec" onclick="loadLiveSvgWorks()" style="margin-left:8px;font-size:11px">Recargar live desde backend</button>
+  </div>
+
+  <div class="card" style="margin-bottom:18px; background:rgba(45,90,74,0.12); border-left:3px solid var(--accent);">
+    <div class="section-title" style="margin-top:0">Índice por línea</div>
+    <div class="grid" style="grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:12px;">
+      <div class="svg-card" style="padding:12px; min-height:auto">
+        <h3>RD</h3>
+        <div class="meta">ONG • suplementos • eventos • riders • campaña</div>
+        <div class="hint">Herramientas orientadas a producción, campaña y comunicación operativa.</div>
+      </div>
+      <div class="svg-card" style="padding:12px; min-height:auto">
+        <h3>ISKVW</h3>
+        <div class="meta">Arte • 2D • 3D • exploración visual</div>
+        <div class="hint">Herramientas para piezas más creativas o conceptuales, sin perder la base de flujo.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Live dynamic works injected here when flujo app running -->
+  <div id="live-svg-grid" class="grid" style="margin-bottom:20px;display:none"></div>
+
+  <!-- RD -->
+  <div class="group">
+    <div class="section-title">RD • Eventos • Flyers • Riders • Etiquetas</div>
+    <div class="grid">
+
+      <!-- flyer_horizontal_minimo -->
+      <div class="svg-card">
+        <h3>flyer_horizontal_minimo</h3>
+        <div class="meta">flyer base horizontal • editable + vectorizado</div>
+        <div class="svg-view">
+          <object data="../svg/flyer_horizontal_minimo/salida_generada/01_editables_svg/01_flyer_base_editable.svg" type="image/svg+xml" width="100%" height="220">
+            <div class="fallback">No se pudo embeber. <a href="../svg/flyer_horizontal_minimo/salida_generada/01_editables_svg/01_flyer_base_editable.svg" target="_blank">Abrir editable</a></div>
+          </object>
+        </div>
+        <div class="actions">
+          <a class="btn" href="../svg/flyer_horizontal_minimo/salida_generada/01_editables_svg/01_flyer_base_editable.svg" target="_blank">Editar editable</a>
+          <a class="btn-sec btn" href="../svg/flyer_horizontal_minimo/salida_generada/02_vectorizados_svg/01_flyer_base_vectorizado.svg" target="_blank">Vectorizado</a>
+          <button class="btn-sec btn" onclick="usarComoBase('../svg/flyer_horizontal_minimo/salida_generada/01_editables_svg/01_flyer_base_editable.svg', 'flyer_horizontal_minimo')">Usar como base</button>
+          <button class="btn-sec btn" onclick="copyPath('../svg/flyer_horizontal_minimo/salida_generada/01_editables_svg/01_flyer_base_editable.svg')">Copiar ruta</button>
+          <button class="btn" onclick="showLargePreview('../svg/flyer_horizontal_minimo/salida_generada/01_editables_svg/01_flyer_base_editable.svg', 'flyer_horizontal_minimo')">Vista grande</button>
+        </div>
+        <div class="mejoras"><b>Mejoras sugeridas:</b> Agregar variantes vertical, soporte multi-idioma, integración directa con preview canvas del hub.</div>
+      </div>
+
+      <!-- prueba-rd-intervencion-terreno -->
+      <div class="svg-card">
+        <h3>prueba-rd-intervencion-terreno</h3>
+        <div class="meta">Flyer intervención terreno • editable + vector</div>
+        <div class="svg-view">
+          <object data="../svg/prueba-rd-intervencion-terreno/salida_generada/01_editables_svg/01_base_prueba-rd-intervencion-terreno_editable.svg" type="image/svg+xml" width="100%" height="220">
+            <div class="fallback">Abrir manualmente: <a href="../svg/prueba-rd-intervencion-terreno/salida_generada/01_editables_svg/01_base_prueba-rd-intervencion-terreno_editable.svg" target="_blank">link</a></div>
+          </object>
+        </div>
+        <div class="actions">
+          <a class="btn" href="../svg/prueba-rd-intervencion-terreno/salida_generada/01_editables_svg/01_base_prueba-rd-intervencion-terreno_editable.svg" target="_blank">Editar</a>
+          <a class="btn-sec btn" href="../svg/prueba-rd-intervencion-terreno/salida_generada/02_vectorizados_svg/01_base_prueba-rd-intervencion-terreno_vectorizado.svg" target="_blank">Vectorizado</a>
+          <button class="btn-sec btn" onclick="usarComoBase('../svg/prueba-rd-intervencion-terreno/salida_generada/01_editables_svg/01_base_prueba-rd-intervencion-terreno_editable.svg', 'prueba-rd-intervencion-terreno')">Usar como base</button>
+          <button class="btn-sec btn" onclick="copyPath('../svg/prueba-rd-intervencion-terreno/salida_generada/01_editables_svg/01_base_prueba-rd-intervencion-terreno_editable.svg')">Copiar ruta</button>
+          <button class="btn" onclick="showLargePreview('../svg/prueba-rd-intervencion-terreno/salida_generada/01_editables_svg/01_base_prueba-rd-intervencion-terreno_editable.svg', 'prueba-rd-intervencion-terreno')">Vista grande</button>
+        </div>
+        <div class="mejoras"><b>Mejoras:</b> Añadir layout para múltiples eventos simultáneos, export directo a PDF print-ready.</div>
+      </div>
+
+      <!-- rider_rd_intervencion_terreno -->
+      <div class="svg-card">
+        <h3>rider_rd_intervencion_terreno</h3>
+        <div class="meta">Rider técnico operativo • 2 piezas</div>
+        <div class="svg-view">
+          <object data="../svg/rider_rd_intervencion_terreno/salida_generada/01_editables_svg/01_requerimientos_rider_editable.svg" type="image/svg+xml" width="100%" height="200">
+            <div class="fallback">Rider requerimientos</div>
+          </object>
+        </div>
+        <div class="actions">
+          <a class="btn" href="../svg/rider_rd_intervencion_terreno/salida_generada/01_editables_svg/01_requerimientos_rider_editable.svg" target="_blank">Editar requerimientos</a>
+          <a class="btn-sec btn" href="../svg/rider_rd_intervencion_terreno/salida_generada/01_editables_svg/02_layout_operativo_editable.svg" target="_blank">Layout operativo</a>
+          <button class="btn-sec btn" onclick="usarComoBase('../svg/rider_rd_intervencion_terreno/salida_generada/01_editables_svg/01_requerimientos_rider_editable.svg', 'rider')">Usar como base</button>
+          <button class="btn" onclick="showLargePreview('../svg/rider_rd_intervencion_terreno/salida_generada/01_editables_svg/01_requerimientos_rider_editable.svg', 'rider_rd')">Vista grande</button>
+        </div>
+        <div class="mejoras"><b>Mejoras:</b> Generar desde plano_stands automáticamente + sync con cotizaciones.</div>
+      </div>
+
+      <!-- etiquetas_ejemplo -->
+      <div class="svg-card">
+        <h3>etiquetas_ejemplo (RD)</h3>
+        <div class="meta">Línea etiquetas • impulso + base blanca</div>
+        <div class="svg-view">
+          <object data="../svg/etiquetas_ejemplo/salida_generada/01_editables_svg/01_etiqueta_impulso_editable.svg" type="image/svg+xml" width="100%" height="200">
+            <div class="fallback">Etiqueta impulso editable</div>
+          </object>
+        </div>
+        <div class="actions">
+          <a class="btn" href="../svg/etiquetas_ejemplo/salida_generada/01_editables_svg/01_etiqueta_impulso_editable.svg" target="_blank">Impulso editable</a>
+          <a class="btn-sec btn" href="../svg/etiquetas_ejemplo/salida_generada/01_editables_svg/02_etiqueta_base_blanca_editable.svg" target="_blank">Base blanca</a>
+          <button class="btn-sec btn" onclick="usarComoBase('../svg/etiquetas_ejemplo/salida_generada/01_editables_svg/01_etiqueta_impulso_editable.svg', 'etiqueta')">Usar como base</button>
+          <a class="btn-sec btn" href="../svg/etiquetas_ejemplo/salida_generada/04_exports/" target="_blank">Exports ZIP</a>
+        </div>
+        <div class="mejoras"><b>Mejoras:</b> Añadir más sabores de suplementos a línea de etiquetas; preview grid 2xN.</div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- SUPLEMENTOS RD -->
+  <div class="group">
+    <div class="section-title">RD • Suplementos</div>
+    <div class="grid">
+
+      <div class="svg-card">
+        <h3>01_linea_suplementos_rd</h3>
+        <div class="meta">Línea completa 2800x2000 • 7 productos</div>
+        <div class="svg-view">
+          <object data="../svg/suplementos_rd/02_editables_svg/01_linea_suplementos_rd_editable.svg" type="image/svg+xml" width="100%" height="210">
+            <div class="fallback">Linea completa editable</div>
+          </object>
+        </div>
+        <div class="actions">
+          <a class="btn" href="../svg/suplementos_rd/02_editables_svg/01_linea_suplementos_rd_editable.svg" target="_blank">Editar línea</a>
+          <a class="btn-sec btn" href="../svg/suplementos_rd/03_final_vectorizado_svg/01_linea_suplementos_rd_vectorizado.svg" target="_blank">Vectorizado</a>
+          <button class="btn-sec btn" onclick="usarComoBase('../svg/suplementos_rd/02_editables_svg/01_linea_suplementos_rd_editable.svg', 'suplementos_linea')">Usar como base</button>
+          <button class="btn" onclick="showLargePreview('../svg/suplementos_rd/02_editables_svg/01_linea_suplementos_rd_editable.svg', 'linea_suplementos')">Vista grande</button>
+        </div>
+        <div class="mejoras"><b>Mejoras:</b> Separar en piezas individuales + grid export; auto-generar desde contenido JSON.</div>
+      </div>
+
+      <div class="svg-card">
+        <h3>02_impulso + 03_hongos</h3>
+        <div class="meta">Productos individuales</div>
+        <div class="svg-view" style="display:flex;gap:4px;">
+          <object data="../svg/suplementos_rd/02_editables_svg/02_impulso_editable.svg" type="image/svg+xml" style="flex:1;height:170px"></object>
+          <object data="../svg/suplementos_rd/02_editables_svg/03_hongos_adaptogenos_editable.svg" type="image/svg+xml" style="flex:1;height:170px"></object>
+        </div>
+        <div class="actions">
+          <a class="btn-sec btn" href="../svg/suplementos_rd/02_editables_svg/02_impulso_editable.svg" target="_blank">Impulso</a>
+          <a class="btn-sec btn" href="../svg/suplementos_rd/02_editables_svg/03_hongos_adaptogenos_editable.svg" target="_blank">Hongos</a>
+          <button class="btn-sec btn" onclick="usarComoBase('../svg/suplementos_rd/02_editables_svg/02_impulso_editable.svg', 'suplemento_impulso')">Usar impulso</button>
+        </div>
+      </div>
+
+      <div class="svg-card">
+        <h3>04_pre_fiesta + 05_magnesio + 06_creatina</h3>
+        <div class="meta">Pre-fiesta • Magnesio • Creatina</div>
+        <div class="svg-view" style="display:flex;gap:4px;flex-wrap:wrap;">
+          <object data="../svg/suplementos_rd/02_editables_svg/04_pre_fiesta_editable.svg" type="image/svg+xml" style="flex:1;min-height:130px"></object>
+          <object data="../svg/suplementos_rd/02_editables_svg/05_magnesio_editable.svg" type="image/svg+xml" style="flex:1;min-height:130px"></object>
+          <object data="../svg/suplementos_rd/02_editables_svg/06_creatina_monohidratada_editable.svg" type="image/svg+xml" style="flex:1;min-height:130px"></object>
+        </div>
+        <div class="actions">
+          <a class="btn-sec btn" href="../svg/suplementos_rd/02_editables_svg/04_pre_fiesta_editable.svg" target="_blank">Pre-fiesta</a>
+          <a class="btn-sec btn" href="../svg/suplementos_rd/02_editables_svg/05_magnesio_editable.svg" target="_blank">Magnesio</a>
+          <a class="btn-sec btn" href="../svg/suplementos_rd/02_editables_svg/06_creatina_monohidratada_editable.svg" target="_blank">Creatina</a>
+          <button class="btn-sec btn" onclick="usarComoBase('../svg/suplementos_rd/02_editables_svg/04_pre_fiesta_editable.svg', 'pre_fiesta')">Usar pre-fiesta</button>
+        </div>
+        <div class="mejoras"><b>Mejoras:</b> Unificar estilo con flyers de eventos para cross-promotion.</div>
+      </div>
+
+      <div class="svg-card">
+        <h3>07_proteina</h3>
+        <div class="meta">Proteína • última pieza de la línea</div>
+        <div class="svg-view">
+          <object data="../svg/suplementos_rd/02_editables_svg/07_proteina_editable.svg" type="image/svg+xml" width="100%" height="180"></object>
+        </div>
+        <div class="actions">
+          <a class="btn" href="../svg/suplementos_rd/02_editables_svg/07_proteina_editable.svg" target="_blank">Editar proteína</a>
+          <a class="btn-sec btn" href="../svg/suplementos_rd/03_final_vectorizado_svg/07_proteina_vectorizado.svg" target="_blank">Vectorizado</a>
+          <button class="btn-sec btn" onclick="usarComoBase('../svg/suplementos_rd/02_editables_svg/07_proteina_editable.svg', 'proteina')">Usar como base</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <div class="group">
+    <div class="section-title">ISKVW • Arte 2D / 3D</div>
+    <div class="grid">
+      <div class="svg-card">
+        <h3>Exploración visual</h3>
+        <div class="meta">Concepto • mood • referencias</div>
+        <div class="hint">Usar para piezas más artísticas, moodboards o ideas visuales que luego pueden pasar a producción.</div>
+      </div>
+      <div class="svg-card">
+        <h3>2D / 3D</h3>
+        <div class="meta">Composición • forma • volumen</div>
+        <div class="hint">Ideal cuando la pieza requiere un tratamiento más experimental o escultórico.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="footer">
+    BRAND ENFORCED: todos visuals usan identidad flujo exacta. Corre Brand Validator en hub antes de export. <br>
+    RD se usa para operación y campaña. ISKVW para exploración y arte. <br>
+    <b>Tip agente:</b> Copia la ruta + úsala en config.json de un nuevo proyecto piezas_vectoriales o como referencia para flujo analyze.
+    <br><a href="flujo_hub.html" style="color:var(--accent); font-weight:600">← Volver al Hub principal / menú del flujo</a>
+    &nbsp;•&nbsp; <a href="plano_demo.html" style="color:var(--accent)">Ir a Plano Demo</a>
+  </div>
+
+</div>
+
+<!-- LARGE PREVIEW MODAL -->
+<div id="svgModal" class="modal">
+  <div class="modal-content">
+    <div class="modal-header">
+      <strong id="modalTitle">Vista grande SVG</strong>
+      <button class="btn-sec" onclick="closeModal()" style="padding:4px 10px">Cerrar ✕</button>
+    </div>
+    <div class="modal-body" id="modalBody">
+      <!-- object injected by JS -->
+    </div>
+    <div class="modal-footer">
+      <button class="btn-sec btn" onclick="copyCurrentPath()">Copiar ruta</button>
+      <button class="btn-sec btn" onclick="useCurrentAsBase()">Usar como base</button>
+      <button class="btn" onclick="closeModal()">Cerrar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+function usarComoBase(path, nombre) {
+  const cmd = `py -m flujo render run projects/piezas_vectoriales/<tu-proyecto>/config.json --for illustrator`;
+  const msg = `USAR COMO BASE (SVG):\n\nRuta editable: ${path}\nPieza: ${nombre}\n\nPasos:\n1. Copia el archivo editable a un nuevo proyecto en projects/piezas_vectoriales/\n2. Ajusta config.json usando flujo.json\n3. Desde el hub genera brief y usa: ${cmd}\n\nTip: abre el hub y pega un pedido similar para hacer match.`;
+  navigator.clipboard.writeText(path + '\n' + msg).then(() => {
+    alert('Copiado al portapapeles (ruta + instrucciones + comando).\n\n' + msg);
+  }).catch(() => alert(msg));
+}
+function copyPath(p) {
+  navigator.clipboard.writeText(p).then(() => alert('Ruta copiada: ' + p));
+}
+
+let currentPath = '';
+let currentName = '';
+
+function showLargePreview(path, name) {
+  currentPath = path;
+  currentName = name || 'Pieza SVG';
+  const modal = document.getElementById('svgModal');
+  const body = document.getElementById('modalBody');
+  const title = document.getElementById('modalTitle');
+  title.textContent = 'Vista grande: ' + currentName;
+
+  body.innerHTML = `<object data="${path}" type="image/svg+xml" style="width:100%; height:78vh; max-height:78vh;"></object>`;
+  modal.classList.add('show');
+}
+
+function closeModal() {
+  const modal = document.getElementById('svgModal');
+  modal.classList.remove('show');
+  // optional cleanup
+}
+
+function copyCurrentPath() {
+  if (currentPath) copyPath(currentPath);
+}
+
+function useCurrentAsBase() {
+  if (currentPath) {
+    usarComoBase(currentPath, currentName);
+  }
+}
+
+// Optional: allow closing modal with Escape
+document.addEventListener('keydown', function(e) {
+  if (e.key === 'Escape') {
+    const m = document.getElementById('svgModal');
+    if (m && m.classList.contains('show')) closeModal();
+  }
+});
+
+function filterSVGWorks() {
+  const q = (document.getElementById('svgFilter').value || '').toLowerCase().trim();
+  const cards = document.querySelectorAll('.svg-card');
+  cards.forEach(card => {
+    const txt = card.textContent.toLowerCase();
+    card.style.display = (!q || txt.includes(q)) ? '' : 'none';
+  });
+}
+
+// Live backend integration (when launched via flujo app / --desktop)
+function getPywebviewApi() {
+  try { return (window.pywebview && window.pywebview.api) || null; } catch(e){return null;}
+}
+function callLive(endpoint) {
+  const api = getPywebviewApi();
+  if (api && endpoint.includes('svg')) {
+    return Promise.resolve(api.list_svg_works ? api.list_svg_works() : fetch(endpoint).then(r=>r.json()));
+  }
+  return fetch(endpoint).then(r=>r.json()).catch(()=> ({}));
+}
+
+function loadLiveSvgWorks() {
+  const container = document.getElementById('live-svg-grid');
+  const hint = document.getElementById('live-hint');
+  if (!container) return;
+  container.style.display = 'grid';
+  container.innerHTML = '<div class="small muted">Escaneando svg/ desde backend...</div>';
+  callLive('/api/list-svg-works').then(d => {
+    if (!d.groups || Object.keys(d.groups).length === 0) {
+      container.innerHTML = '<div class="small muted">Sin datos live (usa flujo app). Mostrando estáticos.</div>';
+      return;
+    }
+    let html = '';
+    Object.keys(d.groups).forEach(g => {
+      const its = d.groups[g] || [];
+      html += `<div class="svg-card"><h3>${g}</h3><div class="meta">live • ${its.length} piezas</div>`;
+      its.slice(0,3).forEach(it => {
+        const p = '../' + it.path;
+        html += `<div class="actions" style="margin:4px 0"><a class="btn-sec btn" href="${p}" target="_blank">${it.name}</a> <button class="btn-sec btn" onclick="usarComoBase('${p}','${it.name}')">Usar base</button></div>`;
+      });
+      html += '</div>';
+    });
+    container.innerHTML = html;
+    if (hint) hint.textContent = `Live: ${d.count} SVGs cargados desde backend.`;
+  }).catch(() => {
+    container.style.display = 'none';
+    if (hint) hint.textContent = '(sin backend live)';
+  });
+}
+
+// Auto attempt live load on desktop/app
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', () => setTimeout(loadLiveSvgWorks, 350));
+} else {
+  setTimeout(loadLiveSvgWorks, 350);
+}
+</script>
+</body>
+</html>

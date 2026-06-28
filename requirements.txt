@@ -1,0 +1,11 @@
+# Dependencias de flujo
+# Instalar con: python -m pip install -r requirements.txt
+
+matplotlib>=3.7.0
+pyyaml>=6.0
+instaloader>=4.10
+pydantic>=2.7
+typer>=0.12
+rich>=13.0
+jsonschema>=4.0
+requests>=2.0

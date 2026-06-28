@@ -1,0 +1,2 @@
+{"sample":"codeine_001","mode":"W","word":"CODEINE","before_points":320,"after_points":302,"removed":18,"moved":44,"collapsed":11,"round_fixed":3,"approved":true,"note":"bien, no deformo O","script_version":"logo_clean_master_v1"}
+{"sample":"brand_001","mode":"W","word":"BRAND","before_points":410,"after_points":390,"removed":20,"moved":50,"collapsed":30,"round_fixed":4,"approved":false,"note":"B perdio curva; no cerrar handles completos en MIXED","script_version":"pre_master"}

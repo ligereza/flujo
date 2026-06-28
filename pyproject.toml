@@ -1,0 +1,58 @@
+[project]
+name = "flujo"
+version = "0.35.13"
+description = "Dimensiones del Orden — arte y automatización"
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [
+    {name = "ligereza"}
+]
+license = {text = "MIT"}
+dependencies = [
+    "matplotlib>=3.7.0",
+    "pyyaml>=6.0",
+    "instaloader>=4.10",
+    "pydantic>=2.7",
+    "typer>=0.12",
+    "rich>=13.0",
+    "jsonschema>=4.0",
+    "requests>=2.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=7.4.0",
+    "pre-commit>=3.0",
+]
+web = [
+    "pywebview>=5.0",  # desktop window (BSD free); pip install pywebview
+]
+desktop-extras = [
+    "pystray>=0.19",   # optional tray icon for --desktop (free)
+    "Pillow>=10",      # for tray image gen (free)
+]
+build = [
+    "pyinstaller>=6.0",  # free packaging to .exe; 'flujo package'. Not runtime dep.
+]
+
+[project.scripts]
+flujo = "flujo.cli:app"
+
+[build-system]
+requires = ["setuptools>=61", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.black]
+line-length = 100
+target-version = ["py310"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"

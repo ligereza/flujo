@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>flujo • Tapiz Void — Pro Pattern Analysis (brand enforced)</title>
+  <style>
+    :root {
+      /*
+      =====================================================================
+      BRAND ENFORCED — flujo Tapiz Void (projects/flujo/flujo.json)
+      =====================================================================
+      Dark pro ONLY. EXACT: ink #1f2a24 / accent #2d5a4a / paper #f8f1e3 (sparing) / support #675f55 / alert #c2410f
+      Generous pro layout (padding 1.6rem+), Inter system, radius 8px, premium shadows.
+      FORBIDDEN: neon/cyber/hacker/light UIs/amateur spacing/experimental "vibecode".
+      Default for all pro outputs: flujo palette. Must pass hub Brand Validator.
+      */
+      --bg: #0a0a0a;
+      --panel: #141414;
+      --border: #2a2a2a;
+      --text: #e8e8e8;
+      --muted: #888;
+      --accent: #2d5a4a;
+      --flujo-ink: #1f2a24; --flujo-accent: #2d5a4a; --flujo-paper: #f8f1e3;
+      --flujo-support: #675f55; --flujo-alert: #c2410f;
+      --void: #e8e8e8;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', system-ui, sans-serif;
+      font-size: 13px;
+      line-height: 1.45;
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    aside {
+      width: 280px;
+      min-width: 240px;
+      background: var(--panel);
+      border-right: 1px solid var(--border);
+      padding: 1.6rem; /* generous breathing */
+      display: flex;
+      flex-direction: column;
+      gap: 1.1rem;
+      overflow-y: auto;
+    }
+
+    h1 { margin: 0; font-size: 1.1rem; color: #fff; letter-spacing: -0.01em; font-weight:700; }
+    h1 span { color: var(--accent); font-weight: 400; }
+
+    .hint { font-size: 0.75rem; color: var(--muted); line-height: 1.4; }
+
+    .group { display: flex; flex-direction: column; gap: 0.35rem; }
+    label { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; font-weight:600; }
+
+    select, input[type="range"], button, textarea {
+      background: var(--panel2,#1a1a1a);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      padding: 0.55rem 0.7rem;
+      font-family: inherit;
+      font-size: 0.85rem;
+      outline: none;
+    }
+
+    select:focus, input:focus, textarea:focus, button:focus { border-color: var(--accent); }
+
+    textarea { resize: vertical; min-height: 120px; line-height: 1.4; color: var(--muted); font-family: ui-monospace, monospace; }
+
+    .row { display: flex; gap: 0.5rem; align-items: center; }
+    .row input[type="range"] { flex: 1; }
+    .row span { min-width: 2.5rem; text-align: right; font-size: 0.75rem; color:var(--muted); }
+
+    button {
+      cursor: pointer;
+      transition: all .15s;
+      font-weight: 600;
+    }
+    button:hover { background: rgba(45,90,74,.1); border-color: var(--accent); color: var(--text); }
+    button.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+    #fileInput { display: none; }
+
+    main {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      padding: 2rem;
+    }
+
+    #canvas {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1.8rem 2rem; /* generous */
+      white-space: pre;
+      font-size: 13px;
+      line-height: 1.5;
+      overflow: hidden;
+      box-shadow: 0 8px 40px rgba(0,0,0,.65);
+      font-family: ui-monospace, monospace;
+    }
+
+    /* El texto es casi invisible; los espacios usan brand darks premium */
+    #canvas .word { color: #141414; }
+    #canvas .word.ghost { color: #2a2a2a; }
+    #canvas .space {
+      background: var(--void);
+      color: var(--bg);
+    }
+    #canvas .space.block {
+      background: transparent;
+      color: var(--void);
+    }
+  </style>
+</head>
+<body>
+  <aside>
+    <h1>flujo • Tapiz <span>Void</span></h1>
+    <p class="hint">BRAND ENFORCED: patrón profesional de espacios (estructura). Paleta flujo EXACTA (projects/flujo/flujo.json) por defecto. Dark pro premium — NADA experimental. Valida en hub antes de export.</p>
+    <div style="font-size:10px;color:#2d5a4a;margin-top:-4px;">Brand enforced • dark pro • estructura pro, no vibecoding</div>
+
+    <div class="group">
+      <label>Código fuente</label>
+      <textarea id="source" spellcheck="false"></textarea>
+    </div>
+
+    <div class="group">
+      <div class="row">
+        <button id="loadFile">📂 Cargar</button>
+        <button id="resetSample">🔄 Demo</button>
+        <button id="autoGen" class="active">⚙ Auto</button>
+      </div>
+      <input type="file" id="fileInput" accept=".py,.txt,.js,.ts,.md,.json,.html,.css,.c,.cpp,.rs,.go" />
+    </div>
+
+    <div class="group">
+      <label>Modo</label>
+      <select id="mode">
+        <option value="negative">negative — espacios iluminados</option>
+        <option value="blocks">blocks — densidad de espacios</option>
+      </select>
+    </div>
+
+    <div class="group">
+      <label>Velocidad</label>
+      <div class="row">
+        <input type="range" id="speed" min="1" max="100" value="40" />
+        <span id="speedVal">40</span>
+      </div>
+    </div>
+
+    <div class="group">
+      <label>Ventana (líneas)</label>
+      <div class="row">
+        <input type="range" id="window" min="10" max="60" value="30" />
+        <span id="windowVal">30</span>
+      </div>
+    </div>
+
+    <div class="group">
+      <div class="row">
+        <button id="playPause" class="active">⏸ Pausar</button>
+      </div>
+      <div style="margin-top:8px;"><a href="../../context/flujo_hub.html" style="color:#2d5a4a;font-size:11px;font-weight:600;text-decoration:none;">← Volver al Hub principal (flujo)</a></div>
+    </div>
+
+    <div class="group">
+      <div class="row">
+        <label><input type="checkbox" id="ghost" /> Texto fantasma</label>
+      </div>
+    </div>
+  </aside>
+
+  <main>
+    <pre id="canvas"></pre>
+  </main>
+
+  <script>
+    // Paleta monocromática basada en flujo (brand enforced, dark pro) — negative pattern viz only. No experimental.
+    const SAMPLE_CODE = `# --- Topología de IA: indentación y one-liners ---
+
+def procesar_tensores(matriz, factores):
+    resultados = []
+    for fila in matriz:
+        activacion = [max(0.0, x * f) for x, f in zip(fila, factores)]
+        if sum(activacion) > 100.5:
+            resultados.append(activacion)
+    return resultados
+
+# One-liner denso
+data = list(map(lambda x: x**2, filter(lambda y: y % 2 == 0, range(1000))))
+
+class Modelo:
+    def __init__(self, capas):
+        self.capas = capas
+
+    def forward(self, x):
+        for capa in self.capas:
+            x = capa(x)
+        return x
+`;
+
+    const NAMES = ["data", "items", "results", "values", "tensor", "features", "labels", "model"];
+    const FUNCS = ["process", "transform", "compute", "normalize", "encode", "decode", "predict", "forward"];
+    const OPS = ["+", "-", "*", "/", "**", "%"];
+
+    function generateLine(indent) {
+      const r = Math.random();
+      const ind = ' '.repeat(indent);
+      if (r < 0.05) return '';
+      if (r < 0.10) return ind + '# ' + ['step', 'layer', 'block', 'attention', 'loop'][Math.floor(Math.random() * 5)] + ' ' + Math.floor(Math.random() * 99);
+      if (r < 0.20) return ind + 'def ' + pick(FUNCS) + '_' + pick(NAMES) + '(' + sample(NAMES, 2).join(', ') + '):';
+      if (r < 0.30) return ind + 'for ' + pick(NAMES) + ' in ' + pick(NAMES) + ':';
+      if (r < 0.40) return ind + 'if ' + pick(NAMES) + ' ' + pick(['>', '<', '==', '>=']) + ' ' + (Math.random() * 100).toFixed(2) + ':';
+      if (r < 0.50) return ind + 'return ' + pick(NAMES);
+      if (r < 0.60) return ind + pick(NAMES) + ' = ' + pick(NAMES) + ' ' + pick(OPS) + ' ' + (Math.random() * 10).toFixed(2);
+      if (r < 0.70) return ind + pick(NAMES) + ' = [' + pick(NAMES) + ' for _ in range(' + Math.floor(Math.random() * 18 + 2) + ')]';
+      if (r < 0.80) return ind + pick(NAMES) + ' = {k: v for k, v in ' + pick(NAMES) + '.items()}';
+      if (r < 0.90) return ind + pick(NAMES) + ' = list(map(lambda x: x ' + pick(OPS) + ' ' + Math.floor(Math.random() * 8 + 2) + ', ' + pick(NAMES) + '))';
+      return ind + pick(NAMES) + '.append(' + pick(NAMES) + ')';
+    }
+
+    function* autoGenerator() {
+      let indent = 0;
+      while (true) {
+        const line = generateLine(indent);
+        yield line;
+        if (line.trimEnd().endsWith(':')) {
+          indent += 4;
+          if (indent > 20) indent = 0;
+        } else if (Math.random() < 0.2 && indent >= 4) {
+          indent -= 4;
+        }
+      }
+    }
+
+    function pick(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+    function sample(arr, n) {
+      const copy = [...arr];
+      for (let i = copy.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy.slice(0, n);
+    }
+
+    const escapeHtml = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+    const els = {
+      source: document.getElementById('source'),
+      canvas: document.getElementById('canvas'),
+      mode: document.getElementById('mode'),
+      speed: document.getElementById('speed'),
+      speedVal: document.getElementById('speedVal'),
+      window: document.getElementById('window'),
+      windowVal: document.getElementById('windowVal'),
+      playPause: document.getElementById('playPause'),
+      autoGen: document.getElementById('autoGen'),
+      loadFile: document.getElementById('loadFile'),
+      fileInput: document.getElementById('fileInput'),
+      resetSample: document.getElementById('resetSample'),
+      ghost: document.getElementById('ghost')
+    };
+
+    let playing = true;
+    let autoMode = true;
+    let sourceLines = [];
+    let sourceIndex = 0;
+    let generator = null;
+    let buffer = [];
+    let rafId = null;
+    let lastTime = 0;
+
+    function tokenize(line) {
+      const tokens = [];
+      const regex = /(\s+)/g;
+      let last = 0;
+      let m;
+      while ((m = regex.exec(line)) !== null) {
+        if (m.index > last) tokens.push({ type: 'word', text: line.slice(last, m.index) });
+        tokens.push({ type: 'space', text: m[1] });
+        last = m.index + m[1].length;
+      }
+      if (last < line.length) tokens.push({ type: 'word', text: line.slice(last) });
+      return tokens;
+    }
+
+    function renderLine(line, mode, ghost) {
+      const tokens = tokenize(line);
+      const blocks = [' ', '▁', '▂', '▃', '▄', '▅', '▆', '▇', '█'];
+      let html = '';
+      for (const tok of tokens) {
+        if (tok.type === 'space') {
+          if (mode === 'negative') {
+            html += `<span class="space">${' '.repeat(tok.text.length)}</span>`;
+          } else {
+            const idx = Math.min(tok.text.length, blocks.length - 1);
+            const char = blocks[idx].repeat(tok.text.length);
+            html += `<span class="space block">${char}</span>`;
+          }
+        } else {
+          const cls = ghost ? 'word ghost' : 'word';
+          html += `<span class="${cls}">${escapeHtml(tok.text)}</span>`;
+        }
+      }
+      return html;
+    }
+
+    function draw() {
+      const win = parseInt(els.window.value, 10);
+      const mode = els.mode.value;
+      const ghost = els.ghost.checked;
+      // Ventana deslizante: últimas N líneas
+      const visible = buffer.slice(-win);
+      const html = visible.map(line => renderLine(line, mode, ghost)).join('\n');
+      els.canvas.innerHTML = html;
+    }
+
+    function pushLine(line) {
+      buffer.push(line);
+      const win = parseInt(els.window.value, 10);
+      if (buffer.length > win * 2) {
+        buffer = buffer.slice(-win); // mantener solo un poco más para suavidad
+      }
+      draw();
+    }
+
+    function tick(now) {
+      if (!playing) return;
+      const speed = parseInt(els.speed.value, 10);
+      const delay = 1000 / (speed * 0.5 + 0.5); // ms entre líneas
+      if (now - lastTime > delay) {
+        lastTime = now;
+        let line;
+        if (autoMode) {
+          line = generator.next().value;
+        } else {
+          if (sourceIndex >= sourceLines.length) sourceIndex = 0;
+          line = sourceLines[sourceIndex++];
+        }
+        pushLine(line);
+      }
+      rafId = requestAnimationFrame(tick);
+    }
+
+    function restart() {
+      buffer = [];
+      sourceIndex = 0;
+      if (autoMode) {
+        generator = autoGenerator();
+      } else {
+        sourceLines = els.source.value.split('\n');
+      }
+      if (playing) {
+        cancelAnimationFrame(rafId);
+        rafId = requestAnimationFrame(tick);
+      }
+      draw();
+    }
+
+    function togglePlay() {
+      playing = !playing;
+      els.playPause.textContent = playing ? '⏸ Pausar' : '▶ Reproducir';
+      els.playPause.classList.toggle('active', playing);
+      if (playing) {
+        lastTime = performance.now();
+        rafId = requestAnimationFrame(tick);
+      } else {
+        cancelAnimationFrame(rafId);
+      }
+    }
+
+    function setAuto(enabled) {
+      autoMode = enabled;
+      els.autoGen.classList.toggle('active', enabled);
+      restart();
+    }
+
+    els.playPause.addEventListener('click', togglePlay);
+    els.autoGen.addEventListener('click', () => setAuto(!autoMode));
+
+    els.speed.addEventListener('input', () => els.speedVal.textContent = els.speed.value);
+    els.window.addEventListener('input', () => {
+      els.windowVal.textContent = els.window.value;
+      draw();
+    });
+    els.ghost.addEventListener('change', draw);
+    els.mode.addEventListener('change', draw);
+    els.source.addEventListener('input', () => { if (!autoMode) restart(); });
+
+    els.loadFile.addEventListener('click', () => els.fileInput.click());
+    els.fileInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        els.source.value = ev.target.result;
+        setAuto(false);
+      };
+      reader.readAsText(file);
+    });
+
+    els.resetSample.addEventListener('click', () => {
+      els.source.value = SAMPLE_CODE;
+      setAuto(false);
+    });
+
+    // Inicializar
+    els.source.value = SAMPLE_CODE;
+    setAuto(true);
+  </script>
+</body>
+</html>

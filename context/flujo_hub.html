@@ -1,0 +1,1845 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FLUJO • Workspace</title>
+<link rel="manifest" href="/manifest.json">
+<style>
+  /*
+  =====================================================================
+  BRAND ENFORCED — flujo (projects/flujo/flujo.json) — STRICT VISUAL QA
+  =====================================================================
+  - EXACT colors ONLY: ink #1f2a24, accent #2d5a4a, paper #f8f1e3 (SVG print ONLY), support #675f55, alert #c2410f
+  - Dark pro theme EXCLUSIVELY: #0a0a0a bg, #141414 panels — ZERO light/paper/chrome outside intended SVG paper areas
+  - Typography: Inter / system sans, 700/600 weights for hierarchy, letter-spacing 0.04-0.08em controlled
+  - Layout: generous spacing (section 28px, card padding 18px+), pro cards (border-radius:8px), modular blocks, subtle frames, safe margins
+  - Motifs: accent left bars on .section-title, uppercase pro-labels, linear-gradient accent buttons, clean borders
+  - FORBIDDEN: any neon/cyan (#00f0ff etc), hacker/matrix/glitch, light UIs, tight spacing, vibecoding experimental, low contrast, non-Inter
+  All outputs (hub, svg_visualizer.html, plano_demo.html, tapiz/*.html, previews, SVGs, renders) MUST use this.
+  Run "VALIDAR BRAND AHORA" before EVERY export/deliverable. Designer trust depends on premium consistent feel.
+  Source of truth: projects/flujo/flujo.json — edit colors there + sync :root here.
+  */
+  :root {
+    --bg: #0a0a0a; --panel: #141414; --panel2: #1a1a1a;
+    --border: #2a2a2a; --text: #e8e8e8; --muted: #888;
+    /* flujo brand exact from projects/flujo/flujo.json (adapted for dark pro UI) — NO legacy cyan/neon */
+    --flujo-ink: #1f2a24;
+    --flujo-accent: #2d5a4a;
+    --flujo-paper: #f8f1e3;
+    --flujo-support: #675f55;
+    --flujo-alert: #c2410f;
+    --accent: #2d5a4a;
+    /* use --flujo-alert for orange, --flujo-support for muted greens if needed */
+  }
+  * { box-sizing: border-box; margin:0; padding:0; }
+  body { background: var(--bg); color: var(--text); font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; font-size: 14px; line-height: 1.5; }
+  .app { max-width: 1280px; margin: 0 auto; padding-bottom: 40px; }
+  header { background: var(--panel); border-bottom: 1px solid var(--border); padding: 14px 24px; display: flex; align-items: center; gap: 14px; } /* generous header padding */
+  header h1 { font-size: 18px; font-weight: 700; letter-spacing: -0.02em; }
+  .badge { background: var(--flujo-accent); color: #fff; padding: 4px 12px; border-radius: 4px; font-size: 11px; font-weight: 600; letter-spacing: 0.04em; }
+  .spacer { flex: 1; }
+  .nav-link { background: var(--panel2); border: 1px solid var(--border); color: var(--text); padding: 8px 14px; border-radius: 4px; font-size: 12px; text-decoration: none; }
+  .nav-link:hover { border-color: var(--accent); }
+  .section { margin: 28px 24px; } /* breathing room */
+  .section-title { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; }
+  .section-title::before { content: ''; width: 3px; height: 14px; background: var(--accent); border-radius: 2px; }
+  .card { background: var(--panel); border: 1px solid var(--border); border-radius: 8px; padding: 18px; transition: all .15s; } /* pro padding, radius */
+  .card:hover { border-color: var(--accent); }
+  .fmt-card { background: var(--panel); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; cursor: pointer; min-width: 132px; transition: all .15s; }
+  .fmt-card:hover { border-color: var(--accent); }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 14px; } /* more space */
+  .grid-3 { grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
+  .btn { background: linear-gradient(135deg, var(--accent), #1a3f2e); color: #fff; border: none; border-radius: 5px; padding: 9px 16px; font-weight: 700; font-size: 12px; cursor: pointer; text-transform: uppercase; letter-spacing: 0.05em; }
+  .btn:hover { opacity: .92; }
+  .btn-sec { background: var(--panel2); color: var(--text); border: 1px solid var(--border); }
+  .btn-sec:hover { border-color: var(--accent); background: rgba(45,90,74,.08); }
+  .tool-btn { background: var(--panel); border: 1px solid var(--border); color: var(--text); padding: 9px 12px; border-radius: 5px; font-size: 12px; cursor: pointer; text-align: center; transition: all .15s; }
+  .tool-btn:hover { border-color: var(--accent); background: rgba(45,90,74,.06); }
+  .preview { border: 1px solid var(--border); background: var(--bg); border-radius: 8px; min-height: 140px; display:flex; align-items:center; justify-content:center; overflow:hidden; padding: 8px; }
+  .preview svg { max-width: 100%; max-height: 100%; box-shadow: 0 4px 20px rgba(0,0,0,.5); }
+  .agent-raw { background: var(--panel2); border: 1px solid var(--border); padding: 14px; border-radius: 6px; font-size: 11px; line-height: 1.4; font-family: ui-monospace, monospace; color: var(--text); }
+  .muted { color: var(--muted); font-size: 12px; }
+  .status-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 14px; }
+  .status-val { font-size: 22px; font-weight: 600; letter-spacing: -0.01em; }
+  input, textarea, select { width: 100%; background: var(--panel2); border: 1px solid var(--border); border-radius: 5px; padding: 10px 12px; color: var(--text); font-size: 13px; font-family: inherit; }
+  input:focus, textarea:focus { border-color: var(--accent); outline: none; }
+  .row { display: flex; gap: 10px; }
+  .pro-label { font-size: 10px; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin-bottom: 4px; }
+  .sep { height: 1px; background: var(--border); margin: 22px 0; }
+  .small { font-size: 11px; }
+  .hero-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; }
+  .hero-card { background: linear-gradient(135deg, rgba(45,90,74,0.16), rgba(20,20,20,0.98)); border-left: 3px solid var(--accent); }
+  .top-hero { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; flex-wrap: wrap; }
+  .hero-main { flex: 1; min-width: 280px; }
+  .status-stack { display: flex; flex-direction: column; gap: 8px; min-width: 140px; }
+  .status-chip { background: rgba(20,20,20,0.78); border: 1px solid var(--border); border-radius: 6px; padding: 8px 10px; }
+  .status-chip span { display: block; font-size: 10px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); }
+  .status-chip strong { display: block; font-size: 13px; color: var(--text); margin-top: 2px; }
+  .status-chip.live { border-color: rgba(45,90,74,.35); background: rgba(45,90,74,.12); }
+  .kicker { font-size: 10px; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin-bottom: 6px; }
+  .inline-pill { display: inline-flex; align-items: center; gap: 6px; padding: 4px 8px; background: rgba(45,90,74,.12); border: 1px solid rgba(45,90,74,.24); border-radius: 999px; font-size: 10px; color: var(--text); letter-spacing: .04em; }
+  .compact-list { display: grid; gap: 8px; font-size: 12px; color: var(--muted); }
+  .compact-list span { display: flex; align-items: center; gap: 8px; }
+  .compact-list span::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); display: inline-block; }
+  /* UI/UX Optimizer: tabs + modal + clean nav for pro workspace (uses existing --flujo-* / --accent vars; no new colors) */
+  .tab-bar { display: flex; gap: 4px; flex-wrap: wrap; background: var(--panel); border-bottom: 1px solid var(--border); padding: 8px 24px; position: sticky; top: 0; z-index: 50; }
+  .tab-btn { background: var(--panel2); color: var(--text); border: 1px solid var(--border); padding: 6px 12px; border-radius: 4px; font-size: 11px; font-weight: 600; letter-spacing: .04em; cursor: pointer; text-transform: uppercase; }
+  .tab-btn:hover { border-color: var(--accent); }
+  .tab-btn.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+  .quick-switch { background: var(--panel2); color: var(--text); border: 1px solid var(--border); border-radius: 4px; padding: 4px 8px; font-size: 11px; }
+  /* Datadrop viewer reuses close-btn (Agent3 robust UX; standalone for dynamic modal) */
+  .close-btn { background: var(--panel2); border: 1px solid var(--border); color: var(--text); padding: 4px 10px; border-radius: 3px; cursor: pointer; font-size: 11px; }
+  .close-btn:hover { border-color: var(--accent); }
+  footer { margin: 36px 24px 12px; font-size: 11px; color: var(--muted); border-top: 1px solid var(--border); padding-top: 14px; }
+</style>
+</head>
+<body>
+<div class="app">
+
+<header>
+  <h1>FLUJO</h1>
+  <span class="badge">Workspace • Creative Direction</span>
+  <span id="header-conn" class="small" style="margin-left:8px; padding:2px 8px; border-radius:3px; background:#1a1a1a; border:1px solid #2a2a2a; color:#888; font-size:10px;">Estático (fallback)</span>
+  <div class="spacer"></div>
+  <select id="quick-switch" class="quick-switch" onchange="switchTabFromSelect(this.value)" title="Cambia de modo rápido (prioriza flujo diario)">
+    <option value="daily">Intake &amp; Jobs</option>
+    <option value="visuales">Visuales &amp; SVG</option>
+    <option value="planos">Planos &amp; Riders</option>
+    <option value="agentes">Agentes &amp; Delegate</option>
+    <option value="herramientas">Herramientas</option>
+  </select>
+  <a class="nav-link" href="svg_visualizer.html" target="_blank">Visualizador SVG</a>
+  <a class="nav-link" href="plano_demo.html" target="_blank">Plano Demo</a>
+  <a id="datadrop-nav-link" class="nav-link" href="javascript:void(0)" onclick="try{ event.preventDefault(); showTab('herramientas','datadrop-section'); }catch(e){ try{ document.getElementById('tab-herramientas').classList.add('active'); document.querySelector('.tab-btn[data-tab=herramientas]').classList.add('active'); document.getElementById('datadrop-section')?.scrollIntoView(); }catch(_){} }" data-tab="herramientas" data-scroll="datadrop-section">Datadrop (en Herramientas)</a>
+  <a class="nav-link" href="../docs/AGENT_OPERATING_MANUAL.md" target="_blank">Manual Agentes</a>
+  <a class="nav-link" href="LAST_HANDOFF.md" target="_blank">LAST_HANDOFF</a>
+  <button class="btn-sec" onclick="copyCmd('py -m flujo daily', this)">Daily</button>
+</header>
+<!-- STATUS -->
+<div class="section">
+  <div class="card hero-card top-hero" style="margin-bottom:14px;">
+    <div class="hero-main">
+      <div class="kicker">Workspace operativo</div>
+      <div style="font-size:15px; font-weight:700; margin-bottom:6px; letter-spacing:-0.02em;">Dos líneas de trabajo claras: RD para la ONG y ISKVW para arte extra y piezas más creativas.</div>
+      <div class="small muted" style="max-width:860px;">Cada área tiene su propio flujo, sus herramientas y sus entregables, para que el hub no se sienta repetitivo ni ambiguo.</div>
+      <div style="margin-top:10px; display:flex; flex-wrap:wrap; gap:8px;">
+        <span class="inline-pill">RD • suplementos / fiestas / terreno</span>
+        <span class="inline-pill">ISKVW • arte 2D / 3D / exploración</span>
+        <span class="inline-pill">Un hub, dos caminos</span>
+      </div>
+      <div class="small muted" style="margin-top:10px;">Siguiente paso: elige la línea correcta y avanza sin mezclar contextos.</div>
+    </div>
+    <div class="status-stack">
+      <div class="status-chip">
+        <span>Versión</span>
+        <strong id="status-version">0.35.13</strong>
+      </div>
+      <div class="status-chip live">
+        <span>Estado</span>
+        <strong id="status-state">En marcha</strong>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- NAV CONECTADO -->
+<div class="section" style="margin-top:8px">
+  <div class="section-title">Índice del hub</div>
+  <div class="row" style="gap:10px; flex-wrap:wrap">
+    <a class="btn" href="svg_visualizer.html">Visualizador SVG</a>
+    <a class="btn btn-sec" href="plano_demo.html">Plano Demo</a>
+    <button class="btn btn-sec" onclick="window.open('../projects/flujo/flujo.json','_blank')">flujo.json</button>
+  </div>
+  <div class="small muted" style="margin-top:4px">El índice organiza el trabajo por áreas; dentro de cada una, el contenido propio se mantiene en su bloque correspondiente.</div>
+</div>
+
+<!-- TAB NAV + PANELS (UI/UX opt: reorganize to not cram all; prioritize daily flow intake→job→visuals→delegate; uses brand vars only) -->
+<div class="tab-bar" role="tablist" aria-label="Modos hub">
+  <button class="tab-btn active" onclick="showTab('daily')" data-tab="daily">Intake &amp; Jobs</button>
+  <button class="tab-btn" onclick="showTab('visuales')" data-tab="visuales">Visuales &amp; SVG</button>
+  <button class="tab-btn" onclick="showTab('planos')" data-tab="planos">Planos &amp; Riders</button>
+  <button class="tab-btn" onclick="showTab('agentes')" data-tab="agentes">Agentes &amp; Delegate</button>
+  <button class="tab-btn" onclick="showTab('herramientas')" data-tab="herramientas">Herramientas</button>
+</div>
+
+<div id="tab-daily" class="tab-panel active">
+<div class="section">
+  <div class="card" style="margin-bottom:12px; border-left:4px solid var(--accent); background:rgba(45,90,74,0.08);">
+    <div class="kicker">Flujo diario</div>
+    <div style="font-size:13px; font-weight:700; margin-bottom:4px;">Pega el pedido, genera el brief y decide si entra por RD o por ISKVW.</div>
+    <div class="small muted">No necesitas volver atrás: intake → clasificación → flujo correcto → revisión.</div>
+  </div>
+  <div class="section-title">Índice por línea de trabajo</div>
+  <div class="grid grid-3">
+    <div class="card">
+      <div class="kicker">RD</div>
+      <div style="font-weight:600; margin-bottom:4px">ONG / trabajo operativo</div>
+      <div class="small muted">Suplementos, flyers, riders, eventos, terreno y materiales de campaña.</div>
+    </div>
+    <div class="card">
+      <div class="kicker">ISKVW</div>
+      <div style="font-weight:600; margin-bottom:4px">Arte extra / exploratorio</div>
+      <div class="small muted">Arte 2D, piezas creativas, visuales más libres y trabajados en 3D si aplica.</div>
+    </div>
+    <div class="card">
+      <div class="kicker">Regla simple</div>
+      <div style="font-weight:600; margin-bottom:4px">No mezclar contextos</div>
+      <div class="small muted">RD usa herramientas de campaña y operación; ISKVW usa herramientas de exploración y arte.</div>
+    </div>
+  </div>
+  <div class="row" style="margin-bottom:10px; gap:8px; flex-wrap:wrap">
+    <button onclick="parsePedido()" class="btn">Generar brief</button>
+    <button onclick="createDraftFromInput()" class="btn btn-sec">Crear job draft</button>
+    <button onclick="document.getElementById('delegate-task').focus()" class="btn btn-sec">Delegar pulido</button>
+    <button onclick="runSafeCommand('flujo health', document.getElementById('pedido-result'))" class="btn btn-sec">Health live</button>
+  </div>
+  <div class="section-title">Intake rápido (pegado manual de pedido o email)</div>
+  <div class="card">
+    <div class="pro-label">Pega aquí el pedido / correo / mensaje <span class="small muted">(o arrastra .txt / .json / .md)</span></div>
+    <textarea id="pedido-input" style="height:68px" placeholder="necesito flyer horizontal 10x14 para evento con 7 voluntarios, testeo incluido..." ondrop="handleDrop(event)" ondragover="event.preventDefault()"></textarea>
+    <div class="row" style="margin-top:8px; gap:8px">
+      <button onclick="parsePedido()" class="btn">Generar brief ordenado + match</button>
+      <button onclick="applyFlujoToBrief()" class="btn btn-sec">Aplicar flujo</button>
+      <button onclick="generatePreview()" class="btn btn-sec">Generar preview visual</button>
+      <button onclick="runRealCommandFromInput()" class="btn btn-sec" title="Ejecuta via /api/run-safe-command (solo si backend activo)">Ejecutar en backend</button>
+    </div>
+    <div id="pedido-result" class="agent-raw" style="margin-top:10px; min-height:60px; display:none"></div>
+    <div class="small muted" style="margin-top:4px">Drag & drop funciona en modo app (flujo app). Los archivos se leen en cliente y pegan al textarea.</div>
+  </div>
+  <!-- Real backend actions (visible always; use /api when connected, safe no-op otherwise) -->
+  <div class="row" style="margin-top:6px; gap:8px; flex-wrap:wrap">
+    <button onclick="createDraftFromInput()" class="btn btn-sec" style="font-size:11px" title="Crea job real en disco vía /api/create-job-draft (solo con flujo app)">+ Crear job draft real</button>
+    <button onclick="refreshLiveJobsAndShow()" class="btn btn-sec" style="font-size:11px" title="Lista jobs live desde backend">Jobs live</button>
+    <button onclick="runSafeCommand('flujo job list', this)" class="btn btn-sec" style="font-size:11px" title="Ejecuta vía backend seguro">▶ job list (live)</button>
+  </div>
+</div>
+
+<div class="section">
+  <div class="section-title">Piezas base por línea</div>
+  <div class="grid grid-3">
+    <div class="card fmt-card" onclick="window.open('svg_visualizer.html','_blank')">
+      <div class="kicker">RD</div>
+      <div style="font-weight:600">Eventos • Flyers • Riders</div>
+      <div class="small muted">Flyers, etiquetas, riders y piezas de campaña para la ONG.</div>
+    </div>
+    <div class="card fmt-card" onclick="window.open('svg_visualizer.html','_blank')">
+      <div class="kicker">RD</div>
+      <div style="font-weight:600">Suplementos RD</div>
+      <div class="small muted">Línea completa de suplementos con piezas individuales y export listo.</div>
+    </div>
+    <div class="card fmt-card" onclick="window.open('svg_visualizer.html','_blank')">
+      <div class="kicker">ISKVW</div>
+      <div style="font-weight:600">Arte 2D / 3D</div>
+      <div class="small muted">Exploración visual, piezas más libres y conceptos más artísticos.</div>
+    </div>
+  </div>
+</div>
+
+<!-- PLANO TEASER -->
+<div class="section">
+  <div class="section-title">Planos de stands + riders + costos (plano)</div>
+  <div class="card">
+    <div style="display:flex; gap:16px; align-items:center; flex-wrap:wrap">
+      <div>
+        <div style="font-weight:600">plano • demo interactivo</div>
+        <div class="small muted">Paramétrico desde constantes reales (mesas, toldos, voluntarios, reglas operativas). Export SVG + rider + costos. Integrado flujo + blender.</div>
+      </div>
+      <div>
+        <a class="btn" href="plano_demo.html" target="_blank">Abrir Plano Demo</a>
+        <button onclick="copyCmd('py -m flujo plano projects/plano/ejemplos/evento_ejemplo.json --rider --costs', this)" class="btn btn-sec" style="margin-left:6px">Copiar comando CLI</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- end of plano teaser inside daily -->
+
+</div><!-- /tab-daily -->
+
+<div id="tab-visuales" class="tab-panel">
+  <div class="section">
+    <div class="card hero-card" style="margin-bottom:14px;">
+      <div class="kicker">Visuales</div>
+      <div style="font-size:14px; font-weight:700; margin-bottom:4px;">Tu base visual está lista para trabajar; el objetivo es avanzar rápido sin perder consistencia de marca.</div>
+      <div class="small muted">Abre el visualizador, revisa las piezas base y valida que todo siga la paleta y la estructura de flujo.</div>
+    </div>
+    <div class="row" style="gap:8px; flex-wrap:wrap; margin-bottom:12px">
+      <a class="btn" href="svg_visualizer.html" target="_blank">Abrir Visualizador SVG</a>
+      <button class="btn btn-sec" onclick="window.open('svg_visualizer.html','_blank')">Abrir en esta pestaña</button>
+      <button class="btn btn-sec" onclick="window.open('../projects/flujo/flujo.json','_blank')">Ver flujo.json</button>
+    </div>
+    <div class="section-title">Piezas base disponibles</div>
+    <div class="grid grid-3">
+      <div class="card">
+        <div style="font-weight:600">Eventos / Flyers</div>
+        <div class="small muted" style="margin-top:4px">Flyers, riders y piezas de evento con estructura lista para adaptar.</div>
+      </div>
+      <div class="card">
+        <div style="font-weight:600">Suplementos RD</div>
+        <div class="small muted" style="margin-top:4px">Línea de piezas con formatos más repetitivos y fáciles de escalar.</div>
+      </div>
+      <div class="card">
+        <div style="font-weight:600">Brand + QA</div>
+        <div class="small muted" style="margin-top:4px">Valida color, contraste y consistencia antes de entregar.</div>
+      </div>
+    </div>
+    <div class="card" style="margin-top:14px;">
+      <div class="kicker">Checklist rápido</div>
+      <div class="compact-list">
+        <span>Revisa si la pieza ya existe como base.</span>
+        <span>Valida brand antes de exportar.</span>
+        <span>Si no encaja, crea un nuevo bloque o deja una tarea clara en el handoff.</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="tab-planos" class="tab-panel">
+  <div class="section">
+    <div class="card hero-card" style="margin-bottom:14px;">
+      <div class="kicker">Planos</div>
+      <div style="font-size:14px; font-weight:700; margin-bottom:4px;">Revisa el plano, recalcula costos y prepara el rider sin salir del flujo.</div>
+      <div class="small muted">El objetivo es mover de la idea a una vista operativa clara y reutilizable.</div>
+    </div>
+    <div class="grid grid-3">
+      <div class="card">
+        <div style="font-weight:600">Plano demo</div>
+        <div class="small muted" style="margin-top:4px">Abre el ejemplo interactivo para revisar distribución, riders y costos.</div>
+        <div style="margin-top:8px">
+          <a class="btn" href="plano_demo.html" target="_blank">Abrir</a>
+        </div>
+      </div>
+      <div class="card">
+        <div style="font-weight:600">Export operativo</div>
+        <div class="small muted" style="margin-top:4px">Genera el rider y los costos desde la misma lógica del proyecto.</div>
+        <div style="margin-top:8px">
+          <button onclick="copyCmd('py -m flujo plano projects/plano/ejemplos/evento_ejemplo.json --rider --costs', this)" class="btn btn-sec">Copiar comando</button>
+        </div>
+      </div>
+      <div class="card">
+        <div style="font-weight:600">Siguiente paso</div>
+        <div class="small muted" style="margin-top:4px">Si el plano ya está claro, pasa a revisión o a la pieza final.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="tab-agentes" class="tab-panel">
+<div class="section">
+  <div class="section-title">Trabajo con agentes</div>
+  <div class="grid">
+    <div class="card">
+      <div class="kicker">Flujo 1</div>
+      <div style="font-weight:600; margin-bottom:4px">Pedido nuevo</div>
+      <div class="small muted">Pega el pedido, genera el brief, crea el job y pasa a revisión sin perder contexto.</div>
+    </div>
+    <div class="card">
+      <div class="kicker">Flujo 2</div>
+      <div style="font-weight:600; margin-bottom:4px">Mejora continua</div>
+      <div class="small muted">Trabaja sobre una tarea concreta, deja el handoff claro y avanza con un solo foco.</div>
+      <div style="margin-top:8px"><a href="LAST_HANDOFF.md" class="small" style="color:var(--accent)">→ LAST_HANDOFF actual</a></div>
+    </div>
+  </div>
+</div>
+
+<!-- DELEGACIÓN A AGENTES ESPECIALIZADOS (accionable — copia prompts completos) -->
+<div class="section">
+  <div class="section-title">Delegar a Agentes Especializados — prompts listos (usa `flujo app` primero + copia aquí). 6 roles paralelos (incl. Creative Director + Packaging). Lanza en clones. Guía + LAST_HANDOFF = verdad.</div>
+  <!-- PRACTICAL HOW-TO DELEGATE FROM HUB (first-class, copyable for designer + AI) -->
+  <div class="card" style="margin-bottom:12px; border-left:4px solid var(--accent);">
+    <div style="font-weight:700; margin-bottom:6px;">Delegar sin perder claridad</div>
+    <div class="small muted" style="line-height:1.55;">Escribe una tarea concreta, elige un rol y copia el prompt listo para trabajar. El objetivo es mantener un handoff claro y no dispersar el trabajo.</div>
+  </div>
+  <div class="card" style="margin-bottom:12px">
+    <div class="pro-label">Tarea específica para delegar (común o personalizada; se inserta en todos los prompts)</div>
+    <textarea id="delegate-task" style="height:52px; font-size:12px" placeholder="e.g. Pulir consistencia visual del hub y visualizadores. O: mejorar matching de formatos en parser intake. O: actualizar linea editorial con nuevos tonos.">Pulir UI del hub + visualizadores (dark pro, spacing). Revisar y alinear previews SVG y cards.</textarea>
+    <div class="row" style="margin-top:6px; gap:6px; flex-wrap:wrap">
+      <button onclick="useExampleTask(0)" class="btn btn-sec" style="font-size:10px;padding:4px 8px">Ej: Pulir visual</button>
+      <button onclick="useExampleTask(1)" class="btn btn-sec" style="font-size:10px;padding:4px 8px">Ej: Mejorar parser</button>
+      <button onclick="useExampleTask(3)" class="btn btn-sec" style="font-size:10px;padding:4px 8px">Ej: Prototipo intake</button>
+      <button onclick="useExampleTask(4)" class="btn btn-sec" style="font-size:10px;padding:4px 8px">Ej: Mejorar package</button>
+      <button onclick="clearDelegateTask()" class="btn btn-sec" style="font-size:10px;padding:4px 8px">Limpiar</button>
+    </div>
+  </div>
+  <div id="delegate-ui" class="grid grid-3">
+    <!-- Dynamic from /api/agents-roles + live delegate buttons. Fallback to static below if no load. -->
+    <div class="card">
+      <div style="font-weight:600">Creative Director</div>
+      <div class="small muted">Estrategia de lanzamiento, revisión de outputs y coherencia premium</div>
+      <button onclick="copyDelegatePrompt('creative')" class="btn btn-sec" style="margin-top:6px; font-size:10px">Copiar prompt completo</button>
+    </div>
+    <div class="card">
+      <div style="font-weight:600">Visual Polish Agent</div>
+      <div class="small muted">Pulido visual y consistencia estética de previews y UI</div>
+      <button onclick="copyDelegatePrompt('visual')" class="btn btn-sec" style="margin-top:6px; font-size:10px">Copiar prompt completo</button>
+    </div>
+    <div class="card">
+      <div style="font-weight:600">Pipeline &amp; Integration Agent</div>
+      <div class="small muted">CLI, backend, jobs, packaging, integración</div>
+      <button onclick="copyDelegatePrompt('pipeline')" class="btn btn-sec" style="margin-top:6px; font-size:10px">Copiar prompt completo</button>
+    </div>
+    <div class="card">
+      <div style="font-weight:600">Future/Modern Agent</div>
+      <div class="small muted">Nuevas integraciones (sin tocar core sin revisión)</div>
+      <button onclick="copyDelegatePrompt('future')" class="btn btn-sec" style="margin-top:6px; font-size:10px">Copiar prompt completo</button>
+    </div>
+    <div class="card">
+      <div style="font-weight:600">Packaging &amp; Distribution Agent</div>
+      <div class="small muted">.exe gratis (PyInstaller, pywebview, icon, tray, assets)</div>
+      <button onclick="copyDelegatePrompt('packaging')" class="btn btn-sec" style="margin-top:6px; font-size:10px">Copiar prompt completo</button>
+    </div>
+  </div>
+  <div class="small" style="margin:6px 0"><button onclick="loadAgentRolesAndRender()" class="btn btn-sec" style="font-size:9px">Cargar roles live + botones handoff API</button> <span class="muted">(usa /api/agents-roles + /api/delegate)</span></div>
+  <div class="small muted" style="margin-top:4px">Lanza en clones separados paralelos. Cada uno hace airdrop propio. Principal integra. Ver modelo completo + prompts de referencia en docs/AGENT_OPERATING_MANUAL.md. Siempre empieza con <code>flujo app</code> + LAST_HANDOFF.</div>
+  <div id="delegate-results" class="agent-raw" style="margin-top:8px; display:none; max-height:140px; overflow:auto; font-size:10px"></div>
+  <div style="margin-top:4px">
+    <label style="font-size:10px"><input type="checkbox" id="delegate-log" checked style="vertical-align:middle" /> log a handoff</label>
+    <button onclick="delegateToSelected()" class="btn btn-sec" style="font-size:9px; margin-left:6px">Delegar seleccionados (live API)</button>
+  </div>
+</div>
+<!-- end delegate section -->
+
+</div><!-- /tab-agentes -->
+
+<div id="tab-herramientas" class="tab-panel">
+<div class="section">
+  <div class="card hero-card" style="margin-bottom:14px;">
+    <div class="kicker">Herramientas</div>
+    <div style="font-size:14px; font-weight:700; margin-bottom:4px;">Comandos rápidos para mover el flujo sin perder tiempo en la terminal.</div>
+    <div class="small muted">La idea es que cada acción sea obvia, rápida y útil en el día a día.</div>
+  </div>
+  <div class="section-title">Comandos frecuentes</div>
+  <div class="grid">
+    <div onclick="copyCmd('py -m flujo job new \"etiquetas acme\" --email inbox/correo.txt', this)" class="tool-btn">job new</div>
+    <div onclick="copyCmd('py -m flujo job prepare jobs/...', this)" class="tool-btn">job prepare</div>
+    <div onclick="copyCmd('py -m flujo render run projects/piezas_vectoriales/.../config.json --for illustrator', this)" class="tool-btn">render illustrator</div>
+    <div onclick="copyCmd('py -m flujo render run ... --for blender', this)" class="tool-btn">render blender</div>
+    <div onclick="copyCmd('py -m flujo cotizaciones &lt;json&gt; --para productora', this)" class="tool-btn">cotizaciones productora</div>
+    <div onclick="copyCmd('py -m flujo brand analyze mi-ejemplo', this)" class="tool-btn">brand analyze</div>
+    <div onclick="copyCmd('py -m flujo daily', this)" class="tool-btn">daily</div>
+    <div onclick="window.open('plano_demo.html','_blank')" class="tool-btn">plano demo</div>
+  </div>
+  <div class="section-title" style="margin-top:16px">Checks live</div>
+  <div class="grid">
+    <div onclick="runSafeCommand('flujo health', this)" class="tool-btn" title="Ejecuta vía /api/run-safe-command">▶ health</div>
+    <div onclick="runSafeCommand('flujo version', this)" class="tool-btn" title="Ejecuta vía /api/run-safe-command">▶ version</div>
+    <div onclick="runSafeCommand('flujo daily', this)" class="tool-btn" title="Ejecuta vía /api/run-safe-command">▶ daily</div>
+    <div onclick="runSafeCommand('flujo handoff last', this)" class="tool-btn" title="Ejecuta vía /api/run-safe-command">▶ handoff</div>
+  </div>
+  <div class="small muted" style="margin-top:8px">Windows: <code>py -m flujo ...</code>. Usa <code>flujo app</code> para live real.</div>
+</div>
+
+<!-- Datadrop moved here inside tab (not always visible on main page flow; use tab or header link) -->
+<div class="section" id="datadrop-section" style="margin-top:16px">
+  <div class="section-title">Datadrop — Airdrop inverso (fotos de trabajos TERMINADOS)</div>
+  <div class="card" style="border-left:4px solid var(--accent)">
+    <div class="small" style="margin-bottom:8px; font-weight:600;">Sube fotos de piezas ya entregadas para construir una base visual útil en el hub. El proceso es simple: arrastra una imagen, asigna tipo y guarda el datadrop.</div>
+    <div class="small muted" style="margin-bottom:8px;">Todo se procesa localmente para mantener la privacidad y dejar una referencia real para revisión y futura mejora.</div>
+
+    <div class="row" style="gap:12px; flex-wrap:wrap; align-items:flex-start;">
+      <div style="flex:1; min-width:220px;">
+        <div class="pro-label">Foto de pieza terminada</div>
+        <input type="file" id="datadrop-file" accept="image/*" style="margin-bottom:6px;" />
+        <div style="margin:4px 0;">
+          <label class="small">Tipo de pieza: </label>
+          <select id="datadrop-type" style="width:auto; display:inline-block; padding:4px 8px;">
+            <option value="flyer">flyer</option>
+            <option value="etiqueta">etiqueta</option>
+            <option value="cartel">cartel / IG</option>
+            <option value="plano">plano / stand</option>
+            <option value="otro">otro</option>
+          </select>
+        </div>
+        <textarea id="datadrop-desc" placeholder="Descripción breve del trabajo terminado (ej: flyer evento 10x14 con 3 columnas, acentos verdes, logo arriba izq)" style="height:52px; font-size:11px;"></textarea>
+        <div style="margin-top:4px;">
+          <label class="small">Link a job (opcional, para contexto):</label>
+          <input id="datadrop-linked" placeholder="jobs/2026-... o dejar vacío" style="font-size:11px; padding:4px;" />
+        </div>
+      </div>
+      <div>
+        <button onclick="uploadDatadrop(this)" class="btn" style="margin-top:4px;">📤 Subir como Datadrop</button>
+        <button onclick="scanDatadropIncoming(this)" class="btn btn-sec" style="margin-top:4px;">Escanear incoming (deja fotos en la carpeta)</button>
+        <button onclick="refreshDatadropsList()" class="btn btn-sec" style="margin-top:4px;">Refrescar lista</button>
+        <button onclick="runSafeCommand('flujo privacy scan', this)" class="btn btn-sec" style="font-size:10px;margin-top:4px;" title="Opcional previo">privacy scan</button>
+        <div id="datadrop-result" class="small muted" style="margin-top:6px; min-height:18px;"></div>
+      </div>
+    </div>
+
+    <div style="margin-top:14px;">
+      <div class="pro-label">Datadrops almacenados (SOLO procesados con manifest + date pattern; incoming staging NUNCA en lista — pending count separado arriba; lista limpia post-scan)</div>
+      <div id="datadrops-pending" class="small muted" style="margin:0 0 4px 0; font-size:10px;"></div>
+      <div id="datadrops-list" class="card" style="background:#111; max-height:260px; overflow:auto; font-size:11px; padding:8px;"></div>
+      <div class="small muted">Haz clic en item para ver detalles / imagen grande (modal). Manifests + for_future_ai + _review_package.txt (usa "Preparar paquete") = fuente para que IA sepa exactamente qué buscar en trabajos reales terminados.</div>
+      <div class="row" style="margin-top:6px;">
+        <button onclick="prepareDatadropPackage()" class="btn btn-sec" style="font-size:10px;">Preparar paquete review (lista manifests para AI / linea_editorial)</button>
+        <button onclick="quickProcessAndFeedLinea(this)" class="btn" style="font-size:10px;background:linear-gradient(135deg,var(--flujo-accent),#1a3f2e);">🚀 Process incoming + Prepare for linea (parallel quick path - bypass/CLI alt too)</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div><!-- /tab-herramientas -->
+
+<details class="section">
+  <summary class="section-title" style="cursor:pointer; user-select:none;">Referencia rápida</summary>
+  <div class="card">
+    <div class="compact-list">
+      <span>Pedido → brief → job → revisión.</span>
+      <span>Usa el hub como fuente de verdad y el handoff como registro.</span>
+      <span>Prioriza brand, formato y entrega final sobre detalles secundarios.</span>
+    </div>
+  </div>
+</details>
+
+<!-- BRAND: consolidated to EXACTLY 1 prominent control (header button + modal). No repeats. Use `flujo app` + hub. -->
+
+<details class="section">
+  <summary class="section-title" style="cursor:pointer; user-select:none;">Export y entregables</summary>
+  <div class="grid">
+    <div class="card">
+      <div style="font-weight:600">Illustrator</div>
+      <div class="small muted">SVG editable con paleta y estructura lista para seguir trabajando.</div>
+      <button onclick="copyCmd('py -m flujo render run projects/piezas_vectoriales/suplementos_rd/config.json --for illustrator', this)" class="btn btn-sec" style="margin-top:8px">Copiar comando</button>
+    </div>
+    <div class="card">
+      <div style="font-weight:600">Photoshop</div>
+      <div class="small muted">Paquete operativo listo para refinamiento visual y composición.</div>
+      <button onclick="copyCmd('py -m flujo export projects/flyer_eventos/ultimo --for photoshop', this)" class="btn btn-sec" style="margin-top:8px">Copiar export</button>
+    </div>
+    <div class="card">
+      <div style="font-weight:600">Blender</div>
+      <div class="small muted">Plano y setup listos para pasar a una vista más técnica.</div>
+      <button onclick="copyCmd('python -m src.flujo.templates.blender_setup projects/plano/ejemplos/evento_ejemplo.json', this)" class="btn btn-sec" style="margin-top:8px">Copiar blender_setup</button>
+    </div>
+  </div>
+</details>
+
+<!-- MODERN INTEGRATIONS: SSE LIVE + TOKENS EXPORT (free, designer daily) -->
+<div class="section">
+  <div class="section-title">Live updates</div>
+  <div class="card">
+    <div class="row" style="margin-bottom:8px; align-items:center; gap:8px; flex-wrap:wrap">
+      <div><span id="live-indicator" style="display:inline-block; width:10px; height:10px; background:#2d5a4a; border-radius:50%; margin-right:6px; vertical-align:middle;"></span><span class="small" style="font-weight:600">LIVE</span> <span class="small muted">(SSE conectado cuando app activa)</span></div>
+      <button onclick="tryRequestNotifications()" class="btn btn-sec" style="font-size:10px;padding:4px 8px">Activar notificaciones OS</button>
+      <button onclick="refreshAllLive()" class="btn btn-sec" style="font-size:10px;padding:4px 8px">Refrescar live ahora</button>
+    </div>
+    <div class="small muted" style="margin-top:6px">SSE entrega jobs/SVG/status en tiempo real. Cambios → UI auto + toast + notif (gratis, browser + tray desktop).</div>
+  </div>
+</div>
+
+<footer>
+  <b>`flujo app` (o --desktop) = entrada diaria ÚNICA.</b> Sirve UI (estos 3 HTMLs: hub + svg_visualizer + plano_demo) + backend APIs reales (delegate 5 roles incl. Packaging, live, parse, SSE, tokens). HTML directo = fallback estático completo.<br>
+  <b>Hub + context/LAST_HANDOFF.md = fuente de verdad para humano + IA.</b> Intake, visual, delegar (paralelo) y revisión aquí. Vuelve al hub desde visualizadores.<br>
+  Conectados: <a href="svg_visualizer.html" style="color:var(--accent)">Visualizador SVG</a> • <a href="plano_demo.html" style="color:var(--accent)">Plano Demo</a> • <a href="../projects/tapiz/vibecode_spaces.html" style="color:var(--accent)">Tapiz (flujo pro)</a> • <a href="../docs/AGENT_OPERATING_MANUAL.md" style="color:var(--accent)">Manual Agentes</a><br>
+  <span class="small muted">App mode activa CONECTADO + live. Legacy (no usar para pro visuals): projects/plano/plano_editor.html • dashboard.html • studio. Usa siempre context/ + brand flujo.json.</span>
+</footer>
+
+</div>
+
+<script>
+// ============ UTILS ============
+// Early safe stubs for critical nav (showTab etc) to avoid crash if clicked before full script parse (desktop/static loads).
+// Real impls below overwrite these.
+window.showTab = window.showTab || function(tab, scrollTarget) {
+  try {
+    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    const p = document.getElementById('tab-' + tab); if (p) p.classList.add('active');
+    const b = document.querySelector('.tab-btn[data-tab="' + tab + '"]'); if (b) b.classList.add('active');
+    const sw = document.getElementById('quick-switch'); if (sw) sw.value = tab;
+    if (scrollTarget) {
+      const t = document.getElementById(scrollTarget);
+      if (t) setTimeout(() => { try { t.scrollIntoView({behavior:'auto'}); } catch(_){} }, 60);
+    }
+  } catch(_){}
+};
+window.scrollToSectionRobust = window.scrollToSectionRobust || function(id){ try { const e=document.getElementById(id); if(e) e.scrollIntoView({behavior:'auto'}); }catch(_){} };
+
+function copyCmd(cmd, el) {
+  const btn = el || ((typeof event !== 'undefined' && event.currentTarget) ? event.currentTarget : null);
+  const origText = btn ? btn.innerText : '';
+  navigator.clipboard.writeText(cmd).then(() => {
+    if (btn) {
+      btn.innerText = 'Copiado!';
+      setTimeout(() => { if (btn) btn.innerText = origText || 'Copiar'; }, 1400);
+    } else {
+      alert('Copiado al portapapeles:\n' + cmd);
+    }
+  }).catch(() => alert('Ejecuta en terminal:\n' + cmd));
+}
+
+// ============ AGENT DELEGATION PROMPT TEMPLATES (ready-to-use, full) ============
+const DELEGATE_TEMPLATES = {
+  creative: `Tu rol: Creative Director.
+
+Sigue docs/AGENT_OPERATING_MANUAL.md (dos flujos + modelo de delegación multi-agente) y las reglas.
+
+Punto de entrada OBLIGATORIO: ejecuta \`flujo app\` (o \`flujo app --desktop\`). Abre el hub pro. Lee context/LAST_HANDOFF.md + este manual primero (bajo token).
+
+[Tarea específica: %%TASK%%]
+
+Define la Estrategia de lanzamiento, prioriza la narrativa visual y el impacto premium, y organiza la ejecución para que los subagentes trabajen con coherencia. Revisar outputs de otros agentes, proponer mejoras, revisar entregables finales y dejar una decisión clara para la entrega final.`,
+
+  visual: `Tu rol: Visual Polish Agent.
+
+Sigue docs/AGENT_OPERATING_MANUAL.md (dos flujos + modelo de delegación multi-agente) y las reglas.
+
+Punto de entrada OBLIGATORIO: ejecuta \`flujo app\` (o \`flujo app --desktop\`). Abre el hub pro. Lee context/LAST_HANDOFF.md + este manual primero (bajo token).
+
+[Tarea específica: %%TASK%%]
+
+Trabaja en tu clon separado. Entrega SOLO vía airdrop (incluye handoff actualizado + docs relevantes). Al final, actualiza LAST_HANDOFF con tareas pendientes. Usa siempre el flujo y mantén coherencia visual. Revisa outputs de otros si aplica.`,
+
+  pipeline: `Tu rol: Pipeline & Integration Agent.
+
+Sigue docs/AGENT_OPERATING_MANUAL.md (dos flujos + modelo de delegación multi-agente) y las reglas.
+
+Punto de entrada OBLIGATORIO: ejecuta \`flujo app\`. Lee context/LAST_HANDOFF.md + este manual primero.
+
+[Tarea específica: %%TASK%%]
+
+Usa py en Windows. Prueba siempre: compileall, pytest -q, comandos manuales. Trabaja en clon. Entrega vía airdrop actualizando handoff, version.py si aplica y docs. Coordina con la línea editorial si tocas UI o identidad visual.`,
+
+  future: `Tu rol: Future/Modern Agent.
+
+Sigue docs/AGENT_OPERATING_MANUAL.md (dos flujos + modelo de delegación multi-agente) y las reglas.
+
+Punto de entrada OBLIGATORIO: ejecuta \`flujo app\`. Lee context/LAST_HANDOFF.md + este manual primero.
+
+[Tarea específica: %%TASK%%]
+
+Coordina explícitamente: menciona en handoff qué revisó Brand/Pipeline. Entrega airdrop con prototipo + recomendaciones. Prioriza gratis y compatible con Python core. NO toques core sin revisión explícita.`,
+
+  packaging: `Tu rol: Packaging & Distribution Agent.
+
+Sigue docs/AGENT_OPERATING_MANUAL.md (dos flujos + modelo de delegación multi-agente) y las reglas.
+
+Punto de entrada OBLIGATORIO: ejecuta \`flujo app\` (o \`flujo app --desktop\`). Lee context/LAST_HANDOFF.md + este manual primero.
+
+[Tarea específica: %%TASK%%]
+
+Usa PyInstaller (gratis) + pywebview. Nunca rompas paths o assets bundled. Trabaja en clon. Entrega airdrop con pruebas de build simulado + nota de UX desktop. Coordina con Pipeline (core) y la línea editorial si tocas identidad visual. Prioriza gratis y Windows-first. Actualiza LAST_HANDOFF.`
+};
+
+function getDelegateTask() {
+  const ta = document.getElementById('delegate-task');
+  return (ta && ta.value.trim()) || 'Realizar la tarea solicitada alineado al flujo. Ver LAST_HANDOFF para contexto exacto.';
+}
+
+function useExampleTask(idx) {
+  const ta = document.getElementById('delegate-task');
+  if (!ta) return;
+  const examples = [
+    'Pulir UI del hub + visualizadores (dark pro, spacing). Revisar y alinear previews SVG y cards.',
+    'Mejorar el parser de intake en hub + /api/parse-real-pedido para mejor matching de formatos y generar brief.yaml listo. Agregar tests.',
+    'Actualizar o revisar la línea editorial y la coherencia visual del workspace. Mantener el tono de los entregables consistente.',
+    'Explorar prototipo de intake automático (webhook simple sin deps pagas). Entregar spec + stub en docs/ + nota riesgos. No tocar producción.',
+    'Mejorar `flujo package` (PyInstaller, bundling assets, launcher desktop, paths frozen). Probar simulado y documentar UX Windows gratis.'
+  ];
+  ta.value = examples[idx] || examples[0];
+}
+
+function clearDelegateTask() {
+  const ta = document.getElementById('delegate-task');
+  if (ta) ta.value = '';
+}
+
+// ============ MODERN DELEGATION + HANDOFF SYSTEM (live via /api/delegate + SSE) ============
+let cachedRoles = null;
+
+function loadAgentRolesAndRender() {
+  const container = document.getElementById('delegate-ui') || document.querySelector('.section .grid.grid-3');
+  if (!container) return;
+  fetch('/api/agents-roles').then(r => r.json()).then(d => {
+    cachedRoles = d.roles || [];
+    container.innerHTML = '';
+    cachedRoles.forEach(role => {
+      const el = document.createElement('div');
+      el.className = 'card';
+      el.innerHTML = `
+        <label style="display:flex; align-items:flex-start; gap:6px">
+          <input type="checkbox" class="delegate-role-check" data-role="${role.id}" style="margin-top:2px" checked />
+          <div style="flex:1">
+            <div style="font-weight:600">${role.name}</div>
+            <div class="small muted">${role.short}</div>
+            <div style="margin-top:4px">
+              <button onclick="delegateSingleRole('${role.id}', this)" class="btn btn-sec" style="font-size:9px;padding:3px 6px">Hand-off via API</button>
+            </div>
+          </div>
+        </label>`;
+      container.appendChild(el);
+    });
+    console.log('[hub] roles loaded for delegation', cachedRoles.length);
+  }).catch(() => {
+    // keep static HTML cards; mark connected false implicitly
+  });
+}
+
+function getSelectedRoleIds() {
+  const checks = document.querySelectorAll('.delegate-role-check:checked');
+  if (checks.length) return Array.from(checks).map(c => c.dataset.role);
+  // fallback to all 5 if no dynamic
+  return ['visual-polish', 'pipeline', 'brand', 'future', 'packaging'];
+}
+
+async function delegateSingleRole(roleId, btn) {
+  const task = getDelegateTask();
+  const logIt = document.getElementById('delegate-log') ? document.getElementById('delegate-log').checked : true;
+  if (btn) btn.textContent = 'Enviando...';
+  try {
+    const res = await fetch('/api/delegate', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({role_id: roleId, task, log_to_handoff: logIt})});
+    const data = await res.json();
+    showDelegateResult(data, roleId);
+  } catch(e) {
+    showDelegateResult({error: 'Backend no disponible, usando template local', role: {name: roleId}, prompt: 'Usa CLI: flujo delegate ' + roleId + ' "' + task + '"'}, roleId);
+  } finally {
+    if (btn) btn.textContent = 'Hand-off via API';
+  }
+}
+
+async function delegateToSelected() {
+  const ids = getSelectedRoleIds();
+  const task = getDelegateTask();
+  const logIt = document.getElementById('delegate-log') ? document.getElementById('delegate-log').checked : true;
+  const resultsEl = document.getElementById('delegate-results');
+  if (resultsEl) { resultsEl.style.display='block'; resultsEl.innerHTML = 'Delegando a ' + ids.length + ' roles en paralelo...<br>'; }
+  for (const id of ids) {
+    try {
+      const r = await fetch('/api/delegate', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({role_id:id, task, log_to_handoff: logIt})});
+      const d = await r.json();
+      showDelegateResult(d, id, true /*append*/);
+    } catch(e) {
+      showDelegateResult({error:String(e), role:{name:id}, full_prompt: 'Fallback: flujo delegate '+id+' "'+task+'"' }, id, true);
+    }
+  }
+}
+
+function showDelegateResult(data, roleKey, appendOnly=false) {
+  const res = document.getElementById('delegate-results');
+  if (!res) return;
+  res.style.display = 'block';
+  const roleName = (data.role && data.role.name) || roleKey;
+  let html = `<div style="margin:4px 0;border-top:1px solid #222;padding-top:4px"><b>${roleName}</b><br>`;
+  if (data.error) html += `<span style="color:#c2410f">${data.error}</span>`;
+  else html += `<pre style="white-space:pre-wrap;font-size:9px;margin:2px 0">${(data.full_prompt || data.prompt || '').replace(/</g,'&lt;')}</pre>`;
+  if (data.log_cmd_suggested) html += `<span style="font-size:9px">Sugerido: <code>${data.log_cmd_suggested}</code></span>`;
+  html += `</div>`;
+  if (appendOnly) res.innerHTML += html;
+  else res.innerHTML = html;
+  // also auto copy the prompt if single
+  if (!appendOnly && data.full_prompt) {
+    navigator.clipboard.writeText(data.full_prompt).catch(()=>{});
+  }
+}
+
+function tryInstallPWA() {
+  // Trigger PWA install if possible (manifest served by hub server)
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/sw.js').then(() => console.log('[hub] SW registered for PWA')).catch(()=>{});
+  }
+  if (window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) {
+    alert('Ya estás en modo app instalada.');
+    return;
+  }
+  alert('Para instalar como app: En Chrome/Edge (app mode): Menú > Instalar "flujo • Workspace". Usa `flujo app` para servir con manifest.');
+}
+
+function initRealtimeSSE() {
+  if (!isConnected) return;
+  try {
+    const es = new EventSource('/api/events');
+    es.addEventListener('status', ev => {
+      try { const d = JSON.parse(ev.data); updateLiveFromEvent('status', d); console.log('[SSE status]', d); } catch(_) {}
+    });
+    es.addEventListener('svg', ev => {
+      try { const d=JSON.parse(ev.data); updateLiveFromEvent('svg', d); } catch(_) {}
+    });
+    es.addEventListener('jobs', ev => {
+      try { const d=JSON.parse(ev.data); updateLiveFromEvent('jobs', d); } catch(_) {}
+    });
+    es.addEventListener('heartbeat', ev => {
+      try { updateLiveFromEvent('heartbeat', JSON.parse(ev.data)); } catch(_) {}
+    });
+    es.addEventListener('update', ev => {
+      try { const d=JSON.parse(ev.data); updateLiveFromEvent('update', d); } catch(_) {}
+    });
+    es.onmessage = ev => {
+      try { const d=JSON.parse(ev.data); if (d.type) updateLiveFromEvent(d.type, d); } catch(_){}
+    };
+    es.onerror = () => {
+      pulseLiveIndicator(false);
+      // auto-reconnect for persistent live (designer keeps tab open)
+      setTimeout(() => {
+        if (typeof isConnected !== 'undefined' && isConnected) {
+          try { initRealtimeSSE(); } catch(_) {}
+        }
+      }, 4500);
+    };
+    console.log('[hub] SSE real-time connected for live updates');
+    pulseLiveIndicator(true);
+    // initial refresh on connect
+    setTimeout(refreshAllLive, 800);
+  } catch(e) { /* no EventSource or blocked */ }
+}
+
+// Extend initLiveConnection to also load roles + realtime
+const _origInitLive = initLiveConnection;
+initLiveConnection = function() {
+  _origInitLive && _origInitLive();
+  setTimeout(() => {
+    loadAgentRolesAndRender();
+    if (isConnected) initRealtimeSSE();
+  }, 650);
+};
+
+function copyDelegatePrompt(role) {
+  const task = getDelegateTask();
+  const btnTextMap = {creative:'Creative Director', visual:'Visual Polish', pipeline:'Pipeline', future:'Future/Modern', packaging:'Packaging & Distribution'};
+  const roleMap = {creative: 'creative-director', visual: 'visual-polish', pipeline: 'pipeline', future: 'future', packaging: 'packaging'};
+
+  // Prefer live backend API when connected (uses exact same formal templates as CLI `flujo delegate`)
+  if (typeof isConnected !== 'undefined' && isConnected) {
+    const outEl = document.getElementById('pedido-result');
+    if (outEl) { outEl.style.display='block'; outEl.innerHTML = '<span class="muted">Generando prompt vía backend /api/delegate...</span>'; }
+    fetch('/api/delegate', {
+      method: 'POST',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({role_id: roleMap[role] || role, task: task, log_to_handoff: false})
+    }).then(r => r.json()).then(data => {
+      const p = (data.full_prompt || data.prompt || '');
+      if (p) {
+        copyCmd(p);
+        if (outEl) outEl.innerHTML = `<span style="color:#2d5a4a">✓ Prompt ${btnTextMap[role]||role} copiado (backend)</span>`;
+      } else {
+        fallbackCopy();
+      }
+    }).catch(fallbackCopy);
+    return;
+
+    function fallbackCopy() {
+      let tpl = DELEGATE_TEMPLATES[role] || DELEGATE_TEMPLATES.visual;
+      const prompt = tpl.replace('%%TASK%%', task);
+      copyCmd(prompt);
+      if (outEl) outEl.innerHTML = `<span class="muted">Backend no disp. Usando plantilla local.</span>`;
+    }
+  }
+
+  // Static fallback (always works)
+  let tpl = DELEGATE_TEMPLATES[role] || DELEGATE_TEMPLATES.visual;
+  const prompt = tpl.replace('%%TASK%%', task);
+  copyCmd(prompt);
+  // small visual feedback
+  const note = document.createElement('span');
+  note.style.cssText = 'font-size:9px;color:#2d5a4a;margin-left:6px';
+  note.textContent = '✓ prompt listo para ' + (btnTextMap[role]||role) + ' (pegar en otro clon/IA)';
+  const titleEl = document.querySelector('.section-title');
+  if (titleEl && titleEl.parentNode) {
+    const old = titleEl.parentNode.querySelector('.delegate-feedback');
+    if (old) old.remove();
+    note.className = 'delegate-feedback';
+    titleEl.parentNode.appendChild(note);
+    setTimeout(() => note.remove(), 2200);
+  }
+}
+
+function generatePreview() {
+  const inp = document.getElementById('pedido-input').value.trim() || '{"nombre":"Demo evento","voluntarios":7}';
+  let data; try { data = JSON.parse(inp); } catch(e){ data = {nombre: inp}; }
+  const p = document.createElement('div');
+  p.className = 'preview';
+  p.style.marginTop = '10px';
+  const n = data.nombre || 'Evento';
+  const v = data.voluntarios || 5;
+  const ink = '#e8e8e8', accent = '#2d5a4a', paper = '#111', support='#675f55', alert='#c2410f'; /* exact brand from projects/flujo/flujo.json */
+  p.innerHTML = `
+    <svg width="240" height="120" viewBox="0 0 240 120">
+      <rect x="8" y="8" width="224" height="104" rx="4" fill="${paper}" stroke="${accent}" stroke-width="2"/>
+      <text x="18" y="32" fill="${ink}" font-size="12" font-weight="700">${n}</text>
+      <rect x="18" y="44" width="72" height="40" rx="2" fill="#1a1a1a" stroke="${accent}"/>
+      <text x="26" y="68" fill="${ink}" font-size="9">stand</text>
+      ${Array.from({length:Math.min(v,5)}).map((_,i)=>`<rect x="${110+i*18}" y="78" width="14" height="14" fill="${alert}" rx="1"/>`).join('')}
+      <text x="18" y="104" fill="${support}" font-size="8">flujo aplicado (dark pro • UI consistente)</text>
+    </svg>`;
+  const res = document.getElementById('pedido-result');
+  res.style.display = 'block';
+  res.innerHTML = '';
+  res.appendChild(p);
+}
+
+// ============ LIVE CONNECTION + REAL BACKEND (http + pywebview bridge) ============
+let isConnected = false;
+
+function getPywebviewApi() {
+  // Direct Python bridge in --desktop (premium seamless no roundtrip)
+  try { return (window.pywebview && window.pywebview.api) || null; } catch(e) { return null; }
+}
+
+function callApiOrFetch(endpoint, opts = {}) {
+  const api = getPywebviewApi();
+  if (api) {
+    // map common endpoints to bridge methods (no http) + connected indicator
+    if (endpoint.includes('ping') || endpoint.includes('connected')) return Promise.resolve(api.get_connected ? api.get_connected() : (api.ping ? api.ping() : {connected:true, via:'bridge'}));
+    if (endpoint.includes('list-svg')) return Promise.resolve(api.list_svg_works ? api.list_svg_works() : fetch(endpoint,opts).then(r=>r.json()));
+    if (endpoint.includes('list-jobs')) return Promise.resolve(api.list_jobs ? api.list_jobs() : fetch(endpoint,opts).then(r=>r.json()));
+    if (endpoint.includes('parse')) {
+      const text = (opts.body && JSON.parse(opts.body).text) || '';
+      return Promise.resolve(api.parse_pedido ? api.parse_pedido(text) : fetch(endpoint,opts).then(r=>r.json()));
+    }
+    if (endpoint.includes('create-job-draft')) {
+      const body = opts.body ? JSON.parse(opts.body) : {};
+      return Promise.resolve(api.create_job_draft ? api.create_job_draft(body.text||'', body.name||'') : fetch(endpoint,opts).then(r=>r.json()));
+    }
+    if (endpoint.includes('run-safe') || endpoint.includes('command')) {
+      const cmd = (opts.body && JSON.parse(opts.body).cmd) || '';
+      return Promise.resolve(api.run_command ? api.run_command(cmd) : fetch(endpoint,opts).then(r=>r.json()));
+    }
+    if (endpoint.includes('list-datadrops') || endpoint.includes('datadrop')) {
+      if (endpoint.includes('upload')) {
+        const body = opts.body ? JSON.parse(opts.body) : {};
+        return Promise.resolve(api.datadrop_upload ? api.datadrop_upload(body) : fetch(endpoint,opts).then(r=>r.json()));
+      }
+      if (endpoint.includes('analyze')) {
+        const body = opts.body ? JSON.parse(opts.body) : {};
+        return Promise.resolve(api.datadrop_analyze ? api.datadrop_analyze(body) : fetch(endpoint,opts).then(r=>r.json()));
+      }
+      if (endpoint.includes('prepare-package')) {
+        return Promise.resolve(api.datadrop_prepare_package ? api.datadrop_prepare_package() : fetch(endpoint,opts).then(r=>r.json()));
+      }
+      if (endpoint.includes('scan-incoming') || endpoint.includes('datadrop-scan')) {
+        return Promise.resolve(api.datadrop_scan_incoming ? api.datadrop_scan_incoming() : fetch(endpoint,opts).then(r=>r.json()));
+      }
+      return Promise.resolve(api.list_datadrops ? api.list_datadrops() : fetch(endpoint,opts).then(r=>r.json()));
+    }
+    // default
+    return fetch(endpoint, opts).then(r=>r.json()).catch(() => (api.get_status ? api.get_status() : (api.get_connected ? api.get_connected() : {})));
+  }
+  return fetch(endpoint, opts).then(r => r.json());
+}
+
+function updateConnUI(connected, info = {}) {
+  isConnected = !!connected;
+  const el = document.getElementById('conn-status');
+  const ver = document.getElementById('status-version');
+  const det = document.getElementById('status-detail');
+  const headerEl = document.getElementById('header-conn');
+  if (el) {
+    el.textContent = connected ? 'CONECTADO (APIs reales + delegate)' : 'Estático (fallback)';
+    el.style.color = connected ? 'var(--accent)' : 'var(--flujo-alert)';
+  }
+  if (headerEl) {
+    headerEl.textContent = connected ? '● CONECTADO backend' : 'Estático (fallback)';
+    headerEl.style.color = connected ? 'var(--accent)' : '#888';
+    headerEl.style.borderColor = connected ? 'var(--accent)' : '#2a2a2a';
+  }
+  if (ver && info.version) ver.textContent = info.version;
+  if (det && info.root) det.textContent = `Backend: ${String(info.root || '').split(/[\\/]/).pop() || 'local'}`;
+}
+
+function initLiveConnection() {
+  const api = getPywebviewApi();
+  if (api) {
+    // desktop direct bridge — instant connect
+    try {
+      const data = api.get_connected ? api.get_connected() : (api.ping ? api.ping() : {connected: true});
+      updateConnUI(true, data);
+      loadSvgWorks();
+      loadJobsList();
+      loadDashboardSummary();
+      return;
+    } catch(e){}
+  }
+  // http path: if served by server (not file://), pre-mark trying real backend
+  const isServed = (location.protocol || '').startsWith('http');
+  if (isServed) {
+    const hc = document.getElementById('header-conn');
+    if (hc) { hc.textContent = '● conectando backend...'; hc.style.color = 'var(--accent)'; }
+  }
+  // http path
+  callApiOrFetch('/api/ping').then(data => {
+    if (data && (data.connected || data.status === 'ok')) {
+      updateConnUI(true, data);
+      loadSvgWorks();
+      loadJobsList();
+      loadDashboardSummary();
+    } else {
+      updateConnUI(false);
+    }
+  }).catch(() => updateConnUI(false));
+}
+
+function loadSvgWorks() {
+  callApiOrFetch('/api/list-svg-works').then(d => {
+    if (!d.groups || Object.keys(d.groups).length === 0) return;
+    // Update teaser text or add small live summary in SVG section (non-destructive)
+    const teaser = document.querySelector('.section:nth-of-type(3) .grid');
+    if (teaser) {
+      let sum = teaser.parentNode.querySelector('.live-svg-summary');
+      if (!sum) {
+        sum = document.createElement('div');
+        sum.className = 'small muted live-svg-summary';
+        sum.style.marginTop = '6px';
+        teaser.parentNode.appendChild(sum);
+      }
+      const gcount = Object.keys(d.groups).length;
+      sum.textContent = `Live scan: ${gcount} grupos, ${d.count||0} SVGs (backend). Ver visualizador completo.`;
+    }
+    console.log('[hub] svg works live updated', d);
+  }).catch(()=>{});
+}
+
+function loadJobsList() {
+  callApiOrFetch('/api/list-jobs').then(d => {
+    const statusGrid = document.querySelector('.status-grid');
+    if (!statusGrid) return;
+    let card = document.getElementById('live-jobs');
+    const count = (d && d.count) || 0;
+    const summary = (d && d.jobs && d.jobs.length) ? d.jobs.slice(0,2).map(j=>j.name).join(', ') + (d.jobs.length>2?'…':'') : 'sin jobs';
+    const html = `<div class="pro-label">JOBS ACTIVOS <span class="small" style="color:var(--accent)">(live)</span></div><div class="small" style="font-weight:600">${count} jobs</div><div class="small muted">${summary}</div>`;
+    if (!card) {
+      card = document.createElement('div');
+      card.className = 'card';
+      card.id = 'live-jobs';
+      statusGrid.appendChild(card);
+    }
+    card.innerHTML = html;
+    console.log('[hub] jobs live updated', d);
+  }).catch(()=>{});
+}
+
+function loadDashboardSummary() {
+  callApiOrFetch('/api/dashboard-summary').then(d => {
+    const summaryEl = document.getElementById('dashboard-summary');
+    const nextEl = document.getElementById('dashboard-next-actions');
+    if (!summaryEl) return;
+    const total = d && typeof d.total_items !== 'undefined' ? d.total_items : 0;
+    const alta = d && typeof d.alta !== 'undefined' ? d.alta : 0;
+    const media = d && typeof d.media !== 'undefined' ? d.media : 0;
+    const baja = d && typeof d.baja !== 'undefined' ? d.baja : 0;
+    summaryEl.innerHTML = `${total} items • <span style="color:var(--flujo-alert)">${alta} alta</span> • ${media} media • ${baja} baja`;
+    if (nextEl && d && d.top_items && d.top_items.length) {
+      const topText = d.top_items.slice(0,3).map(item => `• ${item.name} (${item.priority}, ${item.score})`).join('<br>');
+      nextEl.innerHTML = topText;
+    }
+  }).catch(()=>{
+    const summaryEl = document.getElementById('dashboard-summary');
+    if (summaryEl) summaryEl.textContent = 'Sin datos de dashboard';
+  });
+}
+
+function refreshAllLive() {
+  loadJobsList();
+  loadSvgWorks();
+  // ping to confirm
+  callApiOrFetch('/api/ping').then(d => console.log('[live] refresh ping', d)).catch(()=>{});
+}
+
+let livePulseTimer = null;
+function pulseLiveIndicator(active=true) {
+  const dot = document.getElementById('live-indicator');
+  if (!dot) return;
+  dot.style.transition = 'all .2s';
+  if (active) {
+    dot.style.background = 'var(--accent)';
+    dot.style.boxShadow = '0 0 6px var(--accent)';
+    clearTimeout(livePulseTimer);
+    livePulseTimer = setTimeout(() => {
+      if (dot) { dot.style.boxShadow=''; dot.style.background='var(--accent)'; }
+    }, 1200);
+  } else {
+    dot.style.background = 'var(--muted, #888)';
+    dot.style.boxShadow = '';
+  }
+}
+
+function showToast(msg, timeout=2200) {
+  let t = document.getElementById('live-toast');
+  if (!t) {
+    t = document.createElement('div');
+    t.id = 'live-toast';
+    t.style.cssText = 'position:fixed;bottom:12px;right:12px;background:#141414;border:1px solid #2a2a2a;color:#e8e8e8;padding:8px 12px;border-radius:6px;font-size:12px;z-index:9999;box-shadow:0 4px 12px rgba(0,0,0,.6);max-width:260px';
+    document.body.appendChild(t);
+  }
+  t.textContent = msg;
+  t.style.opacity = '1';
+  setTimeout(() => { if (t) t.style.opacity = '0.02'; setTimeout(()=>{ if(t && t.parentNode) t.parentNode.removeChild(t); }, 300); }, timeout);
+}
+
+function tryRequestNotifications() {
+  if (!('Notification' in window)) { showToast('Notifications no soportadas en este browser'); return; }
+  if (Notification.permission === 'granted') { showToast('Notificaciones ya activas'); return; }
+  Notification.requestPermission().then(p => {
+    showToast(p === 'granted' ? 'Notificaciones OS activadas ✓' : 'Permiso denegado (usa toast)');
+  });
+}
+
+function notifyDesktop(msg, title='flujo') {
+  if ('Notification' in window && Notification.permission === 'granted') {
+    try { new Notification(title, { body: msg, icon: 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIiIGhlaWdodD0iMzIiIHZpZXdCb3g9IjAgMCAzMiAzMiI+PHJlY3Qgd2lkdGg9IjMyIiBoZWlnaHQ9IjMyIiByeD0iNCIgZmlsbD0iIzJhNWE0YSIvPjx0ZXh0IHg9IjE2IiB5PSIyMiIgZm9udC1zaXplPSIxNiIgZmlsbD0iI2ZmZiIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC13ZWlnaHQ9IjcwMCI+RjwvdGV4dD48L3N2Zz4=' }); } catch(e){}
+  } else {
+    showToast(msg);
+  }
+  // also log for desktop bridge if any
+  console.log('[notify]', msg);
+}
+
+function updateLiveFromEvent(evType, payload) {
+  pulseLiveIndicator(true);
+  if (evType === 'jobs' || (payload && payload.type === 'jobs')) {
+    loadJobsList();
+    const cnt = (payload && payload.data && payload.data.count) || (payload && payload.count) || 0;
+    if (cnt > 0) console.log('[SSE live jobs]', cnt);
+  }
+  if (evType === 'svg' || (payload && payload.type && payload.type.includes('svg'))) {
+    loadSvgWorks();
+  }
+  if (evType === 'update' || (payload && payload.type === 'live-summary')) {
+    const p = payload || {};
+    if (p.jobs != null || p.count != null) loadJobsList();
+    const summary = `Live: ${p.jobs||0} jobs • ${p.svgs||p.count||0} SVGs`;
+    // only toast on significant change events
+    if (payload && (payload.type === 'job-change' || payload.type === 'svg-change' || payload.type==='live-summary')) {
+      showToast(summary);
+      notifyDesktop(summary);
+    }
+  }
+  if (evType === 'heartbeat') {
+    // silent pulse only
+  }
+}
+
+function runSafeCommand(cmd, targetEl) {
+  const outEl = targetEl || document.getElementById('pedido-result');
+  if (!outEl) return;
+  outEl.style.display = 'block';
+  outEl.innerHTML = `<span class="muted">Ejecutando (backend): ${cmd} ...</span>`;
+  callApiOrFetch('/api/run-safe-command', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({cmd})
+  }).then(data => {
+    let html = `<pre style="font-size:10px;white-space:pre-wrap;margin:0">${(data.stdout||data.stderr||JSON.stringify(data)).replace(/</g,'&lt;')}</pre>`;
+    if (data.error) html = `<span style="color:#c2410f">${data.error}</span>`;
+    outEl.innerHTML = html;
+    notifyDesktop(`Comando completado: ${cmd}`, 'flujo live');
+    pulseLiveIndicator(true);
+  }).catch(e => {
+    outEl.innerHTML = `<span class="muted">Backend no disponible. Ejecuta manualmente: ${cmd}</span>`;
+  });
+}
+
+// ============ PEDIDO PARSER (match real) ============
+function parsePedido() {
+  const input = document.getElementById('pedido-input').value || 'necesito flyer 10x14 evento 7 voluntarios';
+  const res = document.getElementById('pedido-result');
+  res.style.display = 'block';
+  res.innerHTML = '<span class="muted">Procesando... intentando backend real (flujo app)...</span>';
+
+  // Real backend by default when server running (http served or pywebview bridge or successful fetch).
+  // Graceful fallback to pure JS local only if no server / direct file open.
+  const tryReal = () => callApiOrFetch('/api/parse-real-pedido', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({text: input})
+  });
+
+  tryReal()
+  .then(data => {
+    if (data.error) throw new Error(data.error);
+    // Mark as connected to real backend on success (works even if init ping missed)
+    if (!isConnected) {
+      updateConnUI(true, {source: 'parse-success'});
+      // trigger live loads now that we know backend is live
+      setTimeout(() => { try { loadJobsList(); loadSvgWorks(); } catch(_){} }, 50);
+    }
+    showParsedResult(data, input);
+  })
+  .catch(() => {
+    // Fallback a parser JS puro (cuando se abre el HTML directamente como archivo estático)
+    const local = parseLocal(input);
+    local.source = 'local-fallback';
+    showParsedResult(local, input);
+  });
+}
+
+function parseLocal(input) {
+  const low = input.toLowerCase();
+  const known = {
+    'flyer':   {tipo:'flyer', medidas:'10x14', formato:'evt_flyer_fisico_10x14', tool:'render'},
+    'etiqueta':{tipo:'etiqueta', medidas:'16.5x6.5', formato:'sup_etiqueta_165x65', tool:'render'},
+    'plano':   {tipo:'plano', medidas:'según evento', formato:'plano_stand', tool:'plano'},
+    'stand':   {tipo:'plano', medidas:'según evento', formato:'plano_stand', tool:'plano'},
+    'rider':   {tipo:'rider', medidas:'A4', formato:'rider_eventos_a4', tool:'plano'},
+    'cotiz':   {tipo:'cotizacion', medidas:'', formato:'cotizaciones', tool:'cotizaciones'},
+    'cartelera':{tipo:'cartelera', medidas:'1080x1920', formato:'evt_cartelera', tool:'render'},
+    'ig':      {tipo:'post_ig', medidas:'1080x1350', formato:'evt_post_ig', tool:'render'},
+    'suplemento':{tipo:'etiqueta', medidas:'16.5x6.5', formato:'sup_etiqueta_165x65', tool:'render'}
+  };
+  let tipo='desconocido', medidas='', formato='', tool='render', pub='productora';
+  for (const k in known) {
+    if (low.includes(k)) { const m=known[k]; tipo=m.tipo; medidas=m.medidas; formato=m.formato; tool=m.tool; break; }
+  }
+  if (low.includes('interno') || low.includes('empresa')) pub = 'interno';
+  const vol = (input.match(/\d+/) || ['?'])[0];
+  return {tipo, medidas, formato, tool, pub, vol, notas: input};
+}
+
+function showParsedResult(data, original) {
+  const res = document.getElementById('pedido-result');
+  const match = data.formato || data.match ? `MATCH: ${data.formato || data.match}` : 'NO MATCH';
+  let cmd = '';
+  if (data.tool === 'cotizaciones') cmd = `py -m flujo cotizaciones <json> --para ${data.pub || 'productora'}`;
+  else if (data.tool === 'plano') cmd = `py -m flujo plano projects/plano/ejemplos/evento_ejemplo.json --rider --costs`;
+  else cmd = `py -m flujo render run projects/piezas_vectoriales/<proyecto>/config.json --for illustrator`;
+
+  const brief = `tipo_pieza: ${data.tipo}
+medidas: ${data.medidas || 'definir'}
+publico: ${data.pub || 'productora'}
+voluntarios: ${data.vol || data.voluntarios || '?'}
+formato_sugerido: ${data.formato || 'NUEVO'}
+notas: ${original}
+
+# ${match}
+# Acción: ${data.formato || data.match ? 'Usar formato existente + flujo' : 'Proponer NUEVA sección flujo o tarea LAST_HANDOFF'}
+# Comando: ${cmd}
+# Estilo: flujo (usa projects/flujo/flujo.json)
+# source: ${data.source || (isConnected ? 'backend-real' : 'local-fallback')}`;
+
+  res.innerHTML = `<pre style="font-size:10px; white-space:pre-wrap; margin:0">${brief}</pre>`;
+  if (!data.formato && !data.match) {
+    res.innerHTML += `<button onclick="proponerNuevaSeccion()" class="btn btn-sec" style="margin-top:6px;font-size:10px">Proponer nueva sección o tarea</button>`;
+  }
+  // Real create job draft always offered (API uses real backend when available; graceful in static)
+  res.innerHTML += ` <button onclick="createDraftFromCurrent('${(original||'').replace(/'/g,'&#39;')}')" class="btn" style="margin-top:6px;font-size:10px">Crear job draft real</button>`;
+  res.innerHTML += ` <button onclick="runSafeCommand('flujo health', this.parentNode)" class="btn-sec" style="margin-top:6px;font-size:10px">health (live)</button>`;
+}
+
+function createDraftFromCurrent(text) {
+  const res = document.getElementById('pedido-result');
+  if (!res) return;
+  res.innerHTML += `<div style="margin-top:6px"><span class="muted">Creando job draft en backend...</span></div>`;
+  callApiOrFetch('/api/create-job-draft', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({text: text || document.getElementById('pedido-input').value || ''})
+  }).then(d => {
+    if (d.created) {
+      res.innerHTML += `<div style="color:var(--accent);margin-top:4px;font-size:11px">✓ Job creado: ${d.name} <br><small>${d.job_path}</small><br>Next: <code>${d.next}</code></div>`;
+    } else {
+      res.innerHTML += `<div style="color:#c2410f;font-size:10px">Error: ${d.error||'no creado'}</div>`;
+    }
+  }).catch(e => {
+    res.innerHTML += `<div class="muted">No se pudo crear draft (usa 'flujo job new' manual).</div>`;
+  });
+}
+
+function createDraftFromInput() {
+  const inp = document.getElementById('pedido-input').value.trim();
+  const res = document.getElementById('pedido-result');
+  if (!res) return;
+  res.style.display = 'block';
+  if (!inp) { res.innerHTML = '<span class="muted">Pega pedido primero para crear draft.</span>'; return; }
+  res.innerHTML = `<span class="muted">Creando job draft real vía backend...</span>`;
+  callApiOrFetch('/api/create-job-draft', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({text: inp})
+  }).then(d => {
+    if (d.created) {
+      res.innerHTML = `<div style="color:var(--accent);font-size:11px">✓ Job draft creado: ${d.name}<br><small>${d.job_path}</small><br>Next: <code>${d.next}</code><br><span class="small muted">Job real en disco. Usa luego 'flujo job prepare'.</span></div>`;
+      // refresh live list
+      setTimeout(loadJobsList, 300);
+    } else {
+      res.innerHTML = `<span style="color:#c2410f">Error creando: ${d.error||'fallo'}</span>`;
+    }
+  }).catch(() => {
+    res.innerHTML = `<span class="muted">Backend no activo. Ejecuta <code>flujo app</code> para acciones reales. Fallback: copia 'flujo job new "..."'.</span>`;
+  });
+}
+
+function refreshLiveJobsAndShow() {
+  const res = document.getElementById('pedido-result');
+  if (res) { res.style.display='block'; res.innerHTML = '<span class="muted">Cargando jobs live...</span>'; }
+  callApiOrFetch('/api/list-jobs').then(d => {
+    const count = d.count || 0;
+    const list = (d.jobs || []).slice(0,5).map(j => `${j.name} [${j.estado}]`).join('\n') || '(ninguno)';
+    const html = `<pre style="font-size:10px;margin:0">Jobs activos (${count}):\n${list}\n\n(source: ${d.source||'jobs'})</pre>`;
+    if (res) res.innerHTML = html; else alert('Jobs:\n' + list);
+    // also ensure the status card updates
+    loadJobsList();
+  }).catch(() => {
+    if (res) res.innerHTML = '<span class="muted">Sin backend. Abre con `flujo app` para listar jobs reales.</span>';
+  });
+}
+
+function proponerNuevaSeccion() {
+  const r = document.getElementById('pedido-result');
+  r.innerHTML += `<div style="margin-top:6px;color:#c2410f;font-size:10px">→ Nueva sección propuesta. Agrega stub en projects/flujo/ o tarea en LAST_HANDOFF.md</div>`;
+}
+
+function applyFlujoToBrief() {
+  const r = document.getElementById('pedido-result');
+  if (r) r.innerHTML += `<div style="margin-top:4px;color:#2d5a4a;font-size:10px">→ estilo flujo aplicado (usa paleta arriba)</div>`;
+}
+
+function usarComoBase(nombre) {
+  const txt = `BASE: ${nombre}\nRuta: svg/... (ver visualizador)\nAcción: copiar editable a nuevo proyecto + actualizar config con flujo`;
+  navigator.clipboard.writeText(txt).then(()=>alert('Instrucciones + nombre copiados.\n\n' + txt));
+}
+
+// ============ DRAG & DROP + REAL CLI INTEGRATION (modern desktop UX) ============
+function handleDrop(ev) {
+  ev.preventDefault();
+  const dt = ev.dataTransfer;
+  if (!dt || !dt.files || !dt.files.length) return;
+  const f = dt.files[0];
+  if (!f) return;
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const txt = e.target.result;
+    const ta = document.getElementById('pedido-input');
+    ta.value = txt;
+    // auto trigger parse when drop a pedido file
+    setTimeout(parsePedido, 120);
+  };
+  reader.readAsText(f);
+}
+
+function runRealCommandFromInput() {
+  const inp = document.getElementById('pedido-input').value.trim();
+  const resEl = document.getElementById('pedido-result');
+  resEl.style.display = 'block';
+  if (!inp) { resEl.innerHTML = '<span class="muted">Pega o drop un pedido primero.</span>'; return; }
+  // Derive a safe command from text heuristically (uses backend whitelist)
+  let cmd = 'flujo daily';
+  const low = inp.toLowerCase();
+  if (low.includes('job') || low.includes('pedido')) cmd = 'flujo job list';
+  else if (low.includes('plano') || low.includes('stand')) cmd = 'flujo plano projects/plano/ejemplos/evento_ejemplo.json --rider --costs';
+  else if (low.includes('render') || low.includes('pieza')) cmd = 'flujo render formats';
+  else if (low.includes('brand')) cmd = 'flujo brand analyze';
+  resEl.innerHTML = `<div>Comando derivado: <code>${cmd}</code><br>Ejecutando via backend...</div>`;
+
+  callApiOrFetch('/api/run-safe-command', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({cmd})
+  }).then(data => {
+    if (data.error) {
+      resEl.innerHTML += `<pre style="color:#c2410f;font-size:10px">${data.error}</pre>`;
+    } else {
+      resEl.innerHTML += `<pre style="font-size:10px;max-height:120px;overflow:auto">${(data.stdout||'').slice(0,800)}\n${data.success ? '✓ OK' : '⚠️ rc='+data.returncode}</pre>`;
+    }
+  }).catch(() => {
+    resEl.innerHTML += `<span class="muted">Backend no responde. Copia el cmd y ejecuta en terminal: ${cmd}</span>`;
+  });
+}
+
+function addAgentDelegationUI() {
+  // Called on init; injects if missing (for future proofing static html)
+  // The static HTML already has the cards below; this adds interactivity if needed.
+}
+
+// Auto hint preview
+setTimeout(() => {
+  const pr = document.getElementById('pedido-result');
+  if (pr && !pr.innerHTML.trim()) {
+    // no auto spam
+  }
+}, 800);
+
+// Bootstrap live connection + brand/svg loads on server mode
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initLiveConnection);
+} else {
+  initLiveConnection();
+}
+
+// Soft auto-log on previews for agents.
+setTimeout(() => {
+  try {
+    const previews = document.querySelectorAll('.preview, .svg-view');
+    if (previews.length) console.log('%c[flujo] Previews present — ready for review.', 'color:#675f55;font-size:9px');
+  } catch(e){}
+}, 1400);
+
+// Auto-attempt to populate live delegation roles (non-blocking; falls back to static cards)
+setTimeout(() => { try { loadAgentRolesAndRender(); } catch(e){} }, 900);
+
+// Optional: refresh status on click of version
+const verEl = document.getElementById('status-version');
+if (verEl) verEl.onclick = () => { callApiOrFetch('/api/ping').then(d=>updateConnUI(!!(d&&d.connected),d)).catch(()=>updateConnUI(false)); };
+
+// ============ TABS (UI/UX Optimizer: reorganize crammed options; prioritize daily flow) ============
+function scrollToSectionRobust(targetId) {
+  const el = document.getElementById(targetId);
+  if (!el) return;
+  let attempts = 0;
+  const MAX = 8;
+  const doScroll = () => {
+    try {
+      // ensure the section's tab panel is active before measuring
+      const panel = el.closest('.tab-panel');
+      if (panel && !panel.classList.contains('active')) {
+        if (attempts < MAX) {
+          attempts++;
+          requestAnimationFrame(doScroll);
+          return;
+        }
+      }
+      requestAnimationFrame(() => {
+        try {
+          el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          // brief highlight so user sees the datadrop tools
+          const prevBg = el.style.backgroundColor;
+          el.style.transition = 'background-color 0.2s ease';
+          el.style.backgroundColor = 'rgba(194, 65, 15, 0.12)';
+          setTimeout(() => {
+            el.style.backgroundColor = prevBg || '';
+          }, 650);
+        } catch (e) { /* ignore scroll err */ }
+      });
+    } catch (e) { /* never crash nav */ }
+  };
+  // start with rAF after layout, plus small delay fallback for desktop/pywebview
+  requestAnimationFrame(doScroll);
+  setTimeout(doScroll, 80);
+}
+
+function showTab(tab, scrollTarget) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  const panel = document.getElementById('tab-' + tab);
+  if (panel) panel.classList.add('active');
+  const btn = document.querySelector('.tab-btn[data-tab="' + tab + '"]');
+  if (btn) btn.classList.add('active');
+  // update quick switcher
+  const sw = document.getElementById('quick-switch');
+  if (sw) sw.value = tab;
+  // ensure validator result if any stays visible when needed
+
+  // Robust scroll support (fixes race on hidden panel + short timeout)
+  if (scrollTarget) {
+    scrollToSectionRobust(scrollTarget);
+  }
+}
+
+function switchTabFromSelect(val) {
+  if (val) showTab(val);
+}
+
+// init default tab (daily priority) + ensure switcher
+function initTabs() {
+  // daily active by markup
+  const sw = document.getElementById('quick-switch');
+  if (sw) {
+    sw.value = 'daily';
+    sw.onchange = function(){ switchTabFromSelect(this.value); };
+  }
+  // keyboard: 1-5 for tabs quick
+  document.addEventListener('keydown', function(e){
+    if (e.target && (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA')) return;
+    if (e.key === '1') showTab('daily');
+    else if (e.key === '2') showTab('visuales');
+    else if (e.key === '3') showTab('planos');
+    else if (e.key === '4') showTab('agentes');
+    else if (e.key === '5') showTab('herramientas');
+  });
+
+  // Robust datadrop nav attach (in initTabs per spec): preventDefault + scrollTarget + no race
+  // Supports header "Datadrop (en Herramientas)" reliably switching tab + reveal section
+  // Also guards for pywebview/desktop/static + early clicks
+  try {
+    const ddLink = document.getElementById('datadrop-nav-link') ||
+                   document.querySelector('a.nav-link[href="#datadrop-section"]') ||
+                   document.querySelector('[data-scroll="datadrop-section"]');
+    if (ddLink) {
+      // remove any stale inline onclick
+      ddLink.onclick = null;
+      ddLink.addEventListener('click', function(e) {
+        if (e && e.preventDefault) e.preventDefault();
+        try {
+          showTab('herramientas', 'datadrop-section');
+        } catch (err) {
+          // never silent fail: fallback
+          const p = document.getElementById('tab-herramientas');
+          if (p) p.classList.add('active');
+          const b = document.querySelector('.tab-btn[data-tab="herramientas"]');
+          if (b) b.classList.add('active');
+          const target = document.getElementById('datadrop-section');
+          if (target) target.scrollIntoView({behavior: 'auto'});
+          console.warn('[hub] datadrop nav fallback used', err);
+        }
+      }, { passive: false });
+      // data attrs for debug/alt
+      ddLink.setAttribute('data-tab', 'herramientas');
+      ddLink.setAttribute('data-scroll', 'datadrop-section');
+    }
+  } catch (e) { /* init nav never breaks page */ }
+
+  console.log('[hub] tabs ready + datadrop nav wired');
+}
+
+// call on load
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initTabs);
+} else {
+  setTimeout(initTabs, 30);
+}
+
+// ============ DATADROP (inverse airdrop) UI + upload (local via /api + bridge) ============
+// Upload real finished photos → dated subdir in datadrops/ + manifest for future AI review (linea_editorial etc)
+async function uploadDatadrop(btn) {
+  const fileIn = document.getElementById('datadrop-file');
+  const resEl = document.getElementById('datadrop-result');
+  if (!fileIn || !fileIn.files.length) { if(resEl) resEl.textContent = 'Selecciona una foto primero.'; return; }
+  const f = fileIn.files[0];
+  const reader = new FileReader();
+  reader.onload = async function(ev) {
+    const b64 = ev.target.result; // full data: url base64
+    const payload = {
+      filename: f.name,
+      b64: b64,
+      piece_type: document.getElementById('datadrop-type')?.value || 'flyer',
+      description: document.getElementById('datadrop-desc')?.value || '',
+      linked_job: document.getElementById('datadrop-linked')?.value || ''
+    };
+    if (btn) btn.textContent = 'Subiendo...';
+    try {
+      const data = await callApiOrFetch('/api/datadrop-upload', {method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload)});
+      if (data && data.ok) {
+        if (resEl) resEl.innerHTML = `<span style="color:#2d5a4a">✓ Datadrop ${data.id} creado.</span>`;
+        setTimeout(refreshDatadropsList, 300);
+        // optional auto re-analyze hint
+      } else {
+        if (resEl) resEl.innerHTML = `<span style="color:#c2410f">${data?.error || 'Error en upload'}</span>`;
+      }
+    } catch(e) {
+      if (resEl) resEl.innerHTML = `<span class="muted">Backend no activo. (usa 'flujo app'). Fallback: copia manual a datadrops/.</span>`;
+    } finally {
+      if (btn) btn.textContent = '📤 Subir como Datadrop';
+    }
+  };
+  reader.readAsDataURL(f);
+}
+
+async function refreshDatadropsList() {
+  const listEl = document.getElementById('datadrops-list');
+  const pendEl = document.getElementById('datadrops-pending');
+  if (!listEl) return;
+  listEl.innerHTML = '<span class="small muted">Cargando datadrops...</span>';
+  if (pendEl) pendEl.innerHTML = '';
+  try {
+    // Hybrid auto path (parallel): on refresh, auto-scan incoming if present (hides raw always, processes all).
+    // Fast no-op if empty. Drop photos to incoming/ -> refresh list -> clean usable datadrops + view + package.
+    // Conservative reuse; reinforces `flujo app` hub flow for test.
+    await callApiOrFetch('/api/datadrop-scan-incoming', { method: 'POST', body: JSON.stringify({}) }).catch(()=>{});
+    const d = await callApiOrFetch('/api/list-datadrops');
+    let items = (d && d.datadrops) || [];
+    const pending = (d && (d.pending_incoming || 0)) || 0;
+    if (pendEl) {
+      // separate pending banner (Agent2): reports count without ever polluting the list/cards with raw "incoming"
+      if (pending > 0) {
+        pendEl.innerHTML = `⏳ <b>${pending}</b> foto(s) en incoming/ (staging) — lista limpia solo procesados. Pulsa refrescar o escanear para convertir.`;
+      } else {
+        pendEl.innerHTML = '✓ incoming limpio (sin archivos pendientes). Lista = solo datadrops reales con manifest (date_ dirs).';
+      }
+    }
+    // Filter client (Agent2): EXPLICITLY keep ONLY processed manifests. NEVER allow incoming/raw (id==='incoming' or .note or non date/manifest). Pairs with server robust filter.
+    items = items.filter(it => it && typeof it === 'object' && it.id && it.id !== 'incoming' && it.id.toLowerCase() !== 'incoming' && !it.note && (it.uploaded_at || it.palette || it.for_future_ai || it.manifest) && !String(it.id).startsWith('incoming-'));
+    if (!items.length) {
+      listEl.innerHTML = '<span class="small muted">Aún no hay datadrops procesados. Deja fotos en datadrops/incoming/ y pulsa "Refrescar lista" (auto-procesa) o sube arriba.</span>';
+      return;
+    }
+    listEl.innerHTML = '';
+    items.forEach(it => {
+      const card = document.createElement('div');
+      // ENHANCED cards (Agent2 list/UI path): user-friendly, less raw-JSON feel.
+      // Thumbs + summary (id/type + desc short + dims + pal swatches + traits hint) + ✓ badge.
+      // Pro flex, accent border, safe fields only. Click to view (modal). incoming NEVER renders (client+server filter).
+      // After scan: clean update w/ pending banner separate.
+      card.style.cssText = 'border:1px solid #333; border-left:5px solid var(--flujo-accent); padding:10px; margin:6px 0; border-radius:6px; cursor:pointer; display:flex; gap:12px; align-items:flex-start; background:#0f0f0f;';
+      const imgSrc = it.image_path ? `/${encodeURI(it.image_path)}` : '';
+      const thumb = imgSrc ? `<img src="${imgSrc}" style="width:64px;height:64px;object-fit:cover;border-radius:4px;border:1px solid #444;flex-shrink:0;" onerror="this.style.display='none'"/>` : '<span style="width:64px;height:64px;display:inline-block;background:#222;border-radius:4px;font-size:10px;line-height:64px;text-align:center;flex-shrink:0;">IMG</span>';
+      const type = it.type || 'pieza';
+      const desc = (it.description || '').slice(0,62);
+      const dims = (it.dimensions && (it.dimensions.width || it.dimensions.height)) ? `${it.dimensions.width||''}×${it.dimensions.height||''}` : '';
+      // inline swatches (user friendly visual from real palette in manifest produced by scan)
+      let sw = '';
+      (it.palette || []).slice(0,4).forEach(c => { if(c && c.hex) sw += `<span style="display:inline-block;width:14px;height:14px;background:${c.hex};border:1px solid #555;border-radius:2px;margin-right:3px;" title="${c.hex}"></span>`; });
+      const palText = (it.palette || []).slice(0,2).map(c => (c && c.hex) ? c.hex : '').filter(Boolean).join(' ');
+      const traits = ((it.visual_traits || it.for_future_ai || '') + '').slice(0,75);
+      const badge = '<span style="font-size:9px;background:#1a3f2e;color:#9f9;padding:1px 6px;border-radius:3px;margin-left:4px;">✓ procesado</span>';
+      card.innerHTML = `${thumb}<div style="flex:1;min-width:0;font-size:10px;line-height:1.3"><div><b>${it.id}</b> <span class="small muted">[${type}]</span>${badge}</div><div class="small" style="opacity:.9;margin:3px 0;">${desc}${desc?'…':''}</div><div class="small muted">${sw}${palText ? ' '+palText : ''}${dims ? ' • '+dims : ''}</div><div class="small" style="opacity:.65; font-size:9px;margin-top:1px;">${traits ? traits+(traits.length>=75?'…':'') : ''}</div></div>`;
+      card.title = 'Click para ver datadrop completo (imagen + palette + for_future_ai para linea v4.1 §10)';
+      card.onclick = () => showDatadropModal(it);
+      listEl.appendChild(card);
+    });
+  } catch(e) {
+    console.error("[hub refreshDatadropsList]", e);
+    listEl.innerHTML = '<span class="small muted">Lista no disponible (sin backend). Revisa workspace/datadrops/ manualmente.</span>';
+  }
+}
+
+// Robust close helper (Agent3: always cleans listeners, safe remove, explicit id)
+let _datadropEscHandler = null;
+function closeDatadropModal() {
+  try {
+    const m = document.getElementById('datadrop-viewer-modal');
+    if (m && m.parentNode) m.parentNode.removeChild(m);
+    else if (m) m.remove();
+  } catch(e) {}
+  // always cleanup esc listener (prevents leak + interference with global tab/brand keys)
+  if (_datadropEscHandler) {
+    try { document.removeEventListener('keydown', _datadropEscHandler); } catch(e) {}
+    _datadropEscHandler = null;
+  }
+  // extra sweep in case stacked (webview safety)
+  try {
+    document.querySelectorAll('#datadrop-viewer-modal').forEach(el => { if (el && el.parentNode) el.parentNode.removeChild(el); });
+  } catch(e) {}
+}
+
+function showDatadropModal(manifest) {
+  // Hardened reliable datadrop viewer modal (Agent3 UX focus)
+  // Fixes: prior cleanup (no dup IDs), named close(), attachEventListeners post-DOM (not fragile inline+stopImmediate on ancestors),
+  // backdrop target check + content stopProp, Esc always cleans, bigger obvious close (× + "Cerrar" text + .close-btn reuse),
+  // try/catch isolation (never crashes app), structured display (img + swatches + for_future_ai + raw accordion) not raw dump.
+  // Non-breaking: same sig for list cards (refresh after scan) + scan/prepare flows. Reuses brand close-btn style.
+  // Per analysis: old closest[style*] broke on serialization; stopImmediate + no-clean duped listeners broke clicks/Esc in practice (incl webview).
+  try {
+    // ALWAYS remove any prior (prevents ID clash, stacked overlays, getElById returning stale)
+    closeDatadropModal();
+
+    const modal = document.createElement('div');
+    modal.id = 'datadrop-viewer-modal';
+    modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:99999;display:flex;align-items:center;justify-content:center;padding:20px;';
+
+    const imgHtml = manifest.image_path ? `<img src="/${encodeURI(manifest.image_path)}" style="max-width:100%;max-height:52vh;border-radius:6px;border:2px solid var(--accent);margin-bottom:10px;display:block;" alt="datadrop ${manifest.id}"/>` : '';
+
+    let paletteHtml = '';
+    if (Array.isArray(manifest.palette) && manifest.palette.length) {
+      const sw = manifest.palette.slice(0,6).map(p => {
+        const hex = (p && p.hex) || '#333';
+        const pct = p && p.pct ? (p.pct*100).toFixed(0)+'%' : '';
+        return `<span style="display:inline-flex;align-items:center;margin-right:6px;margin-bottom:2px;"><span style="width:22px;height:18px;background:${hex};border:1px solid #555;border-radius:2px;display:inline-block;" title="${hex}"></span><span style="font-size:9px;margin-left:3px;color:#aaa;">${hex} ${pct}</span></span>`;
+      }).join('');
+      paletteHtml = `<div style="margin:6px 0 10px;"><div class="small" style="color:var(--muted);margin-bottom:2px;">PALETA (swatches reales del entregado)</div><div style="display:flex;flex-wrap:wrap;">${sw}</div></div>`;
+    }
+
+    const traits = (manifest.visual_traits || '').replace(/</g,'&lt;');
+    const futureAi = (manifest.for_future_ai || '').replace(/</g,'&lt;');
+    const desc = (manifest.description || '').replace(/</g,'&lt;');
+    const dims = manifest.dimensions ? `${manifest.dimensions.width||'?'}×${manifest.dimensions.height||'?'}` : '';
+    const rawJson = JSON.stringify(manifest, null, 2).replace(/</g,'&lt;');
+
+    modal.innerHTML = `
+      <div id="datadrop-modal-inner" style="background:#141414;border:1px solid #333;border-radius:8px;max-width:860px;width:100%;padding:16px;color:#e8e8e8;max-height:92vh;overflow:auto;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;border-bottom:1px solid #222;padding-bottom:6px;">
+          <div>
+            <b>Datadrop: ${manifest.id}</b>
+            <span class="small muted" style="margin-left:8px;">[${manifest.type||''}]</span>
+          </div>
+          <button class="close-btn" title="Cerrar (clic fondo / Esc / ×)" style="font-size:15px;padding:3px 10px;font-weight:700;">× Cerrar</button>
+        </div>
+
+        ${imgHtml}
+
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:8px;margin-bottom:10px;font-size:11px;">
+          <div><span class="small muted">Subido:</span><br>${manifest.uploaded_at || ''}</div>
+          <div><span class="small muted">Dims:</span><br>${dims}</div>
+          <div><span class="small muted">Archivo:</span><br>${(manifest.original_filename||'').slice(0,30)}</div>
+          <div><span class="small muted">Linked:</span><br>${manifest.linked_job || '—'}</div>
+        </div>
+
+        ${desc ? `<div style="margin-bottom:8px;"><span class="small muted">Descripción:</span><div style="font-size:12px;">${desc}</div></div>` : ''}
+
+        ${paletteHtml}
+
+        ${traits ? `<div style="margin:6px 0 8px;"><span class="small muted">Visual traits:</span><div style="font-size:11px;opacity:.9;">${traits}</div></div>` : ''}
+
+        ${futureAi ? `<div style="margin:8px 0 10px;padding:8px;background:#0a0a0a;border-left:3px solid var(--accent);border-radius:3px;"><div class="small" style="color:var(--accent);font-weight:600;margin-bottom:2px;">FOR_FUTURE_AI (ground-truth para IA / linea v4.1)</div><div style="font-size:10px;white-space:pre-wrap;">${futureAi}</div></div>` : ''}
+
+        <details style="margin-top:8px;">
+          <summary class="small muted" style="cursor:pointer;">Raw manifest JSON (para agentes)</summary>
+          <pre style="white-space:pre-wrap;font-size:9px;background:#0a0a0a;padding:8px;border-radius:4px;max-height:160px;overflow:auto;margin:4px 0 0;">${rawJson}</pre>
+        </details>
+
+        <div style="margin-top:10px; display:flex; gap:8px; justify-content:flex-end;">
+          <button class="close-btn" style="padding:4px 12px;">Cerrar</button>
+        </div>
+        <div class="small muted" style="margin-top:8px;">Viewer usable: clic fondo o botones arriba/abajo o Esc. Coord con scan (refresca list) + cards. <code>flujo app</code> hub.</div>
+      </div>`;
+
+    document.body.appendChild(modal);
+
+    // Backdrop close (robust target) + always
+    modal.addEventListener('click', function(e) {
+      if (e.target === modal) {
+        closeDatadropModal();
+      }
+    });
+
+    // Content stop (post-append; explicit #id selector, robust vs first-div)
+    const content = modal.querySelector('#datadrop-modal-inner');
+    if (content) {
+      content.addEventListener('click', function(e) { e.stopPropagation(); });
+    }
+
+    // Attach close handlers post-DOM to buttons (more reliable than inline onclick in dynamic innerHTML, esp webview)
+    modal.querySelectorAll('.close-btn').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        closeDatadropModal();
+      });
+    });
+
+    // Escape: store handler for reliable cleanup on ANY close path
+    _datadropEscHandler = function(ev) {
+      if (ev.key === 'Escape') {
+        closeDatadropModal();
+      }
+    };
+    document.addEventListener('keydown', _datadropEscHandler);
+
+    // focus close for a11y/keyboard
+    setTimeout(() => {
+      try {
+        const cb = modal.querySelector('.close-btn');
+        if (cb) cb.focus();
+      } catch(e){}
+    }, 30);
+  } catch (err) {
+    // isolation: never let modal crash the hub/app; fallback alert usable
+    console.error('[datadrop modal]', err);
+    try {
+      alert('Datadrop: ' + (manifest && manifest.id || 'ver') + '\nCerrar ventana modal manual si atascada. Usa lista o CLI.');
+      // ensure no stuck: force remove any
+      const stuck = document.getElementById('datadrop-viewer-modal');
+      if (stuck) stuck.remove();
+    } catch(e){}
+  }
+}
+
+async function scanDatadropIncoming(btn) {
+  if (btn) { btn.disabled = true; btn.textContent = 'Escaneando...'; }
+  try {
+    const res = await callApiOrFetch('/api/datadrop-scan-incoming', { method: 'POST', body: JSON.stringify({}) });
+    const r = document.getElementById('datadrop-result');
+    if (r) {
+      if (res && res.ok) {
+        const filesStr = (res.files || res.ids || []).join(', ') || '—';
+        r.innerHTML = `<span style="color:#2d5a4a">✓ Escaneados: ${res.processed || 0}. Archivos: ${filesStr}</span>`;
+      } else {
+        r.innerHTML = `<span style="color:#c2410f">Error: ${res?.error || 'backend (reinicia con flujo app para APIs reales)'}</span>`;
+      }
+    }
+    await refreshDatadropsList();
+    if (res && res.ok && (res.processed||0) > 0) {
+      alert(`Procesados ${res.processed} datadrops desde incoming. Revisa la lista y luego "Preparar paquete review".`);
+    }
+  } catch (e) {
+    alert('Error escaneando incoming. Verifica que existan fotos en datadrops/incoming/');
+  } finally {
+    if (btn) { btn.disabled = false; btn.textContent = 'Escanear incoming (deja fotos en la carpeta)'; }
+  }
+}
+
+function prepareDatadropPackage() {
+  // Inverse airdrop: call backend to write persistent _review_package.txt (with full for_future_ai teaching notes)
+  // Other AI (linea improver) reviews this + images + manifests to know exactly what finished real work looks like.
+  callApiOrFetch('/api/datadrop-prepare-package', { method: 'POST', body: JSON.stringify({}) }).then(res => {
+    if (res && res.ok) {
+      const msg = `✓ Paquete review escrito: ${res.package_file}\n(${res.count} datadrops). Léelo + abre imágenes desde /datadrops/ para que IA sepa 'qué buscar' (paletas reales, patrones, ground-truth).`;
+      const r = document.getElementById('datadrop-result');
+      if (r) r.innerHTML = `<span style="color:#2d5a4a">${msg.replace(/\n/g,'<br>')}</span>`;
+      // also copy summary for immediate paste
+      const sum = 'DATADROP REVIEW PACKAGE:\n' + JSON.stringify(res.summary || [], null, 2) + '\nVer archivo: ' + (res.package_file||'');
+      navigator.clipboard.writeText(sum).catch(()=>{});
+      alert('Review package generado y copiado resumen. Revisa datadrops/_review_package.txt');
+    } else {
+      alert(res?.error || 'Error preparando paquete. Revisa datadrops/ manualmente.');
+    }
+  }).catch(() => {
+    // graceful: still useful info
+    alert('Prepara vía hub (`flujo app`). Revisa workspace/datadrops/ (o flujo_workspace/datadrops en packaged) para manifests + _review_package.txt + fotos. Fuente para saber qué buscar en linea.');
+  });
+}
+
+// Parallel quick path (Agent 4 focus): one action for functional MVP test flow
+// drop photos -> auto process all (scan) -> clean list -> prepare package (feed linea)
+// Conservative: reuses existing scan+prepare. Hub central. `flujo app` first.
+async function quickProcessAndFeedLinea(btn) {
+  if (btn) { btn.disabled = true; btn.textContent = 'Procesando todo + feed...'; }
+  const r = document.getElementById('datadrop-result');
+  try {
+    // 1. scan incoming (robust now, processes ALL reliably)
+    const scanRes = await callApiOrFetch('/api/datadrop-scan-incoming', { method: 'POST', body: JSON.stringify({}) });
+    if (r) {
+      const fstr = (scanRes?.files || scanRes?.ids || []).join(', ') || '—';
+      r.innerHTML = `<span style="color:#2d5a4a">Scan: ${scanRes?.processed||0} procesados. Archivos: ${fstr}</span>`;
+    }
+    await refreshDatadropsList();
+    // 2. prepare package (direct tie to linea editorial)
+    const pkgRes = await callApiOrFetch('/api/datadrop-prepare-package', { method: 'POST', body: JSON.stringify({}) });
+    if (pkgRes && pkgRes.ok) {
+      const msg = `✓ MVP path: ${pkgRes.count} datadrops -> paquete ${pkgRes.package_file}. Listo para linea (usa manifests + fotos).`;
+      if (r) r.innerHTML = `<span style="color:#2d5a4a">${msg}</span>`;
+      navigator.clipboard.writeText('DATADROP MVP: ' + JSON.stringify(pkgRes.summary||[])).catch(()=>{});
+      alert('Procesados todos + paquete review listo. Abre datadrops/_review_package.txt + imágenes para linea.');
+    } else {
+      if (r) r.innerHTML += ' (prepare listo vía CLI si falla)';
+    }
+  } catch(e) {
+    alert('Error en path rápido. Usa botones individuales o CLI `flujo datadrop scan && flujo datadrop prepare`.');
+  } finally {
+    if (btn) { btn.disabled = false; btn.textContent = '🚀 Process incoming + Prepare for linea (parallel quick path)'; }
+    await refreshDatadropsList();
+  }
+}
+
+// initial load of datadrops list (when connected)
+const _origInit = initLiveConnection;
+initLiveConnection = function() {
+  _origInit && _origInit();
+  setTimeout(() => { try { refreshDatadropsList(); } catch(e){} }, 1400);
+};
+
+// Ensure datadrop buttons remain wired (callApiOrFetch + scan/upload/refresh/prepare) even in edge parse/desktop loads.
+// Parallel bindings (onclick inline + addEventListener) for robustness. No duplicate side effects.
+function initDatadropButtons() {
+  try {
+    const map = [
+      ['datadrop-file', null], // input not action
+      [null, 'uploadDatadrop', 'button[onclick*="uploadDatadrop"]'],
+      [null, 'scanDatadropIncoming', 'button[onclick*="scanDatadropIncoming"]'],
+      [null, 'refreshDatadropsList', 'button[onclick*="refreshDatadropsList"]'],
+      [null, 'prepareDatadropPackage', 'button[onclick*="prepareDatadropPackage"]'],
+      [null, 'quickProcessAndFeedLinea', 'button[onclick*="quickProcessAndFeedLinea"]']
+    ];
+    map.forEach(([_, fnName, sel]) => {
+      if (!fnName || !sel) return;
+      document.querySelectorAll(sel).forEach(btn => {
+        if (!btn || btn._datadropWired) return;
+        // Clear inline onclick to avoid double-fire on robust addEventListener wiring (but keep name for debug)
+        btn.onclick = null;
+        btn.addEventListener('click', function(ev) {
+          if (typeof window[fnName] === 'function') {
+            try { window[fnName](btn); } catch(e){}
+          }
+        }, {once: false});
+        btn._datadropWired = true;
+        // restore visual label if needed (no text change)
+      });
+    });
+  } catch(e){ /* wiring never crashes */ }
+}
+
+// Auto call on ready (after main inits)
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', initDatadropButtons);
+} else {
+  setTimeout(initDatadropButtons, 50);
+}
+</script>
+</body>
+</html>
