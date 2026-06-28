@@ -46,8 +46,13 @@ def test_prepare_supplement_job_assets_generates_flow_artifacts(tmp_path: Path) 
     job_dir = tmp_path / "jobs" / "2026-06-28_test"
     job_dir.mkdir(parents=True)
 
-    result = prepare_supplement_job_assets(job_dir, request_text="Pedido de contraportada para Impulso")
+    result = prepare_supplement_job_assets(
+        job_dir,
+        request_text="Pedido de contraportada para Impulso",
+        document_size=(1800, 1200),
+    )
 
     assert result["created"] is True
     assert (job_dir / "flows" / "contraportada.svg").exists()
     assert (job_dir / "flows" / "illustrator_package" / "2026-06-28_test" / "illustrator_artboards.jsx").exists()
+    assert result["document_size"] == [1800, 1200]

@@ -143,8 +143,12 @@ def prepare_supplement_contraportadas_for_illustrator(
     return package_dir
 
 
-def prepare_supplement_job_assets(job_dir: str | Path, request_text: str = "") -> dict[str, Any]:
-    """Crear artefactos de contraportada y paquete Illustrator dentro de un job."""
+def prepare_supplement_job_assets(
+    job_dir: str | Path,
+    request_text: str = "",
+    document_size: tuple[int, int] | None = None,
+) -> dict[str, Any]:
+    """Crear artefactos flexibles para flyer/suplemento dentro de un job."""
     job_path = Path(job_dir)
     job_path.mkdir(parents=True, exist_ok=True)
 
@@ -176,8 +180,9 @@ def prepare_supplement_job_assets(job_dir: str | Path, request_text: str = "") -
     package_svg = svg_dir / svg_output.name
     package_svg.write_bytes(svg_output.read_bytes())
 
+    size = document_size or (2362, 1654)
     spec = {
-        "document": {"name": job_path.name, "width": 2362, "height": 1654, "colorMode": "RGB"},
+        "document": {"name": job_path.name, "width": size[0], "height": size[1], "colorMode": "RGB"},
         "artboards": [
             {
                 "name": supplement.nombre,
@@ -190,7 +195,7 @@ def prepare_supplement_job_assets(job_dir: str | Path, request_text: str = "") -
     }
     write_illustrator_artboards(spec, package_dir / "illustrator_artboards.jsx", base_dir=package_dir)
     (package_dir / "README.md").write_text(
-        f"# {job_path.name}\n\nPaquete de revisión para la contraportada generada desde el hub.\n",
+        f"# {job_path.name}\n\nPaquete de revisión flexible para flyer/suplemento generado desde el hub.\n",
         encoding="utf-8",
     )
 
@@ -199,6 +204,7 @@ def prepare_supplement_job_assets(job_dir: str | Path, request_text: str = "") -
         "svg_path": str(svg_output).replace("\\", "/"),
         "package_dir": str(package_dir).replace("\\", "/"),
         "supplement": supplement.nombre,
+        "document_size": [size[0], size[1]],
     }
 
 
