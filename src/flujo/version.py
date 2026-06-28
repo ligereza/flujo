@@ -1,8 +1,8 @@
 """Versión y changelog de flujo."""
 
-__version__ = "0.40.5"
+__version__ = "0.41.0"
 VERSION = __version__
-__version_info__ = (0, 40, 5)
+__version_info__ = (0, 41, 0)
 
 
 def get_version():
@@ -11,6 +11,16 @@ def get_version():
 
 def get_changelog():
     return {
+        "0.41.0": {
+            "titulo": "Hub React operativo unificado",
+            "fecha": "2026-06-28",
+            "highlights": [
+                "Convierte `flujo_hub.html` en la misma app React single-file usada por Plano y SVG",
+                "Agrega AppShell, HubDashboard, JobsPanel, IntakePanel y CommandPanel conectados a APIs reales con fallback",
+                "El build `npm run build:context` genera `flujo_hub.html`, `plano_demo.html` y `svg_visualizer.html`",
+                "Agrega endpoints livianos de jobs/intake al servidor stdlib para que `hub serve` no quede inutil",
+            ],
+        },
         "0.40.5": {
             "titulo": "SVG Visualizer conectado a SVG reales",
             "fecha": "2026-06-28",

@@ -5,7 +5,7 @@ Do not use accents, enye, emoji, smart quotes, or special arrows here.
 Daily commands for owner on Windows/Git Bash must use `py`, not `python`.
 
 Date: 2026-06-28
-Current version: 0.40.5
+Current version: 0.41.0
 Main daily entry: `py -m flujo app`
 Desktop entry: `py -m flujo app --desktop`
 Verify on Windows: `py -m flujo verify`
@@ -13,7 +13,7 @@ Airdrop check on Windows: `py scripts/validate_airdrop.py` then `py scripts/run_
 
 ## Current state
 
-The repo is healthy after the v0.40 hub airdrop, v0.40.1 dispatcher fix, v0.40.2 Plano/Rider vanilla integration, and v0.40.3 React/Vite web layer for Plano Pro, and v0.40.4 React SVG Visualizer integration, and v0.40.5 real SVG API integration.
+The repo is healthy after the v0.40 hub airdrop, v0.40.1 dispatcher fix, v0.40.2 Plano/Rider vanilla integration, and v0.40.3 React/Vite web layer for Plano Pro, and v0.40.4 React SVG Visualizer integration, and v0.40.5 real SVG API integration, and v0.41.0 unified React hub.
 
 Real package CLI:
 - `py -m flujo health`
@@ -72,6 +72,14 @@ Do not document them as top-level `py -m flujo index` or `py -m flujo route` unl
 - Added `/api/list-svg-works`, `/api/svg-index`, and `/svg/...` static serving to `src/flujo/serve/server.py`.
 - Renamed the main web build command to `npm run build:context`; `npm run build:plano` remains as compatibility alias.
 - CI now installs Node 20, runs `npm ci`, `npm run typecheck`, and `npm run build:context` before `py -m flujo verify`.
+
+### v0.41.0 - unified React hub
+- `context/flujo_hub.html` is now generated from the React app too.
+- Added `AppShell`, `HubDashboard`, `JobsPanel`, `IntakePanel`, `CommandPanel`, and `api/flujoApi.ts`.
+- Dashboard reads ping/jobs/SVG summary with demo fallback.
+- Jobs panel reads `/api/list-jobs`.
+- Intake panel uses `/api/parse-real-pedido` and `/api/create-job-draft` when served by `py -m flujo app`.
+- `src/flujo/serve/server.py` gained light `/api/list-jobs`, `/api/dashboard-summary`, `/api/parse-real-pedido`, and read-only `/api/create-job-draft` response for compatibility.
 
 ## Airdrop model - keep this intact
 

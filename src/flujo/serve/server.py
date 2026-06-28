@@ -120,6 +120,62 @@ def api_index_brief():
             "msg": "Genera el indice con: py -m flujo index build --hash"}
 
 
+def api_list_jobs():
+    """Lista jobs de forma liviana para el hub React en el servidor stdlib."""
+    jobs_dir = os.path.join(REPO, "jobs")
+    jobs = []
+    if not os.path.isdir(jobs_dir):
+        return {"jobs": [], "count": 0, "connected": True, "source": "jobs", "note": "no jobs dir"}
+    for name in sorted(os.listdir(jobs_dir)):
+        if name.startswith(".") or name == "_template":
+            continue
+        path = os.path.join(jobs_dir, name)
+        if not os.path.isdir(path):
+            continue
+        estado_path = os.path.join(path, "estado.md")
+        estado_txt = ""
+        if os.path.isfile(estado_path):
+            try:
+                estado_txt = open(estado_path, encoding="utf-8", errors="replace").read()[:1200]
+            except Exception:
+                estado_txt = ""
+        low = estado_txt.lower()
+        estado = "borrador"
+        for candidate in ["entregado", "revision", "por-revisar", "en-diseno", "pendiente", "listo"]:
+            if candidate in low:
+                estado = candidate
+                break
+        jobs.append({
+            "name": name,
+            "path": os.path.relpath(path, REPO).replace("\\", "/"),
+            "estado": estado,
+            "tipo_pieza": "",
+            "proyecto": "",
+            "pendientes": [],
+        })
+    return {"jobs": jobs, "count": len(jobs), "connected": True, "source": "jobs"}
+
+
+def api_parse_pedido(text):
+    """Heuristica minima para `flujo hub serve`; el backend completo vive en flujo app."""
+    low = (text or "").lower()
+    tipo = "flyer"
+    formato = "evt_flyer_fisico_10x14"
+    tool = "render"
+    medidas = "10x14"
+    if "suplement" in low or "etiqueta" in low:
+        tipo = "etiqueta"; formato = "sup_etiqueta_165x65"; medidas = "16.5x6.5"
+    if "plano" in low or "rider" in low or "stand" in low:
+        tipo = "plano"; formato = "plano_stand"; medidas = "segun evento"; tool = "plano"
+    if "instagram" in low or "post" in low:
+        tipo = "post_ig"; formato = "evt_post_ig"; medidas = "1080x1350"
+    return {
+        "tipo": tipo, "medidas": medidas, "formato": formato, "tool": tool,
+        "match": True, "warnings": ["Parser liviano de hub serve; usa py -m flujo app para parser completo"],
+        "source": "serve-heuristic", "connected": True
+    }
+
+
 def api_list_svg_works():
     """Escanea svg/ y devuelve grupos consumibles por el visualizador React."""
     svg_root = os.path.join(REPO, "svg")
@@ -242,6 +298,10 @@ class Handler(BaseHTTPRequestHandler):
             return self._json(api_materials())
         if path in ("/api/list-svg-works", "/api/svg-index"):
             return self._json(api_list_svg_works())
+        if path == "/api/list-jobs":
+            return self._json(api_list_jobs())
+        if path == "/api/dashboard-summary":
+            return self._json({"total_jobs": api_list_jobs().get("count", 0), "total_svg": api_list_svg_works().get("count", 0), "connected": True})
         if path == "/api/index/brief":
             return self._json(api_index_brief())
         if path.startswith("/api/materials/") and path.endswith("/download"):
@@ -268,6 +328,10 @@ class Handler(BaseHTTPRequestHandler):
                 return self._json(api_plano_render(payload.get("evento", payload)))
             except Exception as e:
                 return self._json({"error": str(e)}, 500)
+        if path in ("/api/parse-pedido", "/api/parse-real-pedido"):
+            return self._json(api_parse_pedido(payload.get("text", "") or payload.get("pedido", "")))
+        if path == "/api/create-job-draft":
+            return self._json({"created": False, "error": "create-job-draft requiere py -m flujo app (backend completo)"}, 501)
         return self._json({"error": "endpoint no encontrado"}, 404)
 
     def _serve_repo_file(self, rel):
