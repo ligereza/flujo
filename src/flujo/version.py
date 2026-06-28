@@ -1,6 +1,6 @@
 """Versión y changelog de flujo."""
 
-__version__ = "0.42.1"
+__version__ = "0.43.0"
 VERSION = __version__
 __version_info__ = (0, 42, 1)
 
@@ -11,7 +11,7 @@ def get_version():
 
 def get_changelog():
     return {
-        "0.42.1": {
+        "0.43.0": {
             "titulo": "Example ingest templates",
             "fecha": "2026-06-28",
             "highlights": [

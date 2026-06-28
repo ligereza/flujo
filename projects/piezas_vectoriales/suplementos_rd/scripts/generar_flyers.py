@@ -33,8 +33,8 @@ PREVIEW_DIR = ROOT / "04_preview"
 EXPORT_DIR = ROOT / "05_exports"
 
 W, H = 2800, 2000
-FONT_REG = "/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf"
-FONT_BOLD = "/usr/share/fonts/truetype/dejavu/DejaVuSans-Bold.ttf"
+FONT_REG = "arial.ttf"
+FONT_BOLD = "arialbd.ttf"
 FONT_FAMILY = "DejaVu Sans, Arial, Helvetica, sans-serif"
 
 
@@ -51,7 +51,7 @@ def ensure_dirs():
 
 
 def fp(weight="regular"):
-    return FontProperties(fname=FONT_BOLD if weight == "bold" else FONT_REG)
+    return FontProperties(family="Arial", weight="bold" if weight=="bold" else "normal")
 
 
 def text_width(s: str, size: float, weight="regular") -> float:
