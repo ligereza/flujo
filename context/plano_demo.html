@@ -3,17 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FLUJO • Plano Demo (Stands & Riders)</title>
+<title>FLUJO • Plano Intervención RD</title>
 <style>
-  /*
-  =====================================================================
-  BRAND ENFORCED — flujo (projects/flujo/flujo.json) — plano_demo
-  =====================================================================
-  EXACT colors in A const + CSS: ink #1f2a24, accent #2d5a4a, paper #f8f1e3 (SVG ONLY), support, alert.
-  Dark pro UI full. Generous panels (padding 16px), radius 8px, Inter, high contrast.
-  SVGs use brand for premium stand viz. No neon/light outside paper.
-  All must pass VALIDAR BRAND from hub. Legacy plano_editor marked.
-  */
   :root {
     --bg: #0a0a0a; --panel: #141414; --panel2: #1a1a1a;
     --border: #2a2a2a; --text: #e8e8e8; --muted: #888;
@@ -37,7 +28,7 @@
   .btn { background: linear-gradient(135deg, var(--accent), #1a3f2e); color:#fff; border: none; padding: 9px 16px; font-weight:700; font-size:12px; border-radius:5px; cursor:pointer; text-transform:uppercase; letter-spacing:.05em; }
   .btn:hover { opacity: .9; }
   .btn-sec { background: var(--panel2); color: var(--text); border: 1px solid var(--border); }
-  .preview-box { background: #0a0a0a; border: 1px solid var(--border); border-radius: 8px; min-height: 420px; display:flex; align-items:center; justify-content:center; overflow:auto; padding:12px; } /* pro dark */
+  .preview-box { background: #0a0a0a; border: 1px solid var(--border); border-radius: 8px; min-height: 420px; display:flex; align-items:center; justify-content:center; overflow:auto; padding:12px; }
   .preview-box svg { max-width: 96%; max-height: 400px; box-shadow: 0 8px 30px rgba(0,0,0,.6); }
   .tabs { display:flex; gap:4px; margin-bottom:8px; }
   .tab { padding: 5px 12px; border:1px solid var(--border); background:var(--panel2); border-radius:4px; font-size:12px; cursor:pointer; }
@@ -50,83 +41,55 @@
   .nav a, .nav button { background: var(--panel2); color: var(--text); border: 1px solid var(--border); padding: 6px 12px; border-radius: 4px; font-size: 12px; text-decoration: none; cursor: pointer; }
   .nav a:hover, .nav button:hover { border-color: var(--accent); }
   .nav .back { font-weight: 600; }
+  .checkbox-group { display: flex; gap: 12px; flex-wrap: wrap; }
+  .checkbox-group label { margin: 0; display: inline-flex; align-items: center; gap: 6px; font-size: 12px; width: auto; }
 </style>
 </head>
 <body>
 <header>
   <h1>FLUJO</h1>
-  <span class="badge">Plano Demo</span>
+  <span class="badge">Plano Intervención RD</span>
   <div class="nav">
-    <a class="back" href="flujo_hub.html" style="background:#1f2a24;border-color:#2d5a4a;font-weight:600">← Volver al Hub principal (menú)</a>
-    <a href="svg_visualizer.html">Visualizador SVG</a>
-    <a href="../projects/plano/">Carpeta plano</a>
+    <a class="back" href="flujo_hub.html" style="background:#1f2a24;border-color:#2d5a4a;font-weight:600">← Hub</a>
+    <a href="svg_visualizer.html">Material RD</a>
     <span id="plano-conn" class="small muted" style="margin-left:8px">• local</span>
   </div>
 </header>
-<div style="max-width:1200px;margin:0 auto;padding:4px 20px;font-size:10px;background:rgba(45,90,74,0.14);color:#2d5a4a;border-bottom:2px solid var(--flujo-accent);font-weight:600;">BRAND ENFORCED ✓ A const usa EXACT ink/accent/support de projects/flujo/flujo.json. Paper SOLO en SVGs. Ejecuta VALIDAR BRAND AHORA en hub antes de export. LEGACY: plano_editor.html (marcado) — usa este demo pro.</div>
 
 <div class="main">
 
-  <!-- CONTROLS -->
+  <!-- CONTROLES -->
   <div class="panel">
-    <div class="section-title">Modo de trabajo</div>
-    <div class="row">
-      <label>Ámbito
-        <select id="lineaTrabajo">
-          <option value="RD">RD • ONG / campaña / terreno</option>
-          <option value="ISKVW">ISKVW • arte / 2D / 3D</option>
-        </select>
-      </label>
-      <label>Tipo de pieza
-        <select id="tipoPieza">
-          <option value="evento">Evento / stand</option>
-          <option value="rider">Rider / operación</option>
-          <option value="arte">Arte / exploración</option>
-        </select>
-      </label>
-    </div>
-    <div class="section-title">Parámetros del evento</div>
-    <label>Nombre del evento<input id="nombre" value="Festival Reduciendo Daño 2026"></label>
+    <div class="section-title">Evento</div>
+    <label>Nombre<input id="nombre" value="Festival ejemplo 2026"></label>
     <div class="row">
       <label>Duración (h)<input id="duracion" type="number" value="6" step="0.5"></label>
-      <label>Voluntarios<input id="voluntarios" type="number" value="7"></label>
+      <label>Asistentes<input id="asistentes" type="number" value="2500"></label>
     </div>
     <div class="row">
-      <label>Asistentes<input id="asistentes" type="number" value="2500"></label>
       <label>Escala (px/m)<input id="scale" type="number" value="92"></label>
+      <label>Voluntarios RD<input id="voluntarios" type="number" value="7" min="1"></label>
     </div>
-    <div style="margin-top:8px">
-      <label style="display:inline-flex; align-items:center; gap:6px; font-size:12px;">
-        <input type="checkbox" id="incluye_testeo" checked> Incluye testeo
-      </label>
-      <label style="display:inline-flex; align-items:center; gap:6px; font-size:12px; margin-left:12px;">
-        <input type="checkbox" id="masivo"> Evento masivo
-      </label>
+
+    <div class="section-title" style="margin-top:12px">Servicios RD</div>
+    <div class="checkbox-group">
+      <label style="width: auto;"><input type="checkbox" id="incluye_testeo" checked> Testeo químico</label>
+      <label style="width: auto;"><input type="checkbox" id="incluye_contension"> Zona contención</label>
     </div>
-    <label>Notas<textarea id="notas" rows="2">Stand de intervención + testeo. Espacio para colación.</textarea></label>
+
+    <label style="margin-top:12px">Notas<textarea id="notas" rows="2">Stand informativo + educación preventiva</textarea></label>
 
     <div class="actions">
-      <button class="btn" onclick="recalcular()">Recalcular plano</button>
+      <button class="btn" onclick="recalcular()">Recalcular</button>
       <button class="btn btn-sec" onclick="exportSVG()">Export SVG</button>
-      <button class="btn btn-sec" onclick="generarRider()">Generar rider</button>
-      <button class="btn btn-sec" onclick="generarCostos()">Generar costos</button>
-      <button class="btn btn-sec" onclick="simularBlender()">Simular Blender</button>
     </div>
-
-    <div class="section-title" style="margin-top:16px">Acciones flujo</div>
-    <div class="actions">
-      <button class="btn btn-sec" onclick="copyCmd('py -m flujo plano projects/plano/ejemplos/evento_ejemplo.json --rider --costs', this)">py plano --rider --costs</button>
-      <button class="btn btn-sec" onclick="copyCmd('python -m src.flujo.templates.blender_setup projects/plano/ejemplos/evento_ejemplo.json', this)">Blender setup</button>
-      <button class="btn btn-sec" onclick="window.open('../projects/plano/plano_editor.html','_blank')">Editor antiguo (LEGACY — NO USAR para visuals pro; usa este demo)</button>
-    </div>
-    <div class="hint" style="font-size:11px;margin-top:10px;color:var(--muted)">Aplica paleta flujo automáticamente (vars exactas). Listo para export a AI/PS/Blender. <strong>Valida Brand en hub antes de entregar.</strong></div>
   </div>
 
-  <!-- PREVIEW + OUTPUTS -->
+  <!-- PREVIEW + TABS -->
   <div>
     <div class="panel">
       <div class="tabs">
-        <div class="tab active" onclick="setTab('plano')">Plano (SVG)</div>
+        <div class="tab active" onclick="setTab('plano')">Plano</div>
         <div class="tab" onclick="setTab('rider')">Rider</div>
         <div class="tab" onclick="setTab('costos')">Costos</div>
       </div>
@@ -143,31 +106,21 @@
     </div>
 
     <div class="panel" style="margin-top:14px">
-      <div class="section-title">flujo brand aplicado (paleta projects/flujo/flujo.json)</div>
-      <div class="hint" id="modoContexto" style="margin-bottom:8px">Contexto actual: RD / evento.</div>
+      <div class="section-title">Brand RD</div>
       <div style="font-size:12px; display:flex; gap:8px; flex-wrap:wrap;">
         <span style="background:#1f2a24; color:#e8e8e8; padding:2px 6px; border-radius:2px;">ink #1f2a24</span>
         <span style="background:#2d5a4a; color:#fff; padding:2px 6px; border-radius:2px;">accent #2d5a4a</span>
         <span style="background:#f8f1e3; color:#111; padding:2px 6px; border-radius:2px;">paper #f8f1e3</span>
         <span style="background:#675f55; color:#fff; padding:2px 6px; border-radius:2px;">support</span>
       </div>
-      <div class="hint">Los planos y riders usan estos colores + tipografía clara. Integrado en cotizaciones dual.</div>
     </div>
   </div>
 
 </div>
 
-<div style="max-width:1200px;margin:20px auto 30px;padding:0 20px;font-size:11px;color:var(--muted);border-top:1px solid var(--border);padding-top:10px;">
-  <span style="color:#2d5a4a;font-weight:600;">BRAND ENFORCED: paleta exacta flujo.json. Valida siempre.</span><br>
-  <a href="flujo_hub.html" style="color:var(--accent);font-weight:600">← Volver al Hub principal (menú del flujo)</a>
-  &nbsp;•&nbsp; <a href="svg_visualizer.html" style="color:var(--accent)">Visualizador SVG</a>
-  &nbsp;•&nbsp; Abre el hub para intake de pedidos y comandos.
-</div>
-
 <script>
 const A = {
   ink: '#1f2a24', accent: '#2d5a4a', paper: '#f8f1e3', support: '#675f55', alert: '#c2410f',
-  // brand darks for premium pro look (use in SVGs)
   dark0: '#0a0a0a', dark1: '#0d0d0d', dark2: '#111', dark3: '#151515', dark4: '#1f1f1f', dark5: '#222'
 };
 
@@ -185,17 +138,16 @@ function recalcular() {
   const asistentes = parseInt(document.getElementById('asistentes').value) || 2500;
   const scale = parseInt(document.getElementById('scale').value) || 92;
   const testeo = document.getElementById('incluye_testeo').checked;
-  const masivo = document.getElementById('masivo').checked;
+  const contension = document.getElementById('incluye_contension').checked;
 
-  // Realistic param-driven (mirrors projects/plano/engine.py + README rules)
-  const numMesas = 1 + Math.floor((vol - 1) / 5); // 1 base + 1 cada 5 vol
-  const standW_m = (masivo || asistentes >= 2000) ? 4.5 : 3.0;
+  // Realista
+  const numMesas = 1 + Math.floor((vol - 1) / 5);
+  const standW_m = 3.5;
   const standH_m = 3.0;
   const pasillo_m = 1.2;
   const mesaW_m = 2.0, mesaH_m = 0.7;
   const silla_m = 0.5;
 
-  // px sizes from scale (px/m) + param effect
   const standW = Math.floor(standW_m * scale);
   const standH = Math.floor(standH_m * scale);
   const pasilloW = Math.max(12, Math.floor(pasillo_m * scale * 0.7));
@@ -203,21 +155,19 @@ function recalcular() {
   const mesaH = Math.floor(mesaH_m * scale * 0.7);
   const sillaSz = Math.floor(silla_m * scale * 0.8);
 
-  const w = 620, h = 460;
+  const w = 620, h = 480;
   let html = `<svg width="${w}" height="${h}" viewBox="0 0 ${w} ${h}" style="background:${A.dark0}">`;
   html += `<rect x="0" y="0" width="${w}" height="${h}" fill="${A.dark1}"/>`;
 
-  // Base positions (generous margins, no overlap)
   let baseX = 28;
   let baseY = 48;
 
-  // Stand principal (toldo) - size driven by params
+  // Stand informativo principal
   html += `<rect x="${baseX}" y="${baseY}" width="${standW}" height="${standH}" rx="6" fill="${A.dark2}" stroke="${A.accent}" stroke-width="2.5"/>`;
-  html += `<text x="${baseX + 10}" y="${baseY + 18}" fill="${A.paper}" font-size="11" font-weight="700">${nombre.substring(0,26)}</text>`;
-  html += `<text x="${baseX + 10}" y="${baseY + 33}" fill="${A.support}" font-size="8">STAND PRINCIPAL ${standW_m}×${standH_m} m</text>`;
-  html += `<text x="${baseX + 10}" y="${baseY + 46}" fill="${A.support}" font-size="7">(escala ${scale}px/m)</text>`;
+  html += `<text x="${baseX + 10}" y="${baseY + 18}" fill="${A.paper}" font-size="11" font-weight="700">STAND INFORMATIVO</text>`;
+  html += `<text x="${baseX + 10}" y="${baseY + 33}" fill="${A.support}" font-size="8">${standW_m}×${standH_m}m • ${vol} personas</text>`;
 
-  // Mesas: grid placement (2 columnas) inside stand, realistic margins/circ
+  // Mesas: educación + distribución
   const marginInside = 8;
   const cols = 2;
   const gapMesa = 6;
@@ -227,106 +177,101 @@ function recalcular() {
     for (let c = 0; c < cols; c++) {
       if (mIdx >= numMesas) break;
       const mx = baseX + marginInside + c * (mesaW + gapMesa);
-      const my = baseY + 52 + r * (mesaH + 5);
+      const my = baseY + 50 + r * (mesaH + 5);
       html += `<rect x="${mx}" y="${my}" width="${mesaW}" height="${mesaH}" rx="2" fill="${A.dark4}" stroke="${A.accent}" stroke-width="1"/>`;
       html += `<text x="${mx + 3}" y="${my + 11}" fill="${A.support}" font-size="6">mesa${mIdx + 1}</text>`;
       mIdx++;
     }
   }
 
-  // Sillas: logical row(s) at bottom of stand interior, no overlap
-  const sillasY = baseY + standH - sillaSz - 8;
-  let sIdx = 0;
-  const maxSillas = Math.min(vol, Math.floor((standW - 2*marginInside) / (sillaSz + 4)));
-  for (let i = 0; i < maxSillas; i++) {
-    const sx = baseX + marginInside + i * (sillaSz + 4);
-    if (sx + sillaSz > baseX + standW - marginInside) break;
-    html += `<rect x="${sx}" y="${sillasY}" width="${sillaSz}" height="${sillaSz}" rx="1" fill="${A.dark5}" stroke="${A.support}" stroke-width="0.8"/>`;
-    sIdx++;
-  }
-  if (sIdx < vol) {
-    // overflow label
-    html += `<text x="${baseX + 8}" y="${sillasY - 4}" fill="${A.alert}" font-size="6">+${vol - sIdx} sillas</text>`;
-  }
-
-  // Circulación pasillo (logical to right of main stand)
+  // Pasillo
   const circX = baseX + standW + 6;
   html += `<rect x="${circX}" y="${baseY - 4}" width="${pasilloW}" height="${standH + 28}" fill="none" stroke="${A.support}" stroke-width="1.5" stroke-dasharray="4 2"/>`;
-  html += `<text x="${circX + pasilloW/2 - 4}" y="${baseY + 14}" fill="${A.support}" font-size="6" transform="rotate(90 ${circX + pasilloW/2 - 4} ${baseY + 14})">pasillo ${pasillo_m}m</text>`;
+  html += `<text x="${circX + 2}" y="${baseY + 14}" fill="${A.support}" font-size="6">pasillo</text>`;
 
-  // Testeo zone: logically placed to RIGHT of circulation (not overlapping)
+  // Stand testeo
   if (testeo) {
     const testX = circX + pasilloW + 8;
-    const testW = Math.min(118, Math.floor(2.2 * scale));
+    const testW = 118;
     const testH = 92;
-    html += `<rect x="${testX}" y="${baseY + 6}" width="${testW}" height="${testH}" rx="4" fill="${A.dark2}" stroke="${A.accent}" stroke-width="1.5"/>`;
-    html += `<text x="${testX + 8}" y="${baseY + 22}" fill="${A.paper}" font-size="9" font-weight="700">TESTEO</text>`;
-    // internal mesas for reactivos
-    html += `<rect x="${testX + 8}" y="${baseY + 30}" width="${mesaW * 0.7}" height="${mesaH * 0.8}" rx="1" fill="${A.dark4}" stroke="${A.support}"/>`;
-    html += `<rect x="${testX + 8 + mesaW*0.7 + 6}" y="${baseY + 30}" width="${mesaW * 0.7}" height="${mesaH * 0.8}" rx="1" fill="${A.dark4}" stroke="${A.support}"/>`;
-    html += `<text x="${testX + 8}" y="${baseY + 78}" fill="${A.support}" font-size="6">reactivos + ${Math.max(1, Math.floor(vol/3))} mesas</text>`;
+    html += `<rect x="${testX}" y="${baseY + 6}" width="${testW}" height="${testH}" rx="4" fill="${A.dark2}" stroke="#ffb84d" stroke-width="2"/>`;
+    html += `<text x="${testX + 8}" y="${baseY + 22}" fill="#ffb84d" font-size="9" font-weight="700">TESTEO</text>`;
+    html += `<text x="${testX + 8}" y="${baseY + 34}" fill="${A.support}" font-size="7">Análisis químico</text>`;
+    
+    // Reactivos
+    html += `<rect x="${testX + 8}" y="${baseY + 38}" width="35" height="24" rx="1" fill="${A.dark4}" stroke="${A.support}"/>`;
+    html += `<text x="${testX + 10}" y="${baseY + 52}" fill="${A.support}" font-size="5">reactivos</text>`;
+    
+    // Mesas testeo
+    html += `<rect x="${testX + 50}" y="${baseY + 38}" width="35" height="24" rx="1" fill="${A.dark4}" stroke="${A.support}"/>`;
+    html += `<text x="${testX + 52}" y="${baseY + 52}" fill="${A.support}" font-size="5">mesas</text>`;
   }
 
-  // Zona extra (contención/descanso) placed BELOW with breathing space (param driven)
-  if (masivo || asistentes > 1800) {
-    const extraY = baseY + standH + 18;
-    const extraH = 46;
-    html += `<rect x="${baseX}" y="${extraY}" width="${standW}" height="${extraH}" rx="4" fill="${A.dark3}" stroke="${A.support}" stroke-width="1"/>`;
-    html += `<text x="${baseX + 8}" y="${extraY + 16}" fill="${A.support}" font-size="8">ZONA CONTENCIÓN / DESCANSO</text>`;
-    html += `<text x="${baseX + 8}" y="${extraY + 30}" fill="${A.support}" font-size="7">+${Math.floor(asistentes / 450)} pers. est. • dur ${dur}h</text>`;
+  // Zona contención
+  if (contension) {
+    const contY = baseY + standH + 16;
+    const contH = 44;
+    html += `<rect x="${baseX}" y="${contY}" width="${standW}}" height="${contH}" rx="3" fill="${A.dark3}" stroke="#a855f7" stroke-width="1.5"/>`;
+    html += `<text x="${baseX + 8}" y="${contY + 14}" fill="#a855f7" font-size="8" font-weight="700">ZONA CONTENCIÓN</text>`;
+    html += `<text x="${baseX + 8}" y="${contY + 28}" fill="${A.support}" font-size="6">Baja estimulación • apoyo emocional</text>`;
   }
 
-  // Clear labels + legend
-  html += `<text x="30" y="24" fill="${A.accent}" font-size="9" font-weight="600">PLANO DEMO — REGLAS REALES (engine + params)</text>`;
-  html += `<text x="30" y="38" fill="${A.support}" font-size="7">Mesas: ${numMesas} (1+1/5vol) • Vol: ${vol} • Asist: ~${asistentes}</text>`;
+  // Info
+  html += `<text x="30" y="24" fill="${A.accent}" font-size="9" font-weight="600">INTERVENCIÓN RD</text>`;
+  html += `<text x="30" y="38" fill="${A.support}" font-size="7">Voluntarios: ${vol} • Dur: ${dur}h • ~${asistentes} asistentes</text>`;
 
-  // Info footer
-  html += `<line x1="20" y1="${h-24}" x2="${w-20}" y2="${h-24}" stroke="${A.dark5}"/>`;
-  html += `<text x="28" y="${h-10}" fill="${A.support}" font-size="7">Escala ${scale}px/m • ${standW_m}×${standH_m}m stand • ${numMesas} mesas • ${Math.min(vol, Math.floor((standW-16)/ (sillaSz+4)))} sillas • pasillo ${pasillo_m}m • ${testeo ? ' +testeo' : ''}${masivo ? ' +masivo' : ''} • Dur: ${dur}h</text>`;
   html += `</svg>`;
 
   document.getElementById('preview').innerHTML = html;
-  document.getElementById('rider').innerText = buildRider(nombre, dur, vol, asistentes, testeo, masivo, numMesas);
-}
-
-function buildRider(nombre, dur, vol, asistentes, testeo, masivo, numMesas) {
-  numMesas = numMesas || (1 + Math.floor((vol - 1) / 5));
-  let r = `RIDER TÉCNICO — ${nombre}\n`;
-  r += `Duración: ${dur}h | Voluntarios: ${vol} | Estimados: ${asistentes}\n\n`;
-  r += `• Stand principal ${ (masivo||asistentes>=2000)?'4.5x3':'3x3' }m toldo\n`;
-  r += `• ${numMesas} mesas 2.0×0.7m (1 base +1 por cada 5 vol) + ${vol} sillas\n`;
-  if (testeo) r += `• +1 stand contiguo TESTEO (reactivos + ventilación)\n`;
-  if (dur > 5 || masivo) r += `• Colación + viáticos obligatorios (producción)\n`;
-  if (masivo || asistentes > 2000) r += `• Zona de contención/descanso baja estimulación\n`;
-  r += `• Pasillo circulación mín ${1.2}m entre zonas\n\n`;
-  r += `Layout: grid mesas + circulación realista (ver preview). Entregar impreso + digital (PDF + SVG)`;
-  return r;
+  generarRider();
 }
 
 function generarRider() {
-  setTab('rider');
-  const nombre = document.getElementById('nombre').value;
-  const dur = parseFloat(document.getElementById('duracion').value);
-  const vol = parseInt(document.getElementById('voluntarios').value);
-  const asistentes = parseInt(document.getElementById('asistentes').value);
+  const nombre = document.getElementById('nombre').value || 'Evento';
+  const dur = parseFloat(document.getElementById('duracion').value) || 6;
+  const vol = parseInt(document.getElementById('voluntarios').value) || 7;
+  const asistentes = parseInt(document.getElementById('asistentes').value) || 2500;
   const testeo = document.getElementById('incluye_testeo').checked;
-  const masivo = document.getElementById('masivo').checked;
-  const numMesas = 1 + Math.floor((vol - 1) / 5);
-  document.getElementById('rider').innerText = buildRider(nombre, dur, vol, asistentes, testeo, masivo, numMesas);
+  const contension = document.getElementById('incluye_contension').checked;
+
+  let r = `RIDER INTERVENCIÓN RD — ${nombre}\n`;
+  r += `Duración: ${dur}h | Voluntarios: ${vol} | Asistentes ~${asistentes}\n\n`;
+  r += `SERVICIOS:\n`;
+  r += `• Stand Informativo: 3.5x3.0m\n`;
+  r += `  - Educación preventiva\n`;
+  r += `  - Distribución suplementos pre/post\n`;
+  r += `  - Orientación personalizada\n`;
+  if (testeo) r += `• Stand Testeo: análisis colorimétrico de sustancias\n`;
+  if (contension) r += `• Zona Contención: espacio baja estimulación + apoyo emocional\n`;
+  r += `\nOPERATIVO:\n`;
+  r += `• Pasillo circulación 1.2m\n`;
+  if (dur > 5) r += `• Colación para equipo (${dur}h)\n`;
+  r += `• Coordinación con producción/seguridad\n`;
+  
+  document.getElementById('rider').innerText = r;
 }
 
 function generarCostos() {
-  setTab('costos');
   const vol = parseInt(document.getElementById('voluntarios').value) || 7;
   const dur = parseFloat(document.getElementById('duracion').value) || 6;
   const testeo = document.getElementById('incluye_testeo').checked;
-  let c = `COTIZACIÓN INTERNO / PRODUCTORA (dual)\n\n`;
-  c += `Personal voluntarios: ${vol} × 8h × $0 (ONG) / costo productora\n`;
-  c += `Stand + toldo + mesas: ~$180.000\n`;
-  if (testeo) c += `Kit testeo + stand extra: +$95.000\n`;
-  if (dur > 5) c += `Alimentación + colación: +$65.000\n`;
-  c += `Total aprox interno: $320k | productora: ver branded\n\n`;
-  c += `Ver: py -m flujo cotizaciones ... --para interno|productora`;
+  const contension = document.getElementById('incluye_contension').checked;
+
+  let c = `COTIZACIÓN INTERVENCIÓN RD\n\n`;
+  c += `RECURSO HUMANO:\n`;
+  c += `• ${vol} voluntarios x ${dur}h: depende negociación\n`;
+  c += `  - Analistas químicos (testeo)\n`;
+  c += `  - Educadores\n`;
+  c += `  - Coordinadores\n\n`;
+  c += `INFRAESTRUCTURA:\n`;
+  c += `• Stand informativo + toldo: ~$180.000\n`;
+  if (testeo) c += `• Kit testeo (reactivos + mesas): ~$95.000\n`;
+  if (contension) c += `• Zona contención (asientos + señalización): ~$25.000\n`;
+  c += `• Mesas + material educativo: ~$35.000\n\n`;
+  if (dur > 5) c += `• Alimentación equipo: ~$65.000\n`;
+  c += `\nTOTAL ESTIMADO: desde $335.000\n`;
+  c += `(varía según negociación con evento/productora)`;
+
   document.getElementById('costos').innerText = c;
 }
 
@@ -336,67 +281,39 @@ function exportSVG() {
   const blob = new Blob([svg.outerHTML], {type:'image/svg+xml'});
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
-  a.href = url; a.download = 'plano_stand_demo.svg'; a.click();
+  a.href = url;
+  a.download = 'intervension_rd_' + (document.getElementById('nombre').value || 'evento').replace(/\s+/g, '_') + '.svg';
+  a.click();
   URL.revokeObjectURL(url);
 }
 
-function simularBlender() {
-  alert('Blender setup:\n\nEjecuta en terminal:\npython -m src.flujo.templates.blender_setup projects/plano/ejemplos/evento_ejemplo.json\n\nEsto crea meshes + materiales con flujo.');
-}
-
-function copyCmd(cmd, el) {
-  navigator.clipboard.writeText(cmd).then(() => {
-    if (el) { const o = el.innerText; el.innerText = 'Copiado!'; setTimeout(()=> el.innerText=o, 1200); }
-    else alert('Copiado: ' + cmd);
-  });
-}
-
 function init() {
-  // init demo (initial load triggers good visual)
   setTimeout(() => {
     recalcular();
+    setTab('rider');
     generarRider();
-  }, 140);
+  }, 100);
 
-  // keyboard Enter triggers recalcular (as before)
-  document.addEventListener('keydown', e => {
-    if (e.key === 'Enter' && !['INPUT','TEXTAREA','SELECT'].includes((e.target||{}).tagName)) recalcular();
-  });
-
-  // reactive to all params: inputs drive live update (button + enter + load still primary)
-  const paramIds = ['nombre','duracion','voluntarios','asistentes','scale','incluye_testeo','masivo'];
+  const paramIds = ['nombre', 'duracion', 'voluntarios', 'asistentes', 'scale', 'incluye_testeo', 'incluye_contension'];
   let t = null;
   paramIds.forEach(id => {
     const el = document.getElementById(id);
     if (el) {
       const handler = () => {
         clearTimeout(t);
-        t = setTimeout(() => { recalcular(); generarRider(); }, 180);
+        t = setTimeout(() => { recalcular(); }, 150);
       };
       el.addEventListener('input', handler);
       el.addEventListener('change', handler);
     }
   });
 
-  // ensure button always works (onclick inline)
-  console.log('[plano_demo] recalcular reactive + realistic placement ready');
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Enter' && !['INPUT','TEXTAREA','SELECT'].includes((e.target||{}).tagName)) recalcular();
+  });
 }
-init();
 
-// Minimal conn hint when served by flujo app (desktop bridge or http)
-(function(){
-  const c = document.getElementById('plano-conn');
-  if (!c) return;
-  try {
-    if (window.pywebview && window.pywebview.api) {
-      c.textContent = '• desktop bridge';
-      c.style.color = A.accent;
-    } else if (location.protocol.startsWith('http')) {
-      c.textContent = '• backend live';
-      c.style.color = A.accent;
-    }
-  } catch(e){}
-})();
+init();
 </script>
 </body>
 </html>
