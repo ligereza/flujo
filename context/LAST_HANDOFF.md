@@ -346,6 +346,32 @@ Both tools now aligned with their purpose:
 
 Status: ✅ Tested locally, responsive, professional presentation
 
+## Agent communication guardrails - 2026-06-28 v0.36.2
+
+Created two new guardrail documents to prevent future agent confusion:
+
+### docs/AGENT_GUARDRAILS_VISUAL_TOOLS.md
+- 5-question rule (mandatory before modifying HTML)
+- Quick reference table (tool purpose / reference / no-touch)
+- Red flags checklist (STOP conditions)
+- Pre-commit quality checklist (navigation, responsive, console clean)
+- Key URLs that should never change
+
+### PARA_IA.md (rewritten)
+- Bullet-based, enfático en guardrails
+- Obligatory reading order (5 steps)
+- Non-negotiable rules table
+- Visual tools warning + links to guardrails
+- Quick reference for common mistakes
+
+Both documents aim to prevent:
+- Modifying tools without understanding context
+- Ignoring HERRAMIENTAS_VISUALES.md
+- Committing untested HTML changes
+- Confusing RIDER (document) with VISUALIZER (gallery)
+
+Status: ✅ Ready for next agent
+
 Recommended recovery if a previous run already applied files:
 ```bash
 py scripts/run_airdrop_checks.py --resume "logo clean lab experimental" --skip-push

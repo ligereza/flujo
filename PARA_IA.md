@@ -1,62 +1,94 @@
 # PARA IA
 
-Este repo se llama **flujo** — arte y automatización.
+**NO HAGAS PUSH SIN LEER TODO ESTO.**
 
-**Punto de entrada obligatorio (diario) para agentes:** `flujo app` (o `flujo app --desktop`) — lanza la app real (stdlib server + APIs reales brand/parse/jobs/delegate/SSE/datadrop) + sirve los 3 HTMLs como UI pro completa. O abre `context/flujo_hub.html` (fallback estático).
+## PUNTO DE ENTRADA ÚNICO DIARIO
+```bash
+py -m flujo app    # o --desktop
+```
+Sirve servidor real + APIs + Hub HTML como UI. Si falla, abre `context/flujo_hub.html` estático.
 
-El hub (dentro de la app) es el workspace pro central con tabs: Intake/Jobs, Visuales, Planos, Agentes/Delegate (5 roles), Herramientas + Datadrop (inverse airdrop fully working).
+## LECTURA OBLIGATORIA EN ORDEN
 
-**Estado actual (2026-06-22) / Avances recientes:**
-- `flujo app` = SINGLE daily entry point. Hub tabs + Datadrop MVP: fotos a datadrops/incoming/ → scan (`flujo datadrop scan` o botón) → dated/ + rich manifests (palette/OCR/visual_traits/for_future_ai). Clean list, cards thumbs/swatches, modal robusto, _review_package.txt.
-- Parallel delegation maximizada (reciente fix): 5 roles (Visual Polish, Pipeline & Integration, Brand Guardian, Future/Modern, Packaging). Hub copy-prompt + live delegate API.
-- LAST_HANDOFF.md low-token source of truth + continuation. Brand strict via projects/flujo/flujo.json. Launchers desktop. Higiene + robust scan/list/modal.
-- Packaging: `flujo package` para .exe standalone.
+1. ✅ **Este archivo** (PARA_IA.md)
+2. ✅ `context/LAST_HANDOFF.md` (estado actual, qué pasó)
+3. ✅ `docs/AGENT_OPERATING_MANUAL.md` (flujos, delegación)
+4. ✅ `docs/HERRAMIENTAS_VISUALES.md` (si tocas HTML visual tools)
+5. ✅ `docs/AGENT_GUARDRAILS_VISUAL_TOOLS.md` (la lista NO hacerlo)
 
-**Hacia dónde vamos:**
-- Auto-compact chat sessions (parallel delegation + LAST_HANDOFF).
-- linea_editorial v4.1 full integration usando datadrop ground-truth para §10/11 validation.
-- Streamlined daily: `flujo app` → hub como único workspace (intake + datadrop + delegate + jobs).
-- Packaging .exe, multi-path resilience, más hygiene/privacy/local analysis, agent specialization.
+**Si vas a modificar herramientas HTML directamente:** Además lee `docs/AGENT_GUARDRAILS_VISUAL_TOOLS.md` PRIMERO.
 
-Lee en orden:
-1. Ejecuta `flujo app` (o `flujo app --desktop`) — entrada diaria obligatoria.
-2. `context/LAST_HANDOFF.md`
-3. `docs/AGENT_OPERATING_MANUAL.md`
+## COSAS QUE NO SON NEGOCIABLES
 
-Comandos clave (Windows: `py -m flujo ...`):
+| Regla | Por qué |
+|---|---|
+| **Usa `py`, no `python`** | Windows Git Bash está configurado así |
+| **Solo `instaloader`, nunca `yt-dlp`** | Policies |
+| **No crees venvs pesados** | Usa entorno del sistema |
+| **Privacidad antes de IAs externas** | `py -m flujo privacy scan` |
+| **Valida airdrop antes de aplicar** | `py scripts/validate_airdrop.py` |
+| **No hagas push sin especificar qué cambió** | HANDOFF o commit detallado |
+| **Las herramientas visuales NO son juguetes** | Leen de docs específicos (ver HERRAMIENTAS_VISUALES.md) |
+
+## ÁREAS DE TRABAJO
+
+| Área | Entrada | Formato |
+|---|---|---|
+| **EVENTOS** | Gmail `subject:evento` + IG link | Flyer 10×14cm, Rider A4, Cartelera 9:16 |
+| **SUPLEMENTOS** | WhatsApp/correo | Etiqueta 16.5×6.5cm, Flyer A5, Pendón, Logo |
+
+## COMANDOS BÁSICOS
 
 ```bash
-flujo version
-flujo health
-flujo daily
-flujo job new "..." --email inbox/correo.txt
-flujo job prepare jobs/<job>
-flujo render run projects/.../config.json --for illustrator|blender
-flujo cotizaciones <json> --para productora|interno
-flujo plano projects/plano/ejemplos/evento_ejemplo.json --rider --costs
-flujo datadrop scan
+py -m flujo version          # Ver versión
+py -m flujo health           # Diagnóstico
+py -m flujo app              # Iniciar hub (OBLIGATORIO diario)
+py -m flujo job new "..."    # Crear job
+py -m flujo datadrop scan    # Procesar fotos terminadas
+py -m flujo privacy scan     # Antes de mandar a IAs
 ```
 
-Herramientas activas: instaloader (solo), análisis de colores + OCR (en analysis/), export a AI/PS/Blender. Datadrop para ground-truth de entregas.
+## HERRAMIENTAS HTML CRÍTICAS
 
-Privacidad: `flujo privacy scan/sanitize` antes de IAs externas.
+⚠️ **NO TOQUES SIN LEER COMPLETO:**
 
-Reglas: Español primero, flujo siempre, Windows con `py`.
-Para reanudación: usa `context/LAST_HANDOFF.md` + `docs/AGENT_OPERATING_MANUAL.md` (prioriza sobre legacy).
+- `context/plano_demo.html` = RIDER RD EVENTOS (documento operativo)
+  - Lee: `docs/RIDER_EVENTOS.md` + `Propuesta_Reduciendo_Dano.txt`
+  
+- `context/svg_visualizer.html` = Visor SUPLEMENTOS (galería diseños)
+  - Lee: `BRIEF_SUPLEMENTOS_RD.md` + `CATALOGO_FORMATOS.md`
 
-**No uses yt-dlp. No crees venvs pesados. Usa `py`.**
+**LEE `docs/AGENT_GUARDRAILS_VISUAL_TOOLS.md` (5-question rule).**
 
-## Airdrops: validación obligatoria
+## ENTREGAS
 
-Antes de aplicar cualquier entrega externa:
+Haces un **ZIP con `_airdrop/`** (NO push directo):
 
-```bash
-py scripts/validate_airdrop.py
-py scripts/run_airdrop_checks.py "vX.Y.Z - descripcion"
+```
+_airdrop/
+  ├── HANDOFF_vX.Y.Z.md
+  ├── cambios en rutas reales
+  └── tests si es lógica nueva
+
+Validación:
+  py scripts/validate_airdrop.py
+  py scripts/run_airdrop_checks.py "vX.Y.Z - desc"
 ```
 
-Los errores quedan en `_logs/airdrop_error_*.txt` para compartirlos sin deformación de la web.
+## ERRORES FRECUENTES = NO LOS REPITAS
 
-## Mapa antes de tocar
+❌ Modificar `plano_demo.html` o `svg_visualizer.html` sin entender propósito  
+❌ Cambiar colores/referencia sin doc  
+❌ Hacer push sin pasar pruebas navegador  
+❌ Ignorar HANDOFF/LAST_HANDOFF  
+❌ Usar `python` en lugar de `py` (Windows)  
 
-Antes de modificar archivos, lee `docs/REPO_MAP.md` y `docs/SCRIPTS_INVENTORY.md`. No uses `_archive/`, `reference_old/` ni checkpoints como fuente primaria salvo que el dueño lo pida explícitamente.
+## REGLA DE ORO
+
+**SI NO ENTIENDES POR QUÉ ALGO EXISTE, NO LO TOQUES.**
+
+Lee primero. Pregunta después. Modifica por último.
+
+---
+
+**Próximo paso:** Lee `context/LAST_HANDOFF.md` (estado actual)
