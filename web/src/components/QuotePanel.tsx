@@ -114,7 +114,71 @@ export default function QuotePanel() {
   };
 
   return (
-    <div className="space-y-5">
+    <div className="space-y-6">
+      {/* ── Printable Area for Quote (Designed for paper and PDF) ── */}
+      <div className="hidden print:block text-black bg-white p-8 font-sans text-xs">
+        <header className="border-b-4 border-black pb-4 mb-8 flex justify-between items-end">
+          <div>
+            <h1 className="text-3xl font-black italic tracking-tighter uppercase">COTIZACIÓN DE SERVICIOS</h1>
+            <p className="text-[9px] uppercase tracking-[0.2em] font-bold mt-1">ONG Reduciendo Daño</p>
+          </div>
+          <div className="text-right">
+            <p className="text-base font-bold">ORGANIZACIÓN RD</p>
+            <p className="text-[9px] opacity-60">Servicios de Reducción de Daño v2026</p>
+          </div>
+        </header>
+
+        <section className="mb-6">
+          <h2 className="text-lg font-black uppercase tracking-tight mb-2">Resumen de la Cotización</h2>
+          <div className="grid grid-cols-2 gap-4 leading-relaxed">
+            <p><strong>Evento / Proyecto:</strong> {eventName || 'Sin nombre'}</p>
+            <p><strong>Cliente:</strong> {clientName || 'Sin especificar'}</p>
+            <p><strong>Fecha de Emisión:</strong> {new Date().toLocaleDateString('es-CL')}</p>
+          </div>
+        </section>
+
+        <section className="mb-6">
+          <h2 className="text-lg font-black uppercase tracking-tight mb-2">Detalle de Servicios</h2>
+          <table className="w-full border-collapse border border-zinc-300 text-xs">
+            <thead>
+              <tr className="bg-zinc-100">
+                <th className="border border-zinc-300 p-2 text-left">Categoría</th>
+                <th className="border border-zinc-300 p-2 text-left">Ítem / Servicio</th>
+                <th className="border border-zinc-300 p-2 text-center">Cantidad</th>
+                <th className="border border-zinc-300 p-2 text-right">Precio Unitario</th>
+                <th className="border border-zinc-300 p-2 text-right">Total</th>
+              </tr>
+            </thead>
+            <tbody>
+              {items.map(it => (
+                <tr key={it.id}>
+                  <td className="border border-zinc-300 p-2">{it.category}</td>
+                  <td className="border border-zinc-300 p-2">{it.label}</td>
+                  <td className="border border-zinc-300 p-2 text-center">{it.qty}</td>
+                  <td className="border border-zinc-300 p-2 text-right">{formatCLP(it.price)}</td>
+                  <td className="border border-zinc-300 p-2 text-right">{formatCLP(it.qty * it.price)}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </section>
+
+        <section className="text-right space-y-1.5 border-t border-black pt-4">
+          <p><strong>Subtotal:</strong> {formatCLP(subtotal)}</p>
+          {discount > 0 && <p><strong>Descuento ({discount}%):</strong> -{formatCLP(discountAmount)}</p>}
+          <p className="text-base font-black"><strong>TOTAL ESTIMADO:</strong> {formatCLP(total)}</p>
+        </section>
+
+        {notes && (
+          <section className="mt-6 border-t border-zinc-300 pt-4">
+            <h3 className="font-bold mb-1">Notas Adicionales:</h3>
+            <p className="text-zinc-600 leading-relaxed">{notes}</p>
+          </section>
+        )}
+      </div>
+
+      {/* Screen View (Interactive App Tool) */}
+      <div className="print:hidden space-y-5">
       {/* Header */}
       <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
         <div>
@@ -332,5 +396,6 @@ export default function QuotePanel() {
         </div>
       </div>
     </div>
+  </div>
   );
 }

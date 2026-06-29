@@ -5,7 +5,7 @@ Do not use accents, enye, emoji, smart quotes, or special arrows here.
 Daily commands for owner on Windows/Git Bash must use `py`, not `python`.
 
 Date: 2026-06-28
-Current version: 0.44.0
+Current version: 0.45.0
 Main daily entry: `py -m flujo app`
 Desktop entry: `py -m flujo app --desktop`
 Verify on Windows: `py -m flujo verify`
@@ -25,6 +25,12 @@ Real package CLI:
 - `py -m flujo hub route ...`
 
 ## Recent completed work
+
+### v0.45.0 - Elements Resizing, Direct Label Editing and Automated Flyer Generation
+- Added width and height numeric input fields to the Property Editor in PlanoTool.tsx, allowing the operator to modify element sizes (w, h in px) directly in design mode.
+- Renamed property label to 'Nombre / Texto Interno' to make it clear that editing the name dynamically modifies the internal text rendered in the SVG canvas.
+- Executed the flyer creation script projects/piezas_vectoriales/suplementos_rd/scripts/generar_flyers.py to generate the 7 editable and vectorised SVG supplement flyers and update their previews.
+- Bumpped version of the system to 0.45.0 and packaged everything into the final airdrop_v0.45.0.zip deliverable.
 
 ### v0.44.0 - Rider requirements restore 17 items + icons + layer ordering + export
 - Fully merged Claude's dark styling with our 17-item requirements checklist, mapping each to a custom Lucide icon instead of emojis.

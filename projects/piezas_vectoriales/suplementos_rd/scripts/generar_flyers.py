@@ -446,11 +446,17 @@ Post Fiesta está incluido en el flyer general, pero todavía no existe ficha in
     (ROOT / "README_FLUJO_OPTIMIZADO.md").write_text(readme, encoding="utf-8")
 
 
+import zipfile
+
+
 def zip_dir(src: Path, zip_name: str):
     zip_path = EXPORT_DIR / zip_name
     if zip_path.exists():
         zip_path.unlink()
-    subprocess.run(["zip", "-qr", str(zip_path), "."], cwd=src, check=True)
+    with zipfile.ZipFile(zip_path, 'w', zipfile.ZIP_DEFLATED) as zipf:
+        for file_path in src.rglob('*'):
+            if file_path.is_file():
+                zipf.write(file_path, file_path.relative_to(src))
 
 
 def make_exports():
@@ -460,10 +466,14 @@ def make_exports():
     full = EXPORT_DIR / "suplementos_rd_flujo_completo_2000x2800.zip"
     if full.exists():
         full.unlink()
-    subprocess.run([
-        "zip", "-qr", str(full),
-        "01_contenido", "02_editables_svg", "03_final_vectorizado_svg", "04_preview", "README_FLUJO_OPTIMIZADO.md"
-    ], cwd=ROOT, check=True)
+    with zipfile.ZipFile(full, 'w', zipfile.ZIP_DEFLATED) as zipf:
+        for folder in ["01_contenido", "02_editables_svg", "03_final_vectorizado_svg", "04_preview"]:
+            for file_path in (ROOT / folder).rglob('*'):
+                if file_path.is_file():
+                    zipf.write(file_path, file_path.relative_to(ROOT))
+        readme_file = ROOT / "README_FLUJO_OPTIMIZADO.md"
+        if readme_file.exists():
+            zipf.write(readme_file, "README_FLUJO_OPTIMIZADO.md")
 
 
 def main():

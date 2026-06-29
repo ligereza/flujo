@@ -1,8 +1,8 @@
 """Versión y changelog de flujo."""
 
-__version__ = "0.44.0"
+__version__ = "0.45.0"
 VERSION = __version__
-__version_info__ = (0, 44, 0)
+__version_info__ = (0, 45, 0)
 
 
 def get_version():
@@ -11,6 +11,16 @@ def get_version():
 
 def get_changelog():
     return {
+        "0.45.0": {
+            "titulo": "Plano element resizing + direct label editing + automated flyer generator run",
+            "fecha": "2026-06-28",
+            "highlights": [
+                "Permite modificar el tamano (ancho y alto en px) de los elementos en el editor de propiedades del Plano SVG",
+                "Permite editar de forma directa el texto interno / nombre de los elementos del plano",
+                "Ejecuta de forma automatizada la creacion y renderizado maestro de los 7 flyers vectorizados de suplementos de la ONG",
+                "Bumpea la version del sistema a 0.45.0 y empaqueta el entregable unificado en airdrop_v0.45.0.zip",
+            ],
+        },
         "0.44.0": {
             "titulo": "Rider requirements restore 17 items + icons + layer ordering + export",
             "fecha": "2026-06-28",

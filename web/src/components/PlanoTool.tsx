@@ -3,7 +3,8 @@ import {
   Map, Download, Plus, Trash2, Eye, EyeOff, Printer, RotateCcw,
   Scan, Users, Moon, Home, Table, Armchair, Box, Zap,
   Lightbulb, Droplet, Thermometer, User, ShieldAlert, HeartPulse, Utensils,
-  ChevronRight, ChevronLeft, Settings, Copy, Layers, Grid3X3, FileText
+  ChevronRight, ChevronLeft, Settings, Copy, Layers, Grid3X3, FileText,
+  Heart, AlertTriangle, Coffee, RefreshCw
 } from 'lucide-react';
 import { cn } from '../utils/cn';
 
@@ -26,7 +27,7 @@ interface Element {
 }
 
 // ── Presets ──────────────────────────────────────────────────────────
-const PRESET_CONFIGS: Record<Preset, { desc: string }> = {
+export const PRESET_CONFIGS: Record<Preset, { desc: string }> = {
   UNDER: {
     desc: '2 voluntarios, 1 mesa, 2 sillas, electricidad/luz básica'
   },
@@ -190,7 +191,6 @@ export default function PlanoTool() {
 
   const svgRef = useRef<SVGSVGElement>(null);
   const selectedElement = elements.find(e => e.id === selectedId);
-  const proposal = PRESET_CONFIGS[preset];
 
   const applyPreset = (p: Preset) => {
     setPreset(p);
@@ -391,52 +391,52 @@ export default function PlanoTool() {
   const printRider = () => window.print();
 
   const toggleCheck = (item: string) => {
-    setCheckedItems(prev => {
-      const isChecking = !prev.includes(item);
-      const next = isChecking ? [...prev, item] : prev.filter(x => x !== item);
-      
-      // Live sync requirements selection to SVG canvas
-      setElements(els => {
-        let updated = [...els];
-        if (isChecking) {
-          if (item === "Toldo/carpa (mínimo 3×3m)" && !updated.some(e => e.id === 'toldo')) {
-            updated.push({ id: 'toldo', type: 'rect', x: 250, y: 350, w: 1000, h: 660, label: 'Toldo / Carpa 3x3', color: '#2d5a4a', visible: true });
-          }
-          if (item === "Mesas (2-3 según modalidad)" && !updated.some(e => e.id === 'mesa')) {
-            updated.push({ id: 'mesa', type: 'rect', x: 500, y: 700, w: 400, h: 200, label: 'Mesa', color: '#10b981', visible: true });
-          }
-          if (item === "Sillas (4-6 por stand)" && !updated.some(e => e.id === 'sillas')) {
-            updated.push({ id: 'sillas', type: 'rect', x: 1000, y: 700, w: 250, h: 200, label: 'Sillas', color: '#ca8a04', visible: true });
-          }
-          if (item === "Punto eléctrico disponible" && !updated.some(e => e.id === 'power')) {
-            updated.push({ id: 'power', type: 'symbol', symbolKey: 'power', x: 1800, y: 700, w: 160, h: 160, label: 'Poder', color: '#f59e0b', visible: true });
-          }
-          if (item === "Calefacción si exterior nocturno" && !updated.some(e => e.id === 'heating')) {
-            updated.push({ id: 'heating', type: 'symbol', symbolKey: 'heating', x: 1800, y: 1000, w: 160, h: 160, label: 'Calefacción', color: '#ef4444', visible: true });
-          }
-          if (item === "Agua/hidratación si aplica" && !updated.some(e => e.id === 'water')) {
-            updated.push({ id: 'water', type: 'symbol', symbolKey: 'water', x: 1800, y: 1300, w: 160, h: 160, label: 'Agua', color: '#2563eb', visible: true });
-          }
-          if (item === "Acceso a equipo médico del evento" && !updated.some(e => e.id === 'medical')) {
-            updated.push({ id: 'medical', type: 'symbol', symbolKey: 'extinguisher', x: 2200, y: 1000, w: 160, h: 160, label: 'Emergencia', color: '#dc2626', visible: true });
-          }
-          if (item === "Zona con menor estimulación sensorial para descanso" && !updated.some(e => e.id === 'zona-descanso')) {
-            updated.push({ id: 'zona-descanso', type: 'symbol', symbolKey: 'contencion', x: 1500, y: 400, w: 200, h: 200, label: 'Zona Descanso', color: '#059669', visible: true });
-          }
-        } else {
-          if (item === "Toldo/carpa (mínimo 3×3m)") updated = updated.filter(e => e.id !== 'toldo');
-          if (item === "Mesas (2-3 según modalidad)") updated = updated.filter(e => e.id !== 'mesa');
-          if (item === "Sillas (4-6 por stand)") updated = updated.filter(e => e.id !== 'sillas');
-          if (item === "Punto eléctrico disponible") updated = updated.filter(e => e.id !== 'power');
-          if (item === "Calefacción si exterior nocturno") updated = updated.filter(e => e.id !== 'heating');
-          if (item === "Agua/hidratación si aplica") updated = updated.filter(e => e.id !== 'water');
-          if (item === "Acceso a equipo médico del evento") updated = updated.filter(e => e.id !== 'medical');
-          if (item === "Zona con menor estimulación sensorial para descanso") updated = updated.filter(e => e.id !== 'zona-descanso');
+    const isChecking = !checkedItems.includes(item);
+    
+    // Update checkedItems
+    setCheckedItems(prev =>
+      isChecking ? [...prev, item] : prev.filter(x => x !== item)
+    );
+    
+    // Live sync requirements selection to SVG canvas
+    setElements(els => {
+      let updated = [...els];
+      if (isChecking) {
+        if (item === "Toldo/carpa (mínimo 3×3m)" && !updated.some(e => e.id === 'toldo')) {
+          updated.push({ id: 'toldo', type: 'rect', x: 250, y: 350, w: 1000, h: 660, label: 'Toldo / Carpa 3x3', color: '#2d5a4a', visible: true });
         }
-        return updated;
-      });
-
-      return next;
+        if (item === "Mesas (2-3 según modalidad)" && !updated.some(e => e.id === 'mesa')) {
+          updated.push({ id: 'mesa', type: 'rect', x: 500, y: 700, w: 400, h: 200, label: 'Mesa', color: '#10b981', visible: true });
+        }
+        if (item === "Sillas (4-6 por stand)" && !updated.some(e => e.id === 'sillas')) {
+          updated.push({ id: 'sillas', type: 'rect', x: 1000, y: 700, w: 250, h: 200, label: 'Sillas', color: '#ca8a04', visible: true });
+        }
+        if (item === "Punto eléctrico disponible" && !updated.some(e => e.id === 'power')) {
+          updated.push({ id: 'power', type: 'symbol', symbolKey: 'power', x: 1800, y: 700, w: 160, h: 160, label: 'Poder', color: '#f59e0b', visible: true });
+        }
+        if (item === "Calefacción si exterior nocturno" && !updated.some(e => e.id === 'heating')) {
+          updated.push({ id: 'heating', type: 'symbol', symbolKey: 'heating', x: 1800, y: 1000, w: 160, h: 160, label: 'Calefacción', color: '#ef4444', visible: true });
+        }
+        if (item === "Agua/hidratación si aplica" && !updated.some(e => e.id === 'water')) {
+          updated.push({ id: 'water', type: 'symbol', symbolKey: 'water', x: 1800, y: 1300, w: 160, h: 160, label: 'Agua', color: '#2563eb', visible: true });
+        }
+        if (item === "Acceso a equipo médico del evento" && !updated.some(e => e.id === 'medical')) {
+          updated.push({ id: 'medical', type: 'symbol', symbolKey: 'extinguisher', x: 2200, y: 1000, w: 160, h: 160, label: 'Emergencia', color: '#dc2626', visible: true });
+        }
+        if (item === "Zona con menor estimulación sensorial para descanso" && !updated.some(e => e.id === 'zona-descanso')) {
+          updated.push({ id: 'zona-descanso', type: 'symbol', symbolKey: 'contencion', x: 1500, y: 400, w: 200, h: 200, label: 'Zona Descanso', color: '#059669', visible: true });
+        }
+      } else {
+        if (item === "Toldo/carpa (mínimo 3×3m)") updated = updated.filter(e => e.id !== 'toldo');
+        if (item === "Mesas (2-3 según modalidad)") updated = updated.filter(e => e.id !== 'mesa');
+        if (item === "Sillas (4-6 por stand)") updated = updated.filter(e => e.id !== 'sillas');
+        if (item === "Punto eléctrico disponible") updated = updated.filter(e => e.id !== 'power');
+        if (item === "Calefacción si exterior nocturno") updated = updated.filter(e => e.id !== 'heating');
+        if (item === "Agua/hidratación si aplica") updated = updated.filter(e => e.id !== 'water');
+        if (item === "Acceso a equipo médico del evento") updated = updated.filter(e => e.id !== 'medical');
+        if (item === "Zona con menor estimulación sensorial para descanso") updated = updated.filter(e => e.id !== 'zona-descanso');
+      }
+      return updated;
     });
   };
 
@@ -526,8 +526,8 @@ export default function PlanoTool() {
 
   const loadFromBackend = async (presetId: Preset = preset) => {
     if (window.location.protocol === 'file:') {
-      applyPresetLocal(presetId);
-      setBackendStatus(`Modo demo con preset ${preset.label}: abre con py -m flujo app para usar /api/plano/render.`);
+      applyPreset(presetId);
+      setBackendStatus(`Modo demo con preset ${presetId}. Abre via py -m flujo app para usar APIs.`);
       return;
     }
     setBackendStatus('Consultando motor Python...');
@@ -581,7 +581,7 @@ export default function PlanoTool() {
   ];
 
   return (
-    <div className="space-y-6" onMouseMove={handleMouseMove} onMouseUp={handleMouseUp}>
+    <div className="space-y-6">
       {/* Printable Area (Styled strictly for high contrast and paper output) */}
       <div className="hidden print:block p-8 text-black bg-white font-sans text-xs">
         <header className="border-b-4 border-black pb-4 mb-8 flex justify-between items-end">
@@ -661,7 +661,7 @@ export default function PlanoTool() {
         <div>
           <h3 className="text-2xl font-bold flex items-center gap-2">
             Rider RD · Herramienta de Plano
-            <span className="text-xs bg-emerald-500/20 text-emerald-400 font-black px-2 py-0.5 rounded-full uppercase tracking-wider">v0.43.3</span>
+            <span className="text-xs bg-emerald-500/20 text-emerald-400 font-black px-2 py-0.5 rounded-full uppercase tracking-wider">v0.45.0</span>
           </h3>
           <p className="text-zinc-400 text-sm mt-1">
             Documento operativo para intervención en terreno — Reduciendo Daño Chile
@@ -945,10 +945,11 @@ export default function PlanoTool() {
                     <rect x="50" y="50" width="2870" height="2000" fill="none" stroke="#3f3f46" strokeWidth={5} strokeDasharray="30 20" rx={20} />
 
                     {/* Elements */}
-                    {elements.filter(el => el.visible).map(el => (
-                      el.type === 'symbol' ? (
-                        renderSymbol(el)
-                      ) : (
+                    {elements.filter(el => el.visible).map(el => {
+                      if (el.type === 'symbol') {
+                        return renderSymbol(el);
+                      }
+                      return (
                         <g
                           key={el.id}
                           transform={`translate(${el.x},${el.y})`}
@@ -975,8 +976,8 @@ export default function PlanoTool() {
                             <rect x={-5} y={-10} width={el.w + 10} height={el.h + 20} rx={16} fill="none" stroke="#10b981" strokeWidth={5} strokeDasharray="15 10" />
                           )}
                         </g>
-                      )
-                    ))}
+                      );
+                    })}
 
                     {/* Draggable Legend */}
                     {showLegend && (
@@ -1064,12 +1065,39 @@ export default function PlanoTool() {
                   <h4 className="text-[10px] font-bold uppercase tracking-widest text-zinc-500">Propiedades</h4>
                   <div className="space-y-3">
                     <div>
-                      <label className="text-[10px] text-zinc-500 block mb-1">Nombre</label>
+                      <label className="text-[10px] text-zinc-500 block mb-1">Nombre / Texto Interno</label>
                       <input
                         value={selectedElement.label}
                         onChange={e => setElements(prev => prev.map(el => el.id === selectedId ? { ...el, label: e.target.value } : el))}
                         className="w-full bg-black/40 border border-zinc-800 rounded px-2.5 py-1.5 text-xs focus:outline-none focus:border-zinc-600"
                       />
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-2">
+                      <div>
+                        <label className="text-[10px] text-zinc-500 block mb-1">Ancho (px)</label>
+                        <input
+                          type="number"
+                          value={selectedElement.w}
+                          onChange={e => {
+                            const val = parseInt(e.target.value) || 0;
+                            setElements(prev => prev.map(el => el.id === selectedId ? { ...el, w: val } : el));
+                          }}
+                          className="w-full bg-black/40 border border-zinc-800 rounded px-2.5 py-1.5 text-xs focus:outline-none focus:border-zinc-600"
+                        />
+                      </div>
+                      <div>
+                        <label className="text-[10px] text-zinc-500 block mb-1">Alto (px)</label>
+                        <input
+                          type="number"
+                          value={selectedElement.h}
+                          onChange={e => {
+                            const val = parseInt(e.target.value) || 0;
+                            setElements(prev => prev.map(el => el.id === selectedId ? { ...el, h: val } : el));
+                          }}
+                          className="w-full bg-black/40 border border-zinc-800 rounded px-2.5 py-1.5 text-xs focus:outline-none focus:border-zinc-600"
+                        />
+                      </div>
                     </div>
 
                     {/* Color Picker */}
@@ -1124,11 +1152,11 @@ export default function PlanoTool() {
                 <h4 className="text-[10px] font-bold uppercase tracking-widest text-zinc-500">Capas ({elements.length})</h4>
                 <div className="space-y-1 max-h-48 overflow-y-auto">
                   {[...elements].reverse().map(el => (
-                    <button
+                    <div
                       key={el.id}
                       onClick={() => selectElementAndBringToFront(el.id)}
                       className={cn(
-                        "w-full flex items-center gap-2 px-2 py-1.5 rounded text-left text-[10px] transition-colors",
+                        "w-full flex items-center gap-2 px-2 py-1.5 rounded text-left text-[10px] transition-colors cursor-pointer",
                         selectedId === el.id ? "bg-zinc-800 text-white" : "text-zinc-400 hover:bg-zinc-800/30"
                       )}
                     >
@@ -1143,7 +1171,7 @@ export default function PlanoTool() {
                       >
                         {el.visible ? <Eye className="w-3 h-3" /> : <EyeOff className="w-3 h-3" />}
                       </button>
-                    </button>
+                    </div>
                   ))}
                 </div>
               </div>
@@ -1210,9 +1238,8 @@ export default function PlanoTool() {
           </div>
         )}
       </div>
-    </div>
-  );
-}
+    );
+  }
 
 // ─── Sub-components ───
 
