@@ -26,9 +26,11 @@ Real package CLI:
 
 ## Recent completed work
 
-### v0.45.0 - Elements Resizing, Direct Label Editing and Automated Flyer Generation
+### v0.45.0 - Resizing, Direct Label, Print Button and RD Logo
 - Added width and height numeric input fields to the Property Editor in PlanoTool.tsx, allowing the operator to modify element sizes (w, h in px) directly in design mode.
 - Renamed property label to 'Nombre / Texto Interno' to make it clear that editing the name dynamically modifies the internal text rendered in the SVG canvas.
+- Integrated the official high-resolution Logo of Reduciendo Dano Chile (RD) inside the printable PDF headers of both PlanoTool.tsx and QuotePanel.tsx.
+- Added a gorgeous 'Imprimir / PDF' action button next to export buttons in QuotePanel.tsx to trigger native high-fidelity visual PDF generations from browser.
 - Executed the flyer creation script projects/piezas_vectoriales/suplementos_rd/scripts/generar_flyers.py to generate the 7 editable and vectorised SVG supplement flyers and update their previews.
 - Bumpped version of the system to 0.45.0 and packaged everything into the final airdrop_v0.45.0.zip deliverable.
 

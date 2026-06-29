@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { Calculator, Plus, Trash2, Download, RotateCcw } from 'lucide-react';
+import { Calculator, Plus, Trash2, Download, RotateCcw, Printer } from 'lucide-react';
 import { cn } from '../utils/cn';
 
 interface LineItem {
@@ -118,9 +118,12 @@ export default function QuotePanel() {
       {/* ── Printable Area for Quote (Designed for paper and PDF) ── */}
       <div className="hidden print:block text-black bg-white p-8 font-sans text-xs">
         <header className="border-b-4 border-black pb-4 mb-8 flex justify-between items-end">
-          <div>
-            <h1 className="text-3xl font-black italic tracking-tighter uppercase">COTIZACIÓN DE SERVICIOS</h1>
-            <p className="text-[9px] uppercase tracking-[0.2em] font-bold mt-1">ONG Reduciendo Daño</p>
+          <div className="flex items-center gap-4">
+            <img src="https://reduciendodano.cl/wp-content/uploads/2021/05/gn-1024x790.png" alt="Logo RD" className="h-16 w-auto object-contain" />
+            <div>
+              <h1 className="text-3xl font-black italic tracking-tighter uppercase">COTIZACIÓN DE SERVICIOS</h1>
+              <p className="text-[9px] uppercase tracking-[0.2em] font-bold mt-1">ONG Reduciendo Daño</p>
+            </div>
           </div>
           <div className="text-right">
             <p className="text-base font-bold">ORGANIZACIÓN RD</p>
@@ -199,6 +202,12 @@ export default function QuotePanel() {
             className="flex items-center gap-2 rounded-lg border border-zinc-700 bg-zinc-900 px-3 py-2 text-xs font-bold text-zinc-300 hover:bg-zinc-800 transition-colors"
           >
             <Download className="h-3.5 w-3.5" /> Exportar (.md)
+          </button>
+          <button
+            onClick={() => window.print()}
+            className="flex items-center gap-2 rounded-lg border border-emerald-800 bg-emerald-950/40 text-emerald-300 px-3 py-2 text-xs font-bold hover:bg-emerald-900/40 transition-colors"
+          >
+            <Printer className="h-3.5 w-3.5" /> Imprimir / PDF
           </button>
         </div>
       </div>

@@ -585,9 +585,12 @@ export default function PlanoTool() {
       {/* Printable Area (Styled strictly for high contrast and paper output) */}
       <div className="hidden print:block p-8 text-black bg-white font-sans text-xs">
         <header className="border-b-4 border-black pb-4 mb-8 flex justify-between items-end">
-          <div>
-            <h1 className="text-3xl font-black italic tracking-tighter uppercase">RIDER TÉCNICO RD</h1>
-            <p className="text-[9px] uppercase tracking-[0.2em] font-bold mt-1">Documentación de Intervención en Terreno — ONG Reduciendo Daño</p>
+          <div className="flex items-center gap-4">
+            <img src="https://reduciendodano.cl/wp-content/uploads/2021/05/gn-1024x790.png" alt="Logo RD" className="h-16 w-auto object-contain" />
+            <div>
+              <h1 className="text-3xl font-black italic tracking-tighter uppercase">RIDER TÉCNICO RD</h1>
+              <p className="text-[9px] uppercase tracking-[0.2em] font-bold mt-1">Documentación de Intervención en Terreno — ONG Reduciendo Daño</p>
+            </div>
           </div>
           <div className="text-right">
             <p className="text-base font-bold">ORGANIZACIÓN RD</p>
