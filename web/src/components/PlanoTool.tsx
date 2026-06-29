@@ -490,6 +490,44 @@ export default function PlanoTool() {
     }
   };
 
+  const handleGoToPlano = () => {
+    setElements(prev => {
+      const next = [...prev];
+      const hasItem = (text: string) => checkedItems.includes(text);
+      
+      if (hasItem("Toldo/carpa (mínimo 3×3m)") && !next.some(e => e.id === 'toldo')) {
+        next.push({ id: 'toldo', type: 'rect', x: 150, y: 100, w: 500, h: 330, label: 'Toldo / Carpa', color: '#2d5a4a20', visible: true });
+      }
+      if (hasItem("Mesas (2-3 según modalidad)") && !next.some(e => e.id === 'mesa')) {
+        next.push({ id: 'mesa', type: 'rect', x: 250, y: 200, w: 120, h: 50, label: 'Mesa', color: '#10b981', visible: true });
+      }
+      if (hasItem("Sillas (4-6 por stand)") && !next.some(e => e.id === 'sillas')) {
+        next.push({ id: 'sillas', type: 'rect', x: 400, y: 200, w: 80, h: 50, label: 'Sillas', color: '#ca8a04', visible: true });
+      }
+      if (hasItem("Rack o caja de almacenamiento") && !next.some(e => e.id === 'rack')) {
+        next.push({ id: 'rack', type: 'symbol', symbolKey: 'rack', x: 150, y: 350, w: 32, h: 32, label: 'Rack Almacén', color: '#4b5563', visible: true });
+      }
+      if (hasItem("Basureros, señalética") && !next.some(e => e.id === 'basureros')) {
+        next.push({ id: 'basureros', type: 'rect', x: 100, y: 400, w: 80, h: 50, label: 'Basureros', color: '#9ca3af', visible: true });
+      }
+      if (hasItem("Punto eléctrico disponible") && !next.some(e => e.id === 'power')) {
+        next.push({ id: 'power', type: 'symbol', symbolKey: 'power', x: 500, y: 150, w: 32, h: 32, label: 'Poder', color: '#f59e0b', visible: true });
+      }
+      if (hasItem("Calefacción si exterior nocturno") && !next.some(e => e.id === 'heating')) {
+        next.push({ id: 'heating', type: 'symbol', symbolKey: 'heating', x: 500, y: 250, w: 32, h: 32, label: 'Calefacción', color: '#ef4444', visible: true });
+      }
+      if (hasItem("Agua/hidratación si aplica") && !next.some(e => e.id === 'water')) {
+        next.push({ id: 'water', type: 'symbol', symbolKey: 'water', x: 500, y: 350, w: 32, h: 32, label: 'Punto de Agua', color: '#2563eb', visible: true });
+      }
+      if (hasItem("Acceso a equipo médico del evento") && !next.some(e => e.id === 'medical')) {
+        next.push({ id: 'medical', type: 'symbol', symbolKey: 'extinguisher', x: 500, y: 450, w: 32, h: 32, label: 'Emergencia', color: '#dc2626', visible: true });
+      }
+      
+      return next;
+    });
+    setPage('map');
+  };
+
   const totalChecks = CHECKLIST_SECTIONS.flatMap(s => s.items).length;
   const completedChecks = checkedItems.length;
 
@@ -780,7 +818,7 @@ export default function PlanoTool() {
             </div>
 
             <button
-              onClick={() => setPage('map')}
+              onClick={handleGoToPlano}
               className="w-full py-5 bg-emerald-500 hover:bg-emerald-400 text-black font-black rounded-3xl shadow-xl shadow-emerald-500/10 transition-transform active:scale-[0.98] flex items-center justify-center gap-3 text-base"
             >
               Ir al Plano de Distribución
@@ -812,7 +850,7 @@ export default function PlanoTool() {
               {/* SVG Canvas wrapper */}
               <div className="rounded-2xl border border-zinc-800 bg-zinc-950 overflow-hidden relative" style={{ height: "560px" }}>
                 <div className="w-full h-full overflow-auto flex items-center justify-center p-4">
-                  <div className="relative bg-white shadow-2xl transition-all" style={{ width: 800, height: 550, transform: `scale(${zoom})`, transformOrigin: "center" }}>
+                  <div className="relative bg-[#09090b] border border-zinc-800 shadow-2xl transition-all" style={{ width: 800, height: 550, transform: `scale(${zoom})`, transformOrigin: "center" }}>
                     <svg
                       ref={svgRef}
                       viewBox="0 0 800 550"

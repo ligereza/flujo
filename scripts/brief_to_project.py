@@ -137,13 +137,13 @@ def main():
     raw_ancho = nested_value(lines, 'medidas', 'ancho_cm')
     raw_alto = nested_value(lines, 'medidas', 'alto_cm')
     size_was_default = not raw_ancho or not raw_alto
-    ancho = to_num(raw_ancho, 14)
-    alto = to_num(raw_alto, 10)
+    ancho = to_num(raw_ancho, 10)
+    alto = to_num(raw_alto, 14)
     w = int(round(ancho * 200))
     h = int(round(alto * 200))
     if w <= 0 or h <= 0:
-        w, h = 2800, 2000
-        ancho, alto = 14, 10
+        w, h = 2000, 2800
+        ancho, alto = 10, 14
 
     title = simple_yaml_value(lines, 'proyecto') or project_name
     cliente = simple_yaml_value(lines, 'cliente') or 'Cliente'

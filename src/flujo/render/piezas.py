@@ -279,8 +279,8 @@ def _create_universal_base(
     w = int(round(ancho * 200))
     h = int(round(alto * 200))
     if w <= 0 or h <= 0:
-        w, h = 2800, 2000
-        ancho, alto = 14.0, 10.0
+        w, h = 2000, 2800
+        ancho, alto = 10.0, 14.0
 
     config = {
         "project": {
