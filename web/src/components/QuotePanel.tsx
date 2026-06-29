@@ -1,158 +1,333 @@
-import { useState } from 'react';
-import { Calculator, Plus, Trash2, Settings } from 'lucide-react';
+import { useState, useMemo } from 'react';
+import { Calculator, Plus, Trash2, Download, RotateCcw } from 'lucide-react';
 import { cn } from '../utils/cn';
 
-type Preset = 'under' | 'base' | 'mainstream';
-
-interface ManualItem {
+interface LineItem {
   id: string;
   label: string;
   qty: number;
   price: number;
+  category: string;
+}
+
+const CATEGORY_OPTIONS = ['Diseño', 'Impresión', 'Evento', 'Digital', 'Otro'];
+
+const DEFAULT_ITEMS: LineItem[] = [
+  { id: '1', label: 'Diseño etiqueta (vector, 2 revisiones)', qty: 1, price: 65000, category: 'Diseño' },
+  { id: '2', label: 'Impresión etiqueta 16.5x6.5 cm (100 unidades)', qty: 1, price: 48000, category: 'Impresión' },
+  { id: '3', label: 'Post Instagram (3 variaciones)', qty: 1, price: 30000, category: 'Digital' },
+];
+
+const PRESETS: { label: string; items: Omit<LineItem, 'id'>[] }[] = [
+  {
+    label: 'Etiqueta Suplementos',
+    items: [
+      { label: 'Diseño etiqueta vectorial (2 revisiones)', qty: 1, price: 65000, category: 'Diseño' },
+      { label: 'Impresión 100 unidades', qty: 1, price: 48000, category: 'Impresión' },
+      { label: 'Post Instagram', qty: 3, price: 12000, category: 'Digital' },
+    ],
+  },
+  {
+    label: 'Kit Evento BASE',
+    items: [
+      { label: 'Diseño flyer físico A5', qty: 1, price: 45000, category: 'Diseño' },
+      { label: 'Impresión flyer A5 (200 unidades)', qty: 1, price: 35000, category: 'Impresión' },
+      { label: 'Diseño plano/rider operativo', qty: 1, price: 30000, category: 'Diseño' },
+      { label: 'Post Instagram evento', qty: 1, price: 15000, category: 'Digital' },
+    ],
+  },
+  {
+    label: 'Kit Evento MAINSTREAM',
+    items: [
+      { label: 'Diseño flyer físico A4 (2 idiomas)', qty: 1, price: 80000, category: 'Diseño' },
+      { label: 'Impresión flyer A4 (500 unidades)', qty: 1, price: 75000, category: 'Impresión' },
+      { label: 'Diseño pendón 80x180 cm', qty: 1, price: 55000, category: 'Diseño' },
+      { label: 'Diseño cartelera digital', qty: 1, price: 35000, category: 'Digital' },
+      { label: 'Plano/rider MAINSTREAM + SVG', qty: 1, price: 45000, category: 'Diseño' },
+      { label: 'Pack Instagram (5 posts)', qty: 1, price: 40000, category: 'Digital' },
+    ],
+  },
+];
+
+function formatCLP(n: number) {
+  return new Intl.NumberFormat('es-CL', { style: 'currency', currency: 'CLP', maximumFractionDigits: 0 }).format(n);
 }
 
 export default function QuotePanel() {
-  const [view, setView] = useState<'quote' | 'config'>('quote');
-  const [preset, setPreset] = useState<Preset>('base');
-  const [eventName, setEventName] = useState('Evento RD');
-  const [manualItems, setManualItems] = useState<ManualItem[]>([]);
+  const [items, setItems] = useState<LineItem[]>(DEFAULT_ITEMS);
+  const [clientName, setClientName] = useState('');
+  const [eventName, setEventName] = useState('');
+  const [notes, setNotes] = useState('');
+  const [discount, setDiscount] = useState(0);
 
-  // Configuración de precios (Persistente)
-  const [prices, setProposalPrices] = useState({
-    under: 250000,
-    base: 450000,
-    mainstream: 850000,
-    voluntario: 35000,
-    reactivos: 120000,
-    fee_gestion: 15
-  });
+  const subtotal = useMemo(() => items.reduce((acc, it) => acc + it.qty * it.price, 0), [items]);
+  const discountAmount = Math.round(subtotal * (discount / 100));
+  const total = subtotal - discountAmount;
 
-  const basePrice = prices[preset];
-  const manualTotal = manualItems.reduce((sum, it) => sum + (it.qty * it.price), 0);
-  const grandTotal = basePrice + manualTotal;
-
-  const addManualItem = () => {
-    setManualItems([...manualItems, { id: Date.now().toString(), label: "Nuevo Item", qty: 1, price: 0 }]);
+  const addItem = () => {
+    const id = String(Date.now());
+    setItems(prev => [...prev, { id, label: '', qty: 1, price: 0, category: 'Diseño' }]);
   };
 
-  const removeManualItem = (id: string) => {
-    setManualItems(manualItems.filter(it => it.id !== id));
+  const updateItem = (id: string, key: keyof LineItem, val: string | number) => {
+    setItems(prev => prev.map(it => it.id === id ? { ...it, [key]: val } : it));
   };
 
-  const copyToClipboard = () => {
-    const text = `COTIZACIÓN: ${eventName.toUpperCase()}\n` +
-                 `Preset: ${preset.toUpperCase()}\n` +
-                 `---------------------------\n` +
-                 `Base Operativa: $${basePrice.toLocaleString('es-CL')}\n` +
-                 manualItems.map(it => `${it.label} (x${it.qty}): $${(it.qty * it.price).toLocaleString('es-CL')}`).join('\n') +
-                 `\n---------------------------\n` +
-                 `TOTAL: $${grandTotal.toLocaleString('es-CL')}\n` +
-                 `Validez: 15 días. Sujeto a disponibilidad de equipo.`;
-    navigator.clipboard.writeText(text);
+  const removeItem = (id: string) => setItems(prev => prev.filter(it => it.id !== id));
+
+  const applyPreset = (preset: typeof PRESETS[number]) => {
+    setItems(preset.items.map((it, i) => ({ ...it, id: String(Date.now() + i) })));
+  };
+
+  const exportTxt = () => {
+    const lines = [
+      `COTIZACIÓN — ${eventName || 'Sin nombre'}`,
+      `Cliente: ${clientName || 'Sin especificar'}`,
+      `Fecha: ${new Date().toLocaleDateString('es-CL')}`,
+      '',
+      ...items.map(it => `  ${it.label}  x${it.qty}  ${formatCLP(it.price)}  → ${formatCLP(it.qty * it.price)}`),
+      '',
+      `Subtotal: ${formatCLP(subtotal)}`,
+      discount > 0 ? `Descuento (${discount}%): -${formatCLP(discountAmount)}` : '',
+      `TOTAL: ${formatCLP(total)}`,
+      '',
+      notes ? `Notas: ${notes}` : '',
+    ].filter(l => l !== undefined);
+
+    const blob = new Blob([lines.join('\n')], { type: 'text/plain;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `cotizacion_${(eventName || 'flujo').toLowerCase().replace(/\s+/g, '_')}.txt`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
+
+  const categoryColor: Record<string, string> = {
+    Diseño: 'text-purple-400 bg-purple-950/40 border-purple-800/40',
+    Impresión: 'text-blue-400 bg-blue-950/40 border-blue-800/40',
+    Evento: 'text-orange-400 bg-orange-950/40 border-orange-800/40',
+    Digital: 'text-emerald-400 bg-emerald-950/40 border-emerald-800/40',
+    Otro: 'text-zinc-400 bg-zinc-900 border-zinc-700',
   };
 
   return (
-    <div className="h-full flex flex-col bg-zinc-950 text-white selection:bg-emerald-500/30">
-      <header className="p-6 border-b border-zinc-800 flex justify-between items-center bg-black/40 backdrop-blur-xl">
-        <div className="flex items-center gap-4">
-           <Calculator className="w-6 h-6 text-emerald-400" />
-           <h2 className="text-xl font-black italic tracking-tighter uppercase">Cotización Pro RD</h2>
+    <div className="space-y-5">
+      {/* Header */}
+      <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <h1 className="flex items-center gap-2 text-2xl font-black">
+            <Calculator className="h-6 w-6" /> Cotización
+          </h1>
+          <p className="mt-1 text-sm text-zinc-500">Base editable para productora/jefatura.</p>
         </div>
         <div className="flex gap-2">
-           <button onClick={() => setView(view === 'quote' ? 'config' : 'quote')} className="p-2 bg-zinc-900 border border-zinc-800 rounded-xl hover:bg-zinc-800"><Settings className="w-5 h-5"/></button>
-           <button onClick={copyToClipboard} className="bg-emerald-500 text-black px-6 py-2 rounded-xl font-black text-xs uppercase tracking-widest hover:bg-emerald-400 transition-all">Copiar Cotización</button>
+          <button
+            onClick={() => { setItems(DEFAULT_ITEMS); setDiscount(0); }}
+            className="flex items-center gap-2 rounded-lg border border-zinc-700 bg-zinc-900 px-3 py-2 text-xs font-bold text-zinc-400 hover:text-zinc-200 transition-colors"
+          >
+            <RotateCcw className="h-3.5 w-3.5" /> Reset
+          </button>
+          <button
+            onClick={exportTxt}
+            className="flex items-center gap-2 rounded-lg border border-zinc-700 bg-zinc-900 px-3 py-2 text-xs font-bold text-zinc-300 hover:bg-zinc-800 transition-colors"
+          >
+            <Download className="h-3.5 w-3.5" /> Exportar TXT
+          </button>
         </div>
-      </header>
+      </div>
 
-      <div className="flex-1 overflow-hidden flex">
-        {view === 'quote' ? (
-          <>
-            <aside className="w-80 border-r border-zinc-800 p-8 space-y-8 bg-zinc-900/20 overflow-y-auto">
-               <div className="space-y-4">
-                  <label className="text-[10px] font-black uppercase text-zinc-500 tracking-widest">Nombre del Evento</label>
-                  <input value={eventName} onChange={e => setEventName(e.target.value)} className="w-full bg-black border border-zinc-800 p-4 rounded-2xl text-sm font-bold focus:border-emerald-500 outline-none transition-all" />
-               </div>
-
-               <div className="space-y-4">
-                  <label className="text-[10px] font-black uppercase text-zinc-500 tracking-widest">Seleccionar Preset</label>
-                  <div className="space-y-2">
-                     {(['under', 'base', 'mainstream'] as const).map(p => (
-                       <button key={p} onClick={() => setPreset(p)} className={cn("w-full p-4 rounded-2xl border-2 text-left transition-all", preset===p ? "bg-emerald-500 border-emerald-400 text-black shadow-lg shadow-emerald-500/20" : "bg-black/20 border-zinc-800 text-zinc-500 hover:border-zinc-700")}>
-                          <div className="font-black uppercase text-xs">{p}</div>
-                          <div className={cn("text-[10px] mt-1 font-bold", preset===p ? "text-black/60" : "text-zinc-600")}>$ {prices[p].toLocaleString('es-CL')} base</div>
-                       </button>
-                     ))}
-                  </div>
-               </div>
-            </aside>
-
-            <main className="flex-1 p-12 overflow-y-auto space-y-12">
-               <section>
-                  <div className="flex justify-between items-center mb-8">
-                     <h3 className="text-2xl font-black tracking-tighter">Items Adicionales / Logística</h3>
-                     <button onClick={addManualItem} className="p-3 bg-zinc-800 rounded-2xl hover:bg-zinc-700 transition-all text-emerald-400"><Plus className="w-6 h-6"/></button>
-                  </div>
-                  
-                  <div className="space-y-3">
-                     {manualItems.map(it => (
-                       <div key={it.id} className="flex gap-4 items-center bg-zinc-900/40 p-4 rounded-3xl border border-zinc-800 group">
-                          <input value={it.label} onChange={e => setManualItems(manualItems.map(x => x.id===it.id ? {...x, label:e.target.value} : x))} className="flex-1 bg-transparent border-none outline-none font-bold text-sm" placeholder="Descripción del servicio..." />
-                          <div className="flex items-center bg-black/40 rounded-xl px-4 py-2 border border-zinc-800">
-                             <span className="text-[10px] font-black text-zinc-600 mr-3">QTY</span>
-                             <input type="number" value={it.qty} onChange={e => setManualItems(manualItems.map(x => x.id===it.id ? {...x, qty: Number(e.target.value)} : x))} className="w-12 bg-transparent text-center font-mono text-sm font-bold outline-none" />
-                          </div>
-                          <div className="flex items-center bg-black/40 rounded-xl px-4 py-2 border border-zinc-800">
-                             <span className="text-[10px] font-black text-zinc-600 mr-3">$</span>
-                             <input type="number" value={it.price} onChange={e => setManualItems(manualItems.map(x => x.id===it.id ? {...x, price: Number(e.target.value)} : x))} className="w-24 bg-transparent text-right font-mono text-sm font-bold outline-none" />
-                          </div>
-                          <button onClick={() => removeManualItem(it.id)} className="text-zinc-700 hover:text-red-500 transition-colors"><Trash2 className="w-5 h-5"/></button>
-                       </div>
-                     ))}
-                     {manualItems.length === 0 && (
-                        <div className="p-20 text-center border-2 border-dashed border-zinc-800 rounded-[3rem]">
-                           <p className="text-zinc-600 font-bold uppercase tracking-widest text-[10px]">No hay items manuales registrados</p>
-                        </div>
-                     )}
-                  </div>
-               </section>
-
-               <section className="bg-emerald-500 rounded-[3rem] p-12 text-black shadow-2xl shadow-emerald-500/20">
-                  <div className="flex justify-between items-end">
-                     <div>
-                        <p className="text-[10px] font-black uppercase tracking-[0.3em] opacity-60 mb-2">Total Estimado</p>
-                        <h4 className="text-6xl font-black tracking-tighter">$ {grandTotal.toLocaleString('es-CL')}</h4>
-                     </div>
-                     <div className="text-right">
-                        <p className="text-xs font-bold opacity-60">Sujeto a confirmación técnica</p>
-                        <p className="text-[10px] font-black uppercase mt-1 opacity-60">NGO Reduciendo Daño</p>
-                     </div>
-                  </div>
-               </section>
-            </main>
-          </>
-        ) : (
-          <div className="flex-1 p-20 overflow-y-auto bg-black/40">
-             <div className="max-w-3xl mx-auto space-y-12">
-                <header>
-                   <h2 className="text-4xl font-black tracking-tighter">Valores de Referencia</h2>
-                   <p className="text-zinc-500 text-xs mt-2 uppercase tracking-widest font-mono">Lógica Comercial para NGO RD</p>
-                </header>
-
-                <div className="grid grid-cols-3 gap-6">
-                   {['under', 'base', 'mainstream'].map(p => (
-                     <div key={p} className="space-y-4">
-                        <label className="text-[10px] font-black uppercase text-emerald-500">Preset {p}</label>
-                        <input type="number" value={prices[p as Preset]} onChange={e => setProposalPrices({...prices, [p]: Number(e.target.value)})} className="w-full bg-zinc-900 border border-zinc-800 p-4 rounded-2xl text-sm font-mono font-bold" />
-                     </div>
-                   ))}
-                </div>
-
-                <div className="pt-12 border-t border-zinc-800">
-                   <button onClick={() => setView('quote')} className="w-full py-5 bg-zinc-800 rounded-3xl font-black text-xs uppercase tracking-widest hover:bg-zinc-700 transition-all">Guardar Cambios y Volver</button>
-                </div>
-             </div>
+      <div className="grid gap-5 xl:grid-cols-[1fr_340px]">
+        {/* Left: items */}
+        <div className="space-y-4">
+          {/* Client info */}
+          <div className="rounded-2xl border border-zinc-800 bg-zinc-900/45 p-4 grid gap-3 sm:grid-cols-2">
+            <div>
+              <label className="mb-1 block text-[10px] font-bold uppercase tracking-widest text-zinc-500">Cliente</label>
+              <input
+                value={clientName}
+                onChange={e => setClientName(e.target.value)}
+                placeholder="Nombre productora / jefatura"
+                className="w-full rounded-lg border border-zinc-800 bg-black/40 px-3 py-2 text-sm outline-none focus:border-zinc-600 transition-colors"
+              />
+            </div>
+            <div>
+              <label className="mb-1 block text-[10px] font-bold uppercase tracking-widest text-zinc-500">Proyecto / Evento</label>
+              <input
+                value={eventName}
+                onChange={e => setEventName(e.target.value)}
+                placeholder="Nombre del evento o proyecto"
+                className="w-full rounded-lg border border-zinc-800 bg-black/40 px-3 py-2 text-sm outline-none focus:border-zinc-600 transition-colors"
+              />
+            </div>
           </div>
-        )}
+
+          {/* Presets */}
+          <div className="flex flex-wrap gap-2">
+            <span className="text-[10px] font-bold uppercase tracking-widest text-zinc-600 self-center">Presets:</span>
+            {PRESETS.map(p => (
+              <button
+                key={p.label}
+                onClick={() => applyPreset(p)}
+                className="rounded-lg border border-zinc-800 bg-zinc-900 px-3 py-1.5 text-xs text-zinc-400 hover:border-zinc-600 hover:text-zinc-200 transition-colors"
+              >
+                {p.label}
+              </button>
+            ))}
+          </div>
+
+          {/* Line items */}
+          <div className="rounded-2xl border border-zinc-800 bg-zinc-900/45 overflow-hidden">
+            {/* Table header */}
+            <div className="grid grid-cols-[1fr_60px_100px_80px_32px] gap-2 px-4 py-2 border-b border-zinc-800 bg-zinc-950/50">
+              {['Descripción', 'Qty', 'Precio unit.', 'Total', ''].map(h => (
+                <div key={h} className="text-[9px] font-bold uppercase tracking-widest text-zinc-600">{h}</div>
+              ))}
+            </div>
+
+            {/* Rows */}
+            <div className="divide-y divide-zinc-800/60">
+              {items.map(it => (
+                <div key={it.id} className="grid grid-cols-[1fr_60px_100px_80px_32px] gap-2 px-4 py-2.5 items-center">
+                  <div className="min-w-0 space-y-1">
+                    <input
+                      value={it.label}
+                      onChange={e => updateItem(it.id, 'label', e.target.value)}
+                      placeholder="Descripción del servicio..."
+                      className="w-full bg-transparent text-sm font-medium outline-none placeholder:text-zinc-700 text-zinc-200"
+                    />
+                    <select
+                      value={it.category}
+                      onChange={e => updateItem(it.id, 'category', e.target.value)}
+                      className={cn('rounded border px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-widest outline-none bg-transparent cursor-pointer', categoryColor[it.category] || categoryColor['Otro'])}
+                    >
+                      {CATEGORY_OPTIONS.map(c => <option key={c} value={c}>{c}</option>)}
+                    </select>
+                  </div>
+                  <input
+                    type="number"
+                    value={it.qty}
+                    onChange={e => updateItem(it.id, 'qty', Number(e.target.value))}
+                    min={1}
+                    className="w-full bg-transparent text-center font-mono text-sm font-bold outline-none text-zinc-300"
+                  />
+                  <input
+                    type="number"
+                    value={it.price}
+                    onChange={e => updateItem(it.id, 'price', Number(e.target.value))}
+                    className="w-full bg-transparent text-right font-mono text-sm font-bold outline-none text-zinc-300"
+                  />
+                  <div className="text-right font-mono text-xs font-bold text-zinc-400">
+                    {formatCLP(it.qty * it.price)}
+                  </div>
+                  <button
+                    onClick={() => removeItem(it.id)}
+                    className="flex items-center justify-center text-zinc-700 hover:text-red-400 transition-colors"
+                  >
+                    <Trash2 className="h-3.5 w-3.5" />
+                  </button>
+                </div>
+              ))}
+            </div>
+
+            {/* Add row */}
+            <div className="border-t border-zinc-800 px-4 py-2">
+              <button
+                onClick={addItem}
+                className="flex items-center gap-2 text-xs text-zinc-500 hover:text-zinc-200 transition-colors"
+              >
+                <Plus className="h-3.5 w-3.5" /> Agregar ítem
+              </button>
+            </div>
+          </div>
+
+          {/* Notes */}
+          <div>
+            <label className="mb-1 block text-[10px] font-bold uppercase tracking-widest text-zinc-500">Notas</label>
+            <textarea
+              value={notes}
+              onChange={e => setNotes(e.target.value)}
+              rows={3}
+              placeholder="Condiciones, plazos, observaciones..."
+              className="w-full rounded-xl border border-zinc-800 bg-zinc-900/50 px-4 py-3 text-sm outline-none focus:border-zinc-600 transition-colors resize-y"
+            />
+          </div>
+        </div>
+
+        {/* Right: summary */}
+        <div className="space-y-4">
+          {/* Totals */}
+          <div className="rounded-2xl border border-zinc-800 bg-zinc-900/45 p-5 space-y-3">
+            <h2 className="text-sm font-bold uppercase tracking-widest text-zinc-500">Resumen</h2>
+
+            {/* By category */}
+            {CATEGORY_OPTIONS.map(cat => {
+              const catTotal = items.filter(it => it.category === cat).reduce((a, it) => a + it.qty * it.price, 0);
+              if (!catTotal) return null;
+              return (
+                <div key={cat} className="flex items-center justify-between text-xs text-zinc-500">
+                  <span className={cn('rounded border px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-widest', categoryColor[cat] || categoryColor['Otro'])}>{cat}</span>
+                  <span>{formatCLP(catTotal)}</span>
+                </div>
+              );
+            })}
+
+            <div className="border-t border-zinc-800 pt-3 space-y-2">
+              <div className="flex items-center justify-between text-sm">
+                <span className="text-zinc-400">Subtotal</span>
+                <span className="font-mono font-bold">{formatCLP(subtotal)}</span>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <span className="text-sm text-zinc-400 shrink-0">Descuento</span>
+                <input
+                  type="number"
+                  value={discount}
+                  onChange={e => setDiscount(Math.min(100, Math.max(0, Number(e.target.value))))}
+                  className="w-16 rounded-lg border border-zinc-800 bg-black/40 px-2 py-1 text-center font-mono text-sm outline-none focus:border-zinc-600"
+                  min={0}
+                  max={100}
+                />
+                <span className="text-zinc-500">%</span>
+                {discount > 0 && (
+                  <span className="ml-auto font-mono text-sm text-red-400">-{formatCLP(discountAmount)}</span>
+                )}
+              </div>
+
+              <div className="flex items-center justify-between rounded-xl border border-emerald-800/40 bg-emerald-950/30 px-3 py-2">
+                <span className="text-sm font-bold text-emerald-300">TOTAL</span>
+                <span className="font-mono text-lg font-black text-emerald-300">{formatCLP(total)}</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Quote preview header */}
+          <div className="rounded-2xl border border-zinc-800 bg-zinc-900/30 p-4 space-y-2">
+            <h2 className="text-sm font-bold uppercase tracking-widest text-zinc-500">Vista previa</h2>
+            <div className="rounded-xl bg-black/40 p-4 space-y-2 text-xs font-mono text-zinc-400">
+              <p className="text-zinc-200 font-bold text-sm">{eventName || '(sin nombre de proyecto)'}</p>
+              <p>Cliente: {clientName || '—'}</p>
+              <p>Fecha: {new Date().toLocaleDateString('es-CL')}</p>
+              <div className="border-t border-zinc-800 my-2" />
+              {items.map(it => (
+                <p key={it.id} className="truncate">
+                  {it.label || '(sin descripción)'} × {it.qty} = {formatCLP(it.qty * it.price)}
+                </p>
+              ))}
+              <div className="border-t border-zinc-800 my-2" />
+              <p className="text-zinc-200 font-bold">TOTAL: {formatCLP(total)}</p>
+              {notes && <p className="text-zinc-600 text-[10px] mt-2">{notes}</p>}
+            </div>
+          </div>
+
+          {/* CLI hint */}
+          <div className="rounded-2xl border border-zinc-800/60 bg-zinc-900/20 p-3">
+            <p className="text-[10px] font-bold uppercase tracking-widest text-zinc-600 mb-2">CLI equivalente</p>
+            <code className="block text-[10px] text-zinc-500 leading-5">
+              py -m flujo brief paquete-cotizacion jobs/&lt;job&gt;
+            </code>
+          </div>
+        </div>
       </div>
     </div>
   );

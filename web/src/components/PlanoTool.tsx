@@ -1,39 +1,42 @@
-import React, { useState, useRef, useCallback } from 'react';
+import React, { useRef, useState, useCallback } from 'react';
 import { 
-  Download, ZoomIn, ZoomOut, RotateCcw, 
-  Trash2, Copy, Layers, Grid3X3, Eye, EyeOff, 
-  ChevronLeft, ChevronRight, Printer, FileText, 
-  CheckSquare, AlertTriangle, Users, Zap, 
-  Shield, Heart, Coffee, RefreshCw, Settings,
-  Scan, Map, Moon, Home, Table, Armchair, Box, 
-  Lightbulb, Droplet, Thermometer, User, ShieldAlert, HeartPulse, Utensils
+  Map, Download, Plus, Trash2, Eye, EyeOff, Printer, RotateCcw,
+  Scan, Users, Moon, Home, Table, Armchair, Box, Zap,
+  Lightbulb, Droplet, Thermometer, User, ShieldAlert, HeartPulse, Utensils,
+  ChevronRight, ChevronLeft, Settings, Copy, Layers, Grid3X3, FileText,
+  Heart, AlertTriangle, Coffee, RefreshCw
 } from 'lucide-react';
 import { cn } from '../utils/cn';
 
-// ─── Types ───
-interface PlanoElement {
+// ── Types ────────────────────────────────────────────────────────────
+type Preset = 'UNDER' | 'BASE' | 'MAINSTREAM';
+
+interface Element {
   id: string;
-  type: 'rect' | 'circle' | 'text' | 'zone' | 'symbol';
+  type: 'rect' | 'symbol';
   symbolType?: 'power' | 'heating' | 'rack' | 'extinguisher' | 'water';
   x: number;
   y: number;
-  width: number;
-  height: number;
+  w: number;
+  h: number;
   label: string;
   color: string;
-  rotation: number;
-  locked: boolean;
   visible: boolean;
-  zoneType?: 'testeo' | 'contencion' | 'informativo' | 'descanso' | 'coordinacion' | 'circulacion';
+  symbolKey?: string;
+  locked?: boolean;
 }
 
-// ─── Paleta RD ───
-const RD_PALETTE = {
-  ink: '#1f2a24',
-  accent: '#2d5a4a',
-  paper: '#f8f1e3',
-  support: '#675f55',
-  alert: '#c2410f',
+// ── Presets ──────────────────────────────────────────────────────────
+const PRESET_CONFIGS: Record<Preset, { desc: string }> = {
+  UNDER: {
+    desc: '2 voluntarios, 1 mesa, 2 sillas, electricidad/luz básica'
+  },
+  BASE: {
+    desc: '4 voluntarios, 2 mesas, 4 sillas, stand + testeo'
+  },
+  MAINSTREAM: {
+    desc: '8 voluntarios, 3 mesas, 8 sillas, alto flujo tipo Espacio Riesco'
+  }
 };
 
 const ZONE_COLORS: Record<string, string> = {
@@ -51,20 +54,20 @@ const ZONE_COLORS: Record<string, string> = {
 };
 
 const ZONE_LABELS: Record<string, string> = {
-  testeo: 'Stand de Testeo',
+  testeo: 'Zona Testeo',
   contencion: 'Contención',
   informativo: 'Stand Informativo',
   descanso: 'Zona Descanso',
   coordinacion: 'Coordinación',
   circulacion: 'Circulación Público',
-  power: "Punto Eléctrico",
-  heating: "Calefacción",
-  rack: "Rack Almacén",
-  extinguisher: "Extintor",
-  water: "Punto de Agua"
+  power: 'Electricidad',
+  heating: 'Calefacción',
+  rack: 'Rack Almacén',
+  extinguisher: 'Extintor',
+  water: 'Punto de Agua'
 };
 
-// ─── Checklist Data (17 requirements in 4 categories) ───
+// ── Checklist Data (17 requirements in 4 categories) ───
 const CHECKLIST_SECTIONS = [
   {
     title: 'Espacio',
@@ -133,81 +136,53 @@ const renderRequirementIcon = (iconName: string, className = "w-4 h-4 text-zinc-
   }
 };
 
-// ─── Default elements for a new plano ───
-const DEFAULT_ELEMENTS: PlanoElement[] = [
-  { id: 'toldo', type: 'rect', x: 150, y: 100, width: 500, height: 350, label: 'Toldo / Carpa', color: '#2d5a4a20', rotation: 0, locked: false, visible: true },
-  { id: 'mesa-testeo', type: 'rect', x: 180, y: 140, width: 200, height: 80, label: 'Mesa Testeo', color: ZONE_COLORS.testeo, rotation: 0, locked: false, visible: true, zoneType: 'testeo' },
-  { id: 'mesa-info', type: 'rect', x: 420, y: 140, width: 200, height: 80, label: 'Mesa Informativa', color: ZONE_COLORS.informativo, rotation: 0, locked: false, visible: true, zoneType: 'informativo' },
-  { id: 'zona-contencion', type: 'rect', x: 180, y: 280, width: 180, height: 140, label: 'Contención', color: ZONE_COLORS.contencion, rotation: 0, locked: false, visible: true, zoneType: 'contencion' },
-  { id: 'zona-descanso', type: 'rect', x: 420, y: 280, width: 200, height: 140, label: 'Zona Descanso', color: ZONE_COLORS.descanso, rotation: 0, locked: false, visible: true, zoneType: 'descanso' },
-  { id: 'entrada', type: 'rect', x: 350, y: 470, width: 100, height: 30, label: 'Entrada Público', color: ZONE_COLORS.circulacion, rotation: 0, locked: false, visible: true, zoneType: 'circulacion' },
-];
-
-type EventPresetId = 'under' | 'base' | 'mainstream';
-
-type EventPreset = {
-  id: EventPresetId;
-  label: string;
-  short: string;
-  volunteers: number;
-  assistants: number;
-  duration: number;
-  tables: number;
-  chairs: number;
-  power: string;
-  light: string;
-  testing: boolean;
-  massive: boolean;
-};
-
-const EVENT_PRESETS: Record<EventPresetId, EventPreset> = {
-  under: {
-    id: 'under', label: 'UNDER', short: 'Club chico / bajo flujo',
-    volunteers: 2, assistants: 350, duration: 4, tables: 1, chairs: 2,
-    power: '1 punto electrico basico', light: 'luz ambiente o 1 foco simple', testing: false, massive: false,
-  },
-  base: {
-    id: 'base', label: 'BASE', short: 'Evento mediano / testeo',
-    volunteers: 4, assistants: 1200, duration: 6, tables: 2, chairs: 4,
-    power: '1 punto electrico estable', light: 'iluminacion de mesa + stand', testing: true, massive: false,
-  },
-  mainstream: {
-    id: 'mainstream', label: 'MAINSTREAM', short: 'Espacio Riesco / festival',
-    volunteers: 8, assistants: 6000, duration: 8, tables: 3, chairs: 8,
-    power: '2 puntos electricos o circuito dedicado', light: 'iluminacion dedicada para stand y testeo', testing: true, massive: true,
-  },
-};
-
-function elementsForPreset(preset: EventPreset): PlanoElement[] {
-  const base: PlanoElement[] = [
-    { id: 'toldo', type: 'rect', x: 150, y: 100, width: 500, height: 330, label: 'Toldo / Carpa', color: '#2d5a4a20', rotation: 0, locked: false, visible: true },
-    { id: 'mesa-info', type: 'rect', x: 200, y: 145, width: 190, height: 75, label: 'Mesa Informativa', color: ZONE_COLORS.informativo, rotation: 0, locked: false, visible: true, zoneType: 'informativo' },
-    { id: 'entrada', type: 'rect', x: 350, y: 455, width: 100, height: 30, label: 'Entrada Público', color: ZONE_COLORS.circulacion, rotation: 0, locked: false, visible: true, zoneType: 'circulacion' },
+// ── Default elements builder ─────────────────────────────────────────
+function buildElements(preset: Preset): Element[] {
+  const base: Element[] = [
+    { id: 'entrada', type: 'rect', x: 250, y: 30, w: 100, h: 30, label: 'ENTRADA', color: '#6366f1', visible: true },
+    { id: 'mesa1', type: 'rect', x: 60, y: 120, w: 120, h: 50, label: 'Mesa 1', color: '#10b981', visible: true },
+    { id: 'testeo', type: 'symbol', x: 200, y: 130, w: 40, h: 40, label: 'Testeo', color: '#f59e0b', visible: true, symbolKey: 'testeo' },
+    { id: 'contencion', type: 'symbol', x: 380, y: 130, w: 40, h: 40, label: 'Contención', color: '#3b82f6', visible: true, symbolKey: 'contencion' },
+    { id: 'power1', type: 'symbol', x: 460, y: 220, w: 32, h: 32, label: 'Poder', color: '#f59e0b', visible: true, symbolKey: 'power' },
+    { id: 'extinguisher1', type: 'symbol', x: 500, y: 320, w: 32, h: 32, label: 'Extintor', color: '#ef4444', visible: true, symbolKey: 'extinguisher' },
   ];
-  if (preset.testing) {
-    base.push({ id: 'mesa-testeo', type: 'rect', x: 425, y: 145, width: 190, height: 75, label: 'Mesa Testeo', color: ZONE_COLORS.testeo, rotation: 0, locked: false, visible: true, zoneType: 'testeo' });
+
+  if (preset === 'BASE' || preset === 'MAINSTREAM') {
+    base.push(
+      { id: 'mesa2', type: 'rect', x: 200, y: 120, w: 120, h: 50, label: 'Mesa 2', color: '#10b981', visible: true },
+      { id: 'stand1', type: 'rect', x: 60, y: 220, w: 80, h: 60, label: 'Stand', color: '#8b5cf6', visible: true },
+    );
   }
-  if (preset.massive) {
-    base.push({ id: 'zona-contencion', type: 'rect', x: 190, y: 280, width: 180, height: 120, label: 'Contención', color: ZONE_COLORS.contencion, rotation: 0, locked: false, visible: true, zoneType: 'contencion' });
-    base.push({ id: 'zona-descanso', type: 'rect', x: 430, y: 280, width: 170, height: 120, label: 'Zona Descanso', color: ZONE_COLORS.descanso, rotation: 0, locked: false, visible: true, zoneType: 'descanso' });
+
+  if (preset === 'MAINSTREAM') {
+    base.push(
+      { id: 'mesa3', type: 'rect', x: 340, y: 120, w: 120, h: 50, label: 'Mesa 3', color: '#10b981', visible: true },
+      { id: 'stand2', type: 'rect', x: 160, y: 220, w: 80, h: 60, label: 'Stand 2', color: '#8b5cf6', visible: true },
+      { id: 'testeo2', type: 'symbol', x: 280, y: 240, w: 40, h: 40, label: 'Testeo 2', color: '#f59e0b', visible: true, symbolKey: 'testeo' },
+      { id: 'contencion2', type: 'symbol', x: 360, y: 240, w: 40, h: 40, label: 'Contención 2', color: '#3b82f6', visible: true, symbolKey: 'contencion' },
+    );
   }
+
   return base;
 }
 
+// ── Main component ───────────────────────────────────────────────────
+type Page = 'req' | 'map' | 'config';
+
 export default function PlanoTool() {
-  const [page, setPage] = useState<'requirements' | 'layout' | 'config'>('layout');
-  const [elements, setElements] = useState<PlanoElement[]>(DEFAULT_ELEMENTS);
+  const [preset, setPreset] = useState<Preset>('BASE');
+  const [page, setPage] = useState<Page>('map');
+  const [elements, setElements] = useState<Element[]>(() => buildElements('BASE'));
   const [selectedId, setSelectedId] = useState<string | null>(null);
+  const [checkedItems, setCheckedItems] = useState<string[]>([]);
+  const [legendPos, setLegendPos] = useState({ x: 420, y: 350 });
   const [zoom, setZoom] = useState(1);
   const [showGrid, setShowGrid] = useState(true);
-  const [dragging, setDragging] = useState<{ id: string; offsetX: number; offsetY: number } | null>(null);
-  const [checkedItems, setCheckedItems] = useState<Set<string>>(new Set());
+  const [showLegend, setShowLegend] = useState(true);
   const [eventName, setEventName] = useState('Evento Festival');
   const [eventDate, setEventDate] = useState('2026-06-28');
   const [eventVenue, setEventVenue] = useState('Parque Bicentenario');
-  const [showLegend, setShowLegend] = useState(true);
   const [backendStatus, setBackendStatus] = useState('');
-  const [eventPreset, setEventPreset] = useState<EventPresetId>('base');
 
   const [orgTexts, setOrgTexts] = useState({
     who: 'Reduciendo Daño es una ONG chilena dedicada a la reduccion de riesgos y danos asociados al consumo de sustancias en contextos de ocio y alta exigencia.',
@@ -215,19 +190,16 @@ export default function PlanoTool() {
   });
 
   const svgRef = useRef<SVGSVGElement>(null);
+  const selectedElement = elements.find(e => e.id === selectedId);
+  const proposal = PRESET_CONFIGS[preset];
 
-  const applyPresetLocal = (presetId: EventPresetId) => {
-    const preset = EVENT_PRESETS[presetId];
-    setEventPreset(presetId);
-    const next = elementsForPreset(preset);
-    setElements(next);
-    setSelectedId(next[0]?.id ?? null);
-    setBackendStatus(`Preset ${preset.label}: ${preset.volunteers} voluntarios, ${preset.tables} mesa(s), ${preset.chairs} sillas. Puedes ajustar si tu jefe pide cambios.`);
+  const applyPreset = (p: Preset) => {
+    setPreset(p);
+    setElements(buildElements(p));
+    setSelectedId(null);
+    setCheckedItems([]);
   };
 
-  const selectedElement = elements.find(e => e.id === selectedId);
-
-  // ─── Select Element and Bring to Front ───
   const selectElementAndBringToFront = (id: string) => {
     setSelectedId(id);
     setElements(prev => {
@@ -240,56 +212,26 @@ export default function PlanoTool() {
     });
   };
 
-  // ─── Drag handlers ───
-  const handleMouseDown = useCallback((e: React.MouseEvent, id: string) => {
-    const el = elements.find(el => el.id === id);
-    if (!el || el.locked) return;
-    const svg = svgRef.current;
-    if (!svg) return;
-    const pt = svg.createSVGPoint();
-    pt.x = e.clientX;
-    pt.y = e.clientY;
-    const svgP = pt.matrixTransform(svg.getScreenCTM()?.inverse());
-    setDragging({ id, offsetX: svgP.x - el.x, offsetY: svgP.y - el.y });
-    selectElementAndBringToFront(id);
-    e.stopPropagation();
-  }, [elements]);
+  const toggleVisible = (id: string) =>
+    setElements(els => els.map(el => el.id === id ? { ...el, visible: !el.visible } : el));
 
-  const handleMouseMove = useCallback((e: React.MouseEvent) => {
-    if (!dragging) return;
-    const svg = svgRef.current;
-    if (!svg) return;
-    const pt = svg.createSVGPoint();
-    pt.x = e.clientX;
-    pt.y = e.clientY;
-    const svgP = pt.matrixTransform(svg.getScreenCTM()?.inverse());
-    setElements(prev => prev.map(el =>
-      el.id === dragging.id
-        ? { ...el, x: Math.round((svgP.x - dragging.offsetX) / 10) * 10, y: Math.round((svgP.y - dragging.offsetY) / 10) * 10 }
-        : el
-    ));
-  }, [dragging]);
+  const removeElement = (id: string) => {
+    setElements(els => els.filter(el => el.id !== id));
+    if (selectedId === id) setSelectedId(null);
+  };
 
-  const handleMouseUp = useCallback(() => {
-    setDragging(null);
-  }, []);
-
-  // ─── Element actions ───
   const addElement = (zoneType: string) => {
     const id = `zone-${Date.now()}`;
-    const newEl: PlanoElement = {
+    const newEl: Element = {
       id,
       type: 'rect',
-      x: 200 + Math.random() * 200,
-      y: 200 + Math.random() * 100,
-      width: 160,
-      height: 100,
+      x: 150 + Math.random() * 100,
+      y: 150 + Math.random() * 100,
+      w: 160,
+      h: 100,
       label: ZONE_LABELS[zoneType] || zoneType,
       color: ZONE_COLORS[zoneType] || '#555',
-      rotation: 0,
-      locked: false,
-      visible: true,
-      zoneType: zoneType as PlanoElement['zoneType'],
+      visible: true
     };
     setElements(prev => [...prev, newEl]);
     setSelectedId(id);
@@ -297,33 +239,25 @@ export default function PlanoTool() {
 
   const addSymbol = (st: 'power' | 'heating' | 'rack' | 'extinguisher' | 'water') => {
     const id = `symbol-${Date.now()}`;
-    const newEl: PlanoElement = {
+    const newEl: Element = {
       id,
       type: 'symbol',
-      symbolType: st,
-      x: 300 + Math.random() * 100,
+      symbolKey: st,
+      x: 200 + Math.random() * 100,
       y: 200 + Math.random() * 100,
-      width: 40,
-      height: 40,
+      w: 40,
+      h: 40,
       label: ZONE_LABELS[st] || st,
       color: ZONE_COLORS[st] || '#555',
-      rotation: 0,
-      locked: false,
       visible: true
     };
     setElements(prev => [...prev, newEl]);
     setSelectedId(id);
   };
 
-  const deleteSelected = () => {
-    if (!selectedId) return;
-    setElements(prev => prev.filter(e => e.id !== selectedId));
-    setSelectedId(null);
-  };
-
   const duplicateSelected = () => {
     if (!selectedElement) return;
-    const dup: PlanoElement = { ...selectedElement, id: `${selectedElement.id}-copy-${Date.now()}`, x: selectedElement.x + 20, y: selectedElement.y + 20 };
+    const dup: Element = { ...selectedElement, id: `${selectedElement.id}-copy-${Date.now()}`, x: selectedElement.x + 20, y: selectedElement.y + 20 };
     setElements(prev => [...prev, dup]);
     setSelectedId(dup.id);
   };
@@ -338,75 +272,163 @@ export default function PlanoTool() {
     setElements(next);
   };
 
-  const loadFromBackend = async (presetId: EventPresetId = eventPreset) => {
-    const preset = EVENT_PRESETS[presetId];
-    setEventPreset(presetId);
-    if (window.location.protocol === 'file:') {
-      applyPresetLocal(presetId);
-      setBackendStatus(`Modo demo con preset ${preset.label}: abre con py -m flujo app para usar /api/plano/render.`);
-      return;
-    }
-    setBackendStatus('Consultando motor Python...');
-    try {
-      const response = await fetch('/api/plano/render', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          evento: {
-            nombre: eventName || 'Evento',
-            fecha: eventDate,
-            preset: preset.id,
-            duracion_horas: preset.duration,
-            voluntarios: preset.volunteers,
-            asistentes_estimados: preset.assistants,
-            incluye_testeo: preset.testing,
-            masivo: preset.massive,
-            ubicacion: eventVenue || 'Por definir',
-            layout_mode: 'manual',
-            notas: `Base generada desde preset ${preset.label}: ${preset.power}; ${preset.light}`,
-          },
-        }),
-      });
-      if (!response.ok) throw new Error(`HTTP ${response.status}`);
-      const data = await response.json();
-      const zones = Array.isArray(data?.layout?.zones) ? data.layout.zones : [];
-      const mapped: PlanoElement[] = zones.map((zone: any, index: number) => {
-        const zoneType = zone.type === 'stand' ? 'informativo' : zone.type === 'descanso' ? 'descanso' : zone.type === 'testeo' ? 'testeo' : zone.type === 'mesa' ? 'informativo' : 'circulacion';
-        return {
-          id: `api-${index}-${zoneType}`,
-          type: 'rect',
-          x: Number(zone.x) || 80,
-          y: Number(zone.y) || 80,
-          width: Number(zone.w) || 140,
-          height: Number(zone.h) || 80,
-          label: String(zone.label || ZONE_LABELS[zoneType] || zoneType),
-          color: ZONE_COLORS[zoneType] || '#555',
-          rotation: 0,
-          locked: false,
-          visible: true,
-          zoneType: zoneType as PlanoElement['zoneType'],
-        };
-      });
-      if (mapped.length) {
-        setElements(mapped);
-        setSelectedId(mapped[0].id);
-      }
-      setBackendStatus(`Motor Python OK con preset ${preset.label}: ${mapped.length} zonas cargadas.`);
-    } catch (error) {
-      setBackendStatus(`No se pudo usar /api/plano/render: ${error instanceof Error ? error.message : String(error)}`);
-    }
+  const onMouseDown = useCallback((e: React.MouseEvent, id: string) => {
+    e.preventDefault();
+    const svg = svgRef.current;
+    if (!svg) return;
+    selectElementAndBringToFront(id);
+
+    const pt = svg.createSVGPoint();
+    pt.x = e.clientX; pt.y = e.clientY;
+    const start = pt.matrixTransform(svg.getScreenCTM()!.inverse());
+    const el = elements.find(x => x.id === id)!;
+    const startX = el.x; const startY = el.y;
+
+    const move = (me: MouseEvent) => {
+      const mpt = svg.createSVGPoint();
+      mpt.x = me.clientX; mpt.y = me.clientY;
+      const mp = mpt.matrixTransform(svg.getScreenCTM()!.inverse());
+      setElements(prev => prev.map(x =>
+        x.id === id ? { ...x, x: Math.round((startX + (mp.x - start.x)) / 10) * 10, y: Math.round((startY + (mp.y - start.y)) / 10) * 10 } : x
+      ));
+    };
+    const up = () => {
+      window.removeEventListener('mousemove', move);
+      window.removeEventListener('mouseup', up);
+    };
+    window.addEventListener('mousemove', move);
+    window.addEventListener('mouseup', up);
+  }, [elements]);
+
+  // ─── Render Symbol (Procedural SVG without Emojis) ───
+  const renderSymbol = (el: Element, isPrint = false) => {
+    const isSelected = el.id === selectedId;
+    const zoneColors: Record<string, string> = {
+      testeo: '#f59e0b',
+      contencion: '#7c3aed',
+      power: '#f59e0b',
+      heating: '#ef4444',
+      rack: '#4b5563',
+      extinguisher: '#dc2626',
+      water: '#2563eb'
+    };
+    const fill = isPrint ? '#000000' : (el.symbolKey ? (zoneColors[el.symbolKey] || el.color) : el.color);
+
+    return (
+      <g
+        key={el.id}
+        transform={`translate(${el.x},${el.y})`}
+        onMouseDown={(e) => onMouseDown(e, el.id)}
+        className="cursor-move"
+        opacity={el.visible ? 1 : 0.2}
+      >
+        <rect width={el.w} height={el.h} fill="transparent" stroke={isSelected ? '#fff' : 'none'} strokeWidth={2} />
+        {el.symbolKey === 'power' && (
+          <g stroke={fill} strokeWidth="2" fill="none">
+            <circle cx="20" cy="20" r="12" />
+            <path d="M20 10 L16 20 H24 L20 30" stroke={fill} strokeWidth="2.5" />
+          </g>
+        )}
+        {el.symbolKey === 'heating' && (
+          <g stroke={fill} strokeWidth="2" fill="none">
+             <rect x="8" y="10" width="24" height="20" rx="2" />
+             <path d="M14 14 V26 M20 14 V26 M26 14 V26" />
+          </g>
+        )}
+        {el.symbolKey === 'rack' && (
+           <g stroke={fill} strokeWidth="2" fill="none">
+              <rect x="5" y="5" width="30" height="30" />
+              <path d="M5 15 H35 M5 25 H35 M15 5 V35 M25 5 V35" strokeOpacity="0.3" />
+           </g>
+        )}
+        {el.symbolKey === 'extinguisher' && (
+           <g fill={fill}>
+              <rect x="15" y="12" width="10" height="25" rx="2" />
+              <path d="M17 12 V8 H23 V12 M23 15 H28" stroke={fill} fill="none" strokeWidth="2" />
+           </g>
+        )}
+        {el.symbolKey === 'water' && (
+           <g stroke={fill} strokeWidth="2" fill="none">
+              <circle cx="20" cy="20" r="12" />
+              <path d="M20 15 Q25 25 20 30 Q15 25 20 15" fill={fill} />
+           </g>
+        )}
+        {['testeo', 'contencion'].includes(el.symbolKey || '') && (
+          <g>
+            <circle cx={el.w / 2} cy={el.h / 2} r={el.w / 2} fill={fill} fillOpacity={0.7} stroke={fill} strokeWidth={2} />
+          </g>
+        )}
+        <text x="20" y="52" textAnchor="middle" fontSize="7" fill={fill} fontWeight="bold" fontFamily="monospace">{el.label.toUpperCase()}</text>
+        {isSelected && (
+          <rect x={-2} y={-2} width={el.w + 4} height={el.h + 4} rx={6} fill="none" stroke="#10b981" strokeWidth={2} strokeDasharray="4 2" />
+        )}
+      </g>
+    );
   };
+
+  const onLegendMouseDown = (e: React.MouseEvent) => {
+    const svg = svgRef.current;
+    if (!svg) return;
+    const pt = svg.createSVGPoint();
+    pt.x = e.clientX; pt.y = e.clientY;
+    const start = pt.matrixTransform(svg.getScreenCTM()!.inverse());
+    const lx = legendPos.x; const ly = legendPos.y;
+
+    const move = (me: MouseEvent) => {
+      const mpt = svg.createSVGPoint();
+      mpt.x = me.clientX; mpt.y = me.clientY;
+      const mp = mpt.matrixTransform(svg.getScreenCTM()!.inverse());
+      setLegendPos({ x: lx + (mp.x - start.x), y: ly + (mp.y - start.y) });
+    };
+    const up = () => {
+      window.removeEventListener('mousemove', move);
+      window.removeEventListener('mouseup', up);
+    };
+    window.addEventListener('mousemove', move);
+    window.addEventListener('mouseup', up);
+    e.stopPropagation();
+  };
+
+  const printRider = () => window.print();
 
   const toggleCheck = (item: string) => {
-    setCheckedItems(prev => {
-      const next = new Set(prev);
-      next.has(item) ? next.delete(item) : next.add(item);
-      return next;
-    });
+    setCheckedItems(prev =>
+      prev.includes(item) ? prev.filter(x => x !== item) : [...prev, item]
+    );
   };
 
-  const totalChecks = CHECKLIST_SECTIONS.reduce((sum, s) => sum + s.items.length, 0);
-  const completedChecks = checkedItems.size;
+  const checkAll = () => {
+    const all = CHECKLIST_SECTIONS.flatMap(s => s.items).map(i => i.text);
+    setCheckedItems(prev => prev.length === all.length ? [] : all);
+  };
+
+  // ─── Export Checklist as Markdown ───
+  const exportChecklistMarkdown = () => {
+    let md = `# RIDER TÉCNICO RD - CHECKLIST\n\n`;
+    md += `**Evento:** ${eventName}\n`;
+    md += `**Fecha:** ${eventDate}\n`;
+    md += `**Lugar:** ${eventVenue}\n`;
+    md += `**Preset Comercial:** ${preset}\n\n`;
+    md += `## 1. Antecedentes de la Organización\n\n`;
+    md += `**Quiénes somos:** ${orgTexts.who}\n\n`;
+    md += `**Objetivo del servicio:** ${orgTexts.goal}\n\n`;
+    md += `## 2. Requerimientos Operativos\n\n`;
+    CHECKLIST_SECTIONS.forEach(sec => {
+      md += `### ${sec.title}\n`;
+      sec.items.forEach(item => {
+        const isChecked = checkedItems.includes(item.text) ? '[x]' : '[ ]';
+        md += `- ${isChecked} ${item.text}\n`;
+      });
+      md += `\n`;
+    });
+    const blob = new Blob([md], { type: 'text/markdown;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `checklist_rider_${eventName.replace(/\s+/g, '_').toLowerCase()}.md`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
 
   // ─── Export SVG ───
   const exportSVG = () => {
@@ -421,79 +443,66 @@ export default function PlanoTool() {
     URL.revokeObjectURL(url);
   };
 
-  // ─── Export Checklist as Markdown ───
-  const exportChecklistMarkdown = () => {
-    let md = `# RIDER TÉCNICO RD - CHECKLIST\n\n`;
-    md += `**Evento:** ${eventName}\n`;
-    md += `**Fecha:** ${eventDate}\n`;
-    md += `**Lugar:** ${eventVenue}\n`;
-    md += `**Preset Comercial:** ${eventPreset.toUpperCase()}\n\n`;
-    md += `## 1. Antecedentes de la Organización\n\n`;
-    md += `**Quiénes somos:** ${orgTexts.who}\n\n`;
-    md += `**Objetivo del servicio:** ${orgTexts.goal}\n\n`;
-    md += `## 2. Requerimientos Operativos\n\n`;
-    CHECKLIST_SECTIONS.forEach(sec => {
-      md += `### ${sec.title}\n`;
-      sec.items.forEach(item => {
-        const isChecked = checkedItems.has(`${sec.title}-${item.text}`) ? '[x]' : '[ ]';
-        md += `- ${isChecked} ${item.text}\n`;
+  const loadFromBackend = async (presetId: Preset = preset) => {
+    if (window.location.protocol === 'file:') {
+      setBackendStatus(`Modo de emulacion local con preset ${presetId}. Abre via py -m flujo app para usar APIs.`);
+      return;
+    }
+    setBackendStatus('Consultando motor Python...');
+    try {
+      const response = await fetch('/api/plano/render', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          evento: {
+            nombre: eventName || 'Evento',
+            fecha: eventDate,
+            preset: presetId.toLowerCase(),
+            ubicacion: eventVenue || 'Por definir'
+          },
+        }),
       });
-      md += `\n`;
-    });
-    const blob = new Blob([md], { type: 'text/markdown;charset=utf-8' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `checklist_rider_${eventName.replace(/\s+/g, '_').toLowerCase()}.md`;
-    a.click();
-    URL.revokeObjectURL(url);
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const data = await response.json();
+      const zones = Array.isArray(data?.layout?.zones) ? data.layout.zones : [];
+      const mapped: Element[] = zones.map((zone: any, index: number) => {
+        const isSymbol = ['testeo', 'contencion', 'power', 'heating', 'extinguisher', 'water'].includes(zone.type);
+        return {
+          id: `api-${index}-${zone.type}`,
+          type: isSymbol ? 'symbol' : 'rect',
+          symbolKey: isSymbol ? zone.type : undefined,
+          x: Number(zone.x) || 80,
+          y: Number(zone.y) || 80,
+          w: Number(zone.w) || 140,
+          h: Number(zone.h) || 80,
+          label: String(zone.label || ZONE_LABELS[zone.type] || zone.type),
+          color: ZONE_COLORS[zone.type] || '#555',
+          visible: true,
+        };
+      });
+      if (mapped.length) {
+        setElements(mapped);
+        setSelectedId(mapped[0].id);
+      }
+      setBackendStatus(`Motor Python OK con preset ${presetId}: ${mapped.length} elementos cargados.`);
+    } catch (error) {
+      setBackendStatus(`No se pudo usar /api/plano/render: ${error instanceof Error ? error.message : String(error)}`);
+    }
   };
 
-  // ─── Render Symbol (Procedural SVG without Emojis) ───
-  const renderSymbol = (el: PlanoElement, isPrint = false) => {
-    const color = isPrint ? '#000' : el.color;
-    return (
-      <g key={el.id} transform={`translate(${el.x},${el.y})`} onMouseDown={(e) => handleMouseDown(e, el.id)} className="cursor-move">
-        <rect width={el.width} height={el.height} fill="transparent" stroke={el.id === selectedId ? '#fff' : 'none'} strokeWidth={2} />
-        {el.symbolType === 'power' && (
-          <g stroke={color} strokeWidth="2" fill="none">
-            <circle cx="20" cy="20" r="12" />
-            <path d="M20 10 L16 20 H24 L20 30" stroke={color} strokeWidth="2.5" />
-          </g>
-        )}
-        {el.symbolType === 'heating' && (
-          <g stroke={color} strokeWidth="2" fill="none">
-             <rect x="8" y="10" width="24" height="20" rx="2" />
-             <path d="M14 14 V26 M20 14 V26 M26 14 V26" />
-          </g>
-        )}
-        {el.symbolType === 'rack' && (
-           <g stroke={color} strokeWidth="2" fill="none">
-              <rect x="5" y="5" width="30" height="30" />
-              <path d="M5 15 H35 M5 25 H35 M15 5 V35 M25 5 V35" strokeOpacity="0.3" />
-           </g>
-        )}
-        {el.symbolType === 'extinguisher' && (
-           <g fill={color}>
-              <rect x="15" y="12" width="10" height="25" rx="2" />
-              <path d="M17 12 V8 H23 V12 M23 15 H28" stroke={color} fill="none" strokeWidth="2" />
-           </g>
-        )}
-        {el.symbolType === 'water' && (
-           <g stroke={color} strokeWidth="2" fill="none">
-              <circle cx="20" cy="20" r="12" />
-              <path d="M20 15 Q25 25 20 30 Q15 25 20 15" fill={color} />
-           </g>
-        )}
-        <text x="20" y="52" textAnchor="middle" fontSize="7" fill={color} fontWeight="bold" fontFamily="monospace">{el.label.toUpperCase()}</text>
-      </g>
-    );
-  };
+  const totalChecks = CHECKLIST_SECTIONS.flatMap(s => s.items).length;
+  const completedChecks = checkedItems.length;
+
+  const NAV_TABS: { key: Page; label: string }[] = [
+    { key: 'req', label: '☑ Checklist' },
+    { key: 'map', label: '🗺 Mapa' },
+    { key: 'config', label: '⚙ Config' },
+  ];
 
   return (
-    <div className="space-y-6" onMouseMove={handleMouseMove} onMouseUp={handleMouseUp}>
-      {/* Printable Area (Styled strictly for high contrast and paper output) */}
-      <div className="hidden print:block p-8 text-black bg-white font-sans text-xs">
+    <div className="space-y-5 selection:bg-emerald-500/30">
+      {/* ── Print-only rider (Designed for paper and PDF) ── */}
+      <div className="hidden print:block text-black bg-white p-8 font-sans text-xs">
         <header className="border-b-4 border-black pb-4 mb-8 flex justify-between items-end">
           <div>
             <h1 className="text-3xl font-black italic tracking-tighter uppercase">RIDER TÉCNICO RD</h1>
@@ -524,7 +533,7 @@ export default function PlanoTool() {
                 </h3>
                 <ul className="space-y-1">
                   {section.items.map(item => {
-                    const isChecked = checkedItems.has(`${section.title}-${item.text}`);
+                    const isChecked = checkedItems.includes(item.text);
                     return (
                       <li key={item.text} className="flex items-center gap-2">
                         <div className="w-3.5 h-3.5 border border-black flex items-center justify-center font-bold font-mono text-[9px]">
@@ -545,7 +554,6 @@ export default function PlanoTool() {
         <section className="h-full flex flex-col">
           <h2 className="text-lg font-black uppercase tracking-tight mb-2">3. Esquema de Distribución del Stand</h2>
           <div className="border border-black p-4 bg-zinc-50 relative flex justify-center items-center">
-            {/* Embedded SVG rendered safely inside print document stream */}
             <svg viewBox="0 0 800 550" className="w-full max-w-[650px] aspect-[1.45/1]">
               <rect width="100%" height="100%" fill="#fafafa" stroke="#ccc" />
               <rect x={20} y={20} width={760} height={510} fill="none" stroke="#666" strokeWidth={1} strokeDasharray="4 2" />
@@ -553,8 +561,8 @@ export default function PlanoTool() {
                 if (el.type === 'symbol') return renderSymbol(el, true);
                 return (
                   <g key={el.id}>
-                    <rect x={el.x} y={el.y} width={el.width} height={el.height} fill="none" stroke="#000" strokeWidth={1.5} />
-                    <text x={el.x + el.width/2} y={el.y + el.height/2} textAnchor="middle" dominantBaseline="central" fontSize={9} fontWeight="bold">{el.label.toUpperCase()}</text>
+                    <rect x={el.x} y={el.y} width={el.w} height={el.h} rx={4} fill="none" stroke="#000" strokeWidth={1.5} />
+                    <text x={el.x + el.w/2} y={el.y + el.h/2} textAnchor="middle" dominantBaseline="central" fontSize={9} fontWeight="bold">{el.label.toUpperCase()}</text>
                   </g>
                 );
               })}
@@ -566,322 +574,291 @@ export default function PlanoTool() {
         </section>
       </div>
 
-      {/* Screen View (Interactive App Tool) */}
-      <div className="flex items-center justify-between print:hidden">
-        <div>
-          <h3 className="text-2xl font-bold flex items-center gap-2">
-            Rider RD · Herramienta de Plano
-            <span className="text-xs bg-emerald-500/20 text-emerald-400 font-black px-2 py-0.5 rounded-full uppercase tracking-wider">v0.43.3</span>
-          </h3>
-          <p className="text-zinc-400 text-sm mt-1">
-            Documento operativo para intervención en terreno — Reduciendo Daño Chile
-          </p>
+      {/* ── Screen UI (Dark and Techno-Elegant) ── */}
+      <div className="print:hidden space-y-4">
+        {/* Header */}
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <h1 className="flex items-center gap-2 text-2xl font-black">
+              <Map className="h-6 w-6" /> Plano / Rider
+              <span className="text-xs bg-emerald-500/20 text-emerald-400 font-black px-2.5 py-0.5 rounded-full uppercase tracking-wider">v0.43.3</span>
+            </h1>
+            <p className="mt-1 text-sm text-zinc-500">
+              Preset operativo NGO RD — {proposal.desc}
+            </p>
+          </div>
+          <div className="flex gap-2">
+            <button
+              onClick={() => loadFromBackend()}
+              className="flex items-center gap-2 rounded-lg border border-emerald-800 bg-emerald-950/40 px-4 py-2 text-xs font-bold text-emerald-300 hover:bg-emerald-900/40 transition-colors"
+            >
+              <RefreshCw className="h-4 w-4" /> Motor Python
+            </button>
+            <button
+              onClick={printRider}
+              className="flex items-center gap-2 rounded-lg border border-zinc-700 bg-zinc-900 px-4 py-2 text-xs font-bold text-zinc-300 hover:bg-zinc-800 transition-colors"
+            >
+              <Printer className="h-4 w-4" /> Imprimir Rider
+            </button>
+          </div>
         </div>
-        <div className="flex items-center gap-2">
-          <button
-            onClick={() => setPage('requirements')}
-            className={cn(
-              "px-4 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-2 border",
-              page === 'requirements' ? "bg-white text-black border-white" : "bg-zinc-900 border-zinc-800 text-zinc-300 hover:bg-zinc-800"
-            )}
-          >
-            <FileText className="w-4 h-4" />
-            1. Requerimientos
-          </button>
-          <button
-            onClick={() => setPage('layout')}
-            className={cn(
-              "px-4 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-2 border",
-              page === 'layout' ? "bg-white text-black border-white" : "bg-zinc-900 border-zinc-800 text-zinc-300 hover:bg-zinc-800"
-            )}
-          >
-            <Layers className="w-4 h-4" />
-            2. Distribución
-          </button>
-          <button
-            onClick={() => setPage('config')}
-            className={cn(
-              "px-4 py-2 rounded-lg text-sm font-medium transition-all flex items-center gap-2 border",
-              page === 'config' ? "bg-white text-black border-white" : "bg-zinc-900 border-zinc-800 text-zinc-300 hover:bg-zinc-800"
-            )}
-          >
-            <Settings className="w-4 h-4" />
-            Ajustes ONG
-          </button>
-          <button
-            onClick={() => loadFromBackend()}
-            className="px-4 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 bg-emerald-950/40 border border-emerald-800/70 text-emerald-200 hover:bg-emerald-900/50"
-          >
-            <RefreshCw className="w-4 h-4 animate-spin-hover" />
-            Motor Python
-          </button>
-        </div>
-      </div>
-      {backendStatus && (
-        <div className="rounded-lg border border-zinc-800 bg-zinc-900/70 px-4 py-2 text-xs text-zinc-400 print:hidden">
-          {backendStatus}
-        </div>
-      )}
 
-      {/* ═══ PAGE 1: REQUIREMENTS (17 items) ═══ */}
-      {page === 'requirements' && (
-        <div className="grid grid-cols-3 gap-6 print:hidden">
-          {/* Left: Info card and modality blocks */}
-          <div className="col-span-2 space-y-6">
-            <div className="p-6 rounded-xl border border-zinc-800" style={{ background: 'linear-gradient(135deg, #1f2a24 0%, #09090b 100%)' }}>
-              <div className="flex items-center gap-3 mb-6">
-                <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ background: RD_PALETTE.accent }}>
-                  <Shield className="w-5 h-5 text-white" />
-                </div>
-                <div>
-                  <h4 className="text-lg font-bold text-white">Reduciendo Daño Chile</h4>
-                  <p className="text-xs text-zinc-400">Propuesta de Servicio · Intervención en Terreno</p>
-                </div>
-              </div>
+        {backendStatus && (
+          <div className="rounded-lg border border-zinc-800 bg-zinc-900/70 px-4 py-2 text-xs text-zinc-400">
+            {backendStatus}
+          </div>
+        )}
+
+        {/* Preset selector */}
+        <div className="flex gap-2 flex-wrap bg-zinc-900/20 border border-zinc-800/80 p-3 rounded-xl items-center">
+          <span className="text-[10px] font-bold uppercase tracking-widest text-zinc-500 mr-2">Presets de Carga:</span>
+          {(['UNDER', 'BASE', 'MAINSTREAM'] as Preset[]).map(p => (
+            <button
+              key={p}
+              onClick={() => applyPreset(p)}
+              className={cn(
+                'rounded-lg border px-4 py-2 text-xs font-bold uppercase tracking-widest transition-colors',
+                preset === p
+                  ? 'border-emerald-500 bg-emerald-950/60 text-emerald-300'
+                  : 'border-zinc-700 bg-zinc-900 text-zinc-400 hover:border-zinc-600 hover:text-zinc-200'
+              )}
+            >
+              {p}
+            </button>
+          ))}
+          <button
+            onClick={() => applyPreset(preset)}
+            className="ml-auto flex items-center gap-1.5 rounded-lg border border-zinc-800 bg-zinc-900 px-3 py-2 text-xs text-zinc-500 hover:text-zinc-300 transition-colors"
+          >
+            <RotateCcw className="h-3.5 w-3.5" /> Reset
+          </button>
+        </div>
+
+        {/* Tabs */}
+        <div className="flex gap-1 border-b border-zinc-800 pb-0">
+          {NAV_TABS.map(({ key, label }) => (
+            <button
+              key={key}
+              onClick={() => setPage(key)}
+              className={cn(
+                'px-4 py-2 text-sm font-medium rounded-t-lg transition-colors -mb-px border-b-2 flex items-center gap-2',
+                page === key
+                  ? 'border-emerald-500 text-emerald-400 bg-zinc-900/50'
+                  : 'border-transparent text-zinc-500 hover:text-zinc-300'
+              )}
+            >
+              {key === 'req' && <FileText className="w-4 h-4" />}
+              {key === 'map' && <Layers className="w-4 h-4" />}
+              {key === 'config' && <Settings className="w-4 h-4" />}
+              {label}
+            </button>
+          ))}
+        </div>
+
+        {/* ── Checklist tab (17 items) ── */}
+        {page === 'req' && (
+          <div className="space-y-4">
+            {/* Antecedentes Card */}
+            <div className="p-6 rounded-xl border border-zinc-800 bg-zinc-900/30">
+              <h3 className="text-sm font-black uppercase text-zinc-400 tracking-wider mb-4">Antecedentes del Evento</h3>
               <div className="grid grid-cols-3 gap-4">
                 <div>
-                  <label className="text-[10px] uppercase tracking-widest text-zinc-500 block mb-1">Evento</label>
+                  <label className="text-[10px] uppercase tracking-widest text-zinc-500 block mb-1 font-bold">Nombre del Evento</label>
                   <input
                     value={eventName}
                     onChange={e => setEventName(e.target.value)}
-                    className="w-full bg-black/30 border border-zinc-700 rounded px-3 py-1.5 text-sm focus:outline-none focus:border-zinc-500"
+                    className="w-full bg-black/40 border border-zinc-800 rounded px-3 py-2 text-sm focus:outline-none focus:border-zinc-600"
                   />
                 </div>
                 <div>
-                  <label className="text-[10px] uppercase tracking-widest text-zinc-500 block mb-1">Fecha</label>
+                  <label className="text-[10px] uppercase tracking-widest text-zinc-500 block mb-1 font-bold">Fecha del Evento</label>
                   <input
                     type="date"
                     value={eventDate}
                     onChange={e => setEventDate(e.target.value)}
-                    className="w-full bg-black/30 border border-zinc-700 rounded px-3 py-1.5 text-sm focus:outline-none focus:border-zinc-500"
+                    className="w-full bg-black/40 border border-zinc-800 rounded px-3 py-2 text-sm focus:outline-none focus:border-zinc-600"
                   />
                 </div>
                 <div>
-                  <label className="text-[10px] uppercase tracking-widest text-zinc-500 block mb-1">Lugar</label>
+                  <label className="text-[10px] uppercase tracking-widest text-zinc-500 block mb-1 font-bold">Ubicación / Local</label>
                   <input
                     value={eventVenue}
                     onChange={e => setEventVenue(e.target.value)}
-                    className="w-full bg-black/30 border border-zinc-700 rounded px-3 py-1.5 text-sm focus:outline-none focus:border-zinc-500"
+                    className="w-full bg-black/40 border border-zinc-800 rounded px-3 py-2 text-sm focus:outline-none focus:border-zinc-600"
                   />
                 </div>
               </div>
             </div>
 
-            {/* Presets card selectors */}
-            <div className="bg-zinc-900/40 border border-zinc-800 p-6 rounded-2xl">
-              <h4 className="text-xs font-black uppercase text-zinc-400 tracking-wider mb-4">Presets de Carga de Eventos</h4>
-              <div className="grid grid-cols-3 gap-4">
-                {(['under', 'base', 'mainstream'] as const).map(p => (
-                  <button
-                    key={p}
-                    onClick={() => applyPresetLocal(p)}
-                    className={cn(
-                      "p-4 rounded-xl border text-left transition-all",
-                      eventPreset === p 
-                        ? "bg-emerald-950/40 border-emerald-500/80 text-emerald-300"
-                        : "bg-black/20 border-zinc-800/80 text-zinc-400 hover:border-zinc-700"
-                    )}
-                  >
-                    <div className="font-black uppercase text-xs">{p}</div>
-                    <div className="text-[10px] mt-1 opacity-70 font-semibold">{EVENT_PRESETS[p].short}</div>
-                    <div className="text-[9px] mt-2 font-mono text-zinc-500">Voluntarios: {EVENT_PRESETS[p].volunteers} | Mesas: {EVENT_PRESETS[p].tables}</div>
-                  </button>
-                ))}
-              </div>
-            </div>
-
+            {/* Modalidades Cards */}
             <div className="grid grid-cols-3 gap-4">
               <ModalidadCard
-                icon={<Heart className="w-5 h-5" />}
+                icon={<Heart className="w-5 h-5 text-emerald-400" />}
                 title="Stand Informativo"
                 description="Personas capacitadas para orientar y entregar consejos preventivos. Material educativo, protectores auditivos, suplementos pre/post."
                 color={ZONE_COLORS.informativo}
               />
               <ModalidadCard
-                icon={<AlertTriangle className="w-5 h-5" />}
+                icon={<AlertTriangle className="w-5 h-5 text-yellow-500" />}
                 title="Stand de Testeo"
                 description="Análisis colorimétricos de sustancias gratuito. Equipo liderado por analistas químicos y químicos farmacéuticos."
                 color={ZONE_COLORS.testeo}
               />
               <ModalidadCard
-                icon={<Coffee className="w-5 h-5" />}
+                icon={<Coffee className="w-5 h-5 text-purple-400" />}
                 title="Contención"
                 description="Rondas preventivas en terreno. Contención psicológica y atención en situaciones de crisis o desregulación emocional."
                 color={ZONE_COLORS.contencion}
               />
             </div>
-          </div>
 
-          {/* Right: Requirements interactive checklist */}
-          <div className="space-y-4">
-            <div className="p-5 bg-zinc-900/50 border border-zinc-800 rounded-2xl sticky top-24">
-              <div className="flex items-center justify-between mb-4">
-                <h4 className="text-sm font-bold uppercase tracking-widest text-zinc-400">Requerimientos (17)</h4>
-                <span className={cn(
-                  "text-xs font-bold px-2 py-0.5 rounded",
-                  completedChecks === totalChecks 
-                    ? "bg-green-500/20 text-green-400" 
-                    : "bg-zinc-800 text-zinc-500"
-                )}>
-                  {completedChecks}/{totalChecks}
-                </span>
-              </div>
-
-              {/* Progress bar */}
-              <div className="w-full h-1.5 bg-zinc-800 rounded-full mb-6 overflow-hidden">
-                <div
-                  className="h-full rounded-full transition-all duration-500"
-                  style={{
-                    width: `${(completedChecks / totalChecks) * 100}%`,
-                    background: completedChecks === totalChecks ? '#22c55e' : RD_PALETTE.accent,
-                  }}
-                />
-              </div>
-
-              <div className="space-y-4 max-h-[380px] overflow-y-auto pr-1">
-                {CHECKLIST_SECTIONS.map(section => (
-                  <div key={section.title} className="space-y-2">
-                    <div className="flex items-center gap-2 border-b border-zinc-800/80 pb-1 mt-2">
-                      <span className="text-emerald-500">{renderRequirementIcon(section.iconName, "w-3.5 h-3.5")}</span>
-                      <span className="text-[10px] font-black uppercase tracking-wider text-zinc-400">{section.title}</span>
-                    </div>
-                    <div className="space-y-1.5">
-                      {section.items.map(item => {
-                        const itemKey = `${section.title}-${item.text}`;
-                        const isChecked = checkedItems.has(itemKey);
-                        return (
-                          <button
-                            key={item.text}
-                            onClick={() => toggleCheck(itemKey)}
-                            className="w-full flex items-center gap-2.5 text-left group"
-                          >
-                            <div className={cn(
-                              "w-4 h-4 rounded border flex items-center justify-center flex-shrink-0 transition-all",
-                              isChecked
-                                ? "bg-green-600 border-green-600"
-                                : "border-zinc-700 group-hover:border-zinc-500"
-                            )}>
-                              {isChecked && (
-                                <CheckSquare className="w-3 h-3 text-white" />
-                              )}
-                            </div>
-                            <div className="flex items-center gap-2 overflow-hidden flex-1">
-                              {renderRequirementIcon(item.icon, "w-3 h-3 text-zinc-500 group-hover:text-zinc-300")}
-                              <span className={cn(
-                                "text-[11px] transition-colors truncate",
-                                isChecked
-                                  ? "text-zinc-500 line-through"
-                                  : "text-zinc-300 group-hover:text-white"
-                              )}>
-                                {item.text}
-                              </span>
-                            </div>
-                          </button>
-                        );
-                      })}
-                    </div>
+            <div className="flex items-center justify-between">
+              <h2 className="font-bold text-sm text-zinc-400 uppercase tracking-widest">Requerimientos Operativos (17 items)</h2>
+              <button
+                onClick={checkAll}
+                className="text-xs text-zinc-500 hover:text-zinc-200 transition-colors"
+              >
+                {checkedItems.length === CHECKLIST_SECTIONS.flatMap(s => s.items).length ? 'Desmarcar todo' : 'Marcar todo'}
+              </button>
+            </div>
+            
+            <div className="grid gap-4 md:grid-cols-2">
+              {CHECKLIST_SECTIONS.map(s => (
+                <div key={s.title} className="rounded-2xl border border-zinc-800 bg-zinc-900/45 p-5 group hover:border-emerald-500/20 transition-all">
+                  <div className="flex items-center gap-2 mb-4 border-b border-zinc-800/80 pb-1">
+                    <span className="text-emerald-500">{renderRequirementIcon(s.iconName, "w-4 h-4")}</span>
+                    <h3 className="text-xs font-bold uppercase tracking-widest text-zinc-400">{s.title}</h3>
                   </div>
-                ))}
-              </div>
+                  <ul className="space-y-2">
+                    {s.items.map(item => (
+                      <li key={item.text}>
+                        <label className="flex items-center gap-3 cursor-pointer group/item">
+                          <input
+                            type="checkbox"
+                            checked={checkedItems.includes(item.text)}
+                            onChange={() => toggleCheck(item.text)}
+                            className="hidden"
+                          />
+                          <span
+                            className={cn(
+                              'h-4 w-4 shrink-0 rounded border-2 flex items-center justify-center transition-colors',
+                              checkedItems.includes(item.text)
+                                ? 'border-emerald-500 bg-emerald-500'
+                                : 'border-zinc-600 group-hover/item:border-zinc-400'
+                            )}
+                          >
+                            {checkedItems.includes(item.text) && (
+                              <svg className="h-2.5 w-2.5 text-black" viewBox="0 0 10 10" fill="none">
+                                <path d="M2 5l3 3 3-5" stroke="currentColor" strokeWidth={1.5} strokeLinecap="round" strokeLinejoin="round" />
+                              </svg>
+                            )}
+                          </span>
+                          <div className="flex items-center gap-2 overflow-hidden flex-1">
+                            {renderRequirementIcon(item.icon, "w-3.5 h-3.5 text-zinc-500 group-hover/item:text-zinc-300")}
+                            <span className={cn('text-xs transition-colors truncate', checkedItems.includes(item.text) ? 'text-zinc-500 line-through' : 'text-zinc-300')}>
+                              {item.text}
+                            </span>
+                          </div>
+                        </label>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ))}
+            </div>
 
-              <div className="pt-4 mt-4 border-t border-zinc-800/80 space-y-2">
-                <button
-                  onClick={exportChecklistMarkdown}
-                  className="w-full flex items-center justify-center gap-2 py-2.5 bg-zinc-800 hover:bg-zinc-700 text-white rounded-lg text-xs font-semibold transition-colors"
-                >
-                  <Download className="w-3.5 h-3.5" /> Exportar Checklist (.md)
-                </button>
-              </div>
+            <div className="flex items-center justify-between rounded-xl border border-zinc-800/60 bg-zinc-900/20 px-6 py-4">
+              <span className="text-xs text-zinc-500 uppercase tracking-widest font-mono">
+                {completedChecks} / {totalChecks} Requerimientos completados
+              </span>
+              <button
+                onClick={exportChecklistMarkdown}
+                className="flex items-center gap-2 rounded-lg border border-zinc-700 bg-zinc-900 px-3.5 py-2 text-xs font-bold text-zinc-300 hover:bg-zinc-800 transition-all active:scale-[0.98]"
+              >
+                <Download className="w-3.5 h-3.5" /> Exportar Checklist (.md)
+              </button>
             </div>
 
             <button
-              onClick={() => setPage('layout')}
+              onClick={() => setPage('map')}
               className="w-full py-5 bg-emerald-500 hover:bg-emerald-400 text-black font-black rounded-3xl shadow-xl shadow-emerald-500/10 transition-transform active:scale-[0.98] flex items-center justify-center gap-3 text-base"
             >
               Ir al Plano de Distribución
               <ChevronRight className="w-5 h-5" />
             </button>
           </div>
-        </div>
-      )}
+        )}
 
-      {/* ═══ PAGE 2: LAYOUT / PLANO ═══ */}
-      {page === 'layout' && (
-        <div className="grid grid-cols-4 gap-6 print:hidden">
-          {/* Canvas area */}
-          <div className="col-span-3">
-            {/* Toolbar */}
-            <div className="flex items-center justify-between mb-3 px-1">
-              <div className="flex items-center gap-1">
-                <ToolBtn icon={<ZoomIn className="w-3.5 h-3.5" />} onClick={() => setZoom(z => Math.min(z + 0.15, 2.5))} tooltip="Zoom +" />
-                <ToolBtn icon={<ZoomOut className="w-3.5 h-3.5" />} onClick={() => setZoom(z => Math.max(z - 0.15, 0.4))} tooltip="Zoom -" />
-                <ToolBtn icon={<RotateCcw className="w-3.5 h-3.5" />} onClick={() => setZoom(1)} tooltip="Reset zoom" />
-                <div className="w-px h-5 bg-zinc-800 mx-1" />
-                <ToolBtn icon={<Grid3X3 className="w-3.5 h-3.5" />} onClick={() => setShowGrid(!showGrid)} active={showGrid} tooltip="Grilla" />
-                <ToolBtn icon={showLegend ? <Eye className="w-3.5 h-3.5" /> : <EyeOff className="w-3.5 h-3.5" />} onClick={() => setShowLegend(!showLegend)} active={showLegend} tooltip="Leyenda" />
+        {/* ── Map tab ── */}
+        {page === 'map' && (
+          <div className="grid grid-cols-4 gap-6">
+            {/* SVG Canvas and Controls */}
+            <div className="col-span-3 space-y-4">
+              <div className="flex items-center justify-between px-1">
+                <div className="flex items-center gap-1.5">
+                  <button onClick={() => setZoom(z => Math.min(z + 0.15, 2.5))} className="p-2 bg-zinc-900 border border-zinc-800 rounded-lg hover:bg-zinc-800 text-zinc-400 hover:text-white" title="Zoom +"><Plus className="w-3.5 h-3.5"/></button>
+                  <button onClick={() => setZoom(z => Math.max(z - 0.15, 0.4))} className="p-2 bg-zinc-900 border border-zinc-800 rounded-lg hover:bg-zinc-800 text-zinc-400 hover:text-white" title="Zoom -"><Trash2 className="w-3.5 h-3.5"/></button>
+                  <button onClick={() => setZoom(1)} className="p-2 bg-zinc-900 border border-zinc-800 rounded-lg hover:bg-zinc-800 text-zinc-400 hover:text-white" title="Reset Zoom"><RotateCcw className="w-3.5 h-3.5"/></button>
+                  <div className="w-px h-5 bg-zinc-800 mx-1" />
+                  <button onClick={() => setShowGrid(!showGrid)} className={cn("p-2 border rounded-lg transition-colors text-xs font-bold", showGrid ? "bg-zinc-800 border-zinc-700 text-white" : "bg-zinc-900 border-zinc-800 text-zinc-500")}>Grilla</button>
+                  <button onClick={() => setShowLegend(!showLegend)} className={cn("p-2 border rounded-lg transition-colors text-xs font-bold", showLegend ? "bg-zinc-800 border-zinc-700 text-white" : "bg-zinc-900 border-zinc-800 text-zinc-500")}>Leyenda</button>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-[10px] font-mono text-zinc-600 mr-2">{Math.round(zoom * 100)}%</span>
+                  <button onClick={exportSVG} className="flex items-center gap-1.5 p-2 bg-zinc-900 border border-zinc-800 rounded-lg text-xs font-bold hover:bg-zinc-800 text-zinc-400 hover:text-white"><Download className="w-3.5 h-3.5"/> SVG</button>
+                </div>
               </div>
-              <div className="flex items-center gap-1">
-                <span className="text-[10px] font-mono text-zinc-600 mr-2">{Math.round(zoom * 100)}%</span>
-                <ToolBtn icon={<Download className="w-3.5 h-3.5" />} onClick={exportSVG} tooltip="Exportar SVG" />
-                <ToolBtn icon={<Printer className="w-3.5 h-3.5" />} onClick={() => window.print()} tooltip="Imprimir" />
-              </div>
-            </div>
 
-            {/* SVG Canvas */}
-            <div className="bg-zinc-950 border border-zinc-800 rounded-xl overflow-hidden relative" style={{ height: "650px" }}>
-              <div className="w-full h-full overflow-auto flex items-center justify-center p-4">
-                <div className="relative bg-white shadow-2xl transition-all" style={{ width: 800, height: 600, transform: `scale(${zoom})`, transformOrigin: "center" }}>
-                  <svg
-                    ref={svgRef}
-                    viewBox="0 0 800 550"
-                    className="w-full h-full"
-                    onClick={() => setSelectedId(null)}
-                  >
-                    {/* Grid */}
-                    {showGrid && (
-                      <g opacity={0.08}>
-                        {Array.from({ length: 81 }, (_, i) => (
-                          <line key={`gv${i}`} x1={i * 10} y1={0} x2={i * 10} y2={550} stroke="#111" strokeWidth={i % 5 === 0 ? 0.6 : 0.3} />
-                        ))}
-                        {Array.from({ length: 56 }, (_, i) => (
-                          <line key={`gh${i}`} x1={0} y1={i * 10} x2={800} y2={i * 10} stroke="#111" strokeWidth={i % 5 === 0 ? 0.6 : 0.3} />
-                        ))}
-                      </g>
-                    )}
+              {/* SVG Canvas wrapper */}
+              <div className="rounded-2xl border border-zinc-800 bg-zinc-950 overflow-hidden relative" style={{ height: "560px" }}>
+                <div className="w-full h-full overflow-auto flex items-center justify-center p-4">
+                  <div className="relative bg-white shadow-2xl transition-all" style={{ width: 800, height: 550, transform: `scale(${zoom})`, transformOrigin: "center" }}>
+                    <svg
+                      ref={svgRef}
+                      viewBox="0 0 800 550"
+                      className="w-full h-full"
+                      onClick={() => setSelectedId(null)}
+                    >
+                      {/* Grid pattern */}
+                      {showGrid && (
+                        <g opacity={0.08}>
+                          {Array.from({ length: 81 }, (_, i) => (
+                            <line key={`gv${i}`} x1={i * 10} y1={0} x2={i * 10} y2={550} stroke="#111" strokeWidth={i % 5 === 0 ? 0.6 : 0.3} />
+                          ))}
+                          {Array.from({ length: 56 }, (_, i) => (
+                            <line key={`gh${i}`} x1={0} y1={i * 10} x2={800} y2={i * 10} stroke="#111" strokeWidth={i % 5 === 0 ? 0.6 : 0.3} />
+                          ))}
+                        </g>
+                      )}
 
-                    {/* Boundary frame */}
-                    <rect x={20} y={20} width={760} height={510} fill="none" stroke="#666" strokeWidth={1} strokeDasharray="6 3" rx={4} />
-                    <text x={30} y={16} fill="#777" fontSize={9} fontFamily="Inter, sans-serif">A4 Horizontal — 29.7 × 21 cm</text>
+                      {/* Boundary frame */}
+                      <rect x="20" y="20" width="760" height="510" fill="none" stroke="#3f3f46" strokeWidth={1} strokeDasharray="6 4" rx={4} />
 
-                    {/* Elements */}
-                    {elements.filter(e => e.visible).map(el => {
-                      if (el.type === 'symbol') {
-                        return renderSymbol(el);
-                      }
-                      const isSelected = el.id === selectedId;
-                      const common = { 
-                        onMouseDown: (e: any) => handleMouseDown(e, el.id), 
-                        className: cn("cursor-move transition-all", isSelected && "stroke-white stroke-2") 
-                      };
-                      if (el.type === 'rect') {
+                      {/* Elements */}
+                      {elements.filter(el => el.visible).map(el => {
+                        if (el.type === 'symbol') return renderSymbol(el);
+                        const isSelected = el.id === selectedId;
+                        const common = { 
+                          onMouseDown: (e: any) => onMouseDown(e, el.id), 
+                          className: cn("cursor-move transition-all", isSelected && "stroke-white stroke-2") 
+                        };
                         return (
                           <g key={el.id} onClick={(e) => { e.stopPropagation(); selectElementAndBringToFront(el.id); }}>
                             <rect
                               x={el.x}
                               y={el.y}
-                              width={el.width}
-                              height={el.height}
+                              width={el.w}
+                              height={el.h}
                               rx={12}
                               fill={el.color}
                               fillOpacity={0.7}
                               stroke={isSelected ? '#ffffff' : el.color}
-                              strokeWidth={isSelected ? 2.5 : 1}
-                              strokeDasharray={el.zoneType === 'circulacion' ? '6 3' : undefined}
+                              strokeWidth={isSelected ? 2.5 : 1.5}
                               {...common}
                             />
                             <text
-                              x={el.x + el.width / 2}
-                              y={el.y + el.height / 2}
+                              x={el.x + el.w / 2}
+                              y={el.y + el.h / 2}
                               textAnchor="middle"
                               dominantBaseline="central"
                               fill="#ffffff"
@@ -893,8 +870,8 @@ export default function PlanoTool() {
                               {el.label.toUpperCase()}
                             </text>
                             <text
-                              x={el.x + el.width / 2}
-                              y={el.y + el.height / 2 + 16}
+                              x={el.x + el.w / 2}
+                              y={el.y + el.h / 2 + 16}
                               textAnchor="middle"
                               dominantBaseline="central"
                               fill="#ffffff80"
@@ -902,250 +879,249 @@ export default function PlanoTool() {
                               fontFamily="monospace"
                               style={{ pointerEvents: 'none' }}
                             >
-                              {el.width}×{el.height}
+                              {el.w}×{el.h}
                             </text>
                           </g>
                         );
-                      }
-                      return null;
-                    })}
+                      })}
 
-                    {/* Legend */}
-                    {showLegend && (
-                      <g transform="translate(600, 35)">
-                        <rect x={0} y={0} width={170} height={140} rx={12} fill="#09090bcc" stroke="#333" strokeWidth={1} />
-                        <text x={12} y={20} fill="#aaa" fontSize={9} fontWeight={900} fontFamily="Inter, sans-serif">LEYENDA</text>
-                        {Object.entries(ZONE_COLORS).filter(([k]) => ['testeo','contencion','informativo','descanso','coordinacion','circulacion'].includes(k)).map(([key, color], i) => (
-                          <g key={key} transform={`translate(12, ${35 + i * 16})`}>
-                            <rect x={0} y={-5} width={10} height={10} rx={2.5} fill={color + 'aa'} stroke={color} strokeWidth={1} />
-                            <text x={16} y={4} fill="#bbb" fontSize={9} fontFamily="Inter, sans-serif">{ZONE_LABELS[key]}</text>
-                          </g>
-                        ))}
+                      {/* Draggable Legend */}
+                      {showLegend && (
+                        <g
+                          transform={`translate(${legendPos.x},${legendPos.y})`}
+                          onMouseDown={onLegendMouseDown}
+                          className="cursor-grab"
+                        >
+                          <rect width={150} height={140} rx={12} fill="#18181bcc" stroke="#3f3f46" strokeWidth={1} />
+                          <text x={75} y={20} textAnchor="middle" fontSize={9} fill="#a1a1aa" fontWeight="bold">
+                            LEYENDA TÉCNICA
+                          </text>
+                          {['testeo', 'contencion', 'power', 'extinguisher'].map((k, i) => {
+                            const colors: Record<string, string> = { testeo: '#2d5a4a', contencion: '#7c3aed', power: '#f59e0b', extinguisher: '#dc2626' };
+                            const fill = colors[k] || '#6366f1';
+                            return (
+                              <g key={k} transform={`translate(12,${35 + i * 22})`}>
+                                {['power', 'extinguisher'].includes(k) ? (
+                                  <rect width={12} height={12} rx={2.5} fill={fill} fillOpacity={0.6} stroke={fill} strokeWidth={1} />
+                                ) : (
+                                  <circle cx={6} cy={6} r={6} fill={fill} fillOpacity={0.6} stroke={fill} strokeWidth={1} />
+                                )}
+                                <text x={20} y={9} fontSize={8.5} fill="#a1a1aa" fontWeight="bold" fontFamily="sans-serif">{ZONE_LABELS[k]}</text>
+                              </g>
+                            );
+                          })}
+                        </g>
+                      )}
+
+                      {/* Title block */}
+                      <g transform="translate(30, 490)">
+                        <text fill="#222" fontSize={11} fontWeight={900} fontFamily="Inter, sans-serif">{eventName.toUpperCase()}</text>
+                        <text x={0} y={14} fill="#666" fontSize={8} fontFamily="Inter, sans-serif">{eventVenue.toUpperCase()} · {eventDate}</text>
+                        <text x={700} y={0} textAnchor="end" fill="#aaa" fontSize={7} fontFamily="monospace">Reduciendo Daño Chile · Rider Operativo</text>
                       </g>
-                    )}
-
-                    {/* Title block */}
-                    <g transform="translate(30, 490)">
-                      <text fill="#222" fontSize={11} fontWeight={900} fontFamily="Inter, sans-serif">{eventName.toUpperCase()}</text>
-                      <text x={0} y={14} fill="#666" fontSize={8} fontFamily="Inter, sans-serif">{eventVenue.toUpperCase()} · {eventDate}</text>
-                      <text x={700} y={0} textAnchor="end" fill="#aaa" fontSize={7} fontFamily="monospace">Reduciendo Daño Chile · Rider Operativo</text>
-                    </g>
-                  </svg>
+                    </svg>
+                  </div>
                 </div>
               </div>
             </div>
+
+            {/* Sidebar Controls */}
+            <aside className="space-y-4">
+              {/* Elements List */}
+              <div className="p-4 bg-zinc-900/50 border border-zinc-800 rounded-xl space-y-3">
+                <h4 className="text-[10px] font-bold uppercase tracking-widest text-zinc-500">Zonas de Montaje</h4>
+                <div className="grid grid-cols-2 gap-2">
+                  {Object.entries(ZONE_LABELS).filter(([k]) => !['power','heating','rack','extinguisher','water'].includes(k)).map(([key, label]) => (
+                    <button
+                      key={key}
+                      onClick={() => addElement(key)}
+                      className="flex items-center gap-2 px-2.5 py-2 bg-zinc-800/50 border border-zinc-800 rounded-lg text-[10px] font-medium hover:bg-zinc-800 transition-colors text-left"
+                    >
+                      <div className="w-2.5 h-2.5 rounded-sm flex-shrink-0" style={{ background: ZONE_COLORS[key] }} />
+                      <span className="truncate">{label}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Add Symbols */}
+              <div className="p-4 bg-zinc-900/50 border border-zinc-800 rounded-xl">
+                <h4 className="text-[10px] font-bold uppercase tracking-widest text-zinc-500 mb-3">Símbolos Técnicos</h4>
+                <div className="grid grid-cols-3 gap-2">
+                  {(['power','heating','rack','extinguisher','water'] as const).map(s => (
+                    <button
+                      key={s}
+                      onClick={() => addSymbol(s)}
+                      className="flex flex-col items-center p-3 bg-zinc-800/30 border border-zinc-800 rounded-xl hover:bg-zinc-800 group transition-all"
+                    >
+                      {s === 'power' && <Zap className="w-4 h-4 text-yellow-500" />}
+                      {s === 'heating' && <RotateCcw className="w-4 h-4 text-red-500" />}
+                      {s === 'rack' && <Box className="w-4 h-4 text-zinc-400" />}
+                      {s === 'extinguisher' && <ShieldAlert className="w-4 h-4 text-red-600" />}
+                      {s === 'water' && <Droplet className="w-4 h-4 text-blue-500" />}
+                      <span className="mt-2 text-[7px] uppercase font-black opacity-40 group-hover:opacity-100">{s}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Property Editor with Color Picker */}
+              {selectedElement && (
+                <div className="p-4 bg-zinc-900 border border-zinc-800 rounded-xl space-y-4 shadow-2xl">
+                  <h4 className="text-[10px] font-bold uppercase tracking-widest text-zinc-500">Propiedades</h4>
+                  <div className="space-y-3">
+                    <div>
+                      <label className="text-[10px] text-zinc-500 block mb-1">Nombre</label>
+                      <input
+                        value={selectedElement.label}
+                        onChange={e => setElements(prev => prev.map(el => el.id === selectedId ? { ...el, label: e.target.value } : el))}
+                        className="w-full bg-black/40 border border-zinc-800 rounded px-2.5 py-1.5 text-xs focus:outline-none focus:border-zinc-600"
+                      />
+                    </div>
+
+                    {/* Color Picker */}
+                    <div>
+                      <label className="text-[10px] text-zinc-500 block mb-1.5">Color del Elemento</label>
+                      <div className="flex gap-1.5 flex-wrap">
+                        {Object.entries(ZONE_COLORS).map(([key, val]) => (
+                          <button
+                            key={key}
+                            onClick={() => setElements(prev => prev.map(el => el.id === selectedId ? { ...el, color: val } : el))}
+                            title={ZONE_LABELS[key]}
+                            className={cn(
+                              "w-5 h-5 rounded-full border-2 transition-all",
+                              selectedElement.color === val ? "border-white scale-110" : "border-transparent hover:scale-105"
+                            )}
+                            style={{ background: val }}
+                          />
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Layer Reordering buttons */}
+                    <div className="grid grid-cols-2 gap-2">
+                      <button
+                        onClick={() => moveLayer('up')}
+                        className="flex items-center justify-center gap-1 py-1.5 bg-zinc-800 border border-zinc-700 rounded text-[9px] font-black uppercase hover:bg-zinc-700"
+                      >
+                        <Layers className="w-3 h-3" /> Subir Capa
+                      </button>
+                      <button
+                        onClick={() => moveLayer('down')}
+                        className="flex items-center justify-center gap-1 py-1.5 bg-zinc-800 border border-zinc-700 rounded text-[9px] font-black uppercase hover:bg-zinc-700"
+                      >
+                        <Layers className="w-3 h-3" /> Bajar Capa
+                      </button>
+                    </div>
+
+                    <div className="flex items-center gap-2 pt-2 border-t border-zinc-800/80">
+                      <button onClick={duplicateSelected} className="flex-1 flex items-center justify-center gap-1.5 py-1.5 bg-zinc-800 border border-zinc-700 rounded text-[10px] font-medium hover:bg-zinc-700 transition-colors">
+                        <Copy className="w-3 h-3" /> Duplicar
+                      </button>
+                      <button onClick={() => selectedId && removeElement(selectedId)} className="flex-1 flex items-center justify-center gap-1.5 py-1.5 bg-red-900/20 text-red-400 border border-red-900/30 rounded text-[10px] font-medium hover:bg-red-900/30 transition-colors">
+                        <Trash2 className="w-3 h-3" /> Eliminar
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Layers List */}
+              <div className="p-4 bg-zinc-900/50 border border-zinc-800 rounded-xl space-y-3">
+                <h4 className="text-[10px] font-bold uppercase tracking-widest text-zinc-500">Capas ({elements.length})</h4>
+                <div className="space-y-1 max-h-48 overflow-y-auto">
+                  {[...elements].reverse().map(el => (
+                    <button
+                      key={el.id}
+                      onClick={() => selectElementAndBringToFront(el.id)}
+                      className={cn(
+                        "w-full flex items-center gap-2 px-2 py-1.5 rounded text-left text-[10px] transition-colors",
+                        selectedId === el.id ? "bg-zinc-800 text-white" : "text-zinc-400 hover:bg-zinc-800/30"
+                      )}
+                    >
+                      <div className="w-2 h-2 rounded-sm flex-shrink-0" style={{ background: el.color }} />
+                      <span className="truncate flex-1">{el.label}</span>
+                      <button
+                        onClick={e => {
+                          e.stopPropagation();
+                          toggleVisible(el.id);
+                        }}
+                        className="p-0.5 hover:text-white"
+                      >
+                        {el.visible ? <Eye className="w-3 h-3" /> : <EyeOff className="w-3 h-3" />}
+                      </button>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Navigation button back */}
+              <button
+                onClick={() => setPage('req')}
+                className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-zinc-900 border border-zinc-800 rounded-lg text-xs font-medium hover:bg-zinc-800 transition-all"
+              >
+                <ChevronLeft className="w-4 h-4" />
+                Volver a Requerimientos
+              </button>
+            </aside>
           </div>
+        )}
 
-          {/* Right panel */}
+        {/* ── Config tab ── */}
+        {page === 'config' && (
           <div className="space-y-4">
-            {/* Add zones */}
-            <div className="p-4 bg-zinc-900/50 border border-zinc-800 rounded-xl">
-              <h4 className="text-[10px] font-bold uppercase tracking-widest text-zinc-500 mb-3">Zonas de Montaje</h4>
-              <div className="grid grid-cols-2 gap-2">
-                {Object.entries(ZONE_LABELS).filter(([k]) => !['power','heating','rack','extinguisher','water'].includes(k)).map(([key, label]) => (
-                  <button
-                    key={key}
-                    onClick={() => addElement(key)}
-                    className="flex items-center gap-2 px-2.5 py-2 bg-zinc-800/50 border border-zinc-800 rounded-lg text-[10px] font-medium hover:bg-zinc-800 transition-colors text-left"
-                  >
-                    <div className="w-2.5 h-2.5 rounded-sm flex-shrink-0" style={{ background: ZONE_COLORS[key] }} />
-                    <span className="truncate">{label}</span>
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Add Symbols */}
-            <div className="p-4 bg-zinc-900/50 border border-zinc-800 rounded-xl">
-              <h4 className="text-[10px] font-bold uppercase tracking-widest text-zinc-500 mb-3">Símbolos Técnicos (Sin Emoji)</h4>
-              <div className="grid grid-cols-3 gap-2">
-                {(['power','heating','rack','extinguisher','water'] as const).map(s => (
-                  <button
-                    key={s}
-                    onClick={() => addSymbol(s)}
-                    className="flex flex-col items-center p-3.5 bg-zinc-800/30 border border-zinc-800 rounded-xl hover:bg-zinc-800 group transition-all"
-                  >
-                    {s === 'power' && <Zap className="w-4 h-4 text-yellow-500" />}
-                    {s === 'heating' && <RefreshCw className="w-4 h-4 text-red-500" />}
-                    {s === 'rack' && <Box className="w-4 h-4 text-zinc-400" />}
-                    {s === 'extinguisher' && <ShieldAlert className="w-4 h-4 text-red-600" />}
-                    {s === 'water' && <Droplet className="w-4 h-4 text-blue-500" />}
-                    <span className="mt-2 text-[7px] uppercase font-black opacity-40 group-hover:opacity-100">{s}</span>
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Selected element properties and Color Picker */}
-            {selectedElement && (
-              <div className="p-4 bg-zinc-900/50 border border-zinc-800 rounded-xl space-y-4">
-                <h4 className="text-[10px] font-bold uppercase tracking-widest text-zinc-500">Propiedades</h4>
+            <h2 className="font-bold text-sm text-zinc-400 uppercase tracking-widest">Configuración de la ONG</h2>
+            <div className="grid gap-4 md:grid-cols-2">
+              <div className="rounded-2xl border border-zinc-800 bg-zinc-900/45 p-5 space-y-4">
+                <h3 className="text-sm font-bold uppercase tracking-widest text-emerald-500">Personalización de Textos</h3>
                 <div className="space-y-3">
                   <div>
-                    <label className="text-[10px] text-zinc-500 block mb-1">Nombre</label>
-                    <input
-                      value={selectedElement.label}
-                      onChange={e => setElements(prev => prev.map(el => el.id === selectedId ? { ...el, label: e.target.value } : el))}
-                      className="w-full bg-black/30 border border-zinc-700 rounded px-2 py-1 text-xs focus:outline-none focus:border-zinc-500"
-                    />
+                    <label className="text-[10px] uppercase tracking-widest text-zinc-500 block mb-1 font-bold">Quiénes Somos</label>
+                    <textarea value={orgTexts.who} onChange={e => setOrgTexts({...orgTexts, who: e.target.value})} className="w-full bg-black/40 border border-zinc-800 p-4 rounded-xl text-xs leading-relaxed outline-none focus:border-zinc-600 min-h-[100px]" />
                   </div>
-
-                  {/* Color Picker */}
                   <div>
-                    <label className="text-[10px] text-zinc-500 block mb-1.5">Color del Elemento</label>
-                    <div className="flex gap-1.5 flex-wrap">
-                      {Object.entries(ZONE_COLORS).map(([key, val]) => (
-                        <button
-                          key={key}
-                          onClick={() => setElements(prev => prev.map(el => el.id === selectedId ? { ...el, color: val } : el))}
-                          title={ZONE_LABELS[key]}
-                          className={cn(
-                            "w-5 h-5 rounded-full border-2 transition-all",
-                            selectedElement.color === val ? "border-white scale-110" : "border-transparent hover:scale-105"
-                          )}
-                          style={{ background: val }}
-                        />
-                      ))}
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-2 gap-2">
-                    <div>
-                      <label className="text-[10px] text-zinc-500 block mb-1">Ancho</label>
-                      <input
-                        type="number"
-                        value={selectedElement.width}
-                        onChange={e => setElements(prev => prev.map(el => el.id === selectedId ? { ...el, width: Number(e.target.value) } : el))}
-                        className="w-full bg-black/30 border border-zinc-700 rounded px-2 py-1 text-xs font-mono focus:outline-none focus:border-zinc-500"
-                      />
-                    </div>
-                    <div>
-                      <label className="text-[10px] text-zinc-500 block mb-1">Alto</label>
-                      <input
-                        type="number"
-                        value={selectedElement.height}
-                        onChange={e => setElements(prev => prev.map(el => el.id === selectedId ? { ...el, height: Number(e.target.value) } : el))}
-                        className="w-full bg-black/30 border border-zinc-700 rounded px-2 py-1 text-xs font-mono focus:outline-none focus:border-zinc-500"
-                      />
-                    </div>
-                  </div>
-
-                  {/* Z-Index Controls */}
-                  <div className="grid grid-cols-2 gap-2">
-                    <button
-                      onClick={() => moveLayer('up')}
-                      className="flex items-center justify-center gap-1 py-1.5 bg-zinc-800 border border-zinc-700 rounded text-[9px] font-black uppercase hover:bg-zinc-700"
-                    >
-                      <Layers className="w-3 h-3" /> Subir Capa
-                    </button>
-                    <button
-                      onClick={() => moveLayer('down')}
-                      className="flex items-center justify-center gap-1 py-1.5 bg-zinc-800 border border-zinc-700 rounded text-[9px] font-black uppercase hover:bg-zinc-700"
-                    >
-                      <Layers className="w-3 h-3" /> Bajar Capa
-                    </button>
-                  </div>
-
-                  <div className="flex items-center gap-2 pt-2">
-                    <button onClick={duplicateSelected} className="flex-1 flex items-center justify-center gap-1.5 py-1.5 bg-zinc-800 border border-zinc-700 rounded text-[10px] font-medium hover:bg-zinc-700 transition-colors">
-                      <Copy className="w-3 h-3" /> Duplicar
-                    </button>
-                    <button onClick={deleteSelected} className="flex-1 flex items-center justify-center gap-1.5 py-1.5 bg-red-900/30 border border-red-900/50 rounded text-[10px] font-medium text-red-400 hover:bg-red-900/50 transition-colors">
-                      <Trash2 className="w-3 h-3" /> Eliminar
-                    </button>
+                    <label className="text-[10px] uppercase tracking-widest text-zinc-500 block mb-1 font-bold">Objetivo del Servicio</label>
+                    <textarea value={orgTexts.goal} onChange={e => setOrgTexts({...orgTexts, goal: e.target.value})} className="w-full bg-black/40 border border-zinc-800 p-4 rounded-xl text-xs leading-relaxed outline-none focus:border-zinc-600 min-h-[100px]" />
                   </div>
                 </div>
               </div>
-            )}
-
-            {/* Elements list */}
-            <div className="p-4 bg-zinc-900/50 border border-zinc-800 rounded-xl">
-              <h4 className="text-[10px] font-bold uppercase tracking-widest text-zinc-500 mb-3">Capas ({elements.length})</h4>
-              <div className="space-y-1 max-h-48 overflow-y-auto">
-                {[...elements].reverse().map(el => (
-                  <button
-                    key={el.id}
-                    onClick={() => setSelectedId(el.id)}
-                    className={cn(
-                      "w-full flex items-center gap-2 px-2 py-1.5 rounded text-left text-[10px] transition-colors",
-                      selectedId === el.id ? "bg-zinc-800 text-white" : "text-zinc-400 hover:bg-zinc-800/50"
-                    )}
-                  >
-                    <div className="w-2 h-2 rounded-sm flex-shrink-0" style={{ background: el.color }} />
-                    <span className="truncate flex-1">{el.label}</span>
-                    <button
-                      onClick={e => {
-                        e.stopPropagation();
-                        setElements(prev => prev.map(item => item.id === el.id ? { ...item, visible: !item.visible } : item));
-                      }}
-                      className="p-0.5 hover:text-white"
-                    >
-                      {el.visible ? <Eye className="w-3 h-3" /> : <EyeOff className="w-3 h-3" />}
-                    </button>
-                  </button>
-                ))}
+              
+              <div className="rounded-2xl border border-zinc-800 bg-zinc-900/45 p-5 space-y-3">
+                <h3 className="text-sm font-bold uppercase tracking-widest text-zinc-500">Integración CLI</h3>
+                <div className="space-y-2">
+                  {[
+                    'py -m flujo app',
+                    'py -m flujo health',
+                    `py -m flujo portal --repo-url https://github.com/ligereza/vibecodeine`,
+                  ].map(cmd => (
+                    <code key={cmd} className="block rounded-lg bg-black/40 px-3 py-2 text-[10px] text-zinc-400 break-all">
+                      {cmd}
+                    </code>
+                  ))}
+                </div>
+                <div className="rounded-xl border border-zinc-800 bg-zinc-950/50 p-3">
+                  <p className="text-[10px] font-bold uppercase tracking-widest text-zinc-600 mb-1">Notas</p>
+                  <p className="text-xs text-zinc-500 leading-relaxed">
+                    El plano se genera en el de forma local. Para una versión dinámica con datos reales de jobs,
+                    conecta el backend levantando la aplicación con <code className="text-zinc-400">py -m flujo app</code>.
+                  </p>
+                </div>
+                <button
+                  onClick={() => setPage('req')}
+                  className="w-full py-4 bg-zinc-800 rounded-xl text-xs font-black uppercase tracking-widest hover:bg-zinc-700 transition-all"
+                >
+                  Guardar y Volver
+                </button>
               </div>
             </div>
-
-            {/* Navigation */}
-            <button
-              onClick={() => setPage('requirements')}
-              className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-zinc-900 border border-zinc-800 rounded-lg text-xs font-medium hover:bg-zinc-800 transition-all"
-            >
-              <ChevronLeft className="w-4 h-4" />
-              Volver a Requerimientos
-            </button>
           </div>
-        </div>
-      )}
-
-      {/* ═══ PAGE 3: CONFIGURATION ═══ */}
-      {page === 'config' && (
-        <div className="max-w-3xl mx-auto space-y-12 bg-black/40 p-12 rounded-3xl border border-zinc-800 print:hidden">
-          <header>
-            <h2 className="text-4xl font-black tracking-tighter">Configuración de Mensajes</h2>
-            <p className="text-zinc-500 text-xs mt-2 uppercase tracking-widest font-mono">Personalización de Textos de la ONG para Impresión</p>
-          </header>
-          
-          <section className="space-y-8">
-            <div className="space-y-4">
-              <label className="text-[10px] font-black uppercase text-emerald-500 tracking-[0.2em]">Quiénes Somos</label>
-              <textarea value={orgTexts.who} onChange={e => setOrgTexts({...orgTexts, who: e.target.value})} className="w-full bg-zinc-900 border border-zinc-800 p-6 rounded-3xl text-sm min-h-[120px] outline-none focus:border-emerald-500 transition-colors leading-relaxed shadow-inner" />
-            </div>
-            <div className="space-y-4">
-              <label className="text-[10px] font-black uppercase text-emerald-500 tracking-[0.2em]">Objetivo del Servicio</label>
-              <textarea value={orgTexts.goal} onChange={e => setOrgTexts({...orgTexts, goal: e.target.value})} className="w-full bg-zinc-900 border border-zinc-800 p-6 rounded-3xl text-sm min-h-[120px] outline-none focus:border-emerald-500 transition-colors leading-relaxed shadow-inner" />
-            </div>
-          </section>
-
-          <div className="p-10 bg-zinc-900/50 border border-dashed border-zinc-800 rounded-[3rem] text-center">
-            <p className="text-zinc-400 text-xs italic leading-relaxed">Los cambios en esta sección se reflejan en tiempo real en la vista de impresión del Rider Técnico.</p>
-          </div>
-          
-          <button onClick={() => setPage('requirements')} className="w-full py-5 bg-zinc-800 rounded-3xl font-black text-xs uppercase tracking-widest hover:bg-zinc-700 transition-all active:scale-[0.99]">Guardar Ajustes y Volver</button>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   );
 }
 
 // ─── Sub-components ───
-
-function ToolBtn({ icon, onClick, tooltip, active }: { icon: React.ReactNode; onClick: () => void; tooltip: string; active?: boolean }) {
-  return (
-    <button
-      onClick={onClick}
-      title={tooltip}
-      className={cn(
-        "p-2 rounded-md transition-colors",
-        active ? "bg-zinc-700 text-white" : "bg-zinc-900 text-zinc-500 hover:text-white hover:bg-zinc-800 border border-zinc-800"
-      )}
-    >
-      {" "}
-      {icon}
-    </button>
-  );
-}
 
 function ModalidadCard({ icon, title, description, color }: { icon: React.ReactNode; title: string; description: string; color: string }) {
   return (
