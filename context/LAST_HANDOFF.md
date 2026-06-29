@@ -5,7 +5,7 @@ Do not use accents, enye, emoji, smart quotes, or special arrows here.
 Daily commands for owner on Windows/Git Bash must use `py`, not `python`.
 
 Date: 2026-06-28
-Current version: 0.43.2
+Current version: 0.43.3
 Main daily entry: `py -m flujo app`
 Desktop entry: `py -m flujo app --desktop`
 Verify on Windows: `py -m flujo verify`
@@ -13,7 +13,7 @@ Airdrop check on Windows: `py scripts/validate_airdrop.py` then `py scripts/run_
 
 ## Current state
 
-The repo is healthy after the v0.40 hub airdrop, v0.41.0 unified React hub, v0.42.1 example ingest templates, the v0.43.1 release with automatic back covers (contraportadas) and vertical flyers, and the new v0.43.2 hotfix that prevents health checks from scanning node_modules or web workspace.
+The repo is healthy after the v0.40 hub airdrop, v0.41.0 unified React hub, v0.42.1 example ingest templates, and the new v0.43.3 release that restores and repairs the 17-item Rider Checklist with procedural Lucide icons (no emojis), persistent checkbox printing, layer reordering (bring to front on select), and checklist Markdown exports.
 
 Real package CLI:
 - `py -m flujo health`
@@ -26,9 +26,18 @@ Real package CLI:
 
 ## Recent completed work
 
+### v0.43.3 - Rider requirements restore 17 items + icons + layer ordering + export
+- Restored `web/src/components/PlanoTool.tsx` to the clean base of `312f1d9` (v0.41.1) and expanded the checklist to the exact 17 items in 4 categories.
+- Added procedural Lucide icons for all 17 requirements, completely replacing emojis.
+- Enabled checklist persistence: each item is clickable, persistent in `checkedItems`, and rendered as marked/empty on print preview.
+- Improved layer rendering: SVG zones have fillOpacity 0.7, layer reordering buttons (subir/bajar) are fully functional, and clicking any element brings it to the front immediately.
+- Integrated color picker: works for both zones and symbols.
+- Added Export options: Text checklist can be downloaded as a Markdown (.md) file, and Plano layout can be exported as a clean SVG.
+- Fixed the navigation bug: resolved the dead state on `setPage("map")` by unifying tabs under 'requirements' | 'layout' | 'config'.
+- Maintained presets (UNDER, BASE, MAINSTREAM) fully operational.
+
 ### v0.43.2 - Fix CI health check - ignore node_modules and web
 - Updated `scripts/flujo_health.py` `check_jsons()` to ignore `node_modules/` and `web/` directories, preventing scans of node packages (which contain tsconfig JSONC and trigger validation failures).
-- Guaranteed completely clean and fast CI and local repository health runs.
 
 ### v0.43.1 - Supplement Back Covers (Contraportadas) with Automation and CLI
 - Automated the generation of SVG back covers in `jobs/{job_id}/flows/contraportada.svg` when creating a job in the Hub with area=suplementos.
@@ -37,16 +46,6 @@ Real package CLI:
 - Fixed a critical layout bug that occurred when replacing the "NOMBRE DEL SUPLEMENTO" placeholder with split/multiline names (e.g. "Pre Fiesta", "Post Fiesta").
 - Documented full pre-press guidelines and operation in a new manual: `docs/CONTRAPORTADAS_SUPLEMENTOS_OPERATIVO.md`.
 - Integrated contraportada specifications and margin checklists into `linea_editorial/v4.1.md` Section H.
-
-### v0.43.0 - Example Ingest Templates
-- Added templates `knowledge/templates/*.for_ai.json` for AI visual analysis.
-- Knowledge ingest now writes `manifest.json`, `for_ai.json`, and `README.md`.
-- Supports templates for cartelera digital, flyer 10x14, supplement flyer, and logo source.
-
-### v0.42.0 - Knowledge Base Skeleton
-- Added `knowledge/` with productoras, venues, logos, and examples.
-- Seeded Creamfields, The Grid, Rave Under template, and Espacio Riesco.
-- Added commands: `py -m flujo knowledge list/show/classify/ingest-example/logo-source`.
 
 ## Airdrop model - keep this intact
 

@@ -1,8 +1,8 @@
 """Versión y changelog de flujo."""
 
-__version__ = "0.43.2"
+__version__ = "0.43.3"
 VERSION = __version__
-__version_info__ = (0, 43, 2)
+__version_info__ = (0, 43, 3)
 
 
 def get_version():
@@ -11,6 +11,17 @@ def get_version():
 
 def get_changelog():
     return {
+        "0.43.3": {
+            "titulo": "Rider requirements restore 17 items + icons + layer ordering + export",
+            "fecha": "2026-06-28",
+            "highlights": [
+                "Rider restaurado a 17 requerimientos con iconos Lucide",
+                "Soporta persistencia de checklist en impresion",
+                "Ordenamiento de capas con traer al frente y color picker",
+                "Exportar checklist como markdown (.md)",
+                "Corrige boton de navegacion Ir al Plano",
+            ],
+        },
         "0.43.2": {
             "titulo": "Fix CI health check – ignore node_modules/web",
             "fecha": "2026-06-28",
