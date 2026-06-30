@@ -1,5 +1,6 @@
-// Mock data based on the real svg_index.json structure from vibecodeine.
-// In production this comes from `py scripts/generate_svg_index.py`.
+// Índice de piezas SVG para el SVG Studio Hub.
+// Se carga desde svg_index.json generado por `python scripts/generate_svg_index.py`
+// Fallback a MOCK_SVG_INDEX si el JSON no está disponible.
 
 export type PieceType = 'etiqueta' | 'flyer' | 'pendon' | 'post-ig' | 'sticker' | 'logo' | 'rider' | 'cartelera' | 'stand';
 export type PieceArea = 'suplementos' | 'eventos' | 'comun';
@@ -21,6 +22,9 @@ export interface SvgPiece {
   svgContent?: string; // inline SVG for demo
   svgUrl?: string; // repo-served URL fallback
   notes?: string;
+  filePath?: string; // ruta al archivo en el repo
+  sections?: string[]; // grupos/sections dentro del SVG
+  dimensions?: { width: number; height: number };
 }
 
 // ─── SVG snippets for demo pieces ───
@@ -306,6 +310,17 @@ export const MOCK_SVG_INDEX: SvgPiece[] = [
   },
 ];
 
+// Cargar índice desde JSON generado (fallback a MOCK_SVG_INDEX)
+export async function loadSvgIndex(): Promise<SvgPiece[]> {
+  try {
+    const resp = await fetch('/src/data/svg_index.json');
+    if (!resp.ok) throw new Error(`HTTP ${resp.status}`);
+    return await resp.json() as SvgPiece[];
+  } catch (err) {
+    console.warn('⚠ No se pudo cargar svg_index.json, usando MOCK_SVG_INDEX:', err);
+    return MOCK_SVG_INDEX;
+  }
+}
 
 export async function loadFromApi(): Promise<SvgPiece[]> {
   const resp = await fetch('/api/list-svg-works');
@@ -346,6 +361,9 @@ export async function loadFromApi(): Promise<SvgPiece[]> {
       lastModified: String(item.lastModified || item.modified || 'repo'),
       status: item.status || 'borrador',
       notes: item.notes || path,
+      filePath: item.filePath || path,
+      sections: item.sections || [],
+      dimensions: item.dimensions,
       ...svg,
     } as SvgPiece;
   };

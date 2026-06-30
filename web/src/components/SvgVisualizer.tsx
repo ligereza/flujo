@@ -12,7 +12,7 @@ import {
   AlignLeft,
 } from 'lucide-react';
 import {
-  MOCK_SVG_INDEX, loadFromApi, TYPE_OPTIONS,
+  MOCK_SVG_INDEX, loadFromApi, loadSvgIndex, TYPE_OPTIONS,
   type SvgPiece, type PieceType, type PieceArea,
 } from '../data/svgIndex';
 import {
@@ -195,8 +195,8 @@ export default function SvgVisualizer() {
 // ═══════════════════════════════════════════════
 
 function GalleryView({ onConfigure }: { onConfigure: (piece: SvgPiece) => void }) {
-  const [pieces, setPieces] = useState<SvgPiece[]>(MOCK_SVG_INDEX);
-  const [sourceStatus, setSourceStatus] = useState('Demo local');
+  const [pieces, setPieces] = useState<SvgPiece[]>([]);
+  const [sourceStatus, setSourceStatus] = useState('Cargando índice SVG...');
   const [search, setSearch] = useState('');
   const [filterType, setFilterType] = useState<PieceType|'all'>('all');
   const [filterArea, setFilterArea] = useState<PieceArea|'all'>('all');
@@ -211,6 +211,14 @@ function GalleryView({ onConfigure }: { onConfigure: (piece: SvgPiece) => void }
   const [customSvg, setCustomSvg] = useState('');
   const fileRef = useRef<HTMLInputElement>(null);
   const folderRef = useRef<HTMLInputElement>(null);
+
+  // Cargar índice SVG al montar el componente
+  useEffect(() => {
+    loadSvgIndex().then(setPieces).catch(err => {
+      console.error('Error cargando índice SVG:', err);
+      setPieces(MOCK_SVG_INDEX);
+    });
+  }, []);
 
   const refreshRepoSvgs = useCallback(async () => {
     if (typeof window !== 'undefined' && window.location.protocol === 'file:') {
