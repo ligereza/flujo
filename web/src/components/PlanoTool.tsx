@@ -233,8 +233,6 @@ function buildElements(preset: Preset): Element[] {
     { id: 'mesa1', type: 'rect', x: 300, y: 500, w: 600, h: 250, label: 'Mesa 1', color: '#10b981', visible: true },
     { id: 'testeo', type: 'symbol', x: 1000, y: 550, w: 200, h: 200, label: 'Testeo', color: '#f59e0b', visible: true, symbolKey: 'testeo' },
     { id: 'contencion', type: 'symbol', x: 1900, y: 550, w: 200, h: 200, label: 'Contención', color: '#3b82f6', visible: true, symbolKey: 'contencion' },
-    { id: 'power1', type: 'symbol', x: 2300, y: 1000, w: 160, h: 160, label: 'Poder', color: '#f59e0b', visible: true, symbolKey: 'power' },
-    { id: 'extinguisher1', type: 'symbol', x: 2500, y: 1500, w: 160, h: 160, label: 'Extintor', color: '#ef4444', visible: true, symbolKey: 'extinguisher' },
   ];
 
   if (preset === 'BASE' || preset === 'MAINSTREAM') {
@@ -465,8 +463,7 @@ export default function PlanoTool() {
 
   const renderSymbol = (el: Element, isPrint = false) => {
     const isSelected = el.id === selectedId;
-    const spec = el.symbolKey ? SYMBOL_BY_KEY[el.symbolKey] : undefined;
-    const fill = isPrint ? '#000000' : (spec?.color || el.color);
+    const fill = isPrint ? '#000000' : el.color;
 
     return (
       <g
@@ -547,8 +544,9 @@ export default function PlanoTool() {
     const wanted = items.map(item => REQUIREMENT_SYMBOL_MAP[item]).filter(Boolean);
     let next = baseElements.filter(el => !(el.id || '').startsWith('req-'));
     wanted.forEach(key => {
-      const hasExisting = next.some(el => el.symbolKey === key);
-      if (!hasExisting) next.push(makeSymbolElement(key, 'req'));
+      const reqId = `req-${key}`;
+      const hasRequirementSymbol = next.some(el => el.id === reqId);
+      if (!hasRequirementSymbol) next.push({ ...makeSymbolElement(key, 'req'), id: reqId });
     });
     return next;
   };
@@ -663,7 +661,12 @@ export default function PlanoTool() {
 
   const totalChecks = CHECKLIST_SECTIONS.flatMap(s => s.items).length;
   const completedChecks = checkedItems.length;
-  const visibleLegendSymbols = SYMBOL_CATALOG.filter(spec => elements.some(el => el.visible && el.symbolKey === spec.key));
+  const visibleLegendSymbols = elements
+    .filter(el => el.visible && el.type === 'symbol' && el.symbolKey)
+    .reduce<Element[]>((acc, el) => {
+      if (!acc.some(item => item.symbolKey === el.symbolKey)) acc.push(el);
+      return acc;
+    }, []);
 
   const NAV_TABS: { key: Page; label: string }[] = [
     { key: 'req', label: '☑ Checklist' },
@@ -749,16 +752,16 @@ export default function PlanoTool() {
                 <text x={465} y={72} textAnchor="middle" fontSize={34} fill="#000" fontWeight="black" fontFamily="monospace" style={{ letterSpacing: '0.05em' }}>
                   LEYENDA TÉCNICA
                 </text>
-                {visibleLegendSymbols.map((spec, i) => {
+                {visibleLegendSymbols.map((el, i) => {
                   const col = i % 2;
                   const row = Math.floor(i / 2);
                   return (
-                    <g key={spec.key} transform={`translate(${40 + col * 445}, ${120 + row * 80})`}>
+                    <g key={`print-legend-${el.id}`} transform={`translate(${40 + col * 445}, ${120 + row * 80})`}>
                       <svg x={0} y={0} width={54} height={54} viewBox="0 0 160 160">
-                        {renderSymbolGlyph(spec.key, '#000000')}
+                        {renderSymbolGlyph(el.symbolKey || 'unknown', '#000000')}
                       </svg>
                       <text x={72} y={36} fontSize={24} fill="#000" fontWeight="bold" fontFamily="sans-serif">
-                        {spec.label.toUpperCase()}
+                        {el.label.toUpperCase()}
                       </text>
                     </g>
                   );
@@ -1133,14 +1136,14 @@ export default function PlanoTool() {
                         <text x={340} y={70} textAnchor="middle" fontSize={38} fill="#a1a1aa" fontWeight="black" fontFamily="monospace" style={{ letterSpacing: '0.08em' }}>
                           LEYENDA TÉCNICA
                         </text>
-                        {visibleLegendSymbols.map((spec, i) => {
-                          const fill = spec.color;
+                        {visibleLegendSymbols.map((el, i) => {
+                          const fill = el.color;
                           return (
-                            <g key={spec.key} transform={`translate(45,${115 + i * 74})`}>
+                            <g key={`legend-${el.id}`} transform={`translate(45,${115 + i * 74})`}>
                               <svg x={0} y={0} width={54} height={54} viewBox="0 0 160 160">
-                                {renderSymbolGlyph(spec.key, fill)}
+                                {renderSymbolGlyph(el.symbolKey || 'unknown', fill)}
                               </svg>
-                              <text x={82} y={38} fontSize={28} fill="#a1a1aa" fontWeight="bold" fontFamily="sans-serif">{spec.label.toUpperCase()}</text>
+                              <text x={82} y={38} fontSize={28} fill="#a1a1aa" fontWeight="bold" fontFamily="sans-serif">{el.label.toUpperCase()}</text>
                             </g>
                           );
                         })}
