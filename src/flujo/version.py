@@ -1,8 +1,8 @@
 """Versión y changelog de flujo."""
 
-__version__ = "0.48.4"
+__version__ = "0.48.5"
 VERSION = __version__
-__version_info__ = (0, 48, 4)
+__version_info__ = (0, 48, 5)
 
 
 def get_version():
@@ -11,6 +11,16 @@ def get_version():
 
 def get_changelog():
     return {
+        "0.48.5": {
+            "titulo": "Chataigne template schema real",
+            "fecha": "2026-06-30",
+            "highlights": [
+                "Ajusta el .noisette experimental al schema real exportado por Chataigne 1.10.3",
+                "Reemplaza stateMachine por states top-level para que aparezcan las acciones",
+                "Usa paths reales como /modules/soundCard/values/ltc/ltcTime y consequencesTRUE",
+                "Mantiene XML/CSV como salidas estables y el .noisette como salida compatible en prueba",
+            ],
+        },
         "0.48.4": {
             "titulo": "Chataigne experimental layout visible",
             "fecha": "2026-06-30",

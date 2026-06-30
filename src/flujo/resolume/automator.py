@@ -338,18 +338,94 @@ def _param(value: object, address: str, **extra: object) -> dict[str, object]:
     return data
 
 
+def _action_short_name(index: int) -> str:
+    return "action" if index == 1 else f"action{index - 1}"
+
+
+def _build_chataigne_action(cue: ShowCue, index: int, fps: int) -> dict[str, object]:
+    """Build one Chataigne 1.10.x Action using the schema observed in user template."""
+    short = _action_short_name(index)
+    nice = "Action" if index == 1 else f"Action {index - 1}"
+    consequence_arg_address = (
+        f"/states/state1/processors/{short}/consequencesTRUE/"
+        "consequence/command/arguments/#1/#1"
+    )
+    return {
+        "niceName": nice,
+        "editorIsCollapsed": True,
+        "type": "Action",
+        "conditions": {
+            "items": [
+                {
+                    "parameters": [
+                        _param(True, "/enabled"),
+                        _param("/modules/soundCard/values/ltc/ltcTime", "/inputValue"),
+                        _param(False, "/toggleMode"),
+                        _param(False, "/alwaysTrigger"),
+                    ],
+                    "niceName": "From Input Value",
+                    "type": "From Input Value",
+                    "comparator": {
+                        "parameters": [
+                            _param(">=", "/comparisonFunction"),
+                            _param(smpte_to_seconds(cue.smpte, fps=fps), "/reference"),
+                        ],
+                        "hideInEditor": True,
+                    },
+                }
+            ],
+            "viewOffset": [0, 0],
+            "viewZoom": 1.0,
+        },
+        "consequences": {
+            "parameters": [_param(False, "/cancelDelaysOnTrigger")],
+            "items": [
+                {
+                    "niceName": "Consequence",
+                    "type": "Consequence",
+                    "commandModule": "osc",
+                    "commandPath": "",
+                    "commandType": "Custom Message",
+                    "command": {
+                        "parameters": [_param(cue.osc_address(), "/address")],
+                        "paramLinks": {},
+                        "argManager": {
+                            "items": [
+                                {
+                                    "parameters": [_param(1, "/#1", hexMode=False)],
+                                    "niceName": "#1",
+                                    "type": "Integer",
+                                    "param": _param(1, consequence_arg_address, hexMode=False),
+                                }
+                            ],
+                            "viewOffset": [0, 0],
+                            "viewZoom": 1.0,
+                        },
+                    },
+                }
+            ],
+            "viewOffset": [0, 0],
+            "viewZoom": 1.0,
+        },
+        "consequencesOff": {
+            "parameters": [_param(False, "/cancelDelaysOnTrigger")],
+            "viewOffset": [0, 0],
+            "viewZoom": 1.0,
+        },
+    }
+
+
 def build_chataigne_noisette_experimental(
     cues: list[ShowCue],
     fps: int = 30,
     host: str = "127.0.0.1",
     port: int = 7000,
 ) -> dict[str, object]:
-    """Build an experimental Chataigne .noisette JSON.
+    """Build a Chataigne 1.10.x .noisette JSON using the user's observed schema.
 
-    Chataigne's native .noisette schema depends on the app version and installed
-    modules. This structure is intentionally more complete than the early script
-    attempts, but it remains experimental until tested against a template saved
-    from the user's own Chataigne installation.
+    The first attempts used a `stateMachine` top-level key, but the user's
+    Chataigne 1.10.3 template stores actions under top-level `states`. This
+    builder follows that schema so actions appear in the State Machine panel.
     """
     modules = [
         {
@@ -357,120 +433,74 @@ def build_chataigne_noisette_experimental(
             "type": "OSC",
             "scripts": {"viewOffset": [0, 0], "viewZoom": 1.0},
             "params": {
-                "parameters": [_param(False, "/logIncoming"), _param(True, "/logOutgoing")],
                 "containers": {
                     "oscInput": {
-                        "parameters": [
-                            _param(False, "/enabled"),
-                            _param(12000, "/localPort", hexMode=False),
-                        ]
+                        "parameters": [_param(False, "/enabled"), _param(12000, "/localPort", hexMode=False)],
+                        "editorIsCollapsed": True,
                     },
                     "oscOutputs": {
                         "items": [
                             {
-                                "niceName": "Resolume Arena",
-                                "type": "BaseItem",
                                 "parameters": [
                                     _param(True, "/local"),
                                     _param(host, "/remoteHost"),
                                     _param(port, "/remotePort", hexMode=False),
                                 ],
+                                "niceName": "OSC Output",
+                                "type": "BaseItem",
                             }
-                        ]
+                        ],
+                        "viewOffset": [0, 0],
+                        "viewZoom": 1.0,
                     },
-                },
-            },
-            "templates": {"viewOffset": [0, 0], "viewZoom": 1.0},
-            "values": {"viewOffset": [0, 0], "viewZoom": 1.0},
-        },
-        {
-            "niceName": "Sound Card",
-            "type": "Sound Card",
-            "params": {
-                "containers": {
-                    "ltc": {
-                        "parameters": [
-                            _param(True, "/enabled"),
-                            _param(float(fps), "/frameRate"),
-                        ]
-                    }
+                    "pass_through": {},
                 }
             },
-            "values": {"viewOffset": [0, 0], "viewZoom": 1.0},
+            "templates": {"viewOffset": [0, 0], "viewZoom": 1.0},
+            "values": {"hideInEditor": True},
+        },
+        {
+            "parameters": [
+                _param([0.2777764797210693, 0.2777764797210693, 0.2777764797210693, 1.0], "/color"),
+                _param(False, "/logIncoming"),
+                _param(False, "/logOutgoing"),
+            ],
+            "niceName": "Sound Card",
+            "type": "Sound Card",
+            "scripts": {"viewOffset": [0, 0], "viewZoom": 1.0},
+            "params": {
+                "containers": {
+                    "inputVolumes": {},
+                    "outputVolumes": {"editorIsCollapsed": True},
+                    "monitor": {"parameters": [_param(False, "/enabled")]},
+                    "fftAnalysis": {
+                        "parameters": [_param(False, "/enabled")],
+                        "editorIsCollapsed": True,
+                        "viewOffset": [0, 0],
+                        "viewZoom": 1.0,
+                    },
+                    "ltc": {"parameters": [_param(True, "/enabled")]},
+                }
+            },
+            "templates": {"viewOffset": [0, 0], "viewZoom": 1.0},
+            "audioSettings": (
+                '<?xml version="1.0" encoding="UTF-8"?>\r\n\r\n'
+                '<DEVICESETUP deviceType="DirectSound" audioOutputDeviceName="" '
+                'audioInputDeviceName="" audioDeviceRate="48000.0" audioDeviceInChans="1"/>\r\n'
+            ),
+            "analyzer": {
+                "parameters": [_param(False, "/enabled")],
+                "editorIsCollapsed": True,
+                "viewOffset": [0, 0],
+                "viewZoom": 1.0,
+            },
         },
     ]
 
-    processors: list[dict[str, object]] = []
-    for index, cue in enumerate(cues, start=1):
-        processors.append(
-            {
-                "niceName": f"Cue_{index:03d}_{cue.title[:24]}",
-                "editorIsCollapsed": True,
-                "type": "Action",
-                "parameters": [_param(True, "/once")],
-                "conditions": {
-                    "items": [
-                        {
-                            "niceName": "From Input Value",
-                            "type": "From Input Value",
-                            "parameters": [
-                                _param(True, "/enabled"),
-                                _param("/modules/Sound Card/values/ltc/ltcTime", "/inputValue"),
-                                _param(False, "/toggleMode"),
-                                _param(False, "/alwaysTrigger"),
-                            ],
-                            "comparator": {
-                                "parameters": [
-                                    _param("==", "/comparisonFunction"),
-                                    _param(smpte_to_seconds(cue.smpte, fps=fps), "/reference"),
-                                    _param(0.05, "/epsilon"),
-                                ],
-                                "hideInEditor": True,
-                            },
-                        }
-                    ],
-                    "viewOffset": [0, 0],
-                    "viewZoom": 1.0,
-                },
-                "consequences": {
-                    "parameters": [_param(False, "/cancelDelaysOnTrigger")],
-                    "items": [
-                        {
-                            "niceName": "Send OSC",
-                            "type": "Consequence",
-                            "commandModule": "OSC",
-                            "commandPath": "",
-                            "commandType": "Custom Message",
-                            "command": {
-                                "parameters": [_param(cue.osc_address(), "/address")],
-                                "paramLinks": {},
-                                "argManager": {
-                                    "items": [
-                                        {
-                                            "niceName": "value",
-                                            "type": "Integer",
-                                            "parameters": [_param(1, "/value", hexMode=False)],
-                                        }
-                                    ],
-                                    "viewOffset": [0, 0],
-                                    "viewZoom": 1.0,
-                                },
-                            },
-                        }
-                    ],
-                    "viewOffset": [0, 0],
-                    "viewZoom": 1.0,
-                },
-                "consequencesOff": {
-                    "parameters": [_param(False, "/cancelDelaysOnTrigger")],
-                    "viewOffset": [0, 0],
-                    "viewZoom": 1.0,
-                },
-            }
-        )
+    processors = [_build_chataigne_action(cue, index, fps=fps) for index, cue in enumerate(cues, start=1)]
 
     return {
-        "metaData": {"version": "1.9.17", "versionNumber": 67854},
+        "metaData": {"version": "1.10.3", "versionNumber": 68099},
         "projectSettings": {
             "containers": {
                 "dashboardSettings": {"parameters": [_param("", "/showDashboardOnStartup", enabled=False)]},
@@ -482,58 +512,75 @@ def build_chataigne_noisette_experimental(
         "layout": {
             "mainLayout": {
                 "type": 1,
-                "width": 1400,
-                "height": 900,
+                "width": 1200,
+                "height": 780,
                 "direction": 2,
                 "shifters": [
                     {
                         "type": 1,
-                        "width": 1400,
-                        "height": 580,
-                        "direction": 1,
+                        "width": 1200,
+                        "height": 780,
+                        "direction": 2,
                         "shifters": [
-                            {"type": 0, "width": 310, "height": 580, "currentContent": "Modules", "tabs": [{"name": "Modules"}]},
-                            {"type": 0, "width": 360, "height": 580, "currentContent": "Inspector", "tabs": [{"name": "Inspector"}]},
-                            {"type": 0, "width": 730, "height": 580, "currentContent": "State Machine", "tabs": [{"name": "State Machine"}, {"name": "Dashboard"}, {"name": "Module Router"}]},
+                            {
+                                "type": 1,
+                                "width": 1200,
+                                "height": 466,
+                                "direction": 1,
+                                "shifters": [
+                                    {
+                                        "type": 1,
+                                        "width": 307,
+                                        "height": 466,
+                                        "direction": 2,
+                                        "shifters": [
+                                            {"type": 0, "width": 307, "height": 240, "currentContent": "Modules", "tabs": [{"name": "Modules"}]},
+                                            {"type": 0, "width": 307, "height": 220, "currentContent": "Custom Variables", "tabs": [{"name": "Custom Variables"}]},
+                                        ],
+                                    },
+                                    {"type": 0, "width": 453, "height": 466, "currentContent": "State Machine", "tabs": [{"name": "State Machine"}, {"name": "Dashboard"}, {"name": "Module Router"}, {"name": "Morpher"}]},
+                                    {"type": 0, "width": 428, "height": 466, "currentContent": "Inspector", "tabs": [{"name": "Inspector"}]},
+                                ],
+                            },
+                            {
+                                "type": 1,
+                                "width": 1200,
+                                "height": 308,
+                                "direction": 1,
+                                "shifters": [
+                                    {"type": 0, "width": 178, "height": 308, "currentContent": "Sequences", "tabs": [{"name": "Sequences"}]},
+                                    {"type": 0, "width": 536, "height": 308, "currentContent": "Sequence Editor", "tabs": [{"name": "Sequence Editor"}]},
+                                    {"type": 0, "width": 474, "height": 308, "currentContent": "Logger", "tabs": [{"name": "Help"}, {"name": "Logger"}, {"name": "Warnings"}]},
+                                ],
+                            },
                         ],
-                    },
-                    {
-                        "type": 1,
-                        "width": 1400,
-                        "height": 320,
-                        "direction": 1,
-                        "shifters": [
-                            {"type": 0, "width": 250, "height": 320, "currentContent": "Sequences", "tabs": [{"name": "Sequences"}]},
-                            {"type": 0, "width": 750, "height": 320, "currentContent": "Logger", "tabs": [{"name": "Logger"}, {"name": "Warnings"}, {"name": "Help"}]},
-                            {"type": 0, "width": 400, "height": 320, "currentContent": "Custom Variables", "tabs": [{"name": "Custom Variables"}]},
-                        ],
-                    },
+                    }
                 ],
             },
             "windows": None,
         },
-        "modules": {"items": modules},
-        "stateMachine": {
-            "currentState": "State 1",
-            "states": {
-                "items": [
-                    {
-                        "niceName": "State 1",
-                        "type": "State",
-                        "parameters": [_param(True, "/active"), _param(False, "/miniMode")],
-                        "processors": {"items": processors},
-                    }
-                ],
-                "viewOffset": [0, 0],
-                "viewZoom": 1.0,
-            },
+        "modules": {"items": modules, "viewOffset": [0, 0], "viewZoom": 1.0},
+        "customVariables": {"viewOffset": [0, 0], "viewZoom": 1.0},
+        "states": {
+            "items": [
+                {
+                    "parameters": [
+                        _param(False, "/miniMode"),
+                        _param([-1031.0, -514.0], "/viewUIPosition"),
+                        _param(True, "/active"),
+                    ],
+                    "niceName": "State 1",
+                    "type": "State",
+                    "processors": {"items": processors, "viewOffset": [0, 0], "viewZoom": 1.0},
+                }
+            ],
+            "viewOffset": [808, 453],
+            "viewZoom": 1.0,
             "transitions": {"hideInEditor": True, "viewOffset": [0, 0], "viewZoom": 1.0},
-            "comments": {"hideInEditor": True, "viewOffset": [0, 0], "viewZoom": 1.0},
+            "comments": {"hideInEditor": True, "viewOffset": [808, 453], "viewZoom": 1.0},
         },
-        "customVariables": {},
-        "sequences": {},
-        "routers": {},
-        "moduleRouter": {"viewOffset": [0, 0], "viewZoom": 1.0},
+        "sequences": {"viewOffset": [0, 0], "viewZoom": 1.0},
+        "routers": {"viewOffset": [0, 0], "viewZoom": 1.0},
     }
 
 
