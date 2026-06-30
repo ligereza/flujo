@@ -12,3 +12,16 @@ requirements_defaults:
 recommended_preset: mainstream
 notes:
   - Usar MAINSTREAM por defecto salvo instruccion contraria.
+operations:
+  electricity_default: true
+  water_default: unknown
+  security_coordination: required
+  medical_access: required
+  load_in_notes:
+    - Confirmar accesos y horarios con produccion.
+recommended_service:
+  rider_level: full
+  default_preset: MAINSTREAM
+  volunteers_min: 8
+  tables_min: 3
+  chairs_min: 8

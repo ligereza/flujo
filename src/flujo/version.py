@@ -1,8 +1,8 @@
 """Versión y changelog de flujo."""
 
-__version__ = "0.47.0"
+__version__ = "0.47.8"
 VERSION = __version__
-__version_info__ = (0, 47, 0)
+__version_info__ = (0, 47, 8)
 
 
 def get_version():
@@ -11,6 +11,18 @@ def get_version():
 
 def get_changelog():
     return {
+        "0.47.8": {
+            "titulo": "Plano/Rider integrado: capas estables, mezcla aditiva y knowledge operativo",
+            "fecha": "2026-06-30",
+            "highlights": [
+                "Integra hotfixes pendientes de Plano/Rider sobre el repo web remoto actual",
+                "Seleccionar elementos ya no reordena capas; se agrega ordenamiento base explicito",
+                "Auto ordenar respeta prioridad de capas y distribuye simbolos en grilla compacta",
+                "Zonas solapadas usan mezcla visual tipo screen para evitar acumulacion opaca",
+                "Sincroniza checklist y mapa en ambos sentidos, preservando color, posicion y tamano de simbolos",
+                "Mejora exportacion/impresion con leyenda tecnica debajo del mapa y schema knowledge operativo",
+            ],
+        },
         "0.47.0": {
             "titulo": "QA operativo para rider/plano y SVGs de suplementos",
             "fecha": "2026-06-29",

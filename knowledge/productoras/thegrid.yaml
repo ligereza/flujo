@@ -19,3 +19,22 @@ logo:
   logo_id: thegrid_primary
 notes:
   - Clasificar por flyer/post y fuentes externas antes de cerrar preset.
+relationship:
+  status: prospect
+  trato: cordial_directo
+  decision_maker: unknown
+  preferred_contact: instagram
+  notes:
+    - Completar despues de revisar primer pedido real.
+service_preferences:
+  default_service: unknown
+  testeo: unknown
+  rider_level: base
+  quote_style: simple
+  preferred_deliverables:
+    - rider_plano
+    - flyer_10x14
+brand_assets:
+  logo_id: thegrid_primary
+  logo_status: source_needed
+  preferred_logo_source: flyer_or_profile

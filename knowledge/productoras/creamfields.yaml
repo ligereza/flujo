@@ -24,3 +24,22 @@ logo:
 sources:
   - type: human
     note: Informacion declarada por usuario/jefe.
+relationship:
+  status: active
+  trato: formal
+  decision_maker: unknown
+  preferred_contact: productor
+  notes:
+    - Priorizar comunicacion institucional y rider claro.
+service_preferences:
+  default_service: informativo
+  testeo: false
+  rider_level: full
+  quote_style: institutional
+  preferred_deliverables:
+    - rider_plano
+    - cartelera_digital
+brand_assets:
+  logo_id: creamfields_primary
+  logo_status: needs_vectorization
+  preferred_logo_source: official_or_presskit

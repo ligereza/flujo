@@ -291,22 +291,24 @@ export default function PlanoTool() {
   };
 
   const selectElementAndBringToFront = (id: string) => {
+    // Seleccionar NO debe cambiar capas. El orden se controla con botones explícitos.
     setSelectedId(id);
-    setElements(prev => {
-      const idx = prev.findIndex(e => e.id === id);
-      if (idx === -1) return prev;
-      const target = prev[idx];
-      const next = prev.filter(e => e.id !== id);
-      next.push(target);
+  };
+
+  const toggleVisible = (id: string) => {
+    setElements(els => {
+      const next = els.map(el => el.id === id ? { ...el, visible: !el.visible } : el);
+      syncChecklistFromElements(next);
       return next;
     });
   };
 
-  const toggleVisible = (id: string) =>
-    setElements(els => els.map(el => el.id === id ? { ...el, visible: !el.visible } : el));
-
   const removeElement = (id: string) => {
-    setElements(els => els.filter(el => el.id !== id));
+    setElements(els => {
+      const next = els.filter(el => el.id !== id);
+      syncChecklistFromElements(next);
+      return next;
+    });
     if (selectedId === id) setSelectedId(null);
   };
 
@@ -323,7 +325,11 @@ export default function PlanoTool() {
       color: ZONE_COLORS[zoneType] || '#555',
       visible: true
     };
-    setElements(prev => [...prev, newEl]);
+    setElements(prev => {
+      const next = [...prev, newEl];
+      syncChecklistFromElements(next);
+      return next;
+    });
     setSelectedId(id);
   };
 
@@ -336,7 +342,11 @@ export default function PlanoTool() {
       x: spec.x + Math.round(Math.random() * 240),
       y: spec.y + Math.round(Math.random() * 180),
     };
-    setElements(prev => [...prev, newEl]);
+    setElements(prev => {
+      const next = [...prev, newEl];
+      syncChecklistFromElements(next);
+      return next;
+    });
     setSelectedId(id);
   };
 
@@ -355,6 +365,24 @@ export default function PlanoTool() {
     const next = [...elements];
     [next[i], next[target]] = [next[target], next[i]];
     setElements(next);
+  };
+
+  const layerPriority = (el: Element) => {
+    if (el.id === 'entrada') return 40;
+    if (el.type === 'symbol') return 30;
+    if (el.type === 'rect') return 10;
+    return 20;
+  };
+
+  const orderLayersByPriority = () => {
+    setElements(prev => [...prev].sort((a, b) => {
+      const pa = layerPriority(a);
+      const pb = layerPriority(b);
+      if (pa !== pb) return pa - pb;
+      if (a.y !== b.y) return a.y - b.y;
+      if (a.x !== b.x) return a.x - b.x;
+      return a.id.localeCompare(b.id);
+    }));
   };
 
   const alignSelected = (mode: 'left' | 'centerX' | 'right' | 'top' | 'centerY' | 'bottom') => {
@@ -379,8 +407,8 @@ export default function PlanoTool() {
     const rectArea = { x: frame.x + 120, y: frame.y + 220, w: 1800, h: frame.h - 360 };
     const symbolArea = { x: frame.x + 2020, y: frame.y + 220, w: 740, h: frame.h - 360 };
     const rectGap = 80;
-    const symbolGapX = 260;
-    const symbolGapY = 210;
+    const symbolGapX = 230;
+    const symbolGapY = 185;
     let rectX = rectArea.x;
     let rectY = rectArea.y;
     let rowH = 0;
@@ -392,13 +420,13 @@ export default function PlanoTool() {
         return { ...el, x: snap(frame.x + (frame.w - el.w) / 2), y: frame.y + 70 };
       }
       if (el.type === 'symbol') {
-        const col = symbolIndex % 2;
-        const row = Math.floor(symbolIndex / 2);
+        const col = symbolIndex % 3;
+        const row = Math.floor(symbolIndex / 3);
         symbolIndex += 1;
         return {
           ...el,
           x: snap(symbolArea.x + col * symbolGapX),
-          y: snap(symbolArea.y + row * symbolGapY),
+          y: snap(Math.min(symbolArea.y + row * symbolGapY, frame.y + frame.h - el.h - 40)),
         };
       }
       if (rectX + el.w > rectArea.x + rectArea.w) {
@@ -410,6 +438,13 @@ export default function PlanoTool() {
       rectX += el.w + rectGap;
       rowH = Math.max(rowH, el.h);
       return next;
+    }).sort((a, b) => {
+      const pa = layerPriority(a);
+      const pb = layerPriority(b);
+      if (pa !== pb) return pa - pb;
+      if (a.y !== b.y) return a.y - b.y;
+      if (a.x !== b.x) return a.x - b.x;
+      return a.id.localeCompare(b.id);
     }));
     setLegendPos({ x: 2060, y: 120 });
   };
@@ -524,17 +559,17 @@ export default function PlanoTool() {
   };
 
   const renderSymbol = (el: Element, isPrint = false) => {
-    const isSelected = el.id === selectedId;
+    const isSelected = !isPrint && el.id === selectedId;
     const fill = isPrint ? '#000000' : el.color;
 
     return (
       <g
         key={el.id}
         transform={`translate(${el.x},${el.y})`}
-        onMouseDown={(e) => { e.stopPropagation(); onMouseDown(e, el.id); }}
-        onTouchStart={(e) => { e.stopPropagation(); onTouchStart(e, el.id); }}
-        onClick={(e) => { e.stopPropagation(); selectElementAndBringToFront(el.id); }}
-        className="cursor-move"
+        onMouseDown={isPrint ? undefined : (e) => { e.stopPropagation(); onMouseDown(e, el.id); }}
+        onTouchStart={isPrint ? undefined : (e) => { e.stopPropagation(); onTouchStart(e, el.id); }}
+        onClick={isPrint ? undefined : (e) => { e.stopPropagation(); selectElementAndBringToFront(el.id); }}
+        className={isPrint ? undefined : "cursor-move"}
         opacity={el.visible ? 1 : 0.2}
       >
         <rect width={el.w} height={el.h} fill="transparent" stroke={isSelected ? '#fff' : 'none'} strokeWidth={5} />
@@ -604,13 +639,44 @@ export default function PlanoTool() {
 
   const syncElementsFromChecked = (items: string[], baseElements = elements) => {
     const wanted = items.map(item => REQUIREMENT_SYMBOL_MAP[item]).filter(Boolean);
-    let next = baseElements.filter(el => !(el.id || '').startsWith('req-'));
+    const requirementKeys = new Set(Object.values(REQUIREMENT_SYMBOL_MAP));
+    let next = baseElements
+      .filter(el => {
+        if (!(el.id || '').startsWith('req-')) return true;
+        return Boolean(el.symbolKey && wanted.includes(el.symbolKey));
+      })
+      .map(el => {
+        if (!el.symbolKey || !requirementKeys.has(el.symbolKey)) return el;
+        if (wanted.includes(el.symbolKey)) return { ...el, visible: true };
+        return { ...el, visible: false };
+      });
     wanted.forEach(key => {
-      const reqId = `req-${key}`;
-      const hasRequirementSymbol = next.some(el => el.id === reqId);
-      if (!hasRequirementSymbol) next.push({ ...makeSymbolElement(key, 'req'), id: reqId });
+      const hasVisibleSymbol = next.some(el => el.symbolKey === key && el.visible);
+      if (!hasVisibleSymbol) next.push({ ...makeSymbolElement(key, 'req'), id: `req-${key}` });
     });
     return next;
+  };
+
+  const requirementForSymbol = (symbolKey?: string) => {
+    if (!symbolKey) return null;
+    const found = Object.entries(REQUIREMENT_SYMBOL_MAP).find(([, key]) => key === symbolKey);
+    return found ? found[0] : null;
+  };
+
+  const syncChecklistFromElements = (nextElements: Element[]) => {
+    const visibleRequirementKeys = new Set(
+      nextElements
+        .filter(el => el.visible && el.type === 'symbol' && el.symbolKey)
+        .map(el => el.symbolKey as string)
+    );
+    const mapEntries = Object.entries(REQUIREMENT_SYMBOL_MAP);
+    setCheckedItems(prev => {
+      const manual = prev.filter(item => !REQUIREMENT_SYMBOL_MAP[item]);
+      const fromMap = mapEntries
+        .filter(([, key]) => visibleRequirementKeys.has(key))
+        .map(([item]) => item);
+      return Array.from(new Set([...manual, ...fromMap]));
+    });
   };
 
   const toggleCheck = (item: string) => {
@@ -794,7 +860,7 @@ export default function PlanoTool() {
         <section className="break-inside-avoid flex flex-col">
           <h2 className="text-lg font-black uppercase tracking-tight mb-2">3. Esquema de Distribución del Stand</h2>
           <div className="border border-black p-4 bg-zinc-50 relative flex justify-center items-center">
-            <svg viewBox="0 0 2970 2100" className="w-full max-w-[95%] h-auto mx-auto aspect-[1.414/1]">
+            <svg viewBox="0 0 2970 2400" className="w-full max-w-[95%] h-auto mx-auto">
               <rect width="100%" height="100%" fill="#fafafa" stroke="#ccc" />
               <rect x={50} y={50} width={2870} height={1800} fill="none" stroke="#666" strokeWidth={5} strokeDasharray="30 20" rx={20} />
               {elements.filter(e => e.visible).map(el => (
@@ -809,29 +875,29 @@ export default function PlanoTool() {
               ))}
               
               {/* High-contrast Technical Legend inside the printable SVG */}
-              <g transform="translate(1580, 900)">
-                <rect width={1240} height={Math.min(760, Math.max(220, 128 + Math.ceil(visibleLegendSymbols.length / 3) * 72))} rx={20} fill="#f4f4f5" stroke="#000" strokeWidth={4} />
-                <text x={620} y={66} textAnchor="middle" fontSize={32} fill="#000" fontWeight="black" fontFamily="monospace" style={{ letterSpacing: '0.05em' }}>
+              <g transform="translate(100, 1870)">
+                <rect width={2770} height={Math.min(420, Math.max(160, 106 + Math.ceil(visibleLegendSymbols.length / 4) * 54))} rx={18} fill="#f4f4f5" stroke="#000" strokeWidth={4} />
+                <text x={1385} y={52} textAnchor="middle" fontSize={30} fill="#000" fontWeight="black" fontFamily="monospace" style={{ letterSpacing: '0.05em' }}>
                   LEYENDA TÉCNICA
                 </text>
                 {visibleLegendSymbols.map((el, i) => {
-                  const col = i % 3;
-                  const row = Math.floor(i / 3);
+                  const col = i % 4;
+                  const row = Math.floor(i / 4);
                   return (
-                    <g key={`print-legend-${el.id}`} transform={`translate(${36 + col * 400}, ${108 + row * 72})`}>
-                      <svg x={0} y={0} width={48} height={48} viewBox="0 0 160 160">
+                    <g key={`print-legend-${el.id}`} transform={`translate(${36 + col * 680}, ${84 + row * 54})`}>
+                      <svg x={0} y={0} width={38} height={38} viewBox="0 0 160 160">
                         {renderSymbolGlyph(el.symbolKey || 'unknown', '#000000')}
                       </svg>
-                      <text x={64} y={32} fontSize={20} fill="#000" fontWeight="bold" fontFamily="sans-serif">
-                        {el.label.toUpperCase().slice(0, 24)}
+                      <text x={52} y={27} fontSize={18} fill="#000" fontWeight="bold" fontFamily="sans-serif">
+                        {el.label.toUpperCase().slice(0, 26)}
                       </text>
                     </g>
                   );
                 })}
               </g>
 
-              <g transform="translate(100, 1930)">
-                <text fontSize={38} fontWeight="bold" fill="#000">{`${eventName.toUpperCase()} · ${eventVenue.toUpperCase()} · ${eventDate}`}</text>
+              <g transform="translate(100, 2340)">
+                <text fontSize={34} fontWeight="bold" fill="#000">{`${eventName.toUpperCase()} · ${eventVenue.toUpperCase()} · ${eventDate}`}</text>
               </g>
             </svg>
           </div>
@@ -867,7 +933,7 @@ export default function PlanoTool() {
         <div>
           <h3 className="text-2xl font-bold flex items-center gap-2">
             Rider RD · Herramienta de Plano
-            <span className="text-xs bg-emerald-500/20 text-emerald-400 font-black px-2 py-0.5 rounded-full uppercase tracking-wider">v0.46.0</span>
+            <span className="text-xs bg-emerald-500/20 text-emerald-400 font-black px-2 py-0.5 rounded-full uppercase tracking-wider">v0.47.8</span>
           </h3>
           <p className="text-zinc-400 text-sm mt-1">
             Documento operativo para intervención en terreno — Reduciendo Daño Chile
@@ -1119,6 +1185,7 @@ export default function PlanoTool() {
                 <button onClick={() => setShowGrid(!showGrid)} className={cn("p-2 border rounded-lg transition-colors text-xs font-bold", showGrid ? "bg-zinc-800 border-zinc-700 text-white" : "bg-zinc-900 border-zinc-800 text-zinc-500")}>Grilla</button>
                 <button onClick={() => setShowLegend(!showLegend)} className={cn("p-2 border rounded-lg transition-colors text-xs font-bold", showLegend ? "bg-zinc-800 border-zinc-700 text-white" : "bg-zinc-900 border-zinc-800 text-zinc-500")}>Leyenda</button>
                 <button onClick={autoArrangePlano} className="p-2 border border-emerald-700/60 bg-emerald-950/40 rounded-lg transition-colors text-xs font-bold text-emerald-300 hover:bg-emerald-900/50">Auto ordenar</button>
+                <button onClick={orderLayersByPriority} className="p-2 border border-sky-700/60 bg-sky-950/40 rounded-lg transition-colors text-xs font-bold text-sky-300 hover:bg-sky-900/50">Orden capas</button>
                 <button onClick={resetLegendPosition} className="p-2 border border-zinc-800 bg-zinc-900 rounded-lg transition-colors text-xs font-bold text-zinc-500 hover:text-zinc-300">Reset leyenda</button>
               </div>
               <div className="flex items-center gap-2">
@@ -1150,7 +1217,7 @@ export default function PlanoTool() {
                     )}
 
                     {/* Boundary frame */}
-                    <rect x="50" y="50" width="2870" height="2000" fill="none" stroke="#3f3f46" strokeWidth={5} strokeDasharray="30 20" rx={20} />
+                    <rect x="50" y="50" width="2870" height="1800" fill="none" stroke="#3f3f46" strokeWidth={5} strokeDasharray="30 20" rx={20} />
 
                     {/* Elements */}
                     {elements.filter(el => el.visible).map(el => {
@@ -1171,7 +1238,8 @@ export default function PlanoTool() {
                             height={el.h}
                             rx={16}
                             fill={el.color}
-                            fillOpacity={0.7}
+                            fillOpacity={0.48}
+                            style={{ mixBlendMode: 'screen' }}
                             stroke={el.id === selectedId ? '#ffffff' : el.color}
                             strokeWidth={el.id === selectedId ? 10 : 5}
                           />
@@ -1310,11 +1378,11 @@ export default function PlanoTool() {
                     <div>
                       <label className="text-[10px] text-zinc-500 block mb-1.5">Color del Elemento</label>
                       <div className="flex gap-1.5 flex-wrap">
-                        {Object.entries(ZONE_COLORS).map(([key, val]) => (
+                        {Object.entries({ ...ZONE_COLORS, black: '#111827', white: '#f8fafc', pink: '#ec4899', cyan: '#06b6d4' }).map(([key, val]) => (
                           <button
                             key={key}
                             onClick={() => setElements(prev => prev.map(el => el.id === selectedId ? { ...el, color: val } : el))}
-                            title={ZONE_LABELS[key]}
+                            title={ZONE_LABELS[key] || key}
                             className={cn(
                               "w-5 h-5 rounded-full border-2 transition-all",
                               selectedElement.color === val ? "border-white scale-125" : "border-transparent hover:scale-110"
@@ -1337,6 +1405,7 @@ export default function PlanoTool() {
                         <button onClick={() => alignSelected('bottom')} className="py-1.5 bg-zinc-800 border border-zinc-700 rounded text-[9px] font-black uppercase hover:bg-zinc-700">Abajo</button>
                       </div>
                       <button onClick={autoArrangePlano} className="w-full py-1.5 bg-emerald-950/50 border border-emerald-800 rounded text-[9px] font-black uppercase text-emerald-300 hover:bg-emerald-900/50">Auto ordenar plano</button>
+                      <button onClick={orderLayersByPriority} className="w-full py-1.5 bg-sky-950/50 border border-sky-800 rounded text-[9px] font-black uppercase text-sky-300 hover:bg-sky-900/50">Ordenar capas base</button>
                     </div>
 
                     {/* Layer Reordering buttons */}
