@@ -637,9 +637,27 @@ function EditorView({ pieceToLoad }: { pieceToLoad: SvgPiece | null }) {
     setActiveDocIndex(0); setSelectedId(null); setMulti([]);
   };
 
-  const loadSvgPiece = useCallback((piece: SvgPiece) => {
-    if (!piece.svgContent) return;
-    const dims = svgDims(piece.svgContent) || { width: 2000, height: 2800 };
+  const loadSvgPiece = useCallback(async (piece: SvgPiece) => {
+    let svgContent = piece.svgContent;
+    // Si no hay contenido inline pero hay URL, cargar desde el repo
+    if (!svgContent && piece.svgUrl) {
+      try {
+        const resp = await fetch(piece.svgUrl);
+        if (resp.ok) {
+          const text = await resp.text();
+          if (text.trim().startsWith('<svg') || text.includes('<svg')) {
+            svgContent = text;
+          }
+        }
+      } catch (e) {
+        console.warn('No se pudo cargar SVG desde', piece.svgUrl, e);
+      }
+    }
+    if (!svgContent) {
+      console.warn('loadSvgPiece: pieza sin contenido SVG ni URL valida:', piece.name, piece.svgUrl);
+      return;
+    }
+    const dims = svgDims(svgContent) || { width: 2000, height: 2800 };
     const cfg: PieceConfig = {
       project: { name: piece.name, slug: piece.id.replace(/[^a-z0-9]+/gi, '_').toLowerCase(), brand: piece.product || piece.area, website: 'REDUCIENDODANO.CL' },
       canvas: { width: Math.max(800, Math.round(dims.width)), height: Math.max(600, Math.round(dims.height)), real_size_cm: { width: 0, height: 0 }, safe_margin_px: 40 },
@@ -648,8 +666,8 @@ function EditorView({ pieceToLoad }: { pieceToLoad: SvgPiece | null }) {
       global_elements: [],
       documents: [{
         id: '01_svg_importado',
-        title: 'SVG importado',
-        elements: [{ type: 'svg_image', x: 0, y: 0, w: Math.max(800, Math.round(dims.width)), h: Math.max(600, Math.round(dims.height)), content: piece.svgContent } as SvgImageElement],
+        title: piece.name,
+        elements: [{ type: 'svg_image', x: 0, y: 0, w: Math.max(800, Math.round(dims.width)), h: Math.max(600, Math.round(dims.height)), content: svgContent } as SvgImageElement],
       }],
     };
     loadCfg(cfg);
@@ -662,8 +680,8 @@ function EditorView({ pieceToLoad }: { pieceToLoad: SvgPiece | null }) {
     setRepoStatus('Actualizando SVGs…');
     try {
       const list = typeof window !== 'undefined' && window.location.protocol === 'file:' ? MOCK_SVG_INDEX : await loadFromApi();
-      setRepoPieces(list.filter(piece => Boolean(piece.svgContent)));
-      setRepoStatus(`${list.filter(piece => Boolean(piece.svgContent)).length} SVGs configurables`);
+      setRepoPieces(list.filter(piece => Boolean(piece.svgContent) || Boolean(piece.svgUrl)));
+      setRepoStatus(`${list.length} SVGs (${list.filter(p => Boolean(p.svgContent)).length} con preview)`);
     } catch (error) {
       setRepoPieces(MOCK_SVG_INDEX);
       setRepoStatus(`Demo (${error instanceof Error ? error.message : 'sin API'})`);
