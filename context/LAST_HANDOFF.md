@@ -295,3 +295,12 @@ Low token tasks for next agent:
 3. Keep RD/suplementos and Studio/eventos separated in UI and docs.
 4. Report real verification output, not assumptions.
 
+---
+
+Update 2026-06-30 - Version alignment v0.48.1
+
+- Aligned package version and runtime version to 0.48.1.
+- Git baseline is a squashed operational agent workspace commit.
+- Current tag: v0.48.1.
+- Verification expected: py -m flujo verify.
+

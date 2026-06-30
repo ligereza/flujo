@@ -1,8 +1,8 @@
 """Versión y changelog de flujo."""
 
-__version__ = "0.47.13"
+__version__ = "0.48.1"
 VERSION = __version__
-__version_info__ = (0, 47, 13)
+__version_info__ = (0, 48, 1)
 
 
 def get_version():
@@ -11,6 +11,17 @@ def get_version():
 
 def get_changelog():
     return {
+        "0.48.1": {
+            "titulo": "Operational agent workspace baseline",
+            "fecha": "2026-06-30",
+            "highlights": [
+                "Squash de main a un baseline operacional limpio",
+                "AGENTS.md queda como contrato operativo principal para agentes",
+                "Airdrop queda estandarizado con _airdrop/, HANDOFF y LAST_HANDOFF",
+                "Repo hygiene aplicado y raiz limpia de handoffs historicos",
+                "Verificacion integral con compileall, pytest, health, version y hub smoke",
+            ],
+        },
         "0.47.13": {
             "titulo": "Rider PDF alineado al editor y SVG Studio configurable real",
             "fecha": "2026-06-30",
