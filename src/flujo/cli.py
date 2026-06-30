@@ -1633,7 +1633,7 @@ def suplementos_contraportada(
     try:
         svg_path = generar_contraportada(suplemento, output_path=output, brief=brief)
         _ok(f"Contraportada generada: {svg_path}")
-        console.print(f"  Tamaño: 10×14 cm (1181×1654 px @ 300dpi)")
+        console.print(f"  Tamaño: 10×14 cm (2000x2800 px @ 300dpi)")
         console.print(f"  Nombre: {suplemento.nombre}")
         console.print(f"  Beneficio: {brief if brief else suplemento.beneficio_1}")
     except FileNotFoundError as e:
@@ -1645,7 +1645,7 @@ def suplementos_contraportada(
 @suplementos_app.command("validate")
 def suplementos_validate(
     paths: list[Path] = typer.Argument(..., help="SVG(s) de suplementos o contraportadas a validar"),
-    contraportada: bool = typer.Option(True, "--contraportada/--generic", help="esperar tamano de contraportada 10x14 cm (1181x1654 px)"),
+    contraportada: bool = typer.Option(True, "--contraportada/--generic", help="esperar tamano de contraportada 10x14 cm (2000x2800 px)"),
 ):
     """Validar SVGs de suplementos antes de revisar/exportar en Illustrator."""
     from .comercial.svg_validator import (

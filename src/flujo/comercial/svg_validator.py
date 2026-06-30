@@ -6,7 +6,7 @@ from pathlib import Path
 from typing import Any, Dict, Iterable, List
 from xml.etree import ElementTree as ET
 
-EXPECTED_CONTRAPORTADA_SIZE = (1181, 1654)
+EXPECTED_CONTRAPORTADA_SIZE = (2000, 2800)
 _PLACEHOLDERS = [
     "NOMBRE DEL",
     "SUPLEMENTO",

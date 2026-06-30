@@ -5,21 +5,31 @@
   <rect x="136" y="120" width="150" height="80" rx="16" fill="#173F2F"/>
   <text x="211" y="180" fill="#FFFFFF" font-family="DejaVu Sans, Arial, sans-serif" font-size="34" font-weight="700" text-anchor="middle">RD</text>
   <text x="336" y="180" fill="#161513" font-family="DejaVu Sans, Arial, sans-serif" font-size="42" font-weight="700">Reduciendo Dano</text>
-  <text x="170" y="350" fill="#173F2F" font-family="DejaVu Sans, Arial, sans-serif" font-size="55" font-weight="700">CONTRAPORTADA</text>
-  <line x1="170" y1="420" x2="830" y2="420" stroke="#173F2F" stroke-width="4"/>
-  <text x="170" y="550" fill="#675F55" font-family="DejaVu Sans, Arial, sans-serif" font-size="36">Ingredientes:</text>
-  <text x="170" y="620" fill="#161513" font-family="DejaVu Sans, Arial, sans-serif" font-size="32">Complemento alimenticio.</text>
-  <text x="170" y="720" fill="#675F55" font-family="DejaVu Sans, Arial, sans-serif" font-size="36">Modo de uso:</text>
-  <text x="170" y="790" fill="#161513" font-family="DejaVu Sans, Arial, sans-serif" font-size="32">Seguir indicaciones del profesional de salud.</text>
-  <text x="170" y="890" fill="#675F55" font-family="DejaVu Sans, Arial, sans-serif" font-size="36">Advertencias:</text>
-  <text x="170" y="960" fill="#161513" font-family="DejaVu Sans, Arial, sans-serif" font-size="32">Mantener fuera del alcance de los ninos.</text>
-  <text x="170" y="1060" fill="#675F55" font-family="DejaVu Sans, Arial, sans-serif" font-size="36">Contenido neto:</text>
-  <text x="170" y="1130" fill="#161513" font-family="DejaVu Sans, Arial, sans-serif" font-size="32">Por definir segun producto.</text>
-  <text x="170" y="1300" fill="#173F2F" font-family="DejaVu Sans, Arial, sans-serif" font-size="55" font-weight="700">INFORMACION NUTRICIONAL</text>
-  <line x1="170" y1="1370" x2="830" y2="1370" stroke="#173F2F" stroke-width="4"/>
-  <text x="170" y="1500" fill="#675F55" font-family="DejaVu Sans, Arial, sans-serif" font-size="28">Porcion:</text>
-  <text x="170" y="1580" fill="#675F55" font-family="DejaVu Sans, Arial, sans-serif" font-size="28">Informacion por 100g / porcion.</text>
-  <text x="170" y="1750" fill="#173F2F" font-family="DejaVu Sans, Arial, sans-serif" font-size="42" font-weight="700">www.REDUCIENDODANO.CL</text>
-  <text x="170" y="1850" fill="#675F55" font-family="DejaVu Sans, Arial, sans-serif" font-size="32">@reduciendodano</text>
-  <text x="170" y="2650" fill="#675F55" font-family="DejaVu Sans, Arial, sans-serif" font-size="28">Lote: [LOTE] | Vencimiento: [FECHA] | Registro: [REG]</text>
+  <text x="170" y="350" fill="#173F2F" font-family="DejaVu Sans, Arial, sans-serif" font-size="55" font-weight="700">NOMBRE DEL</text>
+  <text x="170" y="420" fill="#173F2F" font-family="DejaVu Sans, Arial, sans-serif" font-size="55" font-weight="700">SUPLEMENTO</text>
+  <line x1="170" y1="460" x2="900" y2="460" stroke="#173F2F" stroke-width="4"/>
+  <text x="170" y="570" fill="#173F2F" font-family="DejaVu Sans, Arial, sans-serif" font-size="38" font-weight="700">Descripcion</text>
+  <text x="170" y="640" fill="#161513" font-family="DejaVu Sans, Arial, sans-serif" font-size="32">DESCRIPCION</text>
+  <text x="170" y="760" fill="#173F2F" font-family="DejaVu Sans, Arial, sans-serif" font-size="38" font-weight="700">Beneficio</text>
+  <text x="170" y="830" fill="#161513" font-family="DejaVu Sans, Arial, sans-serif" font-size="32">Beneficio principal o idea de campana para la pieza.</text>
+  <text x="170" y="920" fill="#675F55" font-family="DejaVu Sans, Arial, sans-serif" font-size="32">Texto breve y claro para acompanar el producto.</text>
+  <text x="170" y="1050" fill="#173F2F" font-family="DejaVu Sans, Arial, sans-serif" font-size="38" font-weight="700">Ingredientes</text>
+  <text x="170" y="1120" fill="#161513" font-family="DejaVu Sans, Arial, sans-serif" font-size="32">Ingredientes o perfil principal del suplemento.</text>
+  <text x="170" y="1230" fill="#173F2F" font-family="DejaVu Sans, Arial, sans-serif" font-size="38" font-weight="700">Modo de uso</text>
+  <text x="170" y="1300" fill="#161513" font-family="DejaVu Sans, Arial, sans-serif" font-size="32">Indicaciones de uso del producto.</text>
+  <text x="170" y="1420" fill="#173F2F" font-family="DejaVu Sans, Arial, sans-serif" font-size="55" font-weight="700">INFORMACION NUTRICIONAL</text>
+  <line x1="170" y1="1480" x2="900" y2="1480" stroke="#173F2F" stroke-width="4"/>
+  <text x="170" y="1550" fill="#675F55" font-family="DejaVu Sans, Arial, sans-serif" font-size="28">Porcion: Por definir segun producto</text>
+  <text x="170" y="1600" fill="#675F55" font-family="DejaVu Sans, Arial, sans-serif" font-size="28">Informacion nutricional detallada.</text>
+  <text x="170" y="1720" fill="#173F2F" font-family="DejaVu Sans, Arial, sans-serif" font-size="38" font-weight="700">Advertencias</text>
+  <text x="170" y="1790" fill="#161513" font-family="DejaVu Sans, Arial, sans-serif" font-size="28">Recomendacion de seguimiento del producto.</text>
+  <text x="170" y="1840" fill="#675F55" font-family="DejaVu Sans, Arial, sans-serif" font-size="24">Mantener fuera del alcance de los ninos.</text>
+  <text x="170" y="2050" fill="#173F2F" font-family="DejaVu Sans, Arial, sans-serif" font-size="42" font-weight="700">www.REDUCIENDODANO.CL</text>
+  <text x="170" y="2120" fill="#675F55" font-family="DejaVu Sans, Arial, sans-serif" font-size="32">@reduciendodano</text>
+  <line x1="170" y1="2200" x2="900" y2="2200" stroke="#CFC2B2" stroke-width="2"/>
+  <text x="170" y="2280" fill="#675F55" font-family="DejaVu Sans, Arial, sans-serif" font-size="24">Contenido neto: Por definir</text>
+  <text x="170" y="2320" fill="#675F55" font-family="DejaVu Sans, Arial, sans-serif" font-size="24">Registro sanitario: Por definir</text>
+  <text x="170" y="2400" fill="#675F55" font-family="DejaVu Sans, Arial, sans-serif" font-size="20">Lote: [LOTE] | Vencimiento: [FECHA] | Registro: [REG]</text>
+  <rect x="1650" y="200" width="200" height="200" rx="20" fill="none" stroke="#CFC2B2" stroke-width="2" stroke-dasharray="8 4"/>
+  <text x="1750" y="310" fill="#675F55" font-family="DejaVu Sans, Arial, sans-serif" font-size="18" text-anchor="middle">QR</text>
 </svg>

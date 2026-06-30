@@ -64,8 +64,8 @@ def build_illustrator_artboards_payload(spec: dict[str, Any], base_dir: str | Pa
     return {
         "document": {
             "name": document.get("name", "suplementos_rd"),
-            "width": int(document.get("width", 1181)),
-            "height": int(document.get("height", 1654)),
+            "width": int(document.get("width", 2000)),
+            "height": int(document.get("height", 2800)),
             "colorMode": document.get("colorMode", "RGB"),
         },
         "artboards": normalized_artboards,

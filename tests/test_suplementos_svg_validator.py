@@ -10,7 +10,7 @@ from flujo.comercial.svg_validator import (
 def test_validate_svg_file_ok(tmp_path: Path):
     svg = tmp_path / "ok.svg"
     svg.write_text(
-        '<svg xmlns="http://www.w3.org/2000/svg" width="1181" height="1654" viewBox="0 0 1181 1654">'
+        '<svg xmlns="http://www.w3.org/2000/svg" width="2000" height="2800" viewBox="0 0 2000 2800">'
         '<g><text x="10" y="20">IMPULSO</text></g></svg>',
         encoding="utf-8",
     )

@@ -132,7 +132,7 @@ def prepare_supplement_contraportadas_for_illustrator(
         "document": {
             "name": project_name,
             "width": 2362,
-            "height": 1654,
+            "height": 2800,
             "colorMode": "RGB",
         },
         "artboards": artboards,
@@ -190,7 +190,7 @@ def prepare_supplement_job_assets(
     package_svg = svg_dir / svg_output.name
     package_svg.write_bytes(svg_output.read_bytes())
 
-    size = document_size or (2362, 1654)
+    size = document_size or (2000, 2800)
     spec = {
         "document": {"name": job_path.name, "width": size[0], "height": size[1], "colorMode": "RGB"},
         "artboards": [
