@@ -637,24 +637,37 @@ function EditorView({ pieceToLoad }: { pieceToLoad: SvgPiece | null }) {
     setActiveDocIndex(0); setSelectedId(null); setMulti([]);
   };
 
-  const loadSvgPiece = useCallback(async (piece: SvgPiece) => {
+  const [editorLoading, setEditorLoading] = useState(false);
+const [editorError, setEditorError] = useState('');
+
+const loadSvgPiece = useCallback(async (piece: SvgPiece) => {
+    setEditorError('');
+    setEditorLoading(true);
+    try {
     let svgContent = piece.svgContent;
     // Si no hay contenido inline pero hay URL, cargar desde el repo
     if (!svgContent && piece.svgUrl) {
       try {
         const resp = await fetch(piece.svgUrl);
-        if (resp.ok) {
-          const text = await resp.text();
-          if (text.trim().startsWith('<svg') || text.includes('<svg')) {
-            svgContent = text;
-          }
+        if (!resp.ok) {
+          throw new Error(`HTTP ${resp.status}: ${resp.statusText}`);
         }
+        const text = await resp.text();
+        if (!text.trim().startsWith('<svg') && !text.includes('<svg')) {
+          throw new Error('El archivo no parece ser un SVG valido');
+        }
+        svgContent = text;
       } catch (e) {
-        console.warn('No se pudo cargar SVG desde', piece.svgUrl, e);
+        const err = e instanceof Error ? e.message : 'Error desconocido';
+        setEditorError(`Error cargando ${piece.name}: ${err}`);
+        console.error('loadSvgPiece failed:', piece.svgUrl, e);
+        setEditorLoading(false);
+        return;
       }
     }
     if (!svgContent) {
-      console.warn('loadSvgPiece: pieza sin contenido SVG ni URL valida:', piece.name, piece.svgUrl);
+      setEditorError(`No se encontro contenido para ${piece.name}`);
+      setEditorLoading(false);
       return;
     }
     const dims = svgDims(svgContent) || { width: 2000, height: 2800 };
@@ -672,6 +685,13 @@ function EditorView({ pieceToLoad }: { pieceToLoad: SvgPiece | null }) {
     };
     loadCfg(cfg);
     setZoom(dims.width > 1800 ? 0.35 : 0.65);
+    setEditorLoading(false);
+    } catch (e) {
+      const err = e instanceof Error ? e.message : 'Error';
+      setEditorError('Error cargando SVG: ' + err);
+      console.error('loadSvgPiece exception:', e);
+      setEditorLoading(false);
+    }
   }, []);
 
 
@@ -869,7 +889,9 @@ function EditorView({ pieceToLoad }: { pieceToLoad: SvgPiece | null }) {
           {/* Doc tabs + zoom */}
           <div className="flex flex-wrap items-center justify-between gap-1 border-b border-zinc-800/50 px-2 py-1.5">
             <div className="flex items-center gap-1">
-              {config.documents.map((d,i)=><button key={d.id} onClick={()=>{setActiveDocIndex(i);setSelectedId(null);}}
+              {editorLoading && <span className="text-[10px] text-amber-400 animate-pulse">Cargando SVG...</span>}
+              {editorError && <span className="text-[10px] text-red-400">{editorError}</span>}
+              {!editorLoading && !editorError && config.documents.map((d,i)=><button key={d.id} onClick={()=>{setActiveDocIndex(i);setSelectedId(null);}}
                 className={`rounded px-2 py-1 text-[10px] font-bold ${activeDocIndex===i?'bg-zinc-700 text-white':'text-zinc-500 hover:text-zinc-300'}`}>{d.title}</button>)}
               <button onClick={()=>setShowGlobals(g=>!g)} className={`flex items-center gap-1 rounded px-1.5 py-1 text-[10px] font-bold ${showGlobals?'text-emerald-400':'text-zinc-600'}`}>
                 {showGlobals?<Eye className="h-3 w-3"/>:<EyeOff className="h-3 w-3"/>}Global</button>

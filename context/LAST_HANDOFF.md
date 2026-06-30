@@ -1,25 +1,3 @@
-# LAST_HANDOFF - flujo continuation state
 Date: 2026-06-30
-Version: 0.48.4
-Main entry: py -m flujo app
-Verify: py -m flujo verify
-
-## Current state
-
-All checks green after v0.48.4 SVG path fix.
-16 svgUrl paths corrected in MOCK_SVG_INDEX.
-
-## Fix v0.48.4
-
-Fixed svgUrl paths in web/src/data/svgIndex.ts:
-- Los paths no coincidian con archivos reales
-- 8 archivos de 02_editables_svg/
-- 8 archivos de 03_final_vectorizado_svg/
-
-## Apply
-
-```bash
-py scripts/validate_airdrop.py
-py scripts/run_airdrop_checks.py "v0.48.4 svg url fix"
-git tag v0.48.4 && git push origin v0.48.4
-```
+Version: 0.48.5
+Apply: py scripts/validate_airdrop.py && py scripts/run_airdrop_checks.py "v0.48.5"
