@@ -88,7 +88,7 @@ export default function AppShell({ view, onViewChange, children }: Props) {
         {/* Footer */}
         <div className="border-t border-zinc-800/70 px-5 py-3">
           <div className="text-[10px] text-zinc-600">
-            v0.47.11 · gratis/local
+            v0.47.12 · gratis/local
           </div>
           <div className="text-[10px] text-zinc-700">
             py -m flujo app

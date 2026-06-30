@@ -18,7 +18,7 @@ import {
 import {
   type PieceConfig, type ConfigElement, type TextElement,
   type ParagraphElement, type ListElement, type RectElement,
-  type CircleElement, type LineElement, type Palette as PaletteType,
+  type CircleElement, type LineElement, type SvgImageElement, type Palette as PaletteType,
   assignIds, resolveColor, getElementBounds, DEMO_CONFIGS,
 } from '../data/configTypes';
 
@@ -93,6 +93,14 @@ function renderCfgEl(el: ConfigElement, pal: PaletteType, isSel: boolean, onSele
         <line x1={e.x1} y1={e.y1} x2={e.x2} y2={e.y2} stroke={ss||rc(e.stroke)} strokeWidth={sw||e.stroke_width||1} />
       </g>;
     }
+    case 'svg_image': {
+      const e = el as SvgImageElement;
+      const href = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(e.content)}`;
+      return <g key={e._id} onClick={ev=>{ev.stopPropagation();onSelect();}} className="cursor-pointer">
+        <image href={href} x={e.x} y={e.y} width={e.w} height={e.h} preserveAspectRatio="xMidYMid meet" />
+        {isSel && <rect x={e.x-4} y={e.y-4} width={e.w+8} height={e.h+8} fill="none" stroke="#3b82f6" strokeWidth={2} strokeDasharray="8 4"/>}
+      </g>;
+    }
     case 'text': {
       const e = el as TextElement;
       return <g key={e._id} onClick={ev=>{ev.stopPropagation();onSelect();}} className="cursor-pointer">
@@ -143,6 +151,13 @@ type TopTab = 'gallery' | 'editor';
 
 export default function SvgVisualizer() {
   const [topTab, setTopTab] = useState<TopTab>('gallery');
+
+  useEffect(() => {
+    const handler = () => setTopTab('editor');
+    window.addEventListener('svgstudio-configure-piece', handler);
+    return () => window.removeEventListener('svgstudio-configure-piece', handler);
+  }, []);
+
   return (
     <div className="space-y-4">
       {/* Header */}
@@ -278,6 +293,11 @@ function GalleryView() {
     img.src=u;
   },[]);
   const copySvg = (s: string) => { navigator.clipboard?.writeText(s); setCodeCopied(true); setTimeout(()=>setCodeCopied(false),1500); };
+  const configurePiece = (piece: SvgPiece) => {
+    if (!piece.svgContent) return;
+    window.dispatchEvent(new CustomEvent('svgstudio-configure-piece', { detail: piece }));
+    setSelectedPiece(null);
+  };
   const goTo = (d: -1|1) => { const n=currentIdx+d; if (n>=0&&n<filtered.length){setSelectedPiece(filtered[n]);setModalZoom(1);} };
   const handleCustomPreview = () => {
     if (!customSvg.trim()) return;
@@ -573,6 +593,7 @@ function GalleryView() {
                     <code className="block rounded bg-black/40 p-1.5 font-mono text-[9px] text-zinc-500 leading-4">py -m flujo render run<br/>projects/piezas_vectoriales/<br/>{selectedPiece.id}/config.json</code></div>
                   <div className="space-y-1.5 pt-1">
                     {selectedPiece.svgContent && <>
+                      <button onClick={()=>configurePiece(selectedPiece)} className="flex w-full items-center justify-center gap-1.5 rounded-md border border-emerald-700/50 bg-emerald-950/40 px-3 py-2 text-[11px] font-bold text-emerald-300 hover:bg-emerald-900/50"><Settings className="h-3.5 w-3.5"/>Configurar este SVG</button>
                       <button onClick={()=>downloadSVG(selectedPiece)} className="flex w-full items-center justify-center gap-1.5 rounded-md border border-zinc-700 bg-zinc-800 px-3 py-2 text-[11px] font-bold text-zinc-200 hover:bg-zinc-700"><Download className="h-3.5 w-3.5"/>SVG</button>
                       <button onClick={()=>exportPng(selectedPiece)} className="flex w-full items-center justify-center gap-1.5 rounded-md border border-violet-700/40 bg-violet-950/30 px-3 py-2 text-[11px] font-bold text-violet-300 hover:bg-violet-900/40"><Image className="h-3.5 w-3.5"/>PNG 2×</button>
                     </>}
@@ -613,6 +634,34 @@ function EditorView() {
     setActiveDocIndex(0); setSelectedId(null); setMulti([]);
   };
 
+  const loadSvgPiece = useCallback((piece: SvgPiece) => {
+    if (!piece.svgContent) return;
+    const dims = svgDims(piece.svgContent) || { width: 1600, height: 1000 };
+    const cfg: PieceConfig = {
+      project: { name: piece.name, slug: piece.id.replace(/[^a-z0-9]+/gi, '_').toLowerCase(), brand: piece.product || piece.area, website: 'REDUCIENDODANO.CL' },
+      canvas: { width: Math.max(800, Math.round(dims.width)), height: Math.max(600, Math.round(dims.height)), real_size_cm: { width: 0, height: 0 }, safe_margin_px: 40 },
+      palette: { paper: '#ffffff', ink: '#111111', line: '#d4d4d8', accent: '#10b981' },
+      background: 'paper',
+      global_elements: [],
+      documents: [{
+        id: '01_svg_importado',
+        title: 'SVG importado',
+        elements: [{ type: 'svg_image', x: 0, y: 0, w: Math.max(800, Math.round(dims.width)), h: Math.max(600, Math.round(dims.height)), content: piece.svgContent } as SvgImageElement],
+      }],
+    };
+    loadCfg(cfg);
+    setZoom(dims.width > 1800 ? 0.35 : 0.65);
+  }, []);
+
+  useEffect(() => {
+    const handler = (event: Event) => {
+      const piece = (event as CustomEvent<SvgPiece>).detail;
+      if (piece) loadSvgPiece(piece);
+    };
+    window.addEventListener('svgstudio-configure-piece', handler);
+    return () => window.removeEventListener('svgstudio-configure-piece', handler);
+  }, [loadSvgPiece]);
+
   const doc = config?.documents[activeDocIndex];
   const allEls = useMemo(()=>{
     if(!config) return [];
@@ -640,6 +689,8 @@ function EditorView() {
         updEl(el._id!,{x:Math.round((el as TextElement).x+dx),y:Math.round((el as TextElement).y+dy)} as Partial<TextElement>);break;
       case 'rect':case 'panel':
         updEl(el._id!,{x:Math.round((el as RectElement).x+dx),y:Math.round((el as RectElement).y+dy)} as Partial<RectElement>);break;
+      case 'svg_image':
+        updEl(el._id!,{x:Math.round((el as SvgImageElement).x+dx),y:Math.round((el as SvgImageElement).y+dy)} as Partial<SvgImageElement>);break;
       case 'circle':
         updEl(el._id!,{cx:Math.round((el as CircleElement).cx+dx),cy:Math.round((el as CircleElement).cy+dy)} as Partial<CircleElement>);break;
       case 'line':{const e=el as LineElement;
@@ -793,7 +844,7 @@ function EditorView() {
               {showGrid && <g opacity={.12}>{Array.from({length:Math.ceil(config.canvas.width/100)+1},(_,i)=><line key={`v${i}`} x1={i*100} y1={0} x2={i*100} y2={config.canvas.height} stroke="#999" strokeWidth={1}/>)}
                 {Array.from({length:Math.ceil(config.canvas.height/100)+1},(_,i)=><line key={`h${i}`} x1={0} y1={i*100} x2={config.canvas.width} y2={i*100} stroke="#999" strokeWidth={1}/>)}</g>}
               <rect x={config.canvas.safe_margin_px} y={config.canvas.safe_margin_px} width={config.canvas.width-config.canvas.safe_margin_px*2} height={config.canvas.height-config.canvas.safe_margin_px*2} fill="none" stroke="#ccc" strokeWidth={1} strokeDasharray="12 8" opacity={.25}/>
-              {allEls.filter(e=>['rect','panel','circle','line'].includes(e.type)).map(e=><g key={e._id} onMouseDown={ev=>onMD(ev,e._id!)} className="cursor-move">{renderCfgEl(e,pal,multi.includes(e._id!),()=>{})}</g>)}
+              {allEls.filter(e=>['rect','panel','circle','line','svg_image'].includes(e.type)).map(e=><g key={e._id} onMouseDown={ev=>onMD(ev,e._id!)} className="cursor-move">{renderCfgEl(e,pal,multi.includes(e._id!),()=>{})}</g>)}
               {allEls.filter(e=>['text','paragraph','list'].includes(e.type)).map(e=><g key={e._id} onMouseDown={ev=>onMD(ev,e._id!)} className="cursor-move">{renderCfgEl(e,pal,multi.includes(e._id!),()=>{})}</g>)}
             </svg>
           </div>

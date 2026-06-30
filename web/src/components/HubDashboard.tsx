@@ -72,7 +72,7 @@ export default function HubDashboard({ onNavigate }: Props) {
           {[
             { label: 'Jobs abiertos', value: openJobs, icon: Activity, color: 'text-amber-400' },
             { label: 'Total jobs', value: jobs?.count ?? 0, icon: Boxes, color: 'text-blue-400' },
-            { label: 'Versión', value: ping?.version || '0.47.11', icon: LayoutDashboard, color: 'text-emerald-400' },
+            { label: 'Versión', value: ping?.version || '0.47.12', icon: LayoutDashboard, color: 'text-emerald-400' },
             { label: 'Estado', value: ping?.connected !== false ? 'Conectado' : 'Demo', icon: ping?.connected !== false ? CheckCircle2 : AlertCircle, color: ping?.connected !== false ? 'text-emerald-400' : 'text-zinc-400' },
           ].map(stat => {
             const Icon = stat.icon;

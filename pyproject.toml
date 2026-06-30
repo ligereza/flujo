@@ -1,6 +1,6 @@
 [project]
 name = "flujo"
-version = "0.47.11"
+version = "0.47.12"
 description = "Dimensiones del Orden — arte y automatización"
 readme = "README.md"
 requires-python = ">=3.10"

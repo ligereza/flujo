@@ -644,14 +644,15 @@ export default function PlanoTool() {
   const symbolPrintMarkup = (el: Element) => {
     const key = escapeHtml(el.symbolKey || 'symbol');
     const label = escapeHtml(el.label.toUpperCase());
+    const color = escapeHtml(el.color || '#111111');
     const cx = el.x + el.w / 2;
     const cy = el.y + el.h / 2;
     const r = Math.max(34, Math.min(el.w, el.h) * 0.32);
     return `
       <g>
-        <circle cx="${cx}" cy="${cy}" r="${r}" fill="#fff" stroke="#000" stroke-width="8"/>
-        <text x="${cx}" y="${cy + 12}" text-anchor="middle" font-size="34" font-family="Arial, sans-serif" font-weight="900" fill="#000">${key.slice(0, 3).toUpperCase()}</text>
-        <text x="${cx}" y="${el.y + el.h + 34}" text-anchor="middle" font-size="28" font-family="Arial, sans-serif" font-weight="700" fill="#000">${label}</text>
+        <circle cx="${cx}" cy="${cy}" r="${r}" fill="${color}" fill-opacity="0.18" stroke="${color}" stroke-width="10"/>
+        <text x="${cx}" y="${cy + 12}" text-anchor="middle" font-size="34" font-family="Arial, sans-serif" font-weight="900" fill="${color}">${key.slice(0, 3).toUpperCase()}</text>
+        <text x="${cx}" y="${el.y + el.h + 34}" text-anchor="middle" font-size="28" font-family="Arial, sans-serif" font-weight="700" fill="${color}">${label}</text>
       </g>`;
   };
 
@@ -662,8 +663,8 @@ export default function PlanoTool() {
       if (el.type === 'symbol') return symbolPrintMarkup(el);
       return `
         <g>
-          <rect x="${el.x}" y="${el.y}" width="${el.w}" height="${el.h}" rx="16" fill="none" stroke="#000" stroke-width="6"/>
-          <text x="${el.x + el.w / 2}" y="${el.y + el.h / 2}" text-anchor="middle" dominant-baseline="middle" font-size="42" font-family="Arial, sans-serif" font-weight="900" fill="#000">${label}</text>
+          <rect x="${el.x}" y="${el.y}" width="${el.w}" height="${el.h}" rx="16" fill="${escapeHtml(el.color)}" fill-opacity="0.38" stroke="${escapeHtml(el.color)}" stroke-width="8"/>
+          <text x="${el.x + el.w / 2}" y="${el.y + el.h / 2}" text-anchor="middle" dominant-baseline="middle" font-size="42" font-family="Arial, sans-serif" font-weight="900" fill="#111">${label}</text>
         </g>`;
     }).join('\n');
 
@@ -766,20 +767,25 @@ export default function PlanoTool() {
 </body>
 </html>`;
 
-    const win = window.open('', '_blank', 'noopener,noreferrer,width=1200,height=800');
-    if (!win) {
-      const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `rider_pdf_${eventName.replace(/\s+/g, '_').toLowerCase()}.html`;
-      a.click();
-      URL.revokeObjectURL(url);
-      return;
-    }
-    win.document.open();
-    win.document.write(html);
-    win.document.close();
+    const iframe = document.createElement('iframe');
+    iframe.style.position = 'fixed';
+    iframe.style.right = '0';
+    iframe.style.bottom = '0';
+    iframe.style.width = '0';
+    iframe.style.height = '0';
+    iframe.style.border = '0';
+    iframe.setAttribute('title', 'Rider PDF print frame');
+    document.body.appendChild(iframe);
+    const doc = iframe.contentWindow?.document;
+    if (!doc) return;
+    doc.open();
+    doc.write(html);
+    doc.close();
+    setTimeout(() => {
+      iframe.contentWindow?.focus();
+      iframe.contentWindow?.print();
+      setTimeout(() => iframe.remove(), 3000);
+    }, 350);
   };
 
   const syncElementsFromChecked = (items: string[], baseElements = elements) => {
@@ -1073,7 +1079,7 @@ export default function PlanoTool() {
         <div>
           <h3 className="text-2xl font-bold flex items-center gap-2">
             Rider RD · Herramienta de Plano
-            <span className="text-xs bg-emerald-500/20 text-emerald-400 font-black px-2 py-0.5 rounded-full uppercase tracking-wider">v0.47.11</span>
+            <span className="text-xs bg-emerald-500/20 text-emerald-400 font-black px-2 py-0.5 rounded-full uppercase tracking-wider">v0.47.12</span>
           </h3>
           <p className="text-zinc-400 text-sm mt-1">
             Documento operativo para intervención en terreno — Reduciendo Daño Chile

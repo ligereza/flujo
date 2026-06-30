@@ -1,8 +1,8 @@
 """Versión y changelog de flujo."""
 
-__version__ = "0.47.11"
+__version__ = "0.47.12"
 VERSION = __version__
-__version_info__ = (0, 47, 11)
+__version_info__ = (0, 47, 12)
 
 
 def get_version():
@@ -11,6 +11,17 @@ def get_version():
 
 def get_changelog():
     return {
+        "0.47.12": {
+            "titulo": "PDF directo con color y puente Galeria→Config SVG",
+            "fecha": "2026-06-30",
+            "highlights": [
+                "Imprimir Rider vuelve a abrir el dialogo directo usando iframe oculto, sin descargar HTML",
+                "El plano imprimible recupera color de zonas y simbolos",
+                "SVG Studio agrega boton Configurar este SVG dentro del modal de galeria",
+                "Config Editor puede cargar el SVG seleccionado desde la galeria como documento editable base",
+                "Mantiene Actualizar repo y Carpeta local para ubicar SVGs reales",
+            ],
+        },
         "0.47.11": {
             "titulo": "Hotfix PDF Plano/Rider en ventana imprimible aislada",
             "fecha": "2026-06-30",

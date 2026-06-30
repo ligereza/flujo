@@ -88,7 +88,17 @@ export interface LineElement extends BaseElement {
   y2: number;
 }
 
-export type ConfigElement = TextElement | ParagraphElement | ListElement | RectElement | CircleElement | LineElement;
+
+export interface SvgImageElement extends BaseElement {
+  type: 'svg_image';
+  x: number;
+  y: number;
+  w: number;
+  h: number;
+  content: string;
+}
+
+export type ConfigElement = TextElement | ParagraphElement | ListElement | RectElement | CircleElement | LineElement | SvgImageElement;
 
 export interface DocumentConfig {
   id: string;
@@ -135,6 +145,8 @@ export function getElementBounds(el: ConfigElement): { x: number; y: number; w: 
       return { x: el.cx - el.r, y: el.cy - el.r, w: el.r * 2, h: el.r * 2 };
     case 'line':
       return { x: Math.min(el.x1, el.x2), y: Math.min(el.y1, el.y2), w: Math.abs(el.x2 - el.x1) || 2, h: Math.abs(el.y2 - el.y1) || 2 };
+    case 'svg_image':
+      return { x: el.x, y: el.y, w: el.w, h: el.h };
   }
 }
 
