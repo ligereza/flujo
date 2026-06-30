@@ -243,3 +243,55 @@ Next recommended Windows commands after applying this airdrop:
 5. If dry-run looks correct: py scripts/cleanup_repo_hygiene_20260630.py --apply
 6. py -m flujo verify
 7. After green checks, create real git tag v0.48.0.
+
+---
+
+Update 2026-06-30 - Agent operations base
+
+Current operational baseline:
+- Main repo is cleaned after root hygiene pass.
+- Tag v0.48.0 exists for combined agents dual web resolume hygiene.
+- Next intended baseline can be v0.48.1 after this agent-ops docs pass.
+
+Agent entry rules:
+1. Read AGENTS.md first.
+2. Read this file second.
+3. Use docs/AGENT_AIRDROP_PROTOCOL.md for any package delivery.
+4. Agents without push must deliver a ZIP with `_airdrop/` at top level.
+5. Every airdrop must include HANDOFF_*.md or HOTFIX_*.md and this file updated.
+6. User-facing commands must use `py`, not `python`.
+7. Keep this file ASCII-only.
+8. Do not include caches, build output, ZIPs, DBs, credentials or heavy real files in airdrops.
+
+Apply airdrop on Windows/Git Bash:
+```bash
+py scripts/validate_airdrop.py
+py scripts/run_airdrop_checks.py "short message"
+```
+
+Resume if apply already happened but later checks failed:
+```bash
+py scripts/run_airdrop_checks.py --resume "short message"
+```
+
+Minimum verification for future agents:
+```bash
+py -m compileall src/flujo
+py -m pytest tests/ -q
+py -m flujo verify
+```
+
+If web changed:
+```bash
+cd web
+npm run typecheck
+npm run build:context
+cd ..
+```
+
+Low token tasks for next agent:
+1. Preserve the airdrop protocol exactly.
+2. Do not rewrite core behavior without tests.
+3. Keep RD/suplementos and Studio/eventos separated in UI and docs.
+4. Report real verification output, not assumptions.
+

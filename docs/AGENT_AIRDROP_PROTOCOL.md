@@ -1,74 +1,113 @@
-# Protocolo para agentes que entregan airdrops
+# Protocolo operativo de airdrop para agentes
 
-## Regla central
+Este documento es la regla base para integrar trabajo de agentes sin push directo.
 
-No tienes push directo. Entregas un ZIP con una carpeta `_airdrop/` que replica rutas finales del repo.
+## Principio
 
-Ejemplo correcto:
+Un agente no pega archivos sueltos ni instrucciones ambiguas. Un agente entrega un ZIP con `_airdrop/` en la raiz. Esa carpeta replica rutas finales del repo.
 
-```text
-_airdrop/src/flujo/cli.py
-_airdrop/docs/AGENT_GUIDE.md
-_airdrop/HANDOFF_2026-06-21_x.md
+## Estructura correcta
+
+```txt
+_airdrop/HANDOFF_2026-06-30_descripcion.md
+_airdrop/context/LAST_HANDOFF.md
+_airdrop/src/flujo/ejemplo.py
+_airdrop/tests/test_ejemplo.py
+_airdrop/docs/ejemplo.md
 ```
 
-Ejemplo incorrecto:
+## Estructura incorrecta
 
-```text
-_airdrop/v0.35/src/flujo/cli.py
-src/_airdrop/...
-[cli.py](http://cli.py)
+```txt
+airdrop/
+_airdrop/_airdrop/
+v0.48/_airdrop/
+src/flujo/ejemplo.py fuera de _airdrop
+archivos como enlaces Markdown en vez de archivos reales
 ```
 
-## Obligatorio (Windows primero, español prioritario)
+## Contenido obligatorio
 
-- ZIP con archivos reales dentro de `_airdrop/`.
-- `HANDOFF_*.md` o `HOTFIX_*.md` + **actualizar siempre `context/LAST_HANDOFF.md`** (incluye 1-2 tareas simples claras para otros agentes + nota plataforma: "Windows: py | Linux: python3").
-- Rutas planas (usa / ), sin links Markdown.
-- Comandos finales desde la raíz, usa `py` (Windows/Git Bash). Prueba en clon limpio.
-- Mostrar lista de archivos del ZIP.
-- En handoff: usa español primero para reducir malentendidos. Incluye sección "Tareas simples (low token)" como órdenes claras.
+Cada airdrop debe traer:
 
-## Prohibido salvo autorización explícita
+1. `HANDOFF_*.md` o `HOTFIX_*.md`.
+2. `context/LAST_HANDOFF.md` actualizado en ASCII-only.
+3. Archivos reales en rutas finales del repo.
+4. Verificacion reportada.
+5. Lista de archivos del ZIP.
 
-- `delete.txt` o `_delete.txt`.
-- Cambios al motor de airdrop (`src/flujo/airdrop.py`).
-- `--no-checkpoint` o nuevos flujos de checkpoint.
-- Dependencias nuevas no justificadas.
-- Archivos generados: `__pycache__`, `.pytest_cache`, `.egg-info`, `data/*.db`, medios pesados, ZIPs, outputs.
+## Prohibido
 
-## Comandos finales (Windows: usa 'py'. Linux: python3)
+```txt
+__pycache__/
+.pytest_cache/
+node_modules/
+dist/
+build/
+_airdrop_backups/
+_logs/
+*.zip dentro del airdrop
+*.db
+credenciales
+tokens
+cookies
+archivos pesados reales
+_delete.txt
+delete.txt
+```
+
+Prohibido tocar `src/flujo/airdrop.py` salvo autorizacion explicita del usuario.
+
+## Validacion y apply
+
+Desde raiz del repo en Windows/Git Bash:
 
 ```bash
 py scripts/validate_airdrop.py
-py scripts/run_airdrop_checks.py "mensaje"
-
-# Si el airdrop ya aplicó pero falló después (tests/health/checkpoint), reanudar:
-py scripts/run_airdrop_checks.py --resume "mensaje"
+py scripts/run_airdrop_checks.py "mensaje corto"
 ```
 
-Verificación integral opcional/CI:
+Si ya aplico cambios pero fallo despues:
 
 ```bash
-py -m flujo verify
-py scripts/hub_smoke.py
+py scripts/run_airdrop_checks.py --resume "mensaje corto"
 ```
 
-Incluye en LAST_HANDOFF: tareas simples claras + nota "probado en Windows".
+Si el usuario autorizo tocar motor de airdrop:
 
-Limpieza opcional:
 ```bash
-# Histórico movido a .archive/ - no rm en root
-# rm -rf .archive/_airdrop_backups   # solo si en archive
+py scripts/validate_airdrop.py --allow-airdrop-engine
+py scripts/run_airdrop_checks.py "mensaje corto" --allow-airdrop-engine
+```
+
+## Que hace el runner
+
+El runner debe:
+
+1. Validar `_airdrop/`.
+2. Simular cambios.
+3. Aplicar con backup/manifest.
+4. Instalar el paquete en modo dev.
+5. Ejecutar compileall, pytest, health, version y smoke cuando exista.
+6. Crear checkpoint/commit/push si todo pasa.
+
+## Regla de fallo
+
+Si algo falla, no declarar exito. Reportar:
+
+```txt
+comando ejecutado
+codigo de salida
+error exacto
+archivo de log si existe
+```
+
+## Limpieza despues de aplicar
+
+```bash
+rm -rf _airdrop
 find . -type d -name "__pycache__" -prune -exec rm -rf {} +
 rm -rf .pytest_cache
 git status --short
-git log --oneline -3
+git log --oneline -5
 ```
-
-## Si algo falla
-
-No digas que está OK. Entrega el archivo `_logs/airdrop_error_*.txt` o pega su contenido como texto plano.
-
-
-Nota Windows/Git Bash: `scripts/run_airdrop_checks.py` usa el motor Python de airdrop y no invoca `bash` internamente para apply/checkpoint.

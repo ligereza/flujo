@@ -1,28 +1,76 @@
-# Sistema de Airdrop — flujo
+# Airdrop - flujo
 
-El sistema de airdrop permite aplicar actualizaciones rápidas y parches al repositorio sin necesidad de PRs complejos para cada pequeña mejora.
+Airdrop es el mecanismo oficial para recibir cambios de agentes externos sin darles push directo.
 
-## 🚀 Nueva CLI Integrada
+## Regla unica
 
-Ahora el sistema de airdrop está integrado directamente en la CLI de `flujo`.
+El ZIP debe contener `_airdrop/` como carpeta superior. Dentro van archivos reales copiables a sus rutas finales.
 
-### Comandos Disponibles:
+```txt
+_airdrop/HANDOFF_2026-06-30_cambio.md
+_airdrop/context/LAST_HANDOFF.md
+_airdrop/src/flujo/archivo.py
+_airdrop/tests/test_archivo.py
+```
 
-| Comando | Descripción |
-| :--- | :--- |
-| `flujo airdrop list` | Lista las versiones disponibles en `_airdrop/`. |
-| `flujo airdrop dry-run <v>` | Simula los cambios que aplicaría la versión `<v>`. |
-| `flujo airdrop apply <v>` | Aplica la versión `<v>` y crea un backup automático. |
-| `flujo airdrop rollback` | Revierte al último backup realizado. |
-| `flujo airdrop finish` | Muestra el estado de git y pasos finales. |
+No usar `airdrop/`. No anidar `_airdrop/_airdrop/`. No enviar archivos sueltos fuera de `_airdrop/`.
 
-## 🛠️ Flujo de Trabajo Recomendado
+## Aplicar un airdrop
 
-1. **Listar:** `flujo airdrop list`
-2. **Simular:** `flujo airdrop dry-run v0.18`
-3. **Aplicar:** `flujo airdrop apply v0.18`
-4. **Finalizar:** `flujo airdrop finish`
+En Windows/Git Bash:
 
----
+```bash
+cd /c/IA/flujo
+rm -rf _airdrop
+unzip /ruta/al/paquete.zip
+py scripts/validate_airdrop.py
+py scripts/run_airdrop_checks.py "mensaje corto"
+```
 
-**Versión:** Junio 2026 · v0.18 (Enhanced)
+Si el runner ya aplico pero fallo en checks posteriores:
+
+```bash
+py scripts/run_airdrop_checks.py --resume "mensaje corto"
+```
+
+## Verificacion manual util
+
+```bash
+py -m compileall src/flujo
+py -m pytest tests/ -q
+py -m flujo verify
+```
+
+Para web:
+
+```bash
+cd web
+npm run typecheck
+npm run build:context
+cd ..
+```
+
+## Limpieza local
+
+```bash
+rm -rf _airdrop
+find . -type d -name "__pycache__" -prune -exec rm -rf {} +
+rm -rf .pytest_cache
+git status --short
+```
+
+## Archivos prohibidos en airdrops
+
+```txt
+__pycache__/
+.pytest_cache/
+node_modules/
+dist/
+build/
+_airdrop_backups/
+_logs/
+*.zip
+*.db
+credenciales
+archivos pesados reales
+```
