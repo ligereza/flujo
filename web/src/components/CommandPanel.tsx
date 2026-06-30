@@ -18,7 +18,7 @@ const groups = [
     commands: ['py scripts/validate_airdrop.py', 'py scripts/run_airdrop_checks.py "mensaje"'],
   },
   {
-    title: 'Operación',
+    title: 'Operacion',
     icon: '🔧',
     commands: [
       'py -m flujo portal --repo-url https://github.com/ligereza/vibecodeine',
@@ -33,6 +33,34 @@ const groups = [
       'py -m flujo github-sync --status',
       'py -m flujo github-sync --push -m "mensaje"',
       'git status --short',
+    ],
+  },
+  {
+    title: 'Resolume & Chataigne',
+    icon: '🎛️',
+    commands: [
+      'py -m flujo resolume automatizar jobs/<job_id>',
+      'py -m flujo resolume automatizar jobs/<job_id> --fps 25',
+      'py -m flujo resolume automatizar jobs/<job_id> --host 127.0.0.1 --port 7000',
+    ],
+  },
+  {
+    title: 'Suplementos RD',
+    icon: '💊',
+    commands: [
+      'py -m flujo suplementos list',
+      'py -m flujo suplementos contraportada "Impulso" --output salida.svg',
+      'py -m flujo suplementos validate svg/suplementos_rd/04_contraportadas/generadas/*.svg',
+    ],
+  },
+  {
+    title: 'Plano / Rider',
+    icon: '🗺️',
+    commands: [
+      'py -m flujo plano projects/plano/ejemplos/evento_ejemplo.json --output plano.svg',
+      'py -m flujo plano projects/plano/ejemplos/evento_ejemplo.json --validate',
+      'py -m flujo plano projects/plano/ejemplos/evento_ejemplo.json --rider',
+      'py -m flujo plano projects/plano/ejemplos/evento_ejemplo.json --costs',
     ],
   },
 ];

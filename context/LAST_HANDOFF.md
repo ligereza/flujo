@@ -209,3 +209,37 @@ Next recommended steps:
 1. Agente 1: implement visual workspace split in web/src/components/AppShell.tsx and verify with npm run build:context.
 2. Agente 2: expand Resolume parser/generator tests and package airdrop_resolume_automator.zip after py -m compileall src/flujo/resolume.
 3. If applying these Agente 3 changes to another clone, use the generated airdrop package and run py scripts/validate_airdrop.py then py scripts/run_airdrop_checks.py "agente3 resolume base y docs duales".
+
+---
+
+**Update 2026-06-30 - Combined agent integration and repo hygiene package**
+
+- Integrated vetted Agente 2 Resolume hardening:
+  - src/flujo/resolume/automator.py improved for aliases, strict SMPTE validation, clearer errors and XML pre-flight generation.
+  - tests/test_resolume_automator.py added for SMPTE parsing, intake.json aliases, brief.md parsing and XML parse checks.
+- Integrated selected Agente 1 web improvements without replacing the full SVG/config editor:
+  - AppShell now exposes Modo RD and Modo Studio navigation.
+  - Added EventsPanel for EVENTOS / Instagram command generation.
+  - Added ResolumePanel for Resolume/Chataigne command generation and SMPTE/OSC reference.
+  - App routing now supports events and resolume views.
+  - CommandPanel and HubDashboard expose Studio and Resolume commands/actions.
+- Preserved current package.json, index.css, SvgVisualizer.tsx and svgIndex.ts to avoid losing build:context, print/PDF CSS and existing Config Editor functionality.
+- Added safe hygiene plan and script responding to external review:
+  - docs/REPO_HYGIENE_ACTION_PLAN_2026-06-30.md
+  - scripts/cleanup_repo_hygiene_20260630.py
+- Hygiene helper is dry-run by default and targets root handoff clutter, duplicate root brief, legacy root prototypes and local caches/logs.
+
+Verification in sandbox:
+- python3 -m compileall src/flujo/resolume scripts/cleanup_repo_hygiene_20260630.py: OK
+- PYTHONPATH=src python3 -m pytest tests/test_resolume_automator.py -q: OK
+- cd web && npm run build:context: OK
+- py-equivalent airdrop validation prepared for _airdrop/: OK after package creation.
+
+Next recommended Windows commands after applying this airdrop:
+1. py -m compileall src/flujo/resolume scripts/cleanup_repo_hygiene_20260630.py
+2. py -m pytest tests/test_resolume_automator.py -q
+3. cd web && npm run build:context
+4. py scripts/cleanup_repo_hygiene_20260630.py
+5. If dry-run looks correct: py scripts/cleanup_repo_hygiene_20260630.py --apply
+6. py -m flujo verify
+7. After green checks, create real git tag v0.48.0.

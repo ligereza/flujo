@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import {
   LayoutDashboard, Boxes, ClipboardList, Calculator,
   TerminalSquare, Map, Shapes, Zap, Activity,
-  CheckCircle2, Clock, AlertCircle, ArrowRight,
+  CheckCircle2, Clock, AlertCircle, ArrowRight, Camera, Radio,
 } from 'lucide-react';
 import type { AppView } from './AppShell';
 import { flujoApi, type Ping, type JobsResponse } from '../api/flujoApi';
@@ -32,6 +32,8 @@ export default function HubDashboard({ onNavigate }: Props) {
     { view: 'plano' as const, icon: Map, title: 'Plano / Rider', desc: 'Preparar layout, rider y SVG de evento', color: 'from-emerald-500 to-teal-600' },
     { view: 'quote' as const, icon: Calculator, title: 'Cotización', desc: 'Base editable para productora/jefatura', color: 'from-pink-500 to-rose-600' },
     { view: 'commands' as const, icon: TerminalSquare, title: 'Comandos', desc: 'Copiar checks y build', color: 'from-zinc-400 to-zinc-600' },
+    { view: 'events' as const, icon: Camera, title: 'Eventos / IG', desc: 'Descarga Instagram y pipeline flyer-auto para Studio', color: 'from-fuchsia-500 to-violet-600', badge: 'Studio' },
+    { view: 'resolume' as const, icon: Radio, title: 'Resolume / Chataigne', desc: 'Generar XML pre-flight SMPTE/OSC para shows', color: 'from-indigo-500 to-blue-600', badge: 'SMPTE' },
   ];
 
   const statusColor = (s?: string) => {

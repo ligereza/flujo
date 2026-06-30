@@ -20,6 +20,12 @@ DURATION_RE = re.compile(
     r"(?:duration|duracion|duraci[oó]n|length)\s*[:#-]?\s*([\d:.]+)\s*(s|sec|seg|seconds)?",
     re.IGNORECASE,
 )
+SETLIST_KEYS = ("setlist", "tracks", "songs", "scenes", "escenas", "temas", "canciones")
+START_KEYS = ("start", "smpte", "timecode", "tc", "inicio")
+TITLE_KEYS = ("title", "name", "tema", "song", "scene", "escena", "nombre")
+DURATION_KEYS = ("duration", "duracion", "length", "duration_seconds")
+LAYER_KEYS = ("layer", "capa")
+CLIP_KEYS = ("clip", "columna", "column")
 
 
 @dataclass(frozen=True)
@@ -39,6 +45,8 @@ class ShowCue:
 
 def parse_smpte_time(value: str, fps: int = 30) -> tuple[int, int, int, int]:
     """Validate and split a SMPTE timecode string in ``HH:MM:SS:FF`` format."""
+    if fps <= 0:
+        raise ValueError("fps debe ser un entero positivo")
     match = SMPTE_RE.fullmatch(value.strip())
     if not match:
         raise ValueError(f"SMPTE invalido: {value!r}; se espera HH:MM:SS:FF")
@@ -48,8 +56,6 @@ def parse_smpte_time(value: str, fps: int = 30) -> tuple[int, int, int, int]:
     frames = int(match.group("f"))
     if minutes > 59 or seconds > 59:
         raise ValueError(f"SMPTE invalido: minutos/segundos fuera de rango en {value!r}")
-    if fps <= 0:
-        raise ValueError("fps debe ser un entero positivo")
     if frames >= fps:
         raise ValueError(f"SMPTE invalido: frame {frames} fuera de rango para {fps} fps")
     return hours, minutes, seconds, frames
@@ -88,21 +94,15 @@ def _first_value(data: dict[str, object], keys: tuple[str, ...], default: object
 
 
 def _cue_from_dict(item: dict[str, object], index: int, fps: int) -> ShowCue | None:
-    smpte_raw = _first_value(item, ("start", "smpte", "timecode", "tc", "inicio"))
+    smpte_raw = _first_value(item, START_KEYS)
     if not smpte_raw:
         return None
     smpte = str(smpte_raw).strip()
     parse_smpte_time(smpte, fps=fps)
-    title = str(
-        _first_value(
-            item,
-            ("title", "name", "tema", "song", "scene", "escena", "nombre"),
-            f"Cue {index}",
-        )
-    ).strip()
-    layer_raw = _first_value(item, ("layer", "capa"), 1)
-    clip_raw = _first_value(item, ("clip", "columna", "column"), index)
-    duration_raw = _first_value(item, ("duration", "duracion", "length", "duration_seconds"), "")
+    title = str(_first_value(item, TITLE_KEYS, f"Cue {index}")).strip() or f"Cue {index}"
+    layer_raw = _first_value(item, LAYER_KEYS, 1)
+    clip_raw = _first_value(item, CLIP_KEYS, index)
+    duration_raw = _first_value(item, DURATION_KEYS, "")
     try:
         layer = int(layer_raw)
         clip = int(clip_raw)
@@ -111,7 +111,7 @@ def _cue_from_dict(item: dict[str, object], index: int, fps: int) -> ShowCue | N
     if layer < 1 or clip < 1:
         raise ValueError(f"Layer/clip deben ser positivos en cue {title!r}")
     return ShowCue(
-        title=title or f"Cue {index}",
+        title=title,
         smpte=smpte,
         layer=layer,
         clip=clip,
@@ -125,7 +125,7 @@ def _extract_cue_items(payload: object) -> list[dict[str, object]]:
         return [item for item in payload if isinstance(item, dict)]
     if not isinstance(payload, dict):
         return []
-    for key in ("setlist", "tracks", "songs", "scenes", "escenas", "temas", "canciones"):
+    for key in SETLIST_KEYS:
         value = payload.get(key)
         if isinstance(value, list):
             return [item for item in value if isinstance(item, dict)]
@@ -160,6 +160,13 @@ def _parse_intake_json(path: Path, fps: int) -> tuple[list[ShowCue], int]:
     return cues, effective_fps
 
 
+def _clean_brief_title(text: str) -> str:
+    title = re.sub(LAYER_RE, "", text)
+    title = re.sub(CLIP_RE, "", title)
+    title = re.sub(DURATION_RE, "", title)
+    return title.strip(" -|:\t")
+
+
 def _parse_brief_md(path: Path, fps: int) -> list[ShowCue]:
     cues: list[ShowCue] = []
     for line in path.read_text(encoding="utf-8", errors="replace").splitlines():
@@ -174,13 +181,13 @@ def _parse_brief_md(path: Path, fps: int) -> list[ShowCue]:
         duration_match = DURATION_RE.search(line)
         layer = int(layer_match.group(1)) if layer_match else 1
         clip = int(clip_match.group(1)) if clip_match else len(cues) + 1
+        if layer < 1 or clip < 1:
+            raise ValueError(f"Layer/clip deben ser positivos en brief.md para cue {smpte}")
         duration = duration_match.group(1) if duration_match else ""
-        title = re.sub(LAYER_RE, "", remainder)
-        title = re.sub(CLIP_RE, "", title)
-        title = re.sub(DURATION_RE, "", title).strip(" -|:\t")
+        title = _clean_brief_title(remainder) or f"Cue {len(cues) + 1}"
         cues.append(
             ShowCue(
-                title=title or f"Cue {len(cues) + 1}",
+                title=title,
                 smpte=smpte,
                 layer=layer,
                 clip=clip,
@@ -200,20 +207,29 @@ def parse_smpte_setlist(job_path: str | Path, fps: int = 30) -> list[ShowCue]:
         raise ValueError("fps debe ser un entero positivo")
 
     intake = job / "intake.json"
+    brief = job / "brief.md"
+
+    intake_error: ValueError | None = None
     if intake.exists():
-        cues, _effective_fps = _parse_intake_json(intake, fps=fps)
+        cues, effective_fps = _parse_intake_json(intake, fps=fps)
         if cues:
             return cues
+        intake_error = ValueError(
+            f"No se encontraron cues SMPTE validos en intake.json (fps efectivo: {effective_fps})"
+        )
 
-    brief = job / "brief.md"
     if brief.exists():
         cues = _parse_brief_md(brief, fps=fps)
         if cues:
             return cues
 
-    sources = [str(path.name) for path in (intake, brief) if path.exists()]
-    if not sources:
+    if not intake.exists() and not brief.exists():
         raise FileNotFoundError(f"El job {job} no contiene intake.json ni brief.md")
+
+    if intake.exists() and not brief.exists() and intake_error is not None:
+        raise intake_error
+
+    sources = [str(path.name) for path in (intake, brief) if path.exists()]
     raise ValueError(f"No se encontraron cues SMPTE validos en {', '.join(sources)}")
 
 
