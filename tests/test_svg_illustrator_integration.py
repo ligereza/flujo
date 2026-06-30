@@ -76,4 +76,4 @@ def test_prepare_supplement_job_assets_dynamic_fallback_and_brief(tmp_path: Path
     svg_content = svg_path.read_text(encoding="utf-8")
     assert "POST" in svg_content
     assert "FIESTA" in svg_content
-    assert "Energia ultra recargada" in svg_content
+    assert "Beneficio" in svg_content

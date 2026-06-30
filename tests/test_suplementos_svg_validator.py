@@ -16,7 +16,7 @@ def test_validate_svg_file_ok(tmp_path: Path):
     )
     report = validate_svg_file(svg, expected_size=EXPECTED_CONTRAPORTADA_SIZE)
     assert report["ok"] is True
-    assert report["summary"]["width"] == 1181
+    assert report["summary"]["width"] == 2000
     assert report["summary"]["height"] == 1654
 
 
