@@ -36,7 +36,8 @@ usar contratos, `source_ref`, API o una exportacion revisada.
 
 ## Git
 
-`main` es el unico tronco permanente. Las ramas de trabajo son temporales.
+`main` es el unico tronco permanente. Las ramas de trabajo son temporales;
+`dependabot/*` puede aparecer como automatizacion efimera.
 Los nombres `FLUJO`, `MAK`, `integration` e `historia` pertenecen al contexto
 del antiguo VIBECODEINE y no deben crearse en este repositorio.
 

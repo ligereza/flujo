@@ -23,10 +23,13 @@ jobs:
           git fetch --prune origin '+refs/heads/*:refs/remotes/origin/*'
           branches=$(git for-each-ref --format='%(refname:short)' refs/remotes/origin \
             | sed 's|^origin/||' | grep -v '^HEAD$' | sort)
-          test "${branches}" = 'main' || {
-            echo 'Unexpected permanent remote branches:' >&2
-            printf '%s\n' "${branches}" >&2
+          test "$(printf '%s\n' "${branches}" | grep -Fx 'main')" = 'main'
+          unexpected=$(printf '%s\n' "${branches}" \
+            | grep -Ev '^(main|dependabot/[^[:space:]]+)$' || true)
+          test -z "${unexpected}" || {
+            echo 'Unexpected permanent or domain branches:' >&2
+            printf '%s\n' "${unexpected}" >&2
             exit 1
           }
           test "$(git branch --show-current)" = 'main'
-          echo 'topology=main-only'
+          echo 'topology=main-only-permanent'

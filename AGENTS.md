@@ -34,6 +34,8 @@ los esquemas versionados en este repositorio.
 
 - `main` es la unica rama permanente y el unico tronco de despliegue.
 - Las ramas de trabajo son temporales y deben volver a `main` tras revision.
+- GitHub puede crear ramas temporales `dependabot/*`; no son ramas de dominio
+  ni una segunda autoridad del repositorio.
 - No crees aqui ramas `FLUJO`, `MAK`, `historia`, `integration` ni ramas por
   checkout vecino. `historia` pertenece al registro historico de VIBECODEINE.
 - Antes de modificar, mide `git status`, lee el contrato relevante y ejecuta

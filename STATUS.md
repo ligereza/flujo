@@ -7,6 +7,8 @@ Fecha de corte: 2026-09-14
 - Separacion completada y publicada en `https://github.com/ligereza/flujo.git`.
 - Commit de migracion: `e28038c9458ebc58699d3fc929c0a722414c8e35`.
 - `main` es la unica rama permanente de este repositorio.
+- El remoto puede mostrar ramas temporales `dependabot/*` generadas por
+  GitHub; no son ramas permanentes ni de dominio.
 - XIO no forma parte del arbol; la relacion XIO-RD/FLUJO-RD y
   XIO-FOH/FLUJO-ISKVW queda documentada como integracion externa.
 - RD e ISKVW siguen siendo perfiles de aplicacion, no ramas Git.

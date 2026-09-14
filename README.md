@@ -28,7 +28,8 @@ XIO aqui.
 ## Git
 
 `main` es la unica rama permanente de este repositorio. Las ramas de trabajo
-son temporales. No existe aqui una rama `FLUJO`, `MAK` o `historia`; la rama
+son temporales; `dependabot/*` puede aparecer como automatizacion efimera. No
+existe aqui una rama `FLUJO`, `MAK` o `historia`; la rama
 `historia` y la procedencia del antiguo monorepo se conservan en VIBECODEINE y
 se describen en [`MIGRATION.md`](MIGRATION.md).
 
