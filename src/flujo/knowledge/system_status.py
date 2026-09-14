@@ -58,6 +58,45 @@ def _listener(port: int) -> dict[str, Any]:
         return {"host": "127.0.0.1", "port": port, "reachable": False}
 
 
+def _unix_listener(path: Path) -> dict[str, Any]:
+    """Check one private Unix listener without making an HTTP request."""
+    socket_path = path.expanduser().resolve()
+    try:
+        with socket.socket(socket.AF_UNIX, socket.SOCK_STREAM) as client:
+            client.settimeout(0.25)
+            client.connect(str(socket_path))
+        return {"transport": "unix", "path": str(socket_path), "reachable": True}
+    except OSError:
+        return {"transport": "unix", "path": str(socket_path), "reachable": False}
+
+
+def _service_listener(port: int | None, socket_path: Path | None = None) -> dict[str, Any]:
+    """Prefer the deployed Unix socket and retain TCP only for standalone runs."""
+    if socket_path is not None:
+        unix = _unix_listener(socket_path)
+        # An existing socket path is authoritative. Do not report an unrelated
+        # legacy TCP process as the healthy consumer when the private service is
+        # present but unavailable.
+        if unix["reachable"] or Path(socket_path).expanduser().exists():
+            return unix
+        if port is not None:
+            tcp = _listener(port)
+            return {**tcp, "transport": "tcp", "role": "legacy_fallback", "unix": unix}
+        return unix
+    if port is not None:
+        return {**_listener(port), "transport": "tcp"}
+    return {"transport": "unknown", "reachable": False}
+
+
+def _service_socket_path(physical: Path, component_id: str) -> Path:
+    """Resolve the configured private socket relative to the live MAK root."""
+    env_name = f"MAK_{component_id.upper()}_SOCKET"
+    configured = os.environ.get(env_name, "").strip()
+    if configured:
+        return Path(configured).expanduser()
+    return physical / ".cache" / "mak" / f"{component_id}.sock"
+
+
 def _process_snapshot(tokens: Iterable[str]) -> dict[str, Any]:
     """Count matching local processes without returning command lines or PIDs."""
     wanted = tuple(token.lower() for token in tokens if token)
@@ -227,9 +266,10 @@ def _service_component(
     component_id: str,
     label: str,
     source: Path,
-    port: int,
+    port: int | None,
     process_tokens: Iterable[str],
     source_candidates: Iterable[Path] = (),
+    socket_path: Path | None = None,
 ) -> dict[str, Any]:
     candidates = tuple(source_candidates)
     source_evidence = _path_status(source)
@@ -239,7 +279,7 @@ def _service_component(
             if fallback["exists"]:
                 source_evidence = {**fallback, "declared_path": str(source), "role": "fallback"}
                 break
-    listener = _listener(port)
+    listener = _service_listener(port, socket_path)
     process = _process_snapshot(process_tokens)
     runtime_source = _runtime_source(
         process_tokens, (source, *candidates)
@@ -678,14 +718,16 @@ def system_status(
             ),
         ),
         "research": _service_component(
-            "research", "Research 8890", physical / "research" / "interfaz.py", _PORTS["research"],
+            "research", "Research", physical / "research" / "interfaz.py", _PORTS["research"],
             ("research/interfaz.py",),
             source_candidates=(repo / "cultura" / "mak_research" / "interfaz.py",),
+            socket_path=_service_socket_path(physical, "research"),
         ),
         "codex": _service_component(
-            "codex", "Codex bridge 8891", physical / "codex" / "interfaz_codex.py", _PORTS["codex"],
+            "codex", "Codex bridge", physical / "codex" / "interfaz_codex.py", _PORTS["codex"],
             ("codex/interfaz_codex.py",),
             source_candidates=(repo / "cultura" / "mak_codex" / "interfaz_codex.py",),
+            socket_path=_service_socket_path(physical, "codex"),
         ),
         "search": _service_component(
             "search", "SearXNG 8888", physical / "searxng" / "settings.yml", _PORTS["search"],

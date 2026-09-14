@@ -1,6 +1,6 @@
 # STATUS — FLUJO autonomo
 
-Fecha de corte: 2026-09-14
+Fecha de corte: 2026-09-14 — verificación de transporte Unix del Hub
 
 ## Estado
 
@@ -33,6 +33,12 @@ este checkout no depende de esa copia ni de una ruta local vecina.
   `data/vj_event_context.db` y contiene 7 eventos.
 - `rd_datos.db` no es una segunda base activa: las tablas de campo viven en la
   proyección `rd.db`; el archivo vacío histórico quedó archivado por MAK.
+- El estado operativo local reconoce la topología consolidada: Hub TCP en
+  `:8900` y Research/Codex por sockets Unix privados del Hub, con TCP antiguo
+  solo como fallback de ejecución aislada. No se abrieron listeners nuevos.
+- La simplificación de navegación pertenece a MAK: el Hub deja cinco
+  superficies principales visibles y agrupa las operativas secundarias bajo
+  `más`, sin cambiar rutas ni contratos de FLUJO.
 
 ## Siguiente comprobacion
 
