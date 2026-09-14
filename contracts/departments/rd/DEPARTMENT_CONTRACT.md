@@ -4,9 +4,9 @@ Owner: RD / Reduciendo Dano.
 Consumer: the MAK Hub on port 8900 and the RD offline tools.
 
 Allowed read roots are `src/flujo/rd`, `src/flujo/plano`, `projects/plano`,
-`data/productoras`, `knowledge/venues`, `knowledge/logos` and the RD database
-projection. Keep `data/rd_datos.db` classified as an empty runtime shell until
-an explicit data authority exists.
+`data/productoras`, `knowledge/venues`, `knowledge/logos` and the single RD
+database projection. The former `data/rd_datos.db` path is retired; field data
+uses its own tables in `data/rd.db` only after explicit authority exists.
 
 Use Spanish or English ASCII keywords when searching. Code and machine-facing
 metadata stay English ASCII. Human-facing RD output may use Spanish accents.

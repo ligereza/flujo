@@ -28,5 +28,6 @@ allowlist and publication gate.
 ## Projection
 
 `src/flujo/rd/database.py` imports this evidence into isolated `testeo_*`
-tables in the regenerable `data/rd.db`. It does not insert rows into the
-accumulative `data/rd_datos.db` tables and does not alter `data/rd_datos_demo`.
+tables in the regenerable `data/rd.db`. Field data, when it exists, also lives
+in that same projection under its own tables; this evidence is never promoted
+to field observations and does not alter `data/rd_datos_demo`.

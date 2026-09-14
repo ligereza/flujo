@@ -2,7 +2,7 @@
   "contract": "rd_portfolio_entity_crosswalk",
   "version": 1,
   "status": "review_only",
-  "source_databases": ["data/rd.db", "data/rd_datos.db"],
+  "source_databases": ["data/rd.db"],
   "rules": {
     "identity_join": "explicit_provenance_only",
     "ambiguous_names": "review_state",

@@ -125,8 +125,8 @@ def rd_summary(root: Path) -> dict[str, Any]:
     result: dict[str, Any] = {
         "schema": "mak-rd-summary-v1",
         "canonical_projection": "data/rd.db",
-        # Una sola base desde el 2026-09-05. `rd_datos.db` se conserva como
-        # origen de la migracion y ya no recibe escrituras.
+        # Una sola base desde el 2026-09-05. El nombre legacy se conserva solo
+        # en la respuesta para que consumidores antiguos puedan degradar.
         "runtime_tables_in_projection": ["registros_testeo", "atenciones", "encuestas"],
         "legacy_runtime_boundary": "data/rd_datos.db",
         "databases": {},
@@ -311,9 +311,8 @@ def rd_topics(root: Path) -> dict[str, Any]:
 
     This is a bounded read-only index, not a second database. The canonical
     projection remains ``data/rd.db``, which since 2026-09-05 also carries the
-    accumulative field tables; ``data/rd_datos.db`` is kept as the migration
-    source and remains an
-    empty runtime boundary. Counts come from the existing summary and the
+    accumulative field tables; the former ``data/rd_datos.db`` path is retired
+    and remains only as a compatibility label. Counts come from the existing summary and the
     cross-domain bridge reports only expose status and bounded totals.
     """
     root = Path(root).resolve()
