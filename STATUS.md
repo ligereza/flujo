@@ -39,6 +39,8 @@ este checkout no depende de esa copia ni de una ruta local vecina.
 - La simplificación de navegación pertenece a MAK: el Hub deja cinco
   superficies principales visibles y agrupa las operativas secundarias bajo
   `más`, sin cambiar rutas ni contratos de FLUJO.
+- Esta actualización del detector quedó publicada en `main` como
+  `d96b9f7` (`fix(status): detect private consumer sockets`).
 
 ## Siguiente comprobacion
 
