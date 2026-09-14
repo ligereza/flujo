@@ -28,7 +28,7 @@ dev = [
     "vpype>=1.15.0",
     "pre-commit>=4.6.2",
     "pyflakes>=3.4.0",  # ratchet #139: NameError latentes en codigo autogenerado
-    "hypothesis>=6.167.0",
+    "hypothesis>=6.168.0",
 ]
 render = [
     # El critico perceptual del motor semantico mide sobre PIXELES, asi que sin
@@ -37,11 +37,11 @@ render = [
     # rasterizador disponible.
     # Va en un extra propio y no en `dev` para no cargarle cairo a quien solo
     # quiere correr los tests que no rasterizan.
-    "cairosvg>=2.9.0",
+    "cairosvg>=2.9.1",
 ]
 research = [
     # Optional browser-backed capture; urllib remains the zero-dependency fallback.
-    "crawl4ai>=0.9.2,<1.0",
+    "crawl4ai>=0.9.3,<1.0",
 ]
 web = [
     "pywebview>=6.2.1",  # desktop window (BSD free); pip install pywebview
@@ -50,7 +50,7 @@ desktop-extras = [
     "pystray>=0.19.5",   # optional tray icon for --desktop (free)
 ]
 build = [
-    "pyinstaller>=6.22.1",  # free packaging to .exe; 'flujo package'. Not runtime dep.
+    "pyinstaller>=6.22.2",  # free packaging to .exe; 'flujo package'. Not runtime dep.
 ]
 
 [project.scripts]
