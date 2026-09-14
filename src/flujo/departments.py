@@ -14,6 +14,8 @@ import os
 import sqlite3
 from typing import Any
 
+from .rd.paths import rd_db_path
+
 SCHEMA = "mak-departments-v1"
 
 DEPARTMENTS: dict[str, dict[str, Any]] = {
@@ -130,8 +132,10 @@ def rd_summary(root: Path) -> dict[str, Any]:
         "databases": {},
     }
     for relative in ("data/rd.db", "data/rd_datos.db"):
-        path = root / relative
+        path = rd_db_path(root) if relative == "data/rd.db" else root / relative
         entry: dict[str, Any] = {"path": relative, "exists": path.is_file()}
+        if relative == "data/rd.db" and path != root / relative:
+            entry["resolved_path"] = str(path)
         if path.is_file():
             try:
                 uri = "file:%s?mode=ro" % path.as_posix()

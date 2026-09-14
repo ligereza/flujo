@@ -12,11 +12,27 @@ Fecha de corte: 2026-09-14
 - XIO no forma parte del arbol; la relacion XIO-RD/FLUJO-RD y
   XIO-FOH/FLUJO-ISKVW queda documentada como integracion externa.
 - RD e ISKVW siguen siendo perfiles de aplicacion, no ramas Git.
+- La proyeccion SQLite no se versiona en este repositorio. En la instalacion
+  conjunta actual, FLUJO y XIO-RD deben usar `FLUJO_RD_DB=/home/mak/data/rd.db`;
+  sin esa configuracion, un checkout limpio reporta RD como no construido.
 
 ## Preservacion
 
 La procedencia del antiguo worktree y su historia permanecen en VIBECODEINE;
 este checkout no depende de esa copia ni de una ruta local vecina.
+
+## Verificacion local
+
+- `PYTHONPATH=src python -m pytest -o addopts='' -m flujo`: `1631 passed`;
+  los skips corresponden a dependencias o entornos no disponibles.
+- Hub `:8765`: ping, summary/topics RD, read-only context, RD panel, VJ/ISKVW
+  context, dashboard y SVG respondieron correctamente.
+- La base RD local no se versiona. Para compartir la única proyección del host
+  con MAK/XIO se usa `FLUJO_RD_DB`; en esta máquina apunta a
+  `/home/mak/data/rd.db`. El read model VJ regenerable vive aparte en
+  `data/vj_event_context.db` y contiene 7 eventos.
+- `rd_datos.db` no es una segunda base activa: las tablas de campo viven en la
+  proyección `rd.db`; el archivo vacío histórico quedó archivado por MAK.
 
 ## Siguiente comprobacion
 

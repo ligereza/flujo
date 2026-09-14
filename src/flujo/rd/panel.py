@@ -15,6 +15,8 @@ import unicodedata
 from collections import Counter
 from pathlib import Path
 
+from .paths import rd_db_path
+
 
 def _event_key(productora_slug: str, nombre: str, fecha: str = "") -> str:
     """Stable key for an RD event card; never uses a display-name lookup."""
@@ -66,7 +68,7 @@ def _database_event_link(root: Path, productora_slug: str, event: dict) -> dict:
         "table": "productora_eventos",
         "keys": ["productora_slug", "nombre", "fecha"],
     }
-    db_path = Path(root) / "data" / "rd.db"
+    db_path = rd_db_path(root)
     if not db_path.is_file():
         result["reason"] = "la proyección SQLite no está construida"
         return result
@@ -148,7 +150,7 @@ def _database_venue_link(root: Path, productora_slug: str, event: dict) -> dict:
     if not venue_key:
         result["reason"] = "el evento no tiene un venue identificable"
         return result
-    db_path = Path(root) / "data" / "rd.db"
+    db_path = rd_db_path(root)
     if not db_path.is_file():
         result["status"] = "unavailable"
         result["reason"] = "la proyección SQLite no está construida"
@@ -627,7 +629,7 @@ def _evidencia_2025(root) -> list[dict]:
     it to the wrong producer.  Values are source wording only; no colour is
     interpreted as identity, purity, dose or safety.
     """
-    db_path = Path(root) / "data" / "rd.db"
+    db_path = rd_db_path(root)
     if not db_path.is_file():
         return []
     uri = f"file:{db_path.resolve().as_posix()}?mode=ro"

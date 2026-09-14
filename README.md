@@ -46,6 +46,11 @@ El runtime debe degradar de forma explicita cuando un consumidor externo no
 esta disponible. No se agregan rutas fisicas de la maquina como dependencia
 por defecto.
 
+En una instalacion conjunta con MAK, configura la proyeccion local compartida
+sin copiarla al repositorio: `FLUJO_RD_DB=/ruta/al/MAK/data/rd.db` antes de
+levantar el hub. Sin esa variable, FLUJO usa su propio `data/rd.db` ignorado,
+que puede no existir en un checkout limpio.
+
 ## Higiene de cambios
 
 No subas secretos, `.env`, bases SQLite, archivos `*-wal`/`*-shm`, caches,

@@ -33,6 +33,15 @@ def _tables(path: Path) -> dict[str, int]:
         conn.close()
 
 
+def test_rd_db_override_points_to_one_external_host_projection(tmp_path: Path, monkeypatch):
+    from flujo.rd.paths import rd_db_path
+
+    assert rd_db_path(tmp_path) == tmp_path / "data" / "rd.db"
+    external = tmp_path / "mak" / "data" / "rd.db"
+    monkeypatch.setenv("FLUJO_RD_DB", str(external))
+    assert rd_db_path(tmp_path) == external.resolve()
+
+
 def test_build_crea_las_6_tablas_con_datos(rd_db: Path):
     n = _tables(rd_db)
     assert n["reactivos"] >= 20        # 21 reacciones en la carta canonica

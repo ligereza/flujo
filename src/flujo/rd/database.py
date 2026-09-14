@@ -32,6 +32,8 @@ from datetime import date
 from pathlib import Path
 from typing import Any
 
+from .paths import rd_db_path
+
 _REPO = Path(__file__).resolve().parents[3]
 DEFAULT_DB_PATH = _REPO / "data" / "rd.db"
 
@@ -1501,7 +1503,7 @@ def build_rd_db(
     tests cargan una productora sintetica con venue preferido sin tocar el
     store real). Por defecto usan los canonicos del repo.
     """
-    path = Path(db_path) if db_path is not None else DEFAULT_DB_PATH
+    path = Path(db_path) if db_path is not None else rd_db_path(_REPO)
     prod_dir = Path(productoras_dir) if productoras_dir is not None else _PRODUCTORAS_DIR
     ven_dir = Path(venues_dir) if venues_dir is not None else _VENUES_DIR
     path.parent.mkdir(parents=True, exist_ok=True)
@@ -1743,7 +1745,7 @@ def build_rd_db(
 
 def connect(db_path: str | Path | None = None) -> sqlite3.Connection:
     """Abre la DB (la construye si no existe). Filas como dict-like (Row)."""
-    path = Path(db_path) if db_path is not None else DEFAULT_DB_PATH
+    path = Path(db_path) if db_path is not None else rd_db_path(_REPO)
     if not path.exists():
         build_rd_db(path)
     conn = sqlite3.connect(path)

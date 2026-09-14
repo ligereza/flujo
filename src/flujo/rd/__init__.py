@@ -27,9 +27,11 @@ from .database import (
     testing_observations,
     venues,
 )
+from .paths import rd_db_path
 
 __all__ = [
     "DEFAULT_DB_PATH",
+    "rd_db_path",
     "build_rd_db",
     "connect",
     "disclaimer",

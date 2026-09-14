@@ -2782,43 +2782,49 @@ class HubRequestHandler(BaseHTTPRequestHandler):
         return not expected or self.headers.get("X-XIO-Token", "") == expected
 
     def _get_xio_bootstrap(self) -> dict:
-        from ..rd.database import DEFAULT_DB_PATH
+        from ..rd.database import _REPO
+        from ..rd.paths import rd_db_path
         from ..rd.xio_ingest import bootstrap
 
-        return bootstrap(DEFAULT_DB_PATH)
+        return bootstrap(rd_db_path(_REPO))
 
     def _get_xio_samples(self, event_ref: str, sample_code: str = "") -> dict:
-        from ..rd.database import DEFAULT_DB_PATH
+        from ..rd.database import _REPO
+        from ..rd.paths import rd_db_path
         from ..rd.xio_ingest import load_samples
 
-        return load_samples(DEFAULT_DB_PATH, event_ref, sample_code)
+        return load_samples(rd_db_path(_REPO), event_ref, sample_code)
 
     def _sync_xio_sample(self, payload: dict) -> dict:
-        from ..rd.database import DEFAULT_DB_PATH
+        from ..rd.database import _REPO
+        from ..rd.paths import rd_db_path
         from ..rd.xio_ingest import ingest
 
-        return ingest(payload, DEFAULT_DB_PATH, workspace_root() / "xio_evidence")
+        return ingest(payload, rd_db_path(_REPO), workspace_root() / "xio_evidence")
 
     def _sync_xio_event(self, payload: dict) -> dict:
-        from ..rd.database import DEFAULT_DB_PATH
+        from ..rd.database import _REPO
+        from ..rd.paths import rd_db_path
         from ..rd.xio_ingest import sync_event
 
-        return sync_event(payload, DEFAULT_DB_PATH)
+        return sync_event(payload, rd_db_path(_REPO))
 
     def _sync_xio_application_event(self, payload: dict) -> dict:
-        from ..rd.database import DEFAULT_DB_PATH
+        from ..rd.database import _REPO
+        from ..rd.paths import rd_db_path
         from ..rd.xio_ingest import sync_application_event
 
-        return sync_application_event(payload, DEFAULT_DB_PATH)
+        return sync_application_event(payload, rd_db_path(_REPO))
 
     def _get_xio_application_events(self, session_id: str) -> dict:
-        from ..rd.database import DEFAULT_DB_PATH
+        from ..rd.database import _REPO
+        from ..rd.paths import rd_db_path
         from ..rd.xio_ingest import load_application_events
 
         return {
             "schema": "xio-application-events-v1",
             "sessionId": session_id,
-            "events": load_application_events(DEFAULT_DB_PATH, session_id),
+            "events": load_application_events(rd_db_path(_REPO), session_id),
         }
 
     def _get_rd_datos_summary(self) -> dict:

@@ -236,7 +236,6 @@ def render_catalogo() -> str:
         "",
         f"Este archivo es generado por `{GENERATOR_PATH}` -- NO editar a mano, "
         f"regenerar con: `py {GENERATOR_PATH}`",
-        "",
     ]
     return "\n".join(partes) + "\n"
 

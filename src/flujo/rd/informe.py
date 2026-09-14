@@ -18,12 +18,12 @@ from typing import Any, Iterable
 
 from ..privacy import scan_text
 from .datos import (
-    DEFAULT_DB_PATH,
     atenciones_por_tipo,
     conectar,
     tasa_adulteracion,
     tendencias,
 )
+from .paths import rd_db_path
 
 DISCLAIMER = (
     "DISCLAIMER OBLIGATORIO: los resultados de reactivos colorimetricos son "
@@ -120,7 +120,7 @@ def resumen_json(db_path: str | Path | None = None) -> dict[str, Any]:
     archivo presente pero corrupto/no-sqlite tambien degrada a
     `{"disponible": False, "error": ...}` en vez de propagar (el hub NUNCA
     debe devolver 500 por este endpoint)."""
-    path = Path(db_path) if db_path is not None else DEFAULT_DB_PATH
+    path = Path(db_path) if db_path is not None else rd_db_path(Path(__file__).resolve().parents[3])
     # A GET summary must never create the field-data database as a side effect.
     # `conectar()` is intentionally schema-creating for ingestion, so this
     # reader opens an existing, non-empty SQLite file in URI read-only mode.

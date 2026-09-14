@@ -51,6 +51,7 @@ from typing import Any
 
 from ..privacy import scan_text
 from ..privacy.sanitize import REPLACEMENTS
+from .paths import rd_db_path
 
 _REPO = Path(__file__).resolve().parents[3]
 DEFAULT_DB_PATH = _REPO / "data" / "rd.db"
@@ -140,7 +141,7 @@ class IngestResult:
 def conectar(db: str | Path | None = None) -> sqlite3.Connection:
     """Abre (y crea si falta) la DB de datos de campo. NUNCA destructivo:
     usa `CREATE TABLE IF NOT EXISTS`, jamas borra el archivo existente."""
-    path = Path(db) if db is not None else DEFAULT_DB_PATH
+    path = Path(db) if db is not None else rd_db_path(_REPO)
     path.parent.mkdir(parents=True, exist_ok=True)
     conn = sqlite3.connect(path)
     conn.row_factory = sqlite3.Row
