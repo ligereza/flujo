@@ -1,0 +1,160 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mak.local/schemas/knowledge/source_learning_case.schema.json",
+  "title": "MAK Source Learning Case",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "case_id",
+    "title",
+    "objective",
+    "source_sets",
+    "source_artifacts",
+    "message_refs",
+    "findings",
+    "learning_units",
+    "verification_ladder",
+    "non_claims"
+  ],
+  "properties": {
+    "schema": {"const": "mak-source-learning-case-v1"},
+    "case_id": {"type": "string", "minLength": 1},
+    "title": {"type": "string", "minLength": 1},
+    "objective": {"type": "string", "minLength": 1},
+    "source_sets": {
+      "type": "array",
+      "minItems": 2,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["source_id", "root", "role", "selection_policy"],
+        "properties": {
+          "source_id": {"type": "string", "minLength": 1},
+          "root": {"type": "string", "pattern": "^/"},
+          "role": {"type": "string", "minLength": 1},
+          "selection_policy": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "source_artifacts": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["artifact_id", "source_set", "path", "sha256", "kind", "role"],
+        "properties": {
+          "artifact_id": {"type": "string", "minLength": 1},
+          "source_set": {"type": "string", "minLength": 1},
+          "path": {"type": "string", "pattern": "^/"},
+          "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+          "kind": {"enum": ["conversation_export", "research_artifact", "session_index"]},
+          "role": {"type": "string", "minLength": 1},
+          "anchors": {"type": "array", "items": {"type": "string"}}
+        }
+      }
+    },
+    "message_refs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "ref_id",
+          "artifact_id",
+          "conversation_id",
+          "message_id",
+          "sender",
+          "epistemic_class",
+          "text_sha256",
+          "contribution"
+        ],
+        "properties": {
+          "ref_id": {"type": "string", "minLength": 1},
+          "artifact_id": {"type": "string", "minLength": 1},
+          "conversation_id": {"type": "string", "minLength": 1},
+          "message_id": {"type": "string", "minLength": 1},
+          "sender": {"enum": ["human", "assistant"]},
+          "epistemic_class": {"enum": ["user_hypothesis", "model_output"]},
+          "text_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+          "contribution": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "findings": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["finding_id", "statement", "epistemic_class", "status", "evidence_refs"],
+        "properties": {
+          "finding_id": {"type": "string", "minLength": 1},
+          "statement": {"type": "string", "minLength": 1},
+          "epistemic_class": {
+            "enum": [
+              "user_hypothesis",
+              "model_output",
+              "audited_result",
+              "synthesis_candidate",
+              "operational_guardrail",
+              "non_claim"
+            ]
+          },
+          "status": {
+            "enum": ["candidate", "unverified", "supported_by_local_audit", "active", "excluded"]
+          },
+          "evidence_refs": {"type": "array", "minItems": 1, "items": {"type": "string"}}
+        }
+      }
+    },
+    "learning_units": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["unit_id", "lesson", "action", "guardrail", "status", "evidence_refs"],
+        "properties": {
+          "unit_id": {"type": "string", "minLength": 1},
+          "lesson": {"type": "string", "minLength": 1},
+          "action": {"type": "string", "minLength": 1},
+          "guardrail": {"type": "string", "minLength": 1},
+          "status": {"enum": ["candidate", "active"]},
+          "evidence_refs": {"type": "array", "minItems": 1, "items": {"type": "string"}}
+        }
+      }
+    },
+    "verification_ladder": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["order", "gate", "failure_action"],
+        "properties": {
+          "order": {"type": "integer", "minimum": 1},
+          "gate": {"type": "string", "minLength": 1},
+          "failure_action": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "non_claims": {
+      "type": "array",
+      "minItems": 2,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["claim_id", "statement", "status", "reason"],
+        "properties": {
+          "claim_id": {"type": "string", "minLength": 1},
+          "statement": {"type": "string", "minLength": 1},
+          "status": {"const": "excluded"},
+          "reason": {"type": "string", "minLength": 1}
+        }
+      }
+    }
+  }
+}

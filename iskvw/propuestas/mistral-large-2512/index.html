@@ -1,0 +1,997 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ISKVW</title>
+<style>
+  @font-face {
+    font-family: 'Iskra';
+    src: url('data:font/woff2;base64,d09GMgABAAAAAAZgAA8AAAAACWQAAAt4AAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAGhYbgRwcKgZgAFQIIBBEICoIsQgABNgIkA4oAWAB6AHQAhQAGVgIeBmyAG4ANgUcKvqRWP5DYXBxCwGZiTDAo5y4JAMjAJBSADAAwB4GYAA2AJbBw4BvQE2AjQDpgI0A24DdAN4GNgI2A4oDIgJWAtgBtALYABEBEAAAAAQAAK/8AAP/+/wABAAH9AAD8AABEAAAAAAAAAAEAAAABAAH//wAPAAEAAAAAAAAAAAAAgAAAAQAAAAAAAQAAQAAAAEAAAAAAAIAAQAAAAEAAK38118PPPUACwQAAAAAANiUZJAAAAA04lGSAAAAAAAAAAAAAAAAAAAAABEAAAAAAAAAAAAAAAAAAAAABQAAf//AAA=') format('woff2');
+    font-display: block;
+  }
+
+  :root {
+    --bg: #000000;
+    --fg: #f0f0f0;
+    --accent: #3b82f6;
+    --manual: #ffffff;
+    --etiqueta: #6b7280;
+    --obra: #ffffff;
+    --pieza_grafica: #3b82f6;
+    --concepto: #10b981;
+    --informe: #f59e0b;
+    --peso-1: 1px;
+    --peso-2: 2px;
+    --peso-3: 3px;
+    --peso-4: 4px;
+  }
+
+  body {
+    margin: 0;
+    padding: 0;
+    background: var(--bg);
+    color: var(--fg);
+    font-family: 'Iskra', monospace;
+    overflow: hidden;
+    touch-action: manipulation;
+    cursor: default;
+  }
+
+  #canvas-container {
+    position: fixed;
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+    left: 0;
+  }
+
+  #canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  #estado {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.8);
+    padding: 8px 12px;
+    font-size: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    z-index: 10;
+  }
+
+  #estado-mensaje {
+    color: var(--fg);
+  }
+
+  #estado-accion {
+    color: var(--accent);
+    cursor: pointer;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  #controles {
+    position: fixed;
+    top: 12px;
+    left: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    background: rgba(0, 0, 0, 0.8);
+    padding: 8px;
+    border-radius: 0;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    z-index: 10;
+  }
+
+  .control {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 160px;
+  }
+
+  .control label {
+    font-size: 10px;
+    color: #9ca3af;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+  }
+
+  .control input[type="range"] {
+    width: 100%;
+  }
+
+  .control select {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: var(--fg);
+    font-family: 'Iskra', monospace;
+    font-size: 10px;
+    padding: 4px;
+  }
+
+  #pieza-detalle {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.98);
+    padding: 24px;
+    box-sizing: border-box;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 20;
+    overflow-y: auto;
+    transform: translateX(100%);
+    transition: transform 0.3s ease-out, opacity 0.2s ease-out;
+  }
+
+  #pieza-detalle.visible {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateX(0);
+  }
+
+  #pieza-detalle h2 {
+    margin: 0 0 12px 0;
+    font-size: 18px;
+    color: var(--accent);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    padding-bottom: 8px;
+  }
+
+  #pieza-detalle .meta {
+    margin: 12px 0;
+    font-size: 11px;
+    color: #9ca3af;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  #pieza-detalle .meta span {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 3px 6px;
+    border-radius: 2px;
+  }
+
+  #pieza-detalle .resumen {
+    margin: 16px 0;
+    font-size: 13px;
+    line-height: 1.6;
+    font-style: italic;
+  }
+
+  #pieza-detalle .etiquetas {
+    margin: 16px 0;
+    font-size: 11px;
+    color: var(--etiqueta);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  #pieza-detalle .etiqueta {
+    background: rgba(107, 114, 128, 0.2);
+    padding: 3px 6px;
+    border-radius: 2px;
+  }
+
+  #pieza-detalle .vinculos {
+    margin: 20px 0;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 16px;
+  }
+
+  #pieza-detalle .vinculos h3 {
+    margin: 0 0 12px 0;
+    font-size: 13px;
+    color: #9ca3af;
+  }
+
+  #pieza-detalle .vinculos-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 8px;
+  }
+
+  #pieza-detalle .vinculo {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 8px;
+    border-radius: 2px;
+    font-size: 11px;
+    cursor: pointer;
+    transition: background 0.1s;
+    border-left: 3px solid;
+  }
+
+  #pieza-detalle .vinculo:hover {
+    background: rgba(255, 255, 255, 0.1);
+  }
+
+  #pieza-detalle .vinculo.manual {
+    border-left-color: var(--manual);
+  }
+
+  #pieza-detalle .vinculo.etiqueta {
+    border-left-color: var(--etiqueta);
+  }
+
+  #pieza-detalle .cerrar {
+    position: fixed;
+    top: 12px;
+    right: 12px;
+    background: none;
+    border: none;
+    color: #9ca3af;
+    font-size: 20px;
+    cursor: pointer;
+    padding: 0;
+    width: 24px;
+    height: 24px;
+    z-index: 30;
+  }
+
+  #instrucciones {
+    position: fixed;
+    top: 12px;
+    right: 12px;
+    background: rgba(0, 0, 0, 0.8);
+    padding: 8px 12px;
+    border-radius: 0;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: 10px;
+    color: #9ca3af;
+    z-index: 10;
+    max-width: 200px;
+  }
+
+  #instrucciones h4 {
+    margin: 0 0 6px 0;
+    color: var(--fg);
+    font-size: 11px;
+  }
+
+  #instrucciones ul {
+    margin: 0;
+    padding-left: 16px;
+  }
+
+  #instrucciones li {
+    margin-bottom: 4px;
+  }
+
+  #error {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--bg);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 24px;
+    box-sizing: border-box;
+    z-index: 100;
+    text-align: center;
+  }
+
+  #error h2 {
+    margin: 0 0 12px 0;
+    font-size: 18px;
+    color: #ef4444;
+  }
+
+  #error p {
+    margin: 0 0 24px 0;
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  #error button {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: var(--fg);
+    font-family: 'Iskra', monospace;
+    font-size: 12px;
+    padding: 8px 16px;
+    cursor: pointer;
+  }
+
+  #filtros {
+    position: fixed;
+    bottom: 40px;
+    left: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    background: rgba(0, 0, 0, 0.8);
+    padding: 8px;
+    border-radius: 0;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    z-index: 10;
+  }
+
+  .filtro {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 10px;
+    color: #9ca3af;
+  }
+
+  .filtro input {
+    margin: 0;
+  }
+
+  .filtro span {
+    cursor: pointer;
+  }
+
+  @media (max-width: 768px) {
+    #controles {
+      top: auto;
+      bottom: 120px;
+      left: 12px;
+      right: 12px;
+      flex-direction: row;
+      flex-wrap: wrap;
+    }
+
+    .control {
+      min-width: 45%;
+    }
+
+    #pieza-detalle {
+      padding: 16px;
+    }
+
+    #pieza-detalle .vinculos-list {
+      grid-template-columns: 1fr;
+    }
+
+    #instrucciones {
+      top: auto;
+      bottom: 12px;
+      right: 12px;
+      left: 12px;
+      max-width: none;
+    }
+  }
+</style>
+</head>
+<body>
+<div id="error" style="display: none;">
+  <h2>Error al cargar ISKVW</h2>
+  <p>No se pudo acceder al archivo de datos. Esto puede deberse a:<br>
+  - El archivo no existe en la ruta especificada<br>
+  - Problemas de permisos<br>
+  - Conexión de red interrumpida (aunque debería funcionar sin internet)</p>
+  <button id="reintentar">Reintentar carga</button>
+</div>
+
+<div id="canvas-container">
+  <canvas id="canvas"></canvas>
+</div>
+
+<div id="estado">
+  <div id="estado-mensaje">ISKVW cargando...</div>
+  <div id="estado-accion"></div>
+</div>
+
+<div id="controles">
+  <div class="control">
+    <label for="proximidad">Proximidad</label>
+    <input type="range" id="proximidad" min="0.1" max="2" step="0.1" value="1">
+  </div>
+  <div class="control">
+    <label for="rigidez">Rigidez</label>
+    <input type="range" id="rigidez" min="0.1" max="2" step="0.1" value="1">
+  </div>
+  <div class="control">
+    <label for="tipo-vinculos">Tipo de vínculos</label>
+    <select id="tipo-vinculos">
+      <option value="todos">Todos</option>
+      <option value="manual">Manuales</option>
+      <option value="etiqueta">Etiquetas</option>
+    </select>
+  </div>
+</div>
+
+<div id="filtros">
+  <div class="filtro">
+    <input type="checkbox" id="filtro-obra" checked>
+    <span>Mostrar obras</span>
+  </div>
+  <div class="filtro">
+    <input type="checkbox" id="filtro-pieza-grafica" checked>
+    <span>Mostrar piezas gráficas</span>
+  </div>
+  <div class="filtro">
+    <input type="checkbox" id="filtro-concepto" checked>
+    <span>Mostrar conceptos</span>
+  </div>
+  <div class="filtro">
+    <input type="checkbox" id="filtro-informe" checked>
+    <span>Mostrar informes</span>
+  </div>
+</div>
+
+<div id="pieza-detalle">
+  <button class="cerrar" id="cerrar-detalle">×</button>
+  <h2 id="detalle-titulo">Título</h2>
+  <div class="meta">
+    <span id="detalle-clase">clase</span>
+    <span id="detalle-fecha">fecha</span>
+    <span id="detalle-medio">medio</span>
+    <span id="detalle-estado">estado</span>
+  </div>
+  <div class="resumen" id="detalle-resumen">Resumen de la pieza...</div>
+  <div class="etiquetas" id="detalle-etiquetas"></div>
+  <div class="vinculos">
+    <h3>Vínculos relacionados (<span id="detalle-vinculos-cantidad">0</span>)</h3>
+    <div class="vinculos-list" id="detalle-vinculos-lista"></div>
+  </div>
+</div>
+
+<div id="instrucciones">
+  <h4>Cómo navegar</h4>
+  <ul>
+    <li>Haz clic en un nodo para ver detalles</li>
+    <li>Arrastra nodos para reorganizar</li>
+    <li>Ajusta los controles para cambiar la visualización</li>
+    <li>Usa los filtros para mostrar/ocultar tipos de piezas</li>
+    <li>Los vínculos <strong>blancos</strong> son relaciones declaradas</li>
+    <li>Los vínculos <strong>grises</strong> son coincidencias de etiquetas</li>
+  </ul>
+</div>
+
+<script>
+  const canvas = document.getElementById('canvas');
+  const ctx = canvas.getContext('2d');
+  const container = document.getElementById('canvas-container');
+  const estadoMensaje = document.getElementById('estado-mensaje');
+  const estadoAccion = document.getElementById('estado-accion');
+  const proximidadInput = document.getElementById('proximidad');
+  const rigidezInput = document.getElementById('rigidez');
+  const tipoVinculosSelect = document.getElementById('tipo-vinculos');
+  const filtroObra = document.getElementById('filtro-obra');
+  const filtroPiezaGrafica = document.getElementById('filtro-pieza-grafica');
+  const filtroConcepto = document.getElementById('filtro-concepto');
+  const filtroInforme = document.getElementById('filtro-informe');
+  const piezaDetalle = document.getElementById('pieza-detalle');
+  const cerrarDetalle = document.getElementById('cerrar-detalle');
+  const detalleTitulo = document.getElementById('detalle-titulo');
+  const detalleClase = document.getElementById('detalle-clase');
+  const detalleFecha = document.getElementById('detalle-fecha');
+  const detalleMedio = document.getElementById('detalle-medio');
+  const detalleEstado = document.getElementById('detalle-estado');
+  const detalleResumen = document.getElementById('detalle-resumen');
+  const detalleEtiquetas = document.getElementById('detalle-etiquetas');
+  const detalleVinculosCantidad = document.getElementById('detalle-vinculos-cantidad');
+  const detalleVinculosLista = document.getElementById('detalle-vinculos-lista');
+  const errorDiv = document.getElementById('error');
+  const reintentarBtn = document.getElementById('reintentar');
+
+  let piezas = [];
+  let vinculos = [];
+  let nodos = [];
+  let fuerzas = [];
+  let proximidad = 1;
+  let rigidez = 1;
+  let tipoVinculos = 'todos';
+  let filtros = {
+    obra: true,
+    pieza_grafica: true,
+    concepto: true,
+    informe: true
+  };
+  let piezaSeleccionada = null;
+  let nodoArrastrable = null;
+  let offsetX = 0, offsetY = 0;
+  let mouseX = 0, mouseY = 0;
+  let isTouch = false;
+  let arrastreActivo = false;
+  let cargando = true;
+
+  // Configuración física
+  const config = {
+    repulsion: 1500,
+    distanciaEnlace: 100,
+    rigidezEnlace: 0.1,
+    amortiguamiento: 0.8,
+    gravedad: 0.02,
+    zoom: 1,
+    offsetX: 0,
+    offsetY: 0
+  };
+
+  function mostrarError() {
+    errorDiv.style.display = 'flex';
+    estadoMensaje.textContent = "Error en los datos";
+    estadoAccion.textContent = "";
+  }
+
+  function cargarDatos() {
+    estadoMensaje.textContent = "Cargando ISKVW...";
+    estadoAccion.textContent = "";
+
+    fetch('../../datos/archivo.json')
+      .then(res => {
+        if (!res.ok) throw new Error('Archivo no encontrado');
+        return res.json();
+      })
+      .then(data => {
+        if (!data.piezas || !data.vinculos) {
+          throw new Error('Formato de datos inválido');
+        }
+
+        piezas = data.piezas;
+        vinculos = data.vinculos.map(v => ({
+          ...v,
+          peso: v.peso || 1
+        }));
+
+        inicializarNodos();
+        estadoMensaje.textContent = `ISKVW: ${piezas.length} piezas, ${vinculos.length} vínculos`;
+        estadoAccion.textContent = "Explorar";
+        cargando = false;
+        window.addEventListener('resize', redimensionarCanvas);
+        redimensionarCanvas();
+        animar();
+      })
+      .catch(err => {
+        console.error(err);
+        mostrarError();
+      });
+  }
+
+  reintentarBtn.addEventListener('click', () => {
+    errorDiv.style.display = 'none';
+    cargarDatos();
+  });
+
+  function inicializarNodos() {
+    nodos = piezas.map(pieza => {
+      const radioBase = {
+        obra: 6,
+        pieza_grafica: 4,
+        concepto: 8,
+        informe: 10
+      }[pieza.clase] || 5;
+
+      return {
+        id: pieza.id,
+        titulo: pieza.titulo,
+        clase: pieza.clase,
+        peso: pieza.peso || 1,
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        vx: 0,
+        vy: 0,
+        fx: 0,
+        fy: 0,
+        radio: radioBase * (pieza.peso || 1),
+        etiquetas: pieza.etiquetas || [],
+        resumen: pieza.resumen || '',
+        fecha: pieza.fecha || 'Sin fecha',
+        medio: pieza.medio || { tipo: 'desconocido' },
+        estado: pieza.estado || 'publicado',
+        visible: true
+      };
+    });
+
+    fuerzas = vinculos.map(vinculo => {
+      const de = nodos.find(n => n.id === vinculo.de);
+      const a = nodos.find(n => n.id === vinculo.a);
+      return {
+        de, a,
+        peso: vinculo.peso || 1,
+        clase: vinculo.clase
+      };
+    });
+
+    actualizarVisibilidadNodos();
+  }
+
+  function actualizarVisibilidadNodos() {
+    nodos.forEach(nodo => {
+      nodo.visible = filtros[nodo.clase];
+    });
+  }
+
+  function redimensionarCanvas() {
+    const rect = container.getBoundingClientRect();
+    canvas.width = rect.width;
+    canvas.height = rect.height;
+  }
+
+  function animar() {
+    if (cargando) {
+      requestAnimationFrame(animar);
+      return;
+    }
+
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.2)';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+    proximidad = parseFloat(proximidadInput.value);
+    rigidez = parseFloat(rigidezInput.value);
+    tipoVinculos = tipoVinculosSelect.value;
+
+    aplicarFuerzas();
+    dibujarVinculos();
+    dibujarNodos();
+
+    requestAnimationFrame(animar);
+  }
+
+  function aplicarFuerzas() {
+    nodos.forEach(nodo => {
+      if (!nodo.visible) return;
+      nodo.fx = 0;
+      nodo.fy = 0;
+    });
+
+    // Repulsión entre nodos visibles
+    for (let i = 0; i < nodos.length; i++) {
+      if (!nodos[i].visible) continue;
+      for (let j = i + 1; j < nodos.length; j++) {
+        if (!nodos[j].visible) continue;
+        const nodo1 = nodos[i];
+        const nodo2 = nodos[j];
+        const dx = nodo2.x - nodo1.x;
+        const dy = nodo2.y - nodo1.y;
+        const dist = Math.sqrt(dx * dx + dy * dy) || 0.1;
+
+        const fuerza = config.repulsion / (dist * dist * proximidad);
+        const fx = (dx / dist) * fuerza;
+        const fy = (dy / dist) * fuerza;
+
+        nodo1.fx -= fx;
+        nodo1.fy -= fy;
+        nodo2.fx += fx;
+        nodo2.fy += fy;
+      }
+    }
+
+    // Atracción por vínculos
+    fuerzas.forEach(fuerza => {
+      if (!fuerza.de.visible || !fuerza.a.visible) return;
+      if (tipoVinculos !== 'todos' && fuerza.clase !== tipoVinculos) return;
+
+      const dx = fuerza.a.x - fuerza.de.x;
+      const dy = fuerza.a.y - fuerza.de.y;
+      const dist = Math.sqrt(dx * dx + dy * dy) || 0.1;
+
+      const fuerzaAtraccion = config.rigidezEnlace * rigidez * (dist - config.distanciaEnlace * fuerza.peso);
+      const fx = (dx / dist) * fuerzaAtraccion;
+      const fy = (dy / dist) * fuerzaAtraccion;
+
+      fuerza.de.fx += fx;
+      fuerza.de.fy += fy;
+      fuerza.a.fx -= fx;
+      fuerza.a.fy -= fy;
+    });
+
+    // Gravedad hacia el centro
+    nodos.forEach(nodo => {
+      if (!nodo.visible) return;
+      const dx = canvas.width / 2 - nodo.x;
+      const dy = canvas.height / 2 - nodo.y;
+      nodo.fx += dx * config.gravedad;
+      nodo.fy += dy * config.gravedad;
+    });
+
+    // Aplicar fuerzas y actualizar posiciones
+    nodos.forEach(nodo => {
+      if (!nodo.visible) return;
+
+      if (nodo === nodoArrastrable && arrastreActivo) {
+        nodo.x = mouseX + offsetX;
+        nodo.y = mouseY + offsetY;
+        nodo.vx = 0;
+        nodo.vy = 0;
+        return;
+      }
+
+      nodo.vx = nodo.vx * config.amortiguamiento + nodo.fx;
+      nodo.vy = nodo.vy * config.amortiguamiento + nodo.fy;
+
+      nodo.x += nodo.vx;
+      nodo.y += nodo.vy;
+
+      nodo.x = Math.max(nodo.radio, Math.min(canvas.width - nodo.radio, nodo.x));
+      nodo.y = Math.max(nodo.radio, Math.min(canvas.height - nodo.radio, nodo.y));
+    });
+  }
+
+  function dibujarVinculos() {
+    fuerzas.forEach(fuerza => {
+      if (!fuerza.de.visible || !fuerza.a.visible) return;
+      if (tipoVinculos !== 'todos' && fuerza.clase !== tipoVinculos) return;
+
+      const alpha = fuerza.peso * 0.2;
+      const color = fuerza.clase === 'manual' ? `rgba(255, 255, 255, ${alpha})` : `rgba(107, 114, 128, ${alpha})`;
+      const ancho = fuerza.clase === 'manual' ? Math.max(1, fuerza.peso) : 1;
+
+      ctx.strokeStyle = color;
+      ctx.lineWidth = ancho;
+      ctx.beginPath();
+      ctx.moveTo(fuerza.de.x, fuerza.de.y);
+      ctx.lineTo(fuerza.a.x, fuerza.a.y);
+      ctx.stroke();
+    });
+  }
+
+  function dibujarNodos() {
+    nodos.forEach(nodo => {
+      if (!nodo.visible) return;
+
+      const distMouse = Math.sqrt((nodo.x - mouseX) ** 2 + (nodo.y - mouseY) ** 2);
+      const escalaProximidad = 1 + 0.3 * Math.exp(-distMouse / 100);
+      const radioFinal = nodo.radio * escalaProximidad;
+
+      // Color según clase
+      let color;
+      switch(nodo.clase) {
+        case 'obra': color = 'var(--obra)'; break;
+        case 'pieza_grafica': color = 'var(--pieza_grafica)'; break;
+        case 'concepto': color = 'var(--concepto)'; break;
+        case 'informe': color = 'var(--informe)'; break;
+        default: color = '#9ca3af';
+      }
+
+      // Efecto de selección
+      if (nodo === piezaSeleccionada) {
+        ctx.fillStyle = `rgba(255, 255, 255, 0.3)`;
+        ctx.beginPath();
+        ctx.arc(nodo.x, nodo.y, radioFinal * 1.8, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      // Dibujar nodo
+      ctx.fillStyle = color;
+      ctx.beginPath();
+      ctx.arc(nodo.x, nodo.y, radioFinal, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Efecto de brillo cerca del mouse
+      if (distMouse < 150) {
+        const brillo = 1 - distMouse / 150;
+        ctx.fillStyle = `rgba(255, 255, 255, ${brillo * 0.3})`;
+        ctx.beginPath();
+        ctx.arc(nodo.x, nodo.y, radioFinal * 1.2, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      // Dibujar etiqueta si está muy cerca
+      if (distMouse < 40) {
+        ctx.fillStyle = 'rgba(0, 0, 0, 0.8)';
+        ctx.font = '10px Iskra';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(nodo.titulo, nodo.x, nodo.y - radioFinal - 10);
+      }
+    });
+  }
+
+  function mostrarDetallePieza(nodo) {
+    piezaSeleccionada = nodo;
+    detalleTitulo.textContent = nodo.titulo;
+    detalleClase.textContent = nodo.clase;
+    detalleFecha.textContent = nodo.fecha;
+    detalleMedio.textContent = nodo.medio.tipo;
+    detalleEstado.textContent = nodo.estado;
+    detalleResumen.textContent = nodo.resumen;
+
+    detalleEtiquetas.innerHTML = '';
+    if (nodo.etiquetas.length > 0) {
+      nodo.etiquetas.forEach(etiqueta => {
+        const span = document.createElement('span');
+        span.className = 'etiqueta';
+        span.textContent = etiqueta;
+        detalleEtiquetas.appendChild(span);
+      });
+    }
+
+    // Mostrar vínculos
+    const vinculosPieza = fuerzas.filter(f =>
+      (f.de.id === nodo.id || f.a.id === nodo.id) &&
+      (f.de.visible && f.a.visible)
+    );
+
+    detalleVinculosCantidad.textContent = vinculosPieza.length;
+
+    detalleVinculosLista.innerHTML = '';
+    vinculosPieza.forEach(v => {
+      const otraPieza = v.de.id === nodo.id ? v.a : v.de;
+      const elemento = document.createElement('div');
+      elemento.className = `vinculo ${v.clase}`;
+      elemento.innerHTML = `
+        <div style="font-weight: bold; margin-bottom: 4px;">${otraPieza.titulo}</div>
+        <div style="font-size: 10px; color: #9ca3af;">
+          ${otraPieza.clase} • ${v.clase === 'manual' ? 'Relación declarada' : 'Coincidencia de etiqueta'}
+        </div>
+      `;
+      elemento.addEventListener('click', () => {
+        mostrarDetallePieza(otraPieza);
+      });
+      detalleVinculosLista.appendChild(elemento);
+    });
+
+    piezaDetalle.classList.add('visible');
+  }
+
+  // Eventos de interacción
+  canvas.addEventListener('mousemove', (e) => {
+    const rect = canvas.getBoundingClientRect();
+    mouseX = e.clientX - rect.left;
+    mouseY = e.clientY - rect.top;
+    isTouch = false;
+
+    if (arrastreActivo && nodoArrastrable) {
+      nodoArrastrable.x = mouseX + offsetX;
+      nodoArrastrable.y = mouseY + offsetY;
+    }
+  });
+
+  canvas.addEventListener('touchmove', (e) => {
+    e.preventDefault();
+    const rect = canvas.getBoundingClientRect();
+    mouseX = e.touches[0].clientX - rect.left;
+    mouseY = e.touches[0].clientY - rect.top;
+    isTouch = true;
+
+    if (arrastreActivo && nodoArrastrable) {
+      nodoArrastrable.x = mouseX + offsetX;
+      nodoArrastrable.y = mouseY + offsetY;
+    }
+  });
+
+  canvas.addEventListener('mousedown', (e) => {
+    const rect = canvas.getBoundingClientRect();
+    mouseX = e.clientX - rect.left;
+    mouseY = e.clientY - rect.top;
+
+    const nodoCercano = nodos.find(nodo => {
+      if (!nodo.visible) return false;
+      const dist = Math.sqrt((nodo.x - mouseX) ** 2 + (nodo.y - mouseY) ** 2);
+      return dist < nodo.radio * 1.5;
+    });
+
+    if (nodoCercano) {
+      nodoArrastrable = nodoCercano;
+      offsetX = nodoCercano.x - mouseX;
+      offsetY = nodoCercano.y - mouseY;
+      arrastreActivo = true;
+      canvas.style.cursor = 'grabbing';
+    }
+  });
+
+  canvas.addEventListener('touchstart', (e) => {
+    e.preventDefault();
+    const rect = canvas.getBoundingClientRect();
+    mouseX = e.touches[0].clientX - rect.left;
+    mouseY = e.touches[0].clientY - rect.top;
+
+    const nodoCercano = nodos.find(nodo => {
+      if (!nodo.visible) return false;
+      const dist = Math.sqrt((nodo.x - mouseX) ** 2 + (nodo.y - mouseY) ** 2);
+      return dist < nodo.radio * 1.5;
+    });
+
+    if (nodoCercano) {
+      nodoArrastrable = nodoCercano;
+      offsetX = nodoCercano.x - mouseX;
+      offsetY = nodoCercano.y - mouseY;
+      arrastreActivo = true;
+    }
+  });
+
+  canvas.addEventListener('mouseup', () => {
+    if (arrastreActivo) {
+      arrastreActivo = false;
+      nodoArrastrable = null;
+      canvas.style.cursor = 'default';
+    } else {
+      const rect = canvas.getBoundingClientRect();
+      mouseX = event.clientX - rect.left;
+      mouseY = event.clientY - rect.top;
+
+      const nodoCercano = nodos.find(nodo => {
+        if (!nodo.visible) return false;
+        const dist = Math.sqrt((nodo.x - mouseX) ** 2 + (nodo.y - mouseY) ** 2);
+        return dist < nodo.radio * 1.5;
+      });
+
+      if (nodoCercano) {
+        mostrarDetallePieza(nodoCercano);
+      }
+    }
+  });
+
+  canvas.addEventListener('touchend', (e) => {
+    e.preventDefault();
+    if (arrastreActivo) {
+      arrastreActivo = false;
+      nodoArrastrable = null;
+    } else {
+      const rect = canvas.getBoundingClientRect();
+      if (e.changedTouches.length > 0) {
+        mouseX = e.changedTouches[0].clientX - rect.left;
+        mouseY = e.changedTouches[0].clientY - rect.top;
+      }
+
+      const nodoCercano = nodos.find(nodo => {
+        if (!nodo.visible) return false;
+        const dist = Math.sqrt((nodo.x - mouseX) ** 2 + (nodo.y - mouseY) ** 2);
+        return dist < nodo.radio * 1.5;
+      });
+
+      if (nodoCercano) {
+        mostrarDetallePieza(nodoCercano);
+      }
+    }
+  });
+
+  cerrarDetalle.addEventListener('click', () => {
+    piezaDetalle.classList.remove('visible');
+    piezaSeleccionada = null;
+  });
+
+  proximidadInput.addEventListener('input', () => {
+    proximidad = parseFloat(proximidadInput.value);
+  });
+
+  rigidezInput.addEventListener('input', () => {
+    rigidez = parseFloat(rigidezInput.value);
+  });
+
+  tipoVinculosSelect.addEventListener('change', () => {
+    tipoVinculos = tipoVinculosSelect.value;
+  });
+
+  filtroObra.addEventListener('change', () => {
+    filtros.obra = filtroObra.checked;
+    actualizarVisibilidadNodos();
+  });
+
+  filtroPiezaGrafica.addEventListener('change', () => {
+    filtros.pieza_grafica = filtroPiezaGrafica.checked;
+    actualizarVisibilidadNodos();
+  });
+
+  filtroConcepto.addEventListener('change', () => {
+    filtros.concepto = filtroConcepto.checked;
+    actualizarVisibilidadNodos();
+  });
+
+  filtroInforme.addEventListener('change', () => {
+    filtros.informe = filtroInforme.checked;
+    actualizarVisibilidadNodos();
+  });
+
+  estadoAccion.addEventListener('click', () => {
+    if (piezaSeleccionada) {
+      piezaDetalle.classList.remove('visible');
+      piezaSeleccionada = null;
+    }
+  });
+
+  cargarDatos();
+</script>
+</body>
+</html>

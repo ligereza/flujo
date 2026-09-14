@@ -1,0 +1,10 @@
+# Compatibilidad heredada. La fuente unica es pyproject.toml.
+# Usa: python -m pip install -e ".[dev,render]"
+-r requirements.txt
+pytest>=9.1.1
+pytest-cov>=7.1.0
+duckdb>=1.5.5
+Flask>=3.1.3
+vpype>=1.15.0
+pre-commit>=4.6.2
+pyflakes>=3.4.0

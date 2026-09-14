@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" data-name="a73066a24bf4-18027936916249115">
+<style>
+.c0{animation:k_derivar 12s ease-in-out infinite}
+@keyframes k_derivar{0%,100%{transform:translateY(2px)}50%{transform:translateY(-3px)}}
+</style>
+<rect width="120" height="120" fill="#061826"/>
+<g id="capa-0-protagonista" transform="translate(60,56)" data-rol="protagonista" data-gesto="derivar" data-ritmo="12s" data-figura="figura"><title>protagonista - figura</title><g class="c0"><g transform="scale(30)"><circle cy="-.42" r=".30" fill="#2ee6ff"/><path d="M-.42,1 V.05 a.42,.42 0 0 1 .84,0 V1 Z" fill="#2ee6ff"/></g></g></g>
+<g id="capa-1-satelite_2" transform="translate(96,30)" data-rol="satelite_2" data-gesto="quieto" data-ritmo="4s" data-figura="vinilo"><title>satelite_2 - vinilo</title><g class="c1"><g transform="scale(13)"><circle r=".92" fill="#2ee6ff"/><circle r="0.72" fill="none" stroke="#0d2c42" stroke-width=".03" opacity=".5"/><circle r="0.58" fill="none" stroke="#0d2c42" stroke-width=".03" opacity=".5"/><circle r="0.44" fill="none" stroke="#0d2c42" stroke-width=".03" opacity=".5"/><circle r=".22" fill="#d7ff2e"/><circle r=".05" fill="#0d2c42"/></g></g></g>
+</svg>

@@ -1,0 +1,8 @@
+id: glovox_primary
+producer_id: glovox
+status: source_needed
+source_quality: unknown
+workflow:
+  suggested_tool: logo_clean_lab
+  next_action: "sitio glovox.io es pagina de marcas/sponsors, no expone logo propio; perfil IG @glovox solo entrega foto 100x100 firmada; revisar brandfetch.com/glovox.cl o LinkedIn"
+outputs: {}

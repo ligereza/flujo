@@ -1,0 +1,38 @@
+{
+  "_leeme": [
+    "Las capas del archivo de iskvw. Cada una MIDE algo de cada obra y lo deja",
+    "como un dato más en campo.json. Este archivo lo editás vos.",
+    "",
+    "    py tools/gen_capas_iskvw.py            # corre las capas activas",
+    "    py tools/gen_capas_iskvw.py --listar   # qué capas hay y cuáles corren",
+    "",
+    "La idea es que esto crezca como el micelio de MAK: sumar una capa es sumar",
+    "una entrada acá y una función en el generador, sin tocar la piel ni volver a",
+    "generar el campo. Una piel que no conoce una capa la ignora; una que la",
+    "conoce la usa. Por eso las capas dan DATOS y no estética: qué se hace con",
+    "el dato lo decide cada piel, y eso es tuyo.",
+    "",
+    "'activa' en false la deja declarada sin correr. Nada se borra por apagarse:",
+    "el dato que ya escribió se queda hasta que el campo se regenere.",
+    "",
+    "Las dos primeras usan instrumentos que ya existen en este repo, no cosas",
+    "nuevas: 'tilde' es tools/tilde_meter.py (proyecto tilde) y 'trazo' lee los",
+    "SVG que MAK vectorizó."
+  ],
+  "capas": [
+    {
+      "nombre": "tilde",
+      "activa": true,
+      "instrumento": "tools/tilde_meter.py",
+      "escribe": "tilde",
+      "para": "El residuo diacrítico de lo que la percepción escribió de la obra: cuántas marcas que construyen significado en español hay (á é í ó ú ñ ¿ ¡) y cuántas por cada cien caracteres. Es la medida del proyecto tilde aplicada al archivo: qué se pierde si ese texto se degrada a ASCII."
+    },
+    {
+      "nombre": "trazo",
+      "activa": true,
+      "instrumento": "iskvw/piel/trazos/*.svg",
+      "escribe": "trazo",
+      "para": "La densidad del vector de cada obra: cuántos subtrazos tiene y cuántos puntos. Un contorno limpio y una maraña pesan distinto, y hasta ahora eso no se sabía sin abrir el archivo."
+    }
+  ]
+}

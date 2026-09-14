@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" data-name="9bd0b2ef3159-17974158467618047">
+<style>
+.c0{animation:k_latir 4s ease-in-out infinite}
+@keyframes k_latir{0%,100%{transform:scale(1)}50%{transform:scale(1.09)}}
+</style>
+<rect width="120" height="120" fill="#061826"/>
+<g id="capa-0-protagonista" transform="translate(60,56)" data-rol="protagonista" data-gesto="latir" data-ritmo="4s" data-figura="disco"><title>protagonista - disco</title><g class="c0"><g transform="scale(30)"><circle r=".82" fill="#2ee6ff"/></g></g></g>
+<g id="capa-1-satelite_3" transform="translate(24,86)" data-rol="satelite_3" data-gesto="quieto" data-ritmo="4s" data-figura="grilla"><title>satelite_3 - grilla</title><g class="c1"><g transform="scale(13)"><line x1="-0.900" y1="-.9" x2="-0.900" y2=".9" stroke="#2ee6ff" stroke-width=".035"/><line x1="-.9" y1="-0.900" x2=".9" y2="-0.900" stroke="#2ee6ff" stroke-width=".035"/><line x1="-0.600" y1="-.9" x2="-0.600" y2=".9" stroke="#2ee6ff" stroke-width=".035"/><line x1="-.9" y1="-0.600" x2=".9" y2="-0.600" stroke="#2ee6ff" stroke-width=".035"/><line x1="-0.300" y1="-.9" x2="-0.300" y2=".9" stroke="#2ee6ff" stroke-width=".035"/><line x1="-.9" y1="-0.300" x2=".9" y2="-0.300" stroke="#2ee6ff" stroke-width=".035"/><line x1="-0.000" y1="-.9" x2="-0.000" y2=".9" stroke="#2ee6ff" stroke-width=".035"/><line x1="-.9" y1="-0.000" x2=".9" y2="-0.000" stroke="#2ee6ff" stroke-width=".035"/><line x1="0.300" y1="-.9" x2="0.300" y2=".9" stroke="#2ee6ff" stroke-width=".035"/><line x1="-.9" y1="0.300" x2=".9" y2="0.300" stroke="#2ee6ff" stroke-width=".035"/><line x1="0.600" y1="-.9" x2="0.600" y2=".9" stroke="#2ee6ff" stroke-width=".035"/><line x1="-.9" y1="0.600" x2=".9" y2="0.600" stroke="#2ee6ff" stroke-width=".035"/><line x1="0.900" y1="-.9" x2="0.900" y2=".9" stroke="#2ee6ff" stroke-width=".035"/><line x1="-.9" y1="0.900" x2=".9" y2="0.900" stroke="#2ee6ff" stroke-width=".035"/></g></g></g>
+</svg>

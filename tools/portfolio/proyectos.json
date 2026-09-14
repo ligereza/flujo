@@ -1,0 +1,96 @@
+{
+  "_comentario": "Fuente curada del portafolio publico. Editar ESTE archivo es administrar el sitio: el workflow portfolio.yml lo publica junto al basurero. Solo contenido apto para publico; los limites duros de cada proyecto viajan con su descripcion. IDIOMA (2026-07-26): los campos que LEE UN HUMANO -- nombre, descripcion, titulo -- van en espanol correcto CON acentos y enes, porque este archivo alimenta una pagina publica; un titulo mutilado no es una errata, es un defecto del producto. Los identificadores (id, linea, estado, tags, ruta) quedan en ASCII porque son claves, no texto.",
+  "titulo": "ligereza / flujo",
+  "proyectos": [
+    {
+      "id": "tapiz",
+      "nombre": "Tapiz",
+      "linea": "cultura",
+      "estado": "activo",
+      "descripcion": "Instrumento de patrones ASCII/SVG con paleta propia; animación con significado de digestión. Exporta piezas SVG (SMIL) desde código. Incluye modos telar de composición histórica de alfombra (field/gul, border/boteh, medallion, mihrab) y modo cauce: la recurrencia de tokens elige el color, patrón reconocido y no impuesto.",
+      "ruta": "projects/tapiz/",
+      "tags": ["ascii", "svg", "generativo-visual"]
+    },
+    {
+      "id": "tapiz-piezas-curadas",
+      "nombre": "Tapiz: piezas curadas",
+      "linea": "cultura",
+      "estado": "activo",
+      "descripcion": "Serie curada de cinco piezas SVG tejidas con el instrumento Tapiz real (nunca dibujadas a mano): una por modo telar (field, border, medallion, mihrab) y una cauce animada (SMIL). Cada pieza teje los espacios de un archivo vivo del repositorio —el motor de diagnóstico, el validador de airdrop, el telar tejiéndose a sí mismo— con el comando de regeneración exacto en su README.",
+      "ruta": "projects/tapiz/piezas_curadas/",
+      "tags": ["svg", "generativo-visual", "serie", "telar"]
+    },
+    {
+      "id": "tilde",
+      "nombre": "Tilde",
+      "linea": "cultura",
+      "estado": "v0",
+      "descripcion": "Medidor de supervivencia de las marcas del español —la eñe, las tildes, la apertura de pregunta— cuando el texto pasa por compresión. La tilde como resistencia cultural.",
+      "ruta": "tools/tilde_meter.py",
+      "tags": ["lengua", "medicion", "compresion"]
+    },
+    {
+      "id": "psicosis",
+      "nombre": "Psicosis",
+      "linea": "cultura",
+      "estado": "investigacion",
+      "descripcion": "Dossier sobre cómo se estudia la conducta y la lectura de indicios (Ginzburg, pánico moral, cartografía colectiva). Capa descriptiva y cultural; jamás perfila personas reales.",
+      "ruta": "projects/cultura/dossiers/psicosis.md",
+      "tags": ["investigacion", "lectura-de-indicios"]
+    },
+    {
+      "id": "ecosystem-engine",
+      "nombre": "Tapiz Ecosystem Engine",
+      "linea": "cultura",
+      "estado": "activo",
+      "descripcion": "Motor de diagnóstico a frontend (Python estándar puro) del ecosistema Tapiz (activo) / Psicosis (meta) / Fungi (basurero): mide presión de tokens, simula guardarraíles con mitigación por contexto artístico y detecta condiciones de carrera; compila todo en un system_status.json validable contra el contrato de system_map.py y renderizable en tapiz_renderer.html. Modos --demo, --stress y --live (autorretrato del repositorio real). Manual de operación en tools/TAPIZ.md.",
+      "ruta": "tools/compete_engine.py",
+      "tags": ["python", "generativo-visual", "pipeline"]
+    },
+    {
+      "id": "precursor",
+      "nombre": "Precursor",
+      "linea": "cultura",
+      "estado": "investigacion",
+      "descripcion": "Dossier sobre gramáticas de nombre y estructura (Markush, branding de cepas) desde la cultura, la ley y la estética. Nada operativo: solo la forma de los nombres.",
+      "ruta": "projects/cultura/dossiers/precursor.md",
+      "tags": ["investigacion", "naming"]
+    },
+    {
+      "id": "plano-rider-rd",
+      "nombre": "Plano / Rider RD",
+      "linea": "reduccion-de-dano",
+      "estado": "activo",
+      "descripcion": "Editor de planos operativos a escala real (1 m = 200 px) y rider en PDF para los stands de Reduciendo Daño en eventos; packs Informativo, Testeo y Completo.",
+      "ruta": "web/src/components/PlanoTool.tsx",
+      "tags": ["svg", "produccion", "eventos"]
+    },
+    {
+      "id": "flyer-eventos",
+      "nombre": "Flyer automático",
+      "linea": "studio",
+      "estado": "activo",
+      "descripcion": "Pipeline de flyer de evento sin Photoshop: descarga desde Instagram, paleta por PIL, composición por nodos dentro de Blender y render por GPU.",
+      "ruta": "src/flujo/eventos/",
+      "tags": ["blender", "automatizacion", "vj"]
+    },
+    {
+      "id": "autocanva",
+      "nombre": "AutoCanva",
+      "linea": "studio",
+      "estado": "archivo",
+      "descripcion": "Pipeline en Python que convierte datos de producto (XML/JSON) en flyers listos para imprimir (PNG 2000×3000 y SVG editable en Illustrator) para la línea real de seis suplementos de Reduciendo Daño; nació para eliminar el diseño manual repetitivo en Canva. Precursor del pipeline actual de eventos.",
+      "url": "https://github.com/ligereza/autocanva",
+      "tags": ["python", "svg", "automatizacion", "flyers"]
+    },
+    {
+      "id": "vibecodeine",
+      "nombre": "vibecodeine (flujo)",
+      "linea": "madre",
+      "estado": "activo",
+      "descripcion": "El repositorio madre: CLI, hub web, equipo multiagente y todos los proyectos de arriba. Actúa como interfaz de administración de este portafolio.",
+      "url": "https://github.com/ligereza/vibecodeine",
+      "tags": ["cli", "hub", "multi-agente"]
+    }
+  ]
+}

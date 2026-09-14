@@ -1,0 +1,11 @@
+id: panal_records_primary
+producer_id: panal_records
+status: done
+source_quality: sitio_oficial
+workflow:
+  suggested_tool: logo_clean_lab
+  next_action: ninguna (completo)
+outputs:
+  raster: knowledge/logos/descargas/panal_records.jpg
+  raster_source: knowledge/logos/descargas/panal_records.txt
+  vector: knowledge/logos/vector/panal_records.svg

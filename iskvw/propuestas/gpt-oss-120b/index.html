@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>ISKVW – Red viva</title>
+<style>
+  html,body{margin:0;height:100%;overflow:hidden;background:#111;color:#eee;font-family:system-ui,Arial,sans-serif}
+  canvas{display:block;width:100%;height:100%}
+  #intro{
+    position:absolute;top:0;left:0;right:0;bottom:0;
+    background:#111;display:flex;align-items:center;justify-content:center;
+    flex-direction:column;z-index:10;color:#fff;cursor:pointer;
+    animation:fadein .8s forwards;
+  }
+  #intro h1{font-size:2.2em;margin:0.2em}
+  #intro p{font-size:1em;margin:0}
+  @keyframes fadein{from{opacity:0}to{opacity:1}}
+  #tooltip{
+    position:absolute;padding:.4em .6em;background:#222;border:1px solid #555;
+    border-radius:4px;pointer-events:none;opacity:0;transition:opacity .2s;
+    font-size:.85em;max-width:260px;color:#fff;z-index:9;
+  }
+  #detail{
+    position:absolute;top:0;right:0;bottom:0;width:300px;background:#1a1a1a;
+    border-left:1px solid #333;padding:1em;overflow:auto;transform:translateX(100%);
+    transition:transform .3s;z-index:8;
+  }
+  #detail.open{transform:translateX(0)}
+  #detail h2{margin-top:0;font-size:1.4em;color:#ff6b6b}
+  #detail .close{
+    position:absolute;top:.5em;right:.5em;background:#333;color:#fff;
+    border:none;padding:.2em .5em;cursor:pointer;font-size:1.2em;line-height:1
+  }
+  #status{
+    position:absolute;bottom:0;left:0;right:0;padding:.4em .8em;
+    background:rgba(0,0,0,.6);font-size:.85em;pointer-events:none;
+    display:flex;justify-content:space-between;align-items:center;z-index:7;
+  }
+  #legend{
+    position:absolute;top:0;right:0;background:rgba(0,0,0,.6);
+    color:#fff;padding:.4em .8em;font-size:.8em;z-index:6;
+  }
+  .legend-item{margin:0 .4em;display:inline-flex;align-items:center}
+  .shape{
+    width:12px;height:12px;margin-right:4px;display:inline-block;
+  }
+  .shape.circle{border-radius:50%;background:#4ecdc4}
+  .shape.square{background:#ff6b6b}
+  .shape.diamond{
+    width:0;height:0;border:6px solid transparent;
+    border-bottom-color:#ffa502;position:relative;top:-6px;
+  }
+  .shape.triangle{
+    width:0;height:0;border-left:6px solid transparent;
+    border-right:6px solid transparent;border-bottom:12px solid #1e90ff;
+  }
+  .cursor-drag{cursor:grab}
+  .cursor-drag:active{cursor:grabbing}
+</style>
+</head>
+<body>
+
+<canvas id="canvas"></canvas>
+
+<div id="intro" tabindex="0">
+  <h1>ISKVW</h1>
+  <p>Presiona cualquier tecla o haz clic para sumergirte en la obra</p>
+</div>
+
+<div id="tooltip"></div>
+
+<div id="detail"><button class="close" id="closeDetail">×</button><div id="detailContent"></div></div>
+
+<div id="status"><span id="info"></span><span id="fps"></span></div>
+
+<div id="legend">
+  <span class="legend-item"><span class="shape circle"></span> pieza_grafica</span>
+  <span class="legend-item"><span class="shape square"></span> obra</span>
+  <span class="legend-item"><span class="shape diamond"></span> concepto</span>
+  <span class="legend-item"><span class="shape triangle"></span> informe</span>
+</div>
+
+<script>
+(async()=>{
+
+// ---------- CARGA DE DATOS ----------
+const resp = await fetch('../../datos/archivo.json');
+if(!resp.ok){document.body.textContent='Error al cargar datos';return;}
+const data = await resp.json();
+const piezas = data.piezas||[];
+const enlaces = data.vinculos||[];
+
+// ---------- CONFIGURACIÓN ----------
+const coloresClase = {
+  obra:'#ff6b6b',
+  pieza_grafica:'#4ecdc4',
+  concepto:'#ffa502',
+  informe:'#1e90ff',
+  default:'#888'
+};
+const patronesClase = {
+  obra:'', // sólido
+  pieza_grafica:'', // sólido
+  concepto:'repeating-linear-gradient(45deg, transparent, transparent 4px, rgba(255,255,255,.2) 4px, rgba(255,255,255,.2) 8px)',
+  informe:'', // sólido
+  default:''
+};
+const coloresEnlace = {
+  manual:'#fff',
+  etiqueta:'#777',
+  default:'#555'
+};
+const formaClase = {
+  obra:'square',
+  pieza_grafica:'circle',
+  concepto:'diamond',
+  informe:'triangle',
+  default:'circle'
+};
+const pesoNodoBase = 6;   // radio mínimo
+const pesoEnlaceBase = 0.6; // grosor mínimo
+
+// ---------- NODOS ----------
+const nodos = piezas.map(p=>({
+  id:p.id,
+  titulo:p.titulo,
+  clase:p.clase,
+  peso:p.peso||1,
+  fecha:p.fecha||'',
+  resumen:p.resumen||'',
+  etiquetas:p.etiquetas||[],
+  medio:p.medio||'',
+  estado:p.estado||'',
+  extra:p.extra||{},
+  x:Math.random()*800-400,
+  y:Math.random()*600-300,
+  vx:0,vy:0,
+  fx:0,fy:0,
+  fixed:false
+}));
+const nodoPorId = Object.fromEntries(nodos.map(n=>[n.id,n]));
+
+// ---------- ENLACES ----------
+let edges = enlaces.map(e=>{
+  const a=nodoPorId[e.de];
+  const b=nodoPorId[e.a];
+  if(!a||!b) return null;
+  return {
+    source:a,
+    target:b,
+    peso:e.peso||0,
+    clase:e.clase||'default'
+  };
+}).filter(Boolean);
+
+// ---------- CANVAS ----------
+const canvas=document.getElementById('canvas');
+const ctx=canvas.getContext('2d');
+function resize(){canvas.width=window.innerWidth;canvas.height=window.innerHeight;}
+window.addEventListener('resize',resize);
+resize();
+
+// ---------- UI ----------
+const tooltip=document.getElementById('tooltip');
+const detail=document.getElementById('detail');
+const detailContent=document.getElementById('detailContent');
+const closeDetail=document.getElementById('closeDetail');
+const statusInfo=document.getElementById('info');
+const statusFps=document.getElementById('fps');
+const intro=document.getElementById('intro');
+
+let hoverNode=null,selectedNode=null;
+let isDragging=false,dragNode=null;
+let offsetX=0,offsetY=0;
+let scale=1,tx=0,ty=0;
+let paused=false;
+let showManual=true,showEtiqueta=true,showLabels=true;
+let lastTime=performance.now(), fps=0;
+
+// ---------- ENTRADA ----------
+function iniciar(){
+  intro.style.display='none';
+  requestAnimationFrame(loop);
+}
+intro.addEventListener('click',iniciar);
+intro.addEventListener('keydown',e=>{if(e.key!=='Tab') iniciar();});
+window.addEventListener('keydown',e=>{
+  if(e.target!==document.body) return;
+  switch(e.key){
+    case ' ': paused=!paused; break;
+    case 'r': resetPositions(); break;
+    case 'l': showLabels=!showLabels; break;
+    case 'm': showManual=!showManual; break;
+    case 'e': showEtiqueta=!showEtiqueta; break;
+  }
+});
+
+// ---------- COORDENADAS ----------
+function screenToWorld(sx,sy){
+  return {
+    x:(sx - canvas.width/2 - tx)/scale,
+    y:(sy - canvas.height/2 - ty)/scale
+  };
+}
+function worldToScreen(wx,wy){
+  return {
+    x: wx*scale + canvas.width/2 + tx,
+    y: wy*scale + canvas.height/2 + ty
+  };
+}
+function findNode(x,y){
+  for(let i=nodos.length-1;i>=0;i--){
+    const n=nodos[i];
+    const r = (pesoNodoBase + n.peso)*scale;
+    if(Math.hypot(x-n.x,y-n.y)<r) return n;
+  }
+  return null;
+}
+
+// ---------- INTERACCIÓN ----------
+canvas.addEventListener('mousedown',e=>{
+  const p=screenToWorld(e.offsetX,e.offsetY);
+  const n=findNode(p.x,p.y);
+  if(n){
+    isDragging=true; dragNode=n; n.fixed=true;
+    offsetX=n.x-p.x; offsetY=n.y-p.y;
+    canvas.classList.add('cursor-drag');
+  }
+});
+canvas.addEventListener('mousemove',e=>{
+  const p=screenToWorld(e.offsetX,e.offsetY);
+  if(isDragging && dragNode){
+    dragNode.x=p.x+offsetX;
+    dragNode.y=p.y+offsetY;
+  }else{
+    const n=findNode(p.x,p.y);
+    if(n!==hoverNode){
+      hoverNode=n;
+      if(n){
+        const txt=`<strong>${n.titulo}</strong><br>Clase: ${n.clase}<br>Fecha: ${n.fecha||'–'}`;
+        tooltip.innerHTML=txt;
+        tooltip.style.left=(e.clientX+12)+'px';
+        tooltip.style.top=(e.clientY+12)+'px';
+        tooltip.style.opacity='1';
+      }else{
+        tooltip.style.opacity='0';
+      }
+    }
+  }
+});
+canvas.addEventListener('mouseup',()=>{isDragging=false; if(dragNode){dragNode.fixed=false; dragNode=null} canvas.classList.remove('cursor-drag')});
+canvas.addEventListener('mouseleave',()=>{isDragging=false; if(dragNode){dragNode.fixed=false; dragNode=null} canvas.classList.remove('cursor-drag')});
+canvas.addEventListener('click',e=>{
+  const p=screenToWorld(e.offsetX,e.offsetY);
+  const n=findNode(p.x,p.y);
+  if(n){
+    selectedNode=n;
+    mostrarDetalle(n);
+  }
+});
+
+// ---------- TOUCh ----------
+canvas.addEventListener('touchstart',e=>{
+  const t=e.touches[0];
+  const p=screenToWorld(t.clientX,t.clientY);
+  const n=findNode(p.x,p.y);
+  if(n){
+    isDragging=true; dragNode=n; n.fixed=true;
+    offsetX=n.x-p.x; offsetY=n.y-p.y;
+  }
+});
+canvas.addEventListener('touchmove',e=>{
+  e.preventDefault();
+  const t=e.touches[0];
+  const p=screenToWorld(t.clientX,t.clientY);
+  if(isDragging && dragNode){
+    dragNode.x=p.x+offsetX;
+    dragNode.y=p.y+offsetY;
+  }
+});
+canvas.addEventListener('touchend',()=>{isDragging=false; if(dragNode){dragNode.fixed=false; dragNode=null}});
+let pinchStartDist=null, pinchStartScale=1;
+canvas.addEventListener('touchmove',e=>{
+  if(e.touches.length===2){
+    const [t1,t2]=e.touches;
+    const dx=t2.clientX-t1.clientX, dy=t2.clientY-t1.clientY;
+    const d=Math.hypot(dx,dy);
+    if(pinchStartDist===null){
+      pinchStartDist=d;
+      pinchStartScale=scale;
+    }else{
+      scale=pinchStartScale*d/pinchStartDist;
+    }
+    e.preventDefault();
+  }
+});
+canvas.addEventListener('touchend',e=>{
+  if(e.touches.length<2) pinchStartDist=null;
+});
+
+// ---------- ZOOM ----------
+canvas.addEventListener('wheel',e=>{
+  e.preventDefault();
+  const factor = e.deltaY<0?1.1:0.9;
+  const mx=e.offsetX, my=e.offsetY;
+  const before=screenToWorld(mx,my);
+  scale*=factor;
+  const after=screenToWorld(mx,my);
+  tx+= (after.x - before.x)*scale;
+  ty+= (after.y - before.y)*scale;
+});
+
+// ---------- DETALLE ----------
+function mostrarDetalle(node){
+  const extraHTML = Object.keys(node.extra).length
+    ? `<pre style="background:#222;padding:.5em;border-radius:4px;">${JSON.stringify(node.extra,null,2)}</pre>`
+    : '<em>Sin datos extra</em>';
+  const tags = Array.isArray(node.etiquetas) ? node.etiquetas.join(', ') : '';
+  const html = `
+    <h2>${node.titulo}</h2>
+    <p><strong>Clase:</strong> ${node.clase}</p>
+    <p><strong>Fecha:</strong> ${node.fecha||'–'}</p>
+    <p><strong>Resumen:</strong> ${node.resumen||'–'}</p>
+    <p><strong>Etiquetas:</strong> ${tags||'–'}</p>
+    <p><strong>Medio:</strong> ${node.medio||'–'}</p>
+    <p><strong>Estado:</strong> ${node.estado||'–'}</p>
+    <p><strong>Extra:</strong></p>
+    ${extraHTML}
+  `;
+  detailContent.innerHTML=html;
+  detail.classList.add('open');
+}
+closeDetail.addEventListener('click',()=>{detail.classList.remove('open'); selectedNode=null;});
+
+// ---------- REINICIO ----------
+function resetPositions(){
+  nodos.forEach(n=>{
+    n.x=Math.random()*800-400;
+    n.y=Math.random()*600-300;
+    n.vx=n.vy=0;
+    n.fixed=false;
+  });
+}
+
+// ---------- SIMULACIÓN ----------
+function stepSimulation(delta){
+  const repulsion = 2500; // constante fija para sensación
+  const stiffness = 0.015;
+  const springBase = 120;
+
+  // repulsión entre todos
+  for(let i=0;i<nodos.length;i++){
+    const a=nodos[i];
+    for(let j=i+1;j<nodos.length;j++){
+      const b=nodos[j];
+      let dx=b.x-a.x, dy=b.y-a.y;
+      let dist=Math.hypot(dx,dy)||0.01;
+      let force=repulsion/(dist*dist);
+      let fx=force*dx/dist, fy=force*dy/dist;
+      a.vx-=fx; a.vy-=fy;
+      b.vx+=fx; b.vy+=fy;
+    }
+  }
+
+  // enlaces
+  edges.forEach(e=>{
+    if((e.clase==='manual' && !showManual) ||
+       (e.clase==='etiqueta' && !showEtiqueta)) return;
+    const a=e.source, b=e.target;
+    let dx=b.x-a.x, dy=b.y-a.y;
+    let dist=Math.hypot(dx,dy)||0.01;
+    const desired = springBase * (1 - e.peso);
+    let force = stiffness * (dist - desired);
+    let fx=force*dx/dist, fy=force*dy/dist;
+    if(!a.fixed){a.vx+=fx; a.vy+=fy;}
+    if(!b.fixed){b.vx-=fx; b.vy-=fy;}
+  });
+
+  // fricción y actualización
+  const damping=0.85;
+  nodos.forEach(n=>{
+    if(n.fixed) return;
+    n.vx*=damping; n.vy*=damping;
+    n.x+=n.vx*delta;
+    n.y+=n.vy*delta;
+  });
+}
+
+// ---------- DIBUJO ----------
+function draw(){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+  ctx.save();
+  ctx.translate(canvas.width/2+tx,canvas.height/2+ty);
+  ctx.scale(scale,scale);
+
+  // enlaces
+  edges.forEach(e=>{
+    if((e.clase==='manual' && !showManual) ||
+       (e.clase==='etiqueta' && !showEtiqueta)) return;
+    const a=e.source, b=e.target;
+    const w = pesoEnlaceBase + e.peso*2;
+    ctx.beginPath();
+    ctx.moveTo(a.x,a.y);
+    ctx.lineTo(b.x,b.y);
+    ctx.strokeStyle = coloresEnlace[e.clase]||coloresEnlace['default'];
+    ctx.lineWidth = w/scale;
+    ctx.setLineDash(e.clase==='etiqueta'?[6/scale,4/scale]:[]);
+    ctx.stroke();
+  });
+
+  // nodos
+  nodos.forEach(n=>{
+    const r = pesoNodoBase + n.peso*2;
+    const shape = formaClase[n.clase]||'circle';
+    ctx.save();
+    // patrón para daltonismo
+    if(patronesClase[n.clase]){
+      const patternCanvas=document.createElement('canvas');
+      patternCanvas.width=8; patternCanvas.height=8;
+      const pctx=patternCanvas.getContext('2d');
+      pctx.fillStyle=coloresClase[n.clase]||coloresClase['default'];
+      pctx.fillRect(0,0,8,8);
+      pctx.fillStyle=patronesClase[n.clase];
+      pctx.fillRect(0,0,8,8);
+      const pat=ctx.createPattern(patternCanvas,'repeat');
+      ctx.fillStyle=pat;
+    }else{
+      ctx.fillStyle = coloresClase[n.clase]||coloresClase['default'];
+    }
+    ctx.beginPath();
+    if(shape==='circle'){
+      ctx.arc(n.x,n.y,r,0,Math.PI*2);
+    }else if(shape==='square'){
+      ctx.rect(n.x-r,n.y-r,2*r,2*r);
+    }else if(shape==='diamond'){
+      ctx.moveTo(n.x, n.y-r);
+      ctx.lineTo(n.x+r, n.y);
+      ctx.lineTo(n.x, n.y+r);
+      ctx.lineTo(n.x-r, n.y);
+      ctx.closePath();
+    }else if(shape==='triangle'){
+      ctx.moveTo(n.x, n.y-r);
+      ctx.lineTo(n.x+r*Math.sin(Math.PI/3), n.y+r*Math.cos(Math.PI/3));
+      ctx.lineTo(n.x-r*Math.sin(Math.PI/3), n.y+r*Math.cos(Math.PI/3));
+      ctx.closePath();
+    }
+    ctx.fill();
+    // borde para hover o selección
+    if(n===hoverNode||n===selectedNode){
+      ctx.strokeStyle='#fff';
+      ctx.lineWidth=2/scale;
+      ctx.stroke();
+    }
+    // etiqueta
+    if(showLabels){
+      ctx.fillStyle='#fff';
+      ctx.font='10px system-ui';
+      ctx.textAlign='center';
+      ctx.textBaseline='middle';
+      ctx.fillText(n.titulo.slice(0,12), n.x, n.y);
+    }
+    ctx.restore();
+  });
+
+  ctx.restore();
+
+  // barra de estado
+  const sel = selectedNode?`Seleccionado: ${selectedNode.titulo}`:'Ninguno';
+  statusInfo.textContent = `Nodos: ${nodos.length} | Enlaces: ${edges.length} | ${sel}`;
+}
+
+// ---------- LOOP ----------
+function loop(timestamp){
+  const delta = (timestamp - lastTime)/16; // base 60hz
+  lastTime=timestamp;
+  fps = 1000/(timestamp - (lastTime||timestamp));
+  statusFps.textContent = `FPS: ${fps.toFixed(1)}`;
+  if(!paused) stepSimulation(delta);
+  draw();
+  requestAnimationFrame(loop);
+}
+
+// ---------- INICIO ----------
+requestAnimationFrame(()=>{ // espera a que todo esté listo
+  // nada; la interacción empieza tras intro
+});
+
+})();
+</script>
+</body>
+</html>

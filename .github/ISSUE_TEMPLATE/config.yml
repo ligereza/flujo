@@ -1,0 +1,5 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Revisar el repositorio
+    url: https://github.com/ligereza/flujo
+    about: Documentacion, estado y contratos vigentes de FLUJO.

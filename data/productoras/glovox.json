@@ -1,0 +1,22 @@
+{
+  "name": "Glovox",
+  "aliases": [
+    "GLOVOX",
+    "Glovox"
+  ],
+  "instagram": "",
+  "tipos_fecha": [],
+  "logos": [
+    {
+      "id": "glovox_primary",
+      "knowledge": "PENDIENTE",
+      "estado": "no_encontrado",
+      "notas": "Alta directa por dato del usuario 2026-07-23. Sin candidato de curatoria; logo se busca en web (IG oficial/sitio)."
+    }
+  ],
+  "venues": [],
+  "confirmed": "",
+  "fuente_datos": "Alta directa por palabra del usuario 2026-07-23 (sin research adicional, ver CLAUDE.md regla de gasto). Mencion tambien detectada en triangulacion de fichas (co-organizador Piknic Electronik 12-sep-2026, ver data/productoras/piknic.json).",
+  "notes": "Productora nueva declarada por el usuario.",
+  "eventos": []
+}

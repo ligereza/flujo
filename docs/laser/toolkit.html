@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Kit de herramientas — Láser, TouchDesigner y contenido vectorial</title>
+<style>
+  :root{
+    --bg:#0a0b0f; --bg2:#11131a; --card:#151823; --line:#242838;
+    --tx:#e6e8ef; --dim:#9aa0b5; --faint:#6b7188;
+    --cy:#3ddcc4; --mag:#ff5b8a; --am:#ffb547; --vi:#a78bfa; --gr:#5eead4;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--tx);
+    font:16px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Inter,Roboto,sans-serif;
+    -webkit-font-smoothing:antialiased}
+  .wrap{max-width:1000px;margin:0 auto;padding:0 24px 100px}
+  header{padding:64px 0 40px;border-bottom:1px solid var(--line);margin-bottom:40px}
+  .kicker{font-size:12px;letter-spacing:.18em;text-transform:uppercase;color:var(--cy);font-weight:600;margin-bottom:14px}
+  h1{font-size:40px;line-height:1.15;margin:0 0 16px;font-weight:700;letter-spacing:-.02em}
+  .sub{color:var(--dim);font-size:17px;max-width:70ch;margin:0}
+  .meta{margin-top:22px;font-size:13px;color:var(--faint)}
+  h2{font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--cy);
+    font-weight:700;margin:56px 0 8px;padding-top:24px;border-top:1px solid var(--line)}
+  h2 .n{color:var(--faint);margin-right:10px}
+  .lead{color:var(--dim);margin:0 0 28px;max-width:72ch}
+  h3{font-size:20px;margin:38px 0 14px;font-weight:650;letter-spacing:-.01em}
+  p{max-width:74ch}
+  a{color:var(--cy);text-decoration:none;border-bottom:1px solid rgba(61,220,196,.3)}
+  a:hover{border-bottom-color:var(--cy)}
+  .callout{background:var(--bg2);border-left:3px solid var(--cy);padding:20px 24px;
+    border-radius:0 8px 8px 0;margin:24px 0}
+  .callout.warn{border-left-color:var(--am)}
+  .callout.bad{border-left-color:var(--mag)}
+  .callout .t{font-weight:650;margin-bottom:6px}
+  .callout p{margin:0;color:var(--dim)}
+  .callout p+p{margin-top:10px}
+  .tool{background:var(--card);border:1px solid var(--line);border-radius:10px;
+    padding:18px 20px;margin-bottom:12px}
+  .tool .hd{display:flex;flex-wrap:wrap;align-items:baseline;gap:10px;margin-bottom:8px}
+  .tool .nm{font-weight:650;font-size:17px}
+  .tool .desc{color:var(--dim);font-size:15px;margin:0}
+  .tool .desc strong{color:var(--tx);font-weight:600}
+  .tool .ft{margin-top:12px;padding-top:10px;border-top:1px solid var(--line);
+    font-size:13px;color:var(--faint);display:flex;flex-wrap:wrap;gap:6px 18px}
+  .tool .ft b{color:var(--dim);font-weight:600}
+  .badge{font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;font-weight:700;
+    padding:3px 8px;border-radius:20px;white-space:nowrap}
+  .b-top{background:rgba(61,220,196,.14);color:var(--cy)}
+  .b-ok{background:rgba(94,234,212,.1);color:var(--gr)}
+  .b-warn{background:rgba(255,181,71,.14);color:var(--am)}
+  .b-dead{background:rgba(255,91,138,.13);color:var(--mag)}
+  .b-pay{background:rgba(167,139,250,.14);color:var(--vi)}
+  .b-free{background:rgba(255,255,255,.07);color:var(--dim)}
+  table{width:100%;border-collapse:collapse;margin:22px 0;font-size:14.5px}
+  th{text-align:left;padding:10px 12px;border-bottom:1px solid var(--line);
+    color:var(--cy);font-size:11.5px;letter-spacing:.11em;text-transform:uppercase}
+  td{padding:10px 12px;border-bottom:1px solid rgba(36,40,56,.55);color:var(--dim);vertical-align:top}
+  td b{color:var(--tx);font-weight:600}
+  .flow{background:var(--bg2);border:1px solid var(--line);border-radius:10px;
+    padding:20px;margin:20px 0;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+    font-size:13.5px;line-height:2;color:var(--dim);overflow-x:auto}
+  .flow .s{color:var(--tx);background:rgba(61,220,196,.09);padding:3px 9px;
+    border-radius:5px;border:1px solid rgba(61,220,196,.2)}
+  .flow .a{color:var(--faint);padding:0 6px}
+  .flow .lbl{display:block;color:var(--cy);font-size:11px;letter-spacing:.12em;
+    text-transform:uppercase;margin-bottom:10px;font-family:inherit;font-weight:700}
+  code{background:var(--bg2);padding:2px 6px;border-radius:4px;font-size:13.5px;
+    font-family:ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--gr)}
+  ul{color:var(--dim);max-width:74ch;padding-left:22px}
+  li{margin-bottom:7px}
+  li strong{color:var(--tx)}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  @media(max-width:720px){.grid2{grid-template-columns:1fr}h1{font-size:30px}.wrap{padding:0 16px 70px}}
+  footer{margin-top:70px;padding-top:26px;border-top:1px solid var(--line);
+    color:var(--faint);font-size:13px}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<header>
+  <div class="kicker">Kit de trabajo · Julio 2026</div>
+  <h1>Láser sin BEYOND:<br>rutas, herramientas y material</h1>
+  <p class="sub">Mapa completo del terreno para generar contenido láser con QuickShow, TouchDesigner y el ecosistema vectorial de trazo. Incluye el veredicto sobre la licencia de TD 2023, el catálogo de herramientas de creación, y la referencia técnica para operar mañana.</p>
+  <div class="meta">Dos proyectores Pangolin · interfaz FB3-QS · QuickShow (sin licencia BEYOND) · entradas ILDA libres · TouchDesigner Commercial 2023</div>
+</header>
+
+<h2><span class="n">01</span> El veredicto de la licencia</h2>
+<p class="lead">Era la duda bloqueante. La respuesta es buena.</p>
+
+<div class="callout">
+  <div class="t">Tu licencia de 2023 sí alcanza el camino nativo de láser en TouchDesigner</div>
+  <p>El <b>Laser CHOP</b> no es nuevo: ya se documentaba en material oficial de Derivative en <b>diciembre de 2020</b>, y reemplazó al viejo Scan CHOP. El <b>Laser Device CHOP</b> — el que saca a EtherDream, Helios y ShowNET — se introdujo en builds de <b>2023</b> (aparece en las release notes del build 2023.11290, y su documentación referencia el 2023.11280 como el más antiguo compatible).</p>
+  <p>Las licencias de TouchDesigner son <b>perpetuas</b> e incluyen <b>12 meses de actualizaciones</b> desde la fecha de compra. Conservas para siempre el derecho a usar cualquier build lanzada dentro de esa ventana. Si compraste en 2023, casi con seguridad tienes ambos operadores.</p>
+</div>
+
+<div class="callout warn">
+  <div class="t">Dos advertencias</div>
+  <p><b>El Laser CHOP fue rehecho en el build 2025.30000</b> — cambió parámetros (desaparecen "Start Point Hold Time" e "Input Rate", aparece la distinción entre corner points y guide points, y procesa internamente a 192.000 samples). Esa versión mejorada queda fuera de tu licencia. La anterior funciona, solo es menos refinada. Renovar actualizaciones cuesta <b>USD 300/año</b> para Commercial.</p>
+  <p><b>Verifica el corte exacto</b> entrando a tu cuenta en derivative.ca y mirando la fecha de compra. El mes exacto define hasta qué build llegas. Si compraste a principios de 2023, podrías quedar justo antes del 2023.11280.</p>
+</div>
+
+<div class="callout bad">
+  <div class="t">Y el dato que explica tu setup anterior</div>
+  <p>El <b>Pangolin CHOP</b> se comunica con BEYOND por <b>DLL local mediante mensajes de Windows</b>, no por OSC ni TCP — o sea, exige que BEYOND corra en la misma máquina, solo Windows, sin ruta por red. Y hay una restricción cruzada de licencias: <b>TouchDesigner no comercial solo funciona con la versión demo de BEYOND</b>. Como tú tienes Commercial, ese no era tu problema.</p>
+</div>
+
+<h2><span class="n">02</span> Las cuatro rutas</h2>
+<p class="lead">Todo lo que sigue se ordena en cuatro caminos. Los dos primeros sirven mañana; los dos últimos son a dónde deberías ir.</p>
+
+<div class="flow">
+  <span class="lbl">Ruta A — Sin herramientas externas (la más corta)</span>
+  <span class="s">Cualquier imagen BMP/JPG/GIF</span><span class="a">→</span><span class="s">QuickTrace, modo Centerline</span><span class="a">→</span><span class="s">Cue Grid</span><span class="a">→</span><span class="s">Efectos en vivo</span>
+</div>
+
+<div class="flow">
+  <span class="lbl">Ruta B — Vía SVG (control real del resultado)</span>
+  <span class="s">SVG</span><span class="a">→</span><span class="s">vpype: limpiar, simplificar, ordenar</span><span class="a">→</span><span class="s">Modulaser o msvg2ild</span><span class="a">→</span><span class="s">.ild</span><span class="a">→</span><span class="s">Import a QuickShow</span>
+</div>
+
+<div class="flow">
+  <span class="lbl">Ruta C — Animación seria</span>
+  <span class="s">Blender Line Art / Freestyle</span><span class="a">→</span><span class="s">secuencia SVG</span><span class="a">→</span><span class="s">vpype por frame</span><span class="a">→</span><span class="s">.ild multi-frame</span>
+</div>
+
+<div class="flow">
+  <span class="lbl">Ruta D — Dibujo en vivo (lo que hacías con BEYOND, sin Pangolin)</span>
+  <span class="s">iPad</span><span class="a">→</span><span class="s">TouchDesigner</span><span class="a">→</span><span class="s">Laser CHOP</span><span class="a">→</span><span class="s">Laser Device CHOP</span><span class="a">→</span><span class="s">Helios USD 114</span><span class="a">→</span><span class="s">ILDA in del láser</span>
+</div>
+
+<h2><span class="n">03</span> Conversión SVG → ILDA</h2>
+<p class="lead">Es un nicho pequeño y con menos opciones de las que uno esperaría. No existe ningún paquete de ILDA en PyPI: se verificó contra el índice completo de 861.090 nombres.</p>
+
+<div class="tool">
+  <div class="hd"><span class="nm">Modulaser</span><span class="badge b-top">Lo mejor para mañana</span><span class="badge b-free">Trial sin capar</span></div>
+  <p class="desc">Software de control láser multiplataforma que <strong>importa SVG de forma nativa</strong> (paths, formas y transforms) y <strong>exporta ILDA</strong>. Lo decisivo: el plan gratuito lista literalmente "Export and record" — el export <strong>no está limitado</strong>. Las restricciones del trial son sesiones de 15 minutos y máximo 2 salidas láser, ninguna de las cuales te afecta si solo vas a generar archivos.</p>
+  <div class="ft"><span><b>Web</b> <a href="https://modulaser.app/guides/image-mode">modulaser.app</a></span><span><b>Precio</b> trial gratis, luego suscripción</span><span><b>SO</b> macOS, Windows, Linux, Raspberry Pi</span><span><b>Ojo</b> el texto debe ir convertido a curvas</span></div>
+</div>
+
+<div class="tool">
+  <div class="hd"><span class="nm">msvg2ild</span><span class="badge b-ok">Respaldo gratis</span><span class="badge b-warn">Monocromo</span></div>
+  <p class="desc">Fork en Python 3 del histórico <code>svg2ild.py</code> de OpenLase. <strong>Cero dependencias externas</strong> — solo la librería estándar. Convierte una carpeta de SVGs en un único .ild animado. Soporta path, rect, circle, ellipse, line, polyline, polygon, grupos y transformaciones completas, con aplanado adaptativo de Béziers y arcos. Ya trae reordenamiento para minimizar blanking, velocidades distintas con láser encendido y apagado, y dwell configurable en inicio, fin, esquinas y curvas.</p>
+  <p class="desc" style="margin-top:10px"><strong>Su límite serio:</strong> escribe solo ILDA formato 1 (2D indexado) y <strong>monocromo</strong> — el byte de color está fijo en el código, así que los colores del SVG se pierden.</p>
+  <div class="ft"><span><b>Repo</b> <a href="https://github.com/goodtimes-code/msvg2ild">goodtimes-code/msvg2ild</a></span><span><b>Licencia</b> AGPL-3.0</span><span><b>Última actividad</b> ene 2024</span><span><b>Uso</b> <code>python main.py entrada/ salida/out.ild</code></span></div>
+</div>
+
+<div class="tool">
+  <div class="hd"><span class="nm">ILD Render</span><span class="badge b-pay">130 € netos</span><span class="badge b-ok">Vivo</span></div>
+  <p class="desc">El único puente Inkscape → láser real y mantenido (wiki actualizada en mayo 2026). Trae plugins oficiales para <strong>Inkscape, Blender y After Effects</strong>, sistema de capas con ajustes de optimización independientes y asignación a proyectores. Detalle importante: el plugin de Inkscape <strong>no escribe archivos .ild, hace streaming</strong> a ILD Render corriendo en segundo plano. Solo Windows, y no tienen tienda online — se compra por correo.</p>
+  <div class="ft"><span><b>Web</b> <a href="https://ildrender.automatic-brain.de/">ildrender.automatic-brain.de</a></span><span><b>SO</b> Windows 10/11 64-bit</span><span><b>Salida</b> ShowNET, EtherDream</span></div>
+</div>
+
+<div class="tool">
+  <div class="hd"><span class="nm">LaserShowGen</span><span class="badge b-ok">El más activo</span><span class="badge b-pay">USD 29 Pro</span></div>
+  <p class="desc">Editor y exportador ILDA con el desarrollo más vivo del sector: <strong>v2.2.0 en marzo de 2026, 105 releases</strong>. Versión gratuita permanente con tope de 10 exportaciones diarias y sin timeline. <strong>Importa ILDA, no SVG</strong> — sirve como visor, optimizador y exportador final, no como conversor de vectores.</p>
+  <div class="ft"><span><b>Web</b> <a href="https://bitlasers.com/lasershowgen-sw/">bitlasers.com</a></span><span><b>Código</b> <a href="https://github.com/Grix/ildagen">Grix/ildagen</a></span><span><b>SO</b> Win, macOS, Linux, web</span></div>
+</div>
+
+<div class="tool">
+  <div class="hd"><span class="nm">LaserBoy</span><span class="badge b-warn">Estado dudoso</span><span class="badge b-free">Gratis</span></div>
+  <p class="desc">El clásico de James Lehman. Sus <strong>optimizaciones siguen siendo las mejores entre lo gratuito</strong>: interpolación por distancia máxima, dwell en esquinas, y reordenamiento de segmentos iluminados <em>y de su dirección</em> para minimizar el recorrido total. Pero <strong>no importa SVG</strong> (sí DXF, que Inkscape exporta), la interfaz es de consola con menús de teclas, y las señales de vida son malas: sin changelog ni número de versión, su foro devuelve 503, y su documentación de formato todavía trata el color de 24 bits como "propuesta" sin mencionar los formatos 4 y 5, estandarizados en 2014.</p>
+  <div class="ft"><span><b>Web</b> <a href="https://laserboy.org/">laserboy.org</a></span><span><b>SO</b> Win, Linux, macOS (SDL)</span><span><b>Ruta</b> Inkscape → DXF R14 → LaserBoy</span></div>
+</div>
+
+<div class="tool">
+  <div class="hd"><span class="nm">ilda-viewer</span><span class="badge b-ok">Verificador</span></div>
+  <p class="desc">Visor de archivos .ild en el navegador. Imprescindible para comprobar el resultado <strong>sin tener el proyector delante</strong>. Actualizado en septiembre de 2025.</p>
+  <div class="ft"><span><b>Repo</b> <a href="https://github.com/CR1337/ilda-viewer">CR1337/ilda-viewer</a></span></div>
+</div>
+
+<h3>Callejones sin salida verificados</h3>
+<ul>
+  <li><strong>No existe ninguna extensión de Inkscape open source que exporte ILDA.</strong></li>
+  <li><strong>No hay ningún conversor SVG→ILDA online funcional</strong> en 2026. Los que circulan en foros son de 2014 y están muertos.</li>
+  <li><strong>vpype no tiene plugin ILDA</strong> — verificado contra su lista oficial. Sirve para preparar, no para convertir.</li>
+  <li><strong>Toda la línea Lasershow Converter de Pangolin</strong> (4D, MAX, FLASH, Blender) está atada a LD2000 o a BEYOND. Ninguna es vía barata hacia QuickShow.</li>
+  <li><strong>Cuidado con la confusión más común:</strong> LightBurn, LaserGRBL, LaserWeb y <code>svg2gcode</code> son para láseres de <em>corte y grabado</em> (gcode). No tienen nada que ver con ILDA ni con galvos de show.</li>
+</ul>
+
+<h2><span class="n">04</span> Preparación y optimización: vpype</h2>
+<p class="lead">La pieza que resuelve la parte fea del problema. Es del mundo de los plotters de pluma, que es el mismo problema que el láser: pluma abajo = haz encendido, minimizar viaje con pluma arriba = minimizar puntos gastados en saltos negros.</p>
+
+<div class="tool">
+  <div class="hd"><span class="nm">vpype</span><span class="badge b-top">Pieza central</span><span class="badge b-free">Python, gratis</span></div>
+  <p class="desc">Navaja suiza de gráficos vectoriales para plotter, usable como CLI y <strong>como librería Python</strong> (la geometría vive en un <code>LineCollection</code> de arrays numpy complejos). Comandos clave: <code>read</code> importa SVG con tolerancia de aplanado configurable y con <code>--attr stroke</code> separa en capas <strong>por color de trazo</strong>; <code>linemerge</code> une trazos cuyos extremos casi se tocan; <code>linesort</code> <strong>reordena para minimizar el viaje en blanco</strong>; <code>linesimplify</code> aplica Douglas-Peucker; <code>reloop</code> mueve la costura de trazos cerrados; <code>filter</code> descarta trazos más cortos que X.</p>
+  <div class="ft"><span><b>Repo</b> <a href="https://github.com/abey79/vpype">abey79/vpype</a></span><span><b>Docs</b> <a href="https://vpype.readthedocs.io/">readthedocs</a></span><span><b>Instalación</b> <code>pip install vpype</code></span></div>
+</div>
+
+<div class="tool">
+  <div class="hd"><span class="nm">vpype-hatched</span><span class="badge b-top">Resuelve el relleno</span></div>
+  <p class="desc">Convierte zonas oscuras de una imagen en <strong>rayado</strong>. Esto ataca directamente la limitación más frustrante del láser: que una forma rellena llega como contorno hueco. Con hatching, tu logo sólido llega <strong>rayado en vez de vacío</strong>. Es la técnica canónica de los plotteristas y en láser se ve espectacular.</p>
+  <div class="ft"><span><b>Instalación</b> <code>pip install vpype-hatched</code></span></div>
+</div>
+
+<div class="tool">
+  <div class="hd"><span class="nm">vpype-flow-imager</span><span class="badge b-top">Estética fuerte</span></div>
+  <p class="desc">Convierte una foto en un dibujo de <strong>campos de flujo</strong>: trazos largos y continuos que siguen los gradientes de la imagen. Doblemente ideal para láser — es hipnótico visualmente, y al ser pocos trazos larguísimos gasta <strong>casi cero puntos en saltos negros</strong>.</p>
+  <div class="ft"><span><b>Repo</b> <a href="https://github.com/serycjon/vpype-flow-imager">serycjon/vpype-flow-imager</a></span></div>
+</div>
+
+<div class="tool">
+  <div class="hd"><span class="nm">Otros plugins útiles</span></div>
+  <p class="desc"><strong>vpype-occult</strong> elimina líneas ocultas, útil para geometría 3D proyectada. <strong>vpype-vectrace</strong> hace trazado poligonal. <strong>vpype-ttf</strong> convierte texto a trazo. <strong>vpype-dxf</strong>, <strong>vpype-pixelart</strong>, <strong>vpype-deduplicate</strong> completan el set.</p>
+  <div class="ft"><span><b>Lista completa</b> <a href="https://vpype.readthedocs.io/en/latest/plugins.html">vpype plugins</a></span></div>
+</div>
+
+<h2><span class="n">05</span> Crear material: código generativo</h2>
+<p class="lead">La escena del plotter art es tu biblioteca. Quince años de gente resolviendo cómo hacer que algo sea hermoso siendo solo líneas — que es exactamente tu restricción.</p>
+
+<div class="tool">
+  <div class="hd"><span class="nm">vsketch</span><span class="badge b-top">La apuesta</span><span class="badge b-ok">Activo</span></div>
+  <p class="desc">Framework de bocetos generativos en Python del <strong>mismo autor de vpype</strong>, pensado explícitamente para arte de plotter. Sale SVG de trazo puro y se integra sin fricción con el pipeline de optimización. Si vas a escribir código generativo, este es el punto de entrada con menos resistencia hacia el láser.</p>
+  <div class="ft"><span><b>Repo</b> <a href="https://github.com/abey79/vsketch">abey79/vsketch</a></span><span><b>Docs</b> <a href="https://vsketch.readthedocs.io/">readthedocs</a></span><span><b>Lenguaje</b> Python</span></div>
+</div>
+
+<div class="tool">
+  <div class="hd"><span class="nm">p5.js + p5.js-svg</span><span class="badge b-ok">Activo</span><span class="badge b-free">Gratis</span></div>
+  <p class="desc">El framework creativo más accesible, con un addon que permite exportar el canvas como <strong>SVG real</strong>. Para láser hay que disciplinarse: dibujar solo con <code>line()</code> y <code>noFill()</code>, porque cualquier relleno se pierde en la conversión.</p>
+  <div class="ft"><span><b>Web</b> <a href="https://p5js.org/">p5js.org</a></span><span><b>Lenguaje</b> JavaScript</span></div>
+</div>
+
+<div class="tool">
+  <div class="hd"><span class="nm">ofxLaser</span><span class="badge b-top">Referencia del sector</span></div>
+  <p class="desc">Addon de openFrameworks para salida láser, de <strong>Seb Lee-Delisle</strong> — probablemente el artista láser más respetado trabajando hoy. Es el software detrás de instalaciones profesionales de gran escala. Si quieres ver cómo se hace bien esto, es la referencia.</p>
+  <div class="ft"><span><b>Repo</b> <a href="https://github.com/sebleedelisle/ofxLaser">sebleedelisle/ofxLaser</a></span><span><b>Lenguaje</b> C++ / openFrameworks</span></div>
+</div>
+
+<div class="tool">
+  <div class="hd"><span class="nm">Ilda (librería de Processing)</span><span class="badge b-ok">Única en su tipo</span></div>
+  <p class="desc">La <strong>única librería open source que combina render de SVG y escritura de ILDA</strong> en un mismo lugar. Permite importar, editar y exportar ILDA desde Processing, e incluso importar el formato PIC de LSX. 146 commits.</p>
+  <div class="ft"><span><b>Repo</b> <a href="https://github.com/colouredmirrorball/Ilda">colouredmirrorball/Ilda</a></span></div>
+</div>
+
+<div class="tool">
+  <div class="hd"><span class="nm">awesome-plotters</span><span class="badge b-top">Puerta de entrada</span></div>
+  <p class="desc">Lista curada en GitHub de código, herramientas y recursos para máquinas de dibujo. Es el mejor índice único del ecosistema: desde ahí llegas a casi todo lo demás.</p>
+  <div class="ft"><span><b>Repo</b> <a href="https://github.com/beardicus/awesome-plotters">beardicus/awesome-plotters</a></span></div>
+</div>
+
+<div class="tool">
+  <div class="hd"><span class="nm">DrawingBots</span><span class="badge b-ok">Comunidad</span></div>
+  <p class="desc">Portal y comunidad de robots de dibujo, con listados curados de herramientas y recursos. Los algoritmos que circulan ahí — campos de flujo, differential growth, circle packing, sistemas L, teselados de Truchet, reacción-difusión — son <strong>todos contenido láser directo</strong>, porque nacieron bajo la misma restricción de "solo líneas".</p>
+  <div class="ft"><span><b>Web</b> <a href="https://drawingbots.com/knowledge/tools/">drawingbots.com/knowledge/tools</a></span></div>
+</div>
+
+<div class="tool">
+  <div class="hd"><span class="nm">Otros frameworks</span></div>
+  <p class="desc"><strong>Paper.js</strong> — API vectorial madura con operaciones booleanas, estable aunque con poco cambio reciente. <strong>nannou</strong> — framework creativo en Rust, activo, con exportación SVG vía crates asociados. <strong>DrawBot</strong> — Python sobre macOS, vivo gracias a la comunidad de diseño tipográfico, muy bueno para composición con tipografía. Sin verificar su mantenimiento actual: <strong>canvas-sketch</strong>, <strong>geomerative</strong> (Processing) y <strong>Shoebot</strong>.</p>
+</div>
+
+<h2><span class="n">06</span> Crear material: 3D a línea</h2>
+<p class="lead">Probablemente tu vía más potente y la menos obvia. Para imaginería con profundidad — túneles, portales, alas girando, escaleras en perspectiva — dibujar en 2D no te lleva ahí.</p>
+
+<div class="tool">
+  <div class="hd"><span class="nm">Blender · Grease Pencil + modificador Line Art</span><span class="badge b-top">La joya</span><span class="badge b-free">Gratis</span></div>
+  <p class="desc">Convierte <strong>cualquier escena 3D en trazos limpios</strong> de Grease Pencil, calculados como contornos reales de la geometría. Blender tiene import/export nativo entre Grease Pencil y SVG. Para animación hay que exportar frame por frame. <strong>Bug conocido:</strong> la exportación SVG del Line Art ha tenido problemas históricos con cámara ortográfica — usa perspectiva o verifica el resultado.</p>
+  <div class="ft"><span><b>Manual</b> <a href="https://docs.blender.org/manual/en/latest/files/import_export/grease_pencil_svg.html">Import/Export SVG · Grease Pencil</a></span><span><b>Comunidad</b> <a href="https://blenderartists.org/t/tutorial-exporting-blender-grease-pencil-objects-as-svg-with-correct-scale/1617427">tutorial de escala correcta</a></span></div>
+</div>
+
+<div class="tool">
+  <div class="hd"><span class="nm">Blender · Freestyle SVG Exporter</span><span class="badge b-ok">La vía más directa</span></div>
+  <p class="desc">Add-on oficial que exporta las líneas estilizadas del render Freestyle a SVG, <strong>con soporte de animación</strong>. Es el camino más limpio de 3D animado a secuencia SVG de trazo puro dentro de Blender.</p>
+  <div class="ft"><span><b>Extensión</b> <a href="https://extensions.blender.org/add-ons/freestyle-svg-exporter/">extensions.blender.org</a></span><span><b>Código</b> <a href="https://github.com/folkertdev/freestyle-svg-exporter">folkertdev/freestyle-svg-exporter</a></span></div>
+</div>
+
+<div class="tool">
+  <div class="hd"><span class="nm">Blender → ILDA directo</span><span class="badge b-warn">Sin verificar</span></div>
+  <p class="desc">Existe un flujo documentado en la comunidad láser de Photonlexicon (exportador de archivos .ani / ILDA desde Blender) y Showcontroller soporta animaciones 3D desde Blender de forma directa. <strong>No pude verificar ningún plugin ILDA para Blender oficial y mantenido en 2026</strong> — trátalo como pista a investigar, no como herramienta lista.</p>
+  <div class="ft"><span><b>Hilo</b> <a href="https://photonlexicon.com/forums/showthread.php/26315-Ani-File-from-my-Blender-Exporter">Photonlexicon</a></span><span><b>Showcontroller</b> <a href="https://www.showcontroller.com/en/manual/7-special-features/7-6-3d-animations-from-blender.html">manual 7.6</a></span></div>
+</div>
+
+<div class="tool">
+  <div class="hd"><span class="nm">Rhino / Grasshopper · Make2D</span><span class="badge b-pay">Rhino de pago</span></div>
+  <p class="desc">Make2D es la función nativa de Rhino para proyectar geometría 3D a curvas 2D limpias. Desde Grasshopper, el plugin <strong>GraphicPlus</strong> exporta SVG. Vía sólida si ya trabajas en ese ecosistema.</p>
+  <div class="ft"><span><b>Plugin</b> <a href="https://github.com/interopxyz/GraphicPlus">interopxyz/GraphicPlus</a></span></div>
+</div>
+
+<div class="tool">
+  <div class="hd"><span class="nm">TouchDesigner · Trace SOP</span><span class="badge b-top">Nativo, ya lo tienes</span></div>
+  <p class="desc">Si la tentación es mandar píxeles al láser, la respuesta correcta es trazar <strong>dentro de TD</strong> con el Trace SOP y salir con vectores limpios. No existe puente Syphon/Spout hacia software láser porque el software láser consume vectores, no píxeles.</p>
+</div>
+
+<h2><span class="n">07</span> Crear material: imagen y video a línea</h2>
+
+<div class="callout">
+  <div class="t">La distinción que hay que entender: contorno vs línea central</div>
+  <p><b>Potrace</b> y los trazadores estándar siguen el <b>contorno</b> de una forma. Si trazas una línea dibujada a mano, obtienes el <em>perímetro</em> de esa línea: un trazo doble, hueco por dentro. Para el láser eso significa el doble de puntos y un resultado que no es lo que dibujaste.</p>
+  <p><b>El trazado de línea central</b> (centerline) devuelve una sola línea por trazo. Para line-art, dibujo a mano y logos de trazo, es lo que quieres <b>casi siempre</b>.</p>
+</div>
+
+<div class="tool">
+  <div class="hd"><span class="nm">Inkscape · Trace Bitmap con Centerline</span><span class="badge b-top">Gratis y suficiente</span></div>
+  <p class="desc">Inkscape 1.x integra el modo centerline dentro del propio diálogo de Trace Bitmap, apoyándose en <code>autotrace -centerline</code>. Es la herramienta gratuita de referencia para pasar dibujo a trazo único sin duplicar líneas.</p>
+  <div class="ft"><span><b>Repo</b> <a href="https://github.com/fablabnbg/inkscape-centerline-trace">fablabnbg/inkscape-centerline-trace</a></span><span><b>Fork</b> <a href="https://github.com/Moini/inkscape-centerline-trace">Moini</a></span></div>
+</div>
+
+<div class="tool">
+  <div class="hd"><span class="nm">QuickTrace (dentro de QuickShow)</span><span class="badge b-top">Cero herramientas extra</span></div>
+  <p class="desc">QuickShow <strong>ya trae autotrazador integrado</strong> para BMP, JPEG y GIF, con tres modos: <em>Color Separation</em> para logos de alta calidad, <em>Highlight Separation</em> para fotografías de tono continuo, y <strong><em>Centerline</em> para line-art y dibujo a mano</strong>. Incluye reducción de ruido de artefactos JPEG y control del número de colores a detectar. Lo trazado se arrastra al cue y se puede reeditar en el editor de frames. No acepta SVG — rasteriza primero.</p>
+  <div class="ft"><span><b>Wiki</b> <a href="https://wiki.pangolin.com/doku.php?id=quickshow:quicktrace">wiki.pangolin.com · QuickTrace</a></span></div>
+</div>
+
+<div class="tool">
+  <div class="hd"><span class="nm">TSP art · StippleGen</span><span class="badge b-top">Ideal para láser</span></div>
+  <p class="desc">Genera puntos por <strong>stippling ponderado con Voronoi</strong> y luego los conecta resolviendo un problema del viajante: el resultado es <strong>un único trazo continuo</strong> que reproduce toda la imagen. Para láser es casi óptimo, porque elimina prácticamente todos los saltos en negro y aprovecha cada punto del presupuesto en dibujar.</p>
+  <div class="ft"><span><b>StippleGen</b> <a href="https://www.evilmadscientist.com/2012/stipplegen-weighted-voronoi-stippling-and-tsp-paths-in-processing/">Evil Mad Scientist</a></span><span><b>Python</b> <a href="https://github.com/matthras/tsp-art-python">tsp-art-python</a> · <a href="https://github.com/RoboTums/PyTSPArt">PyTSPArt</a></span></div>
+</div>
+
+<div class="tool">
+  <div class="hd"><span class="nm">vtracer</span><span class="badge b-ok">Rápido</span></div>
+  <p class="desc">Vectorizador moderno escrito en Rust, muy rápido, orientado a contorno y color más que a línea central. Útil para preparar arte base; combínalo con vpype para adaptarlo al presupuesto de puntos.</p>
+</div>
+
+<div class="tool">
+  <div class="hd"><span class="nm">Video a vectores</span><span class="badge b-warn">Territorio sin mapear</span></div>
+  <p class="desc"><strong>No existe un pipeline empaquetado y mantenido</strong> de video a vector para láser. Lo que se hace es un script casero: <code>ffmpeg</code> extrae frames, <code>potrace</code> o <code>vtracer</code> traza cada uno, y se recombinan. Como punto de partida existe <a href="https://github.com/NickJokic/video-tracer">video-tracer</a> (sin verificar mantenimiento) y <a href="https://github.com/HyperionXXI/laser_pipeline_gui">laser_pipeline_gui</a>, que encadena ffmpeg → ImageMagick → Potrace → ILDA con interfaz PySide6 — pero tiene 1 estrella, está marcado como experimental y no declara licencia. Conceptualmente interesante, no apto para producción.</p>
+</div>
+
+<div class="tool">
+  <div class="hd"><span class="nm">Recraft (IA vectorial)</span><span class="badge b-warn">Con reservas</span></div>
+  <p class="desc">Genera <strong>SVG nativo</strong>, no un raster vectorizado después. Pero la advertencia importa: lo que produce suele ser <strong>formas rellenas de color plano, no trazos</strong>. Para láser habría que extraer contornos o pasarlo por centerline/hatching, y simplificar agresivamente. Sirve como generador de arte base, no como salida final.</p>
+  <div class="ft"><span><b>Nota</b> generar con IA y trazar produce miles de puntos — cuenta con perder detalle</span></div>
+</div>
+
+<h2><span class="n">08</span> Animación vectorial</h2>
+
+<div class="callout">
+  <div class="t">Primero, deshacer una confusión frecuente</div>
+  <p>Ningún editor común exporta SVG animado: Illustrator, Figma e Inkscape dan SVG estático. Y la mayoría de herramientas de "animación vectorial" exportan <b>Lottie, que es JSON, no SVG</b>. Los tres mecanismos de animación dentro de un SVG son SMIL (<code>animate</code>, <code>animateTransform</code>, <code>animateMotion</code>), CSS <code>@keyframes</code> embebido, y JavaScript.</p>
+  <p>Y hay un problema práctico: para saber qué geometría hay en el frame <em>t</em> de un SVG con SMIL o CSS <b>hay que renderizarlo</b>. No se deduce leyendo el XML. La solución es un navegador headless (Playwright/Puppeteer) que haga <code>svg.setCurrentTime(t)</code> y lea la geometría computada en cada paso. Funciona, pero es la vía cara — <b>la secuencia de SVGs numerados es más robusta y siempre debería ser tu primera opción</b>.</p>
+</div>
+
+<div class="tool">
+  <div class="hd"><span class="nm">Cavalry</span><span class="badge b-top">Ahora gratis</span><span class="badge b-ok">Novedad 2026</span></div>
+  <p class="desc">App de motion graphics procedural, considerada la alternativa seria a After Effects. <strong>Canva la liberó por completo en abril de 2026</strong> — la versión Pro ahora es gratuita. Tiene soporte nativo de vectores fuerte y herramientas generativas. Lo que no pude confirmar es si exporta directamente <strong>secuencias de SVG estáticos</strong>: su exportación documentada apunta sobre todo a video y secuencias de imagen raster. Vale la pena verificarlo tú, porque si lo hace, es la mejor herramienta de animación de trazo disponible y ahora no cuesta nada.</p>
+  <div class="ft"><span><b>Web</b> <a href="https://cavalry.studio/docs/nodes/general/vector-artwork-support/">cavalry.studio</a></span><span><b>Precio</b> gratis desde abril 2026</span></div>
+</div>
+
+<div class="tool">
+  <div class="hd"><span class="nm">Glaxnimate</span><span class="badge b-top">SVG animado real</span><span class="badge b-free">Open source</span></div>
+  <p class="desc">Editor de animación vectorial libre que trabaja <strong>nativamente con SVG y Lottie</strong>. Es el mejor candidato open source para producir SVG animado de verdad, y a diferencia de Rive no te encierra en un formato propietario con runtime.</p>
+</div>
+
+<div class="tool">
+  <div class="hd"><span class="nm">SVGator</span><span class="badge b-pay">Suscripción</span></div>
+  <p class="desc">Editor de animación SVG basado en web, que exporta SVG animado real con CSS o SMIL. Pensado para banners y web más que para producción audiovisual, pero cumple si lo que quieres es un SVG que se anime solo.</p>
+</div>
+
+<div class="tool">
+  <div class="hd"><span class="nm">Rive</span><span class="badge b-dead">No es tu camino</span></div>
+  <p class="desc">Usa su propio formato binario <code>.riv</code> con runtime propio. <strong>No exporta SVG animado ni Lottie de forma nativa.</strong> Hay conversores de terceros a Lottie, pero eso agrega dos saltos de formato. Descártalo.</p>
+</div>
+
+<div class="tool">
+  <div class="hd"><span class="nm">Synfig, Motion Canvas, Manim</span><span class="badge b-warn">Parcial</span></div>
+  <p class="desc"><strong>Synfig</strong> es animación vectorial open source clásica, exporta a varios formatos incluidas secuencias. <strong>Motion Canvas</strong> (TypeScript) y <strong>Manim</strong> (Python) son frameworks de animación programática que dibujan con primitivas vectoriales internamente pero producen video raster por defecto; se pueden adaptar con scripting propio, pero <strong>ninguno tiene un exportador oficial a secuencia SVG verificado</strong>.</p>
+</div>
+
+<h2><span class="n">09</span> Tipografía de trazo único</h2>
+<p class="lead">Detalle pequeño, impacto grande. Una fuente normal convertida a curvas da contornos dobles; una fuente de trazo único da una sola línea por letra. En el láser eso es la diferencia entre texto que escanea rápido y texto que parpadea.</p>
+
+<div class="tool">
+  <div class="hd"><span class="nm">Hershey Text</span><span class="badge b-top">El estándar</span><span class="badge b-free">Gratis</span></div>
+  <p class="desc">Extensión oficial de Inkscape (v3.0, de Evil Mad Scientist) para fuentes de grabado y trazo único. Es la herramienta canónica del mundo plotter y aplica idéntico al láser.</p>
+  <div class="ft"><span><b>Anuncio</b> <a href="https://www.evilmadscientist.com/2019/hershey-text-v30/">Hershey Text v3.0</a></span><span><b>Wiki</b> <a href="https://wiki.evilmadscientist.com/Hershey_Text">evilmadscientist</a></span></div>
+</div>
+
+<div class="tool">
+  <div class="hd"><span class="nm">SingleLineFonts</span><span class="badge b-pay">Tienda</span></div>
+  <p class="desc">Colección de fuentes SVG de trazo único compatibles con la extensión Hershey Text de Inkscape. Si necesitas más variedad tipográfica que las Hershey clásicas, es la fuente principal.</p>
+  <div class="ft"><span><b>Web</b> <a href="https://www.singlelinefonts.com/collections/svg-fonts">singlelinefonts.com</a></span></div>
+</div>
+
+<div class="tool">
+  <div class="hd"><span class="nm">Laser fonts de QuickShow</span><span class="badge b-ok">Ya lo tienes</span></div>
+  <p class="desc">QuickText incluye sus propias <strong>Laser fonts</strong> de trazo único (solo caracteres latinos) además de las TrueType del sistema. Escanean mucho más rápido. Úsalas por defecto.</p>
+</div>
+
+<h2><span class="n">10</span> Salida en vivo: los DACs</h2>
+<p class="lead">Para cuando quieras recuperar el dibujo en tiempo real que hacías con BEYOND — pero sin depender de Pangolin, con protocolo abierto y soporte nativo en TouchDesigner.</p>
+
+<table>
+<tr><th>DAC</th><th>Precio</th><th>Desde TD</th><th>Especificaciones</th><th>Veredicto</th></tr>
+<tr><td><b>Helios</b></td><td>USD 114 / €99<br><span style="font-size:12.5px">PRO: 219</span></td><td>Nativo, con botón de auto-scan</td><td>65,5 kpps · X/Y 12 bit · color 8 bit · máx 4095 puntos/frame</td><td><b>Empieza aquí.</b> SDK totalmente abierto en C++, C# y Python</td></tr>
+<tr><td><b>Ether Dream 4</b></td><td>USD 289–299</td><td>Nativo, por IP y puerto</td><td>X/Y <b>16 bit</b> + 8 canales de 10 bit (RGB, I, User1-4)</td><td>El salto de calidad. 16 bits en X/Y se nota en geometría fina</td></tr>
+<tr><td><b>ShowNET</b></td><td>Integrado en proyectores Laserworld</td><td>Nativo, autodetección en red</td><td>—</td><td>Sin software ni licencia extra, pero atado a ese hardware</td></tr>
+<tr><td><b>LaserCube</b></td><td>USD 1.000–3.000</td><td><b>No nativo</b></td><td>~35.000 pps por IDN</td><td>Es proyector completo, no DAC. Los modelos nuevos hablan IDN y EtherDream</td></tr>
+<tr><td><b>Moncha</b></td><td>€300–600</td><td>Sin soporte conocido</td><td>Protocolo no documentado</td><td><b>No recomendado</b> para TouchDesigner</td></tr>
+</table>
+
+<div class="callout warn">
+  <div class="t">Sobre mandar audio DC-coupled como señal ILDA</div>
+  <p>Es una técnica real y <b>Derivative la documenta oficialmente</b>, pero en su variante profesional: Laser CHOP → Audio Device Out CHOP → interfaz AVB de baja latencia → <b>LaserAnimation Sollinger AVB2ILDA</b>, que da 24 bits de resolución en X/Y más masking electrónico. Esa es la ruta de mayor calidad del ecosistema.</p>
+  <p>La versión casera (<a href="https://github.com/ffd8/dac_ilda">ffd8/dac_ilda</a>, de 2018) tiene riesgos que no hay que minimizar: <b>la mayoría de interfaces de audio son AC-coupled</b>, y ese condensador elimina el DC — el galvo no puede quedarse quieto, la imagen deriva al centro y las figuras estáticas colapsan. Además no hay blanking de seguridad por hardware: un glitch de driver o un pop de arranque significa haz a máxima potencia parado en un punto, con riesgo ocular real y de quemar el propio escáner. Y ILDA espera ±5V diferencial mientras las interfaces dan entre ±1 y ±10V según modelo.</p>
+</div>
+
+<h2><span class="n">11</span> Contenido láser ya hecho</h2>
+
+<div class="tool">
+  <div class="hd"><span class="nm">Pangolin Cloud</span><span class="badge b-top">Míralo primero</span><span class="badge b-warn">Precio sin confirmar</span></div>
+  <p class="desc">Biblioteca de contenido <strong>integrada dentro de QuickShow</strong>: navegas, previsualizas y descargas shows, cues y efectos nuevos sin salir del software. Pangolin la describe como "tu propia librería de streaming de contenido láser". Artistas pueden publicar y vender ahí. <strong>No pude confirmar si el contenido es gratuito o de pago</strong> — la página no lo detalla. Ábrelo antes de fabricar nada tú.</p>
+  <div class="ft"><span><b>Web</b> <a href="https://pangolin.com/pages/quickshow">pangolin.com/pages/quickshow</a></span></div>
+</div>
+
+<div class="tool">
+  <div class="hd"><span class="nm">animated-lines.com</span><span class="badge b-ok">Libre de derechos</span></div>
+  <p class="desc">Archivos ILDA <strong>royalty free</strong> para animación láser. Contenido listo para importar directo al cue grid.</p>
+  <div class="ft"><span><b>Web</b> <a href="https://www.animated-lines.com/en/">animated-lines.com</a></span></div>
+</div>
+
+<div class="tool">
+  <div class="hd"><span class="nm">Photonlexicon</span><span class="badge b-ok">El foro histórico</span></div>
+  <p class="desc">Foro de referencia de la comunidad láser, activo hace más de una década. Tiene un hilo dedicado de <strong>frames ILDA gratuitos</strong> y una wiki con listados de software y recursos. Es donde vive el conocimiento tribal del sector.</p>
+  <div class="ft"><span><b>Frames gratis</b> <a href="https://www.photonlexicon.com/forums/showthread.php/1256-Free-ILDA-frames">hilo</a></span><span><b>Wiki</b> <a href="https://www.photonlexicon.com/wiki/doku.php?id=old:software_list">software_list</a></span></div>
+</div>
+
+<div class="tool">
+  <div class="hd"><span class="nm">Discord "LaserEverything"</span><span class="badge b-ok">Comunidad viva</span></div>
+  <p class="desc">Servidor de Discord de la comunidad láser. Más rápido que el foro para preguntas puntuales.</p>
+  <div class="ft"><span><b>Invitación</b> <a href="https://discord.com/invite/TBjNKXdFAm">discord.com/invite/TBjNKXdFAm</a></span></div>
+</div>
+
+<h2><span class="n">12</span> Lo que QuickShow ya te da</h2>
+<p class="lead">Resultó tener bastante más de lo que asumíamos. Antes de fabricar contenido, revisa qué hay aquí.</p>
+
+<ul>
+  <li><strong>~2.000 cues incluidos</strong> (la v5.0 sumó más de mil), en categorías Graphics, Atmospherics y DMX. Pangolin no publica el listado nominal, así que no puedo confirmarte si trae llamas, alas o cruces — hay que abrirlo y mirar.</li>
+  <li><strong>Parametric Image Editor</strong>: 31 formas paramétricas, algunas generadoras de contenido en tiempo real, <strong>reactivas a audio, DMX y MIDI</strong>.</li>
+  <li><strong>Advanced Shape/Abstract Editor</strong>: osciladores y moduladores para phasing y pulsación armónica, con modulación de color.</li>
+  <li><strong>Editor de frames con morph</strong>: fijas frame inicial y final y genera los intermedios automáticamente. Carga y edita ILDA existente.</li>
+  <li><strong>QuickText</strong>: texto estático, scrolling, ondulante, proyectado sobre cono o esfera rotatoria, con efectos por carácter individual. Limitación: una sola línea.</li>
+  <li><strong>QuickShape</strong> (7 formas base con modo de puntos/beams), <strong>QuickTargets</strong> (secuencias de beams por pasos, en beats o segundos), <strong>QuickFX</strong> (4 capas de efectos simultáneos sobre cues en marcha), <strong>QuickCapture</strong> (consolida todo lo que suena ahora en un solo cue).</li>
+  <li><strong>Dos láseres con contenido distinto</strong>: soporta hasta 9 FB3 y 30 zonas de proyección. En Cue Properties → pestaña <strong>Destination</strong> asignas la zona de cada cue, y el <strong>teclado numérico</strong> reenruta en vivo (con Num Lock activado).</li>
+</ul>
+
+<div class="callout bad">
+  <div class="t">Sus límites reales</div>
+  <p>Sin exportación ILDA (la entrada es de un solo sentido). Sin SVG ni formatos vectoriales de diseño: solo bitmap vía QuickTrace, o archivos de láser (.ILD, .LDA, .LDB, .LDS, .LPC). DMX solo con <b>Enttec DMX USB Pro</b>, solo perfil de 16 canales, sin Art-Net ni sACN. QuickText de una línea. Timeline básica de 4 pistas, audio solo WAV y MP3.</p>
+</div>
+
+<h2><span class="n">13</span> Referencia técnica</h2>
+
+<h3>Presupuesto de puntos</h3>
+<p>A 30.000 puntos por segundo y buscando 30–40 fps para que no parpadee, tienes <strong>600 a 1.000 puntos por frame</strong>. Un SVG de complejidad media aplanado con tolerancia fina da 15.000 o 20.000 — veinte veces por encima. La simplificación no es opcional. Y recuerda que <strong>cada salto en negro también consume puntos</strong>, con sus puntos de reposo antes y después: diez subtrazos sueltos pueden comerse 150 puntos sin dibujar nada.</p>
+
+<h3>Reglas de diseño para SVG destinados a láser</h3>
+<ul>
+  <li>Solo <code>stroke</code>, sin <code>fill</code> (o <code>fill:none</code> explícito)</li>
+  <li>Un color plano por trazo, sin gradientes ni opacidad</li>
+  <li>Texto ya convertido a curvas, idealmente con fuente de trazo único</li>
+  <li>Menos de ~8 subtrazos por figura; pocos trazos largos y continuos ganan siempre</li>
+  <li>ViewBox cuadrado, figura centrada ocupando casi todo el cuadro</li>
+  <li>Nada de detalle fino: lo que en pantalla mide 2px, en el láser no existe</li>
+  <li>El blanco necesita los tres canales; el azul saturado se ve mucho más apagado que en pantalla — para tonos celestes, cian y blanco rinden mejor que azul puro</li>
+</ul>
+
+<h3>Tabla DMX de 16 canales (QuickShow / Pangolin)</h3>
+<table>
+<tr><th style="width:60px">Canal</th><th>Función</th><th>Notas</th></tr>
+<tr><td><b>1</b></td><td><b>Access</b></td><td>Seguridad y número de canales activos. 33–95 = responde a 4 canales · 97–159 = 8 · 161–223 = 12 · 225–255 = 16</td></tr>
+<tr><td><b>2</b></td><td>Page</td><td>Selecciona página de cues</td></tr>
+<tr><td><b>3</b></td><td>Cue</td><td>Selecciona y dispara el cue (rangos escalonados de 3 en 3)</td></tr>
+<tr><td><b>4</b></td><td>Speed</td><td></td></tr>
+<tr><td><b>5</b></td><td>Fade</td><td>Brillo / intensidad, 0–255</td></tr>
+<tr><td><b>6</b></td><td>Zoom</td><td></td></tr>
+<tr><td><b>7</b></td><td>X Size</td><td>De tamaño negativo total a cero a positivo total</td></tr>
+<tr><td><b>8</b></td><td>Y Size</td><td>Ídem</td></tr>
+<tr><td><b>9</b></td><td>Z Angle</td><td>0–360°</td></tr>
+<tr><td><b>10</b></td><td>X Position</td><td>Izquierda / centro / derecha</td></tr>
+<tr><td><b>11</b></td><td>Y Position</td><td>Arriba / centro / abajo</td></tr>
+<tr><td><b>12</b></td><td>Visible Points</td><td>De ningún punto visible a todos</td></tr>
+<tr><td><b>13</b></td><td>Scan Rate</td><td>6K–30K (10K por defecto)</td></tr>
+<tr><td><b>14</b></td><td>Release</td><td></td></tr>
+<tr><td><b>15</b></td><td>Color</td><td>Rojo, naranja, amarillo, lima, verde, cian, azul, púrpura, rosa, blanco</td></tr>
+<tr><td><b>16</b></td><td>Reservado</td><td></td></tr>
+</table>
+<p style="font-size:14px;color:var(--faint)">Verificada cruzando el chart oficial de 16 canales de Pangolin con hilos del foro donde usuarios confirman el orden con dirección base 200. Contrástala en tu instalación antes del show. <strong>Límite conocido:</strong> con 16 canales no se pueden mapear todas las páginas y cues de un show grande — eso es territorio BEYOND.</p>
+
+<h3>Atajos de teclado del Cue Grid</h3>
+<table>
+<tr><th style="width:180px">Tecla</th><th>Acción</th></tr>
+<tr><td><b>ESC</b></td><td>E-STOP / BLACKOUT — detiene todo el escaneo</td></tr>
+<tr><td><b>Letras A, S, D, F…</b></td><td>Disparan los 60 cues de la página actual (con y sin Shift)</td></tr>
+<tr><td><b>F1–F12</b></td><td>Saltan a las páginas asignadas</td></tr>
+<tr><td><b>Barra espaciadora</b></td><td>Genera beats y ajusta la velocidad del timer</td></tr>
+<tr><td><b>Backspace</b></td><td>Genera beat y resincroniza el timer</td></tr>
+<tr><td><b>` / ~</b></td><td>Invierte el sentido de rotación al vuelo</td></tr>
+<tr><td><b>Teclado numérico</b></td><td>Enruta la salida a las distintas zonas y láseres (requiere Num Lock)</td></tr>
+<tr><td><b>Ctrl+Shift+M</b></td><td>Muestra u oculta el teclado MIDI virtual</td></tr>
+</table>
+
+<h3>Control externo</h3>
+<p><strong>MIDI:</strong> hasta 4 dispositivos de entrada y 1 de salida. Por dispositivo se configura canal, página asignada, tecla inicial (qué nota corresponde al cue superior izquierdo) y eco. Soporte plug-and-play sin configuración para <strong>Akai APC Mini y APC Mini MKII</strong>; el resto requiere mapeo manual. Sobre puertos MIDI virtuales tipo loopMIDI o LoopBe1: <strong>no hay confirmación oficial</strong>, solo un desarrollador de Pangolin recomendándolos en el foro. Funcionalmente deberían aparecer como un puerto más, pero pruébalo antes de depender de ello.</p>
+<p><strong>DMX:</strong> confirmado que QuickShow soporta <strong>únicamente el Enttec DMX USB Pro</strong>, tanto para entrada como salida. La placa DMX interna del FB3-SE <strong>no</strong> sirve. Si tienes un nodo Art-Net, la cadena viable es TD → Art-Net → nodo → cable DMX → Enttec DMX USB Pro → QuickShow.</p>
+
+<div class="callout">
+  <div class="t">Dos detalles operativos que evitan dolores de cabeza</div>
+  <p><b>Exporta siempre en ILDA Type 5 (RGB)</b>, nunca en formato con tabla de paleta. Hay un bug histórico en el importador de QuickShow: el botón "Details" del diálogo de importación estuvo desconectado en las versiones 4.x, impidiendo importar conservando la paleta ILDA estándar. Si tus colores salen mal, es esto.</p>
+  <p><b>La importación por lotes funciona.</b> Un beta tester de Pangolin reporta haber cargado 30 archivos ILD de una sola vez sin problemas.</p>
+</div>
+
+<h2><span class="n">14</span> El plan</h2>
+
+<h3>Para mañana</h3>
+<ol style="color:var(--dim);max-width:74ch;padding-left:22px">
+  <li style="margin-bottom:10px">Abre QuickShow y <strong>revisa primero la librería incluida y el Pangolin Cloud</strong>. Puede que la mitad del show ya esté ahí.</li>
+  <li style="margin-bottom:10px">Lo que falte: <strong>Modulaser</strong> para SVG → .ild, o <strong>QuickTrace en modo Centerline</strong> si puedes rasterizar. Type 5 RGB siempre.</li>
+  <li style="margin-bottom:10px">Organiza el cue grid por sección del show con atajos de teclado asignados.</li>
+  <li style="margin-bottom:10px">Control en vivo: si tu interfaz DMX es un Enttec Pro, monta la cadena Art-Net. Si no, prueba <strong>loopMIDI</strong> esta noche, o directamente los atajos de teclado desde TD.</li>
+  <li>Verifica los .ild en <strong>ilda-viewer</strong> antes de llegar al venue.</li>
+</ol>
+
+<h3>Después del show</h3>
+<ol style="color:var(--dim);max-width:74ch;padding-left:22px">
+  <li style="margin-bottom:10px"><strong>Compra un Helios (USD 114).</strong> Con tu licencia de TD 2023 y las entradas ILDA libres de los láseres, recuperas el dibujo en vivo del iPad de forma permanente y sin depender de Pangolin.</li>
+  <li style="margin-bottom:10px">Monta el pipeline <strong>Blender Line Art → SVG → vpype → ILDA</strong>. Es donde está el material con profundidad que no consigues dibujando en 2D.</li>
+  <li style="margin-bottom:10px">Explora <strong>vpype-hatched</strong> y <strong>vpype-flow-imager</strong>. Resuelven el problema del relleno y abren una estética que el láser hace muy bien.</li>
+  <li>Evalúa si vale los <strong>USD 300</strong> de actualizaciones de TD para llegar al Laser CHOP rehecho del 2025.30000.</li>
+</ol>
+
+<div class="callout warn">
+  <div class="t">Seguridad</div>
+  <p>La propia documentación de Derivative lo pone en mayúsculas: los láseres son peligrosos y el daño a tu vista o a la del público es un riesgo real. Si vas por la ruta del DAC externo pierdes las protecciones de scan-fail de Pangolin — arma siempre con el haz bloqueado y sube potencia recién cuando veas geometría estable. Parada de emergencia física obligatoria.</p>
+</div>
+
+<footer>
+  Compilado en julio de 2026 a partir de documentación oficial de Pangolin, Derivative y los fabricantes, más foros de la comunidad láser. Los puntos marcados como "sin verificar" requieren comprobación directa antes de tomarlos como definitivos.
+</footer>
+
+</div>
+</body>
+</html>

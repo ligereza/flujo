@@ -1,0 +1,23 @@
+# Marcar archivos de log/historial como documentación para no distorsionar el lenguaje principal del repo
+checkpoints/ linguist-documentation
+reference_old/ linguist-documentation
+*.md linguist-documentation
+
+# Forzar finales de línea LF para scripts y configs en todos los sistemas
+*.sh text eol=lf
+*.py text eol=lf
+*.json text eol=lf
+*.yaml text eol=lf
+*.yml text eol=lf
+*.md text eol=lf
+*.txt text eol=lf
+
+# Archivos binarios que nunca deben ser modificados por git
+*.jpg binary
+*.jpeg binary
+*.png binary
+*.gif binary
+*.webp binary
+*.svg text
+*.zip binary
+*.exe binary

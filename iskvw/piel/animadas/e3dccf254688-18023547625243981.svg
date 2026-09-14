@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" data-name="e3dccf254688-18023547625243981">
+<style>
+.c0{animation:k_aparecer 12s ease-in-out infinite}
+@keyframes k_aparecer{0%,55%{opacity:1;transform:scale(1)}80%{opacity:.12;transform:scale(1.1)}100%{opacity:1;transform:scale(1)}}
+</style>
+<rect width="120" height="120" fill="#15151a"/>
+<g id="capa-0-protagonista" transform="translate(60,56)" data-rol="protagonista" data-gesto="aparecer_ciclico" data-ritmo="12s" data-figura="grieta"><title>protagonista - grieta</title><g class="c0"><g transform="scale(30)"><path d="M-.06,-1 L.10,-.62 L-.12,-.28 L.09,.06 L-.10,.42 L.08,.72 L-.04,1" fill="none" stroke="#ff3b30" stroke-width=".14" stroke-linejoin="round" stroke-linecap="round"/></g></g></g>
+<g id="capa-1-satelite_1" transform="translate(24,30)" data-rol="satelite_1" data-gesto="quieto" data-ritmo="4s" data-figura="rayos"><title>satelite_1 - rayos</title><g class="c1"><g transform="scale(13)"><path transform="rotate(0.0)" d="M0,0 L-.11,-1 L.11,-1 Z" fill="#8d8d9c"/><path transform="rotate(30.0)" d="M0,0 L-.11,-1 L.11,-1 Z" fill="#8d8d9c"/><path transform="rotate(60.0)" d="M0,0 L-.11,-1 L.11,-1 Z" fill="#8d8d9c"/><path transform="rotate(90.0)" d="M0,0 L-.11,-1 L.11,-1 Z" fill="#8d8d9c"/><path transform="rotate(120.0)" d="M0,0 L-.11,-1 L.11,-1 Z" fill="#8d8d9c"/><path transform="rotate(150.0)" d="M0,0 L-.11,-1 L.11,-1 Z" fill="#8d8d9c"/><path transform="rotate(180.0)" d="M0,0 L-.11,-1 L.11,-1 Z" fill="#8d8d9c"/><path transform="rotate(210.0)" d="M0,0 L-.11,-1 L.11,-1 Z" fill="#8d8d9c"/><path transform="rotate(240.0)" d="M0,0 L-.11,-1 L.11,-1 Z" fill="#8d8d9c"/><path transform="rotate(270.0)" d="M0,0 L-.11,-1 L.11,-1 Z" fill="#8d8d9c"/><path transform="rotate(300.0)" d="M0,0 L-.11,-1 L.11,-1 Z" fill="#8d8d9c"/><path transform="rotate(330.0)" d="M0,0 L-.11,-1 L.11,-1 Z" fill="#8d8d9c"/></g></g></g>
+</svg>

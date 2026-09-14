@@ -1,0 +1,39 @@
+{
+  "intake_version": "1.0",
+  "pedido": {
+    "id_externo": "MAIL-2026-06-18-014",
+    "solicitante": {
+      "nombre": "Productora Norte",
+      "canal": "correo",
+      "contacto": "eventos@productoranorte.cl"
+    },
+    "tipo_pieza": "flyer",
+    "formato_sugerido": "flyer_horizontal_minimo",
+    "medidas": {
+      "ancho_cm": 14,
+      "alto_cm": 10,
+      "orientacion": "horizontal"
+    },
+    "contenido": {
+      "titulo": "FESTIVAL DE INVIERNO",
+      "subtitulo": "Tres días de música en vivo",
+      "cuerpo": "La cita imperdible de la temporada.",
+      "llamado_accion": "Entradas en ticketera.cl",
+      "extras": {
+        "fecha": "2026-07-12",
+        "hora": "21:00",
+        "lugar": "Teatro Municipal",
+        "direccion": "Av. Principal 123",
+        "precio": "$10.000",
+        "redes": "@festivaldeinvierno",
+        "auspiciadores": ["Marca A", "Marca B"]
+      }
+    },
+    "entrega": {
+      "formatos": ["editable_svg", "vectorizado_svg", "pdf_impresion", "zip"],
+      "fecha_limite": "2026-06-30",
+      "destino": "ambos"
+    },
+    "notas": "Estilo nocturno, colores fríos."
+  }
+}

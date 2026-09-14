@@ -1,0 +1,537 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>flujo • Tapiz Spaces — Pro Structure Visualization (brand enforced)</title>
+  <style>
+    /*
+    =====================================================================
+    BRAND ENFORCED — flujo Tapiz Spaces (projects/flujo/flujo.json)
+    =====================================================================
+    Dark professional ONLY. EXACT colors from JSON: ink #1f2a24, accent #2d5a4a, paper #f8f1e3 (sparing), support #675f55, alert #c2410f
+    Typography: Inter/system sans. Generous pro spacing/padding (1.6rem+), radius 8px cards, high contrast.
+    FORBIDDEN: neon/cyber/matrix/glitch/hacker, cyan #00f0ff, tight amateur spacing, "vibecode" experimental feel.
+    DEFAULT + REQUIRED FOR ALL DELIVERABLES/EXPORTS: "flujo" palette ONLY.
+    Canvas: premium box-shadow, clean border. Looks like high-end designer tool daily use. No experimental.
+    All outputs pass Brand Validator in hub. Update in sync with hub/visualizers.
+    */
+    :root {
+      --bg: #0a0a0a;
+      --panel: #141414;
+      --border: #2a2a2a;
+      --text: #e8e8e8;
+      --muted: #888;
+      --accent: #2d5a4a; /* flujo brand */
+      --flujo-ink: #1f2a24;
+      --flujo-accent: #2d5a4a;
+      --flujo-paper: #f8f1e3;
+      --flujo-support: #675f55;
+      --flujo-alert: #c2410f;
+      --word: #5a5a6e;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font-family: 'Inter', system-ui, sans-serif; /* pro UI font */
+      font-size: 14px;
+      line-height: 1.5;
+      display: flex;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* Panel de controles - now pro flujo style */
+    aside {
+      width: 320px;
+      min-width: 260px;
+      background: var(--panel);
+      border-right: 1px solid var(--border);
+      padding: 1.8rem; /* generous spacing */
+      display: flex;
+      flex-direction: column;
+      gap: 1.1rem;
+      overflow-y: auto;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 1.2rem;
+      color: #fff;
+      letter-spacing: -0.01em;
+      font-weight: 700;
+    }
+
+    h1 span { color: var(--accent); }
+
+    .group { display: flex; flex-direction: column; gap: 0.4rem; }
+    label { font-size: 10px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; font-weight:600; }
+
+    select, input[type="range"], input[type="text"], button, textarea {
+      background: var(--panel2, #1a1a1a);
+      color: var(--text);
+      border: 1px solid var(--border);
+      border-radius: 5px;
+      padding: 0.6rem 0.75rem;
+      font-family: inherit;
+      font-size: 0.9rem;
+      outline: none;
+    }
+
+    select:focus, input:focus, textarea:focus, button:focus { border-color: var(--accent); }
+
+    textarea {
+      resize: vertical;
+      min-height: 120px;
+      line-height: 1.4;
+      font-family: ui-monospace, monospace; /* code stays mono */
+    }
+
+    .row { display: flex; gap: 0.5rem; align-items: center; }
+    .row input[type="range"] { flex: 1; }
+    .row span { min-width: 3rem; text-align: right; font-size: 0.8rem; color:var(--muted); }
+
+    .checks { display: flex; gap: 1rem; flex-wrap: wrap; }
+    .checks label { display: flex; align-items: center; gap: 0.35rem; text-transform: none; cursor: pointer; font-size:0.8rem; }
+
+    button {
+      cursor: pointer;
+      transition: all .15s;
+      font-weight: 600;
+    }
+    button:hover { background: rgba(45,90,74,.1); border-color: var(--accent); }
+    button.primary { background: var(--accent); color: #fff; border-color: var(--accent); }
+    button.primary:hover { opacity:0.9; }
+
+    .hint {
+      font-size: 0.75rem;
+      color: var(--muted);
+      line-height: 1.4;
+    }
+
+    /* Canvas */
+    main {
+      flex: 1;
+      position: relative;
+      overflow: auto;
+      padding: 2.5rem; /* generous */
+    }
+
+    #canvas {
+      margin: 0 auto;
+      max-width: 920px;
+      min-height: 100%;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 2rem; /* breathing */
+      white-space: pre;
+      font-size: 14px;
+      line-height: 1.6;
+      overflow: auto;
+      box-shadow: 0 8px 40px rgba(0,0,0,.65);
+      font-family: ui-monospace, monospace; /* only canvas */
+    }
+
+    #canvas .word { color: var(--word); }
+    #canvas .space {
+      transition: color 0.08s linear;
+      display: inline;
+    }
+
+    #fileInput { display: none; }
+
+    .pallet-swatch {
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      margin-right: 2px;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    /* Brand mode note */
+    .brand-note { font-size:10px; color:var(--accent); margin-top:4px; }
+  </style>
+</head>
+<body>
+  <aside>
+    <h1>flujo • Tapiz <span>Spaces</span></h1>
+    <p class="hint">Visualiza patrones estructurales del código (topología de espacios) como herramienta premium para diseñador. <strong>Usa SIEMPRE la paleta "flujo"</strong> para entregas. Otras son internal/experimental.</p>
+    <div class="brand-note">Brand enforced • dark pro • solo paleta "flujo" (projects/flujo/flujo.json) para clientes. NO experimental.</div>
+
+    <div class="group">
+      <label for="source">Código fuente</label>
+      <textarea id="source" spellcheck="false"></textarea>
+    </div>
+
+    <div class="group">
+      <label>Archivo</label>
+      <div class="row">
+        <button id="loadFile">📂 Cargar .py / .txt</button>
+        <button id="resetSample">🔄 Demo</button>
+      </div>
+      <input type="file" id="fileInput" accept=".py,.txt,.js,.ts,.md,.json,.html,.css,.c,.cpp,.rs,.go" />
+    </div>
+
+    <div class="group">
+      <label for="mode">Modo</label>
+      <select id="mode">
+        <option value="flow">flow — onda sinusoidal</option>
+        <option value="scan">scan — barra vertical</option>
+        <option value="drift">drift — cambio suave</option>
+        <option value="pulse">pulse — pulsos por bloque</option>
+        <option value="rain">rain — lluvia de color</option>
+        <option value="void">void — espacios estáticos</option>
+        <option value="length">length — color por longitud</option>
+        <option value="blocks">blocks — bloques sólidos</option>
+      </select>
+    </div>
+
+    <div class="group">
+      <label for="palette">Paleta</label>
+      <select id="palette"></select>
+    </div>
+
+    <div class="group">
+      <label for="fillChar">Carácter de espacio</label>
+      <input type="text" id="fillChar" value="·" maxlength="1" />
+    </div>
+
+    <div class="group">
+      <label for="speed">Velocidad de animación</label>
+      <div class="row">
+        <input type="range" id="speed" min="0" max="100" value="30" />
+        <span id="speedVal">30</span>
+      </div>
+    </div>
+
+    <div class="group">
+      <div class="checks">
+        <label><input type="checkbox" id="ghost" checked /> Ver texto</label>
+        <label><input type="checkbox" id="animate" checked /> Animar</label>
+      </div>
+    </div>
+
+    <div class="group" style="margin-top: auto;">
+      <div class="row">
+        <button id="togglePlay" class="primary">⏸ Pausar</button>
+        <button id="exportHtml">⬇ Exportar HTML</button>
+      </div>
+      <div style="margin-top:8px;"><a href="../../context/flujo_hub.html" style="color:#2d5a4a;font-size:11px;font-weight:600;text-decoration:none;">← Volver al Hub principal (flujo)</a></div>
+    </div>
+  </aside>
+
+  <main>
+    <pre id="canvas"></pre>
+  </main>
+
+  <script>
+    // -------------------------------------------------------------------
+    // Paletas
+    // -------------------------------------------------------------------
+    const PALETTES = {
+      /* STRICT BRAND from projects/flujo/flujo.json — flujo REQUIRED default for ALL pro/client deliverables.
+       Other palettes: exploration ONLY (internal). FORBIDDEN in outputs: neon, cyber, matrix, glitch, hacker.
+       Every visual from tapiz MUST look premium designer tool. */
+      flujo:   ['#1f2a24', '#2d5a4a', '#675f55', '#c2410f', '#0a0a0a', '#e8e8e8', '#f8f1e3'],
+      ink:     ['#1f2a24', '#141414', '#2a2a2a', '#675f55', '#0a0a0a'],
+      accent:  ['#2d5a4a', '#1f2a24', '#1a3f2e', '#675f55', '#0a0a0a'],
+      support: ['#675f55', '#1f2a24', '#2d5a4a', '#0a0a0a', '#e8e8e8'],
+      deep:    ['#0a0a0a', '#141414', '#1a1a1a', '#2a2a2a', '#675f55']
+    };
+
+    // -------------------------------------------------------------------
+    // Demo
+    // -------------------------------------------------------------------
+    const SAMPLE_CODE = `# --- Topología de IA: indentación y one-liners ---
+
+def procesar_tensores(matriz, factores):
+    resultados = []
+    for fila in matriz:
+        activacion = [max(0.0, x * f) for x, f in zip(fila, factores)]
+        if sum(activacion) > 100.5:
+            resultados.append(activacion)
+    return resultados
+
+# One-liner denso
+data = list(map(lambda x: x**2, filter(lambda y: y % 2 == 0, range(1000))))
+
+class Modelo:
+    def __init__(self, capas):
+        self.capas = capas
+
+    def forward(self, x):
+        for capa in self.capas:
+            x = capa(x)
+        return x
+`;
+
+    // -------------------------------------------------------------------
+    // Utilidades
+    // -------------------------------------------------------------------
+    const escapeHtml = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+
+    function tokenizeLine(line) {
+      const tokens = [];
+      const regex = /(\s+)/g;
+      let last = 0;
+      let m;
+      while ((m = regex.exec(line)) !== null) {
+        if (m.index > last) {
+          tokens.push({ type: 'word', text: line.slice(last, m.index) });
+        }
+        tokens.push({ type: 'space', text: m[1] });
+        last = m.index + m[1].length;
+      }
+      if (last < line.length) {
+        tokens.push({ type: 'word', text: line.slice(last) });
+      }
+      return tokens;
+    }
+
+    function getStaticColor(mode, length, palette, index) {
+      if (mode === 'length') {
+        return palette[Math.min(length, palette.length) - 1] || palette[0];
+      }
+      return palette[(length + index) % palette.length];
+    }
+
+    function getAnimatedColor(mode, x, y, length, palette, t, totalLines) {
+      const n = palette.length;
+      if (mode === 'flow') {
+        const v = Math.sin((x + y * 2 + t * 3) * 0.15);
+        const idx = Math.floor(((v + 1) / 2) * n) % n;
+        return palette[idx < 0 ? idx + n : idx];
+      }
+      if (mode === 'scan') {
+        const scanPos = (t * 2) % 80;
+        const dist = Math.abs((x + length / 2) - scanPos);
+        return dist < 6 ? palette[Math.floor(dist) % n] : '#5a5a6e';
+      }
+      if (mode === 'drift') {
+        return palette[(x + y + Math.floor(t)) % n];
+      }
+      if (mode === 'pulse') {
+        const idx = Math.min(length, n) - 1;
+        const pulse = Math.abs(Math.sin(t * 0.2 + length));
+        return pulse > 0.3 ? palette[idx] : '#5a5a6e';
+      }
+      if (mode === 'rain') {
+        const drop = (y + Math.floor(t)) % (totalLines + 5);
+        return Math.abs(drop - y) < 3 ? palette[(y + Math.floor(t)) % n] : '#5a5a6e';
+      }
+      return palette[length % n];
+    }
+
+    // -------------------------------------------------------------------
+    // Estado
+    // -------------------------------------------------------------------
+    const els = {
+      source: document.getElementById('source'),
+      canvas: document.getElementById('canvas'),
+      mode: document.getElementById('mode'),
+      palette: document.getElementById('palette'),
+      fillChar: document.getElementById('fillChar'),
+      speed: document.getElementById('speed'),
+      speedVal: document.getElementById('speedVal'),
+      ghost: document.getElementById('ghost'),
+      animate: document.getElementById('animate'),
+      togglePlay: document.getElementById('togglePlay'),
+      loadFile: document.getElementById('loadFile'),
+      fileInput: document.getElementById('fileInput'),
+      resetSample: document.getElementById('resetSample'),
+      exportHtml: document.getElementById('exportHtml')
+    };
+
+    let playing = true;
+    let startTime = Date.now();
+    let lastT = 0;
+
+    // -------------------------------------------------------------------
+    // Inicializar selector de paletas (flujo brand first)
+    // -------------------------------------------------------------------
+    function buildPaletteOptions() {
+      els.palette.innerHTML = '';
+      const keys = Object.keys(PALETTES);
+      // put flujo first for strict brand enforcement
+      const ordered = ['flujo', ...keys.filter(k => k !== 'flujo')];
+      for (const name of ordered) {
+        const opt = document.createElement('option');
+        opt.value = name;
+        const colors = PALETTES[name];
+        const swatches = colors.map(c => `<span class="pallet-swatch" style="background:${c}"></span>`).join('');
+        const label = name === 'flujo' ? 'flujo (PRO • default)' : name + ' (INTERNAL • experimental only)';
+        opt.innerHTML = `${swatches} ${label}`;
+        els.palette.appendChild(opt);
+      }
+      els.palette.value = 'flujo'; /* BRAND ENFORCED default — flujo ONLY for pro/client outputs. Other palettes internal only. */
+      // Auto-remind on render/export paths
+    }
+
+    // Brand guard: warn + reselect if non-flujo chosen (BRAND ENFORCED strict for pro)
+    function attachPaletteGuard() {
+      if (!els.palette) return;
+      els.palette.addEventListener('change', () => {
+        if (els.palette.value !== 'flujo') {
+          const warn = document.createElement('div');
+          warn.style.cssText = 'font-size:10px;color:#c2410f;margin-top:4px;font-weight:600';
+          warn.textContent = '⚠ BRAND ENFORCED: Solo paleta "flujo" para entregas pro/cliente. Otras = internal/experimental. Cambia antes de export.';
+          if (els.palette.parentNode) els.palette.parentNode.appendChild(warn);
+          setTimeout(() => { if (warn.parentNode) warn.parentNode.removeChild(warn); }, 2800);
+        }
+      });
+    }
+
+    // -------------------------------------------------------------------
+    // Renderizado
+    // -------------------------------------------------------------------
+    function renderFrame(t) {
+      const text = els.source.value;
+      const mode = els.mode.value;
+      const paletteName = els.palette.value;
+      const palette = PALETTES[paletteName];
+      const fillChar = els.fillChar.value || '·';
+      const ghost = els.ghost.checked;
+      const staticMode = ['void', 'length', 'blocks'].includes(mode);
+      const lines = text.split('\n');
+      const totalLines = lines.length;
+
+      let html = '';
+      for (let y = 0; y < lines.length; y++) {
+        const line = lines[y];
+        const tokens = tokenizeLine(line);
+        let x = 0;
+        for (let i = 0; i < tokens.length; i++) {
+          const token = tokens[i];
+          if (token.type === 'space') {
+            const length = token.text.length;
+            const color = staticMode
+              ? getStaticColor(mode, length, palette, i)
+              : getAnimatedColor(mode, x, y, length, palette, t, totalLines);
+            const chars = fillChar.repeat(length).replace(/ /g, '&nbsp;');
+            html += `<span class="space" style="color:${color}">${chars}</span>`;
+          } else {
+            const escaped = escapeHtml(token.text).replace(/ /g, '&nbsp;');
+            html += ghost ? `<span class="word">${escaped}</span>` : `<span style="opacity:0">${escaped}</span>`;
+          }
+          x += token.text.length;
+        }
+        html += '\n';
+      }
+      els.canvas.innerHTML = html;
+    }
+
+    // -------------------------------------------------------------------
+    // Animación
+    // -------------------------------------------------------------------
+    function loop() {
+      if (!playing) return;
+      const speed = parseInt(els.speed.value, 10) / 100;
+      const now = Date.now();
+      const t = (now - startTime) / 1000 * (speed * 5);
+      lastT = t;
+      renderFrame(t);
+      requestAnimationFrame(loop);
+    }
+
+    function restart() {
+      startTime = Date.now();
+      lastT = 0;
+      if (playing) requestAnimationFrame(loop);
+      else renderFrame(0);
+    }
+
+    // -------------------------------------------------------------------
+    // Eventos
+    // -------------------------------------------------------------------
+    function update() {
+      if (els.animate.checked) {
+        playing = true;
+        els.togglePlay.textContent = '⏸ Pausar';
+        restart();
+      } else {
+        playing = false;
+        els.togglePlay.textContent = '▶ Reproducir';
+        renderFrame(0);
+      }
+    }
+
+    els.togglePlay.addEventListener('click', () => {
+      if (els.animate.checked) {
+        playing = !playing;
+        els.togglePlay.textContent = playing ? '⏸ Pausar' : '▶ Reproducir';
+        if (playing) restart();
+      } else {
+        els.animate.checked = true;
+        update();
+      }
+    });
+
+    els.animate.addEventListener('change', update);
+    els.mode.addEventListener('change', () => { if (!playing) renderFrame(0); });
+    els.palette.addEventListener('change', () => { if (!playing) renderFrame(0); });
+    els.fillChar.addEventListener('input', () => { if (!playing) renderFrame(0); });
+    els.ghost.addEventListener('change', () => { if (!playing) renderFrame(0); });
+    els.source.addEventListener('input', restart);
+
+    els.speed.addEventListener('input', () => {
+      els.speedVal.textContent = els.speed.value;
+    });
+
+    els.loadFile.addEventListener('click', () => els.fileInput.click());
+    els.fileInput.addEventListener('change', (e) => {
+      const file = e.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (ev) => {
+        els.source.value = ev.target.result;
+        restart();
+      };
+      reader.readAsText(file);
+    });
+
+    els.resetSample.addEventListener('click', () => {
+      els.source.value = SAMPLE_CODE;
+      restart();
+    });
+
+    // Exportar un HTML estático del frame actual
+    els.exportHtml.addEventListener('click', () => {
+      // BRAND ENFORCED: force flujo palette for exported deliverable
+      if (els.palette && els.palette.value !== 'flujo') {
+        els.palette.value = 'flujo';
+        renderFrame(lastT || 0);
+      }
+      const html = `<!DOCTYPE html>
+<html lang="es"><head><meta charset="UTF-8"><title>flujo • Tapiz Spaces Export (brand enforced)</title>
+<style>
+/* BRAND ENFORCED from projects/flujo/flujo.json — dark pro ONLY. Exact ink/accent. No experimental. */
+body{background:#0a0a0a;color:#e8e8e8;font-family:'Inter',system-ui,sans-serif;padding:2rem;}
+pre{white-space:pre;background:#141414;border:1px solid #2a2a2a;padding:1.6rem;border-radius:8px;font-family:ui-monospace,monospace;box-shadow:0 4px 24px rgba(0,0,0,.6);}
+.word{color:#5a5a6e;}
+.space{display:inline;}
+</style></head><body><pre>${els.canvas.innerHTML}</pre></body></html>`;
+      const blob = new Blob([html], { type: 'text/html' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'flujo_tapiz_spaces.html';
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+
+    // -------------------------------------------------------------------
+    // Inicio
+    // -------------------------------------------------------------------
+    buildPaletteOptions();
+    attachPaletteGuard();
+    els.source.value = SAMPLE_CODE;
+    update();
+  </script>
+</body>
+</html>

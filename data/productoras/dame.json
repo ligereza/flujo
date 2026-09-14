@@ -1,0 +1,39 @@
+{
+  "name": "Dame",
+  "aliases": [
+    "DAME",
+    "DAMEFLYER",
+    "Dame"
+  ],
+  "instagram": "",
+  "tipos_fecha": [],
+  "logos": [
+    {
+      "id": "dame_primary",
+      "knowledge": "PENDIENTE",
+      "estado": "no_encontrado",
+      "notas": "Sin candidato de logo en curatoría (PR #210, categoria=logo). FALTA."
+    }
+  ],
+  "venues": [
+    {
+      "nombre": "Basel Venue Santiago",
+      "venue_id": null,
+      "preferido": true,
+      "estado": "confirmado_ig_2026-07-23",
+      "notas": "Fuente: post IG hoy (descarga IG DbI68vBCSTc.jpg), evento Jeff Mills 30yr, 20.11.2026."
+    }
+  ],
+  "confirmed": "",
+  "fuente_datos": "nombres de archivo del archivo de entregas (ENTREGA/FEBRERO), mapeo 2026-07-17; sin confirmar por humano. Complementado con post IG del 2026-07-23 (input_ig_DbI68vBCSTc.jpg).",
+  "notes": "Marca de fiesta (combos con Cachorros/Piknic). Fuente: archivo de entregas (FEBRERO) + IG 2026-07-23.",
+  "eventos": [
+    {
+      "nombre": "Dame -- Jeff Mills 30 years",
+      "fecha": "20 noviembre 2026",
+      "venue": "Basel Venue Santiago",
+      "estado": "activo_anunciado",
+      "fuente": "post IG 2026-07-23, descarga IG DbI68vBCSTc.jpg, captado en esta sesión"
+    }
+  ]
+}

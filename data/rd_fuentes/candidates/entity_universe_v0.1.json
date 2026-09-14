@@ -1,0 +1,508 @@
+{
+  "schema_version": "rd-substance-universe-v0.1",
+  "generated_at": "2026-08-11",
+  "language": "en",
+  "source_scope": "public_reduciendodano_cl_pages_scraped_with_firecrawl",
+  "status": "candidate_registry_pending_human_review",
+  "principle": "No entity is excluded because it lacks a test, a ficha, a post, or a matrix cell.",
+  "test_status_values": [
+    "colorimetric_reagent",
+    "specific_strip",
+    "specific_non_colorimetric_test",
+    "laboratory_only",
+    "no_known_test_in_scope",
+    "not_reviewed"
+  ],
+  "entity_kind_values": [
+    "substance",
+    "substance_family",
+    "market_name_or_mixture",
+    "medication",
+    "adulterant_or_contaminant",
+    "metabolite_or_precursor",
+    "contextual_substance"
+  ],
+  "records": [
+    {
+      "id": "cannabis",
+      "display_name": "Cannabis / Marihuana",
+      "aliases": ["THC", "CBD"],
+      "entity_kind": "substance",
+      "matrix": true,
+      "source_status": "direct_sheet_and_product",
+      "test_status": "colorimetric_reagent",
+      "source_urls": ["https://reduciendodano.cl/sustancias/cannabis/", "https://reduciendodano.cl/tienda/cannabis/", "https://reduciendodano.cl/tienda/kit-de-testeo-para-thc-cbd/"]
+    },
+    {
+      "id": "lsd",
+      "display_name": "LSD",
+      "aliases": ["acid", "dietilamida del acido lisergico"],
+      "entity_kind": "substance",
+      "matrix": true,
+      "source_status": "direct_sheet_and_testing_guides",
+      "test_status": "colorimetric_reagent",
+      "source_urls": ["https://reduciendodano.cl/sustancias/lsd/", "https://reduciendodano.cl/lsd-y-alucinogenos-como-usar-el-reactivo-ehrlich/", "https://reduciendodano.cl/tienda/kit-de-testeo-para-lsd/"]
+    },
+    {
+      "id": "psilocybin",
+      "display_name": "Psilocibina / Hongos",
+      "aliases": ["psilocina", "hongos psilocibios"],
+      "entity_kind": "substance_family",
+      "matrix": true,
+      "source_status": "direct_sheet_and_testing_guide",
+      "test_status": "colorimetric_reagent",
+      "source_urls": ["https://reduciendodano.cl/sustancias/psilocibina/", "https://reduciendodano.cl/como-testear-hongos-psilocibios/"]
+    },
+    {
+      "id": "mdma",
+      "display_name": "MDMA / Éxtasis",
+      "aliases": ["molly", "ecstasy", "pasti", "pila"],
+      "entity_kind": "substance",
+      "matrix": true,
+      "source_status": "direct_sheet_and_testing_guides",
+      "test_status": "colorimetric_reagent",
+      "source_urls": ["https://reduciendodano.cl/sustancias/mdma/", "https://reduciendodano.cl/tienda/kit-de-testeo-para-mdma/", "https://reduciendodano.cl/kit-mdma-vs-testear-solo-con-marquis-cuando-necesitas-los-tres-reactivos/"]
+    },
+    {
+      "id": "ketamine",
+      "display_name": "Ketamina",
+      "aliases": ["K", "ket"],
+      "entity_kind": "substance",
+      "matrix": true,
+      "source_status": "direct_sheet_and_testing_guides",
+      "test_status": "colorimetric_reagent",
+      "source_urls": ["https://reduciendodano.cl/sustancias/ketamina/", "https://reduciendodano.cl/como-testear-ketamina-reactivo-morris/", "https://reduciendodano.cl/tienda/kit-de-testeo-para-ketamina/"]
+    },
+    {
+      "id": "tusi",
+      "display_name": "Tusi",
+      "aliases": ["cocaína rosada", "pink cocaine"],
+      "entity_kind": "market_name_or_mixture",
+      "matrix": true,
+      "source_status": "direct_sheet_and_testing_guide",
+      "test_status": "colorimetric_reagent",
+      "source_urls": ["https://reduciendodano.cl/sustancias/tusi/", "https://reduciendodano.cl/como-testear-tusi/", "https://reduciendodano.cl/tienda/kit-de-testeo-para-tusi/"]
+    },
+    {
+      "id": "alcohol",
+      "display_name": "Alcohol / Etanol",
+      "aliases": ["alcohol etílico"],
+      "entity_kind": "contextual_substance",
+      "matrix": true,
+      "source_status": "direct_articles_and_interactions",
+      "test_status": "not_reviewed",
+      "source_urls": ["https://reduciendodano.cl/alcohol-despues-del-trabajo-cultura-laboral-estres-y-reduccion-de-danos/", "https://reduciendodano.cl/chemsex-reduccion-de-danos/"]
+    },
+    {
+      "id": "ghb_gbl",
+      "display_name": "GHB / GBL",
+      "aliases": ["GHB", "GBL"],
+      "entity_kind": "substance_family",
+      "matrix": true,
+      "source_status": "direct_sheet_and_chemsex_guide",
+      "test_status": "specific_non_colorimetric_test",
+      "source_urls": ["https://reduciendodano.cl/sustancias/ghb/", "https://reduciendodano.cl/chemsex-reduccion-de-danos/", "https://reduciendodano.cl/tienda/test-de-deteccion-de-ghb-en-bebidas/"]
+    },
+    {
+      "id": "cocaine",
+      "display_name": "Cocaína",
+      "aliases": ["coca"],
+      "entity_kind": "substance",
+      "matrix": true,
+      "source_status": "direct_sheet_and_testing_guides",
+      "test_status": "colorimetric_reagent",
+      "source_urls": ["https://reduciendodano.cl/sustancias/cocaina/", "https://reduciendodano.cl/como-testear-cocaina-reactivo-liebermann-paso-a-paso/", "https://reduciendodano.cl/tienda/kit-de-testeo-para-cocaina/"]
+    },
+    {
+      "id": "alkyl_nitrites",
+      "display_name": "Poppers / Nitritos de alquilo",
+      "aliases": ["nitrito de amilo", "nitrito de butilo", "nitrito de pentilo", "nitrito de isopropilo"],
+      "entity_kind": "substance_family",
+      "matrix": true,
+      "source_status": "direct_article_ficha_pending",
+      "test_status": "no_known_test_in_scope",
+      "source_urls": ["https://reduciendodano.cl/poppers-lo-que-hay-que-saber/", "https://reduciendodano.cl/chemsex-reduccion-de-danos/"]
+    },
+    {
+      "id": "erectile_dysfunction_medications",
+      "display_name": "Medicamentos para la disfunción eréctil",
+      "aliases": ["Viagra", "sildenafil", "tadalafil", "vardenafil"],
+      "entity_kind": "medication",
+      "matrix": true,
+      "source_status": "direct_interaction_article",
+      "test_status": "not_reviewed",
+      "source_urls": ["https://reduciendodano.cl/poppers-lo-que-hay-que-saber/"]
+    },
+    {
+      "id": "benzodiazepines",
+      "display_name": "Benzodiacepinas",
+      "aliases": ["benzos", "Xanax"],
+      "entity_kind": "substance_family",
+      "matrix": true,
+      "source_status": "direct_sheet_and_product",
+      "test_status": "specific_strip",
+      "source_urls": ["https://reduciendodano.cl/sustancias/benzodiazepinas/", "https://reduciendodano.cl/tienda/kit-de-testeo-para-benzodiacepinas/", "https://reduciendodano.cl/tienda/tira-reactiva-de-benzodiacepinas/"]
+    },
+    {
+      "id": "amphetamine",
+      "display_name": "Anfetamina",
+      "aliases": ["speed"],
+      "entity_kind": "substance",
+      "matrix": true,
+      "source_status": "direct_sheet_and_testing_guide",
+      "test_status": "colorimetric_reagent",
+      "source_urls": ["https://reduciendodano.cl/sustancias/anfetaminas/", "https://reduciendodano.cl/como-testear-anfetaminas/", "https://reduciendodano.cl/tienda/kit-anfetaminas/"]
+    },
+    {
+      "id": "methamphetamine",
+      "display_name": "Metanfetamina",
+      "aliases": ["cristal", "meth"],
+      "entity_kind": "substance",
+      "matrix": true,
+      "source_status": "direct_sheet_and_testing_guide",
+      "test_status": "colorimetric_reagent",
+      "source_urls": ["https://reduciendodano.cl/sustancias/metanfetamina/", "https://reduciendodano.cl/como-testear-metanfetamina/", "https://reduciendodano.cl/tienda/kit-de-testeo-para-metanfetamina/"]
+    },
+    {
+      "id": "mda",
+      "display_name": "MDA",
+      "aliases": ["sass"],
+      "entity_kind": "substance",
+      "matrix": false,
+      "matrix_candidate": true,
+      "source_status": "direct_sheet_and_comparison_content",
+      "test_status": "colorimetric_reagent",
+      "source_urls": ["https://reduciendodano.cl/sustancias/mda/", "https://reduciendodano.cl/sustancias/mdma/", "https://reduciendodano.cl/tienda/simons/", "https://reduciendodano.cl/tienda/robadope/"]
+    },
+    {
+      "id": "dmt",
+      "display_name": "DMT",
+      "aliases": ["dimetiltriptamina"],
+      "entity_kind": "substance",
+      "matrix": false,
+      "source_status": "direct_product_and_reagent_guidance",
+      "test_status": "colorimetric_reagent",
+      "source_urls": ["https://reduciendodano.cl/tienda/kit-de-testeo-para-dmt/", "https://reduciendodano.cl/tienda/ehrlich/", "https://reduciendodano.cl/tienda/hofmann/"]
+    },
+    {
+      "id": "five_meo_dmt",
+      "display_name": "5-MeO-DMT",
+      "aliases": [],
+      "entity_kind": "substance",
+      "matrix": false,
+      "source_status": "direct_product_and_reagent_guidance",
+      "test_status": "colorimetric_reagent",
+      "source_urls": ["https://reduciendodano.cl/tienda/kit-de-testeo-para-dmt/", "https://reduciendodano.cl/tienda/ehrlich/", "https://reduciendodano.cl/tienda/hofmann/"]
+    },
+    {
+      "id": "det",
+      "display_name": "DET",
+      "aliases": [],
+      "entity_kind": "substance",
+      "matrix": false,
+      "source_status": "direct_product_mention",
+      "test_status": "not_reviewed",
+      "source_urls": ["https://reduciendodano.cl/tienda/kit-de-testeo-para-dmt/"]
+    },
+    {
+      "id": "four_ho_substances",
+      "display_name": "4-HO-xxx / triptaminas 4-HO",
+      "aliases": [],
+      "entity_kind": "substance_family",
+      "matrix": false,
+      "source_status": "direct_product_mention",
+      "test_status": "not_reviewed",
+      "source_urls": ["https://reduciendodano.cl/tienda/kit-de-testeo-para-dmt/"]
+    },
+    {
+      "id": "harmala_compounds",
+      "display_name": "Harmalina / Harmina / Gramina",
+      "aliases": ["harmalas"],
+      "entity_kind": "substance_family",
+      "matrix": false,
+      "source_status": "direct_product_mention_and_reagent_guidance",
+      "test_status": "colorimetric_reagent",
+      "source_urls": ["https://reduciendodano.cl/tienda/kit-de-testeo-para-dmt/", "https://reduciendodano.cl/tienda/hofmann/"]
+    },
+    {
+      "id": "escopolamina",
+      "display_name": "Escopolamina",
+      "aliases": [],
+      "entity_kind": "medication",
+      "matrix": false,
+      "source_status": "direct_product_mention",
+      "test_status": "not_reviewed",
+      "source_urls": ["https://reduciendodano.cl/tienda/kit-de-testeo-para-dmt/"]
+    },
+    {
+      "id": "two_c_b",
+      "display_name": "2C-B",
+      "aliases": ["2C-B rosado"],
+      "entity_kind": "substance",
+      "matrix": false,
+      "source_status": "direct_sheet_and_testing_guide",
+      "test_status": "colorimetric_reagent",
+      "source_urls": ["https://reduciendodano.cl/sustancias/2cb/", "https://reduciendodano.cl/como-testear-2cb/", "https://reduciendodano.cl/tienda/kit-de-testeo-para-2c-b/"]
+    },
+    {
+      "id": "nbome_family",
+      "display_name": "NBOMe / N3OMe / NBOH / NBF",
+      "aliases": ["NBOMe"],
+      "entity_kind": "substance_family",
+      "matrix": false,
+      "source_status": "direct_guide_and_product_mention",
+      "test_status": "not_reviewed",
+      "source_urls": ["https://reduciendodano.cl/como-testear-2cb/", "https://reduciendodano.cl/tienda/kit-de-testeo-para-lsd/", "https://reduciendodano.cl/tienda/kit-de-testeo-para-dmt/"]
+    },
+    {
+      "id": "dox_family",
+      "display_name": "DOx",
+      "aliases": ["DOC", "DOB", "DOM"],
+      "entity_kind": "substance_family",
+      "matrix": false,
+      "source_status": "direct_guide_and_product_mention",
+      "test_status": "not_reviewed",
+      "source_urls": ["https://reduciendodano.cl/tienda/kit-de-testeo-para-lsd/", "https://reduciendodano.cl/lsd-y-alucinogenos-como-usar-el-reactivo-ehrlich/"]
+    },
+    {
+      "id": "cathinones",
+      "display_name": "Catinonas",
+      "aliases": ["sales de baño"],
+      "entity_kind": "substance_family",
+      "matrix": false,
+      "source_status": "direct_guide_and_product",
+      "test_status": "colorimetric_reagent",
+      "source_urls": ["https://reduciendodano.cl/sustancias/catinonas/", "https://reduciendodano.cl/tienda/kit-de-testeo-para-mefedrona/"]
+    },
+    {
+      "id": "mephedrone",
+      "display_name": "Mefedrona / 4-MMC",
+      "aliases": ["4-MMC"],
+      "entity_kind": "substance",
+      "matrix": false,
+      "source_status": "direct_guide_and_product",
+      "test_status": "colorimetric_reagent",
+      "source_urls": ["https://reduciendodano.cl/sustancias/mefedrona/", "https://reduciendodano.cl/tienda/kit-de-testeo-para-mefedrona/"]
+    },
+    {
+      "id": "mdpv",
+      "display_name": "MDPV",
+      "aliases": [],
+      "entity_kind": "substance",
+      "matrix": false,
+      "source_status": "direct_product_mention",
+      "test_status": "not_reviewed",
+      "source_urls": ["https://reduciendodano.cl/tienda/kit-de-testeo-para-mefedrona/"]
+    },
+    {
+      "id": "a_pvp",
+      "display_name": "a-PVP",
+      "aliases": [],
+      "entity_kind": "substance",
+      "matrix": false,
+      "source_status": "direct_product_mention",
+      "test_status": "not_reviewed",
+      "source_urls": ["https://reduciendodano.cl/tienda/kit-de-testeo-para-mefedrona/"]
+    },
+    {
+      "id": "benzofurans",
+      "display_name": "5-APB / 6-APB",
+      "aliases": ["benzofuranos"],
+      "entity_kind": "substance_family",
+      "matrix": false,
+      "source_status": "direct_reagent_page_and_product_guidance",
+      "test_status": "colorimetric_reagent",
+      "source_urls": ["https://reduciendodano.cl/tienda/froehde/", "https://reduciendodano.cl/tienda/kit-de-testeo-para-mefedrona/"]
+    },
+    {
+      "id": "dissociative_derivatives",
+      "display_name": "DCK / 2-FDCK / 2-Oxo-PCE / O-PCE / MXE / MXPr",
+      "aliases": ["disociativos derivados de ketamina"],
+      "entity_kind": "substance_family",
+      "matrix": false,
+      "source_status": "direct_product_and_external_testing_mentions",
+      "test_status": "not_reviewed",
+      "source_urls": ["https://reduciendodano.cl/tienda/kit-de-testeo-para-ketamina/", "https://reduciendodano.cl/sustancias/ketamina/"]
+    },
+    {
+      "id": "pcp_derivatives",
+      "display_name": "PCP / 3-MeO-PCP / 3-Cl-PCP / 3-MeO-PCE",
+      "aliases": [],
+      "entity_kind": "substance_family",
+      "matrix": false,
+      "source_status": "external_audit_context",
+      "test_status": "not_reviewed",
+      "source_urls": ["https://dancesafe.org/wp-content/uploads/2024/05/DS_Instructions_Reagents_v17Spring24.pdf"]
+    },
+    {
+      "id": "opioids",
+      "display_name": "Opioides",
+      "aliases": ["opiáceos"],
+      "entity_kind": "substance_family",
+      "matrix": false,
+      "source_status": "direct_sheet_and_product",
+      "test_status": "colorimetric_reagent",
+      "source_urls": ["https://reduciendodano.cl/sustancias/heroina/", "https://reduciendodano.cl/tienda/kit-de-testeo-para-opioides/"]
+    },
+    {
+      "id": "heroin",
+      "display_name": "Heroína",
+      "aliases": [],
+      "entity_kind": "substance",
+      "matrix": false,
+      "source_status": "direct_opioid_sheet_and_product",
+      "test_status": "colorimetric_reagent",
+      "source_urls": ["https://reduciendodano.cl/sustancias/heroina/", "https://reduciendodano.cl/tienda/kit-de-testeo-para-opioides/"]
+    },
+    {
+      "id": "morphine",
+      "display_name": "Morfina",
+      "aliases": [],
+      "entity_kind": "substance",
+      "matrix": false,
+      "source_status": "direct_product_mention",
+      "test_status": "colorimetric_reagent",
+      "source_urls": ["https://reduciendodano.cl/tienda/kit-de-testeo-para-opioides/", "https://reduciendodano.cl/tienda/mecke/"]
+    },
+    {
+      "id": "codeine",
+      "display_name": "Codeína",
+      "aliases": [],
+      "entity_kind": "medication",
+      "matrix": false,
+      "source_status": "direct_product_mention",
+      "test_status": "colorimetric_reagent",
+      "source_urls": ["https://reduciendodano.cl/tienda/kit-de-testeo-para-opioides/", "https://reduciendodano.cl/tienda/froehde/"]
+    },
+    {
+      "id": "oxycodone",
+      "display_name": "Oxicodona",
+      "aliases": [],
+      "entity_kind": "medication",
+      "matrix": false,
+      "source_status": "direct_product_mention",
+      "test_status": "not_reviewed",
+      "source_urls": ["https://reduciendodano.cl/tienda/kit-de-testeo-para-opioides/"]
+    },
+    {
+      "id": "fentanyl",
+      "display_name": "Fentanilo",
+      "aliases": [],
+      "entity_kind": "substance",
+      "matrix": false,
+      "source_status": "direct_sheet_and_strip_product",
+      "test_status": "specific_strip",
+      "source_urls": ["https://reduciendodano.cl/sustancias/fentanilo/", "https://reduciendodano.cl/tienda/tira-reactiva-de-fentanilo/"]
+    },
+    {
+      "id": "xylazine",
+      "display_name": "Xilazina",
+      "aliases": [],
+      "entity_kind": "adulterant_or_contaminant",
+      "matrix": false,
+      "source_status": "direct_strip_product_and_substance_mentions",
+      "test_status": "specific_strip",
+      "source_urls": ["https://reduciendodano.cl/tienda/tira-de-xylazina/", "https://reduciendodano.cl/tienda/kit-de-testeo-para-cocaina/"]
+    },
+    {
+      "id": "pma",
+      "display_name": "PMA",
+      "aliases": ["para-metoxi-anfetamina"],
+      "entity_kind": "adulterant_or_contaminant",
+      "matrix": false,
+      "source_status": "direct_mdma_testing_mention",
+      "test_status": "colorimetric_reagent",
+      "source_urls": ["https://reduciendodano.cl/sustancias/mdma/", "https://reduciendodano.cl/tienda/test-de-mandelin/"]
+    },
+    {
+      "id": "pmma",
+      "display_name": "PMMA",
+      "aliases": ["para-metoxi-metanfetamina"],
+      "entity_kind": "adulterant_or_contaminant",
+      "matrix": false,
+      "source_status": "direct_mdma_testing_mention",
+      "test_status": "colorimetric_reagent",
+      "source_urls": ["https://reduciendodano.cl/sustancias/mdma/", "https://reduciendodano.cl/tienda/test-de-mandelin/"]
+    },
+    {
+      "id": "dxm",
+      "display_name": "DXM",
+      "aliases": ["dextrometorfano"],
+      "entity_kind": "medication",
+      "matrix": false,
+      "source_status": "direct_reagent_page_mention",
+      "test_status": "colorimetric_reagent",
+      "source_urls": ["https://reduciendodano.cl/tienda/mecke/"]
+    },
+    {
+      "id": "levamisole",
+      "display_name": "Levamisol",
+      "aliases": [],
+      "entity_kind": "adulterant_or_contaminant",
+      "matrix": false,
+      "source_status": "direct_cocaine_content",
+      "test_status": "colorimetric_reagent",
+      "source_urls": ["https://reduciendodano.cl/como-testear-cocaina-reactivo-liebermann-paso-a-paso/", "https://reduciendodano.cl/sustancias/cocaina/"]
+    },
+    {
+      "id": "lidocaine",
+      "display_name": "Lidocaína",
+      "aliases": [],
+      "entity_kind": "adulterant_or_contaminant",
+      "matrix": false,
+      "source_status": "direct_cocaine_content",
+      "test_status": "colorimetric_reagent",
+      "source_urls": ["https://reduciendodano.cl/como-testear-cocaina-reactivo-liebermann-paso-a-paso/", "https://reduciendodano.cl/sustancias/cocaina/"]
+    },
+    {
+      "id": "phenacetin",
+      "display_name": "Fenacetina",
+      "aliases": [],
+      "entity_kind": "adulterant_or_contaminant",
+      "matrix": false,
+      "source_status": "direct_methamphetamine_content",
+      "test_status": "not_reviewed",
+      "source_urls": ["https://reduciendodano.cl/sustancias/metanfetamina/"]
+    },
+    {
+      "id": "caffeine",
+      "display_name": "Cafeína",
+      "aliases": [],
+      "entity_kind": "contextual_substance",
+      "matrix": false,
+      "source_status": "direct_articles_and_interaction_research",
+      "test_status": "colorimetric_reagent",
+      "source_urls": ["https://reduciendodano.cl/cafeina-la-psicoactiva-legal/", "https://reduciendodano.cl/cafeina-estimulantes-mdma-cocaina-interacciones/", "https://reduciendodano.cl/tienda/mecke/"]
+    },
+    {
+      "id": "tropacocaine_and_related_impurities",
+      "display_name": "Tropacocaína y otras impurezas relacionadas",
+      "aliases": ["benzoylecgonine", "methylecgonidine"],
+      "entity_kind": "metabolite_or_precursor",
+      "matrix": false,
+      "source_status": "external_audit_and_cocaine_research_context",
+      "test_status": "not_reviewed",
+      "source_urls": ["https://dancesafe.org/important-reagent-reaction-updates/", "https://reduciendodano.cl/como-testear-cocaina-reactivo-liebermann-paso-a-paso/"]
+    },
+    {
+      "id": "ritonavir_cobicistat",
+      "display_name": "Ritonavir / Cobicistat",
+      "aliases": ["terapia antirretroviral"],
+      "entity_kind": "medication",
+      "matrix": false,
+      "source_status": "direct_chemsex_content",
+      "test_status": "laboratory_only",
+      "source_urls": ["https://reduciendodano.cl/chemsex-reduccion-de-danos/"]
+    },
+    {
+      "id": "prep_pep_doxypep",
+      "display_name": "PrEP / PEP / doxyPEP",
+      "aliases": [],
+      "entity_kind": "medication",
+      "matrix": false,
+      "source_status": "direct_chemsex_content",
+      "test_status": "not_reviewed",
+      "source_urls": ["https://reduciendodano.cl/chemsex-reduccion-de-danos/"]
+    }
+  ]
+}

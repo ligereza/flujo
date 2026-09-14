@@ -1,0 +1,53 @@
+"""Módulo de planos de stands para eventos — constantes de realidad."""
+from .engine import (
+    CONSTANTES,
+    Caja,
+    reglas_rider,
+    modulos_desde_evento,
+    solve_layout,
+    render_svg,
+    render_rider,
+    zone_overlay,
+    validate_zone_overlay,
+    validate_evento,
+    render_validation_report,
+    load_evento,
+)
+from .costs import calcular_costos, resumen_costos
+from .packs import (
+    ALL_PACKS,
+    DEFAULT_PACK,
+    PACKS,
+    PackId,
+    desglose_pack,
+    ev_desde_pack,
+    get_pack,
+    normalize_pack_id,
+    proporcion_monto,
+)
+
+__all__ = [
+    "CONSTANTES",
+    "Caja",
+    "reglas_rider",
+    "modulos_desde_evento",
+    "solve_layout",
+    "render_svg",
+    "render_rider",
+    "zone_overlay",
+    "validate_zone_overlay",
+    "validate_evento",
+    "render_validation_report",
+    "load_evento",
+    "calcular_costos",
+    "resumen_costos",
+    "PACKS",
+    "PackId",
+    "ALL_PACKS",
+    "DEFAULT_PACK",
+    "get_pack",
+    "normalize_pack_id",
+    "proporcion_monto",
+    "desglose_pack",
+    "ev_desde_pack",
+]

@@ -1,0 +1,24 @@
+{
+  "schema": "artist-context-v1",
+  "privacy": "public-safe-template",
+  "identity": {
+    "role": "artist and graphic designer",
+    "working_language": "Spanish with correct diacritics",
+    "practice": ["visual research", "generative SVG", "graphic design", "cultural archives"]
+  },
+  "living_projects": [
+    {"id": "vibecodeine", "purpose": "artwork and local-first creative system"},
+    {"id": "iskvw", "purpose": "art archive and curation"},
+    {"id": "rd", "purpose": "harm-reduction communication and tools"}
+  ],
+  "opportunity_preferences": {
+    "pace": "slow and selective",
+    "preferred": ["artist residencies", "cultural grants", "music collaborations", "graphic-design commissions"],
+    "avoid": ["mass outreach", "spam", "unverified claims", "opportunities incompatible with the practice"]
+  },
+  "personal_domains": {
+    "family_and_nursing": "private domain; do not publish or mix with public portfolio",
+    "financial_or_identity_data": "never store in the repository"
+  },
+  "decision_rule": "MAK prepares evidence, fit and next action; the artist approves contact, application or publication."
+}

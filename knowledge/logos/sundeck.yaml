@@ -1,0 +1,11 @@
+id: sundeck_primary
+producer_id: sundeck
+status: done
+source_quality: sitio_oficial
+workflow:
+  suggested_tool: logo_clean_lab
+  next_action: ninguna (completo)
+outputs:
+  raster: knowledge/logos/descargas/sundeck.png
+  raster_source: knowledge/logos/descargas/sundeck.txt
+  vector: knowledge/logos/vector/sundeck.svg

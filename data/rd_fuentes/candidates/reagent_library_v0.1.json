@@ -1,0 +1,222 @@
+{
+  "schema_version": "rd-reagent-library-v0.1",
+  "generated_at": "2026-08-11",
+  "language": "en",
+  "source": "Firecrawl scrape of public reduciendodano.cl pages",
+  "status": "candidate_pending_human_review",
+  "global_constraints": [
+    "Colorimetric reagents are stored as probable_presence signals, not purity or dose measurements.",
+    "A source claim using words such as confirmed is preserved in source_wording; it is not promoted to laboratory certainty.",
+    "A missing reaction in this file means not normalized in this pass, not that the reagent cannot react.",
+    "Product and guide links are evidence links, not automatic purchase recommendations."
+  ],
+  "reagents": [
+    {
+      "id": "marquis",
+      "name": "Marquis",
+      "type": "liquid_reagent",
+      "components": "single_bottle_not_specified",
+      "observation_window": "first_15_seconds",
+      "reactions": [
+        {"target": "MDMA", "sequence": "violet_to_black", "source_wording": "positive"},
+        {"target": "amphetamine", "sequence": "stable_orange", "source_wording": "amphetamine"},
+        {"target": "methamphetamine", "sequence": "orange_to_red", "source_wording": "confirm_with_Simons"},
+        {"target": "opioids_morphine_heroin", "sequence": "pale_violet", "source_wording": "opioid_present"},
+        {"target": "cathinones", "sequence": "no_reaction_or_yellow", "source_wording": "confirm_with_Froehde"},
+        {"target": "2C-B", "sequence": "yellow_to_green_to_black", "source_wording": "phenethylamine"},
+        {"target": "cocaine", "sequence": "no_reaction_or_pale_peach", "source_wording": "2024_update"},
+        {"target": "unknown_or_no_target", "sequence": "transparent_no_change", "source_wording": "requires_another_reagent"}
+      ],
+      "limitations": ["does_not_detect_fentanyl", "does_not_detect_xylazine", "does_not_detect_benzodiazepines", "PMA_PMMA_can_mimic_MDMA_like_reaction"],
+      "complements": ["simons", "robadope", "froehde", "mecke", "fentanyl_strip"],
+      "source_url": "https://reduciendodano.cl/tienda/marquis/"
+    },
+    {
+      "id": "ehrlich",
+      "name": "Ehrlich",
+      "type": "liquid_reagent",
+      "components": "single_bottle_not_specified",
+      "observation_window": "1_to_5_minutes; guide_says_3_to_5_minutes",
+      "reactions": [
+        {"target": "LSD", "sequence": "intense_violet", "source_wording": "indole_detected"},
+        {"target": "psilocybin_psilocin", "sequence": "violet_or_purple", "source_wording": "indole_detected"},
+        {"target": "DMT_and_indole_triptamines", "sequence": "violet_or_purple", "source_wording": "same_as_LSD; use_Hofmann_to_distinguish"},
+        {"target": "5-MeO-DMT", "sequence": "violet", "source_wording": "indole_detected"},
+        {"target": "no_indole_or_non_indole_target", "sequence": "transparent_no_change", "source_wording": "no_indole_detected"}
+      ],
+      "limitations": ["detects_indole_presence_not_specific_compound", "does_not_distinguish_LSD_psilocybin_DMT", "does_not_react_with_NBOMe_or_DOx", "does_not_detect_MDMA_cocaine_ketamine_amphetamines"],
+      "complements": ["hofmann"],
+      "source_url": "https://reduciendodano.cl/tienda/ehrlich/",
+      "guide_url": "https://reduciendodano.cl/lsd-y-alucinogenos-como-usar-el-reactivo-ehrlich/"
+    },
+    {
+      "id": "liebermann",
+      "name": "Liebermann",
+      "type": "liquid_reagent",
+      "components": "single_bottle_not_specified",
+      "observation_window": "first_30_to_60_seconds",
+      "reactions": [
+        {"target": "cocaine_without_detected_adulterant", "sequence": "yellow", "source_wording": "no_detectable_adulterant"},
+        {"target": "ketamine", "sequence": "very_pale_yellow", "source_wording": "confirm_with_Morris"},
+        {"target": "levamisole_or_lidocaine", "sequence": "oxidized_red_or_orange_red", "source_wording": "adulterant_present"},
+        {"target": "opioids_or_MDMA_or_other_unexpected_compound", "sequence": "black", "source_wording": "confirm"},
+        {"target": "fentanyl_or_uncovered_target", "sequence": "transparent_no_reaction", "source_wording": "not_detectable_here"}
+      ],
+      "limitations": ["cannot_distinguish_levamisole_from_lidocaine", "does_not_detect_fentanyl", "darker_reactions_can_mask_lighter_reactions", "does_not_establish_purity"],
+      "complements": ["morris", "fentanyl_strip"],
+      "source_url": "https://reduciendodano.cl/tienda/liebermann/",
+      "guide_url": "https://reduciendodano.cl/como-testear-cocaina-reactivo-liebermann-paso-a-paso/"
+    },
+    {
+      "id": "morris",
+      "name": "Morris",
+      "type": "two_part_liquid_reagent",
+      "components": "A_and_B",
+      "observation_window": "3_to_5_minutes",
+      "reactions": [
+        {"target": "cocaine", "sequence": "bright_blue", "source_wording": "cocaine_confirmed"},
+        {"target": "ketamine", "sequence": "violet_or_purple", "source_wording": "ketamine_confirmed"},
+        {"target": "levamisole_or_lidocaine", "sequence": "red_orange", "source_wording": "adulterant_present"},
+        {"target": "other_or_no_target", "sequence": "no_reaction_or_weak", "source_wording": "use_Liebermann_to_expand"}
+      ],
+      "limitations": ["does_not_detect_fentanyl", "does_not_detect_benzodiazepines", "does_not_detect_most_inert_cutting_agents", "requires_correct_A_B_procedure_and_precise_small_sample"],
+      "complements": ["marquis", "liebermann", "fentanyl_strip"],
+      "source_url": "https://reduciendodano.cl/tienda/morris/",
+      "guide_url": "https://reduciendodano.cl/como-testear-ketamina-reactivo-morris/"
+    },
+    {
+      "id": "froehde",
+      "name": "Froehde",
+      "type": "liquid_reagent",
+      "components": "single_bottle_not_specified",
+      "observation_window": "first_30_to_60_seconds",
+      "reactions": [
+        {"target": "MDMA", "sequence": "bluish_gray_to_black", "source_wording": "MDMA_confirmed"},
+        {"target": "5-APB_or_6-APB", "sequence": "violet_to_black", "source_wording": "benzofuran_detected"},
+        {"target": "MDA", "sequence": "bluish_green", "source_wording": "MDA_present"},
+        {"target": "opioids_morphine_codeine", "sequence": "blue_to_green_to_yellow", "source_wording": "opioid_present"},
+        {"target": "cathinones_mephedrone", "sequence": "brown_to_green", "source_wording": "cathinone_present"},
+        {"target": "ketamine", "sequence": "yellowish_brown", "source_wording": "confirm_with_Morris"},
+        {"target": "unknown_or_no_target", "sequence": "no_reaction", "source_wording": "requires_another_reagent"}
+      ],
+      "limitations": ["broad_spectrum_signal_requires_complementary_reagent", "does_not_establish_purity"],
+      "complements": ["marquis", "morris", "robadope"],
+      "source_url": "https://reduciendodano.cl/tienda/froehde/"
+    },
+    {
+      "id": "simons",
+      "name": "Simon's",
+      "type": "two_part_liquid_reagent",
+      "components": "A_and_B",
+      "observation_window": "first_30_seconds",
+      "reactions": [
+        {"target": "MDMA", "sequence": "intense_blue", "source_wording": "secondary_amine"},
+        {"target": "methamphetamine", "sequence": "blue", "source_wording": "secondary_amine"},
+        {"target": "MDA", "sequence": "no_reaction_or_gray_green", "source_wording": "primary_amine_not_MDMA"},
+        {"target": "amphetamine", "sequence": "no_reaction", "source_wording": "primary_amine_not_methamphetamine"}
+      ],
+      "limitations": ["requires_A_then_B_sequence", "negative_reaction_is_not_a_complete_identification", "source_page_contains_a_2023_update_note"],
+      "complements": ["marquis", "robadope"],
+      "source_url": "https://reduciendodano.cl/tienda/simons/"
+    },
+    {
+      "id": "zimmermann",
+      "name": "Zimmermann",
+      "type": "liquid_reagent",
+      "components": "single_bottle_not_specified",
+      "observation_window": "first_30_to_60_seconds",
+      "reactions": [
+        {"target": "benzodiazepines_diazepam_alprazolam_clonazepam", "sequence": "orange_to_red_orange", "source_wording": "benzodiazepine_detected"},
+        {"target": "nitrazepam_or_flunitrazepam", "sequence": "reddish_orange", "source_wording": "benzodiazepine_detected"},
+        {"target": "ketamine", "sequence": "very_faint_pink", "source_wording": "not_conclusive; not_benzodiazepine"},
+        {"target": "unknown_or_no_benzodiazepine", "sequence": "no_reaction", "source_wording": "no_benzodiazepine_detected"}
+      ],
+      "limitations": ["source_page_describes_benzodiazepine_detection_as_reliable_but_still_colorimetric", "does_not_establish_purity_or_dose"],
+      "complements": ["benzodiazepine_strip"],
+      "source_url": "https://reduciendodano.cl/tienda/zimmermann/"
+    },
+    {
+      "id": "mecke",
+      "name": "Mecke",
+      "type": "liquid_reagent",
+      "components": "single_bottle_not_specified",
+      "observation_window": "first_30_seconds",
+      "reactions": [
+        {"target": "MDMA", "sequence": "blue_to_black", "source_wording": "MDMA_confirmed"},
+        {"target": "opioids_morphine_heroin_codeine", "sequence": "blue_to_black", "source_wording": "opioid_present"},
+        {"target": "DXM", "sequence": "yellow_to_green_to_black", "source_wording": "DXM_present"},
+        {"target": "caffeine", "sequence": "yellow", "source_wording": "common_adulterant"},
+        {"target": "ketamine", "sequence": "pale_yellow_to_green", "source_wording": "confirm_with_Morris"},
+        {"target": "amphetamine", "sequence": "no_reaction", "source_wording": "use_Marquis"}
+      ],
+      "limitations": ["overlapping_reactions_require_context_and_complementary_reagents", "does_not_establish_purity"],
+      "complements": ["marquis", "morris"],
+      "source_url": "https://reduciendano.cl/tienda/mecke/"
+    },
+    {
+      "id": "mandelin",
+      "name": "Mandelin",
+      "type": "liquid_reagent",
+      "components": "single_bottle_not_specified",
+      "observation_window": "first_30_seconds",
+      "reactions": [
+        {"target": "ketamine", "sequence": "orange_to_red", "source_wording": "confirm_with_Morris"},
+        {"target": "PMA_or_PMMA_in_ecstasy", "sequence": "green", "source_wording": "high_risk_warning"}
+      ],
+      "limitations": ["focused_page_does_not_expose_a_complete_reaction_table_in_scrape", "requires_complementary_reagent", "does_not_establish_purity"],
+      "complements": ["marquis", "morris", "fentanyl_strip"],
+      "source_url": "https://reduciendodano.cl/tienda/test-de-mandelin/"
+    },
+    {
+      "id": "hofmann",
+      "name": "Hofmann",
+      "type": "liquid_reagent",
+      "components": "single_bottle_not_specified",
+      "observation_window": "not_normalized_in_first_pass",
+      "reactions": [
+        {"target": "LSD", "sequence": "blue_to_violet", "source_wording": "LSD_confirmed"},
+        {"target": "psilocybin_psilocin", "sequence": "reddish_brown_to_violet", "source_wording": "psilocybin_present"},
+        {"target": "DMT", "sequence": "yellow", "source_wording": "DMT_present"},
+        {"target": "5-MeO-DMT", "sequence": "green", "source_wording": "5-MeO-DMT_present"},
+        {"target": "harmalina", "sequence": "yellow_to_orange", "source_wording": "harmala_present"},
+        {"target": "mescaline", "sequence": "no_reaction", "source_wording": "use_Marquis"}
+      ],
+      "limitations": ["observation_window_requires_source_review", "should_be_used_as_complement_to_Ehrlich_for_indole_samples", "does_not_establish_purity"],
+      "complements": ["ehrlich", "marquis"],
+      "source_url": "https://reduciendano.cl/tienda/hofmann/"
+    },
+    {
+      "id": "robadope",
+      "name": "Robadope",
+      "type": "liquid_reagent",
+      "components": "single_bottle_not_specified",
+      "observation_window": "first_30_seconds",
+      "reactions": [
+        {"target": "amphetamine", "sequence": "pink_or_pink_red", "source_wording": "primary_amine"},
+        {"target": "MDA", "sequence": "pink", "source_wording": "primary_amine"},
+        {"target": "2C-B_and_primary_phenethylamines", "sequence": "pink", "source_wording": "primary_amine"},
+        {"target": "MDMA", "sequence": "no_reaction", "source_wording": "not_primary_amine"},
+        {"target": "methamphetamine", "sequence": "no_reaction", "source_wording": "not_primary_amine"}
+      ],
+      "limitations": ["distinguishes_primary_amine_signal_not_complete_compound_identity", "must_be_interpreted_with_Marquis_or_other_reagent"],
+      "complements": ["marquis", "simons", "froehde"],
+      "source_url": "https://reduciendano.cl/tienda/robadope/"
+    },
+    {
+      "id": "cbd_thc",
+      "name": "CBD:THC",
+      "type": "two_part_liquid_reagent",
+      "components": "A_and_B",
+      "observation_window": "30_to_60_seconds",
+      "reactions": [
+        {"target": "THC_dominant", "sequence": "blue", "source_wording": "THC_dominant"},
+        {"target": "CBD_dominant", "sequence": "purple_or_pink", "source_wording": "CBD_dominant"},
+        {"target": "THC_and_CBD_mix", "sequence": "green", "source_wording": "mixed_cannabinoids"},
+        {"target": "no_detected_cannabinoid", "sequence": "no_reaction", "source_wording": "no_cannabinoids_detected"}
+      ],
+      "limitations": ["does_not_determine_exact_ratio", "does_not_establish_purity", "requires_A_and_B_sequence"],
+      "complements": ["zimmermann", "fentanyl_strip"],
+      "source_url": "https://reduciendodano.cl/tienda/cannabis/"
+    }
+  ]
+}

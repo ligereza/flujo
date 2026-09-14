@@ -1,0 +1,12 @@
+{
+  "schema": "mak-official-math-statement-capture-v1",
+  "target_id": "MILLENNIUM-PNP-001",
+  "source_url": "https://www.claymath.org/millennium/p-vs-np/",
+  "source_title": "P vs NP - Clay Mathematics Institute",
+  "retrieved_at": "2026-08-20",
+  "page_status": "Unsolved",
+  "canonical_statement": "Clay's official P vs NP page labels the problem unsolved and frames it as whether problems whose solutions are easy to check are also easy to solve.",
+  "canonical_statement_hash": "4dfe5bdbfca3ac233ca4f8f9a4a9741a038175052a0d5e4a0245b6c2190a0f74",
+  "hash_basis": "sha256(UTF-8 canonical_statement)",
+  "scope_note": "Normalized curator evidence, not a verbatim transcript, proof evidence, or theorem claim."
+}

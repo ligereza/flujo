@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" data-name="45e39c680d4f-18000762428700413">
+<style>
+.c0{animation:k_girar 7s linear infinite}
+@keyframes k_girar{to{transform:rotate(360deg)}}
+</style>
+<rect width="120" height="120" fill="#061826"/>
+<g id="capa-0-protagonista" transform="translate(60,58)" data-rol="protagonista" data-gesto="girar" data-ritmo="7s" data-figura="vinilo"><title>protagonista - vinilo</title><g class="c0"><g transform="scale(40)"><circle r=".92" fill="#2ee6ff"/><circle r="0.72" fill="none" stroke="#0d2c42" stroke-width=".03" opacity=".5"/><circle r="0.58" fill="none" stroke="#0d2c42" stroke-width=".03" opacity=".5"/><circle r="0.44" fill="none" stroke="#0d2c42" stroke-width=".03" opacity=".5"/><circle r=".22" fill="#d7ff2e"/><circle r=".05" fill="#0d2c42"/></g></g></g>
+<g id="capa-1-base" transform="translate(60,96)" data-rol="base" data-gesto="quieto" data-ritmo="4s" data-figura="bocina"><title>base - bocina</title><g class="c1"><g transform="scale(16)"><path d="M-.85,-.34 H-.34 L.20,-.88 V.88 L-.34,.34 H-.85 Z" fill="#2ee6ff"/><path d="M.42,-.42 a.55,.55 0 0 1 0,.84" fill="none" stroke="#d7ff2e" stroke-width=".12" stroke-linecap="round"/><path d="M.66,-.72 a.95,.95 0 0 1 0,1.44" fill="none" stroke="#d7ff2e" stroke-width=".12" stroke-linecap="round"/></g></g></g>
+</svg>

@@ -1,0 +1,16 @@
+fecha,evento,tipo,derivado_a,rango_etario,notas
+2026-08-18,After Mecanica,informacion,punto de hidratacion,25-34,entrega de agua y sales
+2026-04-22,Open Air Dunas,escucha,,35-44,"conversacion de contencion, sin derivacion"
+2026-07-09,Fiesta Solsticio,escucha,urgencias medicas,18-24,
+2026-07-09,Under Bosque,hidratacion,salud mental,35-44,
+2026-04-07,Warehouse 12,derivacion,salud mental,45+,entrega de agua y sales
+2026-05-02,Warehouse 12,informacion,punto de hidratacion,25-34,acompanamiento breve en punto fijo
+2026-08-30,After Mecanica,informacion,punto de hidratacion,35-44,"conversacion de contencion, sin derivacion"
+2026-09-01,After Mecanica,hidratacion,punto de hidratacion,45+,
+2026-05-21,Fiesta Solsticio,hidratacion,punto de hidratacion,18-24,"conversacion de contencion, sin derivacion"
+2026-09-12,After Mecanica,informacion,,25-34,acompanamiento breve en punto fijo
+2026-08-11,Fiesta Solsticio,escucha,,45+,entrega de agua y sales
+2026-07-18,Open Air Dunas,hidratacion,urgencias medicas,35-44,acompanamiento breve en punto fijo
+2026-06-28,Fiesta Solsticio,derivacion,urgencias medicas,45+,"conversacion de contencion, sin derivacion"
+2026-06-13,Warehouse 12,escucha,salud mental,45+,"conversacion de contencion, sin derivacion"
+2026-05-01,Club Nortico,hidratacion,,25-34,

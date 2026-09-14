@@ -1,0 +1,9 @@
+# Semillas de venues -- una sala por linea, de memoria.
+# De memoria NO es medido: todo lo que entre por aca queda como "aportado".
+#
+# ciudad | nombre | tipo | ancho | prof | truss | tiro | notas
+# tipos: teatro club galpon casa multiuso aire_libre otro
+# campo sin dato: - (o dejarlo vacio)
+
+Santiago | Sala Ejemplo | teatro | 10 | 4.5 | 6.2 | 9 | columna a un tercio; el booth tapa el lado derecho
+Valparaiso | Otro Ejemplo | club | 8 | 4 | 5.2 | 7 | -

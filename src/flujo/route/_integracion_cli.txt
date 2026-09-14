@@ -1,0 +1,34 @@
+COMO ENCHUFAR 'route' AL DISPATCHER DE flujo
+=============================================
+
+El modulo ya funciona suelto:
+    py src/flujo/route/resolver.py where --area eventos --pieza flyer
+
+Para exponerlo como  py -m flujo route ...  agrega el subcomando al
+dispatcher principal de flujo (donde se registran app/health/portal/etc).
+
+Patron tipico (ajusta al estilo real de tu src/flujo/__main__.py o cli):
+
+    # --- en el registro de subcomandos de flujo ---
+    from flujo.route import resolver as route_resolver
+
+    def _cmd_route(argv):
+        # argv = lista de args despues de 'route'
+        return route_resolver.main(argv)
+
+    SUBCOMANDOS["route"] = _cmd_route
+
+Si flujo usa argparse con subparsers, basta delegar el resto de args:
+
+    sub_route = subparsers.add_parser("route", help="router de rutas RD")
+    sub_route.add_argument("rest", nargs=argparse.REMAINDER)
+    # y en el handler:
+    #   from flujo.route import resolver
+    #   resolver.main(args.rest)
+
+REGLAS (del repo)
+- Windows + py (no python).
+- ASCII-only en handoffs.
+- No mueve/borra archivos: este modulo es solo-lectura.
+- Si haces airdrop: validar con scripts/validate_airdrop.py y
+  correr scripts/run_airdrop_checks.py "mensaje".

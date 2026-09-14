@@ -1,0 +1,25 @@
+{
+  "intake_version": "1.0",
+  "pedido": {
+    "id_externo": "MAIL-2026-06-20-002",
+    "area": "eventos",
+    "solicitante": {
+      "nombre": "Coordinación Eventos",
+      "canal": "correo"
+    },
+    "tipo_pieza": "cartelera",
+    "formato_sugerido": "evt_cartelera_individual_1080x1920",
+    "contenido": {
+      "titulo": "Estaremos en la Expo",
+      "extras": {
+        "instagram_post": "https://www.instagram.com/p/XXXXXXXXX/",
+        "nota": "Productora, fecha y venue se infieren del post de IG descargado."
+      }
+    },
+    "entrega": {
+      "formatos": ["zip"],
+      "destino": "digital"
+    },
+    "notas": "Cartelera individual (un solo evento). Foto base desde IG enmarcada en Blender, droplet PS exporta."
+  }
+}

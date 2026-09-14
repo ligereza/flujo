@@ -1,0 +1,26 @@
+{
+  "name": "Techno Youth",
+  "aliases": [
+    "TECHNOYOUTH",
+    "Techno Youth",
+    "cl-technoyouthchile"
+  ],
+  "instagram": "",
+  "tipos_fecha": [
+    "RAVE",
+    "UNDERGROUND"
+  ],
+  "logos": [],
+  "venues": [],
+  "confirmed": "",
+  "fuente_datos": "nombres de archivo del archivo de entregas (ENTREGA/FEBRERO), mapeo 2026-07-17; sin confirmar por humano.",
+  "notes": "Colectivo/fiesta techno. tipos inferidos del nombre. Fuente: archivo de entregas (FEBRERO, root webp). Relacion declarada por el usuario 2026-07-23: TECHNOYOUTH impulsa OPENKLUB junto con PANAL RECORDS.",
+  "relaciones": [
+    {
+      "tipo": "impulsa",
+      "objetivo": "OPENKLUB",
+      "fuente": "palabra del usuario 2026-07-23"
+    }
+  ],
+  "eventos": []
+}

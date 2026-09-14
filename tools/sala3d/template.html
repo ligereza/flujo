@@ -1,0 +1,758 @@
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>sala flujo — portafolio 3D</title>
+<style>
+  /* sala flujo: galeria a oscuras, las piezas dan la luz. Tema unico oscuro
+     (decision de diseno: la bioluminiscencia de las piezas exige el vacio). */
+  :root {
+    --void: #0a0908;
+    --wall: #14110d;
+    --amber: #f59e0b;
+    --amber-dim: #8a6a2f;
+    --bone: #e8e0d0;
+    --dim: #7a6f5f;
+    --teal: #b7ffd9;
+    --serif: Georgia, 'Times New Roman', serif;
+    --mono: ui-monospace, 'Cascadia Code', Consolas, monospace;
+  }
+  html, body { margin: 0; height: 100%; overflow: hidden; background: var(--void); }
+  body { font-family: var(--mono); color: var(--bone); }
+  #gl, #css3d { position: fixed; inset: 0; }
+  #gl { z-index: 0; }
+  #css3d { z-index: 1; pointer-events: none; }
+  #css3d .panel, #css3d .art { pointer-events: auto; }
+
+  /* ---- piezas y paneles CSS3D ---- */
+  .art { background: #1f2a24; box-shadow: 0 0 90px 18px rgba(183,255,217,.10); cursor: pointer; }
+  .art svg { display: block; width: 100%; height: 100%; }
+  .panel {
+    width: 560px; box-sizing: border-box; padding: 34px 38px;
+    background: rgba(13,11,9,.88); border-left: 3px solid var(--amber-dim);
+    color: var(--bone);
+  }
+  .panel h2 { font-family: var(--serif); font-size: 60px; font-weight: 400; margin: 0 0 10px; color: var(--bone); text-wrap: balance; }
+  .panel .meta { font-size: 30px; line-height: 1.5; color: var(--dim); margin: 0 0 18px; }
+  .panel .meta b { color: var(--amber); font-weight: 600; }
+  .panel .cita { font-family: var(--serif); font-style: italic; font-size: 33px; line-height: 1.45; color: #cfc4ae; margin: 0; }
+  .panel.center { border-left: none; border-top: 3px solid var(--amber-dim); text-align: center; }
+  .panel .pairs { font-size: 44px; line-height: 1.8; margin: 18px 0 0; }
+  .panel .pairs .vivo { color: var(--amber); }
+  .panel .pairs .muerto { color: #4a4238; }
+  .panel.entrada h1 { font-family: var(--serif); font-size: 100px; font-weight: 400; letter-spacing: 2px; margin: 0 0 14px; color: var(--bone); }
+  .panel.entrada .sub { font-size: 34px; color: var(--amber); letter-spacing: 6px; text-transform: uppercase; margin: 0 0 26px; }
+  .panel.entrada .metodo { font-size: 32px; color: var(--dim); margin: 0; }
+
+  /* ---- HUD ---- */
+  #hud { position: fixed; inset: 0; z-index: 10; pointer-events: none; }
+  #hud > * { pointer-events: auto; }
+  #marca { position: fixed; top: 22px; left: 26px; font-size: 17px; letter-spacing: 3px; color: var(--dim); text-transform: uppercase; }
+  #marca b { color: var(--amber); font-weight: 600; }
+  #dots { position: fixed; top: 26px; right: 26px; display: flex; gap: 10px; }
+  #dots button { width: 16px; height: 16px; border-radius: 50%; border: 1px solid var(--amber-dim); background: transparent; cursor: pointer; padding: 0; }
+  #dots button.on { background: var(--amber); border-color: var(--amber); }
+  #nav {
+    position: fixed; left: 50%; bottom: 26px; transform: translateX(-50%);
+    display: flex; align-items: center; gap: 18px;
+  }
+  .btn {
+    font-family: var(--mono); font-size: 19px; letter-spacing: 2px; text-transform: uppercase;
+    color: var(--bone); background: rgba(20,17,13,.85); border: 1px solid var(--amber-dim);
+    border-radius: 999px; padding: 16px 30px; min-height: 58px; cursor: pointer;
+  }
+  .btn:hover { border-color: var(--amber); color: var(--amber); }
+  .btn:focus-visible { outline: 2px solid var(--amber); outline-offset: 2px; }
+  .btn.on { background: var(--amber); color: #14110d; border-color: var(--amber); font-weight: 700; }
+  #sala-titulo { font-size: 21px; letter-spacing: 3px; text-transform: uppercase; color: var(--bone); min-width: 300px; text-align: center; }
+  #sala-titulo small { display: block; font-size: 15px; color: var(--dim); letter-spacing: 1px; text-transform: none; margin-top: 5px; }
+
+  /* rail de progreso del recorrido */
+  #rail {
+    position: fixed; left: 50%; bottom: 12px; transform: translateX(-50%);
+    width: min(460px, 64vw); height: 3px; border-radius: 2px;
+    background: rgba(138,106,47,.35); pointer-events: none;
+  }
+  #rail-fill { height: 100%; width: 0%; background: var(--amber); border-radius: 2px; transition: width .5s ease; }
+  @media (prefers-reduced-motion: reduce) { #rail-fill { transition: none; } }
+
+  /* controles del zootropo: solo visibles en la rotonda */
+  #rotunda-ctl {
+    position: fixed; left: 50%; bottom: 110px; transform: translateX(-50%);
+    display: none; align-items: center; gap: 16px;
+  }
+  #rotunda-ctl.show { display: flex; }
+  #rotunda-ctl .btn { font-size: 22px; padding: 18px 34px; min-height: 64px; }
+  #vel { font-size: 22px; color: var(--amber); min-width: 90px; text-align: center; }
+
+  /* ---- portal de entrada ---- */
+  #intro {
+    position: fixed; inset: 0; z-index: 20; background: var(--void);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 26px; transition: opacity 1.4s ease; text-align: center; padding: 0 20px;
+  }
+  #intro.out { opacity: 0; pointer-events: none; }
+  #intro h1 { font-family: var(--serif); font-size: clamp(54px, 9vw, 120px); font-weight: 400; letter-spacing: 4px; margin: 0; }
+  #intro .sub { font-size: clamp(16px, 2.4vw, 24px); color: var(--amber); letter-spacing: 8px; text-transform: uppercase; }
+  #intro .hint { font-size: 16px; color: var(--dim); max-width: 640px; line-height: 1.7; }
+  #intro .btn { font-size: 24px; padding: 20px 60px; }
+
+  /* ---- overlay de espora ---- */
+  #espora {
+    position: fixed; inset: 0; z-index: 30; background: rgba(10,9,8,.92);
+    display: none; align-items: center; justify-content: center; padding: 24px;
+  }
+  #espora.show { display: flex; }
+  #espora .caja {
+    max-width: 760px; max-height: 80vh; overflow: auto; padding: 40px 46px;
+    background: var(--wall); border: 1px solid var(--amber-dim);
+  }
+  #espora h3 { font-family: var(--serif); font-size: 40px; font-weight: 400; margin: 0 0 6px; color: var(--teal); }
+  #espora .intent { font-size: 18px; color: var(--dim); margin: 0 0 22px; }
+  #espora pre { font-size: 17px; line-height: 1.6; color: var(--bone); white-space: pre-wrap; margin: 0 0 26px; }
+  @media (prefers-reduced-motion: reduce) { #intro { transition: none; } }
+</style>
+
+<div id="gl"></div>
+<div id="css3d"></div>
+
+<div id="hud">
+  <div id="marca"><b>ligereza / flujo</b> · sala cultura</div>
+  <div id="dots"></div>
+  <div id="rotunda-ctl">
+    <button class="btn" id="b-girar">girar ⏸</button>
+    <button class="btn" id="b-estrobo">estrobo ◉</button>
+    <button class="btn" id="b-menos">−</button>
+    <span id="vel">1.0×</span>
+    <button class="btn" id="b-mas">+</button>
+  </div>
+  <div id="nav">
+    <button class="btn" id="b-prev" aria-label="sala anterior">‹ atras</button>
+    <div id="sala-titulo">entrada<small>&nbsp;</small></div>
+    <button class="btn" id="b-next" aria-label="sala siguiente">adelante ›</button>
+  </div>
+  <div id="rail" aria-hidden="true"><div id="rail-fill"></div></div>
+</div>
+
+<div id="intro">
+  <h1>sala flujo</h1>
+  <div class="sub">portafolio · ala cultura · 3D</div>
+  <div class="hint">Una galeria a oscuras: las piezas dan la luz. Telar, cauce en rotonda-zootropo,
+    ecosistema, tilde. Flechas ← → o botones para recorrer; arrastra para mirar; click en una pieza para acercarte.</div>
+  <button class="btn" id="b-entrar">entrar</button>
+</div>
+
+<div id="espora" role="dialog" aria-modal="true">
+  <div class="caja">
+    <h3 id="esp-nombre"></h3>
+    <p class="intent" id="esp-intent"></p>
+    <pre id="esp-body"></pre>
+    <button class="btn" id="esp-cerrar">cerrar</button>
+  </div>
+</div>
+
+<template id="art-field">__ART_FIELD__</template>
+<template id="art-border">__ART_BORDER__</template>
+<template id="art-medallion">__ART_MEDALLION__</template>
+<template id="art-mihrab">__ART_MIHRAB__</template>
+<template id="art-cauce">__ART_CAUCE__</template>
+<template id="art-field2">__ART_FIELD2__</template>
+<template id="art-border2">__ART_BORDER2__</template>
+<template id="art-mihrab2">__ART_MIHRAB2__</template>
+<template id="art-medallion2">__ART_MEDALLION2__</template>
+<template id="art-cauce2">__ART_CAUCE2__</template>
+<script type="application/json" id="calm-data">__CALM_JSON__</script>
+
+<script>__THREE__</script>
+<script>__CSS3D__</script>
+<script>
+(function () {
+  'use strict';
+  var REDUCED = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var CALM = JSON.parse(document.getElementById('calm-data').textContent);
+
+  // ---------- escena ----------
+  var scene = new THREE.Scene();
+  scene.fog = new THREE.FogExp2(0x0a0908, 0.00062);
+  var camera = new THREE.PerspectiveCamera(60, innerWidth / innerHeight, 1, 30000);
+  var renderer = new THREE.WebGLRenderer({ antialias: true });
+  renderer.setPixelRatio(Math.min(devicePixelRatio, 2));
+  renderer.setSize(innerWidth, innerHeight);
+  renderer.setClearColor(0x0a0908, 1);
+  document.getElementById('gl').appendChild(renderer.domElement);
+  var cssRenderer = new CSS3DRenderer();
+  cssRenderer.setSize(innerWidth, innerHeight);
+  document.getElementById('css3d').appendChild(cssRenderer.domElement);
+  cssRenderer.domElement.style.pointerEvents = 'none';
+
+  // ---------- arquitectura ----------
+  var HALL_W = 1100, HALL_H = 560, END_Z = -7300;
+  var matWall = new THREE.MeshBasicMaterial({ color: 0x14110d });
+  var matVoid = new THREE.MeshBasicMaterial({ color: 0x0d0b09 });
+
+  function plane(w, h, mat) { return new THREE.Mesh(new THREE.PlaneGeometry(w, h), mat); }
+  var floor = plane(20000, 20000, matVoid);
+  floor.rotation.x = -Math.PI / 2; scene.add(floor);
+  var grid = new THREE.GridHelper(20000, 200, 0x1a150e, 0x15100b);
+  grid.position.y = 0.5; scene.add(grid);
+
+  // muros laterales en dos tramos (la rotonda interrumpe el pasillo)
+  function wallSeg(x, z0, z1) {
+    var m = plane(Math.abs(z1 - z0), HALL_H, matWall);
+    m.position.set(x, HALL_H / 2, (z0 + z1) / 2);
+    m.rotation.y = x < 0 ? Math.PI / 2 : -Math.PI / 2;
+    scene.add(m);
+  }
+  wallSeg(-HALL_W / 2, 200, -4150); wallSeg(HALL_W / 2, 200, -4150);
+  wallSeg(-HALL_W / 2, -5650, END_Z); wallSeg(HALL_W / 2, -5650, END_Z);
+  var endWall = plane(HALL_W, HALL_H, matWall);
+  endWall.position.set(0, HALL_H / 2, END_Z); scene.add(endWall);
+
+  // ---------- texturas de apoyo ----------
+  function radialTex(inner, outer) {
+    var c = document.createElement('canvas'); c.width = c.height = 256;
+    var g = c.getContext('2d');
+    var grad = g.createRadialGradient(128, 128, 8, 128, 128, 128);
+    grad.addColorStop(0, inner); grad.addColorStop(1, outer);
+    g.fillStyle = grad; g.fillRect(0, 0, 256, 256);
+    return new THREE.CanvasTexture(c);
+  }
+  var haloTex = radialTex('rgba(183,255,217,0.32)', 'rgba(183,255,217,0)');
+  var sporeTex = radialTex('rgba(183,255,217,0.95)', 'rgba(183,255,217,0)');
+  var amberTex = radialTex('rgba(245,158,11,0.5)', 'rgba(245,158,11,0)');
+
+  function frameLines(w, h, color) {
+    var g = new THREE.BufferGeometry();
+    var m = 26; // margen del marco
+    var pts = [
+      -w/2-m,-h/2-m,0,  w/2+m,-h/2-m,0,   w/2+m,-h/2-m,0,  w/2+m,h/2+m,0,
+       w/2+m,h/2+m,0,  -w/2-m,h/2+m,0,   -w/2-m,h/2+m,0,  -w/2-m,-h/2-m,0
+    ];
+    g.setAttribute('position', new THREE.BufferAttribute(new Float32Array(pts), 3));
+    return new THREE.LineSegments(g, new THREE.LineBasicMaterial({ color: color }));
+  }
+
+  // ---------- montaje de una pieza CSS3D sobre muro ----------
+  // (x, z) = punto del muro; (nx, nz) = normal del muro hacia adentro de la sala.
+  // side (opcional, +-1) elige de que lado de la pieza cuelga el rotulo.
+  var artworks = []; // {obj, el, x, z}
+  function hangArt(tplId, x, z, nx, nz, worldH, title, meta, cita, side) {
+    side = side || 1;
+    var tpl = document.getElementById(tplId);
+    var svg = tpl.content.firstElementChild.cloneNode(true);
+    var vb = svg.getAttribute('viewBox').split(' ');
+    var aw = parseFloat(vb[2]), ah = parseFloat(vb[3]);
+    var scale = worldH / ah, worldW = aw * scale;
+    var div = document.createElement('div');
+    div.className = 'art';
+    div.style.width = aw + 'px'; div.style.height = ah + 'px';
+    svg.removeAttribute('width'); svg.removeAttribute('height');
+    div.appendChild(svg);
+    var obj = new CSS3DObject(div);
+    var cy = 30 + worldH / 2;
+    var ry = Math.atan2(nx, nz);           // la pieza mira hacia la normal
+    var tx = -nz * side, tz = nx * side;   // tangente del muro (lado del rotulo)
+    obj.position.set(x + nx * 8, cy, z + nz * 8);
+    obj.rotation.y = ry;
+    obj.scale.setScalar(scale);
+    scene.add(obj);
+    // halo + marco WebGL detras
+    var halo = plane(worldW * 2.6, worldH * 1.25, new THREE.MeshBasicMaterial({
+      map: haloTex, transparent: true, blending: THREE.AdditiveBlending, depthWrite: false }));
+    halo.position.set(x + nx * 4, cy, z + nz * 4); halo.rotation.y = ry;
+    scene.add(halo);
+    var fr = frameLines(worldW, worldH, 0x8a6a2f);
+    fr.position.set(x + nx * 6, cy, z + nz * 6); fr.rotation.y = ry;
+    scene.add(fr);
+    // reflejo tenue de la pieza sobre el piso
+    var refl = plane(worldW * 1.5, worldH * 0.9, new THREE.MeshBasicMaterial({
+      map: haloTex, transparent: true, opacity: 0.2,
+      blending: THREE.AdditiveBlending, depthWrite: false }));
+    refl.rotation.x = -Math.PI / 2; refl.rotation.z = ry;
+    refl.position.set(x + nx * worldH * 0.45, 2.5, z + nz * worldH * 0.45);
+    scene.add(refl);
+    // rotulo de sala al lado
+    var panel = makePanel(
+      '<h2>' + title + '</h2><p class="meta">' + meta + '</p><p class="cita">' + cita + '</p>');
+    var pobj = new CSS3DObject(panel);
+    pobj.position.set(x + nx * 8 + tx * (worldW / 2 + 240), 230, z + nz * 8 + tz * (worldW / 2 + 240));
+    pobj.rotation.y = ry;
+    pobj.scale.setScalar(0.55);
+    scene.add(pobj);
+    artworks.push({ obj: obj, el: div, panel: panel, pobj: pobj, x: x, z: z, sway: true });
+    return { div: div, x: x, z: z };
+  }
+  function makePanel(innerHTML, cls) {
+    var d = document.createElement('div');
+    d.className = 'panel' + (cls ? ' ' + cls : '');
+    d.innerHTML = innerHTML;
+    return d;
+  }
+  function addCssPanel(innerHTML, cls, x, y, z, ry, scale) {
+    var el = makePanel(innerHTML, cls);
+    var o = new CSS3DObject(el);
+    o.position.set(x, y, z); o.rotation.y = ry || 0; o.scale.setScalar(scale || 0.55);
+    scene.add(o);
+    artworks.push({ obj: o, el: el, x: x, z: z });
+    return el;
+  }
+
+  // ---------- contenido: entrada ----------
+  addCssPanel(
+    '<h1>sala flujo</h1><div class="sub">portafolio &middot; ala cultura</div>' +
+    '<p class="metodo">metodo: dossier &rarr; instrumento &rarr; material &rarr; pieza.<br>' +
+    'todas las piezas fueron tejidas por instrumentos del repo con su paleta real;<br>' +
+    'la animacion SMIL sigue viva: nada es captura.</p>',
+    'entrada center', 0, 260, -150, 0, 0.62);
+
+  // ---------- salas telar y cauce ----------
+  var CITA = {
+    field: 'field / gul: motivo octogonal repetido en el campo de la alfombra; sello tribal o totem de la familia tejedora (dossier tapiz)',
+    border: 'border / boteh: gota-cipres persa sembrada en los marcos que encuadran el campo; simboliza hoja, llama o vida (dossier tapiz)',
+    medallion: 'medallion: foco central de la gramatica medallon+borde persa; eco del jardin-paraiso que simboliza la vida eterna (dossier tapiz)',
+    mihrab: 'mihrab: nicho de oracion en arco de las alfombras de oracion, orientado hacia La Meca durante el rezo (dossier tapiz)',
+    cauce: 'cauce: los rios entre espacios; la recurrencia se reconoce, no se impone; las marcas sobreviven la digestion (puente tilde)'
+  };
+  var H_ART = 480;
+  hangArt('art-field', -HALL_W/2, -800, 1, 0, H_ART, 'Campo <i>(gul)</i>',
+    '<b>instrumento</b> vibecode &middot; modo field<br><b>fuente tejida</b> tools/compete_engine.py', CITA.field);
+  hangArt('art-border', HALL_W/2, -1500, -1, 0, H_ART, 'Borde <i>(boteh)</i>',
+    '<b>instrumento</b> vibecode &middot; modo border<br><b>fuente tejida</b> scripts/validate_airdrop.py', CITA.border, -1);
+  hangArt('art-medallion', -HALL_W/2, -2200, 1, 0, H_ART, 'Medallon',
+    '<b>instrumento</b> vibecode &middot; modo medallion<br><b>fuente tejida</b> projects/tapiz/vibecode/loom.py', CITA.medallion);
+  hangArt('art-mihrab', HALL_W/2, -2900, -1, 0, H_ART, 'Mihrab',
+    '<b>instrumento</b> vibecode &middot; modo mihrab<br><b>fuente tejida</b> projects/tapiz/vibecode/spaces.py', CITA.mihrab, -1);
+  hangArt('art-cauce', -HALL_W/2, -3700, 1, 0, H_ART, 'Cauce I &mdash; autotejido',
+    '<b>instrumento</b> vibecode &middot; modo cauce<br><b>fuente tejida</b> projects/tapiz/vibecode/cauce.py (el instrumento se teje a si mismo)<br>' +
+    '<b>reconocimiento</b> mismo token, mismo color; las marcas nunca decaen', CITA.cauce);
+
+  // ---------- rotonda cauce: zootropo ----------
+  var ROT_Z = -4900, DRUM_R = 780, DRUM_H = 520, SECTORS = 24;
+  var rotunda = new THREE.Group();
+  rotunda.position.set(0, 0, ROT_Z);
+  scene.add(rotunda);
+
+  // poema-loop: el poema es la cita curatorial, CON sus marcas vivas
+  var POEMA = 'los ríos entre espacios · la recurrencia se reconoce, no se impone · las marcas sobreviven la digestión · puente tilde · ';
+  var PARES = 'año/ano · papá/papa · él/el · sólo/solo · ';
+  var MARKS_RE = /[áéíóúüñ¿¡~]/;
+  var PALETTE = ['#b7ffd9', '#7fd4b0', '#5aa98c', '#8fe3c0', '#6fc4a2'];
+  function tokenColor(word) {
+    if (MARKS_RE.test(word)) return '#f59e0b';
+    var h = 0;
+    for (var i = 0; i < word.length; i++) h = (h * 31 + word.charCodeAt(i)) >>> 0;
+    return PALETTE[h % PALETTE.length];
+  }
+  function drawBandLoop(g, text, y, font, W) {
+    g.font = font;
+    var words = text.split(' ');
+    var x = 0, sp = g.measureText(' ').width;
+    while (x < W + 400) {
+      for (var i = 0; i < words.length && x < W + 400; i++) {
+        var w = words[i]; if (!w) { x += sp; continue; }
+        var col = tokenColor(w);
+        g.fillStyle = col;
+        if (col === '#f59e0b') { g.shadowColor = '#f59e0b'; g.shadowBlur = 26; } else { g.shadowBlur = 0; }
+        g.fillText(w, x, y);
+        x += g.measureText(w).width + sp;
+      }
+    }
+    g.shadowBlur = 0;
+  }
+  function buildDrumTexture() {
+    var W = 8192, H = 1024;
+    var c = document.createElement('canvas'); c.width = W; c.height = H;
+    var g = c.getContext('2d');
+    g.fillStyle = '#101a15'; g.fillRect(0, 0, W, H);
+    // rios verticales tenues entre sectores
+    g.strokeStyle = 'rgba(183,255,217,0.10)'; g.lineWidth = 10;
+    var secW = W / SECTORS;
+    for (var i = 0; i < SECTORS; i++) {
+      g.beginPath(); g.moveTo(i * secW, 0); g.lineTo(i * secW, H); g.stroke();
+    }
+    g.textBaseline = 'middle';
+    // banda alta: poema-loop en letra grande
+    drawBandLoop(g, POEMA, 150, '700 132px ui-monospace, Consolas, monospace', W);
+    // banda central: 24 fases de la enye — la tilde sube y baja (el cuadro del zootropo)
+    for (var s = 0; s < SECTORS; s++) {
+      var cx = s * secW + secW / 2;
+      var phase = Math.sin((s / SECTORS) * Math.PI * 2);
+      g.font = '700 300px ui-monospace, Consolas, monospace';
+      g.fillStyle = '#e8e0d0'; g.shadowBlur = 0;
+      g.fillText('n', cx - 90, 560);
+      g.font = '700 240px ui-monospace, Consolas, monospace';
+      g.fillStyle = '#f59e0b'; g.shadowColor = '#f59e0b'; g.shadowBlur = 34;
+      g.fillText('~', cx - 78, 400 - phase * 72);
+      g.shadowBlur = 0;
+      // rastro del recorrido de la marca
+      g.strokeStyle = 'rgba(245,158,11,0.18)'; g.lineWidth = 4;
+      g.beginPath(); g.moveTo(cx + 92, 400 - 72); g.lineTo(cx + 92, 400 + 72); g.stroke();
+    }
+    // banda baja: pares minimos — la mitad con marca vive, la otra en penumbra
+    g.font = '700 104px ui-monospace, Consolas, monospace';
+    var x = 40, sp = g.measureText(' ').width;
+    var toks = PARES.split(' ');
+    while (x < W + 200) {
+      for (var t = 0; t < toks.length && x < W + 200; t++) {
+        var tok = toks[t]; if (!tok) { x += sp; continue; }
+        if (tok.indexOf('/') > 0) {
+          var mitades = tok.split('/');
+          g.shadowColor = '#f59e0b'; g.shadowBlur = 20; g.fillStyle = '#f59e0b';
+          g.fillText(mitades[0], x, 880); x += g.measureText(mitades[0]).width;
+          g.shadowBlur = 0; g.fillStyle = '#4a4238';
+          g.fillText('/' + mitades[1], x, 880); x += g.measureText('/' + mitades[1]).width + sp;
+        } else {
+          g.shadowBlur = 0; g.fillStyle = '#5aa98c';
+          g.fillText(tok, x, 880); x += g.measureText(tok).width + sp;
+        }
+      }
+    }
+    g.shadowBlur = 0;
+    var tex = new THREE.CanvasTexture(c);
+    tex.wrapS = THREE.RepeatWrapping;
+    tex.anisotropy = renderer.capabilities.getMaxAnisotropy();
+    return tex;
+  }
+  var drumTex = buildDrumTexture();
+  var drum = new THREE.Mesh(
+    new THREE.CylinderGeometry(DRUM_R, DRUM_R, DRUM_H, 96, 1, true),
+    new THREE.MeshBasicMaterial({ map: drumTex, side: THREE.BackSide }));
+  drum.position.y = 40 + DRUM_H / 2;
+  rotunda.add(drum);
+  // anillo de piso
+  var ring = new THREE.Mesh(new THREE.RingGeometry(DRUM_R - 26, DRUM_R, 96),
+    new THREE.MeshBasicMaterial({ color: 0xf59e0b, transparent: true, opacity: 0.28, side: THREE.DoubleSide }));
+  ring.rotation.x = -Math.PI / 2; ring.position.y = 1.5; rotunda.add(ring);
+  // ranuras del zootropo (anillo estatico interior); visibles solo en modo estrobo
+  var slits = new THREE.Group();
+  var SLIT_R = 470;
+  var slitMat = new THREE.MeshBasicMaterial({ color: 0x050403, side: THREE.DoubleSide });
+  for (var s = 0; s < SECTORS; s++) {
+    var a = (s / SECTORS) * Math.PI * 2;
+    var arc = (2 * Math.PI * SLIT_R) / SECTORS;
+    var pm = plane(arc * 0.72, DRUM_H + 40, slitMat);
+    pm.position.set(Math.sin(a) * SLIT_R, 40 + DRUM_H / 2, Math.cos(a) * SLIT_R);
+    pm.rotation.y = a;
+    slits.add(pm);
+  }
+  slits.visible = false;
+  rotunda.add(slits);
+  // rotulo de la rotonda (colgado sobre el eje del pasillo, antes de entrar)
+  addCssPanel(
+    '<h2>Cauce II &mdash; rotonda zootropo</h2>' +
+    '<p class="meta"><b>el poema es un bucle</b>: la cita curatorial gira en el tambor con sus marcas vivas.<br>' +
+    '<b>estrobo</b>: 24 ranuras fijas; cada sector lleva la tilde de la e&ntilde;e en otra fase &mdash; ' +
+    'al girar, la marca que sobrevive se anima como en un zootropo.</p>' +
+    '<p class="cita">' + CITA.cauce + '</p>',
+    'center', 0, 300, ROT_Z + DRUM_R + 260, 0, 0.6);
+
+  // ---------- ala este: segunda ala perpendicular desde la rotonda ----------
+  var EAST_END = 4200, EAST_HALF = 550;
+  var EAST_N = ROT_Z - EAST_HALF, EAST_S = ROT_Z + EAST_HALF; // muros z = ROT_Z +- 550
+  function wallSegX(z, x0, x1, ry) {
+    var m = plane(Math.abs(x1 - x0), HALL_H, matWall);
+    m.position.set((x0 + x1) / 2, HALL_H / 2, z);
+    m.rotation.y = ry;
+    scene.add(m);
+  }
+  wallSegX(EAST_N, 900, EAST_END, 0);        // muro norte, mira +z
+  wallSegX(EAST_S, 900, EAST_END, Math.PI);  // muro sur, mira -z
+  var eastEndWall = plane(EAST_HALF * 2, HALL_H, matWall);
+  eastEndWall.position.set(EAST_END, HALL_H / 2, ROT_Z);
+  eastEndWall.rotation.y = -Math.PI / 2;
+  scene.add(eastEndWall);
+
+  hangArt('art-field2', 1500, EAST_N, 0, 1, H_ART, 'Campo II <i>(gul)</i>',
+    '<b>instrumento</b> vibecode &middot; modo field<br><b>fuente tejida</b> tools/tapiz_telemetry.py (la telemetria vuelta alfombra)', CITA.field);
+  hangArt('art-border2', 2150, EAST_S, 0, -1, H_ART, 'Borde II <i>(boteh)</i>',
+    '<b>instrumento</b> vibecode &middot; modo border<br><b>fuente tejida</b> projects/cultura/dossiers/tapiz.md (la investigacion es el borde de la obra)', CITA.border, -1);
+  hangArt('art-mihrab2', 2800, EAST_N, 0, 1, H_ART, 'Mihrab II',
+    '<b>instrumento</b> vibecode &middot; modo mihrab<br><b>fuente tejida</b> desktop/tilde_meter.py (el instrumento reza por las marcas)', CITA.mihrab);
+  hangArt('art-cauce2', 3450, EAST_S, 0, -1, H_ART, 'Cauce III &mdash; la galeria tejiendose',
+    '<b>instrumento</b> vibecode &middot; modo cauce<br><b>fuente tejida</b> tools/sala3d/build.js (el build de esta sala leido por el cauce)', CITA.cauce, -1);
+  hangArt('art-medallion2', EAST_END, ROT_Z, -1, 0, H_ART, 'Medallon II &mdash; entrada',
+    '<b>instrumento</b> vibecode &middot; modo medallion<br><b>fuente tejida</b> projects/tapiz/vibecode_spaces.py (casi vacio: la entrada solo delega)', CITA.medallion);
+
+  // ---------- sala ecosistema ----------
+  var ECO_Z = -5950;
+  var meshVars = CALM.luminous_mesh_densities.css_variables || {};
+  var lum = parseFloat(meshVars['--mesh-luminosity'] || 0.8);
+  var ecoPlane = plane(900, 760, new THREE.MeshBasicMaterial({
+    map: amberTex, transparent: true, opacity: 0.16 + lum * 0.2,
+    blending: THREE.AdditiveBlending, depthWrite: false }));
+  ecoPlane.rotation.x = -Math.PI / 2; ecoPlane.position.set(0, 3, ECO_Z); scene.add(ecoPlane);
+  var spores = [];
+  var payloads = (CALM.encoded_asset_payloads && CALM.encoded_asset_payloads.payloads) || {};
+  var pKeys = Object.keys(payloads);
+  pKeys.forEach(function (k, i) {
+    var sp = new THREE.Sprite(new THREE.SpriteMaterial({ map: sporeTex, transparent: true, depthWrite: false }));
+    sp.scale.setScalar(120);
+    sp.position.set((i % 2 ? 1 : -1) * (180 + i * 60), 200 + i * 70, ECO_Z - 60 * i);
+    sp.userData = { key: k, payload: payloads[k], baseY: sp.position.y, ph: i * 1.7 };
+    scene.add(sp); spores.push(sp);
+  });
+  addCssPanel(
+    '<h2>Ecosistema</h2>' +
+    '<p class="meta"><b>motor</b> tools/compete_engine.py &middot; compilacion --demo &middot; estado ' +
+    (CALM.luminous_mesh_densities.status || 'STABLE') + '<br>' +
+    '<b>esporas</b> ' + pKeys.length + ' cuerpos enterrados &middot; click para exhumar<br>' +
+    '<b>mascara</b> ' + (CALM.chromatic_frequency_masks.mask_intensity || 'CLEAR') + '</p>' +
+    '<p class="cita">el edificio mismo es la pieza: la niebla es la mascara, la grilla respira con la presion del repo, y los muertos brillan.</p>',
+    'center', -330, 280, ECO_Z + 240, 0.3, 0.5);
+
+  // ---------- alcoba tilde ----------
+  var TIL_Z = -6500;
+  var lightbox = plane(560, 380, new THREE.MeshBasicMaterial({ color: 0x2a2115 }));
+  lightbox.position.set(HALL_W/2 - 6, 270, TIL_Z); lightbox.rotation.y = -Math.PI / 2; scene.add(lightbox);
+  var lbGlow = plane(760, 520, new THREE.MeshBasicMaterial({ map: amberTex, transparent: true,
+    blending: THREE.AdditiveBlending, depthWrite: false }));
+  lbGlow.position.set(HALL_W/2 - 4, 270, TIL_Z); lbGlow.rotation.y = -Math.PI / 2; scene.add(lbGlow);
+  var lbFrame = frameLines(560, 380, 0x8a6a2f);
+  lbFrame.position.set(HALL_W/2 - 8, 270, TIL_Z); lbFrame.rotation.y = -Math.PI / 2; scene.add(lbFrame);
+  addCssPanel(
+    '<h2>sobrevivencia-01</h2>' +
+    '<p class="meta"><b>caja de luz vacia</b> &middot; corpus en acumulacion<br>' +
+    '<b>medidor</b> desktop/tilde_meter.py &middot; la pieza se revela cuando el corpus exista</p>' +
+    '<p class="pairs"><span class="vivo">a&ntilde;o</span><span class="muerto"> / ano</span> &nbsp; ' +
+    '<span class="vivo">pap&aacute;</span><span class="muerto"> / papa</span><br>' +
+    '<span class="vivo">&eacute;l</span><span class="muerto"> / el</span> &nbsp; ' +
+    '<span class="vivo">s&oacute;lo</span><span class="muerto"> / solo</span></p>' +
+    '<p class="cita">la tilde nacio comprimiendo sin perder sonido; la pieza mide si ese truco del copista sobrevive a los compresores de hoy.</p>',
+    '', HALL_W/2 - 8, 260, TIL_Z + 560, -Math.PI / 2, 0.55);
+
+  // ---------- muro final: por empezar ----------
+  [['psicosis', -280, 'dos lecturas de una misma conducta y la duda del registro; lente introspectiva y literaria, jamas vigilancia ni perfilado de personas reales.'],
+   ['precursor', 280, 'la forma de los nombres: gramaticas Markush, branding de cepas, la patente como artefacto visual; nada operativo, solo cultura, ley y estetica.']
+  ].forEach(function (fdef) {
+    var fr = frameLines(380, 480, 0x4a3d28);
+    fr.position.set(fdef[1], 290, END_Z + 10); scene.add(fr);
+    addCssPanel(
+      '<h2>' + fdef[0] + '</h2><p class="meta"><b>marco vacio</b> &middot; por empezar &middot; dossier listo</p>' +
+      '<p class="cita">' + fdef[2] + '</p>',
+      'center', fdef[1], 240, END_Z + 16, 0, 0.42);
+  });
+  addCssPanel(
+    '<p class="metodo">sala flujo &middot; 2026 &middot; piezas tejidas por projects/tapiz/vibecode y tools/compete_engine.py &middot; sin capturas: SMIL vivo</p>',
+    'center', 0, 60, END_Z + 16, 0, 0.5);
+
+  // ---------- polvo en suspension (estatico si REDUCED) ----------
+  var DUST_N = 300;
+  var dustPos = new Float32Array(DUST_N * 3);
+  for (var dn = 0; dn < DUST_N; dn++) {
+    if (dn % 2) { // pasillo principal
+      dustPos[dn * 3] = (Math.random() - 0.5) * HALL_W;
+      dustPos[dn * 3 + 2] = 400 + Math.random() * (END_Z - 400);
+    } else {      // ala este
+      dustPos[dn * 3] = 900 + Math.random() * (EAST_END - 900);
+      dustPos[dn * 3 + 2] = ROT_Z + (Math.random() - 0.5) * EAST_HALF * 2;
+    }
+    dustPos[dn * 3 + 1] = 20 + Math.random() * (HALL_H - 60);
+  }
+  var dustGeo = new THREE.BufferGeometry();
+  dustGeo.setAttribute('position', new THREE.BufferAttribute(dustPos, 3));
+  var dust = new THREE.Points(dustGeo, new THREE.PointsMaterial({
+    color: 0xb7ffd9, size: 7, map: sporeTex, transparent: true, opacity: 0.3,
+    blending: THREE.AdditiveBlending, depthWrite: false }));
+  scene.add(dust);
+  var dustAttr = dustGeo.getAttribute('position');
+
+  // ---------- recorrido ----------
+  function wp(px, py, pz, lx, ly, lz, titulo, sub) {
+    return { p: new THREE.Vector3(px, py, pz), l: new THREE.Vector3(lx, ly, lz), t: titulo, s: sub || '' };
+  }
+  var W2 = HALL_W / 2;
+  var WAYPOINTS = [
+    wp(0, 180, 620, 0, 250, -150, 'entrada', 'ligereza / flujo — ala cultura'),
+    wp(140, 200, -380, -W2, 270, -800, 'sala telar · campo', 'gul — sello de la familia tejedora'),
+    wp(-140, 200, -1080, W2, 270, -1500, 'sala telar · borde', 'boteh — gota-cipres en el marco'),
+    wp(140, 200, -1780, -W2, 270, -2200, 'sala telar · medallon', 'el jardin-paraiso al centro'),
+    wp(-140, 200, -2480, W2, 270, -2900, 'sala telar · mihrab', 'el nicho orientado'),
+    wp(140, 200, -3280, -W2, 270, -3700, 'sala cauce I', 'el motor tejido — reconocimiento de tokens'),
+    wp(0, 190, ROT_Z, 0, 240, ROT_Z - 400, 'rotonda cauce II', 'zootropo — el poema es un bucle'),
+    wp(1080, 200, ROT_Z + 140, 1500, 270, EAST_N, 'ala este · campo II', 'gul — la telemetria vuelta alfombra'),
+    wp(1730, 200, ROT_Z - 140, 2150, 270, EAST_S, 'ala este · borde II', 'boteh — la investigacion es el borde'),
+    wp(2380, 200, ROT_Z + 140, 2800, 270, EAST_N, 'ala este · mihrab II', 'el medidor reza por las marcas'),
+    wp(3030, 200, ROT_Z - 140, 3450, 270, EAST_S, 'ala este · cauce III', 'la galeria tejiendose a si misma'),
+    wp(3580, 200, ROT_Z, EAST_END, 270, ROT_Z, 'ala este · medallon II', 'la entrada que solo delega'),
+    wp(0, 210, -5480, 0, 150, ECO_Z, 'sala ecosistema', 'esporas: click para exhumar'),
+    wp(60, 200, TIL_Z + 460, W2, 270, TIL_Z, 'alcoba tilde', 'sobrevivencia-01 — caja de luz vacia'),
+    wp(0, 200, END_Z + 620, 0, 260, END_Z, 'por empezar', 'psicosis · precursor — marcos vacios')
+  ];
+  var current = 0, camPos = WAYPOINTS[0].p.clone(), camLook = WAYPOINTS[0].l.clone();
+  var fromP, fromL, t0 = -1, DUR = 1700;
+  var yaw = 0, pitch = 0;
+
+  function goTo(i) {
+    current = Math.max(0, Math.min(WAYPOINTS.length - 1, i));
+    if (REDUCED) { camPos.copy(WAYPOINTS[current].p); camLook.copy(WAYPOINTS[current].l); }
+    else { fromP = camPos.clone(); fromL = camLook.clone(); t0 = performance.now(); }
+    yaw = 0; pitch = 0;
+    updateHud();
+    cullFar();
+  }
+  function updateHud() {
+    var wpt = WAYPOINTS[current];
+    document.getElementById('sala-titulo').innerHTML = wpt.t + '<small>' + wpt.s + '</small>';
+    document.getElementById('rotunda-ctl').className = current === 6 ? 'show' : '';
+    document.getElementById('rail-fill').style.width =
+      (current / (WAYPOINTS.length - 1) * 100).toFixed(1) + '%';
+    var dots = document.getElementById('dots').children;
+    for (var i = 0; i < dots.length; i++) dots[i].className = i === current ? 'on' : '';
+  }
+  function cullFar() {
+    // los SVG SMIL lejanos se apagan para no pagar su animacion (distancia en x Y z)
+    var p = WAYPOINTS[current].p;
+    artworks.forEach(function (a) {
+      var off = Math.abs(a.z - p.z) > 1900 || Math.abs((a.x || 0) - p.x) > 1900;
+      a.el.style.display = off ? 'none' : '';
+      if (a.panel) a.panel.style.display = off ? 'none' : '';
+    });
+  }
+  var dotsBox = document.getElementById('dots');
+  WAYPOINTS.forEach(function (w, i) {
+    var b = document.createElement('button');
+    b.title = w.t; b.addEventListener('click', function () { goTo(i); });
+    dotsBox.appendChild(b);
+  });
+  document.getElementById('b-prev').addEventListener('click', function () { goTo(current - 1); });
+  document.getElementById('b-next').addEventListener('click', function () { goTo(current + 1); });
+  addEventListener('keydown', function (e) {
+    if (e.key === 'ArrowRight' || e.key === 'PageDown') goTo(current + 1);
+    else if (e.key === 'ArrowLeft' || e.key === 'PageUp') goTo(current - 1);
+    else if (e.key === 'Home') goTo(0);
+    else if (e.key === 'End') goTo(WAYPOINTS.length - 1);
+    else if (e.key === 'Escape') document.getElementById('espora').className = '';
+  });
+
+  // mirar arrastrando
+  var dragging = false, lx = 0, ly = 0;
+  addEventListener('pointerdown', function (e) {
+    if (e.target.closest('.btn') || e.target.closest('.panel') || e.target.closest('#espora')) return;
+    dragging = true; lx = e.clientX; ly = e.clientY;
+  });
+  addEventListener('pointermove', function (e) {
+    if (!dragging) return;
+    yaw -= (e.clientX - lx) * 0.0035; pitch -= (e.clientY - ly) * 0.0025;
+    pitch = Math.max(-0.6, Math.min(0.6, pitch));
+    lx = e.clientX; ly = e.clientY;
+  });
+  addEventListener('pointerup', function () { dragging = false; });
+  // swipe corto sin arrastre = nada; los botones grandes mandan en mobile
+
+  // click en pieza = acercarse
+  artworks.forEach(function (a) {
+    if (!a.el.classList.contains('art')) return;
+    a.el.addEventListener('click', function () {
+      var best = 0, bd = 1e9;
+      WAYPOINTS.forEach(function (w, i) {
+        var d = Math.abs(w.l.z - a.z) + Math.abs(w.l.x - (a.x || 0));
+        if (d < bd) { bd = d; best = i; }
+      });
+      goTo(best);
+    });
+  });
+
+  // ---------- zootropo: controles ----------
+  var spinning = true, strobe = false, velMult = 1;
+  var BASE_SPIN = 0.10, STROBE_SPIN = Math.PI; // rad/s
+  var bGirar = document.getElementById('b-girar'), bEstrobo = document.getElementById('b-estrobo');
+  function refreshCtl() {
+    bGirar.textContent = spinning ? 'girar ⏸' : 'girar ▶';
+    bGirar.className = 'btn' + (spinning ? ' on' : '');
+    bEstrobo.className = 'btn' + (strobe ? ' on' : '');
+    document.getElementById('vel').textContent = velMult.toFixed(1) + '×';
+  }
+  bGirar.addEventListener('click', function () { spinning = !spinning; refreshCtl(); });
+  bEstrobo.addEventListener('click', function () {
+    strobe = !strobe; slits.visible = strobe;
+    scene.fog.density = strobe ? 0.0011 : 0.00062;
+    refreshCtl();
+  });
+  document.getElementById('b-menos').addEventListener('click', function () {
+    velMult = Math.max(0.2, Math.round((velMult - 0.2) * 10) / 10); refreshCtl(); });
+  document.getElementById('b-mas').addEventListener('click', function () {
+    velMult = Math.min(3, Math.round((velMult + 0.2) * 10) / 10); refreshCtl(); });
+  refreshCtl();
+
+  // ---------- esporas: exhumar ----------
+  function decodePayload(chunks) {
+    try {
+      var joined = chunks.join('');
+      var shifted = atob(joined), out = '';
+      for (var i = 0; i < shifted.length; i++) out += String.fromCharCode((shifted.charCodeAt(i) - 42 + 256) % 256);
+      var b = atob(out), bytes = new Uint8Array(b.length);
+      for (var j = 0; j < b.length; j++) bytes[j] = b.charCodeAt(j);
+      return new TextDecoder('utf-8').decode(bytes);
+    } catch (e) { return '[cuerpo ilegible: ' + e.message + ']'; }
+  }
+  var ray = new THREE.Raycaster(), ptr = new THREE.Vector2();
+  renderer.domElement.style.pointerEvents = 'auto';
+  var downAt = 0;
+  renderer.domElement.addEventListener('pointerdown', function () { downAt = performance.now(); });
+  renderer.domElement.addEventListener('pointerup', function (e) {
+    if (performance.now() - downAt > 260) return; // fue arrastre, no click
+    ptr.x = (e.clientX / innerWidth) * 2 - 1; ptr.y = -(e.clientY / innerHeight) * 2 + 1;
+    ray.setFromCamera(ptr, camera);
+    var hit = ray.intersectObjects(spores)[0];
+    if (!hit) return;
+    var p = hit.object.userData.payload;
+    document.getElementById('esp-nombre').textContent = hit.object.userData.key + ' · ' + (p.name || '');
+    document.getElementById('esp-intent').textContent = p.intent || '';
+    document.getElementById('esp-body').textContent = decodePayload(p.data_chunks || []);
+    document.getElementById('espora').className = 'show';
+  });
+  document.getElementById('esp-cerrar').addEventListener('click', function () {
+    document.getElementById('espora').className = '';
+  });
+
+  // ---------- entrada ----------
+  document.getElementById('b-entrar').addEventListener('click', function () {
+    document.getElementById('intro').className = 'out';
+    if (!REDUCED) { camPos.set(0, 220, 1500); fromP = camPos.clone(); fromL = camLook.clone(); t0 = performance.now(); }
+  });
+
+  // ---------- loop ----------
+  function ease(x) { return x < 0.5 ? 4*x*x*x : 1 - Math.pow(-2*x + 2, 3) / 2; }
+  var lastT = performance.now();
+  function tick(now) {
+    requestAnimationFrame(tick);
+    var dt = Math.min(0.05, (now - lastT) / 1000); lastT = now;
+    if (t0 >= 0) {
+      var k = Math.min(1, (now - t0) / DUR), e = ease(k);
+      camPos.lerpVectors(fromP, WAYPOINTS[current].p, e);
+      camLook.lerpVectors(fromL, WAYPOINTS[current].l, e);
+      if (k >= 1) t0 = -1;
+    }
+    camera.position.copy(camPos);
+    var dir = camLook.clone().sub(camPos);
+    var sph = new THREE.Spherical().setFromVector3(dir);
+    sph.theta += yaw; sph.phi = Math.max(0.3, Math.min(Math.PI - 0.3, sph.phi + pitch));
+    camera.lookAt(camPos.clone().add(new THREE.Vector3().setFromSpherical(sph)));
+    if (spinning && !REDUCED) drum.rotation.y += (strobe ? STROBE_SPIN : BASE_SPIN) * velMult * dt;
+    else if (spinning && REDUCED) drum.rotation.y += BASE_SPIN * 0.5 * velMult * dt;
+    spores.forEach(function (sp) {
+      sp.position.y = sp.userData.baseY + Math.sin(now / 1400 + sp.userData.ph) * 26;
+    });
+    if (!REDUCED) {
+      // pulso del anillo ambar en modo estrobo
+      ring.material.opacity = strobe ? 0.34 + 0.2 * Math.sin(now / 110) : 0.28;
+      // sway sutil de los runners colgados
+      artworks.forEach(function (a) {
+        if (a.sway) a.obj.rotation.z = Math.sin(now / 2600 + a.z * 0.002 + a.x * 0.002) * 0.006;
+      });
+      // deriva lenta del polvo
+      for (var di = 0; di < DUST_N; di++) {
+        var dy = dustAttr.getY(di) - dt * 7;
+        if (dy < 12) dy = HALL_H - 30;
+        dustAttr.setY(di, dy);
+      }
+      dustAttr.needsUpdate = true;
+    }
+    renderer.render(scene, camera);
+    cssRenderer.render(scene, camera);
+  }
+  requestAnimationFrame(tick);
+  addEventListener('resize', function () {
+    camera.aspect = innerWidth / innerHeight; camera.updateProjectionMatrix();
+    renderer.setSize(innerWidth, innerHeight); cssRenderer.setSize(innerWidth, innerHeight);
+  });
+  goTo(0);
+})();
+</script>

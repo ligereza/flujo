@@ -1,0 +1,4 @@
+{
+  "repo_tools_path": "",
+  "note": "Dejar vacio para usar ruta relativa desde script location, o poner ruta absoluta ej: C:/IA/flujo/tools"
+}

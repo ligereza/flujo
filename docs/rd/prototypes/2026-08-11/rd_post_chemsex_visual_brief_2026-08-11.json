@@ -1,0 +1,214 @@
+{
+  "schema_version": "rd-post-visual-brief-v0.1",
+  "generated_at": "2026-08-11",
+  "language": "en",
+  "status": "semantic_visual_brief_pending_svg_generation",
+  "source_spec": "rd_post_chemsex_spec_2026-08-11.json",
+  "principles": [
+    "Text order and wording remain controlled by the POST specification.",
+    "Semantic vectors guide form and relation; they do not invent medical content.",
+    "Animation expresses relational change, not decorative movement only.",
+    "A claim-only card remains visually marked as claim-only until its relation is sourced."
+  ],
+  "briefs": [
+    {
+      "slide_id": "s01_cover",
+      "visual_role": "threshold_and_invitation",
+      "semantic_vector": [
+        "community",
+        "care",
+        "conversation",
+        "non_stigmatizing_entry"
+      ],
+      "primary_form": "open_frame_with_two_or_more_elements_that_can_approach_without_colliding",
+      "secondary_forms": [
+        "soft_signal_of_community",
+        "visible_breathing_space"
+      ],
+      "text_hierarchy": [
+        "CHEMSEX",
+        "Orgullo es cuidarnos en comunidad",
+        "short_intro",
+        "navigation_prompt"
+      ],
+      "animation_logic": "A closed or quiet field opens into a shared space; no warning icon appears before the invitation.",
+      "do_not": [
+        "do_not_start_with_panic",
+        "do_not_use_medical_cross_as_primary_symbol",
+        "do_not_add_unprovided_claims"
+      ]
+    },
+    {
+      "slide_id": "s02_definition_and_harm_reduction",
+      "visual_role": "definition_to_multiple_care_dimensions",
+      "semantic_vector": [
+        "sexual_context",
+        "psychoactive_substances",
+        "altered_experience",
+        "multiple_forms_of_care"
+      ],
+      "primary_form": "one_shared_field_that_branches_into_three_non_hierarchical_care_paths",
+      "secondary_forms": [
+        "body_or_context",
+        "three_open_routes"
+      ],
+      "text_hierarchy": [
+        "definition_heading",
+        "definition_sentence",
+        "harm_reduction_heading",
+        "care_list"
+      ],
+      "animation_logic": "A single context separates into physical, infection-related, and mental-health care dimensions without implying that one is the only cause.",
+      "do_not": [
+        "do_not_draw_prevention_as_total_control",
+        "do_not_collapse_care_into_one_warning_symbol"
+      ]
+    },
+    {
+      "slide_id": "s03_chile_context_and_substances",
+      "visual_role": "local_context_and_entity_field",
+      "semantic_vector": [
+        "Chile",
+        "private_party",
+        "public_space",
+        "apps",
+        "substance_inventory"
+      ],
+      "primary_form": "map_like_context_field_with_distinct_substance_nodes",
+      "secondary_forms": [
+        "three_context_zones",
+        "seven_entity_nodes"
+      ],
+      "text_hierarchy": [
+        "context_heading",
+        "context_bullets",
+        "substance_heading",
+        "substance_list"
+      ],
+      "animation_logic": "Context zones appear first; substance nodes enter as a heterogeneous field, not as a single visual category.",
+      "do_not": [
+        "do_not_assign_risk_color_only_from_presence",
+        "do_not_make_all_substances_look_identical",
+        "do_not_imply_all_contexts_are_equivalent"
+      ]
+    },
+    {
+      "slide_id": "s04_general_risks",
+      "visual_role": "four_risk_dimensions_without_totalizing",
+      "semantic_vector": [
+        "drug_risk",
+        "cardiovascular_context",
+        "sexual_health",
+        "mental_health"
+      ],
+      "primary_form": "four_intersecting_but_non-identical_fields",
+      "secondary_forms": [
+        "cardiovascular_signal",
+        "sexual_health_signal",
+        "mental_health_signal"
+      ],
+      "text_hierarchy": [
+        "heading",
+        "framing_sentence",
+        "four_risk_blocks"
+      ],
+      "animation_logic": "Four dimensions enter from different directions and overlap only at a shared context center; no single dimension dominates the whole frame.",
+      "do_not": [
+        "do_not_turn_risk_map_into_a_probability_chart",
+        "do_not_invent_numbers",
+        "do_not_make_viagra_the_only_visual_subject"
+      ]
+    },
+    {
+      "slide_id": "s05_care_actions",
+      "visual_role": "distributed_practical_care",
+      "semantic_vector": [
+        "hydration",
+        "non_sharing",
+        "information",
+        "testing",
+        "PrEP",
+        "PEP",
+        "doxyPEP",
+        "consent",
+        "rapid_care"
+      ],
+      "primary_form": "several_supporting_actions_around_a_shared_center",
+      "secondary_forms": [
+        "open_hand",
+        "network_of_choices",
+        "route_to_professional_care"
+      ],
+      "text_hierarchy": [
+        "heading",
+        "action_blocks_in_source_order"
+      ],
+      "animation_logic": "Each action becomes a stable support around the center; the system must not show a single action as the universal solution.",
+      "do_not": [
+        "do_not_turn_actions_into_commands_beyond_source_text",
+        "do_not_animate_medical_access_as_guaranteed",
+        "do_not_hide_consent_inside_secondary_text"
+      ]
+    },
+    {
+      "slide_id": "s06_riskier_interactions",
+      "visual_role": "relational_warning_map",
+      "semantic_vector": [
+        "combination",
+        "interaction",
+        "depressor",
+        "cardiovascular",
+        "pressure",
+        "antiretroviral_context",
+        "professional_query"
+      ],
+      "primary_form": "separate_entity_nodes_connected_by_visible_interaction_edges",
+      "secondary_forms": [
+        "edge_weight_as_editorial_priority_only",
+        "collision_or_pressure_field",
+        "unresolved_claim_marker"
+      ],
+      "text_hierarchy": [
+        "interaction_heading",
+        "one_card_title",
+        "one_card_body",
+        "source_boundary"
+      ],
+      "animation_logic": "The interaction is a change in relation: nodes approach, influence, or destabilize a shared field. Do not animate substances as if they transform into one another.",
+      "do_not": [
+        "do_not_draw_mixture_as_new_substance",
+        "do_not_use_color_as_numeric_risk_score",
+        "do_not_upgrade_claim_only_cards_to_scientific_relations"
+      ]
+    },
+    {
+      "slide_id": "s07_conclusion",
+      "visual_role": "agency_and_community_return",
+      "semantic_vector": [
+        "decision",
+        "community_information",
+        "anti_stigma",
+        "professional_contact",
+        "trusted_network"
+      ],
+      "primary_form": "field_returns_to_open_collective_composition",
+      "secondary_forms": [
+        "choice_node",
+        "network_return",
+        "quiet_space_for_contact"
+      ],
+      "text_hierarchy": [
+        "conclusion_heading",
+        "empowerment_statement",
+        "contact_prompt",
+        "save_and_share_prompt"
+      ],
+      "animation_logic": "The visual field reopens and distributes agency to the viewer; it ends with an invitation, not a final alarm state.",
+      "do_not": [
+        "do_not_end_with_a_punitive_symbol",
+        "do_not_promote_the_organization_as_medical_authority",
+        "do_not_add_dosage_advice"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,162 @@
+{
+ "schema": "mak-portfolio-format-v1",
+ "format_id": "F3-rol-tecnico",
+ "family": "rol",
+ "vertical_grammar": "practica_o_corpus",
+ "title": "Rol tecnico",
+ "purpose": "Declarar con precision qué parte hizo la practica y qué parte no, usando el proyecto nativo como prueba. En 2026 es el formato mas fuerte: el artefacto terminado ya no prueba capacidad, y una herramienta generativa no exhibe un grafo de proceso coherente.",
+ "consumer": {
+  "kind": "empleador_o_par",
+  "examples": [
+   "estudio de animacion",
+   "agencia",
+   "productora",
+   "otro VJ",
+   "colaborador"
+  ],
+  "decision_it_supports": "asignar una parte concreta de una produccion",
+  "does_not_support": [
+   "acreditar autoria de la obra completa",
+   "adjudicar un fondo autoral"
+  ]
+ },
+ "language": "es",
+ "limits": {
+  "max_items_total": 16,
+  "max_bytes": 12000000,
+  "max_slots_rendered": 4
+ },
+ "declared_claims": [
+  "hice_esta_parte",
+  "puedo"
+ ],
+ "forbidden_claims": [
+  "es_mio"
+ ],
+ "forbidden_inferences": [
+  "un documento nativo no implica proceso propio: pudo llegar para extraer un recurso ajeno",
+  "presencia en el contenedor no implica participacion",
+  "uses=supported no implica output_role conocido"
+ ],
+ "slots": [
+  {
+   "slot_id": "partes_declaradas",
+   "title": "Que parte hice",
+   "count": {
+    "min": 2,
+    "max": 8
+   },
+   "claim": "hice_esta_parte",
+   "layer": "role",
+   "min_state": "candidate",
+   "min_permission": "unnamed",
+   "caption_grammar": "{context_label}: {part_done}. No mio en esta pieza: {part_not_done}.",
+   "allowed_caption_fields": [
+    "context_label",
+    "part_done",
+    "part_not_done",
+    "year"
+   ],
+   "required": true,
+   "evidence_kinds": [
+    "native_project_file",
+    "export_chain",
+    "declared_practice_role"
+   ],
+   "prefer_scope": "container"
+  },
+  {
+   "slot_id": "stack",
+   "title": "Stack tecnico",
+   "count": {
+    "min": 2,
+    "max": 8
+   },
+   "claim": "puedo",
+   "layer": "process",
+   "min_state": "observed",
+   "min_permission": "unnamed",
+   "caption_grammar": "{tool} — {artifact_count} {scope_note}",
+   "allowed_caption_fields": [
+    "tool",
+    "artifact_count",
+    "technique",
+    "span",
+    "context_label",
+    "scope_note"
+   ],
+   "required": true,
+   "evidence_kinds": [
+    "native_project_file",
+    "media_kind_distribution"
+   ],
+   "prefer_scope": "archive"
+  },
+  {
+   "slot_id": "cadena_causal",
+   "title": "Cadena fuente → recurso → salida",
+   "count": {
+    "min": 1,
+    "max": 6
+   },
+   "claim": "puedo",
+   "layer": "process",
+   "min_state": "observed",
+   "min_permission": "unnamed",
+   "caption_grammar": "{source_artifact} → {declared_input_count} insumos declarados → {output_note}",
+   "allowed_caption_fields": [
+    "source_artifact",
+    "declared_input_count",
+    "output_note"
+   ],
+   "required": true,
+   "evidence_kinds": [
+    "declared_inputs",
+    "scene_graph",
+    "export_chain"
+   ],
+   "prefer_scope": "container"
+  },
+  {
+   "slot_id": "no_mio",
+   "title": "Que no es mio",
+   "count": {
+    "min": 1,
+    "max": 8
+   },
+   "claim": "hice_esta_parte",
+   "layer": "role",
+   "min_state": "candidate",
+   "min_permission": "unnamed",
+   "caption_grammar": "{artifact_note} — recibido, no producido aqui. {reason}",
+   "allowed_caption_fields": [
+    "artifact_note",
+    "reason",
+    "context_label"
+   ],
+   "required": true,
+   "evidence_kinds": [
+    "received_only_artifact",
+    "declared_third_party",
+    "no_export_chain"
+   ],
+   "prefer_scope": "container"
+  }
+ ],
+ "invalid_if": [
+  "una ranura obligatoria queda bajo su count minimo",
+  "una afirmacion excede su min_state declarado",
+  "un epigrafe usa un campo fuera de allowed_caption_fields",
+  "una pieza con permission=prohibited o aggregate_only aparece por caso",
+  "el documento afirma es_mio en cualquier ranura",
+  "la ranura no_mio queda vacia: un rol declarado sin su complemento es una sobreafirmacion",
+  "una afirmacion hice_esta_parte supera candidate sin un recibo de tercero"
+ ],
+ "control": {
+  "publication": false,
+  "submission": false,
+  "signed_document": false,
+  "authorship_claimed": false,
+  "training_permitted": false
+ }
+}

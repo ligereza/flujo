@@ -1,0 +1,46 @@
+{
+  "name": "Sundeck",
+  "aliases": [
+    "SUNDECK",
+    "Sundeck",
+    "Sundeck 21 años"
+  ],
+  "instagram": "",
+  "tipos_fecha": [
+    "OPEN_AIR"
+  ],
+  "logos": [
+    {
+      "id": "sundeck_primary",
+      "knowledge": "knowledge/logos/sundeck.yaml",
+      "estado": "encontrado",
+      "archivo": "knowledge/logos/vector/sundeck.svg",
+      "raster": "knowledge/logos/descargas/sundeck.png",
+      "fuente": "https://www.sundeck.cl/ (og logo asset, https://cdn.prod.website-files.com/6266b3520215f67747170742/62681ee4beb1b5bb68596812_Asset%201.png)",
+      "obtenido": "2026-07-24",
+      "notas": "Logo oficial via web anonima (PR #254): sitio oficial sundeck.cl, header Webflow CDN. Reemplaza el estado no_encontrado previo (PR #210 no tenia candidato)."
+    }
+  ],
+  "venues": [
+    {
+      "nombre": "Espacio Riesco",
+      "venue_id": "espacio_riesco",
+      "preferido": false,
+      "estado": "candidato_sin_confirmar",
+      "notas": "venue_crudo de obra_45bae8c3f6 (flyer AUTOMATIZACION/flyervideo/0001.png, fecha_cruda 01/08). Confirmar antes de usar."
+    }
+  ],
+  "confirmed": "",
+  "fuente_datos": "nombres de archivo del archivo de entregas (ENTREGA/FEBRERO), mapeo 2026-07-17; sin confirmar por humano. Complementado con PR #210 (candidatos_db.jsonl match_ratio=1.0): obra_45bae8c3f6, obra_99ef9a1f8a. obra_b94c5571dc ('Sundeck 21 años', match_ratio=0.636) queda como alias no confirmado.",
+  "notes": "Formato rooftop/day (sundeck) -> OPEN_AIR. Fuente: archivo de entregas (ENTREGA) + curatoría PR #210 (2 obras match canónico).",
+  "eventos": [
+    {
+      "nombre": "Sundeck 21 años",
+      "fecha": "17 enero 2026",
+      "venue": "needs_confirmation",
+      "estado": "pasado",
+      "flyer_ref": "RD/HISTORIAS/SUNDECK.17.png",
+      "fuente": "PR #210 obra_b94c5571dc / obra_99ef9a1f8a (ruta_rel HISTORIAS/SUNDECK.17.2.png, HISTORIAS/SUNDECK.17.png), match_ratio 0.636/1.0"
+    }
+  ]
+}

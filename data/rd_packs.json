@@ -1,0 +1,63 @@
+{
+  "_comentario": "Tarifa de los packs de servicio en terreno de Reduciendo Daño. FUENTE UNICA y editable a mano: antes vivia cableada en dos copias (src/flujo/plano/packs.py y web/src/rdBrand.ts) que podian desincronizarse. Origen del dato: tarifa real del area, 'jefe area eventos 2026-07-02', reconciliada el 2026-07-17. `precio` es el UNICO valor absoluto por pack: el desglose del pack COMPLETO se deriva SIEMPRE como precio*pct/100 y nunca se guarda como monto aparte, para que no quede stale si el precio cambia. Los textos de este archivo SE IMPRIMEN en el rider y en la cotizacion, asi que van en espanol correcto con acentos.",
+  "_editar": "Cambiar un precio aca y correr `py -m flujo rd-db build` alcanza: el rider, el costeo y la cotizacion leen de aqui.",
+  "default_pack": "TESTEO",
+  "orden": ["INFO", "TESTEO", "COMPLETO"],
+  "packs": {
+    "INFO": {
+      "id": "INFO",
+      "nombre": "Informativo",
+      "label": "Pack 1 · Informativo",
+      "desc": "6 voluntarios · 1 stand 3×3 (9 m²)",
+      "precio": 250000,
+      "voluntarios": 6,
+      "m2": 9,
+      "stands": 1,
+      "inclusiones": [
+        "Stand informativo atendido",
+        "Material educativo + insumos preventivos",
+        "Protectores auditivos, abanicos, suplementos",
+        "Tests de un solo uso (opcional)"
+      ]
+    },
+    "TESTEO": {
+      "id": "TESTEO",
+      "nombre": "Testeo y Informativo (ambos)",
+      "label": "Pack 2 · Testeo y Informativo",
+      "desc": "6 voluntarios · 2 stands 3×3 (18 m²)",
+      "precio": 300000,
+      "voluntarios": 6,
+      "m2": 18,
+      "stands": 2,
+      "inclusiones": [
+        "Stand informativo y stand de testeo, ambos atendidos",
+        "Módulo de testeo de sustancias",
+        "Análisis colorimétrico gratuito",
+        "Reactivos incluidos"
+      ]
+    },
+    "COMPLETO": {
+      "id": "COMPLETO",
+      "nombre": "Servicio Completo (masivo)",
+      "label": "Pack 3 · Servicio Completo",
+      "desc": "15 voluntarios · 2 stands + zona (~27 m²)",
+      "precio": 500000,
+      "voluntarios": 15,
+      "m2": 27,
+      "stands": 2,
+      "inclusiones": [
+        "Informativo + testeo",
+        "Intervención y contención psicológica",
+        "Zona de descanso baja estimulación",
+        "Coordinación operativa en terreno"
+      ],
+      "proporciones": [
+        { "label": "Equipo en terreno", "pct": 60 },
+        { "label": "Módulo de testeo", "pct": 14 },
+        { "label": "Stand informativo", "pct": 10 },
+        { "label": "Intervención y contención", "pct": 9 },
+        { "label": "Coordinación operativa", "pct": 7 }
+      ]
+    }
+  }
+}

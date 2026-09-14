@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" data-name="63b190b54138-17845787518845296">
+<style>
+.c0{animation:k_respirar 7s ease-in-out infinite}
+@keyframes k_respirar{0%,100%{opacity:.72}50%{opacity:1}}
+</style>
+<rect width="120" height="120" fill="#2b1055"/>
+<g id="capa-0-protagonista" transform="translate(60,42)" data-rol="protagonista" data-gesto="respirar" data-ritmo="7s" data-figura="grieta"><title>protagonista - grieta</title><g class="c0"><g transform="scale(20)"><path d="M-.06,-1 L.10,-.62 L-.12,-.28 L.09,.06 L-.10,.42 L.08,.72 L-.04,1" fill="none" stroke="#ff5f6d" stroke-width=".14" stroke-linejoin="round" stroke-linecap="round"/></g></g></g>
+<g id="capa-1-base" transform="translate(60,84)" data-rol="base" data-gesto="quieto" data-ritmo="4s" data-figura="rayos"><title>base - rayos</title><g class="c1"><g transform="scale(28)"><path transform="rotate(0.0)" d="M0,0 L-.11,-1 L.11,-1 Z" fill="#ffe259"/><path transform="rotate(30.0)" d="M0,0 L-.11,-1 L.11,-1 Z" fill="#ffe259"/><path transform="rotate(60.0)" d="M0,0 L-.11,-1 L.11,-1 Z" fill="#ffe259"/><path transform="rotate(90.0)" d="M0,0 L-.11,-1 L.11,-1 Z" fill="#ffe259"/><path transform="rotate(120.0)" d="M0,0 L-.11,-1 L.11,-1 Z" fill="#ffe259"/><path transform="rotate(150.0)" d="M0,0 L-.11,-1 L.11,-1 Z" fill="#ffe259"/><path transform="rotate(180.0)" d="M0,0 L-.11,-1 L.11,-1 Z" fill="#ffe259"/><path transform="rotate(210.0)" d="M0,0 L-.11,-1 L.11,-1 Z" fill="#ffe259"/><path transform="rotate(240.0)" d="M0,0 L-.11,-1 L.11,-1 Z" fill="#ffe259"/><path transform="rotate(270.0)" d="M0,0 L-.11,-1 L.11,-1 Z" fill="#ffe259"/><path transform="rotate(300.0)" d="M0,0 L-.11,-1 L.11,-1 Z" fill="#ffe259"/><path transform="rotate(330.0)" d="M0,0 L-.11,-1 L.11,-1 Z" fill="#ffe259"/></g></g></g>
+</svg>

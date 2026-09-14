@@ -1,0 +1,5 @@
+[
+  { "type": "panel", "x": 1500, "y": 760, "w": 1050, "h": 560, "radius": 34, "fill": "white", "stroke": "line", "stroke_width": 3, "opacity": 0.72 },
+  { "type": "text", "content": "INFORMACIÓN", "x": 1560, "y": 835, "size": 42, "fill": "accent", "weight": "bold" },
+  { "type": "paragraph", "content": "Contenido neto:\nPorción sugerida:\nModo de uso:\nAdvertencias:", "x": 1560, "y": 930, "size": 34, "fill": "ink", "max_width": 900, "line_height": 52 }
+]

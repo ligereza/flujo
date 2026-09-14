@@ -1,0 +1,23 @@
+{
+  "name": "FRVR",
+  "tipo": "artist_dj",
+  "headliner": true,
+  "aliases": [
+    "FRVR"
+  ],
+  "instagram": "",
+  "tipos_fecha": [],
+  "logos": [],
+  "venues": [
+    {
+      "nombre": "Sala Metronomo",
+      "venue_id": null,
+      "preferido": true,
+      "estado": "extraido_del_flyer",
+      "notas": "El flyer FRVR.PARALELO89.png muestra Sala Metronomo como venue y Paralelo 86 en el cartel. El nombre de archivo es inconsistente; no crear venue paralelo_89."
+    }
+  ],
+  "confirmed": "",
+  "fuente_datos": "flyer FRVR.PARALELO89.png, OCR local y aclaracion del usuario; mapeo 2026-07-17; venue extraido sin ficha tecnica",
+  "notes": "FRVR es el artista/DJ headliner, no la productora. La imagen muestra Sala Metronomo como venue y Paralelo 86 en el lineup. El filename contiene una etiqueta inconsistente. La productora organizadora sigue sin confirmar; conectar con la cola de tools/triangular_fichas.py."
+}

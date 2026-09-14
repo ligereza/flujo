@@ -1,0 +1,42 @@
+{
+  "project": {
+    "name": "Flyer A4 Reduciendo Daño",
+    "slug": "flyer_rd_a4",
+    "brand": "Reduciendo Daño",
+    "website": "reduciendodano.org",
+    "note": "Plantilla institucional A4 para flyers, dossiers o propuestas."
+  },
+  "canvas": {
+    "width": 2480,
+    "height": 3508,
+    "real_size_cm": {"width": 21, "height": 29.7},
+    "safe_margin_px": 120
+  },
+  "palette": {
+    "cream": "#F6EFE3",
+    "paper": "#FFF8ED",
+    "white": "#FFFFFF",
+    "ink": "#161513",
+    "muted": "#675F55",
+    "line": "#D9CEC0",
+    "accent": "#173F2F"
+  },
+  "background": "cream",
+  "global_elements": [
+    {"type": "rect", "x": 80, "y": 80, "w": 2320, "h": 3348, "radius": 60, "fill": "none", "stroke": "line", "stroke_width": 5},
+    {"type": "text", "content": "Reduciendo Daño", "x": 160, "y": 160, "size": 72, "fill": "ink", "weight": "bold", "max_width": 1500}
+  ],
+  "documents": [
+    {
+      "id": "01_flyer_rd",
+      "title": "Flyer / Propuesta",
+      "tipo": "flyer",
+      "elements": [
+        {"type": "text", "content": "TÍTULO PRINCIPAL", "x": 160, "y": 400, "size": 160, "fill": "ink", "weight": "bold", "max_width": 2160},
+        {"type": "paragraph", "content": "Reemplazar este texto por el contenido de la propuesta o comunicación.\n\nMantener tono institucional y cercano.", "x": 160, "y": 700, "size": 64, "fill": "muted", "max_width": 2160, "line_height": 96},
+        {"type": "panel", "x": 160, "y": 1600, "w": 2160, "h": 1400, "radius": 44, "fill": "white", "stroke": "line", "stroke_width": 3, "opacity": 0.72},
+        {"type": "text", "content": "reduciendodano.org", "x": 160, "y": 3200, "size": 56, "fill": "accent", "weight": "bold", "max_width": 1200}
+      ]
+    }
+  ]
+}

@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ctext y='26' font-size='26'%3E%E2%97%89%3C/text%3E%3C/svg%3E">
+<title>ISKVW · terminal</title>
+<style>
+  :root{
+    --bg:#05070a;
+    --fg:#d8e2e6;
+    --dim:#5a6b73;
+    --line:#1c2a30;
+    --accent:#8fe3c7;
+    --accent2:#e39a8f;
+    --warn:#e3c48f;
+  }
+  *{box-sizing:border-box;}
+  html,body{
+    margin:0; padding:0; width:100%; height:100%;
+    background:var(--bg); color:var(--fg);
+    font-family: "Consolas","Courier New",monospace;
+    overflow:hidden;
+    -webkit-tap-highlight-color: transparent;
+  }
+  #fondo{position:fixed; inset:0; display:block; width:100%; height:100%;}
+
+  #hud{
+    position:fixed; inset:0; pointer-events:none;
+    display:flex; flex-direction:column; justify-content:space-between;
+    font-size:12px; letter-spacing:.02em;
+  }
+
+  /* ---- barra de estado (arriba): reporta lo que realmente pasa ---- */
+  #estado{
+    pointer-events:auto;
+    display:flex; flex-wrap:wrap; gap:0 14px;
+    padding:8px 10px;
+    background:linear-gradient(180deg, rgba(5,7,10,.92), rgba(5,7,10,.55));
+    border-bottom:1px solid var(--line);
+    color:var(--dim);
+  }
+  #estado b{color:var(--accent); font-weight:600;}
+  #estado .sep{color:var(--line);}
+  #reloj{margin-left:auto; color:var(--dim);}
+
+  /* ---- panel de control (controles reales, mueven el estado) ---- */
+  #controles{
+    pointer-events:auto;
+    padding:8px 10px 10px;
+    border-top:1px solid var(--line);
+    background:linear-gradient(0deg, rgba(5,7,10,.92), rgba(5,7,10,.4));
+    max-height:42vh;
+    overflow-y:auto;
+  }
+  #controles .fila{
+    display:flex; flex-wrap:wrap; gap:6px;
+    margin-bottom:6px;
+  }
+  #controles .etiqueta-fila{
+    color:var(--dim); font-size:10px; text-transform:uppercase; letter-spacing:.08em;
+    width:100%; margin-bottom:2px;
+  }
+  button.chip{
+    font-family:inherit; font-size:11px;
+    background:transparent; color:var(--fg);
+    border:1px solid var(--line); border-radius:2px;
+    padding:4px 8px; cursor:pointer;
+  }
+  button.chip:hover{border-color:var(--dim);}
+  button.chip.activo{background:var(--accent); color:#04100b; border-color:var(--accent); font-weight:600;}
+  button.chip.categoria.activo{background:var(--accent2); color:#1a0805; border-color:var(--accent2);}
+
+  #modos{display:flex; gap:6px; margin-bottom:8px;}
+  #modos button{
+    font-family:inherit; font-size:11px;
+    background:transparent; color:var(--dim);
+    border:1px solid var(--line); border-radius:2px;
+    padding:5px 10px; cursor:pointer;
+  }
+  #modos button.activo{color:var(--bg); background:var(--fg); font-weight:700;}
+
+  /* ---- panel de obra (conmuta, no apila) ---- */
+  #panelObra{
+    position:fixed; inset:0;
+    pointer-events:none;
+    display:flex; align-items:flex-end; justify-content:center;
+    opacity:0; transition:opacity .35s ease;
+  }
+  #panelObra.abierto{pointer-events:auto; opacity:1;}
+  #tarjeta{
+    width:min(640px, 94vw);
+    max-height:72vh;
+    overflow-y:auto;
+    margin-bottom:0;
+    background:rgba(8,12,15,.96);
+    border:1px solid var(--line);
+    border-bottom:none;
+    border-radius:6px 6px 0 0;
+    padding:16px 18px 20px;
+    transform:translateY(12px);
+    transition:transform .35s ease;
+  }
+  #panelObra.abierto #tarjeta{transform:translateY(0);}
+  #tarjeta h2{margin:0 0 2px; font-size:17px; color:var(--fg); font-weight:600;}
+  #tarjeta .meta{color:var(--dim); font-size:11px; margin-bottom:10px;}
+  #tarjeta .meta b{color:var(--accent);}
+  #tarjeta p{font-size:13px; line-height:1.55; color:#c4cfd3; margin:0 0 10px;}
+  #tarjeta .falta{color:var(--warn); font-style:italic;}
+  #tarjeta .tags{display:flex; flex-wrap:wrap; gap:6px; margin-top:8px;}
+  #tarjeta .tag{
+    font-size:11px; padding:3px 8px; border:1px solid var(--dim); border-radius:12px;
+    color:var(--dim); cursor:pointer; background:transparent;
+  }
+  #tarjeta .tag:hover{color:var(--accent); border-color:var(--accent);}
+  #cerrarTarjeta{
+    position:absolute; top:10px; right:12px;
+    background:none; border:none; color:var(--dim); font-size:16px; cursor:pointer;
+  }
+  #tarjeta{position:relative;}
+  #placeholderAviso{
+    display:inline-block; margin-top:6px; font-size:10px; letter-spacing:.06em;
+    color:var(--bg); background:var(--warn); padding:3px 7px; border-radius:2px;
+    text-transform:uppercase;
+  }
+
+  @media (max-width:560px){
+    #estado{font-size:10px; padding:6px 8px;}
+    #reloj{display:none;}
+    #tarjeta{max-height:60vh; padding:12px 14px 16px;}
+  }
+</style>
+</head>
+<body>
+
+<canvas id="fondo"></canvas>
+
+<div id="hud">
+  <div id="estado">
+    <span>iskvw <span class="sep">/</span> terminal</span>
+    <span class="sep">·</span>
+    <span><b id="nObras">0</b> obras cargadas</span>
+    <span class="sep">·</span>
+    <span><b id="nTags">0</b> etiquetas</span>
+    <span class="sep">·</span>
+    <span><b id="nPlaceholder">0</b> anunciadas sin archivo</span>
+    <span class="sep">·</span>
+    <span>modo: <b id="modoActual">mapa</b></span>
+    <span class="sep">·</span>
+    <span id="seleccionActual">nada seleccionado</span>
+    <span class="sep">·</span>
+    <span style="opacity:.7">arrastrá un nodo o hacé click para abrirlo</span>
+    <span id="reloj"></span>
+  </div>
+
+  <div id="controles">
+    <div id="modos">
+      <button data-modo="mapa" class="activo">mapa de red</button>
+      <button data-modo="etiquetas">por etiqueta</button>
+      <button data-modo="cronologia">cronología</button>
+    </div>
+    <div class="fila">
+      <span class="etiqueta-fila">categorías (<span id="nCategorias">0</span>)</span>
+      <span id="chipsCategoria"></span>
+    </div>
+    <div class="fila">
+      <span class="etiqueta-fila">etiquetas (<span id="nTags2">0</span>)</span>
+      <span id="chipsTag"></span>
+    </div>
+  </div>
+</div>
+
+<div id="panelObra">
+  <div id="tarjeta">
+    <button id="cerrarTarjeta" aria-label="cerrar">✕</button>
+    <div id="tarjetaContenido"></div>
+  </div>
+</div>
+
+<!--
+  Datos incrustados tal cual desde ../../datos/obras.json (no se modificó el
+  archivo original; se copia acá para que el instrumento abra con doble clic
+  sin depender de fetch() sobre file://, que Chrome/Edge bloquean por CORS).
+-->
+<script type="application/json" id="datos-obras">
+[
+  {
+    "id": "vola",
+    "title": "VOLÁ · lo visible y lo invisible",
+    "category": "Animación",
+    "year": 2026,
+    "placeholder": false,
+    "description": "El vaso que el humano ve y el vacío que se anima: figura y fondo de la misma imagen. El nombre lleva su propia tilde — volá / vola decide quién vuela.",
+    "descriptionLong": "VOLÁ junta dos piezas como las dos caras del vaso de Rubin. El VASO (visible) toma el double cup de vibecodeine y lo hace digerir: el líquido se metaboliza, las filas del glifo suben y bajan como una respiración lentísima, al umbral de percepción — la figura que el humano ve y el agente, que solo lee markup estático, no puede percibir. El VACÍO (invisible) anima el espacio negativo del código: los espacios respiran, hilos quebrados bajan por el negativo, raíces rectangulares crecen por los corredores de blanco. Se anima el vacío, no el código. Bajo todo, una pregunta: cómo entiende un LLM lo que es sentirse high — el signo de la sustancia cruza entero (codeína, lean, el double cup), el estado sentido no cruza nada. El modelo digiere la palabra, nunca la sustancia. Hasta el nombre lo demuestra: dobla la tilde y 'volá' (te hablo, hay alguien) se vuelve 'vola' (ello vuela, sin nadie).",
+    "image": "assets/works/vola-vaso.svg",
+    "gallery": ["assets/works/vola-vaso.svg", "assets/works/vola-void.svg"],
+    "video": null,
+    "tags": ["generativo", "animación", "smil", "visible-invisible", "tilde"],
+    "technique": "SVG animado (SMIL/CSS, sin JS) · instrumento propio de espacios",
+    "mediaType": "image",
+    "src": "assets/works/vola-vaso.svg",
+    "poster": null,
+    "createdAt": "2026-07-12T00:00:00.000Z"
+  },
+  {
+    "id": "campo-motor-diagnostico",
+    "title": "Campo · Motor de Diagnóstico",
+    "category": "Generative",
+    "year": 2026,
+    "placeholder": false,
+    "description": "El código que audita el sistema, tejido como campo repetido. La telemetría vuelta alfombra.",
+    "descriptionLong": "Pieza tejida con un instrumento propio: cada archivo de código real se convierte en trama, sin dibujo a mano. El motor de diagnóstico del repo (el mismo que mide su propia salud) fue tejido en modo campo — un patrón tipo gul que se repite mientras el código avanza línea por línea. El color y la posición de cada nodo salen directo de los tokens del archivo fuente: nada se inventa por fuera de lo que el código ya dice.",
+    "image": "assets/works/campo-motor-diagnostico.svg",
+    "gallery": ["assets/works/campo-motor-diagnostico.svg"],
+    "video": null,
+    "tags": ["generativo", "código-tejido", "field"],
+    "technique": "Instrumento propio · tejido de código (modo field / gul)",
+    "mediaType": "image",
+    "src": "assets/works/campo-motor-diagnostico.svg",
+    "poster": null,
+    "createdAt": "2026-07-11T00:00:00.000Z"
+  },
+  {
+    "id": "cenefa-dossier",
+    "title": "Cenefa · Dossier",
+    "category": "2D",
+    "year": 2026,
+    "placeholder": false,
+    "description": "Una investigación escrita tejida como borde: el texto que enmarca la obra se vuelve el marco mismo.",
+    "descriptionLong": "Segunda salida del mismo instrumento, esta vez en modo cenefa (boteh): el archivo tejido no es código sino un dossier de investigación. La lectura literal del texto define la trama del borde, línea por línea, mientras el centro queda libre. El resultado es un motivo textil formal cuya fuente es completamente legible si se abre el archivo original.",
+    "image": "assets/works/cenefa-dossier.svg",
+    "gallery": ["assets/works/cenefa-dossier.svg"],
+    "video": null,
+    "tags": ["generativo", "código-tejido", "border"],
+    "technique": "Instrumento propio · tejido de código (modo border / boteh)",
+    "mediaType": "image",
+    "src": "assets/works/cenefa-dossier.svg",
+    "poster": null,
+    "createdAt": "2026-07-11T00:00:00.000Z"
+  },
+  {
+    "id": "wip-malla-reactiva",
+    "title": "Malla Reactiva",
+    "category": "3D",
+    "year": 2026,
+    "placeholder": false,
+    "description": "Geometría que responde al cursor y al scroll. WebGL en vivo.",
+    "descriptionLong": "Pieza interactiva. Una superficie plana es recorrida por ruido Simplex; el espectador la deforma con su propio movimiento. La obra solo existe mientras se la mira.",
+    "image": "assets/works/malla-reactiva-cover.svg",
+    "gallery": ["assets/works/malla-reactiva-cover.svg"],
+    "video": null,
+    "tags": ["interactivo", "webgl", "tiempo-real"],
+    "technique": "Three.js · Simplex Noise",
+    "mediaType": "image",
+    "template": "3d-immersion",
+    "src": "assets/works/malla-reactiva-cover.svg",
+    "poster": null,
+    "createdAt": "2026-01-20T00:00:00.000Z"
+  },
+  {
+    "id": "sala-flujo-3d",
+    "title": "sala flujo — portafolio 3D",
+    "category": "3D",
+    "year": 2026,
+    "placeholder": false,
+    "description": "Una galeria a oscuras: las piezas dan la luz. Telar, cauce en rotonda-zootropo, ecosistema, tilde -- recorrida en WebGL + CSS3D, no en fotos de la galeria.",
+    "descriptionLong": "sala flujo -- portafolio 3D. Galeria real en WebGL (Three.js) + CSS3D, sin fotos ni video pregrabado: el recorrido ocurre en vivo, en el navegador. Cuatro salas navegables con flechas o botones -- telar, cauce en rotonda-zootropo (con controles de giro y estrobo), ecosistema y tilde -- mas una sala de entrada. Arrastra para mirar alrededor; click en una pieza para acercarte. La sala de ecosistema tiene esporas clickeables que decodifican su propio payload (el mismo lenguaje de decaimiento Tapiz/Psicosis/Fungi que aparece en TAPIZ). Tema unico oscuro por diseno: la bioluminiscencia de las piezas exige el vacio.",
+    "image": "assets/works/sala-3d-cover.png",
+    "gallery": ["assets/works/sala-3d-cover.png"],
+    "video": null,
+    "tags": ["interactivo", "webgl", "css3d", "3d", "tiempo-real"],
+    "technique": "Three.js · CSS3DRenderer · galeria navegable en vivo",
+    "mediaType": "image",
+    "template": "sala-3d",
+    "src": "assets/works/sala-3d-cover.png",
+    "poster": null,
+    "createdAt": "2026-07-12T00:00:00.000Z"
+  },
+  {
+    "id": "tapiz-system-projection",
+    "title": "TAPIZ :: system projection",
+    "category": "Generative",
+    "year": 2026,
+    "placeholder": false,
+    "description": "system projection :: psicosis / fungi diagnostics :: calm compilation. Panel en vivo (luminous mesh, chromatic mask, chronology) con esporas clickeables que decodifican assets en decadencia.",
+    "descriptionLong": "TAPIZ :: system projection. Demo real de tools/tapiz_renderer.html con salida --demo inlineada: un panel de diagnostico que lee el mismo ecosistema Tapiz -> Psicosis -> Fungi y lo proyecta como mesh bioluminiscente sobre malla canvas. Tres paneles en vivo -- luminous mesh (presion, throttle), chromatic mask (riesgo maximo, categorias) y chronology (colisiones, assets afectados) -- mas esporas clickeables (Psicosis, Fungi) que decodifican su payload real al hacer click. Tres modos: calm (compilacion estable), stress (sobrecarga, mascara critica) y live. Tema unico oscuro por diseno -- pieza de arte comprometida (vacio + mesh bioluminiscente), no se adapta a modo claro.",
+    "image": "assets/works/tapiz-cover.png",
+    "gallery": ["assets/works/tapiz-cover.png"],
+    "video": null,
+    "tags": ["interactivo", "canvas", "generativo", "psicosis", "diagnostico"],
+    "technique": "Canvas mesh en vivo · paneles de diagnostico · esporas clickeables",
+    "mediaType": "image",
+    "template": "tapiz",
+    "src": "assets/works/tapiz-cover.png",
+    "poster": null,
+    "createdAt": "2026-07-12T00:00:00.000Z"
+  },
+  {
+    "id": "cauce-sala3d",
+    "title": "Cauce · Sala 3D",
+    "category": "Animación",
+    "year": 2026,
+    "placeholder": false,
+    "description": "El build de una galería 3D leído por el cauce: mismo token, mismo color, patrón reconocido y no impuesto.",
+    "descriptionLong": "Tercera salida del instrumento: modo cauce, animado con SMIL nativo (sin video, sin canvas). Cada token que se repite en el archivo fuente recibe el mismo color por hash — el patrón queda reconocido, no decidido de antemano. Las marcas fuera del alfabeto normal (acentos, signos) nunca decaen, así que sobreviven a toda la animación como puntos fijos.",
+    "image": "assets/works/cauce-sala3d.svg",
+    "gallery": ["assets/works/cauce-sala3d.svg"],
+    "video": null,
+    "tags": ["generativo", "animación", "smil"],
+    "technique": "Instrumento propio · tejido de código, animación SMIL (modo cauce)",
+    "mediaType": "image",
+    "src": "assets/works/cauce-sala3d.svg",
+    "poster": null,
+    "createdAt": "2026-07-11T00:00:00.000Z"
+  },
+  {
+    "id": "medallon-entrada",
+    "title": "Medallón · Entrada",
+    "category": "Generative",
+    "year": 2026,
+    "placeholder": false,
+    "description": "La puerta del instrumento tejida como medallón mínimo: casi vacía, porque entrar es solo delegar.",
+    "descriptionLong": "Cuarta salida: el propio punto de entrada del instrumento tejido sobre sí mismo, en modo medallón. Es la pieza más pequeña de la serie porque el archivo que la origina apenas tiene lógica propia — delega todo a los módulos reales. El medallón queda casi vacío por esa razón, no por decisión estética: la forma sigue exactamente al contenido.",
+    "image": "assets/works/medallon-entrada.svg",
+    "gallery": ["assets/works/medallon-entrada.svg"],
+    "video": null,
+    "tags": ["generativo", "código-tejido", "medallion"],
+    "technique": "Instrumento propio · tejido de código (modo medallion)",
+    "mediaType": "image",
+    "src": "assets/works/medallon-entrada.svg",
+    "poster": null,
+    "createdAt": "2026-07-11T00:00:00.000Z"
+  }
+]
+</script>
+
+<script>
+(function(){
+"use strict";
+
+/* ---------- 1. cargar datos: intenta fetch real (si hay servidor http),
+   si falla (file:// bloqueado por CORS) usa el JSON incrustado arriba.
+   El incrustado es copia literal de datos/obras.json, nunca se edita a mano. ---------- */
+function arrancar(obras){
+  obras = Array.isArray(obras) ? obras : [];
+
+  /* ---------- 2. derivar SOLO lo que los datos realmente dicen ---------- */
+  const nObras = obras.length;
+  const tagSet = new Set();
+  obras.forEach(o => (o.tags || []).forEach(t => tagSet.add(t)));
+  const tagsUnicas = Array.from(tagSet).sort((a,b)=>a.localeCompare(b,'es'));
+  const categoriaSet = new Set(obras.map(o => o.category).filter(Boolean));
+  const categorias = Array.from(categoriaSet).sort((a,b)=>a.localeCompare(b,'es'));
+  const nPlaceholder = obras.filter(o => o.placeholder === true).length;
+
+  document.getElementById('nObras').textContent = nObras;
+  document.getElementById('nTags').textContent = tagsUnicas.length;
+  document.getElementById('nTags2').textContent = tagsUnicas.length;
+  document.getElementById('nPlaceholder').textContent = nPlaceholder;
+  document.getElementById('nCategorias').textContent = categorias.length;
+
+  /* reloj real (hora del sistema, no decorativo: es la hora real) */
+  const relojEl = document.getElementById('reloj');
+  function tickReloj(){
+    const d = new Date();
+    const hh = String(d.getHours()).padStart(2,'0');
+    const mm = String(d.getMinutes()).padStart(2,'0');
+    const ss = String(d.getSeconds()).padStart(2,'0');
+    relojEl.textContent = hh+':'+mm+':'+ss;
+  }
+  tickReloj(); setInterval(tickReloj, 1000);
+
+  /* ---------- 3. chips de filtro reales ---------- */
+  const chipsCategoriaEl = document.getElementById('chipsCategoria');
+  const chipsTagEl = document.getElementById('chipsTag');
+  const filtro = { categorias: new Set(), tags: new Set() };
+
+  categorias.forEach(cat=>{
+    const n = obras.filter(o=>o.category===cat).length;
+    const b = document.createElement('button');
+    b.className = 'chip categoria';
+    b.textContent = cat + ' (' + n + ')';
+    b.addEventListener('click', ()=>{
+      if(filtro.categorias.has(cat)) filtro.categorias.delete(cat);
+      else filtro.categorias.add(cat);
+      b.classList.toggle('activo');
+      recalcularFiltro();
+    });
+    chipsCategoriaEl.appendChild(b);
+  });
+
+  tagsUnicas.forEach(tag=>{
+    const n = obras.filter(o=>(o.tags||[]).includes(tag)).length;
+    const b = document.createElement('button');
+    b.className = 'chip tag';
+    b.textContent = '#'+tag+' ('+n+')';
+    b.dataset.tag = tag;
+    b.addEventListener('click', ()=>{
+      if(filtro.tags.has(tag)) filtro.tags.delete(tag);
+      else filtro.tags.add(tag);
+      b.classList.toggle('activo');
+      recalcularFiltro();
+    });
+    chipsTagEl.appendChild(b);
+  });
+
+  function obraPasaFiltro(o){
+    if(filtro.categorias.size && !filtro.categorias.has(o.category)) return false;
+    if(filtro.tags.size){
+      const tags = o.tags||[];
+      let ok = false;
+      filtro.tags.forEach(t=>{ if(tags.includes(t)) ok = true; });
+      if(!ok) return false;
+    }
+    return true;
+  }
+
+  function recalcularFiltro(){
+    nodos.forEach(n=>{ n.activo = obraPasaFiltro(n.obra); });
+    const activos = nodos.filter(n=>n.activo).length;
+    document.getElementById('seleccionActual').textContent =
+      (filtro.categorias.size||filtro.tags.size)
+        ? (activos+' de '+nObras+' coinciden con el filtro')
+        : 'nada seleccionado';
+  }
+
+  /* ---------- 4. lienzo generativo: red de nodos a partir de `tags` ---------- */
+  const canvas = document.getElementById('fondo');
+  const ctx = canvas.getContext('2d');
+  let W=0, H=0, DPR = Math.min(window.devicePixelRatio||1, 2);
+
+  function ajustarTamano(){
+    W = window.innerWidth; H = window.innerHeight;
+    canvas.width = W*DPR; canvas.height = H*DPR;
+    canvas.style.width = W+'px'; canvas.style.height = H+'px';
+    ctx.setTransform(DPR,0,0,DPR,0,0);
+  }
+  window.addEventListener('resize', ajustarTamano);
+  ajustarTamano();
+
+  /* nodos: uno por obra, disposición circular inicial + jitter, con física
+     de repulsión muy simple (son pocos nodos, alcanza y sobra) */
+  const colorPorCategoria = {};
+  const paletaBase = ['#8fe3c7','#e39a8f','#8fb3e3','#e3c48f','#c78fe3','#8fe3ab'];
+  categorias.forEach((c,i)=> colorPorCategoria[c] = paletaBase[i % paletaBase.length]);
+
+  const nodos = obras.map((o,i)=>{
+    const ang = (i/Math.max(obras.length,1)) * Math.PI*2;
+    return {
+      obra:o,
+      x: 0.5 + Math.cos(ang)*0.28,
+      y: 0.5 + Math.sin(ang)*0.28,
+      vx:(Math.random()-0.5)*0.0006,
+      vy:(Math.random()-0.5)*0.0006,
+      r: 10 + (o.tags?o.tags.length:0)*2.2,
+      color: colorPorCategoria[o.category] || '#8fe3c7',
+      activo:true,
+      fase: Math.random()*Math.PI*2,
+      arrastrando:false
+    };
+  });
+
+  /* aristas: dos obras se conectan si comparten al menos una etiqueta.
+     Es el único vínculo real que hay en los datos (ver ESQUEMA.md). */
+  const aristas = [];
+  for(let i=0;i<nodos.length;i++){
+    for(let j=i+1;j<nodos.length;j++){
+      const ta = nodos[i].obra.tags||[], tb = nodos[j].obra.tags||[];
+      const comunes = ta.filter(t=>tb.includes(t));
+      if(comunes.length) aristas.push({a:i,b:j,peso:comunes.length,tags:comunes});
+    }
+  }
+
+  let seleccionado = null; // índice de nodo con panel abierto
+  let hover = null;
+
+  function fisica(){
+    // repulsión suave entre nodos + atracción leve al centro + deriva
+    for(let i=0;i<nodos.length;i++){
+      const n = nodos[i];
+      if(n.arrastrando) continue;
+      let fx=0, fy=0;
+      for(let j=0;j<nodos.length;j++){
+        if(i===j) continue;
+        const m = nodos[j];
+        const dx = n.x-m.x, dy = n.y-m.y;
+        const d2 = Math.max(dx*dx+dy*dy, 0.0009);
+        const f = 0.0000065/d2;
+        fx += dx*f; fy += dy*f;
+      }
+      fx += (0.5-n.x)*0.00035;
+      fy += (0.5-n.y)*0.00035;
+      n.vx = (n.vx+fx)*0.965;
+      n.vy = (n.vy+fy)*0.965;
+      n.x += n.vx; n.y += n.vy;
+      n.x = Math.min(0.94, Math.max(0.06, n.x));
+      n.y = Math.min(0.9, Math.max(0.12, n.y));
+    }
+  }
+
+  function dibujar(t){
+    ctx.clearRect(0,0,W,H);
+    ctx.fillStyle = '#05070a';
+    ctx.fillRect(0,0,W,H);
+
+    // grilla tenue que pulsa: honesta -- decorativa, no finge medir nada
+    ctx.strokeStyle = 'rgba(143,227,199,0.05)';
+    ctx.lineWidth = 1;
+    const paso = 46;
+    const pulso = 0.5+0.5*Math.sin(t/2600);
+    ctx.globalAlpha = 0.4+0.3*pulso;
+    for(let x=0; x<W; x+=paso){ ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,H); ctx.stroke(); }
+    for(let y=0; y<H; y+=paso){ ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(W,y); ctx.stroke(); }
+    ctx.globalAlpha = 1;
+
+    // aristas: nacen de tags compartidos, nada más
+    aristas.forEach(ar=>{
+      const A = nodos[ar.a], B = nodos[ar.b];
+      const atenuar = (!A.activo || !B.activo);
+      const relevante = seleccionado!==null && (ar.a===seleccionado || ar.b===seleccionado);
+      ctx.beginPath();
+      ctx.moveTo(A.x*W, A.y*H);
+      ctx.lineTo(B.x*W, B.y*H);
+      ctx.lineWidth = 0.6 + ar.peso*0.5;
+      ctx.strokeStyle = relevante
+        ? 'rgba(227,196,143,0.85)'
+        : atenuar ? 'rgba(90,107,115,0.08)' : 'rgba(90,107,115,0.35)';
+      ctx.stroke();
+    });
+
+    // nodos
+    nodos.forEach((n,i)=>{
+      const resp = 0.5+0.5*Math.sin(t/900 + n.fase);
+      const r = n.r + resp*2;
+      const px = n.x*W, py = n.y*H;
+      const activo = n.activo;
+      ctx.beginPath();
+      ctx.arc(px, py, r, 0, Math.PI*2);
+      ctx.fillStyle = activo ? n.color : 'rgba(90,107,115,0.25)';
+      ctx.globalAlpha = activo ? (i===hover||i===seleccionado?1:0.85) : 0.35;
+      ctx.fill();
+      if(n.obra.placeholder){
+        ctx.setLineDash([3,3]);
+        ctx.strokeStyle = '#e3c48f';
+        ctx.lineWidth = 1.5;
+        ctx.stroke();
+        ctx.setLineDash([]);
+      }
+      if(i===seleccionado){
+        ctx.beginPath();
+        ctx.arc(px,py,r+5,0,Math.PI*2);
+        ctx.strokeStyle = '#d8e2e6';
+        ctx.lineWidth = 1;
+        ctx.stroke();
+      }
+      ctx.globalAlpha = 1;
+
+      // etiqueta corta bajo el nodo (sólo si hay espacio / no en móvil angosto)
+      if(W>420){
+        ctx.font = '10px Consolas, monospace';
+        ctx.fillStyle = activo ? 'rgba(216,226,230,0.75)' : 'rgba(90,107,115,0.4)';
+        ctx.textAlign = 'center';
+        const corto = n.obra.title.length>26 ? n.obra.title.slice(0,24)+'…' : n.obra.title;
+        ctx.fillText(corto, px, py+r+13);
+      }
+    });
+  }
+
+  let ultimo = 0;
+  function loop(t){
+    fisica();
+    dibujar(t);
+    requestAnimationFrame(loop);
+  }
+  requestAnimationFrame(loop);
+
+  /* ---------- 5. interacción real: click abre obra, arrastre mueve el nodo ---------- */
+  function coordCanvas(ev){
+    const rect = canvas.getBoundingClientRect();
+    const cx = (ev.touches ? ev.touches[0].clientX : ev.clientX) - rect.left;
+    const cy = (ev.touches ? ev.touches[0].clientY : ev.clientY) - rect.top;
+    return {x:cx/rect.width, y:cy/rect.height};
+  }
+  function nodoEnPunto(p){
+    for(let i=nodos.length-1;i>=0;i--){
+      const n = nodos[i];
+      const dx = (n.x-p.x)*W, dy=(n.y-p.y)*H;
+      if(Math.sqrt(dx*dx+dy*dy) < n.r+6) return i;
+    }
+    return null;
+  }
+
+  let arrastreIdx = null, movioDurante = false;
+  canvas.addEventListener('pointerdown', ev=>{
+    const p = coordCanvas(ev);
+    const i = nodoEnPunto(p);
+    if(i!==null){ arrastreIdx=i; nodos[i].arrastrando=true; movioDurante=false; }
+  });
+  canvas.addEventListener('pointermove', ev=>{
+    const p = coordCanvas(ev);
+    if(arrastreIdx!==null){
+      nodos[arrastreIdx].x = Math.min(0.94,Math.max(0.06,p.x));
+      nodos[arrastreIdx].y = Math.min(0.9,Math.max(0.12,p.y));
+      nodos[arrastreIdx].vx = 0; nodos[arrastreIdx].vy = 0;
+      movioDurante = true;
+    } else {
+      hover = nodoEnPunto(p);
+      canvas.style.cursor = hover!==null ? 'pointer' : 'default';
+    }
+  });
+  window.addEventListener('pointerup', ev=>{
+    if(arrastreIdx!==null){
+      nodos[arrastreIdx].arrastrando=false;
+      if(!movioDurante) abrirObra(arrastreIdx);
+      arrastreIdx = null;
+    }
+  });
+
+  /* ---------- 6. panel de obra: conmuta sobre el lienzo, no apila secciones ---------- */
+  const panelObra = document.getElementById('panelObra');
+  const tarjetaContenido = document.getElementById('tarjetaContenido');
+  const seleccionEl = document.getElementById('seleccionActual');
+
+  function campoOFalta(valor, render){
+    if(valor === undefined || valor === null || valor === '') {
+      return '<span class="falta">(no consta)</span>';
+    }
+    return render ? render(valor) : valor;
+  }
+
+  function abrirObra(i){
+    seleccionado = i;
+    const o = nodos[i].obra;
+    let html = '';
+    html += '<h2>'+escapeHtml(o.title)+'</h2>';
+    html += '<div class="meta">'+escapeHtml(o.category)
+          + ' <span class="sep">·</span> año: ' + campoOFalta(o.year)
+          + ' <span class="sep">·</span> medio: ' + escapeHtml(o.mediaType||'(no consta)')
+          + '</div>';
+    if(o.placeholder){
+      html += '<div id="placeholderAviso">anunciada · sin archivo detrás todavía</div>';
+    }
+    html += '<p>'+escapeHtml(o.descriptionLong || o.description)+'</p>';
+    html += '<div class="meta">técnica: '+campoOFalta(o.technique, escapeHtml)+'</div>';
+    if(o.createdAt){
+      const fecha = new Date(o.createdAt);
+      if(!isNaN(fecha)) html += '<div class="meta">registrada: '+fecha.toISOString().slice(0,10)+'</div>';
+    }
+    const tags = o.tags||[];
+    html += '<div class="tags">';
+    if(tags.length){
+      tags.forEach(t=>{
+        html += '<button class="tag" data-tag="'+escapeAttr(t)+'">#'+escapeHtml(t)+'</button>';
+      });
+    } else {
+      html += '<span class="falta">sin etiquetas</span>';
+    }
+    html += '</div>';
+    tarjetaContenido.innerHTML = html;
+    tarjetaContenido.querySelectorAll('button.tag').forEach(b=>{
+      b.addEventListener('click', ()=>{
+        const t = b.dataset.tag;
+        filtro.categorias.clear();
+        filtro.tags.clear();
+        filtro.tags.add(t);
+        document.querySelectorAll('#chipsTag .chip').forEach(c=>{
+          c.classList.toggle('activo', c.dataset.tag===t);
+        });
+        document.querySelectorAll('#chipsCategoria .chip').forEach(c=>c.classList.remove('activo'));
+        recalcularFiltro();
+        cerrarObra();
+      });
+    });
+    panelObra.classList.add('abierto');
+    seleccionEl.textContent = 'viendo: '+o.title;
+  }
+  function cerrarObra(){
+    seleccionado = null;
+    panelObra.classList.remove('abierto');
+    if(!filtro.categorias.size && !filtro.tags.size){
+      seleccionEl.textContent = 'nada seleccionado';
+    }
+  }
+  document.getElementById('cerrarTarjeta').addEventListener('click', cerrarObra);
+
+  function escapeHtml(s){
+    return String(s).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  }
+  function escapeAttr(s){ return escapeHtml(s); }
+
+  /* ---------- 7. modos: conmutan el criterio de disposición, no apilan páginas ---------- */
+  const botonesModo = document.querySelectorAll('#modos button');
+  let modo = 'mapa';
+  botonesModo.forEach(b=>{
+    b.addEventListener('click', ()=>{
+      modo = b.dataset.modo;
+      botonesModo.forEach(x=>x.classList.remove('activo'));
+      b.classList.add('activo');
+      document.getElementById('modoActual').textContent = ({
+        mapa:'mapa', etiquetas:'por etiqueta', cronologia:'cronología'
+      })[modo];
+      reordenarPorModo();
+    });
+  });
+
+  function reordenarPorModo(){
+    if(modo==='mapa'){
+      nodos.forEach((n,i)=>{
+        const ang = (i/Math.max(nodos.length,1))*Math.PI*2;
+        n.x = 0.5+Math.cos(ang)*0.28; n.y = 0.5+Math.sin(ang)*0.28;
+      });
+    } else if(modo==='cronologia'){
+      // orden real por createdAt; las que no tienen fecha van al final, marcadas aparte
+      const conFecha = nodos.map((n,i)=>({n,i,f:n.obra.createdAt?new Date(n.obra.createdAt).getTime():null}));
+      const ordenables = conFecha.filter(x=>x.f!==null).sort((a,b)=>a.f-b.f);
+      const sinFecha = conFecha.filter(x=>x.f===null);
+      const total = ordenables.length + sinFecha.length;
+      ordenables.forEach((x,k)=>{
+        x.n.x = 0.08 + (k/Math.max(total-1,1))*0.84;
+        x.n.y = 0.45 + (k%2===0?-0.08:0.08);
+      });
+      sinFecha.forEach((x,k)=>{
+        x.n.x = 0.08 + ((ordenables.length+k)/Math.max(total-1,1))*0.84;
+        x.n.y = 0.75;
+      });
+    } else if(modo==='etiquetas'){
+      // agrupa por su primera etiqueta (la única relación que hay en los datos)
+      const grupos = {};
+      nodos.forEach(n=>{
+        const t = (n.obra.tags&&n.obra.tags[0]) || '(sin etiqueta)';
+        (grupos[t]=grupos[t]||[]).push(n);
+      });
+      const claves = Object.keys(grupos);
+      claves.forEach((k,gi)=>{
+        const cx = 0.15 + (gi/Math.max(claves.length-1,1))*0.7;
+        grupos[k].forEach((n,j)=>{
+          n.x = cx + (Math.random()-0.5)*0.05;
+          n.y = 0.3 + j*0.14;
+        });
+      });
+    }
+    nodos.forEach(n=>{ n.vx=0; n.vy=0; });
+  }
+
+  /* click en vacío del lienzo: cierra la obra abierta */
+  canvas.addEventListener('click', ev=>{
+    if(movioDurante) return;
+    const p = coordCanvas(ev);
+    if(nodoEnPunto(p)===null && seleccionado!==null) cerrarObra();
+  });
+
+  recalcularFiltro();
+}
+
+/* ---------- de donde salen las obras ----------
+
+   Esta piel leia SOLO `obras.json`, que son 8 entradas y son HERRAMIENTAS, no
+   obras -- lo dice el manifiesto de `campo` con esas palabras. Habia tres
+   pieles y una sola con el archivo detras, asi que "intercambiable" era cierto
+   en el disco y falso para quien mira: cambiar a esta mostraba 8 herramientas
+   en vez de 1.401 obras.
+
+   El sustrato es `archivo.json`, el mismo contrato que lee `campo`. Se pide
+   PRIMERO, igual que alla, y si no esta se cae a `obras.json` y despues al
+   JSON incrustado (que existe para poder abrir esto con file://, donde el
+   fetch lo bloquea CORS). El orden es el mismo que el de campo a proposito:
+   dos pieles que caen distinto ante el mismo dato no son dos pieles del mismo
+   archivo. */
+function desdeArchivo(d){
+  const piezas = (d && Array.isArray(d.piezas)) ? d.piezas : [];
+  return piezas.map(p => {
+    const extra = p.extra || {};
+    return {
+      id: p.id,
+      title: p.titulo || p.id,
+      tags: p.etiquetas || [],
+      /* `clase` es lo que la pieza ES en el contrato; `extra.categoria` es lo
+         que dijo la percepcion. Se prefiere lo percibido y se cae a la clase,
+         sin inventar una tercera. */
+      category: extra.categoria || p.clase || '',
+      technique: extra.tecnica || '',
+      /* `anunciada` = sin archivo detras. Mostrarla como terminada es la
+         mentira que el contrato prohibe, y esta piel ya sabe pintar eso. */
+      placeholder: p.estado === 'anunciada',
+      createdAt: p.fecha || '',
+      year: (p.fecha || '').slice(0,4),
+      mediaType: (p.medio && p.medio.tipo) || '',
+      svg: (p.medio && p.medio.src) || ''
+    };
+  });
+}
+
+function cargar(rutas, i){
+  i = i || 0;
+  if(i >= rutas.length){
+    try{
+      arrancar(JSON.parse(document.getElementById('datos-obras').textContent));
+    }catch(e){ arrancar([]); }
+    return;
+  }
+  fetch(rutas[i]).then(r=>{
+    if(!r.ok) throw new Error('sin servidor http');
+    return r.json();
+  }).then(d=>{
+    const obras = Array.isArray(d) ? d : desdeArchivo(d);
+    if(!obras.length) throw new Error('vacio');
+    arrancar(obras);
+  }).catch(()=> cargar(rutas, i+1));
+}
+
+cargar(['../../datos/archivo.json', '../../datos/obras.json']);
+
+})();
+</script>
+
+</body>
+</html>

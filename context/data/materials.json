@@ -1,0 +1,15 @@
+{
+  "_meta": {
+    "descripcion": "Material RD para el visualizer. Editable. Si existe, el server /api/materials lo sirve; si no, usa demo.",
+    "actualizado": "2026-06-28"
+  },
+  "items": [
+    { "id": "flyer-prevencion", "category": "flyer", "title": "Flyer Prevencion DGD", "desc": "Educativo sobre drogas de diseno. Stand informativo principal.", "meta": "210x297mm | A4 . 2021", "tags": ["educacion", "DGD", "prevencion"] },
+    { "id": "flyer-testeo", "category": "flyer", "title": "Flyer Testeo Quimico", "desc": "Info sobre analisis colorimetrico. Distribucion en stand testeo.", "meta": "210x297mm | A4 . 2022", "tags": ["testeo", "quimico", "safety"] },
+    { "id": "rider-operativo", "category": "rider", "title": "Rider Operativo RD", "desc": "Protocolo setup stand + atencion. Para productoras de eventos.", "meta": "6 pags . PDF . 2023", "tags": ["operativo", "protocolo", "eventos"] },
+    { "id": "rider-contension", "category": "rider", "title": "Rider Zona Contencion", "desc": "Protocolos atencion crisis emocional y primeros auxilios psicologicos.", "meta": "5 pags . PDF . 2022", "tags": ["contencion", "salud mental", "crisis"] },
+    { "id": "signage-descanso", "category": "signage", "title": "Senalizacion Zona Descanso", "desc": "Senal de acceso a zona de descanso + protocolo. Tono calmo/seguro.", "meta": "0.8x0.5m . 2023", "tags": ["descanso", "acceso", "protocolo"] },
+    { "id": "suplemento-mdma", "category": "suplemento", "title": "Suplemento: MDMA/Extasis", "desc": "Dosis, efectos, riesgos, combinaciones peligrosas, reduccion de dano.", "meta": "4 pags . A5 . 2023", "tags": ["MDMA", "extasis", "dosis"] },
+    { "id": "suplemento-lsd", "category": "suplemento", "title": "Suplemento: LSD/Psicodelicos", "desc": "Experiencia, setting, bad trips, gestion emocional.", "meta": "4 pags . A5 . 2023", "tags": ["LSD", "psicodelicos", "bad-trip"] }
+  ]
+}

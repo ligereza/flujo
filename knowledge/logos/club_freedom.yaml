@@ -1,0 +1,11 @@
+id: club_freedom_primary
+producer_id: club_freedom
+status: done
+source_quality: sitio_oficial
+workflow:
+  suggested_tool: logo_clean_lab
+  next_action: ninguna (completo)
+outputs:
+  raster: knowledge/logos/descargas/club_freedom.png
+  raster_source: knowledge/logos/descargas/club_freedom.txt
+  vector: knowledge/logos/vector/club_freedom.svg

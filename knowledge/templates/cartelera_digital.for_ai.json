@@ -1,0 +1,16 @@
+{
+  "type": "cartelera_digital",
+  "task": "Analiza una cartelera/flyer digital de evento. Completa SOLO con datos observables y marca unknown si no se ve.",
+  "expected_output": {
+    "format": {"id": "cartelera_digital", "tool": "photoshop_blender", "medium": "digital", "orientation": "vertical"},
+    "producer": {"id": "", "name_visible": "", "logo_candidates": [], "confidence": 0.0},
+    "venue": {"name_visible": "", "venue_id_guess": "", "confidence": 0.0},
+    "event": {"name": "", "date": "", "time": "", "ticketing": "", "price": "", "instagram_handles": []},
+    "layout": {"hierarchy": [], "logo_positions": [], "lineup_zone": "", "date_zone": "", "venue_zone": "", "safe_margins": ""},
+    "style": {"background": "", "contrast": "", "density": "", "typography": "", "effects": [], "color_palette": []},
+    "editable_fields": ["fecha", "venue", "ubicacion", "precio", "lineup", "ticketera"],
+    "event_scale_signals": [],
+    "logo_workflow": {"status": "unknown", "notes": ""},
+    "notes": ""
+  }
+}

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" data-name="3c5de2a5b585-18014354447815393">
+<style>
+.c0{animation:k_desplazar 2.2s ease-in-out infinite}
+@keyframes k_desplazar{0%,18%{transform:translateX(0)}62%,100%{transform:translateX(16px)}}
+</style>
+<rect width="120" height="120" fill="#2b1055"/>
+<g id="capa-0-protagonista" transform="translate(60,42)" data-rol="protagonista" data-gesto="desplazar_fuera" data-ritmo="2.2s" data-figura="vinilo"><title>protagonista - vinilo</title><g class="c0"><g transform="scale(20)"><circle r=".92" fill="#ffe259"/><circle r="0.72" fill="none" stroke="#4a1c6e" stroke-width=".03" opacity=".5"/><circle r="0.58" fill="none" stroke="#4a1c6e" stroke-width=".03" opacity=".5"/><circle r="0.44" fill="none" stroke="#4a1c6e" stroke-width=".03" opacity=".5"/><circle r=".22" fill="#ff5f6d"/><circle r=".05" fill="#4a1c6e"/></g></g></g>
+<g id="capa-1-cielo" transform="translate(60,38)" data-rol="cielo" data-gesto="quieto" data-ritmo="4s" data-figura="red" opacity=".38"><title>cielo - red</title><g class="c1"><g transform="scale(30)"><line x1="0" y1="0" x2="-0.72" y2="-0.52" stroke="#ffe259" stroke-width=".055" opacity=".7"/><line x1="0" y1="0" x2="0.72" y2="-0.52" stroke="#ffe259" stroke-width=".055" opacity=".7"/><line x1="0" y1="0" x2="-0.72" y2="0.52" stroke="#ffe259" stroke-width=".055" opacity=".7"/><line x1="0" y1="0" x2="0.72" y2="0.52" stroke="#ffe259" stroke-width=".055" opacity=".7"/><line x1="0" y1="0" x2="0" y2="-0.88" stroke="#ffe259" stroke-width=".055" opacity=".7"/><line x1="0" y1="0" x2="0" y2="0.88" stroke="#ffe259" stroke-width=".055" opacity=".7"/><circle cx="0" cy="0" r="0.19" fill="#ff5f6d"/><circle cx="-0.72" cy="-0.52" r="0.12" fill="#ffe259"/><circle cx="0.72" cy="-0.52" r="0.12" fill="#ffe259"/><circle cx="-0.72" cy="0.52" r="0.12" fill="#ffe259"/><circle cx="0.72" cy="0.52" r="0.12" fill="#ffe259"/><circle cx="0" cy="-0.88" r="0.12" fill="#ffe259"/><circle cx="0" cy="0.88" r="0.12" fill="#ffe259"/></g></g></g>
+</svg>

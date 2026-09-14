@@ -1,0 +1,53 @@
+{
+  "tool": "flyer_eventos",
+  "name": "email_evento_02",
+  "date": "2026-06-13",
+  "status": "from_email_pending_download",
+  "input": {
+    "main_image": "",
+    "event_name": "email_evento_02",
+    "event_date": "",
+    "format": "",
+    "notes": ""
+  },
+  "steps": {
+    "photoshop": "pending",
+    "blender": "pending",
+    "export": "pending"
+  },
+  "outputs": [],
+  "source": {
+    "type": "email",
+    "email_imported_at": "2026-06-13T03:29:41",
+    "link_index": 2,
+    "link_total": 2
+  },
+  "instagram": {
+    "url": "https://www.instagram.com/reel/XYZ789test",
+    "type": "reel",
+    "shortcode": "XYZ789test",
+    "media_guess": "video_possible",
+    "download_status": "pending",
+    "manual_download_possible": true
+  },
+  "extracted_info": {
+    "event_name": "",
+    "producer": "",
+    "venue": "",
+    "event_date": "",
+    "needs_manual_review": true
+  },
+  "manual_review": {
+    "required": true,
+    "reason": "metadata_pending",
+    "notes": [
+      "Revisar si el post es imagen, carrusel o video.",
+      "Si el perfil es privado, shadowban o requiere login, descargar manualmente.",
+      "Completar nombre evento, productora, lugar y fecha desde el flyer."
+    ]
+  },
+  "notes": [
+    "Creado desde correo. Falta descargar/analizar flyer.",
+    "Link parece video. Puede requerir descarga manual o captura de frame."
+  ]
+}

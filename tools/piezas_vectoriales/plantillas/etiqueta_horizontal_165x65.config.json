@@ -1,0 +1,43 @@
+{
+  "project": {
+    "name": "Etiqueta horizontal 16.5 x 6.5 cm",
+    "slug": "etiqueta_horizontal_165x65",
+    "brand": "Marca",
+    "website": "",
+    "note": "Plantilla basada en referencia de etiquetas horizontales 16.5 x 6.5 cm."
+  },
+  "canvas": {
+    "width": 3300,
+    "height": 1300,
+    "real_size_cm": { "width": 16.5, "height": 6.5 },
+    "safe_margin_px": 100
+  },
+  "palette": {
+    "cream": "#F6EFE3",
+    "paper": "#FFF8ED",
+    "white": "#FFFFFF",
+    "ink": "#161513",
+    "muted": "#675F55",
+    "line": "#D9CEC0",
+    "accent": "#173F2F"
+  },
+  "background": "cream",
+  "global_elements": [
+    { "type": "rect", "x": 60, "y": 60, "w": 3180, "h": 1180, "radius": 44, "fill": "none", "stroke": "line", "stroke_width": 4 },
+    { "type": "text", "content": "{brand}", "x": 110, "y": 95, "size": 42, "fill": "ink", "weight": "bold" }
+  ],
+  "documents": [
+    {
+      "id": "01_etiqueta_base_165x65",
+      "title": "Etiqueta base 16.5 x 6.5",
+      "elements": [
+        { "type": "text", "content": "NOMBRE PRODUCTO", "x": 110, "y": 260, "size": 118, "fill": "ink", "weight": "bold" },
+        { "type": "text", "content": "Subtítulo / descripción corta", "x": 120, "y": 430, "size": 52, "fill": "accent", "weight": "bold" },
+        { "type": "panel", "x": 120, "y": 570, "w": 1950, "h": 520, "radius": 36, "fill": "white", "stroke": "line", "stroke_width": 3, "opacity": 0.72 },
+        { "type": "paragraph", "content": "Descripción o información principal. Ajustar desde config.json.", "x": 180, "y": 640, "size": 38, "fill": "muted", "max_width": 1800, "line_height": 52 },
+        { "type": "panel", "x": 2220, "y": 570, "w": 860, "h": 520, "radius": 36, "fill": "white", "stroke": "line", "stroke_width": 3, "opacity": 0.72 },
+        { "type": "text", "content": "QR / LOTE", "x": 2380, "y": 750, "size": 58, "fill": "muted", "weight": "bold" }
+      ]
+    }
+  ]
+}

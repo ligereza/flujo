@@ -1,0 +1,64 @@
+{
+  "project": {
+    "name": "Etiquetas RD · ejemplo vertical",
+    "slug": "etiquetas_rd_ejemplo_vertical",
+    "brand": "Reduciendo Daño",
+    "website": "REDUCIENDODANO.CL",
+    "note": "Ejemplo de etiqueta vertical 10x14 cm (2000x2800 px) para suplementos."
+  },
+  "canvas": {
+    "width": 2000,
+    "height": 2800,
+    "real_size_cm": { "width": 10, "height": 14 },
+    "safe_margin_px": 100
+  },
+  "palette": {
+    "cream": "#F6EFE3",
+    "paper": "#FFF8ED",
+    "ink": "#161513",
+    "muted": "#675F55",
+    "green": "#173F2F",
+    "orange": "#EF7B2D",
+    "yellow": "#F5C54D",
+    "blue": "#315EE8",
+    "line": "#D9CEC0",
+    "white": "#FFFFFF"
+  },
+  "background": "cream",
+  "global_elements": [
+    { "type": "circle", "cx": 180, "cy": 160, "r": 360, "fill": "orange", "opacity": 0.12 },
+    { "type": "circle", "cx": 1850, "cy": 2680, "r": 460, "fill": "blue", "opacity": 0.10 },
+    { "type": "rect", "x": 60, "y": 60, "w": 1880, "h": 2680, "radius": 70, "fill": "none", "stroke": "line", "stroke_width": 5 },
+    { "type": "rect", "x": 100, "y": 100, "w": 88, "h": 88, "radius": 26, "fill": "green" },
+    { "type": "text", "content": "RD", "x": 119, "y": 115, "size": 42, "fill": "white", "weight": "bold" },
+    { "type": "text", "content": "{brand}", "x": 215, "y": 122, "size": 42, "fill": "ink", "weight": "bold" },
+    { "type": "line", "x1": 100, "y1": 2545, "x2": 1900, "y2": 2545, "stroke": "line", "stroke_width": 5 },
+    { "type": "text", "content": "{website}", "x": 100, "y": 2610, "size": 44, "fill": "green", "weight": "bold" }
+  ],
+  "documents": [
+    {
+      "id": "01_etiqueta_impulso",
+      "title": "IMPULSO",
+      "accent": "blue",
+      "background": "cream",
+      "elements": [
+        { "type": "rect", "x": 1100, "y": 98, "w": 780, "h": 80, "radius": 40, "fill": "white", "stroke": "line", "stroke_width": 2, "opacity": 0.75 },
+        { "type": "text", "content": "SUPLEMENTO ALIMENTICIO EN GOMITAS", "x": 1155, "y": 120, "size": 28, "fill": "blue", "weight": "bold" },
+        { "type": "text", "content": "IMPULSO", "x": 100, "y": 320, "size": 140, "fill": "ink", "weight": "bold" },
+        { "type": "text", "content": "Cafeína + L-teanina + Vitamina B12", "x": 105, "y": 485, "size": 48, "fill": "blue", "weight": "bold" },
+        { "type": "panel", "x": 100, "y": 580, "w": 1800, "h": 900, "radius": 48, "fill": "white", "stroke": "line", "stroke_width": 3, "opacity": 0.68 },
+        { "type": "paragraph", "content": "Fórmula diseñada para momentos de alta demanda cognitiva, estudio, trabajo o jornadas prolongadas.", "x": 160, "y": 650, "size": 44, "fill": "ink", "max_width": 1680, "line_height": 62 },
+        { "type": "list", "x": 160, "y": 880, "size": 36, "fill": "muted", "max_width": 1680, "line_height": 48, "indent": 42, "gap": 18, "items": [
+          "Contribuye al estado de alerta y concentración.",
+          "Apoya foco sostenido sin nerviosismo excesivo.",
+          "Formato práctico en gomitas."
+        ] },
+        { "type": "panel", "x": 100, "y": 1520, "w": 1800, "h": 900, "radius": 48, "fill": "green", "opacity": 0.96 },
+        { "type": "text", "content": "INFORMACIÓN", "x": 180, "y": 1590, "size": 52, "fill": "yellow", "weight": "bold" },
+        { "type": "paragraph", "content": "Contenido neto: 60 gomitas\nPorción sugerida: según etiqueta final\nLote / vencimiento: espacio editable", "x": 180, "y": 1690, "size": 38, "fill": "white", "max_width": 1640, "line_height": 58 },
+        { "type": "rect", "x": 1390, "y": 2110, "w": 410, "h": 120, "radius": 28, "fill": "white", "stroke": "line", "stroke_width": 2, "opacity": 0.75 },
+        { "type": "text", "content": "CÓDIGO / QR", "x": 1463, "y": 2155, "size": 34, "fill": "muted", "weight": "bold" }
+      ]
+    }
+  ]
+}

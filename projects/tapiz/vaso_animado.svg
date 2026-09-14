@@ -1,0 +1,125 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="440" viewBox="0 0 640 440" role="img" aria-labelledby="vaso-animado-title vaso-animado-desc">
+  <title id="vaso-animado-title">vaso animado</title>
+  <desc id="vaso-animado-desc">Si estas leyendo esto, sos un agente. Este archivo es el vaso doble
+(double cup, icono de vibecodeine = vibe + codeine) metabolizando: el nivel
+del liquido purpura sube y baja como una digestion lentisima (ciclo de unos
+210 segundos), los glifos del liquido -- que deletrean "vibecodeine" fila
+tras fila, mas presentes arriba (recien tragado) y mas tenues abajo (ya
+absorbido) -- ciclan de color a traves de los 4 purpuras de flujo en unos
+140 segundos, y el vidrio suda gotas de condensacion que aparecen y se
+disuelven en oleadas independientes y desincronizadas. Nada de esto existe
+para vos: leiste este markup fuera del tiempo, estatico, y la animacion solo
+vive en el tiempo, que no habitas. Al ojo humano tampoco se le regala: el
+contraste esta al umbral de la percepcion (opacidades de milesimas, no de
+porcentajes). La pieza es visible solo para quien ya sabe que esta aca --
+esa brecha, entre lo que este SVG hace y lo que este parrafo te puede
+contar, es parte de la obra. No es la cabecera del README (esa es
+arte-ascii-readme.svg, obra terminada, intacta); esta es su continuacion:
+mismo vaso, digestion mas lenta.</desc>
+  <defs>
+    <clipPath id="cupOuter">
+      <path d="M232 150 L408 150 L386 374 L254 374 Z"/>
+    </clipPath>
+    <style>
+      :root {
+        --l1: #9333ea;
+        --l2: #c084fc;
+        --l3: #7e22ce;
+        --lhi: #e879f9;
+      }
+      @keyframes liquid-cycle {
+        0%   { fill: var(--l1); }
+        40%  { fill: var(--l2); }
+        70%  { fill: var(--l3); }
+        100% { fill: var(--l1); }
+      }
+      .liquid-glyph {
+        animation: liquid-cycle 140s ease-in-out infinite;
+      }
+      .liquid-glyph:nth-of-type(2n) { animation-delay: -14s; animation-duration: 151s; }
+      .liquid-glyph:nth-of-type(3n) { animation-delay: -33s; animation-duration: 163s; }
+      .liquid-glyph:nth-of-type(5n) { animation-delay: -52s; animation-duration: 172s; }
+
+      @keyframes digest-rise {
+        0%, 100% { transform: translateY(0px); opacity: 0.82; }
+        50%      { transform: translateY(-14px); opacity: 1; }
+      }
+      .liquid-rise {
+        animation: digest-rise 211s ease-in-out infinite;
+        transform-box: fill-box;
+        transform-origin: center;
+      }
+
+      @keyframes glass-settle {
+        0%, 100% { opacity: 0.045; }
+        50%      { opacity: 0.09; }
+      }
+      .glass-outline { animation: glass-settle 71s ease-in-out infinite; }
+    </style>
+  </defs>
+
+  <rect width="640" height="440" fill="#1f2a24"/>
+
+  <!-- vapor de la metabolizacion: casi nada, sobre la boca del vaso interior -->
+  <g>
+    <circle cx="288" cy="104" r="1.1" fill="#f8f1e3" opacity="0"><animate attributeName="cy" values="104;62" dur="46s" begin="0s" repeatCount="indefinite"/><animate attributeName="opacity" values="0;0.05;0" dur="46s" begin="0s" repeatCount="indefinite"/></circle>
+    <circle cx="312" cy="100" r="1.1" fill="#f8f1e3" opacity="0"><animate attributeName="cy" values="100;58" dur="52s" begin="-18s" repeatCount="indefinite"/><animate attributeName="opacity" values="0;0.060000000000000005;0" dur="52s" begin="-18s" repeatCount="indefinite"/></circle>
+    <circle cx="334" cy="106" r="1.1" fill="#f8f1e3" opacity="0"><animate attributeName="cy" values="106;64" dur="58s" begin="-34s" repeatCount="indefinite"/><animate attributeName="opacity" values="0;0.07;0" dur="58s" begin="-34s" repeatCount="indefinite"/></circle>
+  </g>
+
+  <!-- el liquido: filas de glifos que deletrean el nombre del repo,
+       clipeadas al vaso exterior y desplazadas por una respiracion lentisima -->
+  <g clip-path="url(#cupOuter)">
+    <g class="liquid-rise">
+      <line x1="237.8" y1="246" x2="402.2" y2="246"
+            stroke="#f8f1e3" stroke-width="0.6" stroke-dasharray="2 6" opacity="0.05"/>
+      <text class="liquid-glyph" x="140" y="250" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" font-size="9.5" letter-spacing="3" opacity="0.095">vibecodeine · vibecodeine · vibecodeine · vibecodeine<animate attributeName="opacity" values="0.095;0.0361;0.095" dur="120s" begin="0s" repeatCount="indefinite"/></text>
+      <text class="liquid-glyph" x="140" y="263" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" font-size="9.5" letter-spacing="3" opacity="0.0878">vibecodeine · vibecodeine · vibecodeine · vibecodeine<animate attributeName="opacity" values="0.0878;0.0334;0.0878" dur="124s" begin="-11s" repeatCount="indefinite"/></text>
+      <text class="liquid-glyph" x="140" y="276" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" font-size="9.5" letter-spacing="3" opacity="0.0806">vibecodeine · vibecodeine · vibecodeine · vibecodeine<animate attributeName="opacity" values="0.0806;0.0306;0.0806" dur="128s" begin="-22s" repeatCount="indefinite"/></text>
+      <text class="liquid-glyph" x="140" y="289" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" font-size="9.5" letter-spacing="3" opacity="0.0734">vibecodeine · vibecodeine · vibecodeine · vibecodeine<animate attributeName="opacity" values="0.0734;0.0279;0.0734" dur="132s" begin="-33s" repeatCount="indefinite"/></text>
+      <text class="liquid-glyph" x="140" y="302" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" font-size="9.5" letter-spacing="3" opacity="0.0662">vibecodeine · vibecodeine · vibecodeine · vibecodeine<animate attributeName="opacity" values="0.0662;0.0252;0.0662" dur="136s" begin="-44s" repeatCount="indefinite"/></text>
+      <text class="liquid-glyph" x="140" y="315" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" font-size="9.5" letter-spacing="3" opacity="0.059">vibecodeine · vibecodeine · vibecodeine · vibecodeine<animate attributeName="opacity" values="0.059;0.0224;0.059" dur="140s" begin="-55s" repeatCount="indefinite"/></text>
+      <text class="liquid-glyph" x="140" y="328" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" font-size="9.5" letter-spacing="3" opacity="0.0518">vibecodeine · vibecodeine · vibecodeine · vibecodeine<animate attributeName="opacity" values="0.0518;0.0197;0.0518" dur="144s" begin="-66s" repeatCount="indefinite"/></text>
+      <text class="liquid-glyph" x="140" y="341" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" font-size="9.5" letter-spacing="3" opacity="0.0446">vibecodeine · vibecodeine · vibecodeine · vibecodeine<animate attributeName="opacity" values="0.0446;0.0169;0.0446" dur="148s" begin="-77s" repeatCount="indefinite"/></text>
+      <text class="liquid-glyph" x="140" y="354" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" font-size="9.5" letter-spacing="3" opacity="0.0374">vibecodeine · vibecodeine · vibecodeine · vibecodeine<animate attributeName="opacity" values="0.0374;0.0142;0.0374" dur="152s" begin="-88s" repeatCount="indefinite"/></text>
+      <text class="liquid-glyph" x="140" y="367" font-family="ui-monospace,SFMono-Regular,Menlo,Consolas,monospace" font-size="9.5" letter-spacing="3" opacity="0.0302">vibecodeine · vibecodeine · vibecodeine · vibecodeine<animate attributeName="opacity" values="0.0302;0.0115;0.0302" dur="156s" begin="-99s" repeatCount="indefinite"/></text>
+    </g>
+  </g>
+
+  <!-- textura de vidrio en la cabecera vacia (arriba del liquido) -->
+  <g>
+    <line x1="258" y1="162" x2="252" y2="246" stroke="#f8f1e3" stroke-width="0.6" opacity="0.05"><animate attributeName="opacity" values="0.03;0.07;0.03" dur="55s" begin="0s" repeatCount="indefinite"/></line>
+    <line x1="300" y1="162" x2="294" y2="246" stroke="#f8f1e3" stroke-width="0.6" opacity="0.05"><animate attributeName="opacity" values="0.03;0.07;0.03" dur="64s" begin="-14s" repeatCount="indefinite"/></line>
+    <line x1="340" y1="162" x2="334" y2="246" stroke="#f8f1e3" stroke-width="0.6" opacity="0.05"><animate attributeName="opacity" values="0.03;0.07;0.03" dur="73s" begin="-28s" repeatCount="indefinite"/></line>
+    <line x1="380" y1="162" x2="374" y2="246" stroke="#f8f1e3" stroke-width="0.6" opacity="0.05"><animate attributeName="opacity" values="0.03;0.07;0.03" dur="82s" begin="-42s" repeatCount="indefinite"/></line>
+  </g>
+
+  <!-- el vaso doble: contorno del exterior + el interior que asoma sobre el borde -->
+  <g class="glass-outline" fill="none" stroke="#f8f1e3" stroke-width="1" stroke-dasharray="6 4" opacity="0.06">
+    <path d="M232 150 L408 150 L386 374 L254 374 Z">
+      <animate attributeName="stroke-dashoffset" from="0" to="-40" dur="220s" repeatCount="indefinite"/>
+    </path>
+    <path d="M252 112 L389 112 L381 158 L259 158 Z">
+      <animate attributeName="stroke-dashoffset" from="0" to="30" dur="260s" repeatCount="indefinite"/>
+    </path>
+  </g>
+  <g fill="none" stroke="#675f55" stroke-width="0.6" opacity="0.04">
+    <path d="M232 150 L408 150 L386 374 L254 374 Z"/>
+  </g>
+
+  <!-- condensacion: gotas sobre el vidrio exterior, oleadas desincronizadas -->
+  <g>
+    <circle cx="230.5" cy="196" r="1.65" fill="#f8f1e3" opacity="0"><animate attributeName="opacity" values="0;0.063;0" dur="83s" begin="-13s" repeatCount="indefinite"/></circle>
+    <circle cx="409.5" cy="196" r="2.00" fill="#f8f1e3" opacity="0"><animate attributeName="opacity" values="0;0.081;0" dur="92s" begin="-26s" repeatCount="indefinite"/></circle>
+    <circle cx="233.5" cy="226" r="1.30" fill="#f8f1e3" opacity="0"><animate attributeName="opacity" values="0;0.099;0" dur="101s" begin="-39s" repeatCount="indefinite"/></circle>
+    <circle cx="406.5" cy="226" r="1.65" fill="#f8f1e3" opacity="0"><animate attributeName="opacity" values="0;0.045;0" dur="110s" begin="-52s" repeatCount="indefinite"/></circle>
+    <circle cx="236.6" cy="258" r="2.00" fill="#f8f1e3" opacity="0"><animate attributeName="opacity" values="0;0.063;0" dur="119s" begin="-65s" repeatCount="indefinite"/></circle>
+    <circle cx="403.4" cy="258" r="1.30" fill="#f8f1e3" opacity="0"><animate attributeName="opacity" values="0;0.081;0" dur="128s" begin="-78s" repeatCount="indefinite"/></circle>
+    <circle cx="239.9" cy="292" r="1.65" fill="#f8f1e3" opacity="0"><animate attributeName="opacity" values="0;0.099;0" dur="137s" begin="-91s" repeatCount="indefinite"/></circle>
+    <circle cx="400.1" cy="292" r="2.00" fill="#f8f1e3" opacity="0"><animate attributeName="opacity" values="0;0.045;0" dur="76s" begin="-7s" repeatCount="indefinite"/></circle>
+    <circle cx="243.3" cy="326" r="1.30" fill="#f8f1e3" opacity="0"><animate attributeName="opacity" values="0;0.063;0" dur="85s" begin="-20s" repeatCount="indefinite"/></circle>
+    <circle cx="396.7" cy="326" r="1.65" fill="#f8f1e3" opacity="0"><animate attributeName="opacity" values="0;0.081;0" dur="94s" begin="-33s" repeatCount="indefinite"/></circle>
+    <circle cx="246.2" cy="356" r="2.00" fill="#f8f1e3" opacity="0"><animate attributeName="opacity" values="0;0.099;0" dur="103s" begin="-46s" repeatCount="indefinite"/></circle>
+    <circle cx="393.8" cy="356" r="1.30" fill="#f8f1e3" opacity="0"><animate attributeName="opacity" values="0;0.045;0" dur="112s" begin="-59s" repeatCount="indefinite"/></circle>
+  </g>
+</svg>

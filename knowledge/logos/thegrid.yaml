@@ -1,0 +1,11 @@
+id: thegrid_primary
+producer_id: thegrid
+status: done
+source_quality: sitio_oficial
+workflow:
+  suggested_tool: logo_clean_lab
+  next_action: ninguna (completo; fuente ya era SVG vectorial)
+outputs:
+  raster: knowledge/logos/vector/grid_system.svg
+  raster_source: knowledge/logos/descargas/grid_system.txt
+  vector: knowledge/logos/vector/grid_system.svg

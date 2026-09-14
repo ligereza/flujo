@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" data-name="424488499f19-17852234998587048">
+<style>
+.c0{animation:k_latir 2.2s ease-in-out infinite}
+@keyframes k_latir{0%,100%{transform:scale(1)}50%{transform:scale(1.09)}}
+</style>
+<rect width="120" height="120" fill="#0d0d18"/>
+<g id="capa-0-protagonista" transform="translate(60,56)" data-rol="protagonista" data-gesto="latir" data-ritmo="2.2s" data-figura="horizonte"><title>protagonista - horizonte</title><g class="c0"><g transform="scale(30)"><path d="M-1,.9 C-.6,.35 -.3,.62 0,.42 C.35,.2 .65,.55 1,.32 V1 H-1 Z" fill="#f2f2f5"/><path d="M-1,1 H1" stroke="#ff3b30" stroke-width=".06"/></g></g></g>
+<g id="capa-1-satelite_4" transform="translate(96,86)" data-rol="satelite_4" data-gesto="quieto" data-ritmo="4s" data-figura="disco"><title>satelite_4 - disco</title><g class="c1"><g transform="scale(13)"><circle r=".82" fill="#f2f2f5"/></g></g></g>
+</svg>

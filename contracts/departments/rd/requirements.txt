@@ -1,0 +1,5 @@
+# Install from the repository root.
+-r ../../../requirements.txt
+
+# RD-specific runtime dependencies are intentionally inherited from the
+# canonical root manifest; do not create a second unconstrained stack.

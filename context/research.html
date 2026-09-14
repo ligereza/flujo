@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>MAK Research</title>
+  <style>
+    :root { color-scheme: dark; --bg:#0d1117; --panel:#151c24; --line:#293542; --text:#e7edf3; --muted:#9baaba; --accent:#7ee787; --blue:#79c0ff; }
+    * { box-sizing:border-box; } body { margin:0; font:15px/1.5 system-ui,sans-serif; background:var(--bg); color:var(--text); }
+    main { max-width:1100px; margin:0 auto; padding:28px 18px 60px; } h1 { margin:0 0 4px; } h2 { margin-top:28px; } p { color:var(--muted); }
+    .bar,.panel,.card { background:var(--panel); border:1px solid var(--line); border-radius:12px; padding:16px; }
+    .bar { display:flex; gap:10px; align-items:center; justify-content:space-between; margin:18px 0; } .status { color:var(--accent); }
+    form { display:grid; grid-template-columns:1fr 180px auto; gap:10px; } input,select,button { border:1px solid var(--line); border-radius:8px; padding:11px; background:#0b1016; color:var(--text); } button { background:#1f6f4a; cursor:pointer; } button:hover { filter:brightness(1.15); }
+    .grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:12px; } .card h3 { margin:0 0 5px; color:var(--blue); } .tag { display:inline-block; color:var(--accent); font-family:monospace; margin:3px 5px 3px 0; }
+    .job { border-top:1px solid var(--line); padding:14px 0; } .job:first-child { border-top:0; } .job strong { color:var(--text); } .meta { color:var(--muted); font-size:13px; } .error { color:#ff7b72; } .empty { color:var(--muted); padding:15px 0; }
+    @media (max-width:700px) { form { grid-template-columns:1fr; } .bar { align-items:flex-start; flex-direction:column; } }
+  </style>
+</head>
+<body>
+<main>
+  <h1>MAK Research</h1>
+  <p>Una entrada persistente para ideas de plantas, VJ, curatoria, RD y portafolio. Todos los jobs usan la misma ruta semántica y el adaptador decide el dominio.</p>
+  <div class="bar"><span>Interfaz integrada en MAK</span><span id="status" class="status">cargando...</span></div>
+  <section class="panel">
+    <h2>Crear research job</h2>
+    <form id="job-form">
+      <input id="question" required maxlength="2000" placeholder="Ej.: investigar manuales de cultivo para una obra 3D">
+      <select id="domain"><option value="">Detectar dominio</option><option value="plants">Plantas</option><option value="vj">VJ</option><option value="curatoria">Curatoria</option><option value="rd">RD</option><option value="portfolio">Portafolio</option><option value="general">General</option></select>
+      <button type="submit">Registrar idea</button>
+    </form>
+    <p id="message"></p>
+  </section>
+  <h2>Adaptadores de dominio</h2><section id="adapters" class="grid"></section>
+  <h2>Jobs persistentes</h2><section id="jobs" class="panel"></section>
+</main>
+<script>
+  const esc = (value) => String(value ?? '').replace(/[&<>"']/g, (char) => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
+  const status = document.getElementById('status');
+  async function getJson(path, options) { const response = await fetch(path, options); const data = await response.json(); if (!response.ok) throw new Error(data.error || `HTTP ${response.status}`); return data; }
+  function drawAdapters(data) { const target = document.getElementById('adapters'); target.innerHTML = (data.adapters || []).map((item) => `<article class="card"><h3>${esc(item.label)}</h3><p>${esc(item.description)}</p><span class="tag">${esc(item.slug)}</span><span class="meta">${item.jobs} jobs</span><p class="meta">Fuentes: ${esc(item.source_policy)}</p></article>`).join('') || '<div class="empty">Aun no hay adaptadores.</div>'; }
+  function drawJobs(data) { const target = document.getElementById('jobs'); target.innerHTML = (data.jobs || []).map((item) => `<article class="job"><strong>#${item.id} · ${esc(item.question)}</strong><div class="meta">${esc(item.adapter)} · ${esc(item.status)} · siguiente: ${esc(item.next_process)} · ${item.done_steps}/${item.steps} pasos</div></article>`).join('') || '<div class="empty">Aun no hay jobs.</div>'; }
+  async function refresh() { try { const [catalog, jobs] = await Promise.all([getJson('/api/research/catalog'), getJson('/api/research/jobs')]); drawAdapters(catalog); drawJobs(jobs); status.textContent = `${jobs.count || 0} jobs · registro activo`; } catch (error) { status.textContent = 'error'; status.className = 'error'; document.getElementById('jobs').innerHTML = `<div class="error">${esc(error.message)}</div>`; } }
+  document.getElementById('job-form').addEventListener('submit', async (event) => { event.preventDefault(); const message = document.getElementById('message'); message.textContent = 'guardando...'; try { const data = await getJson('/api/research/jobs', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({question:document.getElementById('question').value, domain:document.getElementById('domain').value}) }); message.textContent = `Job #${data.id} registrado en ${data.domain}. No se hicieron llamadas externas.`; document.getElementById('question').value = ''; await refresh(); } catch (error) { message.textContent = error.message; message.className = 'error'; } });
+  refresh();
+</script>
+</body>
+</html>

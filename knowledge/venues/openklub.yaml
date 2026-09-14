@@ -1,0 +1,13 @@
+id: openklub
+name: OpenKlub
+type: club
+scale_default: base
+capacity_bucket: unknown
+recommended_preset: base
+status: specs_needed
+source: inferido del nombre de archivo C:/RD FEBRERO/OPENKLUB.png (2026-07-17)
+notes:
+  - Nombre "klub" -> venue/club. Puede ser tambien marca-productora (confirmar).
+  - FALTAN specs reales: aforo, m2, requisitos, preset confirmado.
+  - Completar con datos del usuario o de un rider real antes de usar como fuente.
+requirements_defaults: {}

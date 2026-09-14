@@ -1,0 +1,122 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 676 904" width="100%" height="100%" role="img" aria-labelledby="title desc">
+  <title id="title">VIBECODEINE double cup, ASCII silhouette and spill loop</title>
+  <desc id="desc">A double cup is woven from README glyphs. Density, colour and ASCII symbols distinguish the mouth, upper band, seam, lower band and tapered body. The vector lines only clarify the structure; they do not replace the text material. The 24 second cycle returns to its exact first state.</desc>
+  <defs>
+    <linearGradient id="liquid-gradient" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f5d0fe"/>
+      <stop offset=".42" stop-color="#d946ef"/>
+      <stop offset="1" stop-color="#7e22ce"/>
+    </linearGradient>
+    <radialGradient id="ground-glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#c026d3" stop-opacity=".52"/>
+      <stop offset="1" stop-color="#08070a" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="soft-glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="7"/>
+    </filter>
+  </defs>
+  <style>
+    :root { --canvas:#08070a; --ink:#f8fafc; --purple:#c026d3; --violet:#7e22ce; }
+    .canvas { fill:var(--canvas); }
+    .ground { fill:url(#ground-glow); filter:url(#soft-glow); }
+    .ascii-vessel { transform-box:fill-box; transform-origin:center; }
+    .ascii-vessel text { font-family:ui-monospace, SFMono-Regular, Consolas, monospace; font-size:12px; letter-spacing:.6px; font-weight:500; white-space:pre; }
+    .glass { fill:#f5f3ff; opacity:.92; }
+    .upper-band { fill:#ddd6fe; opacity:.9; }
+    .lower-band { fill:#c4b5fd; opacity:.86; }
+    .seam { fill:#160b1c; opacity:1; }
+    .body { fill:#c084fc; opacity:.82; }
+    .foot { fill:#a855f7; opacity:.72; }
+    .liquid { fill:url(#liquid-gradient); opacity:1; }
+    .structure { fill:none; stroke:#f8fafc; stroke-opacity:.7; stroke-width:4; stroke-linejoin:round; }
+    .structure-soft { fill:none; stroke:#d8b4fe; stroke-opacity:.44; stroke-width:3; }
+    .spill { fill:none; stroke:url(#liquid-gradient); stroke-width:18; stroke-linecap:round; stroke-linejoin:round; }
+    .droplet { fill:#d946ef; }
+    .readme-title { fill:#f5d0fe; font-family:ui-monospace, SFMono-Regular, Consolas, monospace; font-size:10px; letter-spacing:1px; opacity:.86; }
+    @media (prefers-reduced-motion:reduce) {
+      .ascii-vessel, .ascii-vessel *, .ground, .spill, .droplet { animation:none !important; }
+    }
+  </style>
+  <rect class="canvas" width="676" height="904"/>
+  <ellipse class="ground" cx="338" cy="758" rx="190" ry="24">
+    <animate attributeName="rx" dur="24s" repeatCount="indefinite" values="190;184;160;132;160;184;190" keyTimes="0;.16;.33;.5;.67;.84;1"/>
+    <animate attributeName="opacity" dur="24s" repeatCount="indefinite" values=".72;.64;.48;.24;.48;.64;.72" keyTimes="0;.16;.33;.5;.67;.84;1"/>
+  </ellipse>
+  <g class="ascii-vessel">
+    <animateTransform attributeName="transform" type="rotate" additive="sum" dur="24s" repeatCount="indefinite" values="0 338 450;-2 338 450;-7 338 450;-14 338 450;-7 338 450;-2 338 450;0 338 450" keyTimes="0;.16;.33;.5;.67;.84;1" calcMode="spline" keySplines=".42 0 .58 1;.42 0 .58 1;.42 0 .58 1;.42 0 .58 1;.42 0 .58 1;.42 0 .58 1"/>
+    <animateTransform attributeName="transform" type="translate" additive="sum" dur="24s" repeatCount="indefinite" values="0 0;5 0;14 2;28 8;14 2;5 0;0 0" keyTimes="0;.16;.33;.5;.67;.84;1" calcMode="spline" keySplines=".42 0 .58 1;.42 0 .58 1;.42 0 .58 1;.42 0 .58 1;.42 0 .58 1;.42 0 .58 1"/>
+    <text x="105" y="180" xml:space="preserve">        <tspan x="105" dy="0">                <tspan class="glass">·░▒▓·░▒▓·░▒▓·░▒▓·░▒▓·░▒▓·░</tspan></tspan>
+        <tspan x="105" dy="12">          <tspan class="glass">░▒▓·░▒▓·░▒▓·░▒▓·░▒▓·░▒▓·░▒▓·░▒▓·░▒▓·░▒</tspan></tspan>
+        <tspan x="105" dy="12">      <tspan class="glass">▒▓·░▒▓·░▒▓·░▒▓·░▒▓·░▒▓·░▒▓·░▒▓·░▒▓·░▒▓·░▒▓·░▒▓</tspan></tspan>
+        <tspan x="105" dy="12">      <tspan class="glass">▓·░▒</tspan><tspan class="liquid">*~^o*~^o*~^o*~^o*~^o*~^o*~^o*~^o*~^o*~</tspan><tspan class="glass">▓·░▒</tspan></tspan>
+        <tspan x="105" dy="12">     <tspan class="glass">·░▒</tspan><tspan class="liquid">~^o*~^o*~^o*~^o*~^o*~^o*~^o*~^o*~^o*~^o*~^</tspan><tspan class="glass">·░▒</tspan></tspan>
+        <tspan x="105" dy="12">      <tspan class="glass">░▒▓·</tspan><tspan class="liquid">^o*~^o*~^o*~^o*~^o*~^o*~^o*~^o*~^o*~^o</tspan><tspan class="glass">░▒▓·</tspan></tspan>
+        <tspan x="105" dy="12">     <tspan class="upper-band">▓█░▒▓█░▒▓█░▒▓█░▒▓█░▒▓█░▒▓█░▒▓█░▒▓█░▒▓█░▒▓█░▒▓█░▒</tspan></tspan>
+        <tspan x="105" dy="12">     <tspan class="upper-band">█░▒▓█░▒▓█░▒▓█░▒▓█░▒▓█░▒▓█░▒▓█░▒▓█░▒▓█░▒▓█░▒▓█░▒▓</tspan></tspan>
+        <tspan x="105" dy="12">     <tspan class="upper-band">░▒▓█░▒▓█░▒▓█░▒▓█░▒▓█░▒▓█░▒▓█░▒▓█░▒▓█░▒▓█░▒▓█░▒▓█</tspan></tspan>
+        <tspan x="105" dy="12">     <tspan class="upper-band">▒▓█░▒▓█░▒▓█░▒▓█░▒▓█░▒▓█░▒▓█░▒▓█░▒▓█░▒▓█░▒▓█░▒▓█░</tspan></tspan>
+        <tspan x="105" dy="12">      <tspan class="upper-band">▓█░▒▓█░▒▓█░▒▓█░▒▓█░▒▓█░▒▓█░▒▓█░▒▓█░▒▓█░▒▓█░▒▓█</tspan></tspan>
+        <tspan x="105" dy="12">       <tspan class="seam">════════════════════════════════════════════</tspan></tspan>
+        <tspan x="105" dy="12">       <tspan class="seam">════════════════════════════════════════════</tspan></tspan>
+        <tspan x="105" dy="12">      <tspan class="lower-band">▓░▒▓░▒▓░▒▓░▒▓░▒▓░▒▓░▒▓░▒▓░▒▓░▒▓░▒▓░▒▓░▒▓░▒▓░▒▓</tspan></tspan>
+        <tspan x="105" dy="12">      <tspan class="lower-band">░▒▓░▒▓░▒▓░▒▓░▒▓░▒▓░▒▓░▒▓░▒▓░▒▓░▒▓░▒▓░▒▓░▒▓░▒▓░</tspan></tspan>
+        <tspan x="105" dy="12">      <tspan class="lower-band">▒▓░▒▓░▒▓░▒▓░▒▓░▒▓░▒▓░▒▓░▒▓░▒▓░▒▓░▒▓░▒▓░▒▓░▒▓░▒</tspan></tspan>
+        <tspan x="105" dy="12">      <tspan class="lower-band">▓░▒▓░▒▓░▒▓░▒▓░▒▓░▒▓░▒▓░▒▓░▒▓░▒▓░▒▓░▒▓░▒▓░▒▓░▒▓</tspan></tspan>
+        <tspan x="105" dy="12">       <tspan class="lower-band">░▒▓░▒▓░▒▓░▒▓░▒▓░▒▓░▒▓░▒▓░▒▓░▒▓░▒▓░▒▓░▒▓░▒▓░▒</tspan></tspan>
+        <tspan x="105" dy="12">       <tspan class="lower-band">▒▓░▒▓░▒▓░▒▓░▒▓░▒▓░▒▓░▒▓░▒▓░▒▓░▒▓░▒▓░▒▓░▒▓░▒▓</tspan></tspan>
+        <tspan x="105" dy="12">        <tspan class="body">ENSIONSOFORDERMAINMAKRDISKVWWORKIDPARENTTA</tspan></tspan>
+        <tspan x="105" dy="12">        <tspan class="body">NSIONSOFORDERMAINMAKRDISKVWWORKIDPARENTTAS</tspan></tspan>
+        <tspan x="105" dy="12">        <tspan class="body">SIONSOFORDERMAINMAKRDISKVWWORKIDPARENTTAS</tspan></tspan>
+        <tspan x="105" dy="12">        <tspan class="body">IONSOFORDERMAINMAKRDISKVWWORKIDPARENTTASK</tspan></tspan>
+        <tspan x="105" dy="12">         <tspan class="body">ONSOFORDERMAINMAKRDISKVWWORKIDPARENTTASK</tspan></tspan>
+        <tspan x="105" dy="12">         <tspan class="body">NSOFORDERMAINMAKRDISKVWWORKIDPARENTTASKL</tspan></tspan>
+        <tspan x="105" dy="12">         <tspan class="body">SOFORDERMAINMAKRDISKVWWORKIDPARENTTASKL</tspan></tspan>
+        <tspan x="105" dy="12">         <tspan class="body">OFORDERMAINMAKRDISKVWWORKIDPARENTTASKLA</tspan></tspan>
+        <tspan x="105" dy="12">          <tspan class="body">FORDERMAINMAKRDISKVWWORKIDPARENTTASKLA</tspan></tspan>
+        <tspan x="105" dy="12">          <tspan class="body">ORDERMAINMAKRDISKVWWORKIDPARENTTASKLAN</tspan></tspan>
+        <tspan x="105" dy="12">          <tspan class="body">RDERMAINMAKRDISKVWWORKIDPARENTTASKLAN</tspan></tspan>
+        <tspan x="105" dy="12">          <tspan class="body">DERMAINMAKRDISKVWWORKIDPARENTTASKLANE</tspan></tspan>
+        <tspan x="105" dy="12">           <tspan class="body">ERMAINMAKRDISKVWWORKIDPARENTTASKLANE</tspan></tspan>
+        <tspan x="105" dy="12">           <tspan class="body">RMAINMAKRDISKVWWORKIDPARENTTASKLANEP</tspan></tspan>
+        <tspan x="105" dy="12">           <tspan class="body">MAINMAKRDISKVWWORKIDPARENTTASKLANEP</tspan></tspan>
+        <tspan x="105" dy="12">           <tspan class="body">AINMAKRDISKVWWORKIDPARENTTASKLANEPU</tspan></tspan>
+        <tspan x="105" dy="12">            <tspan class="body">INMAKRDISKVWWORKIDPARENTTASKLANEPU</tspan></tspan>
+        <tspan x="105" dy="12">            <tspan class="body">NMAKRDISKVWWORKIDPARENTTASKLANEPUR</tspan></tspan>
+        <tspan x="105" dy="12">            <tspan class="body">MAKRDISKVWWORKIDPARENTTASKLANEPUR</tspan></tspan>
+        <tspan x="105" dy="12">            <tspan class="body">AKRDISKVWWORKIDPARENTTASKLANEPURP</tspan></tspan>
+        <tspan x="105" dy="12">             <tspan class="body">KRDISKVWWORKIDPARENTTASKLANEPURP</tspan></tspan>
+        <tspan x="105" dy="12">             <tspan class="body">RDISKVWWORKIDPARENTTASKLANEPURPO</tspan></tspan>
+        <tspan x="105" dy="12">             <tspan class="body">DISKVWWORKIDPARENTTASKLANEPURPO</tspan></tspan>
+        <tspan x="105" dy="12">             <tspan class="body">ISKVWWORKIDPARENTTASKLANEPURPOS</tspan></tspan>
+        <tspan x="105" dy="12">              <tspan class="body">SKVWWORKIDPARENTTASKLANEPURPOS</tspan></tspan>
+        <tspan x="105" dy="12">              <tspan class="body">KVWWORKIDPARENTTASKLANEPURPOSE</tspan></tspan>
+        <tspan x="105" dy="12">              <tspan class="body">VWWORKIDPARENTTASKLANEPURPOSE</tspan></tspan>
+        <tspan x="105" dy="12">              <tspan class="body">WWORKIDPARENTTASKLANEPURPOSEF</tspan></tspan>
+        <tspan x="105" dy="12">               <tspan class="body">WORKIDPARENTTASKLANEPURPOSEF</tspan></tspan>
+        <tspan x="105" dy="12">               <tspan class="body">ORKIDPARENTTASKLANEPURPOSEFO</tspan></tspan>
+        <tspan x="105" dy="12">              <tspan class="foot">VIBECODEINEFLUJODIMENSIONSOFOR</tspan></tspan>
+        <tspan x="105" dy="12">             <tspan class="foot">DERMAINMAKRDISKVWWORKIDPARENTTAS</tspan></tspan>
+        <tspan x="105" dy="12">            <tspan class="foot">KLANEPURPOSEFORMATPROVIDERSOURCESE</tspan></tspan>
+        <tspan x="105" dy="12">           <tspan class="foot">VIDENCESTATUSNEXTACTIONOWNERMAKRESEA</tspan></tspan></text>
+    <path class="structure" d="M204 214 C232 177 444 177 472 214 C444 251 232 251 204 214 Z"/>
+    <path class="structure-soft" d="M193 254 C232 271 444 271 483 254 L480 313 C438 333 238 333 196 313 Z"/>
+    <path class="structure" d="M193 320 C234 340 442 340 483 320 L478 389 C431 409 245 409 198 389 Z"/>
+    <path class="structure-soft" d="M198 389 C228 402 448 402 478 389 L450 704 C427 723 249 723 226 704 Z"/>
+    <path class="spill" d="M466 224 C468 246 470 270 472 294 C474 318 476 337 478 356">
+      <animate attributeName="d" dur="24s" repeatCount="indefinite" values="M466 224 C468 226 470 228 472 230 C474 232 476 234 478 236;M466 224 C468 236 470 248 472 260 C474 272 476 282 478 292;M466 224 C468 246 470 270 472 294 C474 318 476 337 478 356;M466 224 C468 258 470 292 472 326 C474 360 476 390 478 424;M466 224 C468 246 470 270 472 294 C474 318 476 337 478 356;M466 224 C468 236 470 248 472 260 C474 272 476 282 478 292;M466 224 C468 226 470 228 472 230 C474 232 476 234 478 236" keyTimes="0;.16;.33;.5;.67;.84;1" calcMode="spline" keySplines=".42 0 .58 1;.42 0 .58 1;.42 0 .58 1;.42 0 .58 1;.42 0 .58 1"/>
+      <animate attributeName="opacity" dur="24s" repeatCount="indefinite" values="0;.1;.64;1;.64;.1;0" keyTimes="0;.16;.33;.5;.67;.84;1" calcMode="spline" keySplines=".42 0 .58 1;.42 0 .58 1;.42 0 .58 1;.42 0 .58 1;.42 0 .58 1;.42 0 .58 1"/>
+    </path>
+    <g class="droplet">
+      <circle cx="478" cy="430" r="9">
+        <animate attributeName="cy" dur="24s" repeatCount="indefinite" values="236;292;356;448;356;292;236" keyTimes="0;.16;.33;.5;.67;.84;1"/>
+        <animate attributeName="opacity" dur="24s" repeatCount="indefinite" values="0;0;.42;1;.42;0;0" keyTimes="0;.16;.33;.5;.67;.84;1"/>
+      </circle>
+      <circle cx="501" cy="428" r="5">
+        <animate attributeName="cx" dur="24s" repeatCount="indefinite" values="472;482;498;522;498;482;472" keyTimes="0;.16;.33;.5;.67;.84;1"/>
+        <animate attributeName="cy" dur="24s" repeatCount="indefinite" values="238;300;372;500;372;300;238" keyTimes="0;.16;.33;.5;.67;.84;1"/>
+        <animate attributeName="opacity" dur="24s" repeatCount="indefinite" values="0;0;.26;.9;.26;0;0" keyTimes="0;.16;.33;.5;.67;.84;1"/>
+      </circle>
+    </g>
+  </g>
+  <text class="readme-title" x="105" y="820">VIBECODEINE / FLUJO / ASCII IS MATERIAL / 24s LOOP / DOUBLE CUP</text>
+</svg>

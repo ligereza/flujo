@@ -1,0 +1,110 @@
+{
+  "schema_version": "rd-reagent-audit-overlay-v0.1",
+  "generated_at": "2026-08-11",
+  "language": "en",
+  "base_file": "rd_reactivos_normalizados_2026-08-11.json",
+  "status": "candidate_pending_rd_human_review",
+  "method": "Compare RD public pages against DanceSafe, NUAA Drug Checking, UNODC, and scientific review material. Preserve source wording; do not replace local evidence silently.",
+  "global_findings": [
+    {
+      "id": "reagent_scope",
+      "status": "supported",
+      "finding": "Reagents provide expected or unexpected color signals and cannot establish purity, potency, complete contents, or the absence of multiple substances.",
+      "sources": ["https://dancesafe.org/wp-content/uploads/2024/05/DS_Instructions_Reagents_v17Spring24.pdf", "https://testkits.nuaa.org.au/pages/charts"]
+    },
+    {
+      "id": "fentanyl_boundary",
+      "status": "supported",
+      "finding": "Ordinary color reagents cannot be treated as fentanyl tests; a specific strip or laboratory method is required.",
+      "sources": ["https://dancesafe.org/wp-content/uploads/2024/05/DS_Instructions_Reagents_v17Spring24.pdf"]
+    },
+    {
+      "id": "two_part_use",
+      "status": "supported",
+      "finding": "Two-part reagents must be applied as sample plus bottle A plus bottle B on the same sample.",
+      "sources": ["https://dancesafe.org/important-reagent-reaction-updates/", "https://dancesafe.org/wp-content/uploads/2024/05/DS_Instructions_Reagents_v17Spring24.pdf"]
+    },
+    {
+      "id": "market_variability",
+      "status": "supported",
+      "finding": "Expected colors can change with formulation, adulterants, sample size, lighting, and market conditions; color charts require versioning and dates.",
+      "sources": ["https://dancesafe.org/important-reagent-reaction-updates/", "https://dancesafe.org/wp-content/uploads/2024/05/DS_Instructions_Reagents_v17Spring24.pdf"]
+    }
+  ],
+  "reagent_overrides": [
+    {
+      "id": "marquis",
+      "evidence_status": "partially_supported",
+      "observation_override": "RD says first_15_seconds; external instruction says most reactions are read within about_45_to_60_seconds. Preserve both and label the source.",
+      "important_correction": "For cocaine, do not encode bright orange or red as an automatic amphetamine or adulterant diagnosis. DanceSafe reports an expected range from no reaction through light pink to light or medium peach and says the older cocaine row should be disregarded until further notice.",
+      "sources": ["https://dancesafe.org/important-reagent-reaction-updates/", "https://dancesafe.org/wp-content/uploads/2024/05/DS_Instructions_Reagents_v17Spring24.pdf"]
+    },
+    {
+      "id": "ehrlich",
+      "evidence_status": "supported_with_scope_limit",
+      "observation_override": "RD guide emphasizes 3_to_5_minutes; DanceSafe states the visible reaction may take up to_5_minutes and in some cases up to_20_minutes, with a longer validity window.",
+      "important_correction": "Store Ehrlich as indole_class_signal, not as LSD confirmation. Dye from blotter paper can interfere with reading.",
+      "sources": ["https://dancesafe.org/wp-content/uploads/2024/05/DS_Instructions_Reagents_v17Spring24.pdf", "https://testkits.nuaa.org.au/pages/charts"]
+    },
+    {
+      "id": "liebermann",
+      "evidence_status": "conflicting",
+      "important_correction": "RD describes rusty red or orange-red as levamisole or lidocaine. DanceSafe's updated review says the reaction range is broader and no longer recommends using Liebermann to determine whether cocaine is cut with levamisole or lidocaine. Encode this as an unexpected_or_contextual signal, not a confirmed adulterant.",
+      "sources": ["https://dancesafe.org/important-reagent-reaction-updates/", "https://dancesafe.org/wp-content/uploads/2024/05/DS_Instructions_Reagents_v17Spring24.pdf"]
+    },
+    {
+      "id": "morris",
+      "evidence_status": "supported_for_primary_signal",
+      "important_correction": "Bright blue is the expected cocaine signal and violet or purple is the expected ketamine signal, but this remains presumptive. Sample size, stirring, and the A/B sequence materially affect interpretation.",
+      "sources": ["https://dancesafe.org/wp-content/uploads/2024/05/DS_Instructions_Reagents_v17Spring24.pdf", "https://dancesafe.org/product/ketamine-testing-kit/r/NeelixberliN/", "https://testkits.nuaa.org.au/pages/charts"]
+    },
+    {
+      "id": "froehde",
+      "evidence_status": "partially_supported",
+      "important_correction": "International sources support Froehde as a broad or complementary reagent, especially for opioids and differentiation. Exact per-substance color sequences should remain RD_local_candidate until matched to a dated chart or laboratory-backed dataset.",
+      "sources": ["https://testkits.nuaa.org.au/pages/charts", "https://pubs.rsc.org/en/content/articlehtml/2026/ay/d6ay00085a"]
+    },
+    {
+      "id": "simons",
+      "evidence_status": "supported_with_scope_limit",
+      "important_correction": "Simon’s blue signal indicates a secondary amine class and does not by itself distinguish MDMA from methamphetamine. MDA may show no reaction or a muddy gray-green or blackish response; this newer response is documented by DanceSafe.",
+      "sources": ["https://dancesafe.org/important-reagent-reaction-updates/", "https://dancesafe.org/wp-content/uploads/2024/05/DS_Instructions_Reagents_v17Spring24.pdf", "https://testkits.nuaa.org.au/pages/charts"]
+    },
+    {
+      "id": "zimmermann",
+      "evidence_status": "conflicting_or_insufficient",
+      "important_correction": "Keep benzodiazepine reactions as a local RD candidate, not as a universal reliable identifier. DanceSafe states most benzodiazepines do not react consistently with most reagents, and scientific review material notes cross-reactivity with other classes.",
+      "sources": ["https://dancesafe.org/wp-content/uploads/2024/05/DS_Instructions_Reagents_v17Spring24.pdf", "https://pubs.rsc.org/en/content/articlehtml/2026/ay/d6ay00085a"]
+    },
+    {
+      "id": "mecke",
+      "evidence_status": "partially_supported",
+      "important_correction": "International charts support Mecke as useful for opioids and MDMA, but overlapping colors require complementary tests. Do not use a single Mecke color as a complete identity claim.",
+      "sources": ["https://testkits.nuaa.org.au/pages/charts", "https://dancesafe.org/wp-content/uploads/2024/05/DS_Instructions_Reagents_v17Spring24.pdf"]
+    },
+    {
+      "id": "mandelin",
+      "evidence_status": "insufficient_for_public_exact_chart",
+      "important_correction": "Keep the current data as a candidate only. International sources describe Mandelin as useful for MDMA, ketamine, and adulterants, but exact colors vary by chart and the reagent has a tinted baseline. Do not publish the incomplete RD table as a complete color guide.",
+      "sources": ["https://testkits.nuaa.org.au/pages/charts", "https://pubs.rsc.org/en/content/articlehtml/2026/ay/d6ay00085a", "https://dancesafe.org/wp-content/uploads/2024/05/DS_Instructions_Reagents_v17Spring24.pdf"]
+    },
+    {
+      "id": "hofmann",
+      "evidence_status": "supported_as_complementary_but_not_specific",
+      "important_correction": "Hofmann is an additional data point for psychedelic or indole samples, not a standalone LSD, DMT, or psilocybin identification. External chemistry material describes a broader response set, so exact colors remain versioned candidates.",
+      "sources": ["https://testkits.nuaa.org.au/pages/charts", "https://pubs.rsc.org/en/content/articlehtml/2026/ay/d6ay00085a", "https://smplest.eu/products/hofmann-test"]
+    },
+    {
+      "id": "robadope",
+      "evidence_status": "supported_for_primary_amine_signal",
+      "important_correction": "Robadope is a two-part test for primary amines such as MDA, amphetamine, and 2C-B. It is a class signal, not a complete compound identity.",
+      "sources": ["https://testkits.nuaa.org.au/pages/charts", "https://drugs-forum.com/wiki/Simons"]
+    },
+    {
+      "id": "cbd_thc",
+      "evidence_status": "rd_only_pending_external_validation",
+      "important_correction": "Keep the RD reaction table as local source material, but do not generalize exact THC/CBD color outcomes to the public semantic engine until an external chart or laboratory-backed source is added.",
+      "sources": ["https://reduciendodano.cl/tienda/cannabis/"]
+    }
+  ]
+}

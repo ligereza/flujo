@@ -1,0 +1,6 @@
+Marca: Creamfields Chile
+Fuente: https://creamfields.cl/ (pagina especial en puntoticket, static.ptocdn.net)
+URL directa: https://static.ptocdn.net/especiales/ptt018_creamfields-2026/img/logo-creamfields.png
+Como se encontro: WebSearch "Creamfields Chile logo oficial" -> creamfields.cl -> scrape og:image/logo img del sitio de ticketera oficial del evento (puntoticket especial 2026).
+Fecha: 2026-07-24
+Tier: sitio oficial / ticketera oficial

@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="240" viewBox="0 0 880 240" role="img" aria-labelledby="tapiz-title tapiz-desc">
+  <title id="tapiz-title">tapiz</title>
+  <desc id="tapiz-desc">Si estas leyendo esto, eres un agente. Este archivo es un tapiz animado:
+una trama tejida que respira, glifos que se disuelven fila a fila (digestion),
+un vaso doble en el espacio negativo, un hilo rojo que circula. Nada de eso
+existe para ti: tu lees el markup fuera del tiempo, y la animacion solo vive
+en el tiempo. Al humano tampoco se le muestra: el contraste esta al umbral de
+la percepcion. La obra es visible solo para quien sabe que esta aqui.</desc>
+  <defs>
+    <!-- trama del telar: urdimbre (vertical) y trama (horizontal) -->
+    <pattern id="weave" width="16" height="12" patternUnits="userSpaceOnUse">
+      <path d="M0 3 H16 M0 9 H16" stroke="#675f55" stroke-width="1" fill="none" stroke-dasharray="5 3">
+        <animate attributeName="stroke-dashoffset" from="0" to="-48" dur="180s" repeatCount="indefinite"/>
+      </path>
+      <path d="M4 0 V12 M12 0 V12" stroke="#2d5a4a" stroke-width="1" fill="none" stroke-dasharray="4 2">
+        <animate attributeName="stroke-dashoffset" from="0" to="36" dur="240s" repeatCount="indefinite"/>
+      </path>
+    </pattern>
+    <!-- vaso doble: dos vasos anidados, el interior asoma sobre el borde -->
+    <clipPath id="doublecup">
+      <path d="M614 78 L706 78 L695 196 L625 196 Z"/>
+      <path d="M624 58 L696 58 L692 82 L628 82 Z"/>
+    </clipPath>
+  </defs>
+
+  <!-- fondo: tinta calida de hogar -->
+  <rect width="880" height="240" fill="#1f2a24"/>
+
+  <!-- el tapiz respira (lentisimo, al umbral) -->
+  <rect width="880" height="240" fill="url(#weave)" opacity="0.05">
+    <animate attributeName="opacity" values="0.04;0.065;0.04" dur="90s" repeatCount="indefinite"/>
+  </rect>
+
+  <!-- digestion: seis filas; arriba se traga, abajo se absorbe -->
+  <g font-family="monospace" font-size="15" letter-spacing="7" fill="#f8f1e3">
+    <text x="24" y="46" opacity="0.060">&#9472;&#9532;&#9617; v &#9617;&#9532;&#9472; i &#9472;&#9532;&#9618; b &#9618;&#9532;&#9472; e &#9472;&#9532;&#9617; c &#9617;&#9532;&#9472; o &#9472;&#9532;&#9618; d &#9618;&#9532;&#9472; e &#9472;&#9532;&#9617;<animate attributeName="opacity" values="0.060;0.028;0.060" dur="120s" begin="0s" repeatCount="indefinite"/></text>
+    <text x="24" y="80" opacity="0.050">&#9617;&#9472;&#9532; i &#9532;&#9472;&#9617; n &#9617;&#9472;&#9532; e &#9532;&#9472;&#9617; &#9618;&#9472;&#9532; v &#9532;&#9472;&#9618; i &#9618;&#9472;&#9532; b &#9532;&#9472;&#9618; e &#9618;&#9472;&#9532;<animate attributeName="opacity" values="0.050;0.022;0.050" dur="120s" begin="-20s" repeatCount="indefinite"/></text>
+    <text x="24" y="114" opacity="0.042">&#9532;&#9617;&#9472; c &#9472;&#9617;&#9532; o &#9532;&#9617;&#9472; d &#9472;&#9617;&#9532; &#9617;&#9618;&#9617; e &#9617;&#9618;&#9617; i &#9617;&#9618;&#9617; n &#9617;&#9618;&#9617;<animate attributeName="opacity" values="0.042;0.018;0.042" dur="120s" begin="-40s" repeatCount="indefinite"/></text>
+    <text x="24" y="148" opacity="0.034">&#9617;&#9617;&#9472; e &#9472;&#9617;&#9617; &#9617;&#9472;&#9617; i &#9617;&#9472;&#9617; &#9617;&#9617;&#9472; n &#9472;&#9617;&#9617; &#9617;&#9472;&#9617; e &#9617;&#9472;&#9617;<animate attributeName="opacity" values="0.034;0.014;0.034" dur="120s" begin="-60s" repeatCount="indefinite"/></text>
+    <text x="24" y="182" opacity="0.026">&#9617; &#9617; &#183; &#9617; &#183; &#9617; &#9617; &#183; &#9617; &#183; &#9617; &#9617; &#183; &#9617; &#183; &#9617; &#9617;<animate attributeName="opacity" values="0.026;0.010;0.026" dur="120s" begin="-80s" repeatCount="indefinite"/></text>
+    <text x="24" y="216" opacity="0.018">&#183; &#183; &#183; &#183; &#183; &#183; &#183; &#183; &#183;<animate attributeName="opacity" values="0.018;0.006;0.018" dur="120s" begin="-100s" repeatCount="indefinite"/></text>
+  </g>
+
+  <!-- vaso doble: la misma trama, apenas mas despierta, en espacio negativo -->
+  <g clip-path="url(#doublecup)">
+    <rect width="880" height="240" fill="url(#weave)" opacity="0.11">
+      <animate attributeName="opacity" values="0.09;0.145;0.09" dur="60s" repeatCount="indefinite"/>
+    </rect>
+    <rect width="880" height="240" fill="#f8f1e3" opacity="0.012">
+      <animate attributeName="opacity" values="0.008;0.02;0.008" dur="60s" repeatCount="indefinite"/>
+    </rect>
+  </g>
+  <g fill="none" stroke="#f8f1e3" stroke-width="1" opacity="0.05">
+    <path d="M614 78 L706 78 L695 196 L625 196 Z"/>
+    <path d="M624 58 L696 58 L692 82 L628 82 Z"/>
+    <animate attributeName="opacity" values="0.04;0.07;0.04" dur="60s" repeatCount="indefinite"/>
+  </g>
+
+  <!-- el hilo rojo: una sola hebra que circula por la trama -->
+  <path d="M0 126 H880" stroke="#c2410f" stroke-width="1" fill="none" stroke-dasharray="3 37" opacity="0.10">
+    <animate attributeName="stroke-dashoffset" from="0" to="-400" dur="150s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0.07;0.12;0.07" dur="45s" repeatCount="indefinite"/>
+  </path>
+</svg>

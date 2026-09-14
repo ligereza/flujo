@@ -1,0 +1,85 @@
+{
+  "project": {
+    "name": "Rider eventos A4 horizontal",
+    "slug": "rider_eventos_a4_horizontal",
+    "brand": "Marca",
+    "website": "",
+    "note": "Plantilla para rider técnico/layout operativo de intervención en eventos."
+  },
+  "canvas": {
+    "width": 2970,
+    "height": 2100,
+    "real_size_cm": { "width": 29.7, "height": 21 },
+    "safe_margin_px": 120
+  },
+  "palette": {
+    "cream": "#F6EFE3",
+    "paper": "#FFF8ED",
+    "white": "#FFFFFF",
+    "ink": "#161513",
+    "muted": "#675F55",
+    "line": "#D9CEC0",
+    "accent": "#173F2F",
+    "blue": "#315EE8",
+    "orange": "#EF7B2D",
+    "green": "#173F2F",
+    "yellow": "#F5C54D"
+  },
+  "background": "cream",
+  "global_elements": [
+    { "type": "rect", "x": 70, "y": 70, "w": 2830, "h": 1960, "radius": 46, "fill": "none", "stroke": "line", "stroke_width": 4 },
+    { "type": "text", "content": "{brand}", "x": 120, "y": 120, "size": 42, "fill": "ink", "weight": "bold" }
+  ],
+  "documents": [
+    {
+      "id": "01_requerimientos_rider",
+      "title": "Requerimientos rider",
+      "elements": [
+        { "type": "text", "content": "Rider técnico de intervención en terreno", "x": 120, "y": 280, "size": 82, "fill": "ink", "weight": "bold", "max_width": 2450 },
+        { "type": "paragraph", "content": "Documento base para coordinar stand informativo, testeo, contención y zona de descanso en eventos.", "x": 130, "y": 460, "size": 42, "fill": "muted", "max_width": 2500, "line_height": 58 },
+        { "type": "panel", "x": 120, "y": 650, "w": 820, "h": 920, "radius": 36, "fill": "white", "stroke": "line", "stroke_width": 3, "opacity": 0.72 },
+        { "type": "text", "content": "Espacio", "x": 180, "y": 720, "size": 44, "fill": "accent", "weight": "bold" },
+        { "type": "list", "x": 180, "y": 820, "size": 34, "fill": "ink", "max_width": 680, "line_height": 48, "indent": 38, "gap": 12, "items": ["Stand básico sugerido: 3×3 m.", "Stand completo sugerido: 6×3 m.", "Zona de descanso ideal: 3×3 m adicional.", "Mantener circulación libre del público."] },
+        { "type": "panel", "x": 1040, "y": 650, "w": 820, "h": 920, "radius": 36, "fill": "white", "stroke": "line", "stroke_width": 3, "opacity": 0.72 },
+        { "type": "text", "content": "Mobiliario", "x": 1100, "y": 720, "size": 44, "fill": "accent", "weight": "bold" },
+        { "type": "list", "x": 1100, "y": 820, "size": 34, "fill": "ink", "max_width": 680, "line_height": 48, "indent": 38, "gap": 12, "items": ["Mesas para información y/o testeo.", "Sillas para equipo.", "Rack o caja de almacenamiento.", "Basurero visible.", "Señalética del servicio."] },
+        { "type": "panel", "x": 1960, "y": 650, "w": 820, "h": 920, "radius": 36, "fill": "white", "stroke": "line", "stroke_width": 3, "opacity": 0.72 },
+        { "type": "text", "content": "Condiciones", "x": 2020, "y": 720, "size": 44, "fill": "accent", "weight": "bold" },
+        { "type": "list", "x": 2020, "y": 820, "size": 34, "fill": "ink", "max_width": 680, "line_height": 48, "indent": 38, "gap": 12, "items": ["Iluminación suficiente.", "Punto eléctrico si aplica.", "Calefacción si el clima lo requiere.", "Coordinación con producción, seguridad y equipo médico.", "Alimentación para jornadas superiores a 5 horas."] },
+        { "type": "paragraph", "content": "Nota: ajustar medidas finales según recinto, aforo, clima, horario y modalidad contratada.", "x": 140, "y": 1760, "size": 34, "fill": "muted", "max_width": 2500, "line_height": 46 }
+      ]
+    },
+    {
+      "id": "02_layout_operativo",
+      "title": "Layout operativo",
+      "elements": [
+        { "type": "text", "content": "Layout operativo sugerido", "x": 120, "y": 250, "size": 82, "fill": "ink", "weight": "bold", "max_width": 2200 },
+        { "type": "text", "content": "Escala conceptual: 1 m ≈ 180 px", "x": 128, "y": 390, "size": 34, "fill": "muted", "weight": "bold" },
+        { "type": "rect", "x": 260, "y": 560, "w": 1080, "h": 540, "radius": 16, "fill": "white", "stroke": "accent", "stroke_width": 6, "opacity": 0.82 },
+        { "type": "text", "content": "TOLDO / STAND 6×3 m", "x": 560, "y": 595, "size": 38, "fill": "accent", "weight": "bold" },
+        { "type": "rect", "x": 330, "y": 700, "w": 260, "h": 110, "radius": 12, "fill": "paper", "stroke": "line", "stroke_width": 3 },
+        { "type": "text", "content": "Rack", "x": 405, "y": 730, "size": 30, "fill": "ink", "weight": "bold" },
+        { "type": "rect", "x": 650, "y": 700, "w": 300, "h": 120, "radius": 12, "fill": "paper", "stroke": "blue", "stroke_width": 4 },
+        { "type": "text", "content": "Mesa testeo", "x": 700, "y": 732, "size": 28, "fill": "blue", "weight": "bold" },
+        { "type": "rect", "x": 990, "y": 700, "w": 280, "h": 120, "radius": 12, "fill": "paper", "stroke": "orange", "stroke_width": 4 },
+        { "type": "text", "content": "Mesa info", "x": 1040, "y": 732, "size": 28, "fill": "orange", "weight": "bold" },
+        { "type": "circle", "cx": 720, "cy": 930, "r": 40, "fill": "white", "stroke": "line", "stroke_width": 3 },
+        { "type": "circle", "cx": 860, "cy": 930, "r": 40, "fill": "white", "stroke": "line", "stroke_width": 3 },
+        { "type": "text", "content": "Sillas equipo", "x": 660, "y": 990, "size": 28, "fill": "muted", "weight": "bold" },
+        { "type": "rect", "x": 1160, "y": 930, "w": 80, "h": 80, "radius": 12, "fill": "yellow", "stroke": "line", "stroke_width": 3 },
+        { "type": "text", "content": "Basurero", "x": 1115, "y": 1030, "size": 24, "fill": "muted", "weight": "bold" },
+        { "type": "rect", "x": 1560, "y": 560, "w": 760, "h": 540, "radius": 24, "fill": "white", "stroke": "green", "stroke_width": 5, "opacity": 0.72 },
+        { "type": "text", "content": "Zona descanso público", "x": 1720, "y": 610, "size": 36, "fill": "green", "weight": "bold" },
+        { "type": "circle", "cx": 1740, "cy": 800, "r": 48, "fill": "paper", "stroke": "line", "stroke_width": 3 },
+        { "type": "circle", "cx": 1900, "cy": 800, "r": 48, "fill": "paper", "stroke": "line", "stroke_width": 3 },
+        { "type": "circle", "cx": 2060, "cy": 800, "r": 48, "fill": "paper", "stroke": "line", "stroke_width": 3 },
+        { "type": "text", "content": "Menor estímulo / hidratación / contención", "x": 1650, "y": 940, "size": 28, "fill": "muted", "weight": "bold" },
+        { "type": "line", "x1": 1340, "y1": 830, "x2": 1560, "y2": 830, "stroke": "muted", "stroke_width": 5 },
+        { "type": "text", "content": "Circulación", "x": 1370, "y": 760, "size": 26, "fill": "muted", "weight": "bold" },
+        { "type": "panel", "x": 250, "y": 1280, "w": 2070, "h": 420, "radius": 32, "fill": "white", "stroke": "line", "stroke_width": 3, "opacity": 0.72 },
+        { "type": "text", "content": "Puntos a confirmar", "x": 320, "y": 1350, "size": 42, "fill": "accent", "weight": "bold" },
+        { "type": "list", "x": 320, "y": 1440, "size": 30, "fill": "ink", "max_width": 1900, "line_height": 42, "indent": 34, "gap": 8, "items": ["Medidas disponibles del recinto.", "Si es interior/exterior y horario del evento.", "Cantidad de personas del equipo RD.", "Disponibilidad de electricidad, iluminación, calefacción y seguridad cercana."] }
+      ]
+    }
+  ]
+}

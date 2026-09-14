@@ -1,0 +1,8 @@
+id: technoyouth_primary
+producer_id: technoyouth
+status: source_needed
+source_quality: unknown
+workflow:
+  suggested_tool: logo_clean_lab
+  next_action: "sitio technoyouth.cl devolvio 523 (Cloudflare); perfil IG @technoyouthscl solo entrega foto 100x100 firmada; falta press kit o bandcamp"
+outputs: {}

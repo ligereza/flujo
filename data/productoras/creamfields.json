@@ -1,0 +1,42 @@
+{
+  "name": "Creamfields",
+  "aliases": ["CREAMFIELDS", "creamfields.cl", "Creamfields Chile"],
+  "instagram": "creamfieldscl",
+  "tipos_fecha": ["FESTIVAL", "HEADLINERS", "RAVE", "OPEN_AIR"],
+  "logos": [
+    {"id": "creamfields_primary", "knowledge": "knowledge/logos/creamfields.yaml", "estado": "encontrado",
+     "archivo": "knowledge/logos/vector/creamfields.svg",
+     "raster": "knowledge/logos/descargas/creamfields.png",
+     "fuente": "https://creamfields.cl/ (ticketera oficial puntoticket, https://static.ptocdn.net/especiales/ptt018_creamfields-2026/img/logo-creamfields.png)",
+     "obtenido": "2026-07-24",
+     "notas": "Logo oficial via web anonima (PR #254): pagina especial puntoticket 2026, logo del sitio de ticketera oficial. Reemplaza el estado source_needed previo; los 2 candidatos de PR #210 quedan sin usar."}
+  ],
+  "venues": [
+    {
+      "nombre": "Espacio Riesco",
+      "venue_id": "espacio_riesco",
+      "preferido": true,
+      "estado": "ejemplo",
+      "notas": "Referencia de ESCALA mainstream (recinto grande), NO sede confirmada por fecha. Marcado estado=ejemplo: confirmar la sede real de cada edición antes de usar como dato."
+    },
+    {
+      "nombre": "Club Hípico, Santiago Chile",
+      "venue_id": null,
+      "preferido": false,
+      "estado": "candidato_sin_confirmar",
+      "notas": "venue_crudo de obra_0304b8fe9a (PR #210, FLYER/SEGUNDOTRIPLE.mp4, fecha_cruda 11-12 Octubre 2025). Confirmar antes de usar."
+    }
+  ],
+  "confirmed": "",
+  "notes": "Marca de festival EDM masivo. tipos_fecha son definicionales (festival de cabezas de cartel). El logo canónico existe en knowledge/logos/creamfields.yaml (source_needed). El venue Espacio Riesco es un ejemplo de escala, no una sede confirmada. Complementado con PR #210 (candidatos_db.jsonl match_ratio=1.0, obra_0304b8fe9a).",
+  "eventos": [
+    {
+     "nombre": "Creamfields Chile 2025",
+     "fecha": "11-12 octubre 2025",
+     "venue": "Club Hípico, Santiago",
+     "estado": "pasado",
+     "flyer_ref": "RD/FLYER/SEGUNDOTRIPLE.mp4",
+     "fuente": "PR #210 obra_0304b8fe9a (ruta_rel FLYER/SEGUNDOTRIPLE.mp4), fecha_cruda '11 - 12 Octubre 2025', match_ratio 1.0"
+    }
+  ]
+}

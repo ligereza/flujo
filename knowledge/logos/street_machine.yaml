@@ -1,0 +1,11 @@
+id: street_machine_primary
+producer_id: street_machine
+status: done
+source_quality: sitio_oficial
+workflow:
+  suggested_tool: logo_clean_lab
+  next_action: ninguna (completo)
+outputs:
+  raster: knowledge/logos/descargas/street_machine.png
+  raster_source: knowledge/logos/descargas/street_machine.txt
+  vector: knowledge/logos/vector/street_machine.svg

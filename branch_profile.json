@@ -1,0 +1,25 @@
+{
+  "schema": "flujo-repository-profile-v1",
+  "repository": "ligereza/flujo",
+  "branch": "main",
+  "canonical_ref": "main",
+  "lane": "FLUJO",
+  "kind": "standalone",
+  "permanent_branch": "main",
+  "role": "portable workflow engine",
+  "default_test_selector": "-m flujo",
+  "capabilities": "CAPACIDADES_FLUJO.md",
+  "requirements": "requirements-flujo.txt",
+  "hub": {
+    "module": "src/flujo/web/hub.py",
+    "default_port": 8765,
+    "surface": "workflow and workspace"
+  },
+  "external_consumers": [
+    "ligereza/XIO: XIO-RD consumes reviewed FLUJO/RD context",
+    "ligereza/XIO: XIO-FOH consumes FLUJO/ISKVW VJ context",
+    "ligereza/vibecodeine: MAK may consume versioned FLUJO projections"
+  ],
+  "transfer_contract": "exchange typed JSON, source_ref, API or versioned schemas; never import a neighbor checkout",
+  "profiles_are_not_branches": true
+}

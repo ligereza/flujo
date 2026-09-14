@@ -1,0 +1,31 @@
+{
+ "formato": "piel/1",
+ "nombre": "campo",
+ "resumen": "El archivo como campo recorrible: las obras en su posicion medida, los vinculos por peso debajo, y la textura hecha con el vocabulario percibido de cada obra.",
+ "datos": [
+  {"ruta": "../../datos/archivo.json", "obligatorio": false,
+   "para": "el sustrato: piezas Y vinculos en la forma del contrato. Se pide PRIMERO."},
+  {"ruta": "../../datos/campo.json", "obligatorio": false,
+   "para": "respaldo si no hay sustrato: 219 obras proyectadas, sin vinculos."},
+  {"ruta": "../../datos/obras.json", "obligatorio": false,
+   "para": "ultimo respaldo. Son 8 entradas y son HERRAMIENTAS, no obras."},
+  {"ruta": "../../datos/tablero.json", "obligatorio": false,
+   "para": "que mejoras estan encendidas. Ausente = todas apagadas, y esa es la piel de siempre."}
+ ],
+ "medida": "typeof NODOS !== 'undefined' && NODOS ? NODOS.length : -1",
+ "capas": [
+  {"nombre": "obra", "codifica": "posicion", "inerte_sin_dato": false},
+  {"nombre": "vinculos", "codifica": "vinculos"},
+  {"nombre": "textura", "codifica": "titulo+etiquetas"},
+  {"nombre": "tono", "codifica": "extra.colores"},
+  {"nombre": "pulso", "codifica": "extra.tilde", "llave": "patch_efectos"},
+  {"nombre": "curvatura", "codifica": "extra.trazo", "llave": "patch_efectos"},
+  {"nombre": "sangrado", "codifica": "extra.colores", "llave": "patch_efectos"},
+  {"nombre": "desgarro", "codifica": "etiquetas", "llave": "patch_efectos"},
+  {"nombre": "gravedad", "codifica": "peso", "llave": "patch_efectos"},
+  {"nombre": "sala", "codifica": "venue", "llave": "venue3d"}
+ ],
+ "gestos": ["rueda", "pellizco", "quedarse quieto", "semilla en el hash"],
+ "degrada": "Sin archivo.json cae a campo.json y despues a obras.json, dibujando siempre. Una pieza sin posicion medida se reparte por hash DENTRO del campo medido, nunca fuera. Sin tablero no hay efectos ni sala.",
+ "capacidades": ["posiciones_medidas", "patch_efectos", "capa_venue"]
+}

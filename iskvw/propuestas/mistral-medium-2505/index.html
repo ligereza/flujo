@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ISKVW</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #000;
+            color: #fff;
+            font-family: 'Courier New', monospace;
+            overflow: hidden;
+            touch-action: manipulation;
+        }
+        #lienzo {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        #barra-estado {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 10px;
+            font-size: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        #controles {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 10px;
+            border-radius: 4px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        button {
+            background-color: #333;
+            color: #fff;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #555;
+        }
+        #info-pieza {
+            position: absolute;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 10px;
+            max-width: 300px;
+            display: none;
+            font-size: 14px;
+            pointer-events: none;
+        }
+        #info-pieza h3 {
+            margin: 0 0 10px 0;
+            font-size: 16px;
+        }
+        #info-pieza p {
+            margin: 5px 0;
+        }
+        #info-pieza a {
+            color: #4da6ff;
+            text-decoration: none;
+        }
+        #info-pieza a:hover {
+            text-decoration: underline;
+        }
+        #info-pieza button {
+            background-color: #333;
+            color: #fff;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        #info-pieza button:hover {
+            background-color: #555;
+        }
+        #info-pieza .etiquetas {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin-top: 10px;
+        }
+        #info-pieza .etiquetas span {
+            background-color: rgba(255, 255, 255, 0.1);
+            padding: 2px 5px;
+            border-radius: 3px;
+            font-size: 12px;
+        }
+        .oculto {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="lienzo"></canvas>
+    <div id="barra-estado">
+        <span id="nodos">0 nodos</span>
+        <span id="vinculos">0 vínculos</span>
+        <span id="fps">0 fps</span>
+        <span id="zoom">1x</span>
+    </div>
+    <div id="controles">
+        <button id="reiniciar">Reiniciar</button>
+        <button id="pausa">Pausa</button>
+        <button id="etiquetas">Etiquetas</button>
+        <button id="fuerza">Fuerza</button>
+    </div>
+    <div id="info-pieza" class="oculto">
+        <h3 id="titulo-pieza"></h3>
+        <p id="resumen-pieza"></p>
+        <div class="etiquetas" id="etiquetas-pieza"></div>
+        <p id="fecha-pieza"></p>
+        <button id="cerrar-info">Cerrar</button>
+    </div>
+    <script>
+        // Cargar datos con manejo de errores
+        let datos;
+        fetch('datos/archivo.json')
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Error al cargar el archivo JSON');
+                }
+                return response.json();
+            })
+            .then(data => {
+                datos = data;
+                iniciar();
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('barra-estado').textContent = 'Error al cargar los datos';
+            });
+
+        // Configuración del lienzo
+        const lienzo = document.getElementById('lienzo');
+        const ctx = lienzo.getContext('2d');
+        let ancho = window.innerWidth;
+        let alto = window.innerHeight;
+        lienzo.width = ancho;
+        lienzo.height = alto;
+
+        // Estado
+        let nodos = [];
+        let vinculos = [];
+        let escala = 1;
+        let offsetX = 0;
+        let offsetY = 0;
+        let arrastrando = false;
+        let ultimoX, ultimoY;
+        let mostrandoEtiquetas = false;
+        let piezaSeleccionada = null;
+        let pausa = false;
+        let ultimoTiempo = performance.now();
+        let fps = 0;
+        let cuadros = 0;
+        let ultimoFps = 0;
+        let fuerzaActiva = false;
+
+        // Iniciar
+        function iniciar() {
+            // Procesar datos
+            procesarDatos();
+
+            // Configurar controles
+            document.getElementById('reiniciar').addEventListener('click', () => {
+                escala = 1;
+                offsetX = 0;
+                offsetY = 0;
+                actualizarZoom();
+            });
+
+            document.getElementById('pausa').addEventListener('click', () => {
+                pausa = !pausa;
+                document.getElementById('pausa').textContent = pausa ? 'Continuar' : 'Pausa';
+            });
+
+            document.getElementById('etiquetas').addEventListener('click', () => {
+                mostrandoEtiquetas = !mostrandoEtiquetas;
+            });
+
+            document.getElementById('fuerza').addEventListener('click', () => {
+                fuerzaActiva = !fuerzaActiva;
+                document.getElementById('fuerza').textContent = fuerzaActiva ? 'Fuerza: ON' : 'Fuerza: OFF';
+            });
+
+            document.getElementById('cerrar-info').addEventListener('click', () => {
+                document.getElementById('info-pieza').classList.add('oculto');
+            });
+
+            // Configurar eventos de zoom y arrastre
+            lienzo.addEventListener('wheel', (e) => {
+                e.preventDefault();
+                const delta = e.deltaY > 0 ? 0.9 : 1.1;
+                const mouseX = e.clientX - lienzo.getBoundingClientRect().left;
+                const mouseY = e.clientY - lienzo.getBoundingClientRect().top;
+
+                const xRelativo = (mouseX - offsetX) / escala;
+                const yRelativo = (mouseY - offsetY) / escala;
+
+                escala *= delta;
+                escala = Math.max(0.1, Math.min(5, escala));
+
+                offsetX = mouseX - xRelativo * escala;
+                offsetY = mouseY - yRelativo * escala;
+
+                actualizarZoom();
+            });
+
+            // Eventos táctiles
+            let touchStartX, touchStartY;
+            let touchStartOffsetX, touchStartOffsetY;
+
+            lienzo.addEventListener('touchstart', (e) => {
+                if (e.touches.length === 1) {
+                    arrastrando = true;
+                    touchStartX = e.touches[0].clientX;
+                    touchStartY = e.touches[0].clientY;
+                    touchStartOffsetX = offsetX;
+                    touchStartOffsetY = offsetY;
+                } else if (e.touches.length === 2) {
+                    // Pincer gesture for zoom
+                    e.preventDefault();
+                    const touch1 = e.touches[0];
+                    const touch2 = e.touches[1];
+                    const distanciaInicial = Math.hypot(
+                        touch1.clientX - touch2.clientX,
+                        touch1.clientY - touch2.clientY
+                    );
+
+                    const handlePinchZoom = (e) => {
+                        if (e.touches.length === 2) {
+                            const touch1 = e.touches[0];
+                            const touch2 = e.touches[1];
+                            const distanciaActual = Math.hypot(
+                                touch1.clientX - touch2.clientX,
+                                touch1.clientY - touch2.clientY
+                            );
+
+                            const delta = distanciaActual / distanciaInicial;
+                            const mouseX = (touch1.clientX + touch2.clientX) / 2 - lienzo.getBoundingClientRect().left;
+                            const mouseY = (touch1.clientY + touch2.clientY) / 2 - lienzo.getBoundingClientRect().top;
+
+                            const xRelativo = (mouseX - offsetX) / escala;
+                            const yRelativo = (mouseY - offsetY) / escala;
+
+                            escala *= delta;
+                            escala = Math.max(0.1, Math.min(5, escala));
+
+                            offsetX = mouseX - xRelativo * escala;
+                            offsetY = mouseY - yRelativo * escala;
+
+                            actualizarZoom();
+                        } else {
+                            lienzo.removeEventListener('touchmove', handlePinchZoom);
+                        }
+                    };
+
+                    lienzo.addEventListener('touchmove', handlePinchZoom, { passive: false });
+                }
+            });
+
+            lienzo.addEventListener('touchmove', (e) => {
+                if (arrastrando && e.touches.length === 1) {
+                    const touch = e.touches[0];
+                    const dx = touch.clientX - touchStartX;
+                    const dy = touch.clientY - touchStartY;
+                    offsetX = touchStartOffsetX + dx;
+                    offsetY = touchStartOffsetY + dy;
+                }
+            });
+
+            lienzo.addEventListener('touchend', () => {
+                arrastrando = false;
+            });
+
+            // Eventos de mouse
+            lienzo.addEventListener('mousedown', (e) => {
+                arrastrando = true;
+                ultimoX = e.clientX;
+                ultimoY = e.clientY;
+                lienzo.style.cursor = 'grabbing';
+            });
+
+            lienzo.addEventListener('mousemove', (e) => {
+                if (arrastrando) {
+                    const dx = e.clientX - ultimoX;
+                    const dy = e.clientY - ultimoY;
+                    offsetX += dx;
+                    offsetY += dy;
+                    ultimoX = e.clientX;
+                    ultimoY = e.clientY;
+                }
+            });
+
+            lienzo.addEventListener('mouseup', () => {
+                arrastrando = false;
+                lienzo.style.cursor = 'default';
+            });
+
+            lienzo.addEventListener('mouseleave', () => {
+                arrastrando = false;
+                lienzo.style.cursor = 'default';
+            });
+
+            // Detección de clics en nodos
+            lienzo.addEventListener('click', (e) => {
+                const x = (e.clientX - lienzo.getBoundingClientRect().left - offsetX) / escala;
+                const y = (e.clientY - lienzo.getBoundingClientRect().top - offsetY) / escala;
+
+                let nodoClickeado = null;
+                for (const nodo of nodos) {
+                    const distancia = Math.hypot(nodo.x - x, nodo.y - y);
+                    if (distancia <= nodo.peso * 5) {
+                        nodoClickeado = nodo;
+                        break;
+                    }
+                }
+
+                if (nodoClickeado) {
+                    piezaSeleccionada = nodoClickeado;
+                    document.getElementById('titulo-pieza').textContent = nodoClickeado.pieza.titulo;
+                    document.getElementById('resumen-pieza').textContent = nodoClickeado.pieza.resumen || '';
+                    const etiquetasContainer = document.getElementById('etiquetas-pieza');
+                    etiquetasContainer.innerHTML = '';
+                    if (nodoClickeado.pieza.etiquetas) {
+                        nodoClickeado.pieza.etiquetas.forEach(etiqueta => {
+                            const span = document.createElement('span');
+                            span.textContent = etiqueta;
+                            etiquetasContainer.appendChild(span);
+                        });
+                    }
+                    document.getElementById('fecha-pieza').textContent = nodoClickeado.pieza.fecha || '';
+                    document.getElementById('info-pieza').classList.remove('oculto');
+                    document.getElementById('info-pieza').style.left = `${Math.min(e.clientX - 150, ancho - 300)}px`;
+                    document.getElementById('info-pieza').style.top = `${Math.min(e.clientY - 150, alto - 300)}px`;
+                } else {
+                    document.getElementById('info-pieza').classList.add('oculto');
+                }
+            });
+
+            // Bucle de animación
+            function animar() {
+                if (!pausa) {
+                    actualizar();
+                }
+                dibujar();
+                requestAnimationFrame(animar);
+            }
+
+            // Actualizar estado
+            function actualizar() {
+                // Actualizar nodos
+                nodos.forEach(nodo => {
+                    if (fuerzaActiva) {
+                        // Fuerza gravitatoria entre nodos
+                        nodos.forEach(otroNodo => {
+                            if (nodo !== otroNodo) {
+                                const dx = otroNodo.x - nodo.x;
+                                const dy = otroNodo.y - nodo.y;
+                                const distancia = Math.max(1, Math.hypot(dx, dy));
+                                const fuerza = 0.1 * nodo.peso * otroNodo.peso / (distancia * distancia);
+
+                                nodo.velocidadX += fuerza * dx / distancia;
+                                nodo.velocidadY += fuerza * dy / distancia;
+                            }
+                        });
+                    } else {
+                        // Movimiento aleatorio
+                        nodo.velocidadX += (Math.random() - 0.5) * 0.1;
+                        nodo.velocidadY += (Math.random() - 0.5) * 0.1;
+                    }
+
+                    // Limitar velocidad
+                    const velocidad = Math.sqrt(nodo.velocidadX * nodo.velocidadX + nodo.velocidadY * nodo.velocidadY);
+                    if (velocidad > 2) {
+                        nodo.velocidadX *= 0.5;
+                        nodo.velocidadY *= 0.5;
+                    }
+
+                    // Mover
+                    nodo.x += nodo.velocidadX;
+                    nodo.y += nodo.velocidadY;
+
+                    // Limitar a área visible
+                    const radio = nodo.peso * 5;
+                    nodo.x = Math.max(radio, Math.min(ancho * escala - radio, nodo.x));
+                    nodo.y = Math.max(radio, Math.min(alto * escala - radio, nodo.y));
+                });
+
+                // FPS
+                cuadros++;
+                const ahora = performance.now();
+                if (ahora - ultimoTiempo >= 1000) {
+                    fps = cuadros;
+                    cuadros = 0;
+                    ultimoTiempo = ahora;
+                    ultimoFps = fps;
+                }
+            }
+
+            // Dibujar
+            function dibujar() {
+                // Limpiar
+                ctx.clearRect(0, 0, ancho, alto);
+                ctx.save();
+                ctx.translate(-offsetX, -offsetY);
+                ctx.scale(escala, escala);
+
+                // Dibujar vínculos
+                vinculos.forEach(vinculo => {
+                    const nodoA = nodos.find(n => n.id === vinculo.de);
+                    const nodoB = nodos.find(n => n.id === vinculo.a);
+                    if (nodoA && nodoB) {
+                        ctx.beginPath();
+                        ctx.moveTo(nodoA.x, nodoA.y);
+                        ctx.lineTo(nodoB.x, nodoB.y);
+                        if (vinculo.clase === 'manual') {
+                            ctx.strokeStyle = 'rgba(255, 0, 0, 0.5)';
+                            ctx.lineWidth = vinculo.peso * 2;
+                        } else if (vinculo.clase === 'etiqueta') {
+                            ctx.strokeStyle = 'rgba(0, 255, 0, 0.2)';
+                            ctx.lineWidth = vinculo.peso * 1;
+                        } else {
+                            ctx.strokeStyle = 'rgba(0, 0, 255, 0.1)';
+                            ctx.lineWidth = vinculo.peso * 0.5;
+                        }
+                        ctx.stroke();
+                    }
+                });
+
+                // Dibujar nodos
+                nodos.forEach(nodo => {
+                    // Círculo
+                    ctx.beginPath();
+                    ctx.arc(nodo.x, nodo.y, nodo.peso * 5, 0, Math.PI * 2);
+                    if (nodo.clase === 'obra') {
+                        ctx.fillStyle = 'rgba(255, 0, 0, 0.5)';
+                    } else if (nodo.clase === 'pieza_grafica') {
+                        ctx.fillStyle = 'rgba(0, 255, 0, 0.5)';
+                    } else if (nodo.clase === 'concepto') {
+                        ctx.fillStyle = 'rgba(0, 0, 255, 0.5)';
+                    } else {
+                        ctx.fillStyle = 'rgba(255, 255, 0, 0.5)';
+                    }
+                    ctx.fill();
+
+                    // Etiqueta
+                    if (mostrandoEtiquetas) {
+                        ctx.fillStyle = '#fff';
+                        ctx.font = '12px Courier New';
+                        ctx.textAlign = 'center';
+                        ctx.fillText(nodo.titulo, nodo.x, nodo.y + nodo.peso * 5 + 15);
+                    }
+                });
+
+                ctx.restore();
+
+                // Barra de estado
+                document.getElementById('nodos').textContent = `${nodos.length} nodos`;
+                document.getElementById('vinculos').textContent = `${vinculos.length} vínculos`;
+                document.getElementById('fps').textContent = `${ultimoFps} fps`;
+                document.getElementById('zoom').textContent = `${escala.toFixed(2)}x`;
+            }
+
+            // Actualizar zoom
+            function actualizarZoom() {
+                document.getElementById('zoom').textContent = `${escala.toFixed(2)}x`;
+            }
+
+            // Procesar datos
+            function procesarDatos() {
+                // Crear nodos
+                nodos = datos.piezas.map(pieza => ({
+                    id: pieza.id,
+                    titulo: pieza.titulo,
+                    clase: pieza.clase,
+                    peso: pieza.peso || 1,
+                    x: Math.random() * ancho * escala,
+                    y: Math.random() * alto * escala,
+                    velocidadX: 0,
+                    velocidadY: 0,
+                    pieza: pieza
+                }));
+
+                // Crear vínculos
+                vinculos = datos.vinculos.map(vinculo => ({
+                    ...vinculo,
+                    peso: vinculo.peso || 0.1
+                }));
+            }
+
+            // Manejar redimensionamiento
+            window.addEventListener('resize', () => {
+                ancho = window.innerWidth;
+                alto = window.innerHeight;
+                lienzo.width = ancho;
+                lienzo.height = alto;
+            });
+
+            // Iniciar animación
+            animar();
+        }
+    </script>
+</body>
+</html>

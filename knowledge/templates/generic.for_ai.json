@@ -1,0 +1,15 @@
+{
+  "type": "generic",
+  "task": "Analiza ejemplo real para flujo. Completa campos observables y usa unknown si falta informacion.",
+  "expected_output": {
+    "format": {},
+    "producer": {},
+    "venue": {},
+    "layout": {},
+    "style": {},
+    "editable_fields": [],
+    "signals": [],
+    "logo_candidates": [],
+    "notes": ""
+  }
+}

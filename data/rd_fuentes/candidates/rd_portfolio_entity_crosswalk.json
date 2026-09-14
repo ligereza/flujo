@@ -1,0 +1,57 @@
+{
+  "contract": "rd_portfolio_entity_crosswalk",
+  "version": 1,
+  "status": "review_only",
+  "source_databases": ["data/rd.db", "data/rd_datos.db"],
+  "rules": {
+    "identity_join": "explicit_provenance_only",
+    "ambiguous_names": "review_state",
+    "technical_venue_publication": "publico_and_confidence_required",
+    "source_databases_mutation": "disabled"
+  },
+  "entities": [
+    {
+      "canonical_id": "espacio_riesco",
+      "role": "venue",
+      "rd_status": "active_canonical_venue",
+      "portfolio_technical_record": null,
+      "aliases": ["Espacio Riesco"],
+      "evidence": ["data/rd.db:venues", "data/rd.db:productora_venues", "knowledge/venues/espacio_riesco.yaml"],
+      "confidence": "medium",
+      "publication": "gated"
+    },
+    {
+      "canonical_id": "openklub",
+      "role": "producer_or_brand",
+      "rd_status": "producer",
+      "portfolio_technical_record": null,
+      "aliases": ["OpenKlub", "Open Klub", "OPENKLUB"],
+      "venue_claims": [{"raw_name": "Central Cultural", "status": "candidate_unconfirmed", "evidence": "data/rd.db:productora_venues"}],
+      "evidence": ["data/rd.db:productoras", "data/rd.db:productora_venues", "data/productoras/openklub.json"],
+      "confidence": "high_for_producer_low_for_venue",
+      "publication": "gated"
+    },
+    {
+      "canonical_id": "frvr",
+      "role": "artist_dj_headliner",
+      "rd_status": "producer_table_legacy_label",
+      "producer_status": "unconfirmed",
+      "raw_venue": "Sala Metronomo",
+      "lineup_token": "Paralelo 86",
+      "aliases": ["FRVR"],
+      "evidence": ["data/rd.db:productoras", "data/rd.db:productora_venues", "data/productoras/frvr.json", "context/LAST_HANDOFF.md:Phase 491"],
+      "confidence": "high_for_headliner_role_low_for_producer_and_venue",
+      "publication": "review_only"
+    },
+    {
+      "canonical_id": "scd_plaza_egana",
+      "role": "technical_venue",
+      "rd_status": "no_explicit_join",
+      "portfolio_technical_record": "data/venues/scd-plaza-egana.json",
+      "aliases": ["Teatro SCD Plaza Egaña", "SCD Plaza Egaña"],
+      "evidence": ["data/venues/scd-plaza-egana.json", "tools/venue_geometria_scd.py", "iskvw/piel/venue/"],
+      "confidence": "medium",
+      "publication": "gated"
+    }
+  ]
+}

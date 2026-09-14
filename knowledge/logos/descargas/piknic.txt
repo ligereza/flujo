@@ -1,0 +1,2 @@
+fuente: archivo local de logos del usuario
+subido: desde el hub

@@ -1,0 +1,18 @@
+id: rave_under_template
+name: Rave underground template
+category: rave
+scale_default: under
+confidence: 0.7
+signals:
+  - aporte_minimo
+  - bajo_numero_de_seguidores
+  - sin_ticketera_formal
+  - venue_secreto_o_club
+affinity:
+  service_mode: informativo_ligero
+  testeo: maybe
+formats:
+  default_flyer: flyer_impreso_10x14_vertical
+  default_cartelera: cartelera_digital_photoshop
+notes:
+  - Template, no productora real.

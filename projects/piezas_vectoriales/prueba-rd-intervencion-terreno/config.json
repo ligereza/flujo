@@ -1,0 +1,133 @@
+{
+  "project": {
+    "name": "Propuesta de Servicio – Intervención en Terreno",
+    "slug": "prueba-rd-intervencion-terreno",
+    "brand": "Reduciendo Daño Chile",
+    "website": "",
+    "note": "Proyecto base creado desde brief.yaml usando plantilla.",
+    "source_job": "jobs/2026-06-14_prueba-rd-intervencion-terreno"
+  },
+  "canvas": {
+    "width": 2100,
+    "height": 2970,
+    "real_size_cm": {
+      "width": 21,
+      "height": 29.7
+    },
+    "safe_margin_px": 120
+  },
+  "palette": {
+    "cream": "#F6EFE3",
+    "paper": "#FFF8ED",
+    "white": "#FFFFFF",
+    "ink": "#161513",
+    "muted": "#675F55",
+    "line": "#D9CEC0",
+    "accent": "#173F2F"
+  },
+  "background": "cream",
+  "global_elements": [
+    {
+      "type": "rect",
+      "x": 70,
+      "y": 70,
+      "w": 1960,
+      "h": 2830,
+      "radius": 46,
+      "fill": "none",
+      "stroke": "line",
+      "stroke_width": 4
+    },
+    {
+      "type": "text",
+      "content": "{brand}",
+      "x": 120,
+      "y": 120,
+      "size": 42,
+      "fill": "ink",
+      "weight": "bold"
+    }
+  ],
+  "documents": [
+    {
+      "id": "01_base_prueba-rd-intervencion-terreno",
+      "title": "Propuesta de Servicio – Intervención en Terreno",
+      "elements": [
+        {
+          "type": "text",
+          "content": "TÍTULO PROPUESTA",
+          "x": 120,
+          "y": 300,
+          "size": 92,
+          "fill": "ink",
+          "weight": "bold",
+          "max_width": 1780
+        },
+        {
+          "type": "paragraph",
+          "content": "Resumen ejecutivo / bajada principal.",
+          "x": 130,
+          "y": 560,
+          "size": 44,
+          "fill": "muted",
+          "max_width": 1760,
+          "line_height": 62
+        },
+        {
+          "type": "panel",
+          "x": 120,
+          "y": 760,
+          "w": 1860,
+          "h": 760,
+          "radius": 38,
+          "fill": "white",
+          "stroke": "line",
+          "stroke_width": 3,
+          "opacity": 0.72
+        },
+        {
+          "type": "text",
+          "content": "Bloque 1",
+          "x": 190,
+          "y": 840,
+          "size": 48,
+          "fill": "accent",
+          "weight": "bold"
+        },
+        {
+          "type": "panel",
+          "x": 120,
+          "y": 1610,
+          "w": 900,
+          "h": 680,
+          "radius": 38,
+          "fill": "white",
+          "stroke": "line",
+          "stroke_width": 3,
+          "opacity": 0.72
+        },
+        {
+          "type": "panel",
+          "x": 1080,
+          "y": 1610,
+          "w": 900,
+          "h": 680,
+          "radius": 38,
+          "fill": "white",
+          "stroke": "line",
+          "stroke_width": 3,
+          "opacity": 0.72
+        },
+        {
+          "type": "text",
+          "content": "Contacto / cierre",
+          "x": 130,
+          "y": 2470,
+          "size": 44,
+          "fill": "accent",
+          "weight": "bold"
+        }
+      ]
+    }
+  ]
+}

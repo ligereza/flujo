@@ -1,0 +1,43 @@
+name: CI FLUJO
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+jobs:
+  flujo:
+    name: motor, contratos y web
+    runs-on: ubuntu-latest
+    env:
+      PYTHONIOENCODING: utf-8
+      PYTHONUTF8: "1"
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: "3.11"
+          cache: pip
+      - name: Instalar FLUJO
+        run: |
+          python -m pip install -r requirements-flujo.txt
+          python -m pip install -e ".[dev]"
+      - name: Compilar runtime
+        run: python -m compileall -q src/flujo
+      - name: Suite FLUJO
+        env:
+          PYTHONPATH: ${{ github.workspace }}/src
+        run: python -m pytest -o addopts='' -q -m flujo
+      - name: Higiene del repositorio
+        env:
+          PYTHONPATH: ${{ github.workspace }}/src
+        run: python -m pytest -o addopts='' -q -m repo_hygiene
+      - name: CLI disponible desde el checkout
+        env:
+          PYTHONPATH: ${{ github.workspace }}/src
+        run: python -m flujo --help

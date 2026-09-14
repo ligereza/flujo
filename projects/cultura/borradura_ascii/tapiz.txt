@@ -1,0 +1,419 @@
+TAPIZ DE LA BORRADURA -- pieza cultural, lectura pura
+sha (HEAD): 8c0f6f0
+cada caracter del texto sobrevive tal como esta (ASCII, por regla);
+cada '^' debajo marca donde vivia un diacritico que la regla borro.
+==============================================================================
+
+--- CLAUDE.md (16 hueco(s)) ---
+   29 | | **Claude Code / Fable-Opus** | Director: enfoque, codigo critico, arquitectura | Techo. NO revisa cada diff de Qwen |
+      |                                                      ^
+   44 | - toca: credenciales/secretos, auth, workflows CI, `src/flujo/airdrop.py`, comportamiento publico (CLI/API/formato de entrega)
+      |                                                                                            ^
+   47 | - ya se intento y fallo (check `src/flujo/version.py` `get_changelog()`)
+      |                                                ^
+   57 | 2. Revisor gratis: Arena o subagente Sonnet mira lo que CI no ve (diseno, alcance, creep).
+      |                                                                       ^
+   86 | sesion o, si valen, a `tools/` (reusable) / `_archive/` (historico) via PR.
+      |     ^
+   87 | La raiz se ensucio 2 veces (commits 35058a3 y sesion 07-21); no repetir.
+      |                                                   ^
+  114 | 1. Al cerrar CADA sesion: actualiza `context/LAST_HANDOFF.md` y `context/SESSION_STATE.json` con version/fecha real (coincide con `pyproject.toml` y `src/flujo/version.py`) y estado `done/doing/next/blockers`. Si trabajaste, el estado cambio.
+      |                       ^                                                                               ^                                                              ^
+  115 | 2. Antes de "resolver" algo ya intentado: revisa `src/flujo/version.py` `get_changelog()` (que ya fallo), no partas de cero.
+      |                                                                  ^
+  130 | falso que ya no se usaba en produccion, falsa seguridad; corregido 2026-07-20).
+      |                                     ^
+  131 | Codigo autogenerado (utilidades MAK y similares): compilar NO basta -- 6 de
+      |  ^
+  176 | | `pyproject.toml` | Metadata + version (la version manda) |
+      |                                      ^           ^
+  225 | ## Al cerrar sesion
+      |                  ^
+  228 | 2. Actualizar `context/LAST_HANDOFF.md` (ASCII, compacto) + `context/SESSION_STATE.json` (version = `pyproject.toml`, date real, done/doing/next/blockers/ai_stack).
+      |                                                                                                ^
+
+--- context/CAPATAZ.md (3 hueco(s)) ---
+   47 |    trabajo mal hecho de otra sesion; no repitas la confusion.
+      |                                  ^
+   50 |    resultado. Si hay muralla etica/tecnica: anotala, dila, y segui -- el usuario se
+      |                                     ^
+   61 | Escribe rapido, sin pulir, con tipos ("porfavor", "correlo"). Salta a ingles crudo
+      |          ^
+
+--- context/DOCTRINA_CLAUDE.md (13 hueco(s)) ---
+    7 | > errores, no solo el codigo. Si algo aca contradice a `CLAUDE.md`, manda
+      |                        ^
+   36 | (codigo, `--help`, el sistema vivo). Cicatriz: se nego 3 veces que
+      |   ^
+   48 | Un repo sin gobierno decae a entropia: codigo muerto, tests que mockean modulos
+      |                                         ^
+   75 | y el codigo es un detalle perdido/revertido, NO una mentira -- lee lo que el autor
+      |       ^
+   86 | - Al cerrar CADA sesion: actualiza `LAST_HANDOFF.md` (ASCII) + `SESSION_STATE.json`
+      |                      ^
+   87 |   (version = pyproject.toml, fecha real, done/doing/next/blockers). Si trabajaste,
+      |         ^
+   90 |   `src/flujo/version.py` -- no partas de cero sobre un fracaso ya registrado.
+      |                   ^
+   95 |   secretos/auth/CI/`airdrop.py`/comportamiento publico; valores de dinero; >1
+      |                                                 ^
+  107 |   puede pasar testeando el codigo equivocado).
+      |                             ^
+  115 | - Escalera ante bloqueo: config/JSON (carril seguro) -> editar codigo de servicio
+      |                                                                 ^
+  134 | - Verifica el estado vivo; nunca asumas la estructura remota (el codigo puede vivir
+      |                                                                   ^
+  141 | - Un resultado sospechosamente rapido/bueno: cronometralo vos antes de certificar.
+      |                                 ^
+  158 | - Instagram: instaloader murio (IG exige login). Descarga real = mirror publico
+      |                                                                          ^
+
+--- context/LAST_HANDOFF.md (134 hueco(s)) ---
+    3 | Version: 0.56.1 | Fecha: 2026-07-22 | Identidad: Cauce | sesion:
+      |      ^                                                       ^
+    6 | ## Sesion 2026-07-22 (cierre) -- pendientes resueltos por director
+      |        ^
+   15 |    de disenio); restaurado `7 */4 * * *` con backup del crontab previo en
+      |       ^^^^^^^
+   20 |    publica. Agotado: version, IPv4/6, fingerprint requests. NO seguir
+      |                           ^
+   33 |    del servicio). El APK descargado quedo en scratchpad de la sesion;
+      |                                                                   ^
+   47 | - utilidades/ MAK: SE QUEDAN (produccion activa del loop, gobernada por
+      |                                       ^
+   50 |   (movieclip.frame_duration + FFmpeg directo) queda como issue de disenio
+      |                                                                   ^^^^^^^
+   53 | ## Sesion 2026-07-22 -- orden total, gobernanza, MAK autonomo
+      |        ^
+   77 |    MERGED (util real: salud 8890/8891/8900). RATCHET PR #143: pyflakes
+      |            ^
+   98 |     install (ver sesion 07-20); doctor limpio, npm claude 2.1.217 sano.
+      |                      ^
+  110 |   si fue reemplazo de disenio o fallo silencioso.
+      |                       ^^^^^^^
+  124 |   la plantilla real de produccion vive en Desktop/ai_illustrator.
+      |                                ^
+  139 |    es imprescindible; sin el, mergear no tocaba el codigo vivo. Probado:
+      |                                                     ^
+  142 |    invocaciones python frescas cada tick) corre el codigo nuevo enseguida.
+      |                                                     ^
+  151 | Claude. GitHub es el medio de comunicacion, tal como se diseno.
+      |                                                             ^
+  153 | ## Sesion 2026-07-20 noche -- rescate capataz + autonomia MAK
+      |        ^
+  155 | Una sesion previa ("Godspeed tokens deletion issue", `e7893c70`) quedo
+      |         ^
+  164 | ### ARREGLADO esta sesion
+      |                        ^
+  182 |   commit -- redactada antes de pushear. Repo es PUBLICO, la deteccion
+      |                                                  ^
+  184 | - Bug propio cometido y corregido en la misma sesion: al probar el pull
+      |                                                   ^
+  190 | - Proceso huerfano de la sesion muerta (PID 31636, 9h vivo, bg-pty-host)
+      |                              ^
+  196 |    esta sesion -- confirmar que termino (`curl 192.168.50.1:11434/api/tags
+      |             ^
+  201 |    capataz NO funciona todavia por esa via. La sesion muerta encontro
+      |                                                    ^
+  208 |    reescribe, NUNCA pisa codigo vivo, guarda propuesta en
+      |                           ^
+  237 | qwen-agent en un loop (no un ciclo unico como capataz.py hoy). Codigo de
+      |                                                                 ^
+  238 | referencia del test que funciono: buscar en el historial de esta sesion
+      |                                                                      ^
+  246 | (`leer_estado`/`vetear`/`entregar`, mismo codigo que ya usaba
+      |                                            ^
+  265 | corresponde", y ejecuta esa accion con codigo fijo -- sin dialogo, sin
+      |                                         ^
+  287 | ### Verificacion de esta sesion
+      |                              ^
+  288 | No se toco codigo de `src/flujo` -- solo docs/scripts en worktrees +
+      |             ^
+  310 | ## Sesion 2026-07-20 (Sonnet 5, sesion larga multi-tema)
+      |        ^                            ^
+  336 | timing con la sesion, no causado por el usuario ni por mi. Fix: 1 linea en
+      |                   ^
+  340 | IG exige login incluso anonimo (confirmado por el usuario en sesion previa
+      |                                                                  ^
+  345 | (sesion 2026-07-20 tarde): src/flujo/ig/download.py (usado por flyer-import
+      |      ^
+  420 | ### PENDIENTE para el proximo agente/sesion
+      |                                          ^
+  423 |    via mirror (mismo codigo Python, portable), render con Blender local +
+      |                       ^
+  449 | Version: 0.55.0 | Fecha: 2026-07-18T13:30 | Identidad: Cauce | sesion: GODSPEED-5b -- cierre del dia (1 haiku organiza + 4 lanes).
+      |      ^                                                             ^                              ^
+  451 | ## CIERRE DEL DIA 2026-07-18 (resumen para el proximo agente)
+      |                ^
+  455 | ## Sesion 2026-07-18T13:00 (GODSPEED-5b, cierre del dia: 1 haiku organizador + 4 lanes)
+      |        ^                                             ^
+  483 | ## Sesion 2026-07-18T12:00 (GODSPEED-5, director + 5 lectores sonnet + 2 builders sonnet)
+      |        ^
+  512 | - cultura/mak_research/fallback_util.py NUEVO: copia byte-identica del de mak_codex
+      |                                 ^
+  540 | ## Sesion 2026-07-18T10:00-11:30 (MAK dual-dept, director orquesta, 1 operador sonnet) -- PR #85 MERGEADO
+      |        ^
+  544 | metadata tecnica; TODO en vivo (hub :8900), nada en segundo plano. Secuencia de 3 fases:
+      |           ^
+  556 |       ninguna capa HTTP lo deja invocar. Convergio en: hay que reparar codigo (=fase 3).
+      |                                                                         ^
+  591 | - Groq free tier AGOTADO hoy (429 toda la sesion) -- la cadena lo absorbe siempre (eso es
+      |                                               ^
+  592 |   diseno funcionando); pendiente sin gate: reordenar default o cablear score_provider_health
+      |       ^
+  593 |   en research (ya existe en codex/fallback_util).
+      |                                            ^
+  608 | ## Sesion 2026-07-18T08:45 (ventana USB del Xiaomi, director) -- PR #83 MERGEADO
+      |        ^
+  619 | - EFECTO COLATERAL UTIL: run_server.sh recopia TODOS los plugins -- el redeploy
+      |                    ^
+  629 | ## Sesion 2026-07-18T08:00+ (GODSPEED-4 loop continuo, director Fable)
+      |        ^
+  634 | 200 en ligereza.github.io/portfolio-auto/proyectos.html, refresh semanal automatico
+      |                                                                               ^
+  644 | #5 (wifi_intelligence) parcial->tests agregados en esta PR, logica pura cubierta,
+      |                                                              ^
+  647 | de usuario (ver PENDIENTES USUARIO abajo, sin cambio esta sesion).
+      |                                                               ^
+  649 | ## Sesion 2026-07-18T07:00-07:55 (GODSPEED-4, director Fable + 4 haikus + 2 sonnets) -- CIERRE
+      |        ^
+  665 | automatico lunes 06:00 UTC.
+      |      ^
+  680 | por sesion viva (pid 35300) -- se resolvio en worktree detached aparte, sin tocarla.
+      |         ^
+  682 | ## Sesion 2026-07-18T02:00-03:05 (GODSPEED-3, director Fable, ola 2 -- esta rama, PR #73)
+      |        ^
+  696 | - MERGE: si #72 entra primero, esta rama conflictua en LAST_HANDOFF/version --
+      |                                                                          ^
+  697 |   resolucion: conservar ambas narrativas, version manda la mas alta. Y viceversa.
+      |                                                ^
+  698 | - BOX: servicios interfaz/hub corren el codigo nuevo (restart via watchdogs cron).
+      |                                          ^
+  701 | - Skill godspeed ampliada con lecciones 3ra sesion (.claude/skills/godspeed/SKILL.md,
+      |                                                 ^
+  710 | ## Sesion 2026-07-18T02:00+ (GODSPEED-3, director Fable + 4 lectores + 2 builders sonnet, PR #72 -- ya mergeado)
+      |        ^
+  718 |   Contrato seguido: cultura/mak_plataforma/diseno/eventos_y_backlog.md.
+      |                                                ^
+  721 |   interfaz.py y hub.py reiniciados con codigo nuevo -- OJO: eso tambien aterrizo el
+      |                                         ^
+  731 |   usuario decide autostart (la app de Ollama al iniciar sesion ya bindea bien por el
+      |                                                             ^
+  738 | Sesion anterior (0.54.0): PR #71 MERGEADO a main (cd52a69) tras resolver conflictos + fix CI ubuntu
+      |     ^
+  742 | Skill godspeed ampliada con lecciones 2da sesion. Rama #71 borrada (local+remota);
+      |                                               ^
+  746 | ## Sesion 2026-07-18T01:00+ (autonoma, loop 3min activo)
+      |        ^
+  753 |   PRIMER_DIA.md, SCRIPTS_INVENTORY.md, finish_airdrop.sh; INSTALL.txt (relic
+      |           ^
+  766 |   al dia (PR 48 MERGED / 49 CLOSED / 71 OPEN, branch protection ACTIVA,
+      |       ^
+  779 | ## Sesion 2026-07-18b -- GODSPEED-2: sistema generativo VIVO (misma rama/PR #71)
+      |        ^
+  782 | - BACKLOG GENERATIVO implementado desde el contrato diseno/eventos_y_backlog.md seccion 3:
+      |                                                         ^
+  783 |   plataforma/backlog.py (parsear LAGUNAS DE INFORMACION, dedup por hash normalizado, linaje
+      |                                                      ^
+  791 |   live==espejo por md5 (codex_lib+fallback_util+revisar+testear -> ~/codex; cadena+refutar+
+      |                                            ^
+  797 |   2 sesiones) y saltaba TODO verbo codex ("skip: codex sin token" x2 en el log). La sesion
+      |         ^
+  809 | - Pausa-en-error sigue sin construir (diseno completo, es el item grande del backlog).
+      |                                           ^
+  816 | ## Sesion 2026-07-18 -- PR #71 draft (rama worktree-god-haiku-fixes)
+      |        ^
+  824 | - MAK auth: BORRADO TOTAL de token/auth en codex+research (NO "opcional" -- eliminado del codigo):
+      |                                                                                            ^
+  834 | - MAK codex fiabilidad: cultura/mak_codex/fallback_util.py agrega TODOS los coders fallidos
+      |                                                    ^
+  839 | - skill .claude/skills/godspeed/SKILL.md: doctrina director+haiku + fallas reales de esta sesion.
+      |                                                                                               ^
+  846 |   Solo existe el DISENO (cultura/mak_plataforma/diseno/eventos_y_backlog.md) + el emisor vivo
+      |                      ^                              ^
+  849 |   "investigar() fue reescrito" NO coincide con el codigo pero NO fue mentira (trabajo perdido/
+      |                                                    ^
+  850 |   optimista). PROXIMO: CONSTRUIR desde el diseno sobre el emisor -- NO re-buscar, no esta.
+      |                                               ^
+  851 | - [HECHO 2026-07-17 sesion godspeed-2] fallback_util INTEGRADO en codex_lib.py CoderLLM.call
+      |                         ^                       ^
+  854 | - [HECHO 2026-07-17 sesion godspeed-2] Emisor semantico (HALLAZGO:) agregado a cadena/refutar/
+      |                         ^
+  858 | - retencion.py, fallback_util y codex_lib.py integrado NO desplegados al box (solo en repo/PR;
+      |                          ^
+  859 |   el deploy al box 192.168.50.2 sigue pendiente y ahora INCLUYE codex_lib.py + fallback_util.py).
+      |                                                                                         ^
+  863 | WEB = repo publico, solo commits finales. LOCAL = C:/IA/flujo (Windows), toda la info.
+      |             ^
+  864 | LINUX/MAK = 192.168.50.2 station research+codex, codigo SUELTO en ~/research ~/codex ~/plataforma
+      |                                                   ^
+  867 | ## Sesion 2026-07-17T22:30-23:00 (autonoma, cierre)
+      |        ^
+  874 | Anterior: MAK codigo copiado a cultura/mak_research + mak_codex + mak_plataforma + mak_lenguaje,
+      |                ^
+  880 | en coding/cyber/biology rutinarios) y la sesion se degrada a Opus sin retorno.
+      |                                              ^
+  885 |    cp1252 sin PYTHONIOENCODING desde el fix de esta sesion).
+      |                                                         ^
+  888 | 3. Trabajo normal del repo (Resolume/VJ, RD reduccion de danos, xio, codigo)
+      |                                                                       ^
+  891 | ## MAK -- cierre 2026-07-17 (sesion Sonnet/Opus, rama worktree-mak-research-cultural)
+      |                                  ^
+  894 | Debian 192.168.50.2, fuera de src/flujo. Esta sesion cierra el trabajo iniciado
+      |                                                   ^
+  897 | pusheara (ver nota en la seccion "PENDIENTES de esta sesion" mas abajo) --
+      |                                                          ^
+  900 | ### Que se hizo esta sesion (ademas del trabajo previo ya documentado abajo)
+      |                          ^       ^
+  922 |   propio -- correccion de un error real de esta sesion, se habia reconstruido
+      |                                                     ^
+  923 |   una version mas pobre en vez de reusar el editor de nodos/puertos/SVG que
+      |            ^
+  941 |   vez de crecer. La correccion real (leer la seccion "LAGUNAS DE INFORMACION"
+      |                                                                           ^
+  943 |   DISENADA (ver cultura/mak_plataforma/diseno/eventos_y_backlog.md) pero NO
+      |                                            ^
+  956 |   reintentar/editar/saltar/abortar en el panel del hub. Diseno completo en
+      |                                                             ^
+  957 |   cultura/mak_plataforma/diseno/eventos_y_backlog.md.
+      |                              ^
+  989 | No se toco web/ esta sesion.
+      |                          ^
+  991 | ## Estado 2026-07-17 (sesion Fable, autonoma)
+      |                           ^
+ 1001 | ## SESION 2026-07-16 (d) -- MICELIO: el archivo hecho organismo + modos desde el mapa
+      |        ^
+ 1019 |   estilo n8n (entradas se encienden verdes al conectar) ademas de dos-clicks;
+      |                                                             ^
+ 1033 | ## SESION 2026-07-16 (c) -- MAK research: MEMORIA del departamento (RAG local)
+      |        ^
+ 1055 | - PENDIENTE (no del codigo): confirmar EN VIVO el modo Memoria (consultar +
+      |                      ^
+ 1061 | ## SESION 2026-07-16 (b) -- MAK research: GRAFO REAL dirige la ejecucion
+      |        ^
+ 1095 | ## SESION 2026-07-16 -- MAK research: canvas visual + 5 modos + correlacion
+      |        ^
+ 1117 | ## SESION 2026-07-15 (noche) -- MAK research cultural VIVO (sin n8n)
+      |        ^
+ 1122 | angulos historico/estetico/legal/tecnico, 1 modelo por API, sintesis
+      |                                   ^
+ 1130 | replica) por orden del usuario. Copia del codigo: cultura/mak_research/
+      |                                            ^
+ 1137 | ## SESION 2026-07-15 (autonoma tarde) -- showcontrol v1.1->v1.8 + cultura wachuma
+      |        ^
+ 1140 | ## NOTA (otra sesion) -- Optimizacion de gasto aplicada
+      |                   ^
+ 1146 | ### PENDIENTES de esta sesion (lista que NO alcanzo a cerrarse sola)
+      |                            ^
+ 1165 | - E21 piezas MANIFIESTO bloqueadas: #2 (2do modelo util?), #5 (ESP32), #7 (orden
+      |                                                    ^
+ 1177 | Version: 0.52.0 | Fecha: 2026-07-17 | Identidad: Cauce | Suite completa: VERDE
+      |      ^
+ 1183 | ## SESION 2026-07-16 -- CHECKPOINT LIMPIEZA TOTAL (ultracode: 5 sonnet + Fable)
+      |        ^
+ 1250 | ## MAK Codex Fallback Analysis (2026-07-17, sesion god-haiku-fixes)
+      |                                                 ^
+ 1261 | - cultura/mak_codex/fallback_util.py: helper puro (NO deps network/ollama):
+      |                              ^
+ 1273 | - py -m py_compile cultura/mak_codex/fallback_util.py: OK
+      |                                               ^
+ 1281 | - Fallback_util.py agnostico a implementacion (puede inyectarse en codex_lib
+      |            ^
+ 1285 | - py -m compileall src/flujo: OK (anterior), fallback_util.py: OK (nuevo)
+      |                                                       ^
+
+--- context/MASTER_PLAN.md (21 hueco(s)) ---
+    4 | `context/PLAN_SIGUIENTE_AGENTE.md` (pendientes cortos de la proxima sesion);
+      |                                                                         ^
+   33 | repo (tecnico, infra, calidad, tooling, docs, decisiones) casi nunca esta sin
+      |        ^
+   41 | (b) la pasada de descubrimiento no encontro NINGUN trabajo tecnico/infra sin
+      |                                                             ^
+   49 | - Codigo muerto / drift de docs: cazar y limpiar (encargado de limpieza).
+      |    ^
+   62 |   primeras 2 piezas MANIFIESTO en codigo real con tests.
+      |                                    ^
+   78 |   del usuario el 2026-06-30, sesion OSC->127.0.0.1:7000 + LTC + 2 Actions).
+      |                                  ^
+   86 |   lo que falto siempre fue el fixture, no mas codigo. Queda 1 paso de
+      |                                                ^
+  118 | 2026-07-17 (commit 6a2b147), codigo en main. PR #49 abierto (DRAFT). Aislado del xio (403).
+      |                               ^
+  128 | plantilla real de produccion vive en Desktop/ai_illustrator (fuera del repo).
+      |                           ^
+  144 | #10 -- #9 y #10 cerradas ese dia via PRs #75/#77/#80; #1 "el repo se performa
+      |                               ^
+  151 |   tools/svg/steg_changelog.py que embebe version+hash del changelog en canal
+      |                                               ^
+  170 |   reales y fechados de ESTA sesion (siluetas neutras, sin payload; guarda en
+      |                                 ^
+  171 |   codigo + grep). ?11 no se cumplio. 8 tests. MANIFIESTO 6/11 (recuento
+      |    ^
+  190 |   corregir texto y sello SOLO con evidencia (regla: jamas subir numero a mano).
+      |                                                                  ^
+  195 | - T-F4 [HECHA 2026-07-16 en codigo; ESTRENO pendiente]: disparador sin-PC
+      |                              ^
+  220 | 5. Escalada: seguridad, credenciales, CI, airdrop.py, comportamiento publico
+      |                                                                       ^
+  238 | 1. EL REPO ESCRIBE PLANES MAS RAPIDO DE LO QUE EJECUTA. DIRECTOR_PLAN quedo
+      |                                ^
+  239 |    historico el mismo dia que se escribio; 5 tools/ son SPEC sin una linea de
+      |                        ^
+  240 |    codigo; MANIFIESTO lleva 2/11; el PR #49 es literalmente un curador de "19
+      |     ^
+  248 |    minutos (exportar un .noisette). MEJORA: T-A1 marcada bloqueante numero 1
+      |                                                                      ^
+  255 |    zombi cuesta contexto de agente en cada sesion. MEJORA: T-F3 les pone
+      |                                                ^
+
+--- context/PLAN_SEMANAL_OPUS.md (8 hueco(s)) ---
+    5 | es un CONTRATO: cada dia tiene objetivo, comandos exactos, gate de verificacion
+      |                       ^
+    6 | y salida-si-bloqueado. No improvisar el orden; si un dia se cae, su bloque pasa
+      |                                                       ^
+    7 | al backlog del domingo, no se mezcla con el dia siguiente.
+      |                                              ^
+   11 | 1. Entrada obligatoria: CLAUDE.md -> context/LAST_HANDOFF.md (CIERRE DEL DIA)
+      |                                                                           ^
+   22 |    de handoff por sesion; ASCII en context/.
+      |                       ^
+   27 | ## LUNES 20 -- salud del organismo + refresh automatico
+      |                                                   ^
+   39 |   tras un dia de jobs; si groq sigue 429, confirmar que quedo demotado.
+      |            ^
+   69 |   (segundo modelo util: WIN deepseek ya opera -- puede cerrar la pieza?) y #3
+      |                   ^
+
+--- context/PLAN_SIGUIENTE_AGENTE.md (4 hueco(s)) ---
+   20 | - Portfolio publico LIVE (ligereza.github.io/portfolio-auto, 8 obras, 0 Claude API).
+      |              ^
+   25 | 1. PAT Termux (~/.airdrop_token) para redeploy por USB sin sesion interactiva.
+      |                                                                ^
+   30 | ## PENDIENTES SIN GATE (backlog tecnico, puedo iniciar pero no termino solo)
+      |                                  ^
+   47 | 1. context/LAST_HANDOFF.md (estado del dia).
+      |                                         ^
+
+--- context/PLAN_UPSCALE.md (8 hueco(s)) ---
+    9 | Objetivo: dos bumps de milestone en la(s) proxima(s) sesion(es), dejando cada
+      |                                                          ^
+   31 |    - bump 0.54.0 (version.py changelog + pyproject + state files), push.
+      |                        ^
+   39 |   ver LAST_HANDOFF seccion GODSPEED). Solo diseno:
+      |                                                ^
+   40 |   cultura/mak_plataforma/diseno/eventos_y_backlog.md + emisor vivo.
+      |                              ^
+   44 | - Deploy pendiente que arrastra: retencion.py + fallback_util + codex_lib
+      |                                                          ^
+   61 | - Chico pero visible: portfolio publico deja de ser placeholder-catalogo.
+      |                                  ^
+   63 | ## Tareas de fondo (cualquier sesion, sin gate)
+      |                                   ^
+   77 | ## Regla de ejecucion pa la proxima sesion
+      |                                         ^
+
+--- context/WALKTHROUGH.md (2 hueco(s)) ---
+    5 | Repo: flujo (vibecodeine), version 0.52.0 | date 2026-07-17T22:30 | assistant Cauce (Claude Code)
+      |                                 ^
+   59 | context/SESSION_STATE.json  (version, date, done[], doing[], next[], blockers[])
+      |                                   ^

@@ -1,0 +1,6 @@
+{
+ "_doc": "La mano del artista. Editable a mano o con iskvw/editor.html: titulo (tu voz, con tildes), mostrar (false = fuera del archivo publicado), abstraccion 0..1 (1 = pura textura de glifos), svg (ruta a tu version editada, tier firmado), regimen por pieza, peso (numero > 0, cuanta materia tiene la pieza), serie (etiqueta de agrupacion), nota (tu nota, con tildes). Todos opcionales: un campo que no escribis no cambia nada. El regimen global de abajo gobierna la piel entera: semantico | industrial. Antes de subir una edición: py tools/validar_curaduria.py",
+ "version": 1,
+ "regimen": "semantico",
+ "piezas": {}
+}

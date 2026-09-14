@@ -1,0 +1,12 @@
+{
+  "type": "logo_source",
+  "task": "Analiza una fuente de logo de baja/media calidad para preparar limpieza/vectorizacion.",
+  "expected_output": {
+    "logo": {"producer_id": "", "text_visible": "", "icon_visible": false, "colors": [], "source_quality": "low|medium|high"},
+    "geometry": {"curves": "", "straight_edges": "", "text_logo": false, "symbol_logo": false},
+    "cleanup_plan": ["crop", "contrast", "vector_trace", "simplify_nodes", "preserve_curves", "export_svg"],
+    "risks": [],
+    "recommended_outputs": ["clean_svg", "preview_png"],
+    "notes": ""
+  }
+}

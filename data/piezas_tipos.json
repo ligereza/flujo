@@ -1,0 +1,38 @@
+{
+  "_instrucciones": "Vocabulario de PIEZAS de la app. Hoy son flyers y contraportadas; manana pendones, etiquetas o lo que haga falta. Agregar un tipo se hace ACA, no en el codigo: sumar un objeto a 'tipos' con su id, su rotulo y las 'claves' que aparecen en el nombre o la ruta del archivo. La app lo toma en el proximo arranque. Lo mismo para 'areas' y 'medios'. Causa: hasta el 2026-07-27 el tipo se decidia con siete ternarios encadenados dentro de web/src/data/svgIndex.ts, asi que agregar una clase de pieza obligaba a editar TypeScript y recompilar.",
+
+  "tipo_por_defecto": "etiqueta",
+  "area_por_defecto": "comun",
+  "medio_por_defecto": "impresion",
+
+  "tipos": [
+    {"id": "contraportada", "label": "Contraportada", "claves": ["contraportada", "reverso"]},
+    {"id": "etiqueta", "label": "Etiqueta", "claves": ["etiqueta", "label"]},
+    {"id": "flyer", "label": "Flyer", "claves": ["flyer", "frente"]},
+    {"id": "pendon", "label": "Pendon", "claves": ["pendon"]},
+    {"id": "post-ig", "label": "Post IG", "claves": ["post", "instagram", "ig"]},
+    {"id": "sticker", "label": "Sticker", "claves": ["sticker", "calco"]},
+    {"id": "logo", "label": "Logo", "claves": ["logo", "isotipo"]},
+    {"id": "rider", "label": "Rider", "claves": ["rider"]},
+    {"id": "cartelera", "label": "Cartelera", "claves": ["cartelera"]},
+    {"id": "stand", "label": "Stand", "claves": ["stand", "mesa"]},
+    {"id": "plano", "label": "Plano", "claves": ["plano"]}
+  ],
+
+  "areas": [
+    {"id": "eventos", "label": "Eventos", "claves": ["evento"]},
+    {"id": "suplementos", "label": "Suplementos", "claves": ["supl"]},
+    {"id": "comun", "label": "Comun", "claves": []}
+  ],
+
+  "medios": [
+    {"id": "digital", "label": "Digital", "claves": ["digital", "ig", "post", "web"]},
+    {"id": "impresion", "label": "Impresion", "claves": ["impres", "print"]}
+  ],
+
+  "estados": [
+    {"id": "aprobado", "label": "Aprobado"},
+    {"id": "en-revision", "label": "En revision"},
+    {"id": "borrador", "label": "Borrador"}
+  ]
+}

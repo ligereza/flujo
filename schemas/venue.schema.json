@@ -1,0 +1,242 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/ligereza/vibecodeine/schemas/venue.schema.json",
+  "title": "Venue -- ficha tecnica de sala",
+  "description": "Un venue es un ARCHIVO DE DATOS, no un dibujo. Los planos, renders y el export MVR son derivados regenerables. Cada dato lleva su nivel de confianza: el escaneo describe, las cotas a mano se afirman, las cargas se citan. Nunca se publica una medicion propia como si fuera un certificado.",
+  "type": "object",
+  "required": ["id", "nombre", "ciudad", "tipo", "fecha_captura", "fuente_datos", "publico"],
+  "additionalProperties": false,
+
+  "$defs": {
+    "confianza": {
+      "description": "medido = instrumento en la sala por quien firma. ajustado = derivado de un modelo, con residuo declarado. aportado = lo dijo alguien (incluye memoria propia): util, no afirmable. citado = de documentacion certificada de terceros, con fuente. no_verificado = esta ahi y nadie lo respalda.",
+      "enum": ["medido", "ajustado", "aportado", "citado", "no_verificado"]
+    },
+    "medida": {
+      "type": "object",
+      "required": ["m", "confianza"],
+      "additionalProperties": false,
+      "properties": {
+        "m": {"type": "number", "exclusiveMinimum": 0, "maximum": 500},
+        "confianza": {"$ref": "#/$defs/confianza"},
+        "metodo": {
+          "type": "string",
+          "description": "como se obtuvo: 'laser', 'lidar', 'huincha', 'memoria', 'plano del venue', 'aporte de <quien>'"
+        },
+        "fecha": {"type": "string", "format": "date"}
+      }
+    }
+  },
+
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*$",
+      "description": "slug estable. Para venues no publicos, un id que no mapea a nada guardado."
+    },
+    "nombre": {"type": "string", "minLength": 1},
+    "ciudad": {"type": "string", "minLength": 1},
+    "comuna": {"type": "string"},
+    "tipo": {"enum": ["teatro", "club", "galpon", "casa", "multiuso", "aire_libre", "otro"]},
+
+    "publico": {
+      "type": "boolean",
+      "description": "false = NO se publica ni se sube al sitio. Para salas irregulares: la geometria es valiosa y anonima, la identidad es peligrosa y no se necesita. Un venue con publico=false no lleva direccion, ni nombre real, ni nube de puntos."
+    },
+    "direccion": {
+      "type": "string",
+      "description": "solo si publico=true. Nunca para salas irregulares."
+    },
+
+    "fecha_captura": {"type": "string", "format": "date"},
+    "fuente_datos": {
+      "enum": ["memoria", "visita", "aporte", "documento"],
+      "description": "memoria = de la cabeza de quien lo escribe. NO es medicion."
+    },
+    "firmado_por": {
+      "type": "string",
+      "description": "quien responde por los datos 'medido'. Ausente = nadie firma. Este campo es el que separa el tier gratuito del pago."
+    },
+
+    "escenario": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "ancho": {"$ref": "#/$defs/medida"},
+        "profundidad": {"$ref": "#/$defs/medida"},
+        "altura_sobre_sala": {"$ref": "#/$defs/medida"}
+      }
+    },
+
+    "sala": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "altura_truss": {"$ref": "#/$defs/medida"},
+        "altura_libre": {"$ref": "#/$defs/medida"},
+        "tiro_proyeccion": {"$ref": "#/$defs/medida"},
+        "ancho_minimo_paso": {"$ref": "#/$defs/medida"},
+        "aforo": {"type": "integer", "minimum": 0}
+      }
+    },
+
+    "acceso": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "puerta_ancho": {"$ref": "#/$defs/medida"},
+        "puerta_alto": {"$ref": "#/$defs/medida"},
+        "recorrido": {"type": "string"}
+      }
+    },
+
+    "proyeccion": {
+      "type": "object",
+      "additionalProperties": false,
+      "description": "lo que un VJ que viaja necesita saber la semana antes",
+      "properties": {
+        "superficie": {"enum": ["pantalla", "muro", "led", "gasa", "ninguna", "desconocido"]},
+        "resolucion": {"type": "string"},
+        "obstruye_booth": {"type": "boolean"},
+        "notas": {"type": "string"}
+      }
+    },
+
+    "geometria": {
+      "type": "object",
+      "description": "OPCIONAL. La sala como POLILINEAS, no como malla, ni foto, ni nube de puntos: solo lineas, que es lo que un laser puede dibujar y lo que un rider puede citar. Un venue sin este bloque sigue siendo valido -- casi todos no lo tienen. Ejes en metros: x = ancho (0 al centro del escenario, crece a la derecha mirando a la sala), y = profundidad (0 en el fondo del escenario, crece hacia el publico), z = altura sobre el piso de la sala. La confianza es POR POLILINEA, no por archivo: el contorno del escenario puede estar medido y el techo puede ser una suposicion, y el dibujo tiene que poder decirlo.",
+      "required": ["unidad", "polilineas"],
+      "additionalProperties": false,
+      "properties": {
+        "unidad": {
+          "const": "m",
+          "description": "metros. No hay otra opcion a proposito: una geometria con unidad ambigua es una geometria inservible."
+        },
+        "nota": {
+          "type": "string",
+          "description": "de donde salio esta geometria. Si es derivada de un modelo o de un generador, se dice aca y no en un README."
+        },
+        "polilineas": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["puntos", "confianza"],
+            "additionalProperties": false,
+            "properties": {
+              "puntos": {
+                "type": "array",
+                "minItems": 2,
+                "description": "cadena abierta de vertices [x, y, z]. Para cerrarla se repite el primer punto al final: explicito, sin bandera que interpretar.",
+                "items": {
+                  "type": "array",
+                  "minItems": 3,
+                  "maxItems": 3,
+                  "items": {"type": "number", "minimum": -500, "maximum": 500}
+                }
+              },
+              "confianza": {"$ref": "#/$defs/confianza"},
+              "etiqueta": {"type": "string"},
+              "capa": {
+                "type": "string",
+                "description": "agrupa polilineas (escenario, butacas, muros, balcon). Sirve para el presupuesto de aristas del visor y para el mapeo a capas del laser."
+              },
+              "metodo": {
+                "type": "string",
+                "description": "como se obtuvo: 'lidar', 'huincha', 'derivado del modelo radial', 'plano del venue'"
+              }
+            }
+          }
+        },
+        "artefactos": {
+          "type": "array",
+          "description": "obstrucciones UBICADAS: la lista de la raiz las nombra, esta las pone en el espacio.",
+          "items": {
+            "type": "object",
+            "required": ["tipo", "punto", "confianza"],
+            "additionalProperties": false,
+            "properties": {
+              "tipo": {"type": "string"},
+              "punto": {
+                "type": "array",
+                "minItems": 3,
+                "maxItems": 3,
+                "items": {"type": "number", "minimum": -500, "maximum": 500}
+              },
+              "radio": {"type": "number", "exclusiveMinimum": 0, "maximum": 50},
+              "altura": {"type": "number", "exclusiveMinimum": 0, "maximum": 100},
+              "confianza": {"$ref": "#/$defs/confianza"},
+              "nota": {"type": "string"}
+            }
+          }
+        }
+      }
+    },
+
+    "artefactos": {
+      "type": "array",
+      "description": "columnas, palcos, barras, obstrucciones de linea de vision",
+      "items": {
+        "type": "object",
+        "required": ["tipo"],
+        "additionalProperties": false,
+        "properties": {
+          "tipo": {"type": "string"},
+          "nota": {"type": "string"}
+        }
+      }
+    },
+
+    "citas": {
+      "type": "array",
+      "description": "CARGAS, RIGGING Y ELECTRICO VIVEN ACA Y SOLO ACA. Se citan de la documentacion certificada del venue con fuente y fecha. Nunca se derivan de una medicion propia.",
+      "items": {
+        "type": "object",
+        "required": ["afirmacion", "fuente"],
+        "additionalProperties": false,
+        "properties": {
+          "afirmacion": {"type": "string"},
+          "fuente": {"type": "string"},
+          "fecha": {"type": "string", "format": "date"},
+          "foto": {"type": "string"}
+        }
+      }
+    },
+
+    "residuos": {
+      "type": "array",
+      "description": "lo que NO ajusta al modelo ideal, y por cuanto. Un dibujo limpio y falso es peor que uno con nota de discrepancia.",
+      "items": {
+        "type": "object",
+        "required": ["descripcion"],
+        "additionalProperties": false,
+        "properties": {
+          "descripcion": {"type": "string"},
+          "magnitud_m": {"type": "number"}
+        }
+      }
+    },
+
+    "aportes": {
+      "type": "array",
+      "description": "quien corrigio que. El commons se mantiene solo si el credito es visible.",
+      "items": {
+        "type": "object",
+        "required": ["quien", "que"],
+        "additionalProperties": false,
+        "properties": {
+          "quien": {"type": "string"},
+          "que": {"type": "string"},
+          "fecha": {"type": "string", "format": "date"}
+        }
+      }
+    },
+
+    "notas": {"type": "string"},
+    "licencia": {
+      "type": "string",
+      "default": "ODbL-1.0",
+      "description": "share-alike: sin esto, 'libre' significa 'cualquiera lo puede cercar'"
+    }
+  }
+}

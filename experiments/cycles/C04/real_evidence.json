@@ -1,0 +1,123 @@
+{
+  "archive_id": "archive-arica-001",
+  "artifact": {
+    "bytes": 12092541,
+    "container": {
+      "format": "mov,mp4,m4a,3gp,3g2,mj2",
+      "format_long_name": "QuickTime / MOV",
+      "stream_count": 3
+    },
+    "dimensions": {
+      "height": 1536,
+      "width": 256
+    },
+    "duration_seconds": 44.627917,
+    "name": "tottem_ojo.mp4",
+    "sha256": "b7253320e7a23917439dd6ad2fa084a68510469517b76b6428c54f9856ca0776",
+    "video_codec": "h264"
+  },
+  "evaluation": {
+    "case_id": "real-arica-aep-tottem-ojo",
+    "claims": {
+      "dimensions": {
+        "details": {
+          "dimensions": {
+            "height": 1536,
+            "width": 256
+          }
+        },
+        "evidence_refs": [
+          "C04/media_observer/real-observation",
+          "C04/media_observer/ffprobe-exit=0",
+          "C04/media_observer/real-observation",
+          "C04/media_observer/sha256=b7253320e7a23917439dd6ad2fa084a68510469517b76b6428c54f9856ca0776"
+        ],
+        "reason": "dimensions_copied_from_local_media_observation_without_normalization",
+        "status": "observed"
+      },
+      "local_media": {
+        "details": {
+          "observation_count": 1
+        },
+        "evidence_refs": [
+          "C04/media_observer/real-observation",
+          "C04/media_observer/sha256=b7253320e7a23917439dd6ad2fa084a68510469517b76b6428c54f9856ca0776",
+          "C04/media_observer/real-observation",
+          "C04/media_observer/ffprobe-exit=0"
+        ],
+        "reason": "local_media_existence_recorded",
+        "status": "observed"
+      },
+      "native_declaration": {
+        "details": {
+          "declaration_count": 1
+        },
+        "evidence_refs": [
+          "C02/aep_endpoint/observation.json#/input",
+          "C02/aep_endpoint/observation.json#/local_resolution/references/3",
+          "C02/aep_endpoint/observation.json#/local_resolution/references/3",
+          "aep://byte-offset/364461"
+        ],
+        "reason": "native_aep_declaration_recorded",
+        "status": "observed"
+      },
+      "output_role": {
+        "evidence_refs": [],
+        "reason": "no_explicit_export_event_with_evidence_refs",
+        "status": "unknown"
+      },
+      "uses": {
+        "evidence_refs": [
+          "C02/aep_endpoint/observation.json#/local_resolution/references/3",
+          "aep://byte-offset/364461",
+          "C04/media_observer/real-observation",
+          "C04/media_observer/ffprobe-exit=0"
+        ],
+        "reason": "native_fullpath_declaration_and_local_existence",
+        "status": "supported"
+      }
+    },
+    "decision_policy": {
+      "causality_from_coexistence": false,
+      "directory_scan": false,
+      "inputs": [
+        "native_aep",
+        "local_media_observation",
+        "export_event"
+      ],
+      "uses_embeddings": false,
+      "uses_gpu": false,
+      "uses_hidden_truth": false
+    },
+    "relations": [],
+    "schema": "mak-cycle-c04-evidence-evaluator-v1",
+    "selected_observation_id": "media:tottem_ojo.mp4"
+  },
+  "limits": {
+    "claim_limit": "AEP reference plus media metadata does not prove export causality",
+    "export_event_observed": false,
+    "generated_or_renders_to_relations": [],
+    "output_role_claim": {
+      "evidence_refs": [],
+      "reason": "no_explicit_export_event_with_evidence_refs",
+      "status": "unknown"
+    },
+    "uses_claim": {
+      "evidence_refs": [
+        "C02/aep_endpoint/observation.json#/local_resolution/references/3",
+        "aep://byte-offset/364461",
+        "C04/media_observer/real-observation",
+        "C04/media_observer/ffprobe-exit=0"
+      ],
+      "reason": "native_fullpath_declaration_and_local_existence",
+      "status": "supported"
+    }
+  },
+  "schema": "mak-cycle-c04-real-evidence-v1",
+  "source_documents": {
+    "aep_reference_basename": "tottem_ojo.mp4",
+    "aep_reference_offset": 364461,
+    "aep_sha256": "99247d6506c6d1d9ce3023f4a1e044da47c806e3cd606d47b61e70fb32f5c460"
+  },
+  "status": "observed"
+}

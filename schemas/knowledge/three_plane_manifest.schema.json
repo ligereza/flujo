@@ -1,0 +1,140 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "three-plane-local-surfaces-v1",
+  "title": "Three-plane local surface manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "contract", "materialization", "surfaces"],
+  "properties": {
+    "schema": {"const": "three-plane-local-surfaces-v1"},
+    "contract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "authority_order",
+        "local_surfaces_are_authoritative",
+        "git_is_runtime_authority",
+        "bidirectional_sync",
+        "primary_writer"
+      ],
+      "properties": {
+        "authority_order": {
+          "type": "array",
+          "const": ["local_surfaces", "catalog", "git_projection"]
+        },
+        "local_surfaces_are_authoritative": {"const": true},
+        "git_is_runtime_authority": {"const": false},
+        "bidirectional_sync": {"const": false},
+        "primary_writer": {"const": "not_configured"}
+      }
+    },
+    "materialization": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "material_moved",
+        "files_copied",
+        "writes_to_source_surfaces"
+      ],
+      "properties": {
+        "status": {"const": "not_applied"},
+        "material_moved": {"const": false},
+        "files_copied": {"const": 0},
+        "writes_to_source_surfaces": {"const": false}
+      }
+    },
+    "surfaces": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 3,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "surface_id",
+          "plane",
+          "physical_node",
+          "surface_kind",
+          "authority_role",
+          "owner",
+          "producer",
+          "root_uri",
+          "provenance",
+          "hashes",
+          "transport"
+        ],
+        "properties": {
+          "surface_id": {
+            "enum": ["git_transport", "windows_director", "mak_operational"]
+          },
+          "plane": {
+            "enum": ["git_transport", "director_creative", "operational_knowledge"]
+          },
+          "physical_node": {"enum": ["git", "windows", "mak"]},
+          "surface_kind": {"type": "string", "minLength": 1},
+          "authority_role": {"enum": ["local_authority", "projection_only"]},
+          "owner": {"type": "string", "minLength": 1},
+          "producer": {"type": "string", "minLength": 1},
+          "root_uri": {"type": "string", "format": "uri-reference"},
+          "provenance": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["source_surface", "source_kind", "status", "evidence_required"],
+            "properties": {
+              "source_surface": {
+                "type": ["string", "null"],
+                "enum": ["git_transport", "windows_director", "mak_operational", null]
+              },
+              "source_kind": {"type": "string", "minLength": 1},
+              "status": {"const": "declared"},
+              "evidence_required": {"const": true}
+            }
+          },
+          "hashes": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["algorithm", "scope", "status", "artifacts"],
+            "properties": {
+              "algorithm": {"const": "sha256"},
+              "scope": {"const": "explicit_artifacts_only"},
+              "status": {"enum": ["not_computed", "complete"]},
+              "artifacts": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": ["artifact_id", "uri", "bytes", "sha256"],
+                  "properties": {
+                    "artifact_id": {"type": "string", "minLength": 1},
+                    "uri": {"type": "string", "format": "uri-reference"},
+                    "bytes": {"type": "integer", "minimum": 0},
+                    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+                  }
+                }
+              }
+            }
+          },
+          "transport": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "eligibility",
+              "direction",
+              "mode",
+              "human_gate_required",
+              "material_moved"
+            ],
+            "properties": {
+              "eligibility": {"enum": ["reviewed_only", "review_required"]},
+              "direction": {"type": "string", "minLength": 1},
+              "mode": {"type": "string", "minLength": 1},
+              "human_gate_required": {"const": true},
+              "material_moved": {"const": false}
+            }
+          }
+        }
+      }
+    }
+  }
+}

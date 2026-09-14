@@ -1,0 +1,13 @@
+id: paralelo_89
+name: Paralelo 89
+type: club
+scale_default: base
+capacity_bucket: unknown
+recommended_preset: base
+status: specs_needed
+source: inferido del nombre de archivo C:/RD FRVR.PARALELO89.png (2026-07-17)
+notes:
+  - Venue reiterado de la productora FRVR (inferido).
+  - FALTAN specs reales: aforo, m2, requisitos electricos/agua, preset confirmado.
+  - Completar con datos del usuario o de un rider real antes de usar como fuente.
+requirements_defaults: {}

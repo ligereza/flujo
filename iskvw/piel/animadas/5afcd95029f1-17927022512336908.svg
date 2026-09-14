@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" data-name="5afcd95029f1-17927022512336908">
+<style>
+.c0{animation:k_latir 12s ease-in-out infinite}
+@keyframes k_latir{0%,100%{transform:scale(1)}50%{transform:scale(1.09)}}
+</style>
+<rect width="120" height="120" fill="#2b1055"/>
+<g id="capa-0-protagonista" transform="translate(60,42)" data-rol="protagonista" data-gesto="latir" data-ritmo="12s" data-figura="anillo"><title>protagonista - anillo</title><g class="c0"><g transform="scale(20)"><circle r=".82" fill="none" stroke="#ffe259" stroke-width=".16"/></g></g></g>
+<g id="capa-1-cielo" transform="translate(60,38)" data-rol="cielo" data-gesto="quieto" data-ritmo="4s" data-figura="figura" opacity=".38"><title>cielo - figura</title><g class="c1"><g transform="scale(30)"><circle cy="-.42" r=".30" fill="#ffe259"/><path d="M-.42,1 V.05 a.42,.42 0 0 1 .84,0 V1 Z" fill="#ffe259"/></g></g></g>
+</svg>

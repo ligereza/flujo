@@ -1,0 +1,170 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://github.com/ligereza/flujo/schemas/intake.schema.json",
+  "title": "flujo intake pedido",
+  "description": "Esquema de pedido de diseño que entregan colegas/jefes. intake_version 1.0",
+  "type": "object",
+  "required": ["intake_version", "pedido"],
+  "additionalProperties": false,
+  "properties": {
+    "intake_version": {
+      "type": "string",
+      "enum": ["1.0"]
+    },
+    "pedido": {
+      "type": "object",
+      "required": ["tipo_pieza", "contenido"],
+      "additionalProperties": false,
+      "properties": {
+        "id_externo": { "type": "string" },
+        "area": {
+          "type": "string",
+          "description": "Área de la ONG. eventos => entra por correo; suplementos => por whatsapp.",
+          "enum": ["eventos", "suplementos", "comun"]
+        },
+        "solicitante": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "nombre": { "type": "string" },
+            "canal": {
+              "type": "string",
+              "enum": ["correo", "whatsapp", "instagram", "formulario", "otro"]
+            },
+            "contacto": { "type": "string" }
+          }
+        },
+        "tipo_pieza": {
+          "type": "string",
+          "enum": [
+            "etiqueta", "flyer", "one_page", "carrusel", "rider", "sticker", "tarjeta", "pendon",
+            "cartelera", "post", "historia", "brief", "bandera"
+          ]
+        },
+        "formato_sugerido": { "type": "string" },
+        "medidas": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "ancho_cm": { "type": "number", "exclusiveMinimum": 0 },
+            "alto_cm": { "type": "number", "exclusiveMinimum": 0 },
+            "orientacion": {
+              "type": "string",
+              "enum": ["horizontal", "vertical", "cuadrado"]
+            },
+            "sangrado_mm": { "type": "number", "minimum": 0 },
+            "area_segura_mm": { "type": "number", "minimum": 0 }
+          }
+        },
+        "productos": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "contenido": {
+          "type": "object",
+          "required": ["titulo"],
+          "additionalProperties": false,
+          "properties": {
+            "titulo": { "type": "string", "minLength": 1 },
+            "subtitulo": { "type": "string" },
+            "cuerpo": { "type": "string" },
+            "llamado_accion": { "type": "string" },
+            "extras": { "type": "object" }
+          }
+        },
+        "marca": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "nombre": { "type": "string" },
+            "web": { "type": "string" },
+            "paleta_preferida": {
+              "type": "array",
+              "items": { "type": "string", "pattern": "^#([0-9a-fA-F]{6}|[0-9a-fA-F]{3})$" }
+            },
+            "logo_adjunto": { "type": "string" }
+          }
+        },
+        "entrega": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "formatos": {
+              "type": "array",
+              "items": {
+                "type": "string",
+                "enum": ["editable_svg", "vectorizado_svg", "pdf_impresion", "zip"]
+              }
+            },
+            "fecha_limite": { "type": "string", "format": "date" },
+            "destino": {
+              "type": "string",
+              "enum": ["imprenta", "digital", "ambos"]
+            }
+          }
+        },
+        "restricciones": {
+          "type": "object",
+          "additionalProperties": false,
+          "properties": {
+            "no_inventar_claims": { "type": "boolean" },
+            "texto_vectorizado": { "type": "boolean" },
+            "editable_para_illustrator": { "type": "boolean" }
+          }
+        },
+        "notas": { "type": "string" },
+        "modificacion": {
+          "type": "object",
+          "description": "Presente solo cuando el pedido es un cambio sobre una pieza existente.",
+          "required": ["pieza_existente", "tipo_cambio"],
+          "additionalProperties": false,
+          "properties": {
+            "pieza_existente": {
+              "type": "string",
+              "description": "id/folio del job o ruta del config.json a modificar"
+            },
+            "tipo_cambio": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "string",
+                "enum": ["proporcion", "resolucion", "texto", "color", "imagen", "otro"]
+              }
+            },
+            "proporcion": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "ancho_cm": { "type": "number", "exclusiveMinimum": 0 },
+                "alto_cm": { "type": "number", "exclusiveMinimum": 0 }
+              },
+              "required": ["ancho_cm", "alto_cm"]
+            },
+            "resolucion": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "dpi": { "type": "number", "exclusiveMinimum": 0 },
+                "motivo": { "type": "string" }
+              },
+              "required": ["dpi"]
+            },
+            "detalle": { "type": "string" }
+          }
+        }
+      },
+      "anyOf": [
+        { "required": ["modificacion"] },
+        { "required": ["formato_sugerido"] },
+        {
+          "properties": {
+            "medidas": {
+              "required": ["ancho_cm", "alto_cm"]
+            }
+          },
+          "required": ["medidas"]
+        }
+      ]
+    }
+  }
+}

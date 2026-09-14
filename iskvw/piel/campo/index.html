@@ -1,0 +1,1484 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='9' fill='%23e8e4da'/%3E%3C/svg%3E">
+<title>ISKVW</title>
+<style>
+  /* ── El sitio es el metronomo, no escucha nada. No hay menu, no hay
+       portada, no hay indicador de donde estas. Se entra por el medio. ── */
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{height:100%;overflow:hidden;background:#08080a;overscroll-behavior:none}
+  body{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;color:#e8e4da;
+       touch-action:none;-webkit-user-select:none;user-select:none;cursor:crosshair}
+  canvas{position:fixed;inset:0;width:100%;height:100%;display:block}
+
+  /* La ficha aparece SOLO cuando el campo se resuelve. No es un panel:
+     es lo que quedo legible. */
+  #ficha{position:fixed;left:0;right:0;bottom:0;padding:22px 26px 30px;
+         pointer-events:none;opacity:0;transition:opacity .5s ease;
+         background:linear-gradient(to top,rgba(8,8,10,.94),rgba(8,8,10,0))}
+  #ficha.on{opacity:1}
+  #ficha h1{font-size:clamp(1.1rem,4.5vw,1.9rem);font-weight:600;letter-spacing:-.01em;
+            line-height:1.15;margin-bottom:6px}
+  #ficha .meta{font-size:.68rem;color:#8a857a;letter-spacing:.09em;text-transform:uppercase;
+               margin-bottom:9px}
+  #ficha p{font-size:.83rem;line-height:1.5;color:#b9b4a8;max-width:48ch}
+  #ficha .tags{margin-top:10px;font-size:.66rem;color:#6d685f;letter-spacing:.05em}
+
+
+  /* La obra NO es una linea: es su forma hecha de glifos que evolucionan. El
+     canvas se dimensiona en JS contra la altura real de la caja, porque esa
+     altura cambia con el viewport y con la orientacion.
+     El gesto la TOCA: la fuerza del ultimo arrastre la inclina y la estira, y
+     vuelve a cero sola cuando el visitante para. */
+
+  /* En un telefono la ficha con el trazo medio 393 px sobre 844 -- el 47% de la
+     pantalla, casi la mitad del campo tapada. Medido el 2026-07-27 con viewport
+     390x844 y densidad 3. En pantallas angostas el trazo cede altura para que el
+     campo siga siendo lo que se mira; la obra se sigue leyendo porque son
+     glifos y se re-dimensionan solos. */
+  @media (max-width:520px){
+    #ficha{padding:14px 18px 20px}
+
+    #ficha p{font-size:.78rem;max-width:100%}
+    #ficha .tags{margin-top:6px}
+  }
+  /* Telefono acostado: lo escaso es la altura, no el ancho. */
+  @media (max-height:480px){
+
+    #ficha{padding:8px 18px 10px}
+    #ficha h1{font-size:1rem;margin:2px 0}
+    #ficha p{display:none}   /* acostado no hay lugar para leer; queda el nombre */
+  }
+  /* Quedarse quieto DESARROLLA la obra. Idea del usuario: mas de cinco
+     segundos sin moverse y la pieza se presenta en vez de solo estar. Lo que
+     aparece son sus medidas -- lo que la obra encoda -- nunca la descripcion
+     que escribio la maquina: eso sonaria a que lo escribio el artista. */
+  #ficha .mas{max-height:0;opacity:0;overflow:hidden;
+    transition:max-height .9s ease,opacity .9s ease;
+    font-size:.66rem;line-height:1.7;color:#8a857a;letter-spacing:.04em}
+  #ficha.desplegada .mas{max-height:9em;opacity:1;margin-top:10px}
+  /* La pieza grafica se presenta ELLA MISMA al quedarse quieto: el svg
+     animado es la obra, no una descripcion -- la regla de la VOZ se respeta
+     porque no aparece texto de maquina, aparece la pieza. */
+  #ficha .icono{max-height:0;opacity:0;overflow:hidden;
+    transition:max-height 1.1s ease,opacity 1.1s ease}
+  #ficha.desplegada .icono{max-height:13em;opacity:1;margin-top:10px}
+  #ficha .icono svg{height:11em;width:auto;display:block}
+  #ficha a{color:#e8e4da;pointer-events:auto;text-decoration:none;
+           border-bottom:1px solid #3a372f;font-size:.72rem}
+
+  /* Respiracion: 16 ciclos por minuto. Bajo 0,3 Hz -- muy lejos de la zona
+     de parpadeo peligrosa, y ancla al cuerpo de quien mira. */
+  #aire{position:fixed;inset:0;pointer-events:none;
+        background:radial-gradient(circle at 50% 45%,rgba(232,228,218,.05),transparent 62%);
+        animation:respirar 3.75s ease-in-out infinite}
+  @keyframes respirar{0%,100%{opacity:.55;transform:scale(1)}50%{opacity:1;transform:scale(1.035)}}
+
+  #pista{position:fixed;top:16px;left:0;right:0;text-align:center;font-size:.63rem;
+         color:#4a463f;letter-spacing:.18em;text-transform:uppercase;
+         pointer-events:none;transition:opacity 1.4s ease}
+  #pista.ido{opacity:0}
+  /* The venue-layer link. It only EXISTS when the artist turns mejoras.venue3d
+     on in datos/tablero.json; the stroke mirrors the "campo" link the venue
+     viewer already carries back to here, so the pair reads as one gesture. */
+  #sala{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);
+        font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;
+        color:#4a463f;text-decoration:none;border-bottom:1px solid #26241f;
+        pointer-events:auto}
+  #sala:hover{color:#8a857a}
+  @media (prefers-reduced-motion:reduce){#aire{animation:none;opacity:.8}}
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div id="aire"></div>
+<div id="pista">desliza</div>
+<div id="ficha">
+  <div class="meta" id="f-meta"></div>
+  <h1 id="f-titulo"></h1>
+  <p id="f-texto"></p>
+  <div class="tags" id="f-tags"></div>
+  <div class="icono" id="f-icono"></div>
+  <div class="mas" id="f-mas"></div>
+</div>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════════
+   ISKVW · campo
+
+   La gramatica, decidida antes de escribir una linea:
+
+     rapido        → divergir     → build      → difuso, muchas
+     lento         → profundizar  → breakdown  → nitida, una
+     frenar de golpe → drop       → resuelve   → legible
+     subir         → perder foco, NO "volver"
+     inercia       → pesada al bajar, liviana al subir
+
+   Regla que ordena todo: la GRAMATICA es invariante, el CONTENIDO variable.
+   El recorrido cambia que obra aparece; nunca como responde el gesto. Si eso
+   se invierte, el visitante se desincroniza consigo mismo -- que es peor que
+   desincronizarse con su musica.
+
+   Y no se explica. Se descubre: si el visitante sabe que hay una correlacion,
+   esto es un catalogo con efectos. Si la encuentra sola, es una camara.
+
+   VOZ: lo que MAK percibio de cada obra (descripcion, colores, estilo) entra
+   al campo como POSICION y como VINCULO, nunca como texto visible. Una
+   descripcion escrita por una maquina puesta bajo el titulo de una obra suena
+   a que el artista la escribio, y no la escribio. Sin texto propio, no hay
+   texto.
+   ═══════════════════════════════════════════════════════════════════ */
+
+const RESPALDO = {"obras": [{"id": "vola", "title": "VOLÁ · lo visible y lo invisible", "category": "Animación", "year": 2026, "description": "El vaso que el humano ve y el vacío que se anima: figura y fondo de la misma imagen. El nombre lleva su propia tilde — volá / vola decide quién vuela.", "tags": ["generativo", "animación", "smil", "visible-invisible", "tilde"]}, {"id": "campo-motor-diagnostico", "title": "Campo · Motor de Diagnóstico", "category": "Generative", "year": 2026, "description": "El código que audita el sistema, tejido como campo repetido. La telemetría vuelta alfombra.", "tags": ["generativo", "código-tejido", "field"]}, {"id": "cenefa-dossier", "title": "Cenefa · Dossier", "category": "2D", "year": 2026, "description": "Una investigación escrita tejida como borde: el texto que enmarca la obra se vuelve el marco mismo.", "tags": ["generativo", "código-tejido", "border"]}, {"id": "wip-malla-reactiva", "title": "Malla Reactiva", "category": "3D", "year": 2026, "description": "Geometría que responde al cursor y al scroll. WebGL en vivo.", "tags": ["interactivo", "webgl", "tiempo-real"]}, {"id": "sala-flujo-3d", "title": "sala flujo — portafolio 3D", "category": "3D", "year": 2026, "description": "Una galeria a oscuras: las piezas dan la luz. Telar, cauce en rotonda-zootropo, ecosistema, tilde -- recorrida en WebGL + CSS3D, no en fotos de la galeria.", "tags": ["interactivo", "webgl", "css3d", "3d", "tiempo-real"]}, {"id": "tapiz-system-projection", "title": "TAPIZ :: system projection", "category": "Generative", "year": 2026, "description": "system projection :: psicosis / fungi diagnostics :: calm compilation. Panel en vivo (luminous mesh, chromatic mask, chronology) con esporas clickeables que decodifican assets en decadencia.", "tags": ["interactivo", "canvas", "generativo", "psicosis", "diagnostico"]}, {"id": "cauce-sala3d", "title": "Cauce · Sala 3D", "category": "Animación", "year": 2026, "description": "El build de una galería 3D leído por el cauce: mismo token, mismo color, patrón reconocido y no impuesto.", "tags": ["generativo", "animación", "smil"]}, {"id": "medallon-entrada", "title": "Medallón · Entrada", "category": "Generative", "year": 2026, "description": "La puerta del instrumento tejida como medallón mínimo: casi vacía, porque entrar es solo delegar.", "tags": ["generativo", "código-tejido", "medallion"]}]};   // se reemplaza con datos/obras.json
+
+/* ── el estado, todo escalar: nada de scroll nativo con DOM infinito.
+      Un movil de gama media convierte eso en diapositiva. ── */
+const E = {
+  pos: 0,          // posicion en el campo
+  vel: 0,          // velocidad instantanea
+  suave: 0,        // velocidad suavizada -> es el diafragma
+  lat: 0,          // desplazamiento lateral (arrastre horizontal)
+  latObj: 0,
+  foco: null,      // obra resuelta
+  t: 0,
+  tocando: false,
+  ultimoY: 0, ultimoX: 0,
+  quieto: 0,       // cuadros seguidos casi detenido
+  pinch: 0,        // -1 cerrar .. +1 abrir, por pellizco. Se suma al diafragma
+  fuerza: 0,       // cuan fuerte fue el ultimo gesto: deforma el trazo resuelto
+  formaPts: null,  // destino de cada nodo cuando una obra resuelve
+  forma: 0,        // 0 campo .. 1 obra. Interpolado, no conmutado
+  formaTempo: 0.6, // el pulso propio de la obra resuelta
+  despliegue: 0,   // 0 .. 1: cuanto se desarrollo la obra al quedarse quieto
+};
+
+/* Inercia asimetrica: bajar pesa (entrar al agua), subir es liviano (flotar).
+   Es el mismo resorte con distinta constante -- una linea de diferencia, y el
+   visitante lo siente sin poder nombrarlo. */
+const K_BAJA = 0.055, K_SUBE = 0.11;
+
+const c = document.getElementById('c');
+const ctx = c.getContext('2d', {alpha:false});
+let W=0, H=0, DPR=1, OBRAS=[], NODOS=[], LARGO=0;
+// Los vinculos del contrato, cuando el sustrato los trae. Se guardan aunque
+// todavia no se dibujen: como se ven es una decision del artista, no del
+// programa, y el dato tiene que estar antes de que esa decision se pueda tomar.
+let VINCULOS=[];
+// The archive keeps every measured relation in its JSON. The skin only needs
+// the strongest local neighbours in a frame; drawing the full historical graph
+// made old noise cost every animation frame. This is visual LOD, not deletion.
+const MAX_VECINOS_VISIBLES = 12;
+// Vecinos por INDICE de nodo: [indice, peso, indice, peso, ...]. Se arma una
+// vez en `sembrar()`. Es lo que evita recorrer todos los pares en cada frame,
+// que es el defecto medido de la referencia de la que salio este campo.
+let VECINOS=[];
+
+// Los colores que la percepcion encontro en la obra. Si no hay, se devuelve
+// null y quien llama usa el tono neutro: no se inventa un color.
+const TONOS = {rojo:0, naranja:28, amarillo:52, verde:120, cyan:180, celeste:200,
+  azul:220, violeta:270, morado:280, magenta:310, rosa:330, negro:null,
+  blanco:null, gris:null, marron:20, cafe:20, dorado:45, plateado:null};
+// La percepcion devuelve cosas como "Rojo (camiseta)" o "Azul oscuro": vale la
+// primera palabra, el resto es donde esta ese color. Una sola copia de la
+// cuenta porque la usan el tono y la saturacion, y dos copias divergen.
+function palabraColor(c){
+  return String(c).toLowerCase().normalize('NFD')
+    .replace(/[̀-ͯ]/g,'').trim().split(/[\s(,]/)[0];
+}
+function tonoDe(colores){
+  for (const c of (colores||[])){
+    const t = TONOS[palabraColor(c)];
+    if (typeof t === 'number') return t;
+  }
+  return null;
+}
+// Proporcion CROMATICA de lo percibido: negro, blanco, gris y plateado no
+// tienen tono, asi que una obra acromatica no puede tenirle el color a nadie.
+// No es una saturacion HSL medida sobre el pixel -- es la que declara la
+// percepcion, y es el unico dato de color que el archivo tiene.
+function saturacionDe(colores){
+  let vistos = 0, cromaticos = 0;
+  for (const c of (colores||[])){
+    const p = palabraColor(c);
+    if (!(p in TONOS)) continue;          // no es del vocabulario: no cuenta
+    vistos++;
+    if (typeof TONOS[p] === 'number') cromaticos++;
+  }
+  return vistos ? cromaticos/vistos : 0;
+}
+
+/* ═══ el patch de efectos ═══════════════════════════════════════════════
+   La obra no se EXHIBE en el campo: lo DEFORMA. Y lo deforma con lo que ella
+   misma mide -- las tildes que carga, los subtrazos de su vector, los colores
+   que la percepcion le encontro, su materia. Cada coeficiente de aca abajo
+   sale de un dato de la pieza; no hay una sola constante decorativa. Si la
+   obra no trae el dato, el efecto vale CERO y el campo queda como estaba: la
+   primera regla del contrato es que ninguna pieza afirma un dato que no tiene,
+   y un efecto es una afirmacion.
+
+   Se cablea como un sintetizador modular. Una fila del tablero conecta una
+   SENAL (un dato de la obra) con un EFECTO (que le hace al espacio vecino) y
+   una ganancia. Probar otra combinacion es editar `datos/tablero.json`, no
+   esta piel: es la misma regla del esquema -- la piel se cambia sin tocar los
+   datos, y al reves.
+
+   La llave maestra es `mejoras.patch_efectos`, y esta en false hasta que el
+   artista la mueva. En false el bucle de dibujo hace exactamente las mismas
+   cuentas que hacia antes de existir este bloque: lo unico que se paga es un
+   booleano por cuadro.
+
+   Lo que este patch NO hace, porque el costo esta medido y es la ley de esta
+   piel: recorrer pares de nodos. En cada cuadro emiten como mucho TRES obras
+   -- las mas cercanas a la lectura --, sus coeficientes se calculan una vez
+   por cuadro sobre arreglos ya reservados, y cada nodo mira solo esas tres.
+   Nada se reserva dentro del bucle.
+   ══════════════════════════════════════════════════════════════════════ */
+const SENALES = ['tilde','trazo','color','etiqueta','peso'];
+// El orden importa y la lista se declara ANTES que los buffers: `EF_ON` y
+// `EMIS.coef` se dimensionan con `EFECTOS.length`, asi que agregar un efecto
+// con un `push` posterior deja los buffers cortos y el indice nuevo escribe
+// sobre la franja del emisor siguiente, en silencio. Un efecto se agrega
+// aca arriba o no se agrega.
+const EFECTOS = ['pulso','curvatura','sangrado','desgarro','gravedad','luz'];
+const EF_PULSO=0, EF_CURVATURA=1, EF_SANGRADO=2, EF_DESGARRO=3, EF_GRAVEDAD=4,
+      EF_LUZ=5;
+const MAX_EMISORES = 3;
+
+// El cableado por defecto: uno a uno, cada dato al efecto que le corresponde.
+// Es lo que el tablero escribe tal cual; vive tambien aca para que la piel
+// abra sin el archivo (regla 3 del contrato: abre sin internet).
+const PATCH_DEFECTO = [
+  {dato:'tilde',    efecto:'pulso',     ganancia:1},
+  {dato:'trazo',    efecto:'curvatura', ganancia:1},
+  {dato:'color',    efecto:'sangrado',  ganancia:1},
+  {dato:'etiqueta', efecto:'desgarro',  ganancia:1},
+  {dato:'peso',     efecto:'gravedad',  ganancia:1},
+];
+
+// rutas: plano, [senal, efecto, ganancia, senal, efecto, ganancia, ...]. Se
+// recorre en cada cuadro, asi que no se recorre un arreglo de objetos.
+const PATCH = {on:false, rutas:new Float64Array(0)};
+
+// Per-effect switches UNDER the master flag (`efectos` in the board). All ON
+// by default, so a board that only carries the master flag behaves exactly as
+// it always did. A switch set to false silences THAT effect and only that one:
+// its routes are dropped at compile time, so an off effect leaves a
+// coefficient of exactly zero and costs nothing per frame. Absent or unknown
+// keys change nothing -- the board only speaks about effects the skin knows.
+const EF_ON = new Uint8Array(EFECTOS.length).fill(1);
+
+function compilarPatch(filas){
+  const out = [];
+  for (const f of (filas||[])){
+    const s = SENALES.indexOf(f && f.dato);
+    const e = EFECTOS.indexOf(f && f.efecto);
+    // Una fila que nombra algo que la piel no conoce se descarta entera.
+    // Adivinar cual quiso decir seria inventar una intencion que no esta
+    // escrita, y ese es justo el error que el esquema prohibe.
+    if (s < 0 || e < 0) continue;
+    // A route into an effect whose switch is off is a wire into a muted
+    // module: dropping it here is what makes "off" mean zero, not "small".
+    if (!EF_ON[e]) continue;
+    const g = Number(f.ganancia);
+    if (!Number.isFinite(g) || g <= 0) continue;
+    out.push(s, e, Math.min(g, 8));       // techo: una ganancia no es infinita
+  }
+  PATCH.rutas = Float64Array.from(out);
+}
+compilarPatch(PATCH_DEFECTO);
+
+/* El nodo como glifo en vez de como circulo. Se publica APAGADA y la enciende
+   el artista desde `datos/tablero.json`, igual que `patch_efectos`: una llave
+   ausente es una mejora que no existe todavia, no una apagada, y quien la lee
+   decide su default. El de aca es false, que es la piel de siempre. */
+let NODO_GLIFO = false;
+
+function aplicarTablero(t){
+  if (!t || typeof t !== 'object') return;
+  PATCH.on = !!(t.mejoras && t.mejoras.patch_efectos);
+  NODO_GLIFO = !!(t.mejoras && t.mejoras.nodo_glifo);
+  if (t.efectos && typeof t.efectos === 'object')
+    for (let e = 0; e < EFECTOS.length; e++)
+      if (t.efectos[EFECTOS[e]] === false) EF_ON[e] = 0;
+  // Recompile even when the board brings no wiring of its own: the default
+  // wiring has to honour the per-effect switches too.
+  compilarPatch(Array.isArray(t.patch) && t.patch.length ? t.patch : PATCH_DEFECTO);
+}
+
+/* Las senales de UNA obra, medidas una sola vez al sembrar. Cada una queda
+   entre 0 y 1, y vale 0 cuando el dato no esta. Los divisores no son gusto:
+   salen del archivo medido (219 piezas, iskvw/datos/campo.json) -- marcas de
+   tilde llegan a 6, los subtrazos tienen mediana 22 y percentil 90 en 83, los
+   puntos del vector llegan a 1633. */
+function senalesDe(o){
+  const s = new Float64Array(SENALES.length);
+  s[0] = Math.min((o.tilde && o.tilde.marcas || 0) / 6, 1);
+  s[1] = Math.min((o.trazo && o.trazo.subtrazos || 0) / 90, 1);
+  s[2] = saturacionDe(o.colores);
+  s[3] = quebrada(o) ? 1 : 0;
+  // La materia de la pieza. El contrato la declara (`peso`, por defecto 1);
+  // cuando no viene, se usa la materia MEDIDA de su vector -- el mismo hecho
+  // por otra via, no un relleno. Sin ninguna de las dos no hay gravedad: no se
+  // inventa masa.
+  s[4] = typeof o.peso === 'number' ? Math.min(o.peso/3, 1)
+       : Math.min((o.trazo && o.trazo.puntos || 0) / 1600, 1);
+  return s;
+}
+// La etiqueta de quiebre es CURATORIAL: la pone quien clasifica la obra, no la
+// piel. Sin etiqueta no hay desgarro -- el campo no decide solo que una pieza
+// esta rota.
+const RE_QUIEBRE = /glitch|reactiv|error|ruido|psicosis|quiebre|fallo/i;
+function quebrada(o){
+  const etqs = o.tags || o.etiquetas;
+  if (Array.isArray(etqs))
+    for (const t of etqs) if (RE_QUIEBRE.test(String(t))) return true;
+  return RE_QUIEBRE.test(String(o.estilo || ''));
+}
+
+// Los emisores del cuadro. Todo reservado una vez: en cada cuadro se
+// reescriben estos mismos arreglos.
+const EMIS = {
+  n: 0,
+  idx:  new Int32Array(MAX_EMISORES),
+  x:    new Float64Array(MAX_EMISORES),
+  y:    new Float64Array(MAX_EMISORES),
+  campo:new Float64Array(MAX_EMISORES),   // su `y` en el campo, no en pantalla
+  tono: new Float64Array(MAX_EMISORES),
+  coef: new Float64Array(MAX_EMISORES * EFECTOS.length),
+  // El giro de la curvatura, resuelto una vez por cuadro y por emisor. Medido:
+  // hacer el seno y el coseno DENTRO del bucle de nodos costaba 4,5 ms por
+  // cuadro con 479 nodos (37,3 contra 32,8 apagado, un 14% de mas). Aca son
+  // tres senos por cuadro en vez de mil quinientos.
+  giroCo:new Float64Array(MAX_EMISORES),
+  giroSi:new Float64Array(MAX_EMISORES),
+  activo:false,                            // algun coeficiente distinto de cero
+};
+const _dEmis = new Float64Array(MAX_EMISORES);
+
+/* Las tres obras mas cercanas a la lectura, en UNA pasada escalar sobre `y`.
+   Sin ordenar el arreglo (eso seria O(n log n) por cuadro y reservaria) y sin
+   mirar un solo par de nodos. Fuera de alcance no emite nadie. */
+function elegirEmisores(alcance){
+  EMIS.n = 0;
+  if (!PATCH.on || !PATCH.rutas.length) return;
+  for (let i = 0; i < NODOS.length; i++){
+    const dy = Math.abs(NODOS[i].y - E.pos);
+    if (dy > alcance) continue;
+    if (EMIS.n === MAX_EMISORES && dy >= _dEmis[MAX_EMISORES-1]) continue;
+    let k = Math.min(EMIS.n, MAX_EMISORES-1);
+    while (k > 0 && _dEmis[k-1] > dy){
+      _dEmis[k] = _dEmis[k-1]; EMIS.idx[k] = EMIS.idx[k-1]; k--;
+    }
+    _dEmis[k] = dy; EMIS.idx[k] = i;
+    if (EMIS.n < MAX_EMISORES) EMIS.n++;
+  }
+  // El coeficiente de cada efecto: dato de la obra por ganancia de la ruta,
+  // sumado. Dos rutas al mismo efecto se suman, como dos cables a la misma
+  // entrada.
+  EMIS.coef.fill(0);
+  EMIS.activo = false;
+  const R = PATCH.rutas;
+  for (let k = 0; k < EMIS.n; k++){
+    const n = NODOS[EMIS.idx[k]];
+    const base = k * EFECTOS.length;
+    for (let r = 0; r < R.length; r += 3)
+      EMIS.coef[base + (R[r+1]|0)] += n.sen[R[r]|0] * R[r+2];
+    EMIS.campo[k] = n.y;
+    // El giro de la curvatura ya resuelto: adentro del bucle de nodos solo
+    // quedan multiplicaciones.
+    const ang = Math.min(EMIS.coef[base+EF_CURVATURA], 1.2) * 0.9;
+    EMIS.giroCo[k] = Math.cos(ang);
+    EMIS.giroSi[k] = Math.sin(ang);
+    for (let e = 0; e < EFECTOS.length; e++)
+      if (EMIS.coef[base+e] > 0.001) EMIS.activo = true;
+  }
+}
+
+// Mezcla de tonos por el camino CORTO del circulo: de 350 a 10 son 20 grados,
+// no 340. Sin esto el sangrado daria una vuelta entera por el arcoiris.
+function mezclarTono(a, b, m){
+  const dif = ((b - a + 540) % 360) - 180;
+  return (a + dif*m + 360) % 360;
+}
+
+function medir(){
+  DPR = Math.min(window.devicePixelRatio||1, 2);   // 2 es techo: 3 no se ve y cuesta
+  W = c.clientWidth; H = c.clientHeight;
+  c.width = W*DPR; c.height = H*DPR;
+  ctx.setTransform(DPR,0,0,DPR,0,0);
+}
+
+/* ── el campo ──
+   PENDIENTE DECLARADO, y no es menor. Hoy la posicion sale de un hash del
+   identificador: es estable, pero NO es distancia semantica. El propio
+   doublecup lo dejo escrito como el riesgo de su pieza:
+
+     "las posiciones de nodo se reparten por rango en cada eje: la cercania
+      entre nodos no es distancia semantica y el espectador la va a leer
+      como si lo fuera"
+
+   Esta piel comete hoy esa misma mentira. Se corrige cuando las posiciones
+   salgan de los 3157 vinculos MEDIDOS del micelio de MAK: ahi la cercania
+   pasa a significar, y el campo deja de afirmar lo que no sabe.
+   Mientras tanto NO se dibujan lineas entre nodos sin etiqueta compartida:
+   una linea es una afirmacion mas fuerte que una posicion. ── */
+/* ── el contrato, traducido a lo que esta piel ya sabe leer ──
+   Una pieza del contrato no tiene la misma forma que una obra del campo: la
+   posicion viaja en `posicion:{x,y}` (campo OPCIONAL, porque una pieza sin
+   medir no afirma una posicion) y el titulo puede venir VACIO a proposito --
+   en una obra del artista, lo que MAK percibio no es autoria, viaja en
+   `extra.percibido`. Traducir aca y no cambiar `sembrar()` mantiene el resto
+   de la piel igual: la regla del esquema es que la piel se cambia sin tocar
+   los datos, y vale al reves. Campo que no conoces, campo que ignoras. */
+function delContrato(p){
+  const pos = p.posicion || {};
+  return {
+    id: p.id,
+    title: p.titulo || p.extra?.percibido || '',
+    description: p.resumen || '',
+    tags: p.etiquetas || [],
+    x: typeof pos.x === 'number' ? pos.x : undefined,
+    y: typeof pos.y === 'number' ? pos.y : undefined,
+    colores: p.extra?.colores,
+    clase: p.clase,
+    medio: p.medio,
+    abstraccion: p.extra?.abstraccion || 0,
+    firmada: !!p.extra?.firmada,
+    // Materia declarada y capas medidas: son las senales del patch de efectos.
+    // `peso` es campo del contrato; tilde y trazo viajan en `extra`, igual que
+    // los colores, porque son lo que la percepcion midio sobre la pieza.
+    peso: typeof p.peso === 'number' ? p.peso : undefined,
+    tilde: p.extra?.tilde,
+    trazo: p.extra?.trazo,
+  };
+}
+
+/* Doublecup: la textura no usa una rampa generica -- sus caracteres SON el
+   vocabulario percibido de la obra (titulo, etiquetas, tipo), tildes
+   incluidas: el residuo diacritico aparece literalmente en la textura.
+   Ordenado por frecuencia para que lo mas propio de la obra sea lo que mas
+   se ve. El campo generativo sigue gobernando ritmo y densidad; el CONTENIDO
+   ahora codifica la curatoria. Si una obra no trae letras, cae a la rampa. */
+function alfabetoDe(o){
+  const base = ((o.title||'') + ' ' + (o.tags||[]).join(' ') + ' ' +
+                (o.tipo||'')).toLowerCase();
+  const visto = new Map();
+  for (const ch of base)
+    if (/[a-z0-9áéíóúñü]/.test(ch))
+      visto.set(ch, (visto.get(ch)||0)+1);
+  if (!visto.size) return null;
+  return [...visto.entries()].sort((a,b)=>b[1]-a[1]).map(e=>e[0]);
+}
+
+function sembrar(obras){
+  OBRAS = obras;
+  // x e y vienen de la proyeccion MEDIDA (tools/gen_campo_iskvw.py): dos obras
+  // cerca en pantalla estan cerca de verdad. Medido sobre las 697: de los 3
+  // vecinos mas afines de cada obra, el 48.9% sigue siendo vecino aca -- 113
+  // veces mejor que repartirlas al azar. Antes esto salia de un hash y la
+  // cercania no significaba nada.
+  // Cada pieza decide SOLA si trae posicion medida. Antes esto se resolvia
+  // mirando `obras[0]`: con UNA fuente (campo.json, las 219 proyectadas) era
+  // cierto, y dejo de serlo cuando llego el sustrato. `archivo.json` trae esas
+  // mismas 219 con posicion junto a 260 que no la tienen -- las piezas
+  // animadas que cada obra deriva, los ensayos, y las 8 entradas de obras.json
+  // que son HERRAMIENTAS y no obras. La primera del arreglo es una de esas
+  // ultimas, asi que el campo entero caia al hash y la proyeccion medida no se
+  // usaba nunca. Medido: 203 marcas por cuadro en vez de 7647, y el patch de
+  // efectos inerte porque los emisores quedaban lejos de todo.
+  // Una pieza que TIENE su posicion se dibuja ahi. Negarla es la misma mentira
+  // que dibujar un vinculo sin sus dos extremos.
+  const medida = o => typeof o.x === 'number' && typeof o.y === 'number';
+  const proyectadas = obras.filter(medida).length;
+  NODOS = obras.map((o,i) => {
+    const h = [...(o.id||o.title||String(i))].reduce((a,ch)=>((a*31+ch.charCodeAt(0))>>>0),7);
+    return {
+      obra: o,
+      letras: alfabetoDe(o),
+      // El eje del recorrido es la coordenada medida, estirada al campo. El
+      // orden de lectura ES la estructura del archivo, no el de un listado.
+      // Sin posicion propia se reparte por hash DENTRO del campo medido: fuera
+      // de el, 260 piezas estirarian el recorrido a 220.000 px y dejarian una
+      // obra por pantalla. Si NADIE trae posicion no hay campo que respetar y
+      // vale el reparto de siempre.
+      y: medida(o) ? (o.y + 1) * 2600
+        : proyectadas ? h % 5200
+        : i * 460 + (h % 120) - 60,
+      x: medida(o) ? o.x : ((h >> 7) % 1000)/1000 * 1.6 - 0.8,
+      r: 18 + ((h >> 3) % 14),
+      fase: (h % 628)/100,
+      // El tono sale del color que la obra TIENE, no de su identificador.
+      tono: tonoDe(o.colores) ?? ((h >> 11) % 360),
+      // Lo que esta obra le hace al campo, medido una sola vez.
+      sen: senalesDe(o),
+    };
+  });
+  // El maximo, no el ultimo del arreglo: con posiciones proyectadas el orden
+  // del arreglo no tiene nada que ver con la posicion, y tomar el ultimo
+  // dejaba fuera del campo a la mitad de las obras.
+  LARGO = NODOS.length ? Math.max(...NODOS.map(n => n.y)) + 460 : 0;
+
+  // Los vinculos, indexados por nodo UNA vez. Un vinculo cuyas dos puntas no
+  // esten en el campo se descarta aca y no vuelve a costar nada: dibujar una
+  // linea hacia una pieza que no existe seria afirmar una relacion sin sus dos
+  // extremos.
+  VECINOS = NODOS.map(() => []);
+  if (VINCULOS.length){
+    const porId = new Map();
+    NODOS.forEach((n, i) => porId.set(n.obra.id, i));
+    const candidatos = NODOS.map(() => []);
+    for (const v of VINCULOS){
+      const a = porId.get(v.de), b = porId.get(v.a);
+      if (a === undefined || b === undefined || a === b) continue;
+      const peso = Math.max(0, Math.min(1, Number(v.peso) || 0));
+      candidatos[a].push([b, peso]);
+      candidatos[b].push([a, peso]);
+    }
+    for (let i = 0; i < candidatos.length; i++){
+      candidatos[i].sort((a, b) => b[1] - a[1]);
+      for (const [j, peso] of candidatos[i].slice(0, MAX_VECINOS_VISIBLES)){
+        VECINOS[i].push(j, peso);
+      }
+    }
+  }
+}
+
+/* ── el diafragma: la velocidad decide cuanto se ve y cuan nitido ──
+     Es la unica funcion que traduce gesto a imagen, y es pura: misma
+     velocidad, mismo resultado, siempre. Ahi vive la invariancia. */
+function diafragma(v){
+  // El pellizco es el OTRO modo de abrirlo. La velocidad lo abre sola cuando el
+  // visitante se lanza, y eso no cambia; pero en un telefono el unico control
+  // era deslizar, asi que abrir a voluntad no se podia. `E.pinch` va de -1
+  // (cerrar hasta una obra) a +1 (abrir el campo entero) y se suma, no
+  // reemplaza: la gramatica de que rapido = difuso sigue siendo invariante.
+  const s = Math.min(Math.max(Math.abs(v)/26 + E.pinch, 0), 1);
+  return {
+    apertura: s,                               // 0 = una obra nitida, 1 = campo difuso
+    alcance: 260 + s*1500,                     // cuantas entran en cuadro
+    nitidez: 1 - s,
+    ruido: s*s,
+  };
+}
+
+function dibujar(){
+  const d = diafragma(E.suave);
+  // Quien deforma este cuadro. Con el patch apagado esto sale en la primera
+  // linea y EMIS.n queda en 0.
+  elegirEmisores(d.alcance);
+  ctx.fillStyle = '#08080a';
+  ctx.fillRect(0,0,W,H);
+
+  const cx = W/2 + E.lat*W*0.28;
+  const cy = H*0.46;
+  let mejor = null, mejorD = 1e9;
+
+  // Cuando una obra resuelve, ESTOS nodos son sus puntos. No hay una segunda
+  // pieza en otra caja: el mismo cuerpo se pliega en la forma y se despliega de
+  // vuelta al campo. Correccion del usuario: "que sea uno, no dos elementos".
+  const F = E.forma;
+  const escalaForma = Math.min(W, H) * (0.34 + E.despliegue * 0.16);
+  const tGlifo = E.t * (E.formaTempo || 0.6);
+  // El cuerpo del glifo se guarda para que `luz` pueda dilatarlo por nodo sin
+  // volver a componer la cadena de la fuente ni leerla de vuelta del contexto.
+  // Se calcula una vez por cuadro; lo unico que paga por nodo es el que de
+  // verdad recibe luz, y emiten como mucho tres obras.
+  const GLIFO_PX = Math.max(7, escalaForma/34);
+  // Con `nodo_glifo` encendida -- como se publica -- TODO nodo pasa por
+  // `fillText`, no solo la obra resuelta: `soloGlifo` ya no depende de `F`
+  // cuando la llave esta puesta. `F` arranca en 0 exacto y solo se mueve si
+  // alguna vez algo resuelve, asi que un visitante que solo navega dejaba la
+  // fuente sin inicializar -- el tamano de letra de la sesion quedaba
+  // librado a lo que hubiera puesto el navegador, nunca a `GLIFO_PX`.
+  if (F > 0.02 || NODO_GLIFO){
+    ctx.font = `${GLIFO_PX}px ui-monospace,monospace`;
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+  }
+
+  // Donde cae en pantalla cada obra que emite, y con que tono tine. Tres
+  // llamadas por cuadro, no una por nodo. `posicionDe` es una declaracion, asi
+  // que ya esta disponible aca arriba.
+  const conPatch = PATCH.on && EMIS.n > 0 && EMIS.activo;
+  const invAlcance = 1 / d.alcance;      // una division por cuadro, no por nodo
+  if (conPatch){
+    for (let k = 0; k < EMIS.n; k++){
+      const p = posicionDe(EMIS.idx[k]);
+      EMIS.x[k] = p ? p.x : cx;
+      EMIS.y[k] = p ? p.y : cy;
+      EMIS.tono[k] = NODOS[EMIS.idx[k]].tono;
+    }
+  }
+
+  /* Donde cae un nodo en pantalla. Una sola funcion porque la usan DOS pasadas
+     -- los vinculos y los nodos -- y dos copias de la misma cuenta divergen el
+     dia que alguien toca una. Devuelve null si el nodo esta fuera de alcance:
+     con la obra armada ninguno se descarta, porque los lejanos son justamente
+     los que vienen a completar la figura. */
+  function posicionDe(ni){
+    const n = NODOS[ni];
+    const dy = n.y - E.pos;
+    const destino = F > 0.02 && E.formaPts ? E.formaPts[ni] : null;
+    if (Math.abs(dy) > d.alcance && !destino) return null;
+    const cerca = 1 - Math.min(Math.abs(dy)/d.alcance, 1);   // 1 = en el centro
+    let y = cy + dy * (0.55 + d.apertura*0.45);
+    let x = cx + n.x * W * (0.16 + d.apertura*0.30);
+    if (destino){
+      x += (cx + destino[0]*escalaForma - x) * F;
+      y += (cy + destino[1]*escalaForma - y) * F;
+    }
+    return {x, y, cerca, destino};
+  }
+
+  /* ── los vinculos, debajo de las obras ──
+     Se dibujan SIEMPRE y su opacidad sale del peso del vinculo: un vinculo mas
+     fuerte se ve mas. Decision del usuario, 2026-07-30.
+
+     Van antes del bucle de nodos para quedar por DEBAJO: la relacion es el
+     sustrato, la obra es lo que se mira.
+
+     Lo que este bucle NO hace, porque ya costo caro en la referencia de la que
+     salio el campo: recorrer todos los pares en cada frame. Los vecinos se
+     indexan una vez en `sembrar()` y aca solo se recorre la lista del nodo, y
+     solo si AMBAS puntas estan en la banda visible. Con el archivo completo son
+     miles de vinculos y la mayoria, en cualquier momento, esta fuera de
+     pantalla. */
+  if (VECINOS.length){
+    // ── el vinculo como haz de laser, no como linea plana ──
+    // Pedido del artista: "bloom lighting laser". Un haz real tiene un nucleo
+    // fino y saturado con un halo alrededor, y dos haces que se cruzan SUMAN
+    // luz -- no se tapan. `lighter` es composicion aditiva: donde dos trazos
+    // semitransparentes se superponen, el pixel se aclara en vez de
+    // mezclarse por encima. El halo (ancho, tenue) va primero y el nucleo
+    // (fino, brillante) encima, los dos del mismo tono frio para que el
+    // cruce siga leyendose como luz y no como un segundo color.
+    // El alfa de cada pasada sigue saliendo de la MISMA formula de siempre
+    // -- peso del vinculo por cercania por nitidez -- asi que el bloom
+    // cambia COMO se pinta un vinculo, nunca CUANDO se lo ve: la regla
+    // "tenue, acompana, no compite" (2026-07-30) sigue mandando.
+    ctx.globalCompositeOperation = 'lighter';
+    for (let ni = 0; ni < NODOS.length; ni++){
+      const lista = VECINOS[ni];
+      if (!lista) continue;
+      const a = posicionDe(ni);
+      if (!a) continue;
+      for (let k = 0; k < lista.length; k += 2){
+        const nj = lista[k];
+        if (nj < ni) continue;              // cada vinculo una sola vez
+        const b = posicionDe(nj);
+        if (!b) continue;
+        // Tenue: el techo es bajo a proposito. La linea acompana, no compite.
+        const alfa = lista[k+1] * 0.16 * Math.min(a.cerca, b.cerca)
+                     * (0.25 + d.nitidez*0.75);
+        if (alfa < 0.012) continue;         // por debajo de esto no se ve
+        ctx.lineWidth = 3.2;
+        ctx.strokeStyle = `rgba(150,195,255,${(alfa*0.55).toFixed(3)})`;
+        ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
+        ctx.lineWidth = 1;
+        ctx.strokeStyle = `rgba(225,235,255,${Math.min(alfa*2.3, 1).toFixed(3)})`;
+        ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
+      }
+    }
+    ctx.globalCompositeOperation = 'source-over';
+  }
+
+  for (let ni = 0; ni < NODOS.length; ni++){
+    const n = NODOS[ni];
+    const p = posicionDe(ni);
+    if (!p) continue;
+    const cerca = p.cerca;
+    const destino = p.destino;
+    let x = p.x, y = p.y;
+
+    // respiracion propia, y el ruido crece con la velocidad
+    const resp = 1 + Math.sin(E.t*1.67 + n.fase)*0.055;
+    const jitter = d.ruido * 13;
+    let px = x + (Math.random()-0.5)*jitter;
+    let py = y + (Math.random()-0.5)*jitter;
+    let r = n.r * resp * (0.55 + cerca*0.85);
+
+    /* ── lo que las obras cercanas le hacen a ESTE nodo ──
+       Cuatro efectos de dibujo; el quinto (gravedad) toca el estado y vive en
+       `paso()`. El peso de cada uno es la distancia AL EMISOR, no al centro de
+       la pantalla: la obra deforma lo que tiene alrededor, y a su propio lado
+       del campo. Con el patch apagado nada de esto se ejecuta y `tono` y `tG`
+       son literalmente los de antes. */
+    // `luz` vive en este scope y no dentro de `if (conPatch)` porque quien
+    // la consume es el bloque del GLIFO, que se dibuja mas abajo y afuera.
+    // Declarada adentro daba `ReferenceError: luz is not defined` en el
+    // primer cuadro -- lo atrapo el banco, que es para lo que esta.
+    let tono = n.tono, tG = tGlifo, luz = 0;
+    if (conPatch){
+      let pulso = 0, tira = 0, sangre = 0, sangreTono = 0;
+      for (let k = 0; k < EMIS.n; k++){
+        if (EMIS.idx[k] === ni) continue;     // una obra no se deforma a si misma
+        const inf = 1 - Math.min(Math.abs(n.y - EMIS.campo[k]) * invAlcance, 1);
+        if (inf < 0.01) continue;
+        const b = k * EFECTOS.length;
+        pulso += EMIS.coef[b+EF_PULSO] * inf;
+        tira  += EMIS.coef[b+EF_DESGARRO] * inf;
+        const s = EMIS.coef[b+EF_SANGRADO] * inf;
+        if (s > 0){ sangre += s; sangreTono += EMIS.tono[k] * s; }
+        luz   += EMIS.coef[b+EF_LUZ] * inf;
+        // curvatura: el nodo gira ALREDEDOR de la obra, asi que se dobla el
+        // espacio y no se lo estira. El giro es el mismo para todos (ya
+        // resuelto arriba) y lo que cambia con la distancia es CUANTO se
+        // recorre de el: el que esta al lado de la obra llega entero, el
+        // lejano se queda a medio camino. Va adentro del bucle porque cada
+        // emisor curva sobre su propio centro, y dos curvas se componen.
+        if (EMIS.coef[b+EF_CURVATURA] > 0.004){
+          const ux = px - EMIS.x[k], uy = py - EMIS.y[k];
+          const co = EMIS.giroCo[k], si = EMIS.giroSi[k];
+          px += (EMIS.x[k] + ux*co - uy*si - px) * inf;
+          py += (EMIS.y[k] + ux*si + uy*co - py) * inf;
+        }
+      }
+      // pulso: el tiempo del glifo se dilata y se contrae junto a la obra. No
+      // es mas rapido: es una respiracion del tiempo, asi que vuelve.
+      if (pulso > 0.001)
+        tG = tGlifo * (1 + Math.sin(E.t*1.9 + n.fase) * Math.min(pulso,1) * 0.6);
+      // sangrado: el color de la obra se corre sobre lo que tiene cerca.
+      if (sangre > 0.001)
+        tono = mezclarTono(n.tono, sangreTono/sangre, Math.min(sangre,1) * 0.85);
+      // desgarro: el corte es por FILA de 9 px -- una cinta que salta de pista,
+      // no ruido por pixel. Determinista dado E.t: el mismo cuadro se rompe
+      // igual dos veces.
+      if (tira > 0.01){
+        const fila = (py / 9 | 0) + (E.t * 3 | 0);
+        px += (fila & 1 ? 1 : -1) * Math.min(tira, 1) * 16;
+      }
+      // luz: la obra dilata a sus vecinos sin moverlos ni tenirlos. Es el
+      // unico efecto que toca el TAMANO, y por eso su firma no se confunde
+      // con ninguna de las otras cuatro: curvatura desplaza sin recolorear,
+      // sangrado recolorea sin desplazar, desgarro corta solo en x, y esta
+      // deja posicion y color intactos y cambia el radio. Tope en 40%: mas
+      // que eso y los glifos vecinos se pisan entre si.
+      if (luz > 0.001) r *= 1 + Math.min(luz, 1) * 0.4;
+    }
+
+    // Lo lejano se disuelve; lo cercano se afirma. Sin blur real: el blur
+    // cuesta y en un telefono de gama media se nota.
+    const a = Math.pow(cerca, 1.5) * (0.22 + d.nitidez*0.78);
+    // Con la obra armada el nodo YA es un glifo: el halo radial de abajo seria
+    // pintar dos veces la misma materia, y crear un gradiente por nodo y por
+    // cuadro es lo caro de este bucle. Medido con 697 nodos, CPU x6 y densidad
+    // 3: dibujando los dos, 34 fps.
+    /* ── el nodo COMO GLIFO, no como circulo ──
+       La tecnica esta escrita desde el 2026-07-30 en ASCII_REFERENCIA.md, con
+       la causa dicha por el usuario mirando Safari: «los vectorizados se
+       vuelven monotonos, y el svg tiene que ser la forma animada, ASCII como
+       patron, no una linea. Asi que el trazo deja de dibujarse como contorno:
+       se MUESTREA la forma».
+
+       Se aplico a la obra RESUELTA y no al nodo. Medido el 2026-08-01: la
+       maquinaria de glifos --la rampa, el campo que evoluciona, el vocabulario
+       de la obra, la regla doublecup-- corre solo cuando `destino && F > 0.35`,
+       o sea cuando el visitante esta cerca y quieto. El resto del tiempo cada
+       nodo son DOS arcos: un gradiente radial y un circulo solido. Eso es el
+       circulo con hilos que se ve el 95% del tiempo.
+
+       Encendida la llave, el nodo usa la MISMA materia que la obra: el mismo
+       campo, evaluado en la posicion del nodo en vez de en el punto de la
+       forma. No se inventa una estetica nueva: se aplica la escrita un nivel
+       mas arriba. Y sale mas barato -- se dejan de crear dos gradientes por
+       nodo y por cuadro, que es lo caro de este bucle.
+
+       Se publica APAGADA. Encenderla es decision del artista, igual que
+       `patch_efectos`: se edita `datos/tablero.json`, no la piel. */
+    const soloGlifo = (destino && F > 0.35) || NODO_GLIFO;
+    if (!soloGlifo){
+    const g = ctx.createRadialGradient(px,py,0,px,py,r*2.4);
+    g.addColorStop(0, `hsla(${tono},14%,88%,${a})`);
+    g.addColorStop(.45, `hsla(${tono},18%,62%,${a*0.34})`);
+    g.addColorStop(1, 'hsla(0,0%,0%,0)');
+    ctx.fillStyle = g;
+    ctx.beginPath(); ctx.arc(px,py,r*2.4,0,6.2832); ctx.fill();
+    }
+
+    if (soloGlifo){
+      // El glifo sale de un campo que evoluciona, asi que el patron nunca se
+      // repite: es generativo, no una animacion guardada. Cuando la obra se
+      // desarrolla (visitante quieto), la materia sube y se lee mas.
+      // Sin obra resuelta no hay punto de forma: el campo se evalua en la
+      // posicion del propio nodo. Es el mismo campo y la misma formula; lo
+      // unico que cambia es donde se lo mide.
+      //
+      // En `x,y` y NO en `px,py`: `px,py` ya traen el jitter, que sale de
+      // `Math.random()`. Con el nodo dibujado como arco eso movia pixeles y
+      // nada mas -- el contrato del medidor lo dice: "random jitter moves
+      // pixels, never counts". Con el nodo como glifo, la posicion decide QUE
+      // caracter sale, y un nivel que cae en el vacio de la rampa no se
+      // dibuja: el azar pasaba a decidir el CONTEO. Medido el 2026-08-01: dos
+      // corridas del medidor daban 370 y 369 textos para el mismo cuadro.
+      // El temblor es visual y sigue estando; la identidad del glifo es del
+      // nodo, no de donde lo dejo el temblor este cuadro.
+      const q = destino || [x*0.012, y*0.012];
+      const v = Math.sin(q[0]*17 + tG) * Math.cos(q[1]*13 - tG*0.61)
+              + Math.sin((q[0]+q[1])*9 + tG*1.37) * 0.5 * (1 + E.fuerza*2);
+      const RMP = rampa();
+      // El nivel YA NO depende de E.despliegue. Ese piso (55% a 100%) apagaba
+      // la textura generativa mientras se navegaba: despliegue solo sube
+      // quieto 5s (0,02 por cuadro) y cae en unos 8 cuadros al primer gesto,
+      // asi que "el campo esta apagado mientras se navega" era medible, no
+      // una lectura -- el nivel nunca alcanzaba el extremo denso de la rampa
+      // sin cinco segundos inmoviles. El glifo se genera con su rango
+      // COMPLETO siempre; quedarse quieto sigue revelando algo distinto (la
+      // ficha y el tamano de la forma resuelta, mas abajo), nunca la
+      // densidad del glifo.
+      const nivel = Math.max(0, Math.min(RMP.length-1,
+        Math.round(((v + 1.5)/3) * (RMP.length-1))));
+      // Doublecup: en los niveles bajos la rampa conserva el vacio (espacio,
+      // punto); desde ahi el caracter es del vocabulario de la obra, elegido
+      // por una segunda frecuencia del mismo campo para que la textura
+      // respire sin repetirse. Contenido curatorial, ritmo generativo.
+      let g2 = RMP[nivel];
+      if (nivel >= 2 && n.letras){
+        const vi = Math.sin(q[0]*23 - tG*0.7)
+                 * Math.cos(q[1]*19 + tG*0.43);
+        // `abstr` no existia: era una variable suelta que solo se evaluaba bajo
+        // el regimen industrial, asi que el ReferenceError esperaba a que el
+        // artista lo encendiera. La abstraccion es de la OBRA (curaduria.json).
+        g2 = REGIMEN === 'industrial' && (n.obra.abstraccion || 0) < 0.5
+           ? RMP[Math.max(2, nivel)]
+           : n.letras[Math.floor(((vi+1)/2) * 977) % n.letras.length];
+      }
+      if (g2 !== ' '){
+        // Con obra resuelta la opacidad sube con el despliegue; sin ella, el
+        // nodo se lee como se leia el circulo: por cercania y nitidez. Usar
+        // `F` cuando no hay obra dejaria el campo entero invisible.
+        const aG = destino && F > 0.35 ? (F-0.35)/0.65 : a;
+        const tonoFinal = tonoRegimen(n, tono);
+        const alfaGlifo = aG * (0.5 + nivel/(RMP.length-1)*0.5);
+        // ── el glifo con halo: el mismo pedido de "bloom lighting laser" ──
+        // Un segundo trazo del MISMO caracter, mas grande y tenue, DEBAJO --
+        // `lighter` para que el halo de un glifo y el de su vecino SUMEN luz
+        // donde se superponen (la textura densa brilla donde se junta) en
+        // vez de taparse. El nucleo, sin cambios mas abajo, sigue siendo el
+        // trazo nitido de siempre: el halo se AGREGA, no reemplaza nada de lo
+        // que ya dibujaba el glifo. Se salta bajo el piso de opacidad: un
+        // glifo casi invisible no necesita un halo que nadie va a ver, y
+        // evita pagar el doble de `fillText` en el fondo difuso del campo.
+        if (alfaGlifo > 0.05){
+          const fHalo = ctx.font;
+          const mH = /^([\d.]+)px/.exec(fHalo);
+          const pxHalo = (mH ? parseFloat(mH[1]) : GLIFO_PX) * 1.9;
+          ctx.globalCompositeOperation = 'lighter';
+          ctx.font = `${pxHalo}px ui-monospace,monospace`;
+          ctx.fillStyle = `hsla(${tonoFinal},70%,75%,${(alfaGlifo*0.4).toFixed(3)})`;
+          ctx.fillText(g2, px, py);
+          ctx.font = fHalo;
+          ctx.globalCompositeOperation = 'source-over';
+        }
+        ctx.fillStyle = `hsla(${tonoFinal},16%,90%,${alfaGlifo})`;
+        // luz: el vecino se DILATA. Aca y no en `r`, porque con `nodo_glifo`
+        // encendida -- que es como se publica -- el nodo no es un circulo y
+        // `r` no llega a dibujarse: su unico consumidor es el gradiente del
+        // bloque `if (!soloGlifo)`, que con la llave puesta nunca corre.
+        // El efecto se escribio primero contra `r` y el banco lo midio con un
+        // tablero sin `nodo_glifo`: 4.259 radios dilatados en un regimen que
+        // el sitio no usa. Medir el regimen equivocado da un numero cierto
+        // sobre algo que nadie ve.
+        if (luz > 0.001){
+          // Se guarda y se devuelve la fuente QUE HABIA, no `GLIFO_PX`.
+          // Restaurar a `GLIFO_PX` parecia equivalente y no lo es: el titulo
+          // de una obra se dibuja con `11px` y deja el contexto ahi, asi que
+          // "restaurar" al cuerpo del glifo ENCOGIA las marcas siguientes.
+          // Medido: 1.421 glifos pasaban de 11 a 9,6 px con el efecto puesto,
+          // o sea el efecto que dilata estaba achicando.
+          const fPrev = ctx.font;
+          // Se escala LA FUENTE PUESTA, no `GLIFO_PX`. No son lo mismo: el
+          // titulo de una obra deja el contexto en 11px y el cuerpo del glifo
+          // puede ser 7 (su minimo), asi que partir de `GLIFO_PX` daba 9,8 --
+          // MENOS que lo que habia. Medido: 22.110 px de tipo sin el efecto
+          // contra 19.162 con el. El efecto que dilata estaba achicando, y lo
+          // dijo el banco, no yo.
+          const mF = /^([\d.]+)px/.exec(fPrev);
+          const basePx = mF ? parseFloat(mF[1]) : GLIFO_PX;
+          ctx.font = `${basePx * (1 + Math.min(luz, 1) * 0.4)}px ui-monospace,monospace`;
+          ctx.fillText(g2, px, py);
+          ctx.font = fPrev;
+        } else {
+          ctx.fillText(g2, px, py);
+        }
+      }
+    } else {
+      ctx.fillStyle = `hsla(${tono},20%,92%,${a*0.95})`;
+      ctx.beginPath(); ctx.arc(px,py,r*0.42,0,6.2832); ctx.fill();
+    }
+
+    // El titulo solo existe cuando hay nitidez. Dibujar texto es caro:
+    // se paga solo cuando se puede leer.
+    if (cerca > 0.62 && d.nitidez > 0.55 && E.forma < 0.3){
+      const at = (cerca-0.62)/0.38 * (d.nitidez-0.55)/0.45;
+      ctx.font = '11px ui-monospace,monospace';
+      ctx.textAlign = 'center';
+      ctx.fillStyle = `rgba(232,228,218,${Math.min(at,1)*0.75})`;
+      ctx.fillText(nombreDe(n.obra).slice(0,42), px, py + r*2.1);
+    }
+
+    const dist = Math.abs(n.y - E.pos);
+    if (dist < mejorD){ mejorD = dist; mejor = n; }
+  }
+
+  // vinculos: solo con el campo abierto, y solo entre lo que comparte etiqueta.
+  // Con el diafragma cerrado estorban; con el abierto SON la imagen.
+  // Y solo cuando NO hay vinculos medidos. Esta capa infiere una relacion de
+  // una etiqueta compartida, que es justo lo que el sustrato ya no obliga a
+  // adivinar: `archivo.json` trae 269 vinculos MEDIDOS y los dibuja la capa de
+  // abajo, por peso. Compartir una etiqueta no es un vinculo -- afirmarlo es
+  // el mismo defecto que un elemento reclamando un dato que no codifica.
+  // Ademas no escalaba: es todos-contra-todos por cuadro. Medido el
+  // 2026-07-31, con el campo por fin en su tamano real (5.644 px y no 220.000):
+  // 35.902 segmentos y 31,7 ms por cuadro contra 2,8 ms sin ella, con un techo
+  // declarado de 1.200. Dibujaba CERO mientras la fuente era campo.json, cuyas
+  // piezas no traen `tags`, asi que esto no quita nada que se haya visto.
+  if (d.apertura > 0.3 && E.forma < 0.3 && !VINCULOS.length){
+    ctx.lineWidth = 1;
+    for (let i=0;i<NODOS.length;i++){
+      const a1 = NODOS[i]; if (Math.abs(a1.y-E.pos) > d.alcance) continue;
+      for (let j=i+1;j<NODOS.length;j++){
+        const b = NODOS[j]; if (Math.abs(b.y-E.pos) > d.alcance) continue;
+        const comunes = (a1.obra.tags||[]).filter(t=>(b.obra.tags||[]).includes(t)).length;
+        if (!comunes) continue;
+        const p1 = proyectar(a1,d,cx,cy), p2 = proyectar(b,d,cx,cy);
+        ctx.strokeStyle = `rgba(180,175,164,${0.03*comunes*(d.apertura-0.3)/0.7})`;
+        ctx.beginPath(); ctx.moveTo(p1.x,p1.y); ctx.lineTo(p2.x,p2.y); ctx.stroke();
+      }
+    }
+  }
+  return mejor;
+}
+
+// El id del corpus es "<hash>-<slug>". El slug sale del nombre de archivo, no
+// es un titulo que el artista haya puesto. Se muestra igual porque es SUYO --
+// a diferencia de la descripcion, que la escribio una maquina.
+/* El nombre, o el silencio. Nunca un numero.
+   Este respaldo se escribio para `obras.json`, donde el id es un slug y
+   "campo-motor-diagnostico" se vuelve "motor diagnostico". Sobre el archivo
+   real el id es "<hash>-<media id de instagram>", asi que el visitante leia
+   17876911804982196 como si fuera el titulo de la obra. Verificado en
+   navegador el 2026-07-27: cero errores de consola y un numero de 17 digitos
+   ocupando el nombre. Consola limpia no es lo mismo que correcto.
+   La regla es la que esta escrita cuatro lineas mas abajo para el texto:
+   silencio antes que voz prestada. Un fragmento sin letras no es un nombre. */
+function nombreDe(o){
+  if (o.title) return o.title;
+  const s = String(o.id||'').split('-').slice(1).join(' ').replace(/_/g,' ');
+  return /[a-z]/i.test(s) ? s : '';
+}
+
+function proyectar(n,d,cx,cy){
+  const dy = n.y - E.pos;
+  return {x: cx + n.x*W*(0.16+d.apertura*0.30), y: cy + dy*(0.55+d.apertura*0.45)};
+}
+
+/* ── la obra, cuando una resuelve ──
+   Se baja UNA sola, al freno, y se recuerda: 640 de las 697 tienen trazo y bajar
+   los 5 MB juntos para mostrar una sola seria justo lo que el trazado vino a
+   evitar. El nombre del archivo es el hash corto del id ("<hash>-<mediaid>").
+   Una obra sin trazo no deja un hueco: la ficha se muestra sin ella. */
+const _trazos = new Map();
+const _forma = new Map();          // id -> puntos muestreados, una sola vez
+let _pidForma = 0;
+
+/* ── UN organismo, no dos ──
+   Correccion del usuario, y es de concepto: "que sea uno, no dos elementos,
+   que esos mismos nodos sean los puntos". Antes la obra se dibujaba en una caja
+   aparte debajo del campo -- dos cuerpos mirandose. Ahora los NODOS DEL CAMPO
+   migran a la forma de la obra que resuelve y se vuelven sus glifos; al soltar,
+   vuelven a su lugar en el campo. Es el mismo cuerpo cambiando de estado.
+
+   Sale gratis lo que antes costaba: un solo canvas, un solo bucle, y la ficha
+   deja de ocupar media pantalla del telefono. */
+const RAMPA = ' .:-=+*#%@';
+/* Regimen estetico global (curaduria.json -> meta.regimen). 'industrial'
+   cambia la sustancia, no el mecanismo: rampa de bloques CP437 -- el linaje
+   ANSI/Atari, el caracter como unidad industrial -- y monocromo fosforo en
+   vez del tono por obra. La decision es del artista, no de la piel. */
+let REGIMEN = 'semantico';
+const REG = {
+  industrial: { rampa: ' .░▒▓█▓▒░█', tono: 96 },
+};
+function rampa(){ return (REG[REGIMEN] || {}).rampa || RAMPA; }
+// `base` es el tono ya sangrado por el patch; bajo el regimen industrial no se
+// usa, porque ahi el monocromo fosforo es la decision del artista y ningun
+// efecto la pisa.
+function tonoRegimen(n, base){
+  const r = REG[REGIMEN];
+  return r && r.tono != null ? r.tono : (base != null ? base : n.tono);
+}
+
+// Que obras tienen trazo: 208 de 219. Sin esta lista la piel pedia cualquiera y
+// el navegador registraba un 404 por cada una de las que no, y un 404 esperado
+// vuelve indistinguible un fallo de verdad. Si el indice no esta, se intenta
+// igual: perder la obra es peor que un 404.
+let _hayTrazo = null;
+const indiceTrazos = fetch('../trazos/_indice.json')
+  .then(r => r.ok ? r.json() : null)
+  .then(d => { _hayTrazo = d ? new Set(d.trazos) : null; })
+  .catch(() => { _hayTrazo = null; });
+
+function muestrear(ds, cuantos){
+  const NS = 'http://www.w3.org/2000/svg';
+  const cont = document.createElement('div');
+  cont.style.cssText = 'position:absolute;left:-9999px;width:0;height:0;overflow:hidden';
+  const svg = document.createElementNS(NS, 'svg');
+  svg.setAttribute('viewBox', '0 0 160 160');
+  for (const d of ds){
+    const q = document.createElementNS(NS, 'path');
+    q.setAttribute('d', d);
+    svg.appendChild(q);
+  }
+  cont.appendChild(svg);
+  document.body.appendChild(cont);
+  const pts = [];
+  try {
+    const paths = [...svg.querySelectorAll('path')];
+    const largos = paths.map(q => { try { return q.getTotalLength(); } catch(e){ return 0; } });
+    const total = largos.reduce((a,b)=>a+b, 0);
+    if (total > 0){
+      paths.forEach((q, i) => {
+        const n = Math.max(1, Math.round(cuantos * largos[i] / total));
+        for (let k = 0; k < n; k++){
+          try {
+            const w = q.getPointAtLength(largos[i] * k / n);
+            pts.push([w.x / 160 - 0.5, w.y / 160 - 0.5]);   // -0.5..0.5
+          } catch(e){ /* path degenerado */ }
+        }
+      });
+    }
+  } finally { cont.remove(); }
+  return pts;
+}
+
+// Solo los atributos `d`: NADA de markup ajeno entra al DOM. Un diagnostico de
+// seguridad del repo (VCD-04) marca insertar SVG con innerHTML como XSS, y esa
+// es la frontera -- se extraen las curvas y se descarta todo lo demas.
+const RE_D = new RegExp('<path[^>]*?[ \t\r\n]d[ \t\r\n]*=[ \t\r\n]*"([^"]*)"', 'gi');
+const OK_D = new RegExp('^[ \t\r\nMmLlHhVvCcSsQqTtAaZz0-9eE.,+-]+$');
+function pathsDe(texto){
+  const out = [];
+  let m;
+  RE_D.lastIndex = 0;
+  while ((m = RE_D.exec(texto)) !== null){
+    const d = m[1];
+    if (d && OK_D.test(d)) out.push(d);
+  }
+  return out;
+}
+
+async function tomarForma(o){
+  const corto = String(o.id || '').split('-')[0];
+  const mio = ++_pidForma;
+  if (!corto){ E.formaPts = null; return; }
+  await indiceTrazos;
+  if (_hayTrazo && !_hayTrazo.has(corto)){ E.formaPts = null; return; }
+
+  let pts = _forma.get(corto);
+  if (pts === undefined){
+    let svg = _trazos.get(corto);
+    if (svg === undefined){
+      try {
+        const r = await fetch(`../trazos/${corto}.svg`);
+        svg = r.ok ? await r.text() : null;
+      } catch(e){ svg = null; }
+      _trazos.set(corto, svg);
+    }
+    // Tantos puntos como nodos hay: la forma la dibuja el campo entero, asi que
+    // pedir mas puntos que nodos seria pedir glifos que nadie puede poner.
+    // Cuantos puntos se miden. El muestreo es lo unico caro de todo esto y
+    // escala con la densidad del trazo: medido en gama baja con CPU x6, una
+    // obra de 14 puntos costo 60 ms y una de 2031 costo 424 -- casi medio
+    // segundo de tiron al resolverla. El dibujo, en cambio, va a 60 fps con
+    // cualquiera. Asi que se acota lo que cuesta y no lo que se ve: por encima
+    // de 900 subpuntos la figura no gana definicion, solo cuesta.
+    const tope = Math.min(NODOS.length, innerWidth < 520 ? 460 : 900);
+    pts = svg ? muestrear(pathsDe(svg), tope) : null;
+    _forma.set(corto, pts);
+  }
+  if (mio !== _pidForma) return;      // el visitante ya siguio de largo
+  if (!pts || !pts.length){ E.formaPts = null; return; }
+
+  // A cada nodo, el punto que le queda mas a mano. Se ordenan los dos conjuntos
+  // por angulo respecto del centro y se emparejan en orden: barato, estable, y
+  // la migracion se lee como un cuerpo que se pliega, no como un enjambre que
+  // se cruza.
+  const ang = ([x,y]) => Math.atan2(y, x);
+  const orden = NODOS.map((n,i) => [i, Math.atan2(n.y - E.pos, n.x)])
+                     .sort((a,b) => a[1]-b[1]).map(a => a[0]);
+  const pOrd = [...pts].sort((a,b) => ang(a)-ang(b));
+  E.formaPts = new Array(NODOS.length).fill(null);
+  for (let k = 0; k < orden.length; k++){
+    E.formaPts[orden[k]] = pOrd[k % pOrd.length];
+  }
+  E.formaTempo = 0.45 + Math.min((o.tilde && o.tilde.por_cien) || 0, 6) * 0.06
+               + Math.min((o.trazo && o.trazo.puntos) || 400, 4000) / 9000;
+}
+
+/* ── la resolucion: frenar de golpe es el acento ──
+     No siempre resuelve en texto. A veces el campo se ordena y no dice nada,
+     y eso es parte del lenguaje: si siempre se resuelve en informacion, el
+     visitante scrollea buscando datos y esto se vuelve un catalogo. */
+const ficha = document.getElementById('ficha');
+function resolver(n){
+  if (!n || E.foco === n.obra) return;
+  E.foco = n.obra;
+  const o = n.obra;
+  // `tipo` es el vocabulario CERRADO de la percepcion (obra, tatuaje,
+  // foto_evento...), no texto libre del modelo: es un dato que la obra encoda
+  // y por eso puede mostrarse. Va primero porque cuando no hay titulo es lo
+  // unico que ubica la pieza. `category`/`year` son de obras.json y siguen
+  // sirviendo ahi -- un campo que no viene, no se muestra.
+  document.getElementById('f-meta').textContent =
+    [o.tipo, o.category, o.estilo, o.year].filter(Boolean).join(' · ');
+  document.getElementById('f-titulo').textContent = nombreDe(o);
+  // El texto de maquina NO habla por el artista. Lo que MAK percibio sirve
+  // para ubicar la obra en el campo y para medir vinculos -- es metadato, no
+  // autoria. Si la obra no trae texto propio, el campo se queda callado:
+  // silencio antes que voz prestada.
+  document.getElementById('f-texto').textContent =
+    (o.texto_del_artista || o.description_propia || '');
+  // Las capas son datos que se suman al campo sin que la piel se rehaga
+  // (data/iskvw_capas.json). Una piel que no conoce una capa la ignora; esta
+  // conoce dos y las muestra como lo que son, medidas, no adorno.
+  //   tilde  -- el residuo diacritico de lo percibido (proyecto tilde)
+  //   trazo  -- la densidad del vector de la obra
+  const partes = (o.tags || o.colores || []).map(t=>'#'+t);
+  if (o.tilde && o.tilde.marcas)   partes.push('~' + o.tilde.marcas);
+  if (o.trazo && o.trazo.subtrazos) partes.push('/' + o.trazo.subtrazos);
+  document.getElementById('f-tags').textContent = partes.join('  ');
+  ficha.classList.add('on');
+  tomarForma(o);
+
+  // Lo que la obra MIDE, para cuando se despliegue. Son datos que la pieza
+  // encoda; la percepcion de la maquina sigue sin mostrarse como texto.
+  const filas = [];
+  if (o.tipo) filas.push(['es', o.tipo]);
+  if (o.colores && o.colores.length) filas.push(['color', o.colores.join(', ')]);
+  if (o.trazo) filas.push(['trazo', `${o.trazo.subtrazos} subtrazos, ${o.trazo.puntos} puntos`]);
+  if (o.tilde) filas.push(['tilde', `${o.tilde.marcas} marcas · ${o.tilde.por_cien} por cien`]);
+  if (o.estilo) filas.push(['registro', o.estilo]);
+  document.getElementById('f-mas').textContent =
+    filas.map(([k, v]) => `${k} ${v}`).join('   ·   ');
+  presentarIcono(o);
+  // Una obra resuelta tiene direccion propia: sin migas de pan y sin mapa,
+  // pero el que la encontro puede volver y puede mandarla.
+  if (o.id) history.replaceState(null,'','#'+o.id);
+}
+function disolver(){
+  if (!E.foco) return;
+  E.foco = null; ficha.classList.remove('on');
+}
+
+/* Una pieza grafica trae su svg animado (medio.src, ruta del repo publicada
+   tal cual en el sitio). Al resolverla se trae UNA vez y queda en cache; se
+   inserta inline para que sus keyframes corran -- un <img> congela SMIL en
+   algunos navegadores y ademas no hereda nada. Si el asset no esta (servidor
+   local sirviendo solo iskvw/), la ficha sigue sin el: el campo no depende
+   del icono, el icono enriquece al campo. */
+const ICONOS = new Map();
+function presentarIcono(o){
+  const caja = document.getElementById('f-icono');
+  caja.innerHTML = '';
+  if ((o.abstraccion || 0) >= 0.8) return;   // curada como pura textura
+  const src = o.clase === 'pieza_grafica' && o.medio && o.medio.src;
+  if (!src || !/\.svg$/.test(src)) return;
+  if (ICONOS.has(src)){ caja.innerHTML = ICONOS.get(src); return; }
+  // Absoluta a la raiz del sitio: la piel vive copiada en / y en /piel/campo/
+  // a la vez, y una ruta relativa solo puede servir a una de las dos.
+  fetch('/' + src).then(r => r.ok ? r.text() : null).then(t => {
+    if (!t || t.indexOf('<svg') < 0) return;
+    ICONOS.set(src, t);
+    // sigue siendo la obra resuelta? (el visitante pudo moverse mientras cargaba)
+    if (E.foco && E.foco.id === o.id) caja.innerHTML = t;
+  }).catch(()=>{});
+}
+
+/* ── gesto ── */
+function empujar(dy, dx){
+  E.vel += dy * 0.42;
+  E.latObj = Math.max(-1, Math.min(1, E.latObj + dx*0.0022));
+  document.getElementById('pista').classList.add('ido');
+  // La lectura a la que alguien llego queda en la URL: la sesion se puede
+  // volver a abrir y se puede pasar. Altera la lectura LOCAL, nunca el
+  // archivo canonico.
+  escribirSemilla();
+}
+/* ── el gesto, con @thi.ng/rstream-gestures ──
+   Antes esto eran cuatro listeners a mano y un solo dedo moviendo en dos ejes:
+   no habia pellizco, asi que en un telefono el UNICO control era deslizar. El
+   usuario lo dijo mirandolo en Safari.
+
+   `gestureStream` unifica mouse, rueda y multi-touch en un solo flujo con
+   `type` (start|move|drag|end|zoom), `pos`, `active` (los toques vivos) y
+   `zoom`/`zoomDelta`. La libreria esta vendorizada en ../lib/gestos.js: el sitio
+   es estatico y no puede depender de un CDN.
+
+   Se degrada solo: si el modulo no carga, los listeners de abajo siguen siendo
+   el control. Un sitio sin gesto fino es peor que uno sin gesto, no que uno
+   roto. */
+let _conStream = false;
+import('../lib/gestos.js').then(({gestureStream}) => {
+  const s = gestureStream(document.body, {
+    zoom: true, minZoom: 0.35, maxZoom: 2.6, smooth: 0.85, preventDefault: true,
+  });
+  let zPrev = 1;
+  s.subscribe({next(e){
+    _conStream = true;
+    if (e.type === 'drag' || (e.type === 'move' && e.buttons)){
+      // arrastrar recorre el campo en los dos ejes
+      const [dx, dy] = e.delta || [0, 0];
+      empujar(-dy * 1.6, -dx * 1.6);
+      // y la FUERZA del gesto queda disponible para deformar la obra resuelta
+      E.fuerza = Math.min(1, Math.hypot(dx, dy) / 26);
+    }
+    if (e.zoom != null && e.zoom !== zPrev){
+      // pellizcar abre y cierra el diafragma. Sobre 1 abre, bajo 1 cierra.
+      E.pinch = Math.max(-0.85, Math.min(0.85, (e.zoom - 1) * 0.9));
+      zPrev = e.zoom;
+      document.getElementById('pista').classList.add('ido');
+    }
+    if (e.type === 'end' && (!e.active || !e.active.length)) E.tocando = false;
+    if (e.type === 'start') E.tocando = true;
+  }});
+}).catch(() => { /* sin modulo, mandan los listeners de abajo */ });
+
+// Respaldo, y unico camino si el modulo no carga. Se ignoran cuando el stream
+// esta vivo para no empujar dos veces por el mismo dedo.
+addEventListener('wheel', e => {
+  if (_conStream) return;
+  e.preventDefault(); empujar(e.deltaY, e.deltaX);
+}, {passive:false});
+addEventListener('touchstart', e => {
+  if (_conStream) return;
+  E.tocando = true; E.ultimoY = e.touches[0].clientY; E.ultimoX = e.touches[0].clientX;
+}, {passive:true});
+addEventListener('touchmove', e => {
+  if (_conStream) return;
+  const y = e.touches[0].clientY, x = e.touches[0].clientX;
+  empujar((E.ultimoY - y)*1.5, (E.ultimoX - x)*1.5);
+  E.ultimoY = y; E.ultimoX = x;
+}, {passive:true});
+addEventListener('touchend', () => { if (!_conStream) E.tocando = false; }, {passive:true});
+
+// Tap: resuelve donde esta. Es el atajo del que ya entendio, y no estorba
+// al que no: tocar sin moverse es lo mismo que frenar.
+addEventListener('pointerup', e => {
+  if (Math.abs(E.suave) < 4) { const n = masCerca(); if (n) resolver(n); }
+}, {passive:true});
+// Izquierda / derecha con teclado, para quien llega sin dedo ni rueda.
+addEventListener('keydown', e => {
+  if (e.key==='ArrowDown') empujar(90,0);
+  if (e.key==='ArrowUp') empujar(-90,0);
+  if (e.key==='ArrowRight') empujar(0,120);
+  if (e.key==='ArrowLeft') empujar(0,-120);
+});
+
+function masCerca(){
+  let m=null, md=1e9;
+  for (const n of NODOS){ const d=Math.abs(n.y-E.pos); if(d<md){md=d;m=n;} }
+  return m;
+}
+
+/* ── el lazo ── */
+let raf = 0;
+function paso(ahora){
+  ahora = ahora || performance.now();
+  E.t += 0.016;
+  // La constante depende de la direccion: bajar pesa, subir flota.
+  const k = E.vel > 0 ? K_BAJA : K_SUBE;
+  E.pos += E.vel;
+  /* gravedad: el quinto efecto del patch, y el unico que toca el ESTADO y no
+     el dibujo -- por eso vive aca y no en el bucle de nodos. Una obra con
+     materia TIRA de la lectura cuando se le pasa cerca. Los emisores son los
+     del cuadro anterior, que es lo que corresponde: la gravedad se siente
+     donde uno estaba entrando, no donde ya llego.
+     Lo que se siente es un IMAN: con el archivo medido las obras estan a una
+     veintena de pixeles unas de otras, asi que la constante no es un frenado
+     lento sino un enganche corto -- la lectura se apoya en la pieza pesada y
+     pasa de largo por la liviana.
+     El tope de 0,6 px por cuadro no es prudencia: sin el, la pieza mas pesada
+     del archivo se queda con el visitante. Un gesto empuja 0,42 por pixel
+     arrastrado, asi que siempre gana. La obra tira, nunca atrapa. */
+  if (PATCH.on && EMIS.n && EMIS.coef[EF_GRAVEDAD] > 0.001){
+    const dy = NODOS[EMIS.idx[0]].y - E.pos;
+    const inf = 1 - Math.min(Math.abs(dy)/900, 1);
+    if (inf > 0)
+      E.pos += Math.max(-0.6, Math.min(0.6,
+        dy * 0.05 * inf * Math.min(EMIS.coef[EF_GRAVEDAD], 1)));
+  }
+  // Sin principio y sin final: al pasar el ultimo nodo se vuelve a entrar por
+  // el otro lado. Medido el 2026-07-27: sin esto, pasado el ultimo nodo la
+  // pantalla queda negra y el archivo parece roto.
+  if (LARGO > 0){
+    if (E.pos > LARGO) E.pos -= LARGO;
+    else if (E.pos < 0) E.pos += LARGO;
+  }
+  E.vel *= (1 - k*2.6);
+  if (Math.abs(E.vel) < 0.01) E.vel = 0;
+  E.suave += (E.vel - E.suave) * 0.14;
+  E.lat += (E.latObj - E.lat) * 0.09;
+
+  const mejor = dibujar();
+
+  // frenar de golpe = drop. Se cuentan cuadros quietos para que un roce no
+  // dispare la resolucion.
+  if (Math.abs(E.suave) < 1.6 && !E.tocando){
+    if (++E.quieto > 22) resolver(mejor);
+  } else {
+    E.quieto = 0;
+    if (Math.abs(E.suave) > 5) disolver();
+  }
+  // La obra resuelta se dibuja en su propio canvas, y la fuerza del gesto
+  // decae sola: si el visitante para, el patron se calma.
+  // El organismo cambia de estado, no salta: la forma entra y sale interpolada.
+  const quiereForma = E.foco && E.formaPts ? 1 : 0;
+  E.forma += (quiereForma - E.forma) * 0.055;
+
+  // Y si el visitante se queda, la obra se DESARROLLA. Idea del usuario: mas de
+  // cinco segundos quieto y la pieza se presenta. A 60 cuadros son 300; se
+  // cuenta desde que resolvio, y se retira apenas se mueve.
+  const QUIETO_5S = 300;
+  const objetivo = (E.foco && E.quieto > QUIETO_5S) ? 1 : 0;
+  E.despliegue += (objetivo - E.despliegue) * (objetivo ? 0.02 : 0.12);
+  document.getElementById('ficha').classList.toggle('desplegada', E.despliegue > 0.5);
+
+  E.fuerza *= 0.92;
+  if (E.fuerza < 0.002) E.fuerza = 0;
+  raf = requestAnimationFrame(paso);
+}
+
+/* ── la sesion como SEMILLA reproducible ──
+   PROYECCION.md 6.2: un gesto altera la lectura LOCAL, nunca el archivo
+   canonico, y una sesion se comparte como una URL. El criterio no es de
+   opinion: misma semilla + mismo archivo = misma constelacion.
+
+       #semilla=<id-de-pieza>&centro=<y>&escala=<lateral>
+
+   Antes el hash era solo un ancla: el id de una pieza y nada mas, asi que la
+   lectura a la que alguien llego no se podia volver a abrir ni pasarle a
+   nadie. `semilla` sigue aceptando el hash pelado (`#una-pieza`) para no
+   romper un enlace viejo. */
+function leerSemilla(){
+  const bruto = location.hash.slice(1);
+  if (!bruto) return {};
+  if (!bruto.includes('=')) return {semilla: bruto};   // enlace viejo: un id
+  const q = new URLSearchParams(bruto);
+  const num = (k) => {
+    const v = parseFloat(q.get(k));
+    return Number.isFinite(v) ? v : undefined;         // basura = ausente
+  };
+  return {semilla: q.get('semilla') || undefined, centro: num('centro'),
+          escala: num('escala')};
+}
+
+function aplicarSemilla(s){
+  // El id manda sobre el centro: nombra una pieza, y una pieza es un lugar
+  // exacto. El centro solo se usa cuando no hay pieza nombrada o no existe.
+  const i = s.semilla ? NODOS.findIndex(n => n.obra.id === s.semilla) : -1;
+  if (i >= 0) E.pos = NODOS[i].y;
+  else if (s.centro !== undefined) E.pos = Math.max(0, Math.min(LARGO, s.centro));
+  // Sin direccion se entra por la PRIMERA obra. Es como se ve el sitio y es
+  // decision de producto, no un accidente: hasta el 2026-07-30 lo producia un
+  // `Math.max(0, -1)` que volvia inalcanzable el respaldo escrito abajo. Al
+  // sacar ese max, el sitio empezo a abrir por el medio del archivo y dejo de
+  // verse como se veia. El arreglo tecnico era correcto; cambiar la entrada del
+  // portafolio no me correspondia. Queda explicito para que se elija, no se
+  // herede de un bug.
+  else E.pos = NODOS.length ? NODOS[0].y : 0;
+  if (s.escala !== undefined) E.latObj = E.lat = Math.max(-1, Math.min(1, s.escala));
+}
+
+/* Escribir la semilla NO es navegar: `replaceState` para que el boton atras
+   siga sirviendo para salir del sitio y no para deshacer un scroll. */
+let escribiendo = 0;
+function escribirSemilla(){
+  if (escribiendo) return;
+  escribiendo = setTimeout(() => {
+    escribiendo = 0;
+    if (!NODOS.length) return;
+    const p = new URLSearchParams();
+    if (E.foco?.obra?.id) p.set('semilla', E.foco.obra.id);
+    p.set('centro', Math.round(E.pos));
+    p.set('escala', E.lat.toFixed(3));
+    try { history.replaceState(null, '', '#' + p.toString()); }
+    catch(e){ /* un navegador que no deja reescribir el hash sigue andando */ }
+  }, 400);   // el gesto termina antes de que la URL se escriba
+}
+
+/* ── the venue layer, behind its flag ──────────────────────────────────
+   mejoras.venue3d in datos/tablero.json is the switch PR #418 shipped with no
+   consumer; this is the consumer. Off (or absent, or unreadable): the field
+   does not change by one pixel. On: a link to ../venue/ appears, in the same
+   stroke as the "campo" link the viewer already carries back to here. The
+   function is named and idempotent so the smoke can exercise BOTH branches. */
+let SALA_VISIBLE = false;
+function capaVenue(tablero){
+  const encendida = !!(tablero && tablero.mejoras && tablero.mejoras.venue3d === true);
+  if (!encendida || SALA_VISIBLE) return encendida;
+  const a = document.createElement('a');
+  a.id = 'sala'; a.href = '../venue/'; a.textContent = 'sala';
+  document.body.appendChild(a);
+  SALA_VISIBLE = true;
+  return true;
+}
+
+/* ── datos: fetch si hay servidor, respaldo incrustado si no ── */
+async function arrancar(){
+  medir();
+  let obras = RESPALDO.obras;
+  try {
+    // 1. El SUSTRATO: archivo.json trae piezas Y vinculos en la forma del
+    //    contrato (iskvw/ESQUEMA_ARCHIVO.md), asi que ademas de las obras
+    //    llegan los ensayos de MAK con sus conceptos e iconos. Hasta ahora
+    //    ninguna piel lo pedia: se generaba y nadie lo leia.
+    let r = await fetch('../../datos/archivo.json');
+    if (r.ok){
+      const d = await r.json();
+      if (d.piezas?.length){ obras = d.piezas.map(delContrato); VINCULOS = d.vinculos || []; REGIMEN = d.meta?.regimen || REGIMEN; }
+    }
+    // 2. Si no esta (hoy no se publica), el campo medido, igual que siempre.
+    if (obras === RESPALDO.obras){
+      r = await fetch('../../datos/campo.json');
+      if (r.ok){ const d = await r.json(); if (d.piezas?.length) obras = d.piezas; }
+      else {
+        r = await fetch('../../datos/obras.json');
+        if (r.ok){ const d = await r.json(); obras = Array.isArray(d) ? d : (d.obras||obras); }
+      }
+    }
+  } catch(e){ /* sin servidor se usa el respaldo, sin decir nada */ }
+  // 3. El TABLERO: se pide UNA vez y alimenta a sus DOS consumidores -- el
+  //    patch de efectos (`aplicarTablero`, llave `patch_efectos`) y la capa de
+  //    sala (`capaVenue`, llave `venue3d`). Que no este es el caso normal y no
+  //    es un error: sin tablero no hay patch, `capaVenue(null)` deja la sala
+  //    apagada, y la piel dibuja como siempre.
+  try {
+    const rt = await fetch('../../datos/tablero.json');
+    if (rt.ok){
+      const t = await rt.json();
+      aplicarTablero(t);
+      capaVenue(t);
+    }
+  } catch(e){ /* sin tablero: sin efectos y sin sala */ }
+  sembrar(obras);
+  // Se entra por el medio del archivo: no hay principio.
+  // El `Math.max(0, ...)` de antes convertia el -1 de "no encontrado" en 0, asi
+  // que el ternario de la linea siguiente nunca podia ser falso: el respaldo
+  // "por el medio del archivo" era codigo muerto y una direccion mala o vacia
+  // caia SIEMPRE en la primera obra. O sea, el archivo si tenia principio, al
+  // revés de lo que dice el comentario de arriba. Sin el max, el -1 llega.
+  aplicarSemilla(leerSemilla());
+  paso();
+}
+addEventListener('resize', medir);
+// Con la pestana oculta no se dibuja: nadie lo esta mirando.
+document.addEventListener('visibilitychange', () => {
+  if (document.hidden){ cancelAnimationFrame(raf); raf = 0; }
+  else if (!raf) paso();
+});
+arrancar();
+</script>
+</body>
+</html>

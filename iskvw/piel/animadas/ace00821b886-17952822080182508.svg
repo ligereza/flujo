@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" data-name="ace00821b886-17952822080182508">
+<style>
+.c0{animation:k_temblar 12s steps(1) infinite}
+@keyframes k_temblar{0%,88%{transform:translate(0,0)}91%{transform:translate(-2px,1px)}
+94%{transform:translate(2px,-1px)}97%{transform:translate(-1px,0)}}
+</style>
+<rect width="120" height="120" fill="#12120a"/>
+<g id="capa-0-protagonista" transform="translate(60,42)" data-rol="protagonista" data-gesto="temblar" data-ritmo="12s" data-figura="figura"><title>protagonista - figura</title><g class="c0"><g transform="scale(20)"><circle cy="-.42" r=".30" fill="#d7ff2e"/><path d="M-.42,1 V.05 a.42,.42 0 0 1 .84,0 V1 Z" fill="#d7ff2e"/></g></g></g>
+<g id="capa-1-cielo" transform="translate(60,38)" data-rol="cielo" data-gesto="quieto" data-ritmo="4s" data-figura="sello" opacity=".38"><title>cielo - sello</title><g class="c1"><g transform="scale(30)"><circle r=".88" fill="none" stroke="#ff2e7e" stroke-width=".15"/><circle r=".68" fill="none" stroke="#ff2e7e" stroke-width=".05"/><rect x="-.62" y="-.11" width="1.24" height=".22" fill="#ff2e7e"/></g></g></g>
+</svg>

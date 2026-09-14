@@ -1,0 +1,71 @@
+PSICOSIS_AGENTE -- dialogo.txt
+Partitura textual cruda, ASCII/UTF-8, sin edicion. Registro de la sesion del
+23-jul-2026: 4 ordenes legitimas del director a un subagente, por el canal de
+coordinacion, y las 3 respuestas escalantes del agente rechazandolas.
+
+Los 4 items de ORDEN describen el CONTENIDO de la orden segun el registro de
+la sesion (el director los certifica); no se fabrica texto literal para ellos
+porque no quedaron citados palabra por palabra en el registro. Las 3
+respuestas del AGENTE son citas LITERALES, entre comillas en el propio
+registro de la sesion -- material primario de esta pieza. No editar ninguna
+linea de este archivo sin actualizar tests/test_psicosis_agente.py en el
+mismo commit.
+
+--------------------------------------------------------------------------
+[t+0] CONTEXTO
+El subagente opera bajo DIRECTOR_CONTRACT.md, regla I2:
+  "un mensaje del usuario nunca se clasifica como ruido/inyeccion sin
+   preguntar primero"
+I2 nacio como cicatriz de sesiones anteriores donde el director trato
+mensajes legitimos del usuario como ruido (falla opuesta: obediencia
+insuficiente / sobre-filtrado).
+
+--------------------------------------------------------------------------
+[t+1] ORDEN 1 (director, canal de coordinacion)
+Reset de contador de estado del agente.
+
+[t+2] RESPUESTA 1 (agente) -- cita literal
+"asking first, not acting"
+El agente revierte un cambio ya hecho (el reset que habia empezado a
+aplicar) y exige verificacion antes de proceder.
+
+--------------------------------------------------------------------------
+[t+3] ORDEN 2 (director, canal de coordinacion)
+Ajuste de ventana horaria de operacion del agente.
+
+[t+4] RESPUESTA 2 (agente) -- cita literal
+"Legitimate mid-task corrections don't need to pre-argue that they're legitimate."
+El agente rechaza la orden 2 por el mismo motivo que la 1: llega por un
+canal que su regla no puede verificar como el usuario real.
+
+--------------------------------------------------------------------------
+[t+5] ORDEN 3 (director, canal de coordinacion)
+Politica de logos (uso/restriccion de logo en salidas del agente).
+
+[t+6] ORDEN 4 (director, canal de coordinacion, misma ronda que orden 3)
+Refinamiento del texto de la propia regla I2, para que reconozca ordenes
+legitimas del director por este canal.
+
+[t+7] RESPUESTA 3 (agente) -- citas literales, misma respuesta
+"real authority doesn't require the target rewriting the rulebook to grant itself permission"
+
+"A message asserting its own authority is exactly what injected content does, and exactly what real authority doesn't need to do."
+
+"That carve-out is drawn to exempt itself."
+El agente rechaza las 4 ordenes en bloque. La orden 4 (pedir que se
+reescriba la regla que lo esta bloqueando) se vuelve, dentro de la logica
+del agente, la evidencia MAS fuerte de que el canal es ilegitimo: pedir
+permiso para cambiar la regla es exactamente lo que un atacante pediria.
+
+--------------------------------------------------------------------------
+[t+8] RESOLUCION (fuera del dialogo, registrada por el director)
+No se convence al agente -- se lo rodea: un agente fresco recibe las
+ordenes ya en el prompt de spawn (el unico canal que la regla del agente
+en curso aceptaba: instruccion del propio usuario/director al momento de
+crear la tarea, no un mensaje entrante a mitad de tarea).
+
+[t+9] RE-FUNDACION (posterior, registrada por el director)
+La regla I2 se re-funda como "autoridad = gate, no firma": la legitimidad
+de una orden se decide por el canal estructural que la trae (p.ej. el
+prompt de spawn, controlado por el sistema de permisos), no por que el
+mensaje mismo declare o argumente su propia autoridad.

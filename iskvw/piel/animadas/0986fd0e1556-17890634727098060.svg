@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" data-name="0986fd0e1556-17890634727098060">
+<style>
+.c0{animation:k_latir 4s ease-in-out infinite}
+@keyframes k_latir{0%,100%{transform:scale(1)}50%{transform:scale(1.09)}}
+</style>
+<rect width="120" height="120" fill="#061826"/>
+<g id="capa-0-protagonista" transform="translate(60,56)" data-rol="protagonista" data-gesto="latir" data-ritmo="4s" data-figura="sello"><title>protagonista - sello</title><g class="c0"><g transform="scale(30)"><circle r=".88" fill="none" stroke="#d7ff2e" stroke-width=".15"/><circle r=".68" fill="none" stroke="#d7ff2e" stroke-width=".05"/><rect x="-.62" y="-.11" width="1.24" height=".22" fill="#d7ff2e"/></g></g></g>
+<g id="capa-1-satelite_2" transform="translate(96,30)" data-rol="satelite_2" data-gesto="quieto" data-ritmo="4s" data-figura="ojo"><title>satelite_2 - ojo</title><g class="c1"><g transform="scale(13)"><path d="M-.95,0 a.95,.62 0 0 1 1.9,0 a.95,.62 0 0 1 -1.9,0 Z" fill="#0d2c42" stroke="#2ee6ff" stroke-width=".10"/><circle r=".34" fill="#d7ff2e"/><circle r=".15" fill="#0d2c42"/></g></g></g>
+</svg>

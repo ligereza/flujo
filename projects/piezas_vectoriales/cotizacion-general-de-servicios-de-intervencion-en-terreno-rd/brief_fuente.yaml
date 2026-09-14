@@ -1,0 +1,43 @@
+id: 2026-07-02_cotizacion_general_agencia_eventos
+estado: listo_para_disenar
+origen: correo_jefe
+cliente: Agencia de marketing de eventos (contacto directo del manager, evento Amelie Lens)
+proyecto: Cotizacion general de servicios de intervencion en terreno RD
+tipo_pieza: dossier
+
+medidas:
+  ancho_cm:
+  alto_cm:
+  orientacion: vertical
+  sangrado_mm:
+  area_segura_mm:
+
+entrega:
+  editable_svg: false
+  vectorizado_svg: false
+  pdf_impresion: true
+  zip: false
+  otro: markdown + html imprimible (Ctrl+P a PDF) + plano SVG generico
+
+productos: []
+
+contenido:
+  fuente: correo_original
+  texto_aprobado: true
+  notas: >
+    Cotizacion GENERAL sin lugar ni fecha, para que la agencia la reenvie a
+    productoras de fiestas grandes. Debe contar que hacemos, por cuanto y que
+    necesitamos. Tarifas fijadas por el jefe (CLP, por dia de evento):
+    servicio completo evento masivo $500.000 con 15 voluntarios (con desglose);
+    servicio informativo $250.000; informativo con testeo $300.000 con 6
+    voluntarios. Texto institucional tomado de la propuesta oficial
+    (datadrops/Propuesta_Reduciendo_Dano.txt).
+
+restricciones:
+  no_inventar_claims: true
+  texto_vectorizado: false
+  editable_para_illustrator: false
+
+pendientes:
+  - Confirmar con el jefe datos de contacto que van en el documento (correo/telefono)
+  - Confirmar si los traslados fuera de la region base se cotizan aparte

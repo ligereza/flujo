@@ -1,0 +1,6 @@
+Marca: Club Freedom (spot, IG spot.freedom / clubfreedomlive)
+Fuente: https://www.facebook.com/clubfreedomlive/ (foto de perfil oficial, og:image)
+URL directa: https://scontent.fscl3-1.fna.fbcdn.net/v/t39.30808-1/300374318_518644353594655_5523231854593256706_n.png (URL firmada, expira)
+Como se encontro: WebSearch "Club Freedom spot.freedom Chile logo fiesta" -> facebook.com/clubfreedomlive (pagina oficial de Facebook) -> scrape og:image (720x720).
+Fecha: 2026-07-24
+Tier: perfil oficial de Facebook (foto de perfil), no se navego con sesion de usuario -- fetch anonimo de og:image publico.

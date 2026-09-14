@@ -1,0 +1,17 @@
+id: psicosis
+kind: dossier
+project: psicosis
+title: 'Dossier: psicosis — how a behavior is studied, and what if the record is wrong'
+subject: psicosis — how a behavior is studied, and what if the record is wrong
+status: INVESTIGADO (Gemini API 2026-07-10) + spot-check de fuentes (Claude, WebSearch,
+  2026-07-10) + curado a herramienta.
+sections:
+- Research questions (from the rainstorm)
+- Gemini web prompt (paste, one block)
+- Findings
+- Verificacion de fuentes (spot-check por Claude, WebSearch, 2026-07-10)
+- Del dossier a la herramienta (curado por Claude desde los findings)
+hard_limit: true
+source_path: projects/cultura/dossiers/psicosis.md
+content_sha256: f049897addb91aefa886418c7f09e4e3fd05731ecca14a9bf05f50f67109ac07
+ingested_at: '2026-07-10T23:48:48'

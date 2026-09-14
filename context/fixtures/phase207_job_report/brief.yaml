@@ -1,0 +1,26 @@
+id: phase207_job_report
+estado: pendiente_datos
+origen: fixture_local
+cliente: fixture
+proyecto: Validacion de reporte
+tipo_pieza: fixture de prueba
+medidas:
+  ancho_cm: 10.0
+  alto_cm: 10.0
+  orientacion: vertical
+entrega:
+  editable_svg: true
+  vectorizado_svg: true
+  pdf_impresion: false
+  zip: true
+productos:
+  - fixture
+contenido:
+  fuente: fixture
+  texto_aprobado: false
+restricciones:
+  no_inventar_claims: true
+  texto_vectorizado: true
+  editable_para_illustrator: true
+pendientes:
+  - validar salida y rollback

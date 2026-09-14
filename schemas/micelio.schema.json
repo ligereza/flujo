@@ -1,0 +1,87 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/ligereza/vibecodeine/schemas/micelio.schema.json",
+  "title": "sobre micelio/1",
+  "description": "Un sobre, tres verbos. Es el bus entre un modelo frontera SIN API (que solo se puede leer y pegar en un chat) y un organismo automatico que corre con modelos debiles. Tres esquemas separados se vuelven tres dialectos incompatibles en tres meses; por eso la envoltura es una sola y lo que cambia es `tipo`.",
+  "type": "object",
+  "required": ["formato", "tipo", "asunto", "cuerpo"],
+  "properties": {
+    "formato": {
+      "const": "micelio/1",
+      "description": "Version del sobre. Si algun dia cambia la forma, cambia esto y los dos lados lo notan en vez de fallar callados."
+    },
+    "tipo": {
+      "enum": ["semilla", "fruto", "nutriente"],
+      "description": "semilla: una idea traducida a algo germinable, viaja HACIA el organismo. fruto: lo que el organismo produjo, viaja HACIA el chat y tiene que CABER ahi. nutriente: una orden de correccion, viaja hacia el organismo y trae su propio criterio de aceptacion."
+    },
+    "asunto": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Una linea. Es lo que un humano lee para saber de que se trata sin abrir el cuerpo."
+    },
+    "id": {"type": "string"},
+    "fecha": {"type": "string"},
+    "origen": {
+      "enum": ["web", "mak", "humano"],
+      "description": "Quien lo escribio. No cambia el trato, pero un fruto que dice venir de `web` es un sintoma."
+    },
+    "cuerpo": {
+      "type": "object",
+      "description": "Depende de `tipo`. En semilla y nutriente su forma la decide quien escribe: lo que se exige mecanicamente no es el cuerpo, es el criterio."
+    },
+    "criterio": {
+      "type": "array",
+      "minItems": 1,
+      "description": "OBLIGATORIO en semilla y nutriente. Es la unica parte que hace seguro el ciclo: una orden escrita por un modelo que nunca ejecuto el codigo, aplicada por un organismo que no verifica, es como este repo produjo 4.275 lineas inertes. Con criterio, un modelo debil no necesita entender: itera hasta que da verde. Lo que decide no es la opinion de nadie, es si el caso paso.",
+      "items": {
+        "type": "object",
+        "required": ["tipo"],
+        "properties": {
+          "nombre": {"type": "string"},
+          "tipo": {"enum": ["caso", "comando", "archivo", "campo"]},
+          "modulo": {"type": "string"},
+          "funcion": {"type": "string"},
+          "entrada": {"type": "array"},
+          "salida": {},
+          "cmd": {"type": "array", "items": {"type": "string"}},
+          "codigo": {"type": "integer"},
+          "contiene": {"type": "string"},
+          "timeout": {"type": "integer"},
+          "ruta": {"type": "string"},
+          "min_bytes": {"type": "integer"},
+          "campo": {"type": "string"},
+          "min": {},
+          "igual": {}
+        },
+        "allOf": [
+          {
+            "if": {"properties": {"tipo": {"const": "caso"}}},
+            "then": {"required": ["modulo", "funcion", "entrada", "salida"]}
+          },
+          {
+            "if": {"properties": {"tipo": {"const": "comando"}}},
+            "then": {"required": ["cmd"]}
+          },
+          {
+            "if": {"properties": {"tipo": {"const": "archivo"}}},
+            "then": {"required": ["ruta"]}
+          },
+          {
+            "if": {"properties": {"tipo": {"const": "campo"}}},
+            "then": {"required": ["ruta", "campo"]}
+          }
+        ]
+      }
+    },
+    "recortado": {
+      "type": "object",
+      "description": "Solo en fruto. Cuantos elementos se sacaron de cada lista para que el sobre entrara en una ventana de chat. Si dice algo, lo que se esta leyendo NO es todo -- un recorte silencioso se lee como 'esto era todo', y esa mentira ya costo sesiones enteras aca."
+    }
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"tipo": {"enum": ["semilla", "nutriente"]}}},
+      "then": {"required": ["criterio"]}
+    }
+  ]
+}

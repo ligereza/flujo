@@ -1,0 +1,35 @@
+#!/bin/sh
+# Pre-commit RD: bloquea SVG con problemas antes de commitear.
+# Habilitar una vez:  git config core.hooksPath .githooks
+# Saltar en un commit puntual:  git commit --no-verify
+
+# --- 0) SECRETOS: el repo es PUBLICO; los bots escanean cada push y su historial.
+# Bloquea patrones de API keys reales en el diff staged (agregado 2026-07-10).
+secrets=$(git diff --cached --no-color | grep -E '^\+' | grep -cE 'AIzaSy[0-9A-Za-z_-]{20,}|sk-ant-[0-9A-Za-z-]{10,}|sk-or-v1-[0-9a-f]{16,}|gh[posur]_[0-9A-Za-z]{20,}|github_pat_[0-9A-Za-z_]{20,}|nvapi-[0-9A-Za-z_-]{20,}|AKIA[0-9A-Z]{16}|xox[baprs]-[0-9A-Za-z-]{10,}|BEGIN (RSA |EC |OPENSSH )?PRIVATE KEY')
+if [ "$secrets" -gt 0 ]; then
+  echo "BLOQUEADO: el diff staged contiene $secrets linea(s) con patron de API key real."
+  echo "El repo es PUBLICO: una key pusheada queda drenada por bots en horas."
+  echo "Saca la key a .env (gitignored). Si es un falso positivo: git commit --no-verify"
+  exit 1
+fi
+
+staged=$(git diff --cached --name-only --diff-filter=ACM | grep -E '\.svg$' | grep -vE '_airdrop|03_final_vectorizado')
+[ -z "$staged" ] && exit 0
+
+fail=0
+for f in $staged; do
+  [ -f "$f" ] || continue
+  if grep -q "DejaVu" "$f" 2>/dev/null; then
+    echo "BLOQUEADO  $f : usa fuente DejaVu (Illustrator no la tiene). Cambia a Arial."
+    fail=1
+  fi
+  if grep -q "data:image/png;base64" "$f" 2>/dev/null && echo "$f" | grep -qv vectorizado; then
+    echo "AVISO      $f : imagen raster embebida (logo?). Preferir vector inline."
+  fi
+done
+
+if [ "$fail" = 1 ]; then
+  echo "Corrige (o 'git commit --no-verify' para saltar el chequeo)."
+  exit 1
+fi
+exit 0

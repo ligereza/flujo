@@ -1,0 +1,6 @@
+Inbox manual de logos oficiales (2026-07-23)
+
+Deja aca los logos recolectados a mano (web oficial / IG de la productora).
+Convencion: <productora>.<ext> (ej: piknic.png, dame.svg)
+Si tenes la fuente, un <productora>.txt al lado con la URL.
+Destino final: knowledge/logos/ via PR cuando se validen.

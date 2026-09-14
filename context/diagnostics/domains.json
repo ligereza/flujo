@@ -1,0 +1,46 @@
+{
+  "schema": "mak-context-domain-map-v1",
+  "version": 1,
+  "domains": {
+    "core": {
+      "branch_prefix": "maintenance",
+      "keywords": ["repo", "git", "hub", "puerto", "dependencia", "runtime", "diagnostico", "error", "roto", "instalacion", "cli", "architecture", "branch", "deployment"],
+      "contract": "context/diagnostics/contracts/core.md",
+      "read_paths": ["pyproject.toml", "src/flujo/cli.py", "src/flujo/diagnostics.py", "context/LAST_HANDOFF.md"],
+      "checks": ["python3 -m flujo health", "python3 -m flujo diagnose --area core"],
+      "do_not_read": ["WIN raw archive", "large databases", "virtual environments"]
+    },
+    "rd": {
+      "branch_prefix": "rd",
+      "keywords": ["rd", "reducir dano", "plano", "rider", "cotizacion", "pack", "reactivo", "suplemento", "venue", "productora", "evento", "logo", "tarifa", "base de datos"],
+      "contract": "context/diagnostics/contracts/rd.md",
+      "read_paths": ["src/flujo/rd", "src/flujo/plano", "web/src/components/PlanoTool.tsx", "web/src/components/RdDbPanel.tsx", "data/rd_packs.json"],
+      "checks": ["python3 -m pytest -q tests/test_rd_informe.py", "python3 -m flujo rd-db --help"],
+      "do_not_read": ["WIN raw archive", "RD media", "live provider credentials"]
+    },
+    "portfolio": {
+      "branch_prefix": "portfolio",
+      "keywords": ["portafolio", "portfolio", "iskvw", "web", "sitio", "dominio", "cloudflare", "dns", "deploy", "publicar", "publicacion", "frontend", "pagina", "certificado", "hosting"],
+      "contract": "context/diagnostics/contracts/portfolio.md",
+      "read_paths": ["web", "iskvw", ".github/workflows/publicar_iskvw.yml", "tools/portfolio", "web/package.json"],
+      "checks": ["npm run typecheck --prefix web", "npm run build --prefix web"],
+      "do_not_read": ["WIN raw archive", "RD databases", "private media originals"]
+    },
+    "cultura": {
+      "branch_prefix": "cultura",
+      "keywords": ["cultura", "obra", "arte", "artistico", "artista", "ensayo", "tilde", "psicosis", "tapiz", "precursor", "ascii", "semilla", "planta", "plantas", "cultivo", "escultura", "3d", "visual"],
+      "contract": "context/diagnostics/contracts/cultura.md",
+      "read_paths": ["cultura", "web/src/components/CulturaPanel.tsx", "docs/cultura", "context/diagnostics"],
+      "checks": ["python3 -m pytest -q tests/test_archivo_ensayos.py", "python3 -m compileall -q cultura"],
+      "do_not_read": ["WIN raw archive", "RD runtime data", "unrelated departments"]
+    },
+    "research": {
+      "branch_prefix": "research",
+      "keywords": ["research", "investigacion", "scraping", "scraper", "fuente", "fuentes", "manual", "manuales", "web", "url", "crawl", "crawl4ai", "firecrawl", "fondart", "postulacion", "catalogo", "triangulacion", "busqueda", "documentacion", "extraccion", "corpus"],
+      "contract": "context/diagnostics/contracts/research.md",
+      "read_paths": ["cultura/mak_research", "tools", "context/diagnostics", "web/src/components/CulturaPanel.tsx"],
+      "checks": ["python3 -m pytest -q tests/test_mak_research_router.py", "python3 -m flujo diagnose --area research"],
+      "do_not_read": ["WIN raw archive", "private source exports", "provider secrets"]
+    }
+  }
+}

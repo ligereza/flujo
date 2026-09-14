@@ -1,0 +1,29 @@
+{
+  "nombre": "Festival Ejemplo 2026 — topología operativa",
+  "duracion_horas": 6,
+  "voluntarios": 7,
+  "asistentes_estimados": 2500,
+  "incluye_testeo": true,
+  "masivo": true,
+  "ubicacion": "Aire libre",
+  "layout_mode": "grid_2x",
+  "zone_overlay": {
+    "enabled": true,
+    "schema_version": "0.1",
+    "zones": [
+      {"zone_id": "RD_FIELD", "label": "Reducción de daños", "plane": "physical", "x_m": 0, "y_m": 5.0, "w_m": 6.0, "h_m": 3.0},
+      {"zone_id": "FOH_VJ", "label": "FOH VJ", "plane": "physical", "x_m": 7.2, "y_m": 5.0, "w_m": 3.0, "h_m": 2.0},
+      {"zone_id": "NETWORK_CORE", "label": "Núcleo de red", "plane": "logical"}
+    ],
+    "nodes": [
+      {"node_id": "xio-rd-01", "label": "XIO RD", "zone_id": "RD_FIELD", "role": "source", "mode": "observe", "x_m": 1.0, "y_m": 6.2},
+      {"node_id": "xio-foh-01", "label": "XIO FOH", "zone_id": "FOH_VJ", "role": "bridge", "mode": "observe", "x_m": 7.8, "y_m": 6.2},
+      {"node_id": "vj-host-01", "label": "VJ host", "zone_id": "FOH_VJ", "role": "visual_writer", "mode": "proposal_only", "active_writer": true, "writer_groups": ["visual_cues"], "x_m": 9.0, "y_m": 6.2},
+      {"node_id": "network-core-01", "label": "Network core", "zone_id": "NETWORK_CORE", "role": "router", "mode": "observe"}
+    ],
+    "links": [
+      {"from": "xio-rd-01", "to": "xio-foh-01", "transport": "HTTP/JSON", "channel": "event", "direction": "observe"},
+      {"from": "xio-foh-01", "to": "vj-host-01", "transport": "OSC", "channel": "/timecode", "direction": "observe"}
+    ]
+  }
+}

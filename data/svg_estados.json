@@ -1,0 +1,31 @@
+{
+  "_que_es": "En qué estado está cada pieza de diseño. La app no puede adivinarlo mirando el archivo: que un SVG exista no dice si se aprobó, si está en revisión o si es un borrador. Acá se declara.",
+
+  "_por_que_importa": "Sin esto, la galería marcaba TODAS las piezas como 'borrador', incluidas las contraportadas que ya se imprimieron y aprobaron. Mostrarle eso a alguien hace ver el trabajo terminado como si estuviera a medio hacer.",
+
+  "_como_editar": [
+    "Las reglas se aplican de arriba hacia abajo por la ruta de la pieza: gana la ÚLTIMA que coincida, así podés poner una regla general y después la excepción.",
+    "'ruta' es cualquier parte de la ruta del archivo (por ejemplo una carpeta entera, o el nombre de una pieza).",
+    "'estado' puede ser: aprobado, en-revision o borrador."
+  ],
+
+  "por_defecto": "borrador",
+
+  "reglas": [
+    {
+      "ruta": "svg/suplementos_rd/09_contraportadas_dark/",
+      "estado": "aprobado",
+      "nota": "Son las contraportadas que se imprimieron y aprobó la ONG (palabras del usuario, 2026-07-26: 'esos pdf fueron los que aprobaron')."
+    },
+    {
+      "ruta": "svg/suplementos_rd/_plantilla/",
+      "estado": "borrador",
+      "nota": "Plantilla de trabajo, no es una pieza que se entregue."
+    },
+    {
+      "ruta": "svg/eventos_rd/packs_servicios_rd",
+      "estado": "aprobado",
+      "nota": "Los packs de servicio en la tarifa vigente."
+    }
+  ]
+}

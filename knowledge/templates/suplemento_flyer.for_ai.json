@@ -1,0 +1,12 @@
+{
+  "type": "suplemento_flyer",
+  "task": "Analiza pieza de suplementos RD. Detecta estructura comercial, producto, claims, QR/legal y formato.",
+  "expected_output": {
+    "format": {"id": "", "tool": "illustrator_svg", "medium": "impresion_o_digital"},
+    "product": {"name": "", "category": "", "claims": [], "ingredients_visible": []},
+    "layout": {"product_hero": "", "benefits_zone": "", "qr_position": "", "legal_zone": ""},
+    "style": {"background": "", "contrast": "", "medical_clean": false, "typography": "", "color_palette": []},
+    "editable_fields": ["producto", "claims", "ingredientes", "precio", "qr", "legal"],
+    "notes": ""
+  }
+}

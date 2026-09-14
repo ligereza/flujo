@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" data-name="bbce1758481a-17856523829176989">
+<style>
+.c0{animation:k_girar 2.2s linear infinite}
+@keyframes k_girar{to{transform:rotate(360deg)}}
+</style>
+<rect width="120" height="120" fill="#0b1030"/>
+<g id="capa-0-protagonista" transform="translate(60,42)" data-rol="protagonista" data-gesto="girar" data-ritmo="2.2s" data-figura="arcos"><title>protagonista - arcos</title><g class="c0"><g transform="scale(20)"><path d="M-0.92,.62 a0.92,0.92 0 0 1 1.84,0" fill="none" stroke="#8fe0b0" stroke-width=".17" stroke-linecap="round"/><path d="M-0.7100000000000001,.62 a0.7100000000000001,0.7100000000000001 0 0 1 1.4200000000000002,0" fill="none" stroke="#d7ff2e" stroke-width=".17" stroke-linecap="round"/><path d="M-0.5,.62 a0.5,0.5 0 0 1 1.0,0" fill="none" stroke="#132a1c" stroke-width=".17" stroke-linecap="round"/><path d="M-0.29000000000000004,.62 a0.29000000000000004,0.29000000000000004 0 0 1 0.5800000000000001,0" fill="none" stroke="#8fe0b0" stroke-width=".17" stroke-linecap="round"/></g></g></g>
+<g id="capa-1-base" transform="translate(60,84)" data-rol="base" data-gesto="quieto" data-ritmo="4s" data-figura="corazon"><title>base - corazon</title><g class="c1"><g transform="scale(28)"><path d="M0,.86 C-.62,.38 -.95,.02 -.95,-.36 A.52,.52 0 0 1 0,-.60 A.52,.52 0 0 1 .95,-.36 C.95,.02 .62,.38 0,.86 Z" fill="#8fe0b0"/></g></g></g>
+</svg>

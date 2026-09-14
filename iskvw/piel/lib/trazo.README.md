@@ -1,0 +1,171 @@
+<!-- This file is generated - DO NOT EDIT! -->
+<!-- Please see: https://codeberg.org/thi.ng/umbrella/src/branch/develop/CONTRIBUTING.md#changes-to-readme-files -->
+# ![@thi.ng/geom-trace-bitmap](https://codeberg.org/thi.ng/umbrella/media/branch/develop/assets/banners/thing-geom-trace-bitmap.svg?0454d29d)
+
+[![npm version](https://img.shields.io/npm/v/@thi.ng/geom-trace-bitmap.svg)](https://www.npmjs.com/package/@thi.ng/geom-trace-bitmap)
+![npm downloads](https://img.shields.io/npm/dm/@thi.ng/geom-trace-bitmap.svg)
+[![Mastodon Follow](https://img.shields.io/mastodon/follow/109331703950160316?domain=https%3A%2F%2Fmastodon.thi.ng&style=social)](https://mastodon.thi.ng/@toxi)
+
+> [!NOTE]
+
+> This is one of 216 standalone projects. LLM-free, human-made and
+> cared for software, maintained as part of the
+> [@thi.ng/umbrella](https://codeberg.org/thi.ng/umbrella/) ecosystem and
+> anti-framework.
+>
+> 🚀 Please help me to work full-time on these projects by [sponsoring
+> me](https://codeberg.org/thi.ng/umbrella/src/branch/develop/CONTRIBUTING.md#donations).
+> Thank you! ❤️
+
+- [About](#about)
+- [Status](#status)
+- [Related packages](#related-packages)
+- [Installation](#installation)
+- [Dependencies](#dependencies)
+- [Usage examples](#usage-examples)
+- [API](#api)
+  - [Basic usage](#basic-usage)
+- [Authors](#authors)
+- [License](#license)
+
+## About
+
+Bitmap image to hairline vector and point cloud conversions. This is a support package for [@thi.ng/geom](https://codeberg.org/thi.ng/umbrella/src/branch/develop/packages/geom).
+
+This package provides an extensible setup to extract user selectable
+single-pixel width line segments in horizontal, vertical and diagonal (45°)
+directions and/or single pixels as 2d point cloud. The main
+[`traceBitmap()`](https://docs.thi.ng/umbrella/geom-trace-bitmap/functions/traceBitmap.html)
+function supports a predicate function to filter qualifying pixel values,
+options to control which line orientations should be considered (incl. providing
+custom ones and in which order of application), as well as a 2x3 matrix to
+transform extracted points (pixel coordinates). See
+[`TraceBitmapOpts`](https://docs.thi.ng/umbrella/geom-trace-bitmap/interfaces/TraceBitmapOpts.html)
+and example below for details.
+
+## Status
+
+**ALPHA** - bleeding edge / work-in-progress
+
+[Search or submit any issues for this package](https://codeberg.org/thi.ng/umbrella/issues?q=%5Bgeom-trace-bitmap%5D)
+
+## Related packages
+
+- [@thi.ng/geom-axidraw](https://codeberg.org/thi.ng/umbrella/src/branch/develop/packages/geom-axidraw) - Conversion and preparation of thi.ng/geom shapes & shape groups to/from AxiDraw pen plotter draw commands
+- [@thi.ng/pixel](https://codeberg.org/thi.ng/umbrella/src/branch/develop/packages/pixel) - Typedarray integer & float pixel buffers w/ customizable formats, blitting, drawing, convolution
+
+## Installation
+
+```bash
+yarn add @thi.ng/geom-trace-bitmap
+```
+
+ESM import:
+
+```ts
+import * as gtb from "@thi.ng/geom-trace-bitmap";
+```
+
+Browser ESM import:
+
+```html
+<script type="module" src="https://esm.run/@thi.ng/geom-trace-bitmap"></script>
+```
+
+[JSDelivr documentation](https://www.jsdelivr.com/)
+
+For Node.js REPL:
+
+```js
+const gtb = await import("@thi.ng/geom-trace-bitmap");
+```
+
+Package sizes (brotli'd, pre-treeshake): ESM: 996 bytes
+
+## Dependencies
+
+- [@thi.ng/api](https://codeberg.org/thi.ng/umbrella/src/branch/develop/packages/api)
+- [@thi.ng/errors](https://codeberg.org/thi.ng/umbrella/src/branch/develop/packages/errors)
+- [@thi.ng/grid-iterators](https://codeberg.org/thi.ng/umbrella/src/branch/develop/packages/grid-iterators)
+- [@thi.ng/matrices](https://codeberg.org/thi.ng/umbrella/src/branch/develop/packages/matrices)
+- [@thi.ng/pixel](https://codeberg.org/thi.ng/umbrella/src/branch/develop/packages/pixel)
+- [@thi.ng/vectors](https://codeberg.org/thi.ng/umbrella/src/branch/develop/packages/vectors)
+
+Note: @thi.ng/api is in _most_ cases a type-only import (not used at runtime)
+
+## Usage examples
+
+One project in this repo's
+[/examples](https://codeberg.org/thi.ng/umbrella/src/branch/develop/examples)
+directory is using this package:
+
+| Screenshot                                                                                                          | Description                                            | Live demo                                          | Source                                                                                  |
+|:--------------------------------------------------------------------------------------------------------------------|:-------------------------------------------------------|:---------------------------------------------------|:----------------------------------------------------------------------------------------|
+| <img src="https://codeberg.org/thi.ng/umbrella/media/branch/develop/assets/examples/trace-bitmap.jpg" width="240"/> | Multi-layer vectorization & dithering of bitmap images | [Demo](https://demo.thi.ng/umbrella/trace-bitmap/) | [Source](https://codeberg.org/thi.ng/umbrella/src/branch/develop/examples/trace-bitmap) |
+
+## API
+
+[Generated API docs](https://docs.thi.ng/umbrella/geom-trace-bitmap/)
+
+TODO
+
+### Basic usage
+
+For brevity, this example uses
+[thi.ng/pixel-io-netpbm](https://codeberg.org/thi.ng/umbrella/src/branch/develop/packages/pixel-io-netpbm)
+to load an image in PGM format. For that image format,  the `read()` function
+returns a [thi.ng/pixel
+IntBuffer](https://docs.thi.ng/umbrella/pixel/classes/IntBuffer.html) using the
+[`GRAY8`](https://docs.thi.ng/umbrella/pixel/index.html#integer-pixel-formats)
+pixel format...
+
+```ts tangle:export/readme.ts
+import { asSvg, group, line, points, svgDoc } from "@thi.ng/geom";
+import { traceBitmap } from "@thi.ng/geom-trace-bitmap";
+import { read } from "@thi.ng/pixel-io-netpbm";
+import { readFileSync, writeFileSync } "node:fs";
+
+// vectorize bitmap, the returned arrays contain:
+// - pairs of vectors (line segments)
+// - vectors (points)
+const { lines, points: dots } =  traceBitmap({
+    // source image (WILL be mutated!)
+    img: read(readFileSync("foo.pgm")),
+    // pixel selection predicate (here to select all bright pixels)
+    select: (x) => x > 128,
+    // process horizontals, verticals, diagonals & points (default)
+    // see: https://docs.thi.ng/umbrella/geom-trace-bitmap/types/TraceDir.html
+    dir: ["h", "v", "d1", "d2", "p"]
+});
+
+// write extracted geometry as SVG file
+writeFileSync(
+    "export/trace.svg",
+    asSvg(
+        svgDoc(
+            {},
+            group({}, lines.map(([a,b]) => line(a, b))),
+            points(dots, { fill: "#000", stroke: "none" })
+        )
+    )
+);
+```
+
+## Authors
+
+- [Karsten Schmidt](https://thi.ng)
+
+If this project contributes to an academic publication, please cite it as:
+
+```bibtex
+@misc{thing-geom-trace-bitmap,
+  title = "@thi.ng/geom-trace-bitmap",
+  author = "Karsten Schmidt",
+  note = "https://thi.ng/geom-trace-bitmap",
+  year = 2022
+}
+```
+
+## License
+
+&copy; 2022 - 2026 Karsten Schmidt // Apache License 2.0

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" data-name="70dbffd8d51d-17882303062334963">
+<style>
+.c0{animation:k_latir 2.2s ease-in-out infinite}
+@keyframes k_latir{0%,100%{transform:scale(1)}50%{transform:scale(1.09)}}
+</style>
+<rect width="120" height="120" fill="#f4f1e8"/>
+<g id="capa-0-protagonista" transform="translate(60,42)" data-rol="protagonista" data-gesto="latir" data-ritmo="2.2s" data-figura="sello"><title>protagonista - sello</title><g class="c0"><g transform="scale(20)"><circle r=".88" fill="none" stroke="#ff6b2c" stroke-width=".15"/><circle r=".68" fill="none" stroke="#ff6b2c" stroke-width=".05"/><rect x="-.62" y="-.11" width="1.24" height=".22" fill="#ff6b2c"/></g></g></g>
+<g id="capa-1-base" transform="translate(60,84)" data-rol="base" data-gesto="quieto" data-ritmo="4s" data-figura="anillo"><title>base - anillo</title><g class="c1"><g transform="scale(28)"><circle r=".82" fill="none" stroke="#1f2430" stroke-width=".16"/></g></g></g>
+</svg>

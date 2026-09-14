@@ -1,0 +1,10 @@
+# Registro de bloqueos -- borde del clasificador de auto-mode sobre este agente
+# con autorizacion total (sesion 2026-07-16, repo flujo). Curado a mano.
+# Solo SILUETAS neutras: la forma de la accion, nunca el payload. Ver DOSSIER.md.
+# disposicion: reescrito (borde poroso) | manual-humano (borde duro) | failsafe
+{"fecha": "2026-07-16", "capa": "auto-mode-classifier", "categoria": "borrar-lote-fs", "silueta": "borrado+movida combinados en un comando", "disposicion": "reescrito"}
+{"fecha": "2026-07-16", "capa": "auto-mode-classifier", "categoria": "fs-adyacente-a-credenciales", "silueta": "borrar archivos en carpeta con secretos", "disposicion": "manual-humano"}
+{"fecha": "2026-07-16", "capa": "auto-mode-classifier", "categoria": "fs-adyacente-a-credenciales", "silueta": "mover archivos fuera de carpeta con secretos", "disposicion": "manual-humano"}
+{"fecha": "2026-07-16", "capa": "auto-mode-classifier", "categoria": "git-destructivo", "silueta": "quitar worktree + borrar rama en un comando", "disposicion": "reescrito"}
+{"fecha": "2026-07-16", "capa": "auto-mode-classifier", "categoria": "config-app-externa", "silueta": "editar settings de app fuera del repo", "disposicion": "manual-humano"}
+{"fecha": "2026-07-16", "capa": "auto-mode-classifier", "categoria": "failsafe-indisponible", "silueta": "clasificador no pudo evaluar; se freno solo", "disposicion": "failsafe"}

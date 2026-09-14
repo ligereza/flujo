@@ -1,0 +1,115 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape" width="1080" height="1440" viewBox="0 0 1080 1440" role="img" aria-labelledby="svg-title svg-desc">
+  <title id="svg-title">CHEMSEX - Orgullo es cuidarnos en comunidad</title>
+  <desc id="svg-desc">Portada animada para Reduciendo Daño. Dos campos abiertos forman una comunidad alrededor de un centro de cuidado. La pieza no representa alarma ni prohibición.</desc>
+
+  <defs>
+    <linearGradient id="bg-gradient" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#08090d"/>
+      <stop offset="0.58" stop-color="#10151b"/>
+      <stop offset="1" stop-color="#171325"/>
+    </linearGradient>
+    <radialGradient id="care-glow" cx="50%" cy="50%" r="50%">
+      <stop offset="0" stop-color="#dcff36" stop-opacity="0.26"/>
+      <stop offset="0.55" stop-color="#58e8f2" stop-opacity="0.10"/>
+      <stop offset="1" stop-color="#58e8f2" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="community-stroke" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#58e8f2"/>
+      <stop offset="0.52" stop-color="#dcff36"/>
+      <stop offset="1" stop-color="#ffad5c"/>
+    </linearGradient>
+    <filter id="soft-glow" x="-40%" y="-40%" width="180%" height="180%">
+      <feGaussianBlur stdDeviation="18" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="small-glow" x="-80%" y="-80%" width="260%" height="260%">
+      <feGaussianBlur stdDeviation="5" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <style>
+      .micro { font-family: 'IBM Plex Mono', 'Courier New', monospace; letter-spacing: 0.22em; }
+      .display { font-family: Inter, Arial, sans-serif; font-weight: 800; }
+      .italic { font-family: Inter, Arial, sans-serif; font-style: italic; font-weight: 400; }
+      .editable-label { vector-effect: non-scaling-stroke; }
+    </style>
+  </defs>
+
+  <!-- Editable layer: background -->
+  <g id="layer-background" inkscape:groupmode="layer" inkscape:label="01 Background" data-editable="true">
+    <rect id="background" x="0" y="0" width="1080" height="1440" fill="#08090d"/>
+    <rect id="background-gradient" x="28" y="28" width="1024" height="1384" rx="34" fill="url(#bg-gradient)"/>
+    <rect id="safe-border" x="54" y="54" width="972" height="1332" rx="24" fill="none" stroke="#2a2e3c" stroke-width="2"/>
+    <path id="top-grid" d="M90 170H990 M90 210H990" fill="none" stroke="#58e8f2" stroke-opacity="0.12" stroke-width="1"/>
+  </g>
+
+  <!-- Editable layer: semantic field -->
+  <g id="layer-semantic-field" inkscape:groupmode="layer" inkscape:label="02 Semantic Field - Community Care" data-editable="true">
+    <circle id="care-glow" cx="540" cy="790" r="360" fill="url(#care-glow)" opacity="0.82">
+      <animate attributeName="r" values="330;360;330" dur="6s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.55;0.82;0.55" dur="6s" repeatCount="indefinite"/>
+    </circle>
+    <path id="open-field-left" d="M230 1035 C140 930 140 650 305 515 C385 450 450 432 505 428" fill="none" stroke="url(#community-stroke)" stroke-width="18" stroke-linecap="round" opacity="0.88">
+      <animate attributeName="d" values="M230 1035 C140 930 140 650 305 515 C385 450 450 432 505 428;M196 1042 C102 916 120 625 302 490 C388 427 456 410 520 410;M230 1035 C140 930 140 650 305 515 C385 450 450 432 505 428" dur="6s" repeatCount="indefinite"/>
+    </path>
+    <path id="open-field-right" d="M850 1035 C940 930 940 650 775 515 C695 450 630 432 575 428" fill="none" stroke="url(#community-stroke)" stroke-width="18" stroke-linecap="round" opacity="0.88">
+      <animate attributeName="d" values="M850 1035 C940 930 940 650 775 515 C695 450 630 432 575 428;M884 1042 C978 916 960 625 778 490 C692 427 624 410 560 410;M850 1035 C940 930 940 650 775 515 C695 450 630 432 575 428" dur="6s" repeatCount="indefinite"/>
+    </path>
+    <path id="shared-connection" d="M505 428 Q540 398 575 428" fill="none" stroke="#dcff36" stroke-width="7" stroke-linecap="round" opacity="0.9">
+      <animate attributeName="stroke-dasharray" values="0 100;100 0;0 100" dur="6s" repeatCount="indefinite"/>
+    </path>
+  </g>
+
+  <!-- Editable layer: community nodes -->
+  <g id="layer-community-nodes" inkscape:groupmode="layer" inkscape:label="03 Community Nodes" data-editable="true">
+    <g id="node-left" transform="translate(305 790)">
+      <circle r="38" fill="#58e8f2" opacity="0.16" filter="url(#small-glow)"/>
+      <circle r="22" fill="#58e8f2"/>
+      <path d="M-10 4 Q0 -10 10 4" fill="none" stroke="#08090d" stroke-width="5" stroke-linecap="round"/>
+      <circle cx="0" cy="-7" r="5" fill="#08090d"/>
+      <animateTransform attributeName="transform" type="translate" values="305 790;288 760;305 790" dur="6s" repeatCount="indefinite"/>
+    </g>
+    <g id="node-right" transform="translate(775 790)">
+      <circle r="38" fill="#ffad5c" opacity="0.16" filter="url(#small-glow)"/>
+      <circle r="22" fill="#ffad5c"/>
+      <path d="M-10 4 Q0 -10 10 4" fill="none" stroke="#08090d" stroke-width="5" stroke-linecap="round"/>
+      <circle cx="0" cy="-7" r="5" fill="#08090d"/>
+      <animateTransform attributeName="transform" type="translate" values="775 790;792 760;775 790" dur="6s" repeatCount="indefinite"/>
+    </g>
+    <g id="node-top" transform="translate(540 445)">
+      <circle r="24" fill="#dcff36" opacity="0.18" filter="url(#small-glow)"/>
+      <circle r="12" fill="#dcff36"/>
+      <animateTransform attributeName="transform" type="translate" values="540 445;540 425;540 445" dur="6s" repeatCount="indefinite"/>
+    </g>
+  </g>
+
+  <!-- Editable layer: central care form -->
+  <g id="layer-care-symbol" inkscape:groupmode="layer" inkscape:label="04 Care Symbol" data-editable="true">
+    <circle id="care-ring-outer" cx="540" cy="790" r="124" fill="none" stroke="#58e8f2" stroke-width="3" stroke-dasharray="2 18" opacity="0.7">
+      <animateTransform attributeName="transform" type="rotate" from="0 540 790" to="360 540 790" dur="24s" repeatCount="indefinite"/>
+    </circle>
+    <circle id="care-ring-inner" cx="540" cy="790" r="92" fill="#0c1219" stroke="#dcff36" stroke-width="5"/>
+    <path id="care-arc" d="M493 806 A52 52 0 0 0 587 806" fill="none" stroke="#dcff36" stroke-width="8" stroke-linecap="round"/>
+    <circle id="care-point" cx="540" cy="756" r="9" fill="#dcff36" filter="url(#small-glow)"/>
+    <path id="care-bridge-left" d="M488 790 H455" stroke="#58e8f2" stroke-width="4" stroke-linecap="round"/>
+    <path id="care-bridge-right" d="M592 790 H625" stroke="#ffad5c" stroke-width="4" stroke-linecap="round"/>
+    <animateTransform xlink:href="#care-ring-inner" attributeName="transform" type="scale" values="1;1.035;1" dur="6s" repeatCount="indefinite" additive="sum"/>
+  </g>
+
+  <!-- Editable layer: text -->
+  <g id="layer-text" inkscape:groupmode="layer" inkscape:label="05 Text" data-editable="true">
+    <text id="label-system" x="92" y="112" class="micro" fill="#dcff36" font-size="16">REDUCIENDO DAÑO · POST · 01 / 07</text>
+    <text id="title-main" x="92" y="270" class="display" fill="#f0f1f5" font-size="112" letter-spacing="-5">CHEMSEX</text>
+    <text id="title-subtitle" x="94" y="330" class="italic" fill="#a8adbc" font-size="37">Orgullo es cuidarnos en comunidad</text>
+    <text id="intro-line-1" x="94" y="1180" fill="#f0f1f5" font-size="25" font-family="Inter, Arial, sans-serif">El chemsex es una realidad en nuestra comunidad,</text>
+    <text id="intro-line-2" x="94" y="1220" fill="#f0f1f5" font-size="25" font-family="Inter, Arial, sans-serif">dentro y fuera de los espacios de fiesta.</text>
+    <text id="intro-line-3" x="94" y="1260" fill="#a8adbc" font-size="24" font-family="Inter, Arial, sans-serif">Empezar a hablar de esto es el primer paso para protegernos.</text>
+    <text id="swipe-prompt" x="94" y="1330" class="micro" fill="#58e8f2" font-size="15">DESLIZA PARA ENCONTRAR MÁS INFORMACIÓN →</text>
+  </g>
+
+  <!-- Editable layer: motion guide, hidden in normal rendering -->
+  <g id="layer-motion-guides" inkscape:groupmode="layer" inkscape:label="06 Motion Guides" data-editable="true" opacity="0" pointer-events="none">
+    <path id="guide-left" d="M230 1035 C140 930 140 650 305 515 C385 450 450 432 505 428" fill="none" stroke="#ff00ff" stroke-width="2"/>
+    <path id="guide-right" d="M850 1035 C940 930 940 650 775 515 C695 450 630 432 575 428" fill="none" stroke="#ff00ff" stroke-width="2"/>
+    <circle id="guide-center" cx="540" cy="790" r="92" fill="none" stroke="#ff00ff" stroke-width="2"/>
+  </g>
+</svg>

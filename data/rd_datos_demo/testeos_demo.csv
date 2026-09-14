@@ -1,0 +1,31 @@
+fecha,evento,sustancia_declarada,reactivo,resultado_color,familia_detectada,coincide,adulterante_sospechado,descartada,notas
+2026-06-21,Under Bosque,MDMA,Mecke,azul-verde oscuro,MDMA,1,,0,"muestra pequena, resultado tentativo"
+2026-08-19,Warehouse 12,cocaina,Simon,azul palido,cocaina cortada (levamisol / lidocaina),0,manitol,0,"muestra pequena, resultado tentativo"
+2026-04-01,Under Bosque,2C-B,Mandelin,verde oliva,2C-x,1,,0,reactivo aplicado en punto fijo
+2026-07-25,Festival Rio Verde,MDMA,Mecke,azul-verde oscuro,MDMA,1,manitol,0,"muestra pequena, resultado tentativo"
+2026-05-24,Open Air Dunas,ketamina,Froehde,amarillo palido,ketamina,1,,0,reactivo aplicado en punto fijo
+2026-07-06,Under Bosque,ketamina,Froehde,amarillo palido,ketamina,1,lidocaina,0,reactivo aplicado en punto fijo
+2026-08-21,Club Nortico,MDMA,Mecke,azul-verde oscuro,MDMA,1,,0,"muestra pequena, resultado tentativo"
+2026-09-13,Club Nortico,cristal (supuesta cocaina),Simon,sin reaccion (blanco),cocaina,0,,0,reactivo aplicado en punto fijo
+2026-07-28,Open Air Dunas,ketamina,Froehde,amarillo palido,ketamina,1,,0,"muestra pequena, resultado tentativo"
+2026-08-20,Warehouse 12,cocaina,Simon,azul palido,cocaina cortada (levamisol / lidocaina),0,manitol,0,
+2026-08-08,Warehouse 12,anfetamina (speed),Liebermann,naranja-rojizo,anfetamina,1,levamisol,0,reactivo aplicado en punto fijo
+2026-08-23,Warehouse 12,anfetamina (speed),Liebermann,naranja-rojizo,anfetamina,1,cafeina,0,
+2026-05-28,Fiesta Solsticio,cocaina,Simon,azul palido,cocaina cortada (levamisol / lidocaina),0,manitol,0,
+2026-09-19,Under Bosque,desconocida (pastilla sin marca),Marquis,sin cambio,sin reaccion (blanco),0,lidocaina,0,"muestra pequena, resultado tentativo"
+2026-05-07,Warehouse 12,MDA,Marquis,negro-azulado,MDMA / MDA,1,,0,
+2026-09-20,Warehouse 12,MDA,Marquis,negro-azulado,MDMA / MDA,1,lidocaina,0,reactivo aplicado en punto fijo
+2026-07-12,Club Nortico,desconocida (pastilla sin marca),Marquis,sin cambio,sin reaccion (blanco),0,cafeina,0,"muestra pequena, resultado tentativo"
+2026-07-20,After Mecanica,anfetamina (speed),Liebermann,naranja-rojizo,anfetamina,1,,0,reactivo aplicado en punto fijo
+2026-04-09,Fiesta Solsticio,MDMA,Marquis,negro-violeta,MDMA,1,lidocaina,0,"muestra pequena, resultado tentativo"
+2026-08-04,Rave Cordillera,desconocida (pastilla sin marca),Marquis,sin cambio,sin reaccion (blanco),0,,0,reactivo aplicado en punto fijo
+2026-07-29,Warehouse 12,MDA,Marquis,negro-azulado,MDMA / MDA,1,manitol,0,"muestra pequena, resultado tentativo"
+2026-09-17,Festival Rio Verde,desconocida (pastilla sin marca),Marquis,sin cambio,sin reaccion (blanco),0,manitol,0,reactivo aplicado en punto fijo
+2026-07-27,Under Bosque,ketamina,Froehde,amarillo palido,ketamina,1,levamisol,0,reactivo aplicado en punto fijo
+2026-05-17,Open Air Dunas,MDA,Marquis,negro-azulado,MDMA / MDA,1,manitol,0,"muestra pequena, resultado tentativo"
+2026-09-14,Club Nortico,MDMA,Mecke,azul-verde oscuro,MDMA,1,levamisol,0,reactivo aplicado en punto fijo
+2026-05-20,Open Air Dunas,MDMA,Mecke,azul-verde oscuro,MDMA,1,,0,"muestra pequena, resultado tentativo"
+2026-04-24,Festival Rio Verde,MDMA,Marquis,negro-violeta,MDMA,1,levamisol,0,
+2026-05-21,After Mecanica,cocaina,Simon,azul palido,cocaina cortada (levamisol / lidocaina),0,,0,
+2026-06-08,Rave Cordillera,desconocida (pastilla sin marca),Marquis,sin cambio,sin reaccion (blanco),0,,0,
+2026-09-18,Warehouse 12,ketamina,Froehde,amarillo palido,ketamina,1,lidocaina,0,persona reporta primera vez con esta sustancia

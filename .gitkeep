@@ -1,0 +1,3 @@
+# Esta carpeta se mantiene vacía intencionalmente.
+# Sirve para que siempre exista _airdrop/ en el repo.
+# Los archivos que se generan aquí se aplican con scripts/apply_airdrop.sh

@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mak.local/schemas/tennis/shot_event.schema.json",
+  "title": "MAK Tennis Shot Event",
+  "type": "object",
+  "required": ["shot_id", "source", "epistemic_status", "match_id", "point_id", "actor", "timestamp_ref", "observed", "derived", "outcome", "provenance"],
+  "properties": {
+    "schema": {"const": "mak.tennis.shot_event.v0.1"},
+    "shot_id": {"type": "string", "minLength": 1},
+    "source": {
+      "type": "object",
+      "required": ["source_id", "source_record_id"],
+      "properties": {
+        "source_id": {"type": "string"},
+        "source_record_id": {"type": "string"},
+        "source_sha256": {"type": "string"},
+        "video_ref": {"type": ["string", "null"]},
+        "frame_start": {"type": ["integer", "null"]},
+        "frame_contact": {"type": ["integer", "null"]},
+        "frame_end": {"type": ["integer", "null"]}
+      }
+    },
+    "epistemic_status": {"enum": ["OBSERVED", "ANNOTATED", "EXTRACTED", "DERIVED", "PREDICTED", "COUNTERFACTUAL", "UNKNOWN"]},
+    "match_id": {"type": "string"},
+    "point_id": {"type": "string"},
+    "rally_index": {"type": ["integer", "null"]},
+    "shot_index": {"type": ["integer", "null"]},
+    "actor": {"type": ["string", "null"]},
+    "timestamp_ref": {"type": ["number", "null"]},
+    "observed": {"type": "object"},
+    "derived": {"type": "object"},
+    "outcome": {"type": "object"},
+    "provenance": {
+      "type": "object",
+      "required": ["raw_ref", "transform_chain"],
+      "properties": {
+        "raw_ref": {"type": "string"},
+        "transform_chain": {"type": "array", "items": {"type": "string"}},
+        "model_versions": {"type": "object"},
+        "human_review": {"type": ["string", "null"]},
+        "project_ref": {"type": ["string", "null"]}
+      }
+    }
+  }
+}

@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/ligereza/vibecodeine/schemas/piel.schema.json",
+  "title": "manifiesto de una piel",
+  "description": "Lo que cualquier modelo necesita saber para escribir una piel de iskvw sin leer las 1.323 lineas de la que ya existe. Nacio de una medicion del 2026-07-31: habia TRES pieles (campo 1323 lineas, terminal 772, venue 505) y la bateria de verificacion apuntaba literalmente a `campo`, asi que dos podian estar rotas hace meses y nada lo habria dicho. La piel es intercambiable solo si hay una bateria que cualquiera pueda pasar, y esa bateria necesita que la piel declare que pide y como se mide lo que dibujo -- no puede adivinar el nombre de sus variables.",
+  "type": "object",
+  "required": ["formato", "nombre", "datos", "medida"],
+  "properties": {
+    "formato": {"const": "piel/1"},
+    "nombre": {"type": "string", "description": "Igual al nombre del directorio en iskvw/piel/."},
+    "resumen": {"type": "string", "description": "Una linea: que muestra y para quien."},
+    "datos": {
+      "type": "array",
+      "description": "Los archivos que la piel pide, en el orden en que los pide y relativos a su propio directorio. La sonda los sirve de verdad desde el repo, asi que declarar de mas hace fallar, no pasar.",
+      "items": {
+        "type": "object",
+        "required": ["ruta", "obligatorio"],
+        "properties": {
+          "ruta": {"type": "string"},
+          "obligatorio": {
+            "type": "boolean",
+            "description": "false = la piel tiene que seguir dibujando sin el. Es lo que hace que un sustrato pobre no la rompa."
+          },
+          "para": {"type": "string"}
+        }
+      }
+    },
+    "medida": {
+      "type": "string",
+      "description": "Una expresion JS, evaluada en el sandbox despues de los cuadros, que devuelve CUANTO se dibujo (un numero). Es lo unico que permite exigirle lo mismo a pieles que no comparten una sola variable: `NODOS.length` en campo, `ESTADO.dibujadas` en venue. Si da 0 o -1, la piel arranco sin material y la corrida no probo nada -- que es la forma clasica de una sonda verde que no mide."
+    },
+    "capas": {
+      "type": "array",
+      "description": "Una capa o mil. Cada una declara EL DATO QUE CODIFICA, y eso la vuelve verificable: se quita el dato y la capa tiene que quedar inerte. Es la tesis doublecup del repo -- ningun elemento reclama un dato que no codifica -- convertida en algo que se corre. Una capa que dice codificar `tilde` se puede probar; una que dice 'queda mas organico' no.",
+      "items": {
+        "type": "object",
+        "required": ["nombre", "codifica"],
+        "properties": {
+          "nombre": {"type": "string"},
+          "codifica": {"type": "string", "description": "El campo de la pieza que esta capa convierte en imagen."},
+          "llave": {"type": "string", "description": "Clave del tablero que la enciende, si es opcional."},
+          "inerte_sin_dato": {
+            "type": "boolean",
+            "default": true,
+            "description": "Sin su dato, la capa no dibuja nada. false solo si hay una razon escrita."
+          }
+        }
+      }
+    },
+    "gestos": {
+      "type": "array",
+      "description": "A que responde. Un modelo que escribe una piel nueva tiene que saber que gramatica hereda.",
+      "items": {"type": "string"}
+    },
+    "degrada": {
+      "type": "string",
+      "description": "Que hace cuando falta un dato opcional. Hoy esa respuesta vive implicita adentro del codigo, y por eso nadie puede escribir una piel nueva sin leerlo entero."
+    },
+    "capacidades": {
+      "type": "array",
+      "description": "Comprobaciones extra que esta piel acepta, mas alla de la bateria comun (por ejemplo `posiciones_medidas`, `patch_efectos`, `capa_venue`). La bateria las corre SOLO si estan declaradas: exigirle a `terminal` las pruebas de `campo` seria medirla con la forma de otra.",
+      "items": {"type": "string"}
+    }
+  }
+}

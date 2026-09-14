@@ -1,0 +1,137 @@
+@import "tailwindcss";
+
+/* Custom scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #333;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* Smooth scroll */
+html {
+  scroll-behavior: smooth;
+}
+
+/* SVG containment for gallery cards and list thumbnails */
+.svg-contain {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.svg-contain > svg {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+}
+
+/* SVG in modal preview — large, centered, bounded */
+.svg-modal-preview > svg {
+  max-width: 100%;
+  max-height: 400px;
+  width: auto;
+  height: auto;
+  display: block;
+}
+
+/* Animation for pulse dot */
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+
+/* Plano/Rider PDF export: force real pages and prevent map clipping */
+@media print {
+  @page {
+    size: A4 landscape;
+    margin: 8mm;
+  }
+
+  html, body, #root {
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+    min-height: 100% !important;
+    overflow: visible !important;
+    background: #fff !important;
+  }
+
+  body * {
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  .rider-print-root {
+    display: block !important;
+    width: 100% !important;
+    color: #000 !important;
+    background: #fff !important;
+    font-family: Arial, Helvetica, sans-serif !important;
+    font-size: 10px !important;
+  }
+
+  .rider-print-page {
+    box-sizing: border-box !important;
+    width: 100% !important;
+    min-height: 188mm !important;
+    padding: 0 !important;
+    overflow: hidden !important;
+    break-after: page !important;
+    page-break-after: always !important;
+  }
+
+  .rider-print-page:last-child {
+    break-after: auto !important;
+    page-break-after: auto !important;
+  }
+
+  .rider-info-page {
+    display: block !important;
+  }
+
+  .rider-map-page {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 3mm !important;
+  }
+
+  .rider-print-map-frame {
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+    padding: 2mm !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    overflow: hidden !important;
+  }
+
+  .rider-print-map-svg {
+    width: 100% !important;
+    max-width: 100% !important;
+    height: auto !important;
+    max-height: 166mm !important;
+    display: block !important;
+  }
+
+  .rider-detail-page {
+    display: block !important;
+  }
+
+  .rider-detail-page table {
+    font-size: 8.5px !important;
+    line-height: 1.2 !important;
+  }
+}

@@ -1,0 +1,8 @@
+id: openklub_primary
+producer_id: openklub
+status: source_needed
+source_quality: unknown
+workflow:
+  suggested_tool: logo_clean_lab
+  next_action: "dominio openklub.cl no resuelve (DNS); no se identifico cuenta IG/FB oficial en busqueda inicial; falta re-busqueda con terminos alternativos"
+outputs: {}

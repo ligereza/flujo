@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" data-name="02d8e16e7c73-18037394818164790">
+<style>
+.c0{animation:k_latir 2.2s ease-in-out infinite}
+@keyframes k_latir{0%,100%{transform:scale(1)}50%{transform:scale(1.09)}}
+</style>
+<rect width="120" height="120" fill="#12120a"/>
+<g id="capa-0-protagonista" transform="translate(60,56)" data-rol="protagonista" data-gesto="latir" data-ritmo="2.2s" data-figura="grieta"><title>protagonista - grieta</title><g class="c0"><g transform="scale(30)"><path d="M-.06,-1 L.10,-.62 L-.12,-.28 L.09,.06 L-.10,.42 L.08,.72 L-.04,1" fill="none" stroke="#ff2e7e" stroke-width=".14" stroke-linejoin="round" stroke-linecap="round"/></g></g></g>
+<g id="capa-1-marca" transform="translate(60,110)" data-rol="marca" data-gesto="quieto" data-ritmo="4s" data-figura="sello"><title>marca - sello</title><g class="c1"><g transform="scale(6)"><circle r=".88" fill="none" stroke="#ff2e7e" stroke-width=".15"/><circle r=".68" fill="none" stroke="#ff2e7e" stroke-width=".05"/><rect x="-.62" y="-.11" width="1.24" height=".22" fill="#ff2e7e"/></g></g></g>
+</svg>

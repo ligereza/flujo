@@ -1,0 +1,110 @@
+[project]
+name = "flujo"
+version = "0.56.1"
+description = "Dimensiones del Orden — arte y automatización"
+readme = "README.md"
+requires-python = ">=3.10"
+authors = [
+    {name = "ligereza"}
+]
+license = {text = "MIT"}
+dependencies = [
+    "matplotlib>=3.10.9",
+    "pyyaml>=6.0.3",
+    "Pillow>=12.3.0",
+    "pydantic>=2.13.5",
+    "typer>=0.27.2",
+    "rich>=15.0.0",
+    "jsonschema>=4.26.0",
+    "requests>=2.34.2",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=9.1.1",
+    "pytest-cov>=7.1.0",
+    "duckdb>=1.5.5",
+    "Flask>=3.1.3",
+    "vpype>=1.15.0",
+    "pre-commit>=4.6.2",
+    "pyflakes>=3.4.0",  # ratchet #139: NameError latentes en codigo autogenerado
+    "hypothesis>=6.167.0",
+]
+render = [
+    # El critico perceptual del motor semantico mide sobre PIXELES, asi que sin
+    # rasterizador su codigo no se ejecuta y queda sin cubrir. En Linux cairosvg
+    # anda; el motor conserva un backend alternativo para entornos sin
+    # rasterizador disponible.
+    # Va en un extra propio y no en `dev` para no cargarle cairo a quien solo
+    # quiere correr los tests que no rasterizan.
+    "cairosvg>=2.9.0",
+]
+research = [
+    # Optional browser-backed capture; urllib remains the zero-dependency fallback.
+    "crawl4ai>=0.9.2,<1.0",
+]
+web = [
+    "pywebview>=6.2.1",  # desktop window (BSD free); pip install pywebview
+]
+desktop-extras = [
+    "pystray>=0.19.5",   # optional tray icon for --desktop (free)
+]
+build = [
+    "pyinstaller>=6.22.1",  # free packaging to .exe; 'flujo package'. Not runtime dep.
+]
+
+[project.scripts]
+flujo = "flujo.cli:app"
+
+[build-system]
+requires = ["setuptools>=84.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.black]
+line-length = 100
+target-version = ["py310"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q -m flujo"
+strict_config = true
+strict_markers = true
+markers = [
+    "size_small: conservative small-test routing label",
+    "size_medium: conservative medium-test routing label",
+    "size_large: conservative large-test routing label",
+    "size_unknown: test size has not been classified yet",
+    "scope_unit: conservative single-component scope label",
+    "scope_integration: conservative multi-component scope label",
+    "scope_system: conservative end-to-end or system scope label",
+    "scope_unknown: test scope has not been classified yet",
+    "environment_physical: requires a physical MAK or attached device",
+    "environment_external: reaches an external service or provider",
+    "environment_machine_bound: refers to a machine-specific path or runtime",
+    "environment_optional: depends on an optional executable or package",
+    "environment_unknown: test environment has not been classified yet",
+    "lane_fast: high-confidence small candidate for per-change runs",
+    "lane_contract: contract-focused run candidate",
+    "lane_machine: physical, external, or machine-bound run candidate",
+    "lane_optional: optional-dependency run candidate",
+    "lane_review: classification incomplete; review before changing its lane",
+    "flujo: imports the src/flujo motor according to tools/test_lane_map.py",
+    "mak: imports the MAK box layer according to tools/test_lane_map.py",
+    "integration: imports both motor and MAK box layer",
+    "repo_hygiene: tree, git, or docs-only test according to tools/test_lane_map.py",
+]
+
+[tool.coverage.run]
+source = ["src/flujo"]
+omit = ["*/desktop/*"]
+
+[tool.coverage.report]
+skip_covered = true
+show_missing = true

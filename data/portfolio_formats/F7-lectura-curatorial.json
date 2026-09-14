@@ -1,0 +1,129 @@
+{
+ "schema": "mak-portfolio-format-v1",
+ "format_id": "F7-lectura-curatorial",
+ "family": "curatorial",
+ "vertical_grammar": "practica_o_corpus",
+ "title": "Lectura curatorial de material publicado",
+ "purpose": "Mostrar por que dos piezas publicadas conviene verlas juntas, usando SOLO las relaciones que una persona dibujo a mano en el editor de portafolio. Separa dos cosas que se confunden: una relacion de estructura de fuente (mismo carrusel, misma fecha, mismo evento) afirma como se publico el material, y una lectura (concepto compartido, similitud visual) afirma que comparten. La segunda es la curaduria; la primera es su soporte. Ninguna de las dos dice que dos piezas sean una misma obra.",
+ "consumer": {
+  "kind": "curador_o_festival",
+  "examples": [
+   "curador de muestra",
+   "programador de festival",
+   "galeria",
+   "editor de publicacion"
+  ],
+  "decision_it_supports": "evaluar si existe una linea legible en el material publicado",
+  "does_not_support": [
+   "acreditar autoria de ninguna pieza",
+   "afirmar que dos piezas relacionadas son la misma obra",
+   "una posicion de autor: eso lo escribe el artista, no el archivo",
+   "calidad artistica: ninguna relacion la mide"
+  ]
+ },
+ "language": "es",
+ "limits": {
+  "max_items_total": 20,
+  "max_bytes": 3000000,
+  "max_slots_rendered": 2
+ },
+ "declared_claims": [
+  "significa"
+ ],
+ "forbidden_claims": [
+  "es_mio",
+  "hice_esta_parte",
+  "puedo"
+ ],
+ "forbidden_inferences": [
+  "una relacion entre dos piezas no las convierte en una sola obra",
+  "una similitud visual no implica una serie ni una intencion",
+  "una propuesta de un proveedor externo no es una relacion dibujada por la persona y no entra aqui",
+  "una relacion dibujada y no reconfirmada permanece candidata: se muestra como tal",
+  "la ausencia de relacion entre dos piezas no implica que no se relacionen sus contextos"
+ ],
+ "slots": [
+  {
+   "slot_id": "lecturas",
+   "title": "Lecturas: que comparten estas piezas (interpretacion)",
+   "count": {
+    "min": 2,
+    "max": 10
+   },
+   "claim": "significa",
+   "layer": "curatorial",
+   "min_state": "candidate",
+   "min_permission": "public",
+   "caption_grammar": "{left} ↔ {right} — {relation}: {reading}. {confirmation}.",
+   "allowed_caption_fields": [
+    "left",
+    "right",
+    "relation",
+    "reading",
+    "confirmation",
+    "asserts"
+   ],
+   "required": true,
+   "evidence_kinds": [
+    "person_drawn_relation",
+    "third_party_receipt"
+   ],
+   "prefer_scope": "any",
+   "require_fields": {
+    "asserts": [
+     "interpretation"
+    ]
+   }
+  },
+  {
+   "slot_id": "soporte_de_fuente",
+   "title": "Soporte: como se publico el material",
+   "count": {
+    "min": 1,
+    "max": 10
+   },
+   "claim": "significa",
+   "layer": "curatorial",
+   "min_state": "candidate",
+   "min_permission": "public",
+   "caption_grammar": "{left} ↔ {right} — {relation} ({asserts})",
+   "allowed_caption_fields": [
+    "left",
+    "right",
+    "relation",
+    "asserts",
+    "reading",
+    "confirmation"
+   ],
+   "required": true,
+   "evidence_kinds": [
+    "person_drawn_relation",
+    "third_party_receipt"
+   ],
+   "prefer_scope": "any",
+   "require_fields": {
+    "asserts": [
+     "source_publication_structure",
+     "source_dating",
+     "source_context"
+    ]
+   }
+  }
+ ],
+ "invalid_if": [
+  "una ranura obligatoria queda bajo su count minimo",
+  "una afirmacion excede su min_state declarado",
+  "un epigrafe usa un campo fuera de allowed_caption_fields",
+  "una pieza con permission=prohibited o aggregate_only aparece por caso",
+  "el documento afirma es_mio o hice_esta_parte en cualquier ranura",
+  "una relacion propuesta por un proveedor de maquina aparece como si la hubiera dibujado la persona",
+  "el documento se presenta como la posicion del artista en vez de una lectura del material publicado"
+ ],
+ "control": {
+  "publication": false,
+  "submission": false,
+  "signed_document": false,
+  "authorship_claimed": false,
+  "training_permitted": false
+ }
+}

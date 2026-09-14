@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" data-name="798b71072217-17958599114585462">
+<style>
+.c0{animation:k_girari 7s linear infinite}
+@keyframes k_girari{to{transform:rotate(-360deg)}}
+</style>
+<rect width="120" height="120" fill="#2b1055"/>
+<g id="capa-0-protagonista" transform="translate(60,58)" data-rol="protagonista" data-gesto="girar_inverso" data-ritmo="7s" data-figura="estrella"><title>protagonista - estrella</title><g class="c0"><g transform="scale(22)"><path d="M0,-1 L.26,-.26 L1,0 L.26,.26 L0,1 L-.26,.26 L-1,0 L-.26,-.26 Z" fill="#ffe259"/></g></g></g>
+<g id="capa-1-base" transform="translate(60,104)" data-rol="base" data-gesto="quieto" data-ritmo="4s" data-figura="documento"><title>base - documento</title><g class="c1"><g transform="scale(8)"><rect x="-.72" y="-.95" width="1.44" height="1.9" fill="#4a1c6e" stroke="#ffe259" stroke-width=".08"/><rect x="-.52" y="-0.520" width="1.020" height=".09" fill="#ffe259" opacity=".55"/><rect x="-.52" y="-0.220" width="0.740" height=".09" fill="#ffe259" opacity=".55"/><rect x="-.52" y="0.080" width="1.020" height=".09" fill="#ffe259" opacity=".55"/><rect x="-.52" y="0.380" width="0.740" height=".09" fill="#ffe259" opacity=".55"/><rect x="-.52" y="0.680" width="1.020" height=".09" fill="#ffe259" opacity=".55"/></g></g></g>
+</svg>

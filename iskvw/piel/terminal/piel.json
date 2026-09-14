@@ -1,0 +1,35 @@
+{
+ "formato": "piel/1",
+ "nombre": "terminal",
+ "resumen": "El archivo como panel de consola: filtros por etiqueta y categoria sobre las obras, con una red de nodos generativa de fondo tejida desde sus `tags`.",
+ "datos": [
+  {
+   "ruta": "../../datos/archivo.json",
+   "obligatorio": false,
+   "para": "el sustrato: las piezas del contrato. Se pide PRIMERO, igual que en campo -- dos pieles que caen distinto ante el mismo dato no son dos pieles del mismo archivo."
+  },
+  {
+   "ruta": "../../datos/obras.json",
+   "obligatorio": false,
+   "para": "respaldo. Son 8 entradas y son HERRAMIENTAS, no obras: esta piel leia SOLO esto, asi que mostraba 8 herramientas donde hay 1.401 obras."
+  }
+ ],
+ "medida": "",
+ "capas": [
+  {
+   "nombre": "listado",
+   "codifica": "titulo+category+tags"
+  },
+  {
+   "nombre": "red",
+   "codifica": "tags",
+   "inerte_sin_dato": false
+  }
+ ],
+ "gestos": [
+  "click en chip de categoria",
+  "click en chip de etiqueta"
+ ],
+ "degrada": "Si el fetch falla usa el JSON incrustado: se abre igual desde el disco, sin servidor. Es la unica piel que no depende de que haya algo servido.",
+ "capacidades": []
+}

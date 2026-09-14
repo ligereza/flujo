@@ -1,0 +1,23 @@
+{
+  "project": { "name": "Flyer vertical mínimo", "slug": "flyer_vertical_minimo", "brand": "Marca", "website": "WEB.CL" },
+  "canvas": { "width": 2000, "height": 2800, "real_size_cm": { "width": 10, "height": 14 }, "safe_margin_px": 100 },
+  "palette": { "cream": "#F6EFE3", "white": "#FFFFFF", "ink": "#161513", "muted": "#675F55", "line": "#D9CEC0", "accent": "#173F2F" },
+  "background": "cream",
+  "global_elements": [
+    { "type": "rect", "x": 60, "y": 60, "w": 1880, "h": 2680, "radius": 70, "fill": "none", "stroke": "line", "stroke_width": 5 },
+    { "type": "text", "content": "{brand}", "x": 100, "y": 120, "size": 44, "fill": "ink", "weight": "bold" },
+    { "type": "text", "content": "{website}", "x": 100, "y": 2610, "size": 44, "fill": "accent", "weight": "bold" }
+  ],
+  "documents": [
+    {
+      "id": "01_flyer_base",
+      "title": "Flyer base",
+      "elements": [
+        { "type": "text", "content": "TÍTULO PRINCIPAL", "x": 100, "y": 310, "size": 110, "fill": "ink", "weight": "bold" },
+        { "type": "panel", "x": 100, "y": 520, "w": 1800, "h": 1950, "radius": 50, "fill": "white", "stroke": "line", "stroke_width": 3, "opacity": 0.7 },
+        { "type": "paragraph", "content": "Aquí va la descripción principal. Cambia este texto desde el JSON.", "x": 160, "y": 600, "size": 48, "fill": "muted", "max_width": 1680, "line_height": 68 },
+        { "type": "list", "x": 160, "y": 920, "size": 38, "fill": "ink", "max_width": 1680, "line_height": 54, "indent": 40, "gap": 16, "items": ["Punto uno", "Punto dos", "Punto tres"] }
+      ]
+    }
+  ]
+}

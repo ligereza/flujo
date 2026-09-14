@@ -1,0 +1,43 @@
+{
+  "schema": "mak-replay-suite-v1",
+  "suite_id": "mak-core-slices-2026-08-24",
+  "fingerprint": "bbecea1dc18d45068103072e279999bfa7a0af42b2a399d4ad3e517f21052fd0",
+  "cases": [
+    {
+      "case_id": "title-resolution-ambiguous",
+      "group_id": "title-resolution",
+      "split": "replay",
+      "task": "ambiguous titles must abstain instead of silently selecting a row",
+      "source_refs": ["tests/test_title_resolution.py"],
+      "validator": {"kind": "pytest", "target": "tests/test_title_resolution.py::test_two_same_titled_rows_resolve_as_many_not_a_silent_pick"},
+      "expected": {"status": "passed"}
+    },
+    {
+      "case_id": "blender-scene-probe-read-only",
+      "group_id": "blender-scene-probe",
+      "split": "replay",
+      "task": "scene probe reads render paths without writing the source scene",
+      "source_refs": ["tests/test_blender_scene_probe.py"],
+      "validator": {"kind": "pytest", "target": "tests/test_blender_scene_probe.py::test_probe_extracts_scene_paths_without_writing"},
+      "expected": {"status": "passed"}
+    },
+    {
+      "case_id": "aep-truncated-not-empty",
+      "group_id": "aep-reader",
+      "split": "holdout",
+      "task": "truncated AEP input must remain an explicit decoder failure",
+      "source_refs": ["tests/test_aepfile.py"],
+      "validator": {"kind": "pytest", "target": "tests/test_aepfile.py::test_invalid_and_truncated_files_are_not_reported_as_empty"},
+      "expected": {"status": "passed"}
+    },
+    {
+      "case_id": "png-legacy-xmp-container",
+      "group_id": "png-xmp-witness",
+      "split": "holdout",
+      "task": "legacy tEXt XMP containers are recognized without treating them as outside hits",
+      "source_refs": ["tests/test_png_xmp_witness.py"],
+      "validator": {"kind": "pytest", "target": "tests/test_png_xmp_witness.py::test_witness_also_accepts_legacy_text_xmp_container"},
+      "expected": {"status": "passed"}
+    }
+  ]
+}

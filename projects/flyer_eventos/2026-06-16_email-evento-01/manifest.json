@@ -1,0 +1,64 @@
+{
+  "tool": "flyer_eventos",
+  "name": "email_evento_01",
+  "date": "2026-06-16",
+  "status": "downloaded_pending_review",
+  "source": {
+    "type": "email",
+    "email_imported_at": "2026-06-16T20:40:11",
+    "link_index": 1,
+    "link_total": 1
+  },
+  "input": {
+    "main_image": "",
+    "event_name": "email_evento_01",
+    "event_date": "",
+    "format": "",
+    "notes": ""
+  },
+  "steps": {
+    "photoshop": "pending",
+    "blender": "pending",
+    "export": "pending"
+  },
+  "outputs": [],
+  "instagram": {
+    "url": "https://www.instagram.com/p/DZdW4_vmY4l",
+    "type": "p",
+    "shortcode": "DZdW4_vmY4l",
+    "media_guess": "image_or_carousel_possible",
+    "download_status": "downloaded",
+    "manual_download_possible": false,
+    "download_result": {
+      "status": "downloaded",
+      "shortcode": "DZdW4_vmY4l",
+      "url": "https://www.instagram.com/p/DZdW4_vmY4l",
+      "media_type": "video",
+      "files": [
+        "C:\\IA\\flujo\\projects\\flyer_eventos\\2026-06-16_email-evento-01\\input\\input_ig_video.mp4"
+      ],
+      "title": "Post by sundeckfiestas"
+    }
+  },
+  "extracted_info": {
+    "event_name": "",
+    "producer": "",
+    "venue": "",
+    "event_date": "",
+    "needs_manual_review": true
+  },
+  "manual_review": {
+    "required": true,
+    "reason": "metadata_pending",
+    "notes": [
+      "Revisar si el post es imagen, carrusel o video.",
+      "Si el perfil es privado, shadowban o requiere login, descargar manualmente.",
+      "Completar nombre evento, productora, lugar y fecha desde el flyer."
+    ]
+  },
+  "notes": [
+    "Creado desde correo. Falta descargar/analizar flyer.",
+    "Descarga automática exitosa: video",
+    "Archivos: C:\\IA\\flujo\\projects\\flyer_eventos\\2026-06-16_email-evento-01\\input\\input_ig_video.mp4"
+  ]
+}

@@ -1,0 +1,135 @@
+{
+  "artifact": {
+    "format": "glb",
+    "generator": "Khronos glTF Blender I/O v4.5.49",
+    "meshes": [
+      "Recurso 2",
+      "Recurso 3"
+    ],
+    "name": "rayu_resources.glb",
+    "nodes": [
+      "Recurso 2",
+      "Recurso 3"
+    ]
+  },
+  "inputs": {
+    "export_script_sha256": "976182451c074632732808b35c2ec332787edb1b0f4d4fd7c75883f8ac76d120",
+    "marker_sha256": "70e53d71d56e6269acc904fe8145443256550256c1f99464a3a8fa258821f746",
+    "output_bytes": 1537592,
+    "output_sha256": "dfa70c3248a739959e8366dbc0eb4382ce17f97592114e51fb6bbb67ae565042",
+    "source_locator": "ARICA/RAYU.blend",
+    "source_sha256": "acafc1db0088016139921b1ea2c9d7a5310247658117fa7021662e13e907ce86",
+    "source_snapshot_sha256": "b369c2d4111e0f825501781670c032cd97ce3da247fd0523598a04413d05d783"
+  },
+  "read_policy": {
+    "blender_opened": false,
+    "directory_scan": false,
+    "inputs_written": false,
+    "scripts_executed": false
+  },
+  "schema": "mak-cycle-c05-export-witness-v1",
+  "witness": {
+    "checks": {
+      "marker_target_matches_output": {
+        "details": {
+          "marker_target": "C:\\ARICA\\rayu_resources.glb",
+          "observed_output": "rayu_resources.glb",
+          "script_target": "C:\\ARICA\\rayu_resources.glb"
+        },
+        "reason": "declared_output_basename_matches_observed_glb",
+        "status": "pass"
+      },
+      "output_after_script_and_marker": {
+        "details": {
+          "marker_mtime_ns": 1783147816000000000,
+          "output_mtime_ns": 1783147816000000000,
+          "script_mtime_ns": 1783147813000000000
+        },
+        "reason": "filesystem_mtime_order_is_consistent",
+        "status": "pass"
+      },
+      "output_contains_exported_objects": {
+        "details": {
+          "output_meshes": [
+            "Recurso 2",
+            "Recurso 3"
+          ],
+          "output_nodes": [
+            "Recurso 2",
+            "Recurso 3"
+          ],
+          "selected": [
+            "Recurso 2",
+            "Recurso 3"
+          ]
+        },
+        "reason": "glb_contains_selected_nodes_and_meshes",
+        "status": "pass"
+      },
+      "output_is_blender_glb": {
+        "details": {
+          "asset": {
+            "generator": "Khronos glTF Blender I/O v4.5.49",
+            "version": "2.0"
+          }
+        },
+        "reason": "glb_generator_and_version_observed",
+        "status": "pass"
+      },
+      "script_and_marker_agree": {
+        "details": {
+          "marker_names": [
+            "Recurso 2",
+            "Recurso 3"
+          ],
+          "script_names": [
+            "Recurso 2",
+            "Recurso 3"
+          ]
+        },
+        "reason": "marker_confirms_script_selection",
+        "status": "pass"
+      },
+      "source_contains_exported_objects": {
+        "details": {
+          "selected": [
+            "Recurso 2",
+            "Recurso 3"
+          ],
+          "source_objects": [
+            "Spot",
+            "Line",
+            "Cylinder",
+            "Recurso 3",
+            "Camera",
+            "Ceiling Light Line",
+            "Recurso 2"
+          ]
+        },
+        "reason": "native_snapshot_contains_selected_objects",
+        "status": "pass"
+      },
+      "source_hash_matches_native_snapshot": {
+        "details": {
+          "actual": "acafc1db0088016139921b1ea2c9d7a5310247658117fa7021662e13e907ce86",
+          "expected": "acafc1db0088016139921b1ea2c9d7a5310247658117fa7021662e13e907ce86"
+        },
+        "reason": "source_hash_matches_snapshot",
+        "status": "pass"
+      }
+    },
+    "claim_limit": "supports an export event for this artifact; does not prove final-delivery status, artistic intent, authorship, or absence of later modification",
+    "event_type": "export",
+    "evidence_refs": [
+      "C05/source_blend/sha256=acafc1db0088016139921b1ea2c9d7a5310247658117fa7021662e13e907ce86",
+      "C05/export_script/sha256=976182451c074632732808b35c2ec332787edb1b0f4d4fd7c75883f8ac76d120",
+      "C05/export_marker/sha256=70e53d71d56e6269acc904fe8145443256550256c1f99464a3a8fa258821f746",
+      "C05/output_glb/sha256=dfa70c3248a739959e8366dbc0eb4382ce17f97592114e51fb6bbb67ae565042",
+      "C02/blender_endpoint/snapshot.json#/snapshot/native/scenes/0/objects"
+    ],
+    "reason": "explicit_script_marker_and_glb_bind_native_objects_to_export",
+    "source_ref": "authoring:blend:ARICA/RAYU.blend",
+    "status": "supported",
+    "target_ref": "artifact:glb:rayu_resources.glb"
+  }
+}

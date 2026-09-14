@@ -1,0 +1,189 @@
+{
+  "name": "Research Agent - APIs gratis (multi-proveedor)",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "research",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "wh-research-1",
+      "name": "Webhook: Recibir Tema",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        260,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a-topic",
+              "name": "topic",
+              "value": "={{ $json.body.topic }}",
+              "type": "string"
+            },
+            {
+              "id": "a-maxIterations",
+              "name": "maxIterations",
+              "value": "={{ $json.body.max_iterations || 4 }}",
+              "type": "number"
+            },
+            {
+              "id": "a-searchDepth",
+              "name": "searchDepth",
+              "value": "={{ $json.body.search_depth || 'basic' }}",
+              "type": "string"
+            },
+            {
+              "id": "a-providerOrder",
+              "name": "providerOrder",
+              "value": "={{ $json.body.providers || 'groq,cerebras,azure,ollama' }}",
+              "type": "string"
+            },
+            {
+              "id": "a-tavilyApiKey",
+              "name": "tavilyApiKey",
+              "value": "={{ $json.body.tavily_api_key || $env.TAVILY_API_KEY || '' }}",
+              "type": "string"
+            },
+            {
+              "id": "a-groqApiKey",
+              "name": "groqApiKey",
+              "value": "={{ $json.body.groq_api_key || $env.GROQ_API_KEY || '' }}",
+              "type": "string"
+            },
+            {
+              "id": "a-groqModel",
+              "name": "groqModel",
+              "value": "={{ $json.body.groq_model || 'llama-3.3-70b-versatile' }}",
+              "type": "string"
+            },
+            {
+              "id": "a-cerebrasApiKey",
+              "name": "cerebrasApiKey",
+              "value": "={{ $json.body.cerebras_api_key || $env.CEREBRAS_API_KEY || '' }}",
+              "type": "string"
+            },
+            {
+              "id": "a-cerebrasModel",
+              "name": "cerebrasModel",
+              "value": "={{ $json.body.cerebras_model || 'gpt-oss-120b' }}",
+              "type": "string"
+            },
+            {
+              "id": "a-azureApiKey",
+              "name": "azureApiKey",
+              "value": "={{ $json.body.azure_api_key || $env.AZURE_API_KEY || '' }}",
+              "type": "string"
+            },
+            {
+              "id": "a-azureEndpoint",
+              "name": "azureEndpoint",
+              "value": "={{ $json.body.azure_endpoint || $env.AZURE_ENDPOINT || 'https://ligereza.services.ai.azure.com' }}",
+              "type": "string"
+            },
+            {
+              "id": "a-azureDeployment",
+              "name": "azureDeployment",
+              "value": "={{ $json.body.azure_deployment || $env.AZURE_DEPLOYMENT || 'gpt-5-mini' }}",
+              "type": "string"
+            },
+            {
+              "id": "a-ollamaBaseUrl",
+              "name": "ollamaBaseUrl",
+              "value": "={{ $json.body.ollama_base_url || $env.OLLAMA_BASE_URL || 'http://ollama:11434' }}",
+              "type": "string"
+            },
+            {
+              "id": "a-ollamaModel",
+              "name": "ollamaModel",
+              "value": "={{ $json.body.ollama_model || 'mistral-nemo:latest' }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "set-config-1",
+      "name": "Config: Variables y Keys",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        520,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "jsCode": "// ============================================================\n// RESEARCH LOOP + INFORME -- multi-proveedor (APIs gratis)\n// Bucle: SEARCH (Tavily) -> FETCH -> ANALYZE (LLM) -> DECIDE\n// LLM con fallback: groq -> cerebras -> azure -> ollama (local)\n// Todo en un solo Code node: menos nodos = menos puntos de falla.\n// ============================================================\n\nconst cfg = $input.first().json;\nif (!cfg.topic) throw new Error('body.topic requerido');\nif (!cfg.tavilyApiKey) throw new Error('Falta Tavily key (body.tavily_api_key o env TAVILY_API_KEY)');\n\nconst t0 = Date.now();\n// Arrow function: captura el `this` del sandbox de n8n.\n// (function declarations rompen this.helpers -- bug de la version anterior)\nconst httpRequest = async (opts) => await this.helpers.httpRequest(opts);\n\nconst msgs = (system, user) => system\n  ? [{ role: 'system', content: system }, { role: 'user', content: user }]\n  : [{ role: 'user', content: user }];\n\nconst PROVIDERS = {\n  groq: {\n    ok: () => !!cfg.groqApiKey,\n    call: async (system, user, maxTok) => {\n      const r = await httpRequest({\n        method: 'POST', url: 'https://api.groq.com/openai/v1/chat/completions',\n        headers: { Authorization: 'Bearer ' + cfg.groqApiKey, 'Content-Type': 'application/json' },\n        body: { model: cfg.groqModel, messages: msgs(system, user), temperature: 0.3, max_tokens: maxTok },\n        json: true, timeout: 60000,\n      });\n      return ((r.choices && r.choices[0].message.content) || '').trim();\n    },\n  },\n  cerebras: {\n    ok: () => !!cfg.cerebrasApiKey,\n    call: async (system, user, maxTok) => {\n      const r = await httpRequest({\n        method: 'POST', url: 'https://api.cerebras.ai/v1/chat/completions',\n        headers: { Authorization: 'Bearer ' + cfg.cerebrasApiKey, 'Content-Type': 'application/json' },\n        // gpt-oss-120b razona antes de responder: margen extra de tokens\n        body: { model: cfg.cerebrasModel, messages: msgs(system, user), max_completion_tokens: maxTok + 2048 },\n        json: true, timeout: 60000,\n      });\n      return ((r.choices && r.choices[0].message.content) || '').trim();\n    },\n  },\n  azure: {\n    ok: () => !!(cfg.azureApiKey && cfg.azureEndpoint && cfg.azureDeployment),\n    call: async (system, user, maxTok) => {\n      const base = String(cfg.azureEndpoint).replace(/\\/+$/, '');\n      const r = await httpRequest({\n        method: 'POST',\n        url: base + '/openai/deployments/' + cfg.azureDeployment + '/chat/completions?api-version=2024-10-21',\n        headers: { 'api-key': cfg.azureApiKey, 'Content-Type': 'application/json' },\n        // gpt-5-mini: NO acepta temperature custom; razona -> margen extra\n        body: { messages: msgs(system, user), max_completion_tokens: maxTok + 2048 },\n        json: true, timeout: 90000,\n      });\n      return ((r.choices && r.choices[0].message.content) || '').trim();\n    },\n  },\n  ollama: {\n    ok: () => !!cfg.ollamaBaseUrl,\n    call: async (system, user, maxTok) => {\n      const r = await httpRequest({\n        method: 'POST', url: String(cfg.ollamaBaseUrl).replace(/\\/+$/, '') + '/api/generate',\n        headers: { 'Content-Type': 'application/json' },\n        body: {\n          model: cfg.ollamaModel,\n          prompt: system ? system + '\\n\\n' + user : user,\n          stream: false,\n          options: { temperature: 0.3, num_predict: maxTok },\n        },\n        json: true, timeout: 300000,\n      });\n      return (r.response || '').trim();\n    },\n  },\n};\n\nconst providerOrder = String(cfg.providerOrder || 'groq,cerebras,azure,ollama')\n  .split(',').map((s) => s.trim()).filter((p) => PROVIDERS[p] && PROVIDERS[p].ok());\nif (!providerOrder.length) throw new Error('Ningun proveedor LLM configurado (keys vacias)');\n\nconst llmStats = {};   // proveedor -> llamadas exitosas\nconst errors = [];     // errores no fatales (para meta)\n\nconst callLLM = async (system, user, maxTok) => {\n  let lastErr = null;\n  for (const name of providerOrder) {\n    try {\n      const text = await PROVIDERS[name].call(system, user, maxTok || 1024);\n      if (text) { llmStats[name] = (llmStats[name] || 0) + 1; return text; }\n      lastErr = new Error(name + ' devolvio vacio');\n    } catch (e) {\n      lastErr = e;\n      errors.push(name + ': ' + String((e && e.message) || e).slice(0, 160));\n    }\n  }\n  throw new Error('Todos los proveedores LLM fallaron. Ultimo error: ' + (lastErr && lastErr.message));\n};\n\nconst searchTavily = async (query) => {\n  try {\n    return await httpRequest({\n      method: 'POST', url: 'https://api.tavily.com/search',\n      headers: { Authorization: 'Bearer ' + cfg.tavilyApiKey, 'Content-Type': 'application/json' },\n      body: {\n        query,\n        search_depth: cfg.searchDepth || 'basic', // basic = 1 credito, advanced = 2\n        max_results: 5,\n        include_answer: true,\n        include_raw_content: false,\n      },\n      json: true, timeout: 30000,\n    });\n  } catch (e) {\n    errors.push('tavily: ' + String((e && e.message) || e).slice(0, 160));\n    return { results: [], answer: null };\n  }\n};\n\nconst fetchUrlContent = async (url) => {\n  try {\n    const body = await httpRequest({\n      method: 'GET', url, timeout: 12000, json: false,\n      headers: { 'User-Agent': 'Mozilla/5.0 (ResearchBot/1.0)' },\n    });\n    let text = typeof body === 'string' ? body : JSON.stringify(body);\n    text = text\n      .replace(/<script[\\s\\S]*?<\\/script>/gi, ' ')\n      .replace(/<style[\\s\\S]*?<\\/style>/gi, ' ')\n      .replace(/<[^>]+>/g, ' ')\n      .replace(/&[a-z#0-9]+;/gi, ' ')\n      .replace(/\\s+/g, ' ').trim();\n    return text.slice(0, 4000);\n  } catch (e) {\n    return '';\n  }\n};\n\n// ---------------- BUCLE PRINCIPAL ----------------\nconst maxIterations = Math.min(Math.max(parseInt(cfg.maxIterations, 10) || 4, 1), 10);\nconst findings = [];\nconst queryHistory = [];\nconst seenUrls = new Set(); // dedupe entre iteraciones (la v1 re-bajaba las mismas URLs)\nlet currentQuery = cfg.topic;\n\nfor (let i = 0; i < maxIterations; i++) {\n  queryHistory.push(currentQuery);\n  const search = await searchTavily(currentQuery);\n\n  if (search.answer) {\n    findings.push({ type: 'tavily_answer', iteration: i + 1, query: currentQuery, content: search.answer });\n  }\n\n  const fresh = (search.results || []).filter((r) => r.url && !seenUrls.has(r.url)).slice(0, 3);\n  for (const r of fresh) {\n    seenUrls.add(r.url);\n    const raw = await fetchUrlContent(r.url);\n    const content = raw.length > 200 ? raw : (r.content || raw);\n    if (!content) continue;\n\n    const analysis = await callLLM(\n      'Eres un asistente de investigacion. Analizas contenido web y devuelves SOLO JSON valido, sin markdown ni texto extra.',\n      'Tema: \"' + cfg.topic + '\"\\nTITULO: ' + (r.title || '') + '\\nURL: ' + r.url +\n      '\\n\\nCONTENIDO:\\n' + content +\n      '\\n\\nDevuelve JSON: {\"key_facts\":[\"...\"],\"relevance\":\"alta|media|baja\",\"summary\":\"2-3 frases\",\"new_angles\":[\"...\"]}',\n      900,\n    );\n    let parsed;\n    try {\n      parsed = JSON.parse(analysis.replace(/```json\\n?|```\\n?/g, '').trim());\n    } catch (e) {\n      parsed = { raw_analysis: analysis.slice(0, 1500) };\n    }\n    findings.push({ type: 'web_analysis', iteration: i + 1, query: currentQuery, title: r.title, url: r.url, analysis: parsed });\n  }\n\n  if (i === maxIterations - 1) break; // ultima vuelta: no gastar la llamada DECIDIR\n\n  const decision = await callLLM(\n    null,\n    'Eres agente de investigacion. Tema: \"' + cfg.topic + '\". Iteracion ' + (i + 1) + '/' + maxIterations +\n    '.\\nHallazgos recientes:\\n' + JSON.stringify(findings.slice(-5)).slice(0, 6000) +\n    '\\n\\nSi la informacion ya cubre el tema responde EXACTAMENTE \"FINALIZAR: <razon breve>\". ' +\n    'Si falta, responde EXACTAMENTE \"CONTINUAR: <nueva consulta concreta>\". ' +\n    'No repitas estas consultas ya hechas: ' + queryHistory.join(' | '),\n    300,\n  );\n\n  if (/^\\s*FINALIZAR/i.test(decision)) break;\n  const m = decision.match(/CONTINUAR:?\\s*(.+)/i);\n  let next = m ? m[1].trim().replace(/^[\"']|[\"']$/g, '') : '';\n  if (!next || queryHistory.some((q) => q.toLowerCase() === next.toLowerCase())) {\n    next = cfg.topic + ' (angulo ' + (i + 2) + ')';\n  }\n  currentQuery = next.slice(0, 300);\n}\n\n// ---------------- INFORME FINAL ----------------\nconst sources = [...new Set(findings.filter((f) => f.url).map((f) => f.url))];\nlet report;\ntry {\n  report = await callLLM(\n    'Eres un investigador senior. Redactas informes claros en espanol, en formato Markdown.',\n    'Genera un informe con secciones: 1. RESUMEN EJECUTIVO, 2. HALLAZGOS PRINCIPALES (cita fuente URL), ' +\n    '3. ANALISIS CRITICO, 4. LAGUNAS DE INFORMACION, 5. PROXIMOS PASOS.\\n\\n' +\n    'TEMA: \"' + cfg.topic + '\"\\n\\nHALLAZGOS:\\n' + JSON.stringify(findings, null, 1).slice(0, 14000) +\n    '\\n\\nFUENTES:\\n' + sources.join('\\n'),\n    2000,\n  );\n} catch (e) {\n  report = '[Informe no generado: ' + e.message + '] Revisar meta.errors y findings crudos.';\n}\n\nreturn [{\n  json: {\n    topic: cfg.topic,\n    report,\n    meta: {\n      iterations: queryHistory.length,\n      queries: queryHistory,\n      findingsCount: findings.length,\n      sources,\n      llmCalls: llmStats,\n      providerOrder,\n      errors: errors.slice(0, 20),\n      ms: Date.now() - t0,\n    },\n    findings,\n  },\n}];\n"
+      },
+      "id": "code-loop-1",
+      "name": "Research Loop + Informe",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        780,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "respondWith": "firstIncomingItem",
+        "options": {}
+      },
+      "id": "respond-1",
+      "name": "Responder Webhook",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1.1,
+      "position": [
+        1040,
+        300
+      ]
+    }
+  ],
+  "connections": {
+    "Webhook: Recibir Tema": {
+      "main": [
+        [
+          {
+            "node": "Config: Variables y Keys",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Config: Variables y Keys": {
+      "main": [
+        [
+          {
+            "node": "Research Loop + Informe",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Research Loop + Informe": {
+      "main": [
+        [
+          {
+            "node": "Responder Webhook",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "staticData": null,
+  "active": false
+}

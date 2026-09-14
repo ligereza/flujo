@@ -1,0 +1,34 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://mak.local/schemas/knowledge/math_search_request.schema.json",
+  "title": "MAK mathematical search request",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "request_id", "target_id", "policy", "budget", "constraints", "visibility"],
+  "properties": {
+    "schema": {"const": "mak-math-search-request-v1"},
+    "request_id": {"type": "string", "minLength": 1},
+    "target_id": {"type": "string", "minLength": 1},
+    "policy": {"enum": ["SIMPLE", "GRAVEYARD", "ALIEN", "CURATOR"]},
+    "budget": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["compute_units", "max_expanded_cost"],
+      "properties": {
+        "compute_units": {"type": "integer", "minimum": 1},
+        "max_expanded_cost": {"type": "number", "minimum": 0}
+      }
+    },
+    "constraints": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["target_legality_required", "literature_mode"],
+      "properties": {
+        "target_legality_required": {"type": "boolean"},
+        "literature_mode": {"enum": ["NORMAL", "NO_TARGET_SPECIFIC", "CURATOR_ONLY"]}
+      }
+    },
+    "visibility": {"const": "METADATA_ONLY"},
+    "next_gate": {"type": "string", "minLength": 1}
+  }
+}

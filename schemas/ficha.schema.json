@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/ligereza/vibecodeine/schemas/ficha.schema.json",
+  "title": "ficha de percepcion",
+  "description": "Una linea de ~/curatoria/fichas/fichas.jsonl. Lo que agrega este esquema respecto de lo que ya se escribia es `medicion`: cada medida declara su ESTADO. Medido el 2026-07-31 sobre las 3.138 fichas reales, `ocr_texto` venia vacio en el 76% y `datos_evento` en el 69%, y ese vacio significaba tres cosas distintas a la vez -- el OCR no aplicaba a ese tipo de archivo, corrio y no habia texto, o reventó. Nada aguas abajo podia distinguirlas, y una piel no puede decidir que hacer con un dato cuya ausencia no tiene motivo.",
+  "type": "object",
+  "required": ["id", "fuente", "ruta_rel", "tipo", "medicion"],
+  "properties": {
+    "id": {"type": "string"},
+    "fuente": {"type": "string"},
+    "ruta_rel": {"type": "string", "description": "Relativa a la raiz de la fuente. NUNCA absoluta: el repo es publico."},
+    "tipo": {"enum": ["imagen", "video", "pdf", "otro"]},
+    "categoria": {"type": "string"},
+    "bytes": {"type": "integer"},
+    "mtime": {"type": "string"},
+    "ocr_texto": {"type": "string", "description": "Texto crudo. Su vacio SOLO se interpreta junto a medicion.ocr."},
+    "vision": {"type": "object"},
+    "datos_evento": {"type": "object"},
+    "calidad_senal": {"type": "string"},
+    "error": {"type": ["string", "null"]},
+    "seg_proceso": {"type": "number"},
+    "ts": {"type": "string"},
+    "medicion": {
+      "type": "object",
+      "description": "Por que un campo esta vacio. Es la diferencia entre un dato ausente y un dato que nadie intento tomar, y es lo unico que permite que un modelo debil actue bien sobre este archivo.",
+      "required": ["ocr", "vision", "datos_evento"],
+      "additionalProperties": {
+        "type": "object",
+        "required": ["estado"],
+        "properties": {
+          "estado": {
+            "enum": ["medido", "vacio", "no_intentado", "fallo"],
+            "description": "no_intentado: la medicion no aplica a este tipo de archivo. fallo: se intento y reventó. vacio: se midio de verdad y no habia nada. medido: hay dato."
+          },
+          "detalle": {"type": "string"}
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,119 @@
+{
+ "schema": "mak-portfolio-format-v1",
+ "format_id": "F4-fondart-nacional-investigacion-2027",
+ "family": "fondo_publico",
+ "vertical_grammar": "investigacion",
+ "title": "Antecedentes para Fondart Nacional Linea Investigacion 2027",
+ "purpose": "Aportar SOLO la parte que el archivo puede sostener de la postulacion a fondart-nacional-investigacion-2027, transcrita de las bases capturadas y hasheadas. La convocatoria pondera Impacto de transferencia 0.40, Calidad 0.30, Curriculo 0.20 y Viabilidad 0.10 (bases p.15). El archivo puede alimentar Curriculo y parte de Viabilidad; Calidad e Impacto de transferencia dependen del proyecto propuesto y no del archivo, y esa mitad no se genera aqui. Ademas la linea exige estudio de campo para levantamiento de datos (p.2), de modo que el ajuste de una practica audiovisual a esta linea es una decision del postulante, no un resultado de este documento.",
+ "consumer": {
+  "kind": "jurado_fondo_publico",
+  "examples": [
+   "evaluador Fondart Nacional Linea Investigacion",
+   "seccion Antecedentes del postulante del FUP"
+  ],
+  "decision_it_supports": "puntuar el criterio Curriculo y parte de Viabilidad con evidencia trazable",
+  "does_not_support": [
+   "el criterio Calidad, que evalua el proyecto propuesto",
+   "el criterio Impacto potencial de la actividad transferencia, que evalua el plan de transferencia",
+   "las 8 compuertas duras de las bases: autorizacion ministerial de difusion, cofinanciamiento, incompatibilidades del postulante, estudio de campo requerido, FUP completo, requerimientos minimos, una sola postulacion, y actividad de transferencia",
+   "los 8 documentos requeridos, incluidos consentimiento indigena, derechos de autor, estatutos y compromisos de equipo y espacio",
+   "reclamar autoria de una obra en un documento firmado"
+  ]
+ },
+ "language": "es",
+ "limits": {
+  "max_items_total": 28,
+  "max_bytes": 4000000,
+  "max_slots_rendered": 4
+ },
+ "declared_claims": [
+  "ocurrio",
+  "puedo",
+  "hice_esta_parte"
+ ],
+ "forbidden_claims": [
+  "es_mio",
+  "significa"
+ ],
+ "forbidden_inferences": [
+  "una postulacion es un documento firmado: la autoria no se reclama desde evidencia de archivo",
+  "un contenedor con proyectos nativos no implica autoria de lo que renderizan",
+  "una fecha de archivo no es una fecha de actividad declarable ante un jurado",
+  "la trayectoria acreditada no implica ajuste a la linea de investigacion",
+  "el plazo de la convocatoria figura como constraint_status_unknown en la captura: verificar en la fuente oficial antes de usar este documento"
+ ],
+ "slots": [
+  {
+   "slot_id": "curriculum_contextos",
+   "title": "Curriculo: contextos de trabajo acreditables",
+   "count": {"min": 4, "max": 14},
+   "claim": "ocurrio",
+   "layer": "context",
+   "min_state": "supported_candidate",
+   "min_permission": "unnamed",
+   "caption_grammar": "{context_label} — {kind}, {span}",
+   "allowed_caption_fields": ["context_label", "kind", "span", "year"],
+   "required": true,
+   "evidence_kinds": ["container_root", "external_authority", "live_screen_setup", "third_party_receipt"],
+   "prefer_scope": "container"
+  },
+  {
+   "slot_id": "curriculum_capacidad",
+   "title": "Curriculo: capacidad tecnica sostenida",
+   "count": {"min": 3, "max": 8},
+   "claim": "puedo",
+   "layer": "process",
+   "min_state": "observed",
+   "min_permission": "unnamed",
+   "caption_grammar": "{technique} — {artifact_count} {scope_note}, {span}",
+   "allowed_caption_fields": ["technique", "artifact_count", "span", "tool", "context_label", "scope_note"],
+   "required": true,
+   "evidence_kinds": ["native_project_file", "media_kind_distribution"],
+   "prefer_scope": "archive"
+  },
+  {
+   "slot_id": "viabilidad_tecnica",
+   "title": "Viabilidad: ejecucion tecnica ya demostrada",
+   "count": {"min": 2, "max": 4},
+   "claim": "puedo",
+   "layer": "process",
+   "min_state": "observed",
+   "min_permission": "unnamed",
+   "caption_grammar": "{structure_note} · {artifact_kind}",
+   "allowed_caption_fields": ["structure_note", "artifact_kind", "declared_input_count"],
+   "required": true,
+   "evidence_kinds": ["live_screen_setup", "declared_inputs", "scene_graph", "native_project_file"],
+   "prefer_scope": "container"
+  },
+  {
+   "slot_id": "rol_y_exclusiones",
+   "title": "Rol declarado y lo que no es propio",
+   "count": {"min": 2, "max": 6},
+   "claim": "hice_esta_parte",
+   "layer": "role",
+   "min_state": "candidate",
+   "min_permission": "unnamed",
+   "caption_grammar": "{context_label}: {part_done}. No propio: {part_not_done}.",
+   "allowed_caption_fields": ["context_label", "part_done", "part_not_done", "year"],
+   "required": true,
+   "evidence_kinds": ["declared_practice_role", "third_party_receipt", "received_only_artifact", "no_export_chain"],
+   "prefer_scope": "container"
+  }
+ ],
+ "invalid_if": [
+  "una ranura obligatoria queda bajo su count minimo",
+  "una afirmacion excede su min_state declarado",
+  "un epigrafe usa un campo fuera de allowed_caption_fields",
+  "una pieza con permission=prohibited o aggregate_only aparece por caso",
+  "el documento afirma es_mio en cualquier ranura",
+  "el documento se presenta como la postulacion completa en vez de un insumo de antecedentes",
+  "la ranura rol_y_exclusiones queda vacia: declarar rol sin declarar exclusiones es sobreafirmar en un documento firmado"
+ ],
+ "control": {
+  "publication": false,
+  "submission": false,
+  "signed_document": false,
+  "authorship_claimed": false,
+  "training_permitted": false
+ }
+}

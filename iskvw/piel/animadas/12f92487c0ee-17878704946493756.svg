@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" data-name="12f92487c0ee-17878704946493756">
+<style>
+.c0{animation:k_girar 2.2s linear infinite}
+@keyframes k_girar{to{transform:rotate(360deg)}}
+</style>
+<rect width="120" height="120" fill="#0d0d18"/>
+<g id="capa-0-protagonista" transform="translate(60,58)" data-rol="protagonista" data-gesto="girar" data-ritmo="2.2s" data-figura="onda"><title>protagonista - onda</title><g class="c0"><g transform="scale(40)"><circle r="0.34" fill="none" stroke="#f2f2f5" stroke-width=".10" opacity="1.00"/><circle r="0.58" fill="none" stroke="#f2f2f5" stroke-width=".10" opacity="0.78"/><circle r="0.82" fill="none" stroke="#f2f2f5" stroke-width=".10" opacity="0.56"/></g></g></g>
+<g id="capa-1-base" transform="translate(60,96)" data-rol="base" data-gesto="quieto" data-ritmo="4s" data-figura="horizonte"><title>base - horizonte</title><g class="c1"><g transform="scale(16)"><path d="M-1,.9 C-.6,.35 -.3,.62 0,.42 C.35,.2 .65,.55 1,.32 V1 H-1 Z" fill="#f2f2f5"/><path d="M-1,1 H1" stroke="#ff3b30" stroke-width=".06"/></g></g></g>
+</svg>

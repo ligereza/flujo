@@ -1,0 +1,333 @@
+{
+  "schema": "mak-ordering-features-v1",
+  "purpose": "Declare, for every feature this system can read off a file, what it costs, what can refute it, and what it is therefore allowed to decide. Consulted before a feature is used to classify anything. The prose behind each entry is docs/ordering_chaos.md.",
+  "decision_rule": "A feature may not decide a question unless either (a) the feature is proof, or (b) its declared authority is present and was consulted. Otherwise the answer is an abstention with the missing authority named.",
+  "confidence_scale": [
+    "proof",
+    "strong",
+    "moderate",
+    "weak",
+    "none"
+  ],
+  "authorities": {
+    "artist_discography": {
+      "what": "The artist's released catalogue, with release dates.",
+      "consult": "Web lookup against Apple Music, Spotify, Deezer, letras.com or Chilean music press. Every datum keeps its source URL.",
+      "can_refute": "That a folder name is a track title.",
+      "why_it_exists": "The unit of MAK's VJ work for a musician is the track. A folder name found in the discography inherits a real release date; a folder name absent from it is a deliverable, an asset or unknown. Verified on LYON (5 of 9 named folders are 2025 singles) and DREFGIRA (01 CDR.mov is track 01 of Despues del Sol).",
+      "failure_mode": "A title that is a very common word matches by accident. Abstain when two releases explain the same name."
+    },
+    "pep_405_environment_marker": {
+      "what": "PEP 405 requires the interpreter to write pyvenv.cfg at a virtual environment root; sys.prefix derives from it.",
+      "consult": "os.path.isfile(<ancestor>/pyvenv.cfg)",
+      "can_refute": "That a Python file under this path was authored here.",
+      "why_it_exists": "A hand-written list of directory names (venvs, .venvs, venv-providers) missed a Windows virtualenv called env and admitted 1463 rows, 17.7% of the classification queue, from one directory.",
+      "failure_mode": "The environment root sits above the scan root, so no ancestor is visible. Fall back to a site-packages/dist-packages path segment, and treat an unreadable path as no evidence rather than as absence."
+    },
+    "repository_load_path": {
+      "what": "The glob a loader actually runs over a directory.",
+      "consult": "Read the loader. data/venues/*.json is loaded by cargar_todos(); data/venues_propuestas/ is not.",
+      "can_refute": "That a directory is a safe namespace for a draft.",
+      "why_it_exists": "A venue proposal written into data/venues/ broke the validator with eight schema errors.",
+      "failure_mode": "None known; the loader is the ground truth."
+    },
+    "content_identity": {
+      "what": "Two files with the same sha256 hold the same bytes.",
+      "consult": "Compare full sha256. A sample hash is NOT an identity.",
+      "can_refute": "That two rows are two different things.",
+      "why_it_exists": "2566 of 8273 queue rows were byte-identical to a file already in the live repository. Full hashes exist for only 112 of 45536 SSD assets, so on the SSD this authority is mostly unavailable.",
+      "failure_mode": "Identity of content is not identity of role. 44 zero-byte __init__.py files share a purpose and have 5 different consumers."
+    },
+    "operator_attestation": {
+      "what": "The operator states it.",
+      "consult": "Ask, and record actor plus reason plus evidence.",
+      "can_refute": "Anything below it.",
+      "why_it_exists": "Of 2034 archive pieces, only 8 carry both a date and the author's own sentence. Authorship has no cheaper source.",
+      "failure_mode": "None epistemically; it is the ceiling. Practically it is the scarcest resource in the system, which is why every fold and every ordering exists to spend less of it."
+    },
+    "tool_default_registry": {
+      "what": "The set of names and values a tool writes when the operator has not said anything.",
+      "consult": "Compare against the tool's documented defaults. For Resolume: a slice named 'Slice N' on a 1920x1080 canvas is the default a new screen ships with.",
+      "can_refute": "That a name in a project file is a statement by the operator.",
+      "why_it_exists": "A rig signature built from slice name plus canvas produced three false positives, because ('Slice 1', 1920, 1080) is what the file says when nobody said anything. The fix was to classify the name, not to keep an exception list.",
+      "failure_mode": "The default set is version-dependent, and an operator may legitimately leave a default in place on a real rig. So this proves the name is uninformative; it never proves the RIG is uninteresting."
+    }
+  },
+  "features": [
+    {
+      "name": "filename",
+      "cost": "free",
+      "evidence_kind": "observation",
+      "refutable_by": "artist_discography",
+      "max_confidence_without_authority": "none",
+      "max_confidence_with_authority": "strong",
+      "may_decide": [
+        "track_identity (only with artist_discography)",
+        "release_date (only with artist_discography)"
+      ],
+      "may_not_decide": [
+        "purpose",
+        "value",
+        "authorship",
+        "whether a file is junk"
+      ],
+      "learned_from": "Class 1. research/corpus filenames read as machine junk were per-artwork records of the operator's own archive; MERECEDORA read as unknown was a released single.",
+      "notes": "A name is only as strong as the authority that can refute it. The same feature was the weakest in three errors and the strongest in the fourth."
+    },
+    {
+      "name": "tool_default_name",
+      "cost": "free",
+      "evidence_kind": "derived_feature",
+      "refutable_by": "tool_default_registry",
+      "max_confidence_without_authority": "none",
+      "max_confidence_with_authority": "proof",
+      "may_decide": [
+        "that this name carries no information"
+      ],
+      "may_not_decide": [
+        "similarity",
+        "identity",
+        "anything at all"
+      ],
+      "learned_from": "Class 1. ('Slice 1', 1920, 1080) is Resolume's default name and canvas and produced three false positive rig matches.",
+      "notes": "Knowing a name is a tool default requires knowing the defaults, which is why it needs an authority like any other claim. Once consulted it is a string comparison, hence proof -- but proof of SILENCE only. It converts a false positive into an explicit abstention and never licenses a similarity claim."
+    },
+    {
+      "name": "path_or_container",
+      "cost": "free",
+      "evidence_kind": "observation",
+      "refutable_by": "repository_load_path",
+      "max_confidence_without_authority": "moderate",
+      "max_confidence_with_authority": "strong",
+      "may_decide": [
+        "provenance",
+        "which client or commission a work belongs to"
+      ],
+      "may_not_decide": [
+        "meaning",
+        "identity of a place",
+        "whether a draft is safe here"
+      ],
+      "learned_from": "Class 2. A ScreenSetup named after a venue describes a dated deployment: BERLIN 1 and berlin 2 are the same room with zero shared surfaces.",
+      "notes": "Container decides who it was for. It never decides what it is."
+    },
+    {
+      "name": "declared_marker",
+      "cost": "cheap",
+      "evidence_kind": "declared_marker",
+      "refutable_by": "pep_405_environment_marker",
+      "max_confidence_without_authority": "none",
+      "max_confidence_with_authority": "proof",
+      "may_decide": [
+        "provenance class (installed vs authored)"
+      ],
+      "may_not_decide": [
+        "value",
+        "whether the operator cares about it"
+      ],
+      "learned_from": "Class 1 and the root cause of 1463 queue rows. A definition required by a spec beats a list of names someone thought of.",
+      "notes": "Prefer a marker a specification obliges someone to write over any naming convention."
+    },
+    {
+      "name": "content_hash",
+      "cost": "cheap",
+      "evidence_kind": "observation",
+      "refutable_by": "content_identity",
+      "max_confidence_without_authority": "none",
+      "max_confidence_with_authority": "proof",
+      "may_decide": [
+        "that two rows are the same content",
+        "which copy is canonical, given a declared canonical root"
+      ],
+      "may_not_decide": [
+        "purpose",
+        "consumer",
+        "which copy matters more"
+      ],
+      "learned_from": "Class 6. Content identity is valid for the purpose half of a question and invalid for the consumer half.",
+      "notes": "A sample hash is not an identity and must produce an explicit tie, never a decision. Full hashes cover 112 of 45536 SSD assets."
+    },
+    {
+      "name": "structural_anchor",
+      "cost": "cheap",
+      "evidence_kind": "derived_feature",
+      "refutable_by": null,
+      "max_confidence_without_authority": "strong",
+      "max_confidence_with_authority": "strong",
+      "may_decide": [
+        "dimension (3d / 2d / mixed)",
+        "which tool made it"
+      ],
+      "may_not_decide": [
+        "authorship",
+        "whether it is finished",
+        "value"
+      ],
+      "anchors": {
+        "3d": [
+          ".blend"
+        ],
+        "2d": [
+          ".aep",
+          ".psd",
+          ".ai",
+          ".svg"
+        ],
+        "note": "Both present means 3d composed in After Effects, which is mixed, not ambiguous. The operator states that all his video passes through After Effects, so .aep is the composition anchor and .blend is the 3d anchor; they add rather than compete."
+      },
+      "learned_from": "The operator's own rule: the Blender project gives you the association. Measured: 927 .blend across 19 container roots; the existing projects.dimensionality column marks 774 rows 3d totalling only 85 GB while 30 mixed rows total 553 GB, so that column is counting downloaded models, not works.",
+      "notes": "This is strong without an external authority because the anchor's existence is the evidence. It is the correct first cut, ahead of anything derived from the image."
+    },
+    {
+      "name": "publication_surface",
+      "cost": "cheap",
+      "evidence_kind": "observation",
+      "refutable_by": "operator_attestation",
+      "max_confidence_without_authority": "strong",
+      "max_confidence_with_authority": "proof",
+      "may_decide": [
+        "obra vs registro"
+      ],
+      "may_not_decide": [
+        "whether it goes on the web",
+        "value"
+      ],
+      "mapping": {
+        "posts": "obra",
+        "reels": "obra",
+        "igtv": "obra (surface retired by Instagram; still obra)",
+        "stories": "registro",
+        "archived_posts": "not obra",
+        "other": "UNRESOLVED, 330 files, do not classify until measured"
+      },
+      "learned_from": "The operator's rule, which corrected an archive that had 240 stories filed as clase obra. Measured: 5899 stories on disk and only 240 ever indexed, so 5659 registro entries exist outside every index.",
+      "notes": "Surface decides obra vs registro cheaply and reliably. It never decides publication: that is the operator's, and the portfolio interface exists for it."
+    },
+    {
+      "name": "release_date",
+      "cost": "cheap",
+      "evidence_kind": "external_authority",
+      "refutable_by": "artist_discography",
+      "max_confidence_without_authority": "none",
+      "max_confidence_with_authority": "strong",
+      "may_decide": [
+        "chronology",
+        "the join between an SSD project and an Instagram record"
+      ],
+      "may_not_decide": [
+        "that two things sharing a date are the same work"
+      ],
+      "learned_from": "The operator's observation that a finished work sits on the same dates as the story that shared it. A release date is a real date; an mtime is when a byte was last written.",
+      "notes": "This is the only key found so far that binds the two orders on this disk: the SSD records how a work was made, Instagram records that it was shown. Widen the window and it stops discriminating; report how many candidates a window catches and abstain when it catches too many."
+    },
+    {
+      "name": "vector_or_scene_geometry",
+      "cost": "medium",
+      "evidence_kind": "derived_feature",
+      "refutable_by": null,
+      "max_confidence_without_authority": "moderate",
+      "max_confidence_with_authority": "strong",
+      "may_decide": [
+        "relation between two works"
+      ],
+      "may_not_decide": [
+        "intent",
+        "concept",
+        "authorship"
+      ],
+      "learned_from": "The operator's insight: an image holds no more than pixels and what a model claims to see, while an SVG and a 3d project hold the geometry that composes them, which is relatable.",
+      "notes": "Named SVG paths and .blend objects, materials and collections are structured and comparable BETWEEN works with no model in the middle. This is why SVG and 3d are the backbone of relating works, and why a geometry match must outrank a description."
+    },
+    {
+      "name": "vision_description",
+      "cost": "expensive",
+      "evidence_kind": "derived_feature",
+      "refutable_by": null,
+      "max_confidence_without_authority": "weak",
+      "max_confidence_with_authority": "weak",
+      "may_decide": [
+        "a candidate subject, as a proposal only"
+      ],
+      "may_not_decide": [
+        "concept",
+        "authorship",
+        "identity",
+        "anything at scale"
+      ],
+      "learned_from": "Class 5. Of 1818 archive entries with a machine 'percibido', ZERO carry the author's 'resumen'. Calling that corpus first-rate application material overshot as badly as calling it junk undershot.",
+      "notes": "Expensive AND unrefutable, the worst combination in the table. It is a good index INTO the record and carries no authorship. Never let it reach the same confidence as a geometry match or an authority hit."
+    },
+    {
+      "name": "human_attestation",
+      "cost": "human",
+      "evidence_kind": "human_attestation",
+      "refutable_by": "operator_attestation",
+      "max_confidence_without_authority": "proof",
+      "max_confidence_with_authority": "proof",
+      "may_decide": [
+        "authorship",
+        "publication",
+        "value",
+        "concept",
+        "anything"
+      ],
+      "may_not_decide": [],
+      "learned_from": "Every door built this week records actor, reason and evidence, because a decision nobody signed is not better than no decision.",
+      "notes": "The scarcest resource in the system. Every fold, subtraction and ordering elsewhere in this registry exists to spend less of it, never to replace it."
+    }
+  ],
+  "folding_relations": [
+    {
+      "relation": "content_identity",
+      "valid_for": [
+        "purpose",
+        "project"
+      ],
+      "invalid_for": [
+        "consumer",
+        "route"
+      ],
+      "why": "44 zero-byte __init__.py files: identical content, identical purpose, five trees, five different consumers."
+    },
+    {
+      "relation": "directory",
+      "valid_for": [
+        "project",
+        "commission",
+        "coarse class"
+      ],
+      "invalid_for": [
+        "route",
+        "consumer",
+        "finished vs working material"
+      ],
+      "why": "The coarse half of a question is a property of the folder; 3 directories cover half the queue's human rows. The fine half is per file and stays open."
+    },
+    {
+      "relation": "containment",
+      "valid_for": [
+        "propagating a REJECTION downward"
+      ],
+      "invalid_for": [
+        "propagating an ACCEPTANCE downward"
+      ],
+      "why": "A folder that is an Auto-Save cannot hold a delivered work. A real work does hold working material. Asymmetric, and falsifiable: if the operator overrides an inherited rejection, this is wrong."
+    },
+    {
+      "relation": "release_date_window",
+      "valid_for": [
+        "linking an obra to the registro that shared it"
+      ],
+      "invalid_for": [
+        "asserting two works are the same"
+      ],
+      "why": "Chronological coincidence is evidence of association, never of identity. Report how many candidates the window catches."
+    }
+  ],
+  "learning_contract": {
+    "training_example": "One operator decision plus the features that were on screen when it was made. Recorded by the review doors in project_transitions and classification_resolutions, with actor, reason and evidence.",
+    "must_abstain_below": "A configured probability threshold, reported alongside every proposal.",
+    "the_only_honest_metric": "Prediction accuracy on HELD-OUT operator decisions, reported together with the abstention rate. Accuracy on decisions already seen always looks good and means nothing.",
+    "negative_result_is_a_result": "If held-out decisions cannot be predicted, the system has not learned, and reporting that is the finding."
+  }
+}

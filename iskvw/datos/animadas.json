@@ -1,0 +1,5042 @@
+{
+ "version": 1,
+ "piezas": [
+  {
+   "obra_id": "00dfbf29763b-17963390141716156",
+   "titulo": "00dfbf29763b-17963390141716156",
+   "src": "iskvw/piel/animadas/00dfbf29763b-17963390141716156.svg",
+   "spec": {
+    "composicion": "centro_unico",
+    "tono": "atardecer",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "disco",
+      "gesto": "latir",
+      "ritmo": "rapido"
+     },
+     {
+      "rol": "base",
+      "figura": "puerta",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "0142feb0bda0-17857906844163602",
+   "titulo": "0142feb0bda0-17857906844163602",
+   "src": "iskvw/piel/animadas/0142feb0bda0-17857906844163602.svg",
+   "spec": {
+    "composicion": "protagonista_y_flancos",
+    "tono": "subterraneo",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "ojo",
+      "gesto": "latir",
+      "ritmo": "medio"
+     },
+     {
+      "rol": "flanco_der",
+      "figura": "figura",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "0219e1d84690-17954134879326364",
+   "titulo": "0219e1d84690-17954134879326364",
+   "src": "iskvw/piel/animadas/0219e1d84690-17954134879326364.svg",
+   "spec": {
+    "composicion": "horizonte",
+    "tono": "blueprint",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "espiral",
+      "gesto": "latir",
+      "ritmo": "muy_rapido"
+     },
+     {
+      "rol": "base",
+      "figura": "puerta",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "02d8e16e7c73-18037394818164790",
+   "titulo": "02d8e16e7c73-18037394818164790",
+   "src": "iskvw/piel/animadas/02d8e16e7c73-18037394818164790.svg",
+   "spec": {
+    "composicion": "capas",
+    "tono": "acido",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "grieta",
+      "gesto": "latir",
+      "ritmo": "rapido"
+     },
+     {
+      "rol": "marca",
+      "figura": "sello",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "0309513c750b-17988112985588156",
+   "titulo": "0309513c750b-17988112985588156",
+   "src": "iskvw/piel/animadas/0309513c750b-17988112985588156.svg",
+   "spec": {
+    "composicion": "capas",
+    "tono": "atardecer",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "grilla",
+      "gesto": "latir",
+      "ritmo": "muy_lento"
+     },
+     {
+      "rol": "fondo_amplio",
+      "figura": "anillo",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "04d565d4c17f-18020008679255636",
+   "titulo": "04d565d4c17f-18020008679255636",
+   "src": "iskvw/piel/animadas/04d565d4c17f-18020008679255636.svg",
+   "spec": {
+    "composicion": "confrontacion",
+    "tono": "subterraneo",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "disco",
+      "gesto": "latir",
+      "ritmo": "lento"
+     },
+     {
+      "rol": "lado_der",
+      "figura": "documento",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "070d74bb7ee3-17845442352222553",
+   "titulo": "070d74bb7ee3-17845442352222553",
+   "src": "iskvw/piel/animadas/070d74bb7ee3-17845442352222553.svg",
+   "spec": {
+    "composicion": "confrontacion",
+    "tono": "atardecer",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "grieta",
+      "gesto": "latir",
+      "ritmo": "muy_lento"
+     },
+     {
+      "rol": "lado_izq",
+      "figura": "estrella",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "08d8944c7581-17896000479057228",
+   "titulo": "08d8944c7581-17896000479057228",
+   "src": "iskvw/piel/animadas/08d8944c7581-17896000479057228.svg",
+   "spec": {
+    "composicion": "horizonte",
+    "tono": "atardecer",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "vinilo",
+      "gesto": "derivar",
+      "ritmo": "muy_rapido"
+     },
+     {
+      "rol": "marca",
+      "figura": "bocina",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "0986fd0e1556-17890634727098060",
+   "titulo": "0986fd0e1556-17890634727098060",
+   "src": "iskvw/piel/animadas/0986fd0e1556-17890634727098060.svg",
+   "spec": {
+    "composicion": "centro_y_satelites",
+    "tono": "blueprint",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "sello",
+      "gesto": "latir",
+      "ritmo": "medio"
+     },
+     {
+      "rol": "satelite_2",
+      "figura": "ojo",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "0b6e572c5a89-17869666019637673",
+   "titulo": "0b6e572c5a89-17869666019637673",
+   "src": "iskvw/piel/animadas/0b6e572c5a89-17869666019637673.svg",
+   "spec": {
+    "composicion": "centro_unico",
+    "tono": "papel",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "arcos",
+      "gesto": "respirar",
+      "ritmo": "rapido"
+     },
+     {
+      "rol": "base",
+      "figura": "rayos",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "0bffc5fc7955-17843571640579977",
+   "titulo": "0bffc5fc7955-17843571640579977",
+   "src": "iskvw/piel/animadas/0bffc5fc7955-17843571640579977.svg",
+   "spec": {
+    "composicion": "protagonista_y_flancos",
+    "tono": "campo",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "onda",
+      "gesto": "latir",
+      "ritmo": "lento"
+     },
+     {
+      "rol": "base",
+      "figura": "disco",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "0cb12eff4a8b-18046460327208724",
+   "titulo": "0cb12eff4a8b-18046460327208724",
+   "src": "iskvw/piel/animadas/0cb12eff4a8b-18046460327208724.svg",
+   "spec": {
+    "composicion": "horizonte",
+    "tono": "atardecer",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "figura",
+      "gesto": "latir",
+      "ritmo": "muy_lento"
+     },
+     {
+      "rol": "cielo",
+      "figura": "corazon",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "0fa807254c70-17850145885813995",
+   "titulo": "0fa807254c70-17850145885813995",
+   "src": "iskvw/piel/animadas/0fa807254c70-17850145885813995.svg",
+   "spec": {
+    "composicion": "confrontacion",
+    "tono": "atardecer",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "figura",
+      "gesto": "latir",
+      "ritmo": "medio"
+     },
+     {
+      "rol": "base",
+      "figura": "horizonte",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "0fd5d5060dbf-18039831448636728",
+   "titulo": "0fd5d5060dbf-18039831448636728",
+   "src": "iskvw/piel/animadas/0fd5d5060dbf-18039831448636728.svg",
+   "spec": {
+    "composicion": "centro_unico",
+    "tono": "subterraneo",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "corazon",
+      "gesto": "latir",
+      "ritmo": "lento"
+     },
+     {
+      "rol": "marca",
+      "figura": "rayos",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "11266e87c50b-18027468613155305",
+   "titulo": "11266e87c50b-18027468613155305",
+   "src": "iskvw/piel/animadas/11266e87c50b-18027468613155305.svg",
+   "spec": {
+    "composicion": "horizonte",
+    "tono": "vitral",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "maquina",
+      "gesto": "latir",
+      "ritmo": "lento"
+     },
+     {
+      "rol": "base",
+      "figura": "rayos",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "12f92487c0ee-17878704946493756",
+   "titulo": "12f92487c0ee-17878704946493756",
+   "src": "iskvw/piel/animadas/12f92487c0ee-17878704946493756.svg",
+   "spec": {
+    "composicion": "centro_unico",
+    "tono": "subterraneo",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "onda",
+      "gesto": "girar",
+      "ritmo": "rapido"
+     },
+     {
+      "rol": "base",
+      "figura": "horizonte",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "12fee1ff6258-17905818486257867",
+   "titulo": "12fee1ff6258-17905818486257867",
+   "src": "iskvw/piel/animadas/12fee1ff6258-17905818486257867.svg",
+   "spec": {
+    "composicion": "protagonista_y_flancos",
+    "tono": "atardecer",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "muro",
+      "gesto": "latir",
+      "ritmo": "rapido"
+     },
+     {
+      "rol": "base",
+      "figura": "figura",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "1631c7043143-17857558768532518",
+   "titulo": "1631c7043143-17857558768532518",
+   "src": "iskvw/piel/animadas/1631c7043143-17857558768532518.svg",
+   "spec": {
+    "composicion": "centro_y_satelites",
+    "tono": "documento",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "grilla",
+      "gesto": "latir",
+      "ritmo": "medio"
+     },
+     {
+      "rol": "satelite_1",
+      "figura": "vinilo",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "17cbe031ca38-17922479254362947",
+   "titulo": "17cbe031ca38-17922479254362947",
+   "src": "iskvw/piel/animadas/17cbe031ca38-17922479254362947.svg",
+   "spec": {
+    "composicion": "confrontacion",
+    "tono": "subterraneo",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "grilla",
+      "gesto": "latir",
+      "ritmo": "rapido"
+     },
+     {
+      "rol": "lado_izq",
+      "figura": "bocina",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "19116286e171-17973643747627482",
+   "titulo": "19116286e171-17973643747627482",
+   "src": "iskvw/piel/animadas/19116286e171-17973643747627482.svg",
+   "spec": {
+    "composicion": "centro_unico",
+    "tono": "subterraneo",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "ojo",
+      "gesto": "latir",
+      "ritmo": "lento"
+     },
+     {
+      "rol": "base",
+      "figura": "puerta",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "196b3c04dc11-17995133948367802",
+   "titulo": "196b3c04dc11-17995133948367802",
+   "src": "iskvw/piel/animadas/196b3c04dc11-17995133948367802.svg",
+   "spec": {
+    "composicion": "horizonte",
+    "tono": "campo",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "horizonte",
+      "gesto": "latir",
+      "ritmo": "muy_lento"
+     },
+     {
+      "rol": "cielo",
+      "figura": "rayos",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "196d8431a3d3-17890131999386365",
+   "titulo": "196d8431a3d3-17890131999386365",
+   "src": "iskvw/piel/animadas/196d8431a3d3-17890131999386365.svg",
+   "spec": {
+    "composicion": "confrontacion",
+    "tono": "atardecer",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "disco",
+      "gesto": "latir",
+      "ritmo": "medio"
+     },
+     {
+      "rol": "base",
+      "figura": "onda",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "1a2cfe51b2f3-17919931742825923",
+   "titulo": "1a2cfe51b2f3-17919931742825923",
+   "src": "iskvw/piel/animadas/1a2cfe51b2f3-17919931742825923.svg",
+   "spec": {
+    "composicion": "horizonte",
+    "tono": "campo",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "sello",
+      "gesto": "latir",
+      "ritmo": "lento"
+     },
+     {
+      "rol": "base",
+      "figura": "vinilo",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "1b5030f45984-17950172047590824",
+   "titulo": "1b5030f45984-17950172047590824",
+   "src": "iskvw/piel/animadas/1b5030f45984-17950172047590824.svg",
+   "spec": {
+    "composicion": "protagonista_y_flancos",
+    "tono": "subterraneo",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "muro",
+      "gesto": "derivar",
+      "ritmo": "medio"
+     },
+     {
+      "rol": "flanco_izq",
+      "figura": "figura",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "1cbbd987e1c4-18046704922359496",
+   "titulo": "1cbbd987e1c4-18046704922359496",
+   "src": "iskvw/piel/animadas/1cbbd987e1c4-18046704922359496.svg",
+   "spec": {
+    "composicion": "capas",
+    "tono": "blueprint",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "rayos",
+      "gesto": "latir",
+      "ritmo": "muy_lento"
+     },
+     {
+      "rol": "detalle",
+      "figura": "figura",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "1ce1a99879f3-18032221660216727",
+   "titulo": "1ce1a99879f3-18032221660216727",
+   "src": "iskvw/piel/animadas/1ce1a99879f3-18032221660216727.svg",
+   "spec": {
+    "composicion": "horizonte",
+    "tono": "blueprint",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "vinilo",
+      "gesto": "temblar",
+      "ritmo": "medio"
+     },
+     {
+      "rol": "base",
+      "figura": "muro",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "1d38b3e02d71-17852485193026716",
+   "titulo": "1d38b3e02d71-17852485193026716",
+   "src": "iskvw/piel/animadas/1d38b3e02d71-17852485193026716.svg",
+   "spec": {
+    "composicion": "protagonista_y_flancos",
+    "tono": "atardecer",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "arcos",
+      "gesto": "latir",
+      "ritmo": "muy_lento"
+     },
+     {
+      "rol": "flanco_izq",
+      "figura": "ojo",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "20f0f7b4c882-17971405207236015",
+   "titulo": "20f0f7b4c882-17971405207236015",
+   "src": "iskvw/piel/animadas/20f0f7b4c882-17971405207236015.svg",
+   "spec": {
+    "composicion": "horizonte",
+    "tono": "papel",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "grilla",
+      "gesto": "emanar",
+      "ritmo": "rapido"
+     },
+     {
+      "rol": "base",
+      "figura": "grieta",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "21490b68ce62-17935111921327616",
+   "titulo": "21490b68ce62-17935111921327616",
+   "src": "iskvw/piel/animadas/21490b68ce62-17935111921327616.svg",
+   "spec": {
+    "composicion": "centro_y_satelites",
+    "tono": "subterraneo",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "figura",
+      "gesto": "latir",
+      "ritmo": "medio"
+     },
+     {
+      "rol": "satelite_4",
+      "figura": "disco",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "229e279b2e03-17901746678649318",
+   "titulo": "229e279b2e03-17901746678649318",
+   "src": "iskvw/piel/animadas/229e279b2e03-17901746678649318.svg",
+   "spec": {
+    "composicion": "horizonte",
+    "tono": "atardecer",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "disco",
+      "gesto": "latir",
+      "ritmo": "muy_lento"
+     },
+     {
+      "rol": "marca",
+      "figura": "corazon",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "23d91037633f-17862116563354908",
+   "titulo": "23d91037633f-17862116563354908",
+   "src": "iskvw/piel/animadas/23d91037633f-17862116563354908.svg",
+   "spec": {
+    "composicion": "confrontacion",
+    "tono": "subterraneo",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "anillo",
+      "gesto": "latir",
+      "ritmo": "medio"
+     },
+     {
+      "rol": "lado_der",
+      "figura": "bocina",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "248ffb44bd63-17907756642389163",
+   "titulo": "248ffb44bd63-17907756642389163",
+   "src": "iskvw/piel/animadas/248ffb44bd63-17907756642389163.svg",
+   "spec": {
+    "composicion": "protagonista_y_flancos",
+    "tono": "blueprint",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "grilla",
+      "gesto": "latir",
+      "ritmo": "rapido"
+     },
+     {
+      "rol": "flanco_izq",
+      "figura": "sello",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "298b05deffe6-17980659043235652",
+   "titulo": "298b05deffe6-17980659043235652",
+   "src": "iskvw/piel/animadas/298b05deffe6-17980659043235652.svg",
+   "spec": {
+    "composicion": "confrontacion",
+    "tono": "documento",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "disco",
+      "gesto": "latir",
+      "ritmo": "lento"
+     },
+     {
+      "rol": "lado_der",
+      "figura": "arcos",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "29c6ee454099-18024745522325508",
+   "titulo": "29c6ee454099-18024745522325508",
+   "src": "iskvw/piel/animadas/29c6ee454099-18024745522325508.svg",
+   "spec": {
+    "composicion": "capas",
+    "tono": "documento",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "espiral",
+      "gesto": "saltar",
+      "ritmo": "medio"
+     },
+     {
+      "rol": "detalle",
+      "figura": "bocina",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "2a1d316b2c8a-17925973582930358",
+   "titulo": "2a1d316b2c8a-17925973582930358",
+   "src": "iskvw/piel/animadas/2a1d316b2c8a-17925973582930358.svg",
+   "spec": {
+    "composicion": "protagonista_y_flancos",
+    "tono": "atardecer",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "vinilo",
+      "gesto": "latir",
+      "ritmo": "medio"
+     },
+     {
+      "rol": "flanco_izq",
+      "figura": "grieta",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "2a6cd487543e-18041459209209008",
+   "titulo": "2a6cd487543e-18041459209209008",
+   "src": "iskvw/piel/animadas/2a6cd487543e-18041459209209008.svg",
+   "spec": {
+    "composicion": "confrontacion",
+    "tono": "papel",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "horizonte",
+      "gesto": "latir",
+      "ritmo": "medio"
+     },
+     {
+      "rol": "base",
+      "figura": "multitud",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "2ab727377783-17926121515293459",
+   "titulo": "2ab727377783-17926121515293459",
+   "src": "iskvw/piel/animadas/2ab727377783-17926121515293459.svg",
+   "spec": {
+    "composicion": "capas",
+    "tono": "concreto",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "horizonte",
+      "gesto": "latir",
+      "ritmo": "lento"
+     },
+     {
+      "rol": "marca",
+      "figura": "vinilo",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "2b0f0388730c-18007224232002257",
+   "titulo": "2b0f0388730c-18007224232002257",
+   "src": "iskvw/piel/animadas/2b0f0388730c-18007224232002257.svg",
+   "spec": {
+    "composicion": "capas",
+    "tono": "atardecer",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "figura",
+      "gesto": "latir",
+      "ritmo": "muy_lento"
+     },
+     {
+      "rol": "marca",
+      "figura": "disco",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "2b25266fd2ac-17973031436785166",
+   "titulo": "2b25266fd2ac-17973031436785166",
+   "src": "iskvw/piel/animadas/2b25266fd2ac-17973031436785166.svg",
+   "spec": {
+    "composicion": "centro_y_satelites",
+    "tono": "blueprint",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "vinilo",
+      "gesto": "latir",
+      "ritmo": "muy_lento"
+     },
+     {
+      "rol": "marca",
+      "figura": "puerta",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "2bc600ffc3e7-17881347154780719",
+   "titulo": "2bc600ffc3e7-17881347154780719",
+   "src": "iskvw/piel/animadas/2bc600ffc3e7-17881347154780719.svg",
+   "spec": {
+    "composicion": "capas",
+    "tono": "campo",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "red",
+      "gesto": "latir",
+      "ritmo": "lento"
+     },
+     {
+      "rol": "detalle",
+      "figura": "maquina",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "2ddc586d2cbd-17942274569252156",
+   "titulo": "2ddc586d2cbd-17942274569252156",
+   "src": "iskvw/piel/animadas/2ddc586d2cbd-17942274569252156.svg",
+   "spec": {
+    "composicion": "centro_unico",
+    "tono": "atardecer",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "arcos",
+      "gesto": "derivar",
+      "ritmo": "muy_rapido"
+     },
+     {
+      "rol": "base",
+      "figura": "grieta",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "2e3829004718-17931375283311054",
+   "titulo": "2e3829004718-17931375283311054",
+   "src": "iskvw/piel/animadas/2e3829004718-17931375283311054.svg",
+   "spec": {
+    "composicion": "centro_y_satelites",
+    "tono": "subterraneo",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "ojo",
+      "gesto": "latir",
+      "ritmo": "lento"
+     },
+     {
+      "rol": "satelite_2",
+      "figura": "estrella",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "30685a8b8f50-18030500869835498",
+   "titulo": "30685a8b8f50-18030500869835498",
+   "src": "iskvw/piel/animadas/30685a8b8f50-18030500869835498.svg",
+   "spec": {
+    "composicion": "horizonte",
+    "tono": "atardecer",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "vinilo",
+      "gesto": "latir",
+      "ritmo": "muy_lento"
+     },
+     {
+      "rol": "marca",
+      "figura": "disco",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "30fcb6538d57-18027037204785191",
+   "titulo": "30fcb6538d57-18027037204785191",
+   "src": "iskvw/piel/animadas/30fcb6538d57-18027037204785191.svg",
+   "spec": {
+    "composicion": "horizonte",
+    "tono": "atardecer",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "rayos",
+      "gesto": "respirar",
+      "ritmo": "muy_lento"
+     },
+     {
+      "rol": "cielo",
+      "figura": "bocina",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "3112139ddd11-17872469170449460",
+   "titulo": "3112139ddd11-17872469170449460",
+   "src": "iskvw/piel/animadas/3112139ddd11-17872469170449460.svg",
+   "spec": {
+    "composicion": "centro_unico",
+    "tono": "atardecer",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "espiral",
+      "gesto": "latir",
+      "ritmo": "rapido"
+     },
+     {
+      "rol": "marca",
+      "figura": "maquina",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "3147095932d0-17938411838340253",
+   "titulo": "3147095932d0-17938411838340253",
+   "src": "iskvw/piel/animadas/3147095932d0-17938411838340253.svg",
+   "spec": {
+    "composicion": "centro_y_satelites",
+    "tono": "vitral",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "espiral",
+      "gesto": "latir",
+      "ritmo": "muy_rapido"
+     },
+     {
+      "rol": "satelite_3",
+      "figura": "horizonte",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "31a9c297b538-17873328835671068",
+   "titulo": "31a9c297b538-17873328835671068",
+   "src": "iskvw/piel/animadas/31a9c297b538-17873328835671068.svg",
+   "spec": {
+    "composicion": "centro_unico",
+    "tono": "documento",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "figura",
+      "gesto": "latir",
+      "ritmo": "lento"
+     },
+     {
+      "rol": "marca",
+      "figura": "vinilo",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "31c7d939afec-18030531728093298",
+   "titulo": "31c7d939afec-18030531728093298",
+   "src": "iskvw/piel/animadas/31c7d939afec-18030531728093298.svg",
+   "spec": {
+    "composicion": "centro_y_satelites",
+    "tono": "blueprint",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "figura",
+      "gesto": "latir",
+      "ritmo": "rapido"
+     },
+     {
+      "rol": "satelite_2",
+      "figura": "onda",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "395f7f500f6a-17941517737215370",
+   "titulo": "395f7f500f6a-17941517737215370",
+   "src": "iskvw/piel/animadas/395f7f500f6a-17941517737215370.svg",
+   "spec": {
+    "composicion": "centro_y_satelites",
+    "tono": "atardecer",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "espiral",
+      "gesto": "latir",
+      "ritmo": "rapido"
+     },
+     {
+      "rol": "marca",
+      "figura": "rayos",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "3c0e66c38cf0-17903499398588620",
+   "titulo": "3c0e66c38cf0-17903499398588620",
+   "src": "iskvw/piel/animadas/3c0e66c38cf0-17903499398588620.svg",
+   "spec": {
+    "composicion": "horizonte",
+    "tono": "atardecer",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "figura",
+      "gesto": "latir",
+      "ritmo": "lento"
+     },
+     {
+      "rol": "base",
+      "figura": "maquina",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "3c5de2a5b585-18014354447815393",
+   "titulo": "3c5de2a5b585-18014354447815393",
+   "src": "iskvw/piel/animadas/3c5de2a5b585-18014354447815393.svg",
+   "spec": {
+    "composicion": "horizonte",
+    "tono": "atardecer",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "vinilo",
+      "gesto": "desplazar_fuera",
+      "ritmo": "rapido"
+     },
+     {
+      "rol": "cielo",
+      "figura": "red",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "3d2e229b21e8-17891099396688732",
+   "titulo": "3d2e229b21e8-17891099396688732",
+   "src": "iskvw/piel/animadas/3d2e229b21e8-17891099396688732.svg",
+   "spec": {
+    "composicion": "capas",
+    "tono": "atardecer",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "muro",
+      "gesto": "latir",
+      "ritmo": "lento"
+     },
+     {
+      "rol": "marca",
+      "figura": "grieta",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "3d914888bcd5-17952394505250295",
+   "titulo": "3d914888bcd5-17952394505250295",
+   "src": "iskvw/piel/animadas/3d914888bcd5-17952394505250295.svg",
+   "spec": {
+    "composicion": "confrontacion",
+    "tono": "atardecer",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "puerta",
+      "gesto": "latir",
+      "ritmo": "lento"
+     },
+     {
+      "rol": "lado_der",
+      "figura": "vinilo",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "3e254697de58-17856415024396354",
+   "titulo": "3e254697de58-17856415024396354",
+   "src": "iskvw/piel/animadas/3e254697de58-17856415024396354.svg",
+   "spec": {
+    "composicion": "confrontacion",
+    "tono": "subterraneo",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "documento",
+      "gesto": "temblar",
+      "ritmo": "muy_lento"
+     },
+     {
+      "rol": "lado_der",
+      "figura": "estrella",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "41fcd93b1b40-17915129442148731",
+   "titulo": "41fcd93b1b40-17915129442148731",
+   "src": "iskvw/piel/animadas/41fcd93b1b40-17915129442148731.svg",
+   "spec": {
+    "composicion": "protagonista_y_flancos",
+    "tono": "atardecer",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "estrella",
+      "gesto": "latir",
+      "ritmo": "rapido"
+     },
+     {
+      "rol": "base",
+      "figura": "ojo",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "424488499f19-17852234998587048",
+   "titulo": "424488499f19-17852234998587048",
+   "src": "iskvw/piel/animadas/424488499f19-17852234998587048.svg",
+   "spec": {
+    "composicion": "centro_y_satelites",
+    "tono": "subterraneo",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "horizonte",
+      "gesto": "latir",
+      "ritmo": "rapido"
+     },
+     {
+      "rol": "satelite_4",
+      "figura": "disco",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "426723f40aa0-17856257185528232",
+   "titulo": "426723f40aa0-17856257185528232",
+   "src": "iskvw/piel/animadas/426723f40aa0-17856257185528232.svg",
+   "spec": {
+    "composicion": "protagonista_y_flancos",
+    "tono": "documento",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "figura",
+      "gesto": "latir",
+      "ritmo": "muy_lento"
+     },
+     {
+      "rol": "flanco_der",
+      "figura": "anillo",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "43e76a1ca91e-17909801017791769",
+   "titulo": "43e76a1ca91e-17909801017791769",
+   "src": "iskvw/piel/animadas/43e76a1ca91e-17909801017791769.svg",
+   "spec": {
+    "composicion": "centro_unico",
+    "tono": "subterraneo",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "anillo",
+      "gesto": "aparecer_ciclico",
+      "ritmo": "muy_rapido"
+     },
+     {
+      "rol": "base",
+      "figura": "maquina",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "45e39c680d4f-18000762428700413",
+   "titulo": "45e39c680d4f-18000762428700413",
+   "src": "iskvw/piel/animadas/45e39c680d4f-18000762428700413.svg",
+   "spec": {
+    "composicion": "centro_unico",
+    "tono": "blueprint",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "vinilo",
+      "gesto": "girar",
+      "ritmo": "lento"
+     },
+     {
+      "rol": "base",
+      "figura": "bocina",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "462cb8d97b0a-17854869059277411",
+   "titulo": "462cb8d97b0a-17854869059277411",
+   "src": "iskvw/piel/animadas/462cb8d97b0a-17854869059277411.svg",
+   "spec": {
+    "composicion": "centro_y_satelites",
+    "tono": "atardecer",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "maquina",
+      "gesto": "oscilar",
+      "ritmo": "muy_lento"
+     },
+     {
+      "rol": "marca",
+      "figura": "estrella",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "469a446f0eb4-18009779075826996",
+   "titulo": "469a446f0eb4-18009779075826996",
+   "src": "iskvw/piel/animadas/469a446f0eb4-18009779075826996.svg",
+   "spec": {
+    "composicion": "capas",
+    "tono": "atardecer",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "disco",
+      "gesto": "latir",
+      "ritmo": "muy_lento"
+     },
+     {
+      "rol": "detalle",
+      "figura": "vinilo",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "469b65a1c664-17883592555766748",
+   "titulo": "469b65a1c664-17883592555766748",
+   "src": "iskvw/piel/animadas/469b65a1c664-17883592555766748.svg",
+   "spec": {
+    "composicion": "protagonista_y_flancos",
+    "tono": "papel",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "multitud",
+      "gesto": "latir",
+      "ritmo": "muy_rapido"
+     },
+     {
+      "rol": "flanco_der",
+      "figura": "red",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "47c5e1280c8d-17903695373302170",
+   "titulo": "47c5e1280c8d-17903695373302170",
+   "src": "iskvw/piel/animadas/47c5e1280c8d-17903695373302170.svg",
+   "spec": {
+    "composicion": "protagonista_y_flancos",
+    "tono": "documento",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "corazon",
+      "gesto": "emanar",
+      "ritmo": "medio"
+     },
+     {
+      "rol": "base",
+      "figura": "sello",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "482f35d610ba-17978304679616985",
+   "titulo": "482f35d610ba-17978304679616985",
+   "src": "iskvw/piel/animadas/482f35d610ba-17978304679616985.svg",
+   "spec": {
+    "composicion": "centro_y_satelites",
+    "tono": "subterraneo",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "grieta",
+      "gesto": "latir",
+      "ritmo": "muy_lento"
+     },
+     {
+      "rol": "satelite_4",
+      "figura": "anillo",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "4a40b16cde31-17859851695716477",
+   "titulo": "4a40b16cde31-17859851695716477",
+   "src": "iskvw/piel/animadas/4a40b16cde31-17859851695716477.svg",
+   "spec": {
+    "composicion": "centro_y_satelites",
+    "tono": "atardecer",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "documento",
+      "gesto": "latir",
+      "ritmo": "medio"
+     },
+     {
+      "rol": "marca",
+      "figura": "anillo",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "4a97ae0a63a1-17920162732987408",
+   "titulo": "4a97ae0a63a1-17920162732987408",
+   "src": "iskvw/piel/animadas/4a97ae0a63a1-17920162732987408.svg",
+   "spec": {
+    "composicion": "protagonista_y_flancos",
+    "tono": "subterraneo",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "ojo",
+      "gesto": "latir",
+      "ritmo": "rapido"
+     },
+     {
+      "rol": "base",
+      "figura": "ojo",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "4b7e3865fe95-17857585285695768",
+   "titulo": "4b7e3865fe95-17857585285695768",
+   "src": "iskvw/piel/animadas/4b7e3865fe95-17857585285695768.svg",
+   "spec": {
+    "composicion": "centro_unico",
+    "tono": "atardecer",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "multitud",
+      "gesto": "latir",
+      "ritmo": "lento"
+     },
+     {
+      "rol": "marca",
+      "figura": "anillo",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "4bfb2474cdd4-17852453596740632",
+   "titulo": "4bfb2474cdd4-17852453596740632",
+   "src": "iskvw/piel/animadas/4bfb2474cdd4-17852453596740632.svg",
+   "spec": {
+    "composicion": "centro_y_satelites",
+    "tono": "atardecer",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "horizonte",
+      "gesto": "latir",
+      "ritmo": "lento"
+     },
+     {
+      "rol": "satelite_2",
+      "figura": "vinilo",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "4c2cca9cb908-17983913072552679",
+   "titulo": "4c2cca9cb908-17983913072552679",
+   "src": "iskvw/piel/animadas/4c2cca9cb908-17983913072552679.svg",
+   "spec": {
+    "composicion": "protagonista_y_flancos",
+    "tono": "campo",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "onda",
+      "gesto": "latir",
+      "ritmo": "muy_rapido"
+     },
+     {
+      "rol": "flanco_izq",
+      "figura": "vinilo",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "4ce8705aceee-17935718032695979",
+   "titulo": "4ce8705aceee-17935718032695979",
+   "src": "iskvw/piel/animadas/4ce8705aceee-17935718032695979.svg",
+   "spec": {
+    "composicion": "confrontacion",
+    "tono": "blueprint",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "sello",
+      "gesto": "latir",
+      "ritmo": "lento"
+     },
+     {
+      "rol": "lado_der",
+      "figura": "vinilo",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "4fb51cb0841a-18044199200352968",
+   "titulo": "4fb51cb0841a-18044199200352968",
+   "src": "iskvw/piel/animadas/4fb51cb0841a-18044199200352968.svg",
+   "spec": {
+    "composicion": "confrontacion",
+    "tono": "blueprint",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "rayos",
+      "gesto": "latir",
+      "ritmo": "muy_rapido"
+     },
+     {
+      "rol": "lado_der",
+      "figura": "anillo",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "505348af9811-18043147852364441",
+   "titulo": "505348af9811-18043147852364441",
+   "src": "iskvw/piel/animadas/505348af9811-18043147852364441.svg",
+   "spec": {
+    "composicion": "centro_y_satelites",
+    "tono": "atardecer",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "sello",
+      "gesto": "latir",
+      "ritmo": "muy_rapido"
+     },
+     {
+      "rol": "marca",
+      "figura": "ojo",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "50661730f653-17854541141265810",
+   "titulo": "50661730f653-17854541141265810",
+   "src": "iskvw/piel/animadas/50661730f653-17854541141265810.svg",
+   "spec": {
+    "composicion": "horizonte",
+    "tono": "concreto",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "figura",
+      "gesto": "latir",
+      "ritmo": "muy_lento"
+     },
+     {
+      "rol": "marca",
+      "figura": "multitud",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "53e5bedf179e-18015892819195070",
+   "titulo": "53e5bedf179e-18015892819195070",
+   "src": "iskvw/piel/animadas/53e5bedf179e-18015892819195070.svg",
+   "spec": {
+    "composicion": "centro_y_satelites",
+    "tono": "subterraneo",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "figura",
+      "gesto": "respirar",
+      "ritmo": "rapido"
+     },
+     {
+      "rol": "satelite_2",
+      "figura": "disco",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "5503d6cd1b06-17852382094998479",
+   "titulo": "5503d6cd1b06-17852382094998479",
+   "src": "iskvw/piel/animadas/5503d6cd1b06-17852382094998479.svg",
+   "spec": {
+    "composicion": "confrontacion",
+    "tono": "campo",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "red",
+      "gesto": "girar",
+      "ritmo": "muy_rapido"
+     },
+     {
+      "rol": "lado_izq",
+      "figura": "anillo",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "554aebe1f5ae-17843337307459792",
+   "titulo": "554aebe1f5ae-17843337307459792",
+   "src": "iskvw/piel/animadas/554aebe1f5ae-17843337307459792.svg",
+   "spec": {
+    "composicion": "centro_y_satelites",
+    "tono": "atardecer",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "maquina",
+      "gesto": "emanar",
+      "ritmo": "muy_rapido"
+     },
+     {
+      "rol": "satelite_2",
+      "figura": "disco",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "55d07e864c5e-17887963534739559",
+   "titulo": "55d07e864c5e-17887963534739559",
+   "src": "iskvw/piel/animadas/55d07e864c5e-17887963534739559.svg",
+   "spec": {
+    "composicion": "protagonista_y_flancos",
+    "tono": "blueprint",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "grilla",
+      "gesto": "latir",
+      "ritmo": "rapido"
+     },
+     {
+      "rol": "flanco_izq",
+      "figura": "red",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "58fb07316da4-17995719622846671",
+   "titulo": "58fb07316da4-17995719622846671",
+   "src": "iskvw/piel/animadas/58fb07316da4-17995719622846671.svg",
+   "spec": {
+    "composicion": "centro_unico",
+    "tono": "subterraneo",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "grieta",
+      "gesto": "latir",
+      "ritmo": "muy_lento"
+     },
+     {
+      "rol": "marca",
+      "figura": "maquina",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "59184c75ae63-18023904385794570",
+   "titulo": "59184c75ae63-18023904385794570",
+   "src": "iskvw/piel/animadas/59184c75ae63-18023904385794570.svg",
+   "spec": {
+    "composicion": "centro_unico",
+    "tono": "subterraneo",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "onda",
+      "gesto": "latir",
+      "ritmo": "muy_rapido"
+     },
+     {
+      "rol": "marca",
+      "figura": "figura",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "5a63a35bf7a8-17866132174511924",
+   "titulo": "5a63a35bf7a8-17866132174511924",
+   "src": "iskvw/piel/animadas/5a63a35bf7a8-17866132174511924.svg",
+   "spec": {
+    "composicion": "confrontacion",
+    "tono": "acido",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "red",
+      "gesto": "latir",
+      "ritmo": "muy_rapido"
+     },
+     {
+      "rol": "lado_der",
+      "figura": "grieta",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "5a8006c51f7c-18046313870118858",
+   "titulo": "5a8006c51f7c-18046313870118858",
+   "src": "iskvw/piel/animadas/5a8006c51f7c-18046313870118858.svg",
+   "spec": {
+    "composicion": "protagonista_y_flancos",
+    "tono": "blueprint",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "corazon",
+      "gesto": "latir",
+      "ritmo": "lento"
+     },
+     {
+      "rol": "flanco_izq",
+      "figura": "arcos",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "5afcd95029f1-17927022512336908",
+   "titulo": "5afcd95029f1-17927022512336908",
+   "src": "iskvw/piel/animadas/5afcd95029f1-17927022512336908.svg",
+   "spec": {
+    "composicion": "horizonte",
+    "tono": "atardecer",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "anillo",
+      "gesto": "latir",
+      "ritmo": "muy_lento"
+     },
+     {
+      "rol": "cielo",
+      "figura": "figura",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "5cab5f2cbce0-17871820783379260",
+   "titulo": "5cab5f2cbce0-17871820783379260",
+   "src": "iskvw/piel/animadas/5cab5f2cbce0-17871820783379260.svg",
+   "spec": {
+    "composicion": "confrontacion",
+    "tono": "campo",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "figura",
+      "gesto": "derivar",
+      "ritmo": "muy_lento"
+     },
+     {
+      "rol": "lado_der",
+      "figura": "vinilo",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "5dfdf07e3c7d-17852448997388699",
+   "titulo": "5dfdf07e3c7d-17852448997388699",
+   "src": "iskvw/piel/animadas/5dfdf07e3c7d-17852448997388699.svg",
+   "spec": {
+    "composicion": "horizonte",
+    "tono": "atardecer",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "grieta",
+      "gesto": "latir",
+      "ritmo": "muy_rapido"
+     },
+     {
+      "rol": "cielo",
+      "figura": "grieta",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "5f6fbb3a285d-17843328659444328",
+   "titulo": "5f6fbb3a285d-17843328659444328",
+   "src": "iskvw/piel/animadas/5f6fbb3a285d-17843328659444328.svg",
+   "spec": {
+    "composicion": "capas",
+    "tono": "papel",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "puerta",
+      "gesto": "girar",
+      "ritmo": "rapido"
+     },
+     {
+      "rol": "marca",
+      "figura": "figura",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "5f7472403ef2-17888511127323558",
+   "titulo": "5f7472403ef2-17888511127323558",
+   "src": "iskvw/piel/animadas/5f7472403ef2-17888511127323558.svg",
+   "spec": {
+    "composicion": "capas",
+    "tono": "subterraneo",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "horizonte",
+      "gesto": "respirar",
+      "ritmo": "lento"
+     },
+     {
+      "rol": "marca",
+      "figura": "anillo",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "614cef7a9a8b-17854724201160688",
+   "titulo": "614cef7a9a8b-17854724201160688",
+   "src": "iskvw/piel/animadas/614cef7a9a8b-17854724201160688.svg",
+   "spec": {
+    "composicion": "capas",
+    "tono": "atardecer",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "corazon",
+      "gesto": "emanar",
+      "ritmo": "lento"
+     },
+     {
+      "rol": "detalle",
+      "figura": "bocina",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "616ee906aeec-17962190425532463",
+   "titulo": "616ee906aeec-17962190425532463",
+   "src": "iskvw/piel/animadas/616ee906aeec-17962190425532463.svg",
+   "spec": {
+    "composicion": "confrontacion",
+    "tono": "blueprint",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "documento",
+      "gesto": "latir",
+      "ritmo": "medio"
+     },
+     {
+      "rol": "lado_izq",
+      "figura": "muro",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "6275fab9abeb-17876063299534561",
+   "titulo": "6275fab9abeb-17876063299534561",
+   "src": "iskvw/piel/animadas/6275fab9abeb-17876063299534561.svg",
+   "spec": {
+    "composicion": "horizonte",
+    "tono": "atardecer",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "vinilo",
+      "gesto": "latir",
+      "ritmo": "medio"
+     },
+     {
+      "rol": "cielo",
+      "figura": "rayos",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "6286cc34b8e1-17971649371238729",
+   "titulo": "6286cc34b8e1-17971649371238729",
+   "src": "iskvw/piel/animadas/6286cc34b8e1-17971649371238729.svg",
+   "spec": {
+    "composicion": "horizonte",
+    "tono": "campo",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "estrella",
+      "gesto": "latir",
+      "ritmo": "muy_lento"
+     },
+     {
+      "rol": "cielo",
+      "figura": "puerta",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "62a044f75382-18024809851845772",
+   "titulo": "62a044f75382-18024809851845772",
+   "src": "iskvw/piel/animadas/62a044f75382-18024809851845772.svg",
+   "spec": {
+    "composicion": "protagonista_y_flancos",
+    "tono": "campo",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "anillo",
+      "gesto": "latir",
+      "ritmo": "lento"
+     },
+     {
+      "rol": "flanco_izq",
+      "figura": "ojo",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "63b190b54138-17845787518845296",
+   "titulo": "63b190b54138-17845787518845296",
+   "src": "iskvw/piel/animadas/63b190b54138-17845787518845296.svg",
+   "spec": {
+    "composicion": "horizonte",
+    "tono": "atardecer",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "grieta",
+      "gesto": "respirar",
+      "ritmo": "lento"
+     },
+     {
+      "rol": "base",
+      "figura": "rayos",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "64a65eab9dad-17859506293659408",
+   "titulo": "64a65eab9dad-17859506293659408",
+   "src": "iskvw/piel/animadas/64a65eab9dad-17859506293659408.svg",
+   "spec": {
+    "composicion": "centro_unico",
+    "tono": "subterraneo",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "arcos",
+      "gesto": "latir",
+      "ritmo": "lento"
+     },
+     {
+      "rol": "base",
+      "figura": "vinilo",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "652443a11851-17857101362197863",
+   "titulo": "652443a11851-17857101362197863",
+   "src": "iskvw/piel/animadas/652443a11851-17857101362197863.svg",
+   "spec": {
+    "composicion": "confrontacion",
+    "tono": "subterraneo",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "red",
+      "gesto": "latir",
+      "ritmo": "muy_rapido"
+     },
+     {
+      "rol": "lado_izq",
+      "figura": "figura",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "6611aff74b99-18032684564372263",
+   "titulo": "6611aff74b99-18032684564372263",
+   "src": "iskvw/piel/animadas/6611aff74b99-18032684564372263.svg",
+   "spec": {
+    "composicion": "centro_y_satelites",
+    "tono": "acido",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "figura",
+      "gesto": "latir",
+      "ritmo": "muy_rapido"
+     },
+     {
+      "rol": "marca",
+      "figura": "onda",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "685b4d981f7c-18038253160975120",
+   "titulo": "685b4d981f7c-18038253160975120",
+   "src": "iskvw/piel/animadas/685b4d981f7c-18038253160975120.svg",
+   "spec": {
+    "composicion": "centro_unico",
+    "tono": "blueprint",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "sello",
+      "gesto": "latir",
+      "ritmo": "rapido"
+     },
+     {
+      "rol": "base",
+      "figura": "arcos",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "68e042c84028-17934207533872011",
+   "titulo": "68e042c84028-17934207533872011",
+   "src": "iskvw/piel/animadas/68e042c84028-17934207533872011.svg",
+   "spec": {
+    "composicion": "horizonte",
+    "tono": "atardecer",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "grieta",
+      "gesto": "saltar",
+      "ritmo": "muy_lento"
+     },
+     {
+      "rol": "cielo",
+      "figura": "maquina",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "6a2b6cc16bb4-18000677603236889",
+   "titulo": "6a2b6cc16bb4-18000677603236889",
+   "src": "iskvw/piel/animadas/6a2b6cc16bb4-18000677603236889.svg",
+   "spec": {
+    "composicion": "confrontacion",
+    "tono": "subterraneo",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "multitud",
+      "gesto": "latir",
+      "ritmo": "muy_rapido"
+     },
+     {
+      "rol": "base",
+      "figura": "estrella",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "6c3f2b081d3c-18037683662584029",
+   "titulo": "6c3f2b081d3c-18037683662584029",
+   "src": "iskvw/piel/animadas/6c3f2b081d3c-18037683662584029.svg",
+   "spec": {
+    "composicion": "horizonte",
+    "tono": "atardecer",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "grilla",
+      "gesto": "latir",
+      "ritmo": "muy_rapido"
+     },
+     {
+      "rol": "marca",
+      "figura": "maquina",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "707f9c22bf76-18004246832396649",
+   "titulo": "707f9c22bf76-18004246832396649",
+   "src": "iskvw/piel/animadas/707f9c22bf76-18004246832396649.svg",
+   "spec": {
+    "composicion": "capas",
+    "tono": "campo",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "ojo",
+      "gesto": "saltar",
+      "ritmo": "lento"
+     },
+     {
+      "rol": "fondo_amplio",
+      "figura": "espiral",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "708591fa4ff5-18036078992195907",
+   "titulo": "708591fa4ff5-18036078992195907",
+   "src": "iskvw/piel/animadas/708591fa4ff5-18036078992195907.svg",
+   "spec": {
+    "composicion": "protagonista_y_flancos",
+    "tono": "blueprint",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "figura",
+      "gesto": "latir",
+      "ritmo": "muy_rapido"
+     },
+     {
+      "rol": "base",
+      "figura": "multitud",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "709516867d5c-17991523726227122",
+   "titulo": "709516867d5c-17991523726227122",
+   "src": "iskvw/piel/animadas/709516867d5c-17991523726227122.svg",
+   "spec": {
+    "composicion": "protagonista_y_flancos",
+    "tono": "atardecer",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "grieta",
+      "gesto": "desplazar_fuera",
+      "ritmo": "muy_rapido"
+     },
+     {
+      "rol": "flanco_izq",
+      "figura": "figura",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "70dbffd8d51d-17882303062334963",
+   "titulo": "70dbffd8d51d-17882303062334963",
+   "src": "iskvw/piel/animadas/70dbffd8d51d-17882303062334963.svg",
+   "spec": {
+    "composicion": "horizonte",
+    "tono": "papel",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "sello",
+      "gesto": "latir",
+      "ritmo": "rapido"
+     },
+     {
+      "rol": "base",
+      "figura": "anillo",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "738e94312612-17888318691124495",
+   "titulo": "738e94312612-17888318691124495",
+   "src": "iskvw/piel/animadas/738e94312612-17888318691124495.svg",
+   "spec": {
+    "composicion": "horizonte",
+    "tono": "atardecer",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "arcos",
+      "gesto": "latir",
+      "ritmo": "medio"
+     },
+     {
+      "rol": "marca",
+      "figura": "sello",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "74459f3169b5-17903165113588892",
+   "titulo": "74459f3169b5-17903165113588892",
+   "src": "iskvw/piel/animadas/74459f3169b5-17903165113588892.svg",
+   "spec": {
+    "composicion": "confrontacion",
+    "tono": "atardecer",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "ojo",
+      "gesto": "aparecer_ciclico",
+      "ritmo": "lento"
+     },
+     {
+      "rol": "lado_der",
+      "figura": "vinilo",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "7537a43931f5-17880030728540671",
+   "titulo": "7537a43931f5-17880030728540671",
+   "src": "iskvw/piel/animadas/7537a43931f5-17880030728540671.svg",
+   "spec": {
+    "composicion": "centro_unico",
+    "tono": "papel",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "onda",
+      "gesto": "respirar",
+      "ritmo": "medio"
+     },
+     {
+      "rol": "base",
+      "figura": "anillo",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "76688e6ec157-17953319629530145",
+   "titulo": "76688e6ec157-17953319629530145",
+   "src": "iskvw/piel/animadas/76688e6ec157-17953319629530145.svg",
+   "spec": {
+    "composicion": "protagonista_y_flancos",
+    "tono": "documento",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "figura",
+      "gesto": "latir",
+      "ritmo": "medio"
+     },
+     {
+      "rol": "flanco_der",
+      "figura": "muro",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "7785c95c9370-17852840569564439",
+   "titulo": "7785c95c9370-17852840569564439",
+   "src": "iskvw/piel/animadas/7785c95c9370-17852840569564439.svg",
+   "spec": {
+    "composicion": "horizonte",
+    "tono": "campo",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "ojo",
+      "gesto": "aparecer_ciclico",
+      "ritmo": "rapido"
+     },
+     {
+      "rol": "base",
+      "figura": "anillo",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "789193d3e117-17866260151364074",
+   "titulo": "789193d3e117-17866260151364074",
+   "src": "iskvw/piel/animadas/789193d3e117-17866260151364074.svg",
+   "spec": {
+    "composicion": "confrontacion",
+    "tono": "atardecer",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "puerta",
+      "gesto": "latir",
+      "ritmo": "lento"
+     },
+     {
+      "rol": "lado_izq",
+      "figura": "corazon",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "7959759f21fc-17867276761467490",
+   "titulo": "7959759f21fc-17867276761467490",
+   "src": "iskvw/piel/animadas/7959759f21fc-17867276761467490.svg",
+   "spec": {
+    "composicion": "centro_unico",
+    "tono": "blueprint",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "bocina",
+      "gesto": "derivar",
+      "ritmo": "rapido"
+     },
+     {
+      "rol": "marca",
+      "figura": "maquina",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "798b71072217-17958599114585462",
+   "titulo": "798b71072217-17958599114585462",
+   "src": "iskvw/piel/animadas/798b71072217-17958599114585462.svg",
+   "spec": {
+    "composicion": "confrontacion",
+    "tono": "atardecer",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "estrella",
+      "gesto": "girar_inverso",
+      "ritmo": "lento"
+     },
+     {
+      "rol": "base",
+      "figura": "documento",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "7bede9529955-17988022210474137",
+   "titulo": "7bede9529955-17988022210474137",
+   "src": "iskvw/piel/animadas/7bede9529955-17988022210474137.svg",
+   "spec": {
+    "composicion": "capas",
+    "tono": "atardecer",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "horizonte",
+      "gesto": "latir",
+      "ritmo": "lento"
+     },
+     {
+      "rol": "detalle",
+      "figura": "vinilo",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "7cbc907f282f-17996095862572575",
+   "titulo": "7cbc907f282f-17996095862572575",
+   "src": "iskvw/piel/animadas/7cbc907f282f-17996095862572575.svg",
+   "spec": {
+    "composicion": "centro_unico",
+    "tono": "campo",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "bocina",
+      "gesto": "derivar",
+      "ritmo": "muy_lento"
+     },
+     {
+      "rol": "marca",
+      "figura": "horizonte",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "7effbf393c6d-17948307560315640",
+   "titulo": "7effbf393c6d-17948307560315640",
+   "src": "iskvw/piel/animadas/7effbf393c6d-17948307560315640.svg",
+   "spec": {
+    "composicion": "centro_unico",
+    "tono": "subterraneo",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "anillo",
+      "gesto": "latir",
+      "ritmo": "muy_rapido"
+     },
+     {
+      "rol": "marca",
+      "figura": "figura",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "8033b0656077-17992005898201864",
+   "titulo": "8033b0656077-17992005898201864",
+   "src": "iskvw/piel/animadas/8033b0656077-17992005898201864.svg",
+   "spec": {
+    "composicion": "horizonte",
+    "tono": "subterraneo",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "figura",
+      "gesto": "girar_inverso",
+      "ritmo": "medio"
+     },
+     {
+      "rol": "marca",
+      "figura": "onda",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "820a4be12dc9-17854988393220848",
+   "titulo": "820a4be12dc9-17854988393220848",
+   "src": "iskvw/piel/animadas/820a4be12dc9-17854988393220848.svg",
+   "spec": {
+    "composicion": "centro_unico",
+    "tono": "concreto",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "disco",
+      "gesto": "girar_inverso",
+      "ritmo": "medio"
+     },
+     {
+      "rol": "marca",
+      "figura": "anillo",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "8390de6692ce-17906258920342528",
+   "titulo": "8390de6692ce-17906258920342528",
+   "src": "iskvw/piel/animadas/8390de6692ce-17906258920342528.svg",
+   "spec": {
+    "composicion": "horizonte",
+    "tono": "atardecer",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "maquina",
+      "gesto": "latir",
+      "ritmo": "lento"
+     },
+     {
+      "rol": "cielo",
+      "figura": "multitud",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "85954ebb9eba-17889941056342714",
+   "titulo": "85954ebb9eba-17889941056342714",
+   "src": "iskvw/piel/animadas/85954ebb9eba-17889941056342714.svg",
+   "spec": {
+    "composicion": "horizonte",
+    "tono": "concreto",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "puerta",
+      "gesto": "latir",
+      "ritmo": "muy_rapido"
+     },
+     {
+      "rol": "marca",
+      "figura": "multitud",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "884e6c9fe122-17850072878008610",
+   "titulo": "884e6c9fe122-17850072878008610",
+   "src": "iskvw/piel/animadas/884e6c9fe122-17850072878008610.svg",
+   "spec": {
+    "composicion": "confrontacion",
+    "tono": "subterraneo",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "anillo",
+      "gesto": "latir",
+      "ritmo": "rapido"
+     },
+     {
+      "rol": "lado_der",
+      "figura": "documento",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "8953ed397094-17856044518371302",
+   "titulo": "8953ed397094-17856044518371302",
+   "src": "iskvw/piel/animadas/8953ed397094-17856044518371302.svg",
+   "spec": {
+    "composicion": "horizonte",
+    "tono": "atardecer",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "sello",
+      "gesto": "latir",
+      "ritmo": "medio"
+     },
+     {
+      "rol": "marca",
+      "figura": "muro",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "89b1df943701-17976437587426924",
+   "titulo": "89b1df943701-17976437587426924",
+   "src": "iskvw/piel/animadas/89b1df943701-17976437587426924.svg",
+   "spec": {
+    "composicion": "horizonte",
+    "tono": "papel",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "anillo",
+      "gesto": "latir",
+      "ritmo": "medio"
+     },
+     {
+      "rol": "base",
+      "figura": "vinilo",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "8e2176d13f78-17880943226362042",
+   "titulo": "8e2176d13f78-17880943226362042",
+   "src": "iskvw/piel/animadas/8e2176d13f78-17880943226362042.svg",
+   "spec": {
+    "composicion": "centro_y_satelites",
+    "tono": "papel",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "muro",
+      "gesto": "latir",
+      "ritmo": "rapido"
+     },
+     {
+      "rol": "satelite_3",
+      "figura": "anillo",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "906ecb05310d-17929370071961613",
+   "titulo": "906ecb05310d-17929370071961613",
+   "src": "iskvw/piel/animadas/906ecb05310d-17929370071961613.svg",
+   "spec": {
+    "composicion": "horizonte",
+    "tono": "subterraneo",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "red",
+      "gesto": "respirar",
+      "ritmo": "muy_lento"
+     },
+     {
+      "rol": "cielo",
+      "figura": "red",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "9368b6a43866-18001717157275260",
+   "titulo": "9368b6a43866-18001717157275260",
+   "src": "iskvw/piel/animadas/9368b6a43866-18001717157275260.svg",
+   "spec": {
+    "composicion": "centro_y_satelites",
+    "tono": "atardecer",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "estrella",
+      "gesto": "latir",
+      "ritmo": "rapido"
+     },
+     {
+      "rol": "satelite_2",
+      "figura": "rayos",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "93ba8427fd53-18025876696979203",
+   "titulo": "93ba8427fd53-18025876696979203",
+   "src": "iskvw/piel/animadas/93ba8427fd53-18025876696979203.svg",
+   "spec": {
+    "composicion": "centro_y_satelites",
+    "tono": "campo",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "figura",
+      "gesto": "derivar",
+      "ritmo": "muy_rapido"
+     },
+     {
+      "rol": "satelite_1",
+      "figura": "grilla",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "944287df6fc9-17867272316919445",
+   "titulo": "944287df6fc9-17867272316919445",
+   "src": "iskvw/piel/animadas/944287df6fc9-17867272316919445.svg",
+   "spec": {
+    "composicion": "horizonte",
+    "tono": "atardecer",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "corazon",
+      "gesto": "latir",
+      "ritmo": "medio"
+     },
+     {
+      "rol": "marca",
+      "figura": "arcos",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "96423d60e71e-18039320674171833",
+   "titulo": "96423d60e71e-18039320674171833",
+   "src": "iskvw/piel/animadas/96423d60e71e-18039320674171833.svg",
+   "spec": {
+    "composicion": "horizonte",
+    "tono": "acido",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "arcos",
+      "gesto": "latir",
+      "ritmo": "muy_rapido"
+     },
+     {
+      "rol": "cielo",
+      "figura": "espiral",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "97425692c5c4-17894763210171792",
+   "titulo": "97425692c5c4-17894763210171792",
+   "src": "iskvw/piel/animadas/97425692c5c4-17894763210171792.svg",
+   "spec": {
+    "composicion": "confrontacion",
+    "tono": "acido",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "figura",
+      "gesto": "latir",
+      "ritmo": "medio"
+     },
+     {
+      "rol": "base",
+      "figura": "estrella",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "975796bda466-17883123040368304",
+   "titulo": "975796bda466-17883123040368304",
+   "src": "iskvw/piel/animadas/975796bda466-17883123040368304.svg",
+   "spec": {
+    "composicion": "protagonista_y_flancos",
+    "tono": "papel",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "documento",
+      "gesto": "temblar",
+      "ritmo": "rapido"
+     },
+     {
+      "rol": "base",
+      "figura": "grieta",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "9bd0b2ef3159-17974158467618047",
+   "titulo": "9bd0b2ef3159-17974158467618047",
+   "src": "iskvw/piel/animadas/9bd0b2ef3159-17974158467618047.svg",
+   "spec": {
+    "composicion": "centro_y_satelites",
+    "tono": "blueprint",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "disco",
+      "gesto": "latir",
+      "ritmo": "medio"
+     },
+     {
+      "rol": "satelite_3",
+      "figura": "grilla",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "9bfe162c78f7-17853914342827122",
+   "titulo": "9bfe162c78f7-17853914342827122",
+   "src": "iskvw/piel/animadas/9bfe162c78f7-17853914342827122.svg",
+   "spec": {
+    "composicion": "capas",
+    "tono": "blueprint",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "espiral",
+      "gesto": "latir",
+      "ritmo": "medio"
+     },
+     {
+      "rol": "marca",
+      "figura": "ojo",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "9c03b2b85ffd-17867756357007350",
+   "titulo": "9c03b2b85ffd-17867756357007350",
+   "src": "iskvw/piel/animadas/9c03b2b85ffd-17867756357007350.svg",
+   "spec": {
+    "composicion": "centro_y_satelites",
+    "tono": "atardecer",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "figura",
+      "gesto": "respirar",
+      "ritmo": "muy_rapido"
+     },
+     {
+      "rol": "satelite_1",
+      "figura": "anillo",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "9ca8f2d81150-18039205718370073",
+   "titulo": "9ca8f2d81150-18039205718370073",
+   "src": "iskvw/piel/animadas/9ca8f2d81150-18039205718370073.svg",
+   "spec": {
+    "composicion": "capas",
+    "tono": "atardecer",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "sello",
+      "gesto": "latir",
+      "ritmo": "muy_rapido"
+     },
+     {
+      "rol": "fondo_amplio",
+      "figura": "vinilo",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "9d1c8873b72d-17875877382045470",
+   "titulo": "9d1c8873b72d-17875877382045470",
+   "src": "iskvw/piel/animadas/9d1c8873b72d-17875877382045470.svg",
+   "spec": {
+    "composicion": "horizonte",
+    "tono": "atardecer",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "muro",
+      "gesto": "latir",
+      "ritmo": "muy_lento"
+     },
+     {
+      "rol": "marca",
+      "figura": "anillo",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "9f8bc8818916-17917610360544437",
+   "titulo": "9f8bc8818916-17917610360544437",
+   "src": "iskvw/piel/animadas/9f8bc8818916-17917610360544437.svg",
+   "spec": {
+    "composicion": "horizonte",
+    "tono": "atardecer",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "corazon",
+      "gesto": "latir",
+      "ritmo": "muy_lento"
+     },
+     {
+      "rol": "base",
+      "figura": "puerta",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "a0a18f0c0509-17864158375421508",
+   "titulo": "a0a18f0c0509-17864158375421508",
+   "src": "iskvw/piel/animadas/a0a18f0c0509-17864158375421508.svg",
+   "spec": {
+    "composicion": "centro_y_satelites",
+    "tono": "blueprint",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "figura",
+      "gesto": "latir",
+      "ritmo": "muy_lento"
+     },
+     {
+      "rol": "satelite_2",
+      "figura": "maquina",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "a18665eb1a14-17881701249354045",
+   "titulo": "a18665eb1a14-17881701249354045",
+   "src": "iskvw/piel/animadas/a18665eb1a14-17881701249354045.svg",
+   "spec": {
+    "composicion": "capas",
+    "tono": "atardecer",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "onda",
+      "gesto": "aparecer_ciclico",
+      "ritmo": "muy_rapido"
+     },
+     {
+      "rol": "marca",
+      "figura": "sello",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "a1c8697866ea-17853532205187140",
+   "titulo": "a1c8697866ea-17853532205187140",
+   "src": "iskvw/piel/animadas/a1c8697866ea-17853532205187140.svg",
+   "spec": {
+    "composicion": "horizonte",
+    "tono": "documento",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "espiral",
+      "gesto": "latir",
+      "ritmo": "rapido"
+     },
+     {
+      "rol": "marca",
+      "figura": "corazon",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "a2c12438de18-17927313944894972",
+   "titulo": "a2c12438de18-17927313944894972",
+   "src": "iskvw/piel/animadas/a2c12438de18-17927313944894972.svg",
+   "spec": {
+    "composicion": "confrontacion",
+    "tono": "campo",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "maquina",
+      "gesto": "latir",
+      "ritmo": "muy_lento"
+     },
+     {
+      "rol": "lado_izq",
+      "figura": "anillo",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "a2dbdccd72b0-17857597066757138",
+   "titulo": "a2dbdccd72b0-17857597066757138",
+   "src": "iskvw/piel/animadas/a2dbdccd72b0-17857597066757138.svg",
+   "spec": {
+    "composicion": "capas",
+    "tono": "vitral",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "vinilo",
+      "gesto": "latir",
+      "ritmo": "lento"
+     },
+     {
+      "rol": "detalle",
+      "figura": "espiral",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "a3098c606ca1-18035622598311174",
+   "titulo": "a3098c606ca1-18035622598311174",
+   "src": "iskvw/piel/animadas/a3098c606ca1-18035622598311174.svg",
+   "spec": {
+    "composicion": "confrontacion",
+    "tono": "atardecer",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "figura",
+      "gesto": "desplazar_fuera",
+      "ritmo": "muy_rapido"
+     },
+     {
+      "rol": "lado_izq",
+      "figura": "grieta",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "a4e497f75f30-17877159435368708",
+   "titulo": "a4e497f75f30-17877159435368708",
+   "src": "iskvw/piel/animadas/a4e497f75f30-17877159435368708.svg",
+   "spec": {
+    "composicion": "centro_y_satelites",
+    "tono": "atardecer",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "bocina",
+      "gesto": "latir",
+      "ritmo": "rapido"
+     },
+     {
+      "rol": "satelite_4",
+      "figura": "onda",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "a53dedc24d16-17866918565631590",
+   "titulo": "a53dedc24d16-17866918565631590",
+   "src": "iskvw/piel/animadas/a53dedc24d16-17866918565631590.svg",
+   "spec": {
+    "composicion": "centro_y_satelites",
+    "tono": "subterraneo",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "estrella",
+      "gesto": "latir",
+      "ritmo": "muy_lento"
+     },
+     {
+      "rol": "satelite_1",
+      "figura": "maquina",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "a54acb2ffc17-17887498509305353",
+   "titulo": "a54acb2ffc17-17887498509305353",
+   "src": "iskvw/piel/animadas/a54acb2ffc17-17887498509305353.svg",
+   "spec": {
+    "composicion": "protagonista_y_flancos",
+    "tono": "blueprint",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "onda",
+      "gesto": "emanar",
+      "ritmo": "lento"
+     },
+     {
+      "rol": "flanco_der",
+      "figura": "grilla",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "a54b493c83dc-17931529555724724",
+   "titulo": "a54b493c83dc-17931529555724724",
+   "src": "iskvw/piel/animadas/a54b493c83dc-17931529555724724.svg",
+   "spec": {
+    "composicion": "centro_unico",
+    "tono": "papel",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "corazon",
+      "gesto": "latir",
+      "ritmo": "muy_lento"
+     },
+     {
+      "rol": "base",
+      "figura": "onda",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "a632e8737c66-18035328752225452",
+   "titulo": "a632e8737c66-18035328752225452",
+   "src": "iskvw/piel/animadas/a632e8737c66-18035328752225452.svg",
+   "spec": {
+    "composicion": "confrontacion",
+    "tono": "acido",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "sello",
+      "gesto": "latir",
+      "ritmo": "muy_rapido"
+     },
+     {
+      "rol": "lado_der",
+      "figura": "muro",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "a6db0c8c9fb1-17851550597063004",
+   "titulo": "a6db0c8c9fb1-17851550597063004",
+   "src": "iskvw/piel/animadas/a6db0c8c9fb1-17851550597063004.svg",
+   "spec": {
+    "composicion": "capas",
+    "tono": "atardecer",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "figura",
+      "gesto": "latir",
+      "ritmo": "muy_lento"
+     },
+     {
+      "rol": "marca",
+      "figura": "disco",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "a71c42b9ccc6-17880397139811782",
+   "titulo": "a71c42b9ccc6-17880397139811782",
+   "src": "iskvw/piel/animadas/a71c42b9ccc6-17880397139811782.svg",
+   "spec": {
+    "composicion": "protagonista_y_flancos",
+    "tono": "subterraneo",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "multitud",
+      "gesto": "latir",
+      "ritmo": "rapido"
+     },
+     {
+      "rol": "flanco_izq",
+      "figura": "onda",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "a73066a24bf4-18027936916249115",
+   "titulo": "a73066a24bf4-18027936916249115",
+   "src": "iskvw/piel/animadas/a73066a24bf4-18027936916249115.svg",
+   "spec": {
+    "composicion": "centro_y_satelites",
+    "tono": "blueprint",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "figura",
+      "gesto": "derivar",
+      "ritmo": "muy_lento"
+     },
+     {
+      "rol": "satelite_2",
+      "figura": "vinilo",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "a855cb3e64a8-17851907533756714",
+   "titulo": "a855cb3e64a8-17851907533756714",
+   "src": "iskvw/piel/animadas/a855cb3e64a8-17851907533756714.svg",
+   "spec": {
+    "composicion": "confrontacion",
+    "tono": "subterraneo",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "anillo",
+      "gesto": "latir",
+      "ritmo": "rapido"
+     },
+     {
+      "rol": "lado_der",
+      "figura": "grilla",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "ab95176baac7-17863182340666631",
+   "titulo": "ab95176baac7-17863182340666631",
+   "src": "iskvw/piel/animadas/ab95176baac7-17863182340666631.svg",
+   "spec": {
+    "composicion": "horizonte",
+    "tono": "subterraneo",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "bocina",
+      "gesto": "latir",
+      "ritmo": "lento"
+     },
+     {
+      "rol": "base",
+      "figura": "espiral",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "ac5fcf77a3e3-17938347118323980",
+   "titulo": "ac5fcf77a3e3-17938347118323980",
+   "src": "iskvw/piel/animadas/ac5fcf77a3e3-17938347118323980.svg",
+   "spec": {
+    "composicion": "centro_unico",
+    "tono": "concreto",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "anillo",
+      "gesto": "latir",
+      "ritmo": "muy_lento"
+     },
+     {
+      "rol": "base",
+      "figura": "puerta",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "ace00821b886-17952822080182508",
+   "titulo": "ace00821b886-17952822080182508",
+   "src": "iskvw/piel/animadas/ace00821b886-17952822080182508.svg",
+   "spec": {
+    "composicion": "horizonte",
+    "tono": "acido",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "figura",
+      "gesto": "temblar",
+      "ritmo": "muy_lento"
+     },
+     {
+      "rol": "cielo",
+      "figura": "sello",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "b4826aec8c85-17983848808413828",
+   "titulo": "b4826aec8c85-17983848808413828",
+   "src": "iskvw/piel/animadas/b4826aec8c85-17983848808413828.svg",
+   "spec": {
+    "composicion": "centro_unico",
+    "tono": "papel",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "documento",
+      "gesto": "latir",
+      "ritmo": "rapido"
+     },
+     {
+      "rol": "marca",
+      "figura": "bocina",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "b4a21501412d-17973436162886570",
+   "titulo": "b4a21501412d-17973436162886570",
+   "src": "iskvw/piel/animadas/b4a21501412d-17973436162886570.svg",
+   "spec": {
+    "composicion": "centro_unico",
+    "tono": "acido",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "estrella",
+      "gesto": "latir",
+      "ritmo": "rapido"
+     },
+     {
+      "rol": "base",
+      "figura": "rayos",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "b5386769010f-17967901133172544",
+   "titulo": "b5386769010f-17967901133172544",
+   "src": "iskvw/piel/animadas/b5386769010f-17967901133172544.svg",
+   "spec": {
+    "composicion": "confrontacion",
+    "tono": "blueprint",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "bocina",
+      "gesto": "latir",
+      "ritmo": "rapido"
+     },
+     {
+      "rol": "base",
+      "figura": "vinilo",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "b622ddb80161-17854954905131132",
+   "titulo": "b622ddb80161-17854954905131132",
+   "src": "iskvw/piel/animadas/b622ddb80161-17854954905131132.svg",
+   "spec": {
+    "composicion": "protagonista_y_flancos",
+    "tono": "blueprint",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "red",
+      "gesto": "latir",
+      "ritmo": "muy_rapido"
+     },
+     {
+      "rol": "flanco_der",
+      "figura": "puerta",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "b7893c484798-17949299791604959",
+   "titulo": "b7893c484798-17949299791604959",
+   "src": "iskvw/piel/animadas/b7893c484798-17949299791604959.svg",
+   "spec": {
+    "composicion": "protagonista_y_flancos",
+    "tono": "subterraneo",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "figura",
+      "gesto": "latir",
+      "ritmo": "muy_rapido"
+     },
+     {
+      "rol": "base",
+      "figura": "horizonte",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "b7db44844c69-17869689289853974",
+   "titulo": "b7db44844c69-17869689289853974",
+   "src": "iskvw/piel/animadas/b7db44844c69-17869689289853974.svg",
+   "spec": {
+    "composicion": "confrontacion",
+    "tono": "acido",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "puerta",
+      "gesto": "temblar",
+      "ritmo": "medio"
+     },
+     {
+      "rol": "lado_izq",
+      "figura": "sello",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "b7e5e5fb7c92-18038093332156834",
+   "titulo": "b7e5e5fb7c92-18038093332156834",
+   "src": "iskvw/piel/animadas/b7e5e5fb7c92-18038093332156834.svg",
+   "spec": {
+    "composicion": "horizonte",
+    "tono": "vitral",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "horizonte",
+      "gesto": "latir",
+      "ritmo": "medio"
+     },
+     {
+      "rol": "cielo",
+      "figura": "horizonte",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "b7fd4e77b4a2-17926032902806396",
+   "titulo": "b7fd4e77b4a2-17926032902806396",
+   "src": "iskvw/piel/animadas/b7fd4e77b4a2-17926032902806396.svg",
+   "spec": {
+    "composicion": "centro_y_satelites",
+    "tono": "blueprint",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "anillo",
+      "gesto": "latir",
+      "ritmo": "rapido"
+     },
+     {
+      "rol": "satelite_3",
+      "figura": "arcos",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "b84dbc5e84a8-17974721233720861",
+   "titulo": "b84dbc5e84a8-17974721233720861",
+   "src": "iskvw/piel/animadas/b84dbc5e84a8-17974721233720861.svg",
+   "spec": {
+    "composicion": "centro_y_satelites",
+    "tono": "documento",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "documento",
+      "gesto": "latir",
+      "ritmo": "muy_lento"
+     },
+     {
+      "rol": "marca",
+      "figura": "red",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "b9c4c92daa55-18022778749304715",
+   "titulo": "b9c4c92daa55-18022778749304715",
+   "src": "iskvw/piel/animadas/b9c4c92daa55-18022778749304715.svg",
+   "spec": {
+    "composicion": "horizonte",
+    "tono": "campo",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "onda",
+      "gesto": "latir",
+      "ritmo": "rapido"
+     },
+     {
+      "rol": "marca",
+      "figura": "onda",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "b9d99421b10f-17980010639952080",
+   "titulo": "b9d99421b10f-17980010639952080",
+   "src": "iskvw/piel/animadas/b9d99421b10f-17980010639952080.svg",
+   "spec": {
+    "composicion": "capas",
+    "tono": "blueprint",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "grilla",
+      "gesto": "latir",
+      "ritmo": "muy_lento"
+     },
+     {
+      "rol": "fondo_amplio",
+      "figura": "ojo",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "b9e64fd64603-17882155144429191",
+   "titulo": "b9e64fd64603-17882155144429191",
+   "src": "iskvw/piel/animadas/b9e64fd64603-17882155144429191.svg",
+   "spec": {
+    "composicion": "protagonista_y_flancos",
+    "tono": "subterraneo",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "onda",
+      "gesto": "latir",
+      "ritmo": "rapido"
+     },
+     {
+      "rol": "flanco_izq",
+      "figura": "estrella",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "ba68d36f0b59-18014122394476059",
+   "titulo": "ba68d36f0b59-18014122394476059",
+   "src": "iskvw/piel/animadas/ba68d36f0b59-18014122394476059.svg",
+   "spec": {
+    "composicion": "horizonte",
+    "tono": "blueprint",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "figura",
+      "gesto": "latir",
+      "ritmo": "muy_lento"
+     },
+     {
+      "rol": "marca",
+      "figura": "muro",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "bacf9a14813c-17930415769342822",
+   "titulo": "bacf9a14813c-17930415769342822",
+   "src": "iskvw/piel/animadas/bacf9a14813c-17930415769342822.svg",
+   "spec": {
+    "composicion": "capas",
+    "tono": "papel",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "muro",
+      "gesto": "respirar",
+      "ritmo": "lento"
+     },
+     {
+      "rol": "marca",
+      "figura": "figura",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "bbce1758481a-17856523829176989",
+   "titulo": "bbce1758481a-17856523829176989",
+   "src": "iskvw/piel/animadas/bbce1758481a-17856523829176989.svg",
+   "spec": {
+    "composicion": "horizonte",
+    "tono": "campo",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "arcos",
+      "gesto": "girar",
+      "ritmo": "rapido"
+     },
+     {
+      "rol": "base",
+      "figura": "corazon",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "c00203a1b3aa-17893302373618541",
+   "titulo": "c00203a1b3aa-17893302373618541",
+   "src": "iskvw/piel/animadas/c00203a1b3aa-17893302373618541.svg",
+   "spec": {
+    "composicion": "capas",
+    "tono": "campo",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "puerta",
+      "gesto": "latir",
+      "ritmo": "rapido"
+     },
+     {
+      "rol": "fondo_amplio",
+      "figura": "multitud",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "c0560fe28b09-17966138426608671",
+   "titulo": "c0560fe28b09-17966138426608671",
+   "src": "iskvw/piel/animadas/c0560fe28b09-17966138426608671.svg",
+   "spec": {
+    "composicion": "capas",
+    "tono": "blueprint",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "vinilo",
+      "gesto": "latir",
+      "ritmo": "rapido"
+     },
+     {
+      "rol": "fondo_amplio",
+      "figura": "vinilo",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "c19c1776dcad-17902678446125471",
+   "titulo": "c19c1776dcad-17902678446125471",
+   "src": "iskvw/piel/animadas/c19c1776dcad-17902678446125471.svg",
+   "spec": {
+    "composicion": "protagonista_y_flancos",
+    "tono": "subterraneo",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "bocina",
+      "gesto": "latir",
+      "ritmo": "lento"
+     },
+     {
+      "rol": "flanco_izq",
+      "figura": "maquina",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "c47d46620944-17967933337471287",
+   "titulo": "c47d46620944-17967933337471287",
+   "src": "iskvw/piel/animadas/c47d46620944-17967933337471287.svg",
+   "spec": {
+    "composicion": "confrontacion",
+    "tono": "subterraneo",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "ojo",
+      "gesto": "latir",
+      "ritmo": "medio"
+     },
+     {
+      "rol": "lado_der",
+      "figura": "figura",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "c54e379eaff9-17974105490670053",
+   "titulo": "c54e379eaff9-17974105490670053",
+   "src": "iskvw/piel/animadas/c54e379eaff9-17974105490670053.svg",
+   "spec": {
+    "composicion": "centro_unico",
+    "tono": "blueprint",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "anillo",
+      "gesto": "latir",
+      "ritmo": "muy_lento"
+     },
+     {
+      "rol": "base",
+      "figura": "maquina",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "c603ca65f216-18016259455084202",
+   "titulo": "c603ca65f216-18016259455084202",
+   "src": "iskvw/piel/animadas/c603ca65f216-18016259455084202.svg",
+   "spec": {
+    "composicion": "confrontacion",
+    "tono": "atardecer",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "grilla",
+      "gesto": "latir",
+      "ritmo": "muy_lento"
+     },
+     {
+      "rol": "lado_der",
+      "figura": "espiral",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "c68f9bef3a83-17968555390696307",
+   "titulo": "c68f9bef3a83-17968555390696307",
+   "src": "iskvw/piel/animadas/c68f9bef3a83-17968555390696307.svg",
+   "spec": {
+    "composicion": "confrontacion",
+    "tono": "subterraneo",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "corazon",
+      "gesto": "latir",
+      "ritmo": "medio"
+     },
+     {
+      "rol": "lado_der",
+      "figura": "puerta",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "c888a7bc77e4-18015988396089055",
+   "titulo": "c888a7bc77e4-18015988396089055",
+   "src": "iskvw/piel/animadas/c888a7bc77e4-18015988396089055.svg",
+   "spec": {
+    "composicion": "confrontacion",
+    "tono": "campo",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "anillo",
+      "gesto": "latir",
+      "ritmo": "muy_rapido"
+     },
+     {
+      "rol": "base",
+      "figura": "figura",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "c9fd60a14c5d-18046605865086283",
+   "titulo": "c9fd60a14c5d-18046605865086283",
+   "src": "iskvw/piel/animadas/c9fd60a14c5d-18046605865086283.svg",
+   "spec": {
+    "composicion": "horizonte",
+    "tono": "subterraneo",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "grieta",
+      "gesto": "girar_inverso",
+      "ritmo": "lento"
+     },
+     {
+      "rol": "base",
+      "figura": "rayos",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "cbc08a35a9f3-17862660513372721",
+   "titulo": "cbc08a35a9f3-17862660513372721",
+   "src": "iskvw/piel/animadas/cbc08a35a9f3-17862660513372721.svg",
+   "spec": {
+    "composicion": "protagonista_y_flancos",
+    "tono": "campo",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "disco",
+      "gesto": "latir",
+      "ritmo": "muy_rapido"
+     },
+     {
+      "rol": "flanco_izq",
+      "figura": "corazon",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "cf901baa57a8-17884915530214952",
+   "titulo": "cf901baa57a8-17884915530214952",
+   "src": "iskvw/piel/animadas/cf901baa57a8-17884915530214952.svg",
+   "spec": {
+    "composicion": "centro_unico",
+    "tono": "atardecer",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "bocina",
+      "gesto": "latir",
+      "ritmo": "medio"
+     },
+     {
+      "rol": "marca",
+      "figura": "rayos",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "d1b3f78b459b-17872102909481262",
+   "titulo": "d1b3f78b459b-17872102909481262",
+   "src": "iskvw/piel/animadas/d1b3f78b459b-17872102909481262.svg",
+   "spec": {
+    "composicion": "centro_unico",
+    "tono": "concreto",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "espiral",
+      "gesto": "respirar",
+      "ritmo": "medio"
+     },
+     {
+      "rol": "base",
+      "figura": "disco",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "d379c6b14deb-17922172468848742",
+   "titulo": "d379c6b14deb-17922172468848742",
+   "src": "iskvw/piel/animadas/d379c6b14deb-17922172468848742.svg",
+   "spec": {
+    "composicion": "protagonista_y_flancos",
+    "tono": "subterraneo",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "maquina",
+      "gesto": "latir",
+      "ritmo": "rapido"
+     },
+     {
+      "rol": "flanco_der",
+      "figura": "espiral",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "d3e0ff6a1931-17923706170929622",
+   "titulo": "d3e0ff6a1931-17923706170929622",
+   "src": "iskvw/piel/animadas/d3e0ff6a1931-17923706170929622.svg",
+   "spec": {
+    "composicion": "confrontacion",
+    "tono": "subterraneo",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "grilla",
+      "gesto": "oscilar",
+      "ritmo": "rapido"
+     },
+     {
+      "rol": "lado_der",
+      "figura": "rayos",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "d493fd0a393a-17861305420545825",
+   "titulo": "d493fd0a393a-17861305420545825",
+   "src": "iskvw/piel/animadas/d493fd0a393a-17861305420545825.svg",
+   "spec": {
+    "composicion": "centro_y_satelites",
+    "tono": "atardecer",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "ojo",
+      "gesto": "latir",
+      "ritmo": "medio"
+     },
+     {
+      "rol": "satelite_2",
+      "figura": "estrella",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "d4ab64242cdb-17844724201661167",
+   "titulo": "d4ab64242cdb-17844724201661167",
+   "src": "iskvw/piel/animadas/d4ab64242cdb-17844724201661167.svg",
+   "spec": {
+    "composicion": "centro_unico",
+    "tono": "subterraneo",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "figura",
+      "gesto": "latir",
+      "ritmo": "muy_rapido"
+     },
+     {
+      "rol": "marca",
+      "figura": "corazon",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "d50bcf42b35c-17997760667585464",
+   "titulo": "d50bcf42b35c-17997760667585464",
+   "src": "iskvw/piel/animadas/d50bcf42b35c-17997760667585464.svg",
+   "spec": {
+    "composicion": "centro_y_satelites",
+    "tono": "subterraneo",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "grilla",
+      "gesto": "latir",
+      "ritmo": "muy_lento"
+     },
+     {
+      "rol": "satelite_3",
+      "figura": "puerta",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "d54a5d8c3f92-17896425919564980",
+   "titulo": "d54a5d8c3f92-17896425919564980",
+   "src": "iskvw/piel/animadas/d54a5d8c3f92-17896425919564980.svg",
+   "spec": {
+    "composicion": "confrontacion",
+    "tono": "acido",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "rayos",
+      "gesto": "latir",
+      "ritmo": "medio"
+     },
+     {
+      "rol": "lado_izq",
+      "figura": "multitud",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "d58fc823447a-17894584518153632",
+   "titulo": "d58fc823447a-17894584518153632",
+   "src": "iskvw/piel/animadas/d58fc823447a-17894584518153632.svg",
+   "spec": {
+    "composicion": "capas",
+    "tono": "atardecer",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "arcos",
+      "gesto": "derivar",
+      "ritmo": "muy_rapido"
+     },
+     {
+      "rol": "fondo_amplio",
+      "figura": "multitud",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "d5abfa05d85b-17997359173276602",
+   "titulo": "d5abfa05d85b-17997359173276602",
+   "src": "iskvw/piel/animadas/d5abfa05d85b-17997359173276602.svg",
+   "spec": {
+    "composicion": "centro_unico",
+    "tono": "campo",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "grieta",
+      "gesto": "derivar",
+      "ritmo": "muy_rapido"
+     },
+     {
+      "rol": "base",
+      "figura": "bocina",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "d5bdf158f273-18013055563219281",
+   "titulo": "d5bdf158f273-18013055563219281",
+   "src": "iskvw/piel/animadas/d5bdf158f273-18013055563219281.svg",
+   "spec": {
+    "composicion": "centro_unico",
+    "tono": "acido",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "maquina",
+      "gesto": "latir",
+      "ritmo": "medio"
+     },
+     {
+      "rol": "base",
+      "figura": "grieta",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "d6bdef32b2c1-18004810045586801",
+   "titulo": "d6bdef32b2c1-18004810045586801",
+   "src": "iskvw/piel/animadas/d6bdef32b2c1-18004810045586801.svg",
+   "spec": {
+    "composicion": "confrontacion",
+    "tono": "atardecer",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "figura",
+      "gesto": "derivar",
+      "ritmo": "medio"
+     },
+     {
+      "rol": "lado_der",
+      "figura": "ojo",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "d8727f120597-17864582880343851",
+   "titulo": "d8727f120597-17864582880343851",
+   "src": "iskvw/piel/animadas/d8727f120597-17864582880343851.svg",
+   "spec": {
+    "composicion": "confrontacion",
+    "tono": "campo",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "estrella",
+      "gesto": "latir",
+      "ritmo": "lento"
+     },
+     {
+      "rol": "base",
+      "figura": "bocina",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "d8a334efb37b-17857606856174709",
+   "titulo": "d8a334efb37b-17857606856174709",
+   "src": "iskvw/piel/animadas/d8a334efb37b-17857606856174709.svg",
+   "spec": {
+    "composicion": "confrontacion",
+    "tono": "documento",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "espiral",
+      "gesto": "girar",
+      "ritmo": "muy_rapido"
+     },
+     {
+      "rol": "lado_izq",
+      "figura": "onda",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "dd3a305b5ad4-18044157760131818",
+   "titulo": "dd3a305b5ad4-18044157760131818",
+   "src": "iskvw/piel/animadas/dd3a305b5ad4-18044157760131818.svg",
+   "spec": {
+    "composicion": "centro_y_satelites",
+    "tono": "atardecer",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "estrella",
+      "gesto": "latir",
+      "ritmo": "lento"
+     },
+     {
+      "rol": "satelite_1",
+      "figura": "vinilo",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "ddc5ed8b2836-18037996208732713",
+   "titulo": "ddc5ed8b2836-18037996208732713",
+   "src": "iskvw/piel/animadas/ddc5ed8b2836-18037996208732713.svg",
+   "spec": {
+    "composicion": "confrontacion",
+    "tono": "atardecer",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "vinilo",
+      "gesto": "latir",
+      "ritmo": "medio"
+     },
+     {
+      "rol": "lado_izq",
+      "figura": "horizonte",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "df1f20c46c9e-17930300897449367",
+   "titulo": "df1f20c46c9e-17930300897449367",
+   "src": "iskvw/piel/animadas/df1f20c46c9e-17930300897449367.svg",
+   "spec": {
+    "composicion": "protagonista_y_flancos",
+    "tono": "documento",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "vinilo",
+      "gesto": "aparecer_ciclico",
+      "ritmo": "muy_lento"
+     },
+     {
+      "rol": "base",
+      "figura": "ojo",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "e039fc9487a6-18044196727141488",
+   "titulo": "e039fc9487a6-18044196727141488",
+   "src": "iskvw/piel/animadas/e039fc9487a6-18044196727141488.svg",
+   "spec": {
+    "composicion": "centro_y_satelites",
+    "tono": "subterraneo",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "anillo",
+      "gesto": "oscilar",
+      "ritmo": "medio"
+     },
+     {
+      "rol": "satelite_4",
+      "figura": "estrella",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "e1339c3b32a1-17866198324751913",
+   "titulo": "e1339c3b32a1-17866198324751913",
+   "src": "iskvw/piel/animadas/e1339c3b32a1-17866198324751913.svg",
+   "spec": {
+    "composicion": "horizonte",
+    "tono": "atardecer",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "disco",
+      "gesto": "latir",
+      "ritmo": "rapido"
+     },
+     {
+      "rol": "marca",
+      "figura": "muro",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "e24c1c4afe59-17972832553704127",
+   "titulo": "e24c1c4afe59-17972832553704127",
+   "src": "iskvw/piel/animadas/e24c1c4afe59-17972832553704127.svg",
+   "spec": {
+    "composicion": "protagonista_y_flancos",
+    "tono": "atardecer",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "muro",
+      "gesto": "latir",
+      "ritmo": "muy_lento"
+     },
+     {
+      "rol": "base",
+      "figura": "anillo",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "e3dccf254688-18023547625243981",
+   "titulo": "e3dccf254688-18023547625243981",
+   "src": "iskvw/piel/animadas/e3dccf254688-18023547625243981.svg",
+   "spec": {
+    "composicion": "centro_y_satelites",
+    "tono": "concreto",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "grieta",
+      "gesto": "aparecer_ciclico",
+      "ritmo": "muy_lento"
+     },
+     {
+      "rol": "satelite_1",
+      "figura": "rayos",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "e50e2a7207aa-17881947253365515",
+   "titulo": "e50e2a7207aa-17881947253365515",
+   "src": "iskvw/piel/animadas/e50e2a7207aa-17881947253365515.svg",
+   "spec": {
+    "composicion": "centro_unico",
+    "tono": "papel",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "grilla",
+      "gesto": "oscilar",
+      "ritmo": "medio"
+     },
+     {
+      "rol": "base",
+      "figura": "documento",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "e52a3dc32a99-18000331694768894",
+   "titulo": "e52a3dc32a99-18000331694768894",
+   "src": "iskvw/piel/animadas/e52a3dc32a99-18000331694768894.svg",
+   "spec": {
+    "composicion": "protagonista_y_flancos",
+    "tono": "atardecer",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "red",
+      "gesto": "latir",
+      "ritmo": "medio"
+     },
+     {
+      "rol": "base",
+      "figura": "anillo",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "e7bbfea249b7-17847173833847674",
+   "titulo": "e7bbfea249b7-17847173833847674",
+   "src": "iskvw/piel/animadas/e7bbfea249b7-17847173833847674.svg",
+   "spec": {
+    "composicion": "centro_y_satelites",
+    "tono": "atardecer",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "muro",
+      "gesto": "latir",
+      "ritmo": "rapido"
+     },
+     {
+      "rol": "marca",
+      "figura": "red",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "e7cdbea4a481-18008788493194016",
+   "titulo": "e7cdbea4a481-18008788493194016",
+   "src": "iskvw/piel/animadas/e7cdbea4a481-18008788493194016.svg",
+   "spec": {
+    "composicion": "confrontacion",
+    "tono": "atardecer",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "documento",
+      "gesto": "latir",
+      "ritmo": "rapido"
+     },
+     {
+      "rol": "base",
+      "figura": "onda",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "e8561ed5b36f-17922173342398055",
+   "titulo": "e8561ed5b36f-17922173342398055",
+   "src": "iskvw/piel/animadas/e8561ed5b36f-17922173342398055.svg",
+   "spec": {
+    "composicion": "centro_y_satelites",
+    "tono": "vitral",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "figura",
+      "gesto": "latir",
+      "ritmo": "rapido"
+     },
+     {
+      "rol": "satelite_3",
+      "figura": "disco",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "eac1e3ff9265-17886435419639069",
+   "titulo": "eac1e3ff9265-17886435419639069",
+   "src": "iskvw/piel/animadas/eac1e3ff9265-17886435419639069.svg",
+   "spec": {
+    "composicion": "protagonista_y_flancos",
+    "tono": "atardecer",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "figura",
+      "gesto": "latir",
+      "ritmo": "lento"
+     },
+     {
+      "rol": "flanco_der",
+      "figura": "rayos",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "ec0e8596eae8-17899256850111382",
+   "titulo": "ec0e8596eae8-17899256850111382",
+   "src": "iskvw/piel/animadas/ec0e8596eae8-17899256850111382.svg",
+   "spec": {
+    "composicion": "capas",
+    "tono": "atardecer",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "arcos",
+      "gesto": "latir",
+      "ritmo": "muy_lento"
+     },
+     {
+      "rol": "marca",
+      "figura": "onda",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "ee7a3500f4e2-17890383429401863",
+   "titulo": "ee7a3500f4e2-17890383429401863",
+   "src": "iskvw/piel/animadas/ee7a3500f4e2-17890383429401863.svg",
+   "spec": {
+    "composicion": "confrontacion",
+    "tono": "atardecer",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "horizonte",
+      "gesto": "latir",
+      "ritmo": "medio"
+     },
+     {
+      "rol": "base",
+      "figura": "documento",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "ee966a429816-17896910748056160",
+   "titulo": "ee966a429816-17896910748056160",
+   "src": "iskvw/piel/animadas/ee966a429816-17896910748056160.svg",
+   "spec": {
+    "composicion": "horizonte",
+    "tono": "atardecer",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "grieta",
+      "gesto": "latir",
+      "ritmo": "rapido"
+     },
+     {
+      "rol": "cielo",
+      "figura": "bocina",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "ef32d58eb517-17845030481297400",
+   "titulo": "ef32d58eb517-17845030481297400",
+   "src": "iskvw/piel/animadas/ef32d58eb517-17845030481297400.svg",
+   "spec": {
+    "composicion": "protagonista_y_flancos",
+    "tono": "atardecer",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "arcos",
+      "gesto": "latir",
+      "ritmo": "muy_rapido"
+     },
+     {
+      "rol": "flanco_der",
+      "figura": "vinilo",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "f0c61a97cb3a-17848120819422106",
+   "titulo": "f0c61a97cb3a-17848120819422106",
+   "src": "iskvw/piel/animadas/f0c61a97cb3a-17848120819422106.svg",
+   "spec": {
+    "composicion": "centro_y_satelites",
+    "tono": "documento",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "grieta",
+      "gesto": "latir",
+      "ritmo": "muy_rapido"
+     },
+     {
+      "rol": "satelite_3",
+      "figura": "muro",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "f1bd29f6b71e-18022603120675787",
+   "titulo": "f1bd29f6b71e-18022603120675787",
+   "src": "iskvw/piel/animadas/f1bd29f6b71e-18022603120675787.svg",
+   "spec": {
+    "composicion": "centro_unico",
+    "tono": "atardecer",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "ojo",
+      "gesto": "latir",
+      "ritmo": "medio"
+     },
+     {
+      "rol": "base",
+      "figura": "ojo",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "f4c029c09afe-17875722509747916",
+   "titulo": "f4c029c09afe-17875722509747916",
+   "src": "iskvw/piel/animadas/f4c029c09afe-17875722509747916.svg",
+   "spec": {
+    "composicion": "protagonista_y_flancos",
+    "tono": "atardecer",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "horizonte",
+      "gesto": "latir",
+      "ritmo": "rapido"
+     },
+     {
+      "rol": "flanco_der",
+      "figura": "muro",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "f4cce4725e4e-17950066945275581",
+   "titulo": "f4cce4725e4e-17950066945275581",
+   "src": "iskvw/piel/animadas/f4cce4725e4e-17950066945275581.svg",
+   "spec": {
+    "composicion": "capas",
+    "tono": "blueprint",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "estrella",
+      "gesto": "saltar",
+      "ritmo": "medio"
+     },
+     {
+      "rol": "marca",
+      "figura": "estrella",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "f5d0c058461d-17888148403348431",
+   "titulo": "f5d0c058461d-17888148403348431",
+   "src": "iskvw/piel/animadas/f5d0c058461d-17888148403348431.svg",
+   "spec": {
+    "composicion": "protagonista_y_flancos",
+    "tono": "campo",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "ojo",
+      "gesto": "latir",
+      "ritmo": "lento"
+     },
+     {
+      "rol": "base",
+      "figura": "arcos",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "f9f28cd4b9bb-17907859922296381",
+   "titulo": "f9f28cd4b9bb-17907859922296381",
+   "src": "iskvw/piel/animadas/f9f28cd4b9bb-17907859922296381.svg",
+   "spec": {
+    "composicion": "centro_unico",
+    "tono": "subterraneo",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "grilla",
+      "gesto": "latir",
+      "ritmo": "medio"
+     },
+     {
+      "rol": "marca",
+      "figura": "red",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "fc55664f011c-18040456306010733",
+   "titulo": "fc55664f011c-18040456306010733",
+   "src": "iskvw/piel/animadas/fc55664f011c-18040456306010733.svg",
+   "spec": {
+    "composicion": "horizonte",
+    "tono": "blueprint",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "muro",
+      "gesto": "latir",
+      "ritmo": "rapido"
+     },
+     {
+      "rol": "cielo",
+      "figura": "rayos",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "fc7136de1e7f-17939322224390711",
+   "titulo": "fc7136de1e7f-17939322224390711",
+   "src": "iskvw/piel/animadas/fc7136de1e7f-17939322224390711.svg",
+   "spec": {
+    "composicion": "protagonista_y_flancos",
+    "tono": "atardecer",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "rayos",
+      "gesto": "derivar",
+      "ritmo": "medio"
+     },
+     {
+      "rol": "flanco_izq",
+      "figura": "vinilo",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "fcaae5dd5a62-17969315711254699",
+   "titulo": "fcaae5dd5a62-17969315711254699",
+   "src": "iskvw/piel/animadas/fcaae5dd5a62-17969315711254699.svg",
+   "spec": {
+    "composicion": "protagonista_y_flancos",
+    "tono": "blueprint",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "red",
+      "gesto": "latir",
+      "ritmo": "rapido"
+     },
+     {
+      "rol": "flanco_izq",
+      "figura": "onda",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  },
+  {
+   "obra_id": "fd34ec19212c-17853871524389343",
+   "titulo": "fd34ec19212c-17853871524389343",
+   "src": "iskvw/piel/animadas/fd34ec19212c-17853871524389343.svg",
+   "spec": {
+    "composicion": "centro_y_satelites",
+    "tono": "campo",
+    "capas": [
+     {
+      "rol": "protagonista",
+      "figura": "arcos",
+      "gesto": "latir",
+      "ritmo": "muy_lento"
+     },
+     {
+      "rol": "satelite_2",
+      "figura": "red",
+      "gesto": "quieto"
+     }
+    ]
+   },
+   "declara_animacion": true
+  }
+ ]
+}

@@ -1,0 +1,101 @@
+{
+  "schema": "mak-math-target-capsule-v1",
+  "target_id": "MILLENNIUM-PNP-001",
+  "title": "P versus NP",
+  "problem_family": "millennium",
+  "problem_status": "open",
+  "layer": "cultural_research_first",
+  "official_statement_ref": "file:/home/mak/flujo/knowledge/math_targets/p_vs_np_official_statement_capture_2026-08-20.json",
+  "official_statement_hash": "4dfe5bdbfca3ac233ca4f8f9a4a9741a038175052a0d5e4a0245b6c2190a0f74",
+  "formal_target_ref": "file:/home/mak/curatoria_inbox/MAK_TODO_SESION_2026-08-19/ARTIFACTS/MAK_AUDIT_P_EQUALS_NP_PEDIGREE_POLYTOPES_2026-08-19.md",
+  "formal_target_hash": "4bc2dd6c2d0ab9cdf3ecceac6b6afbfb9c0d9d9407f699687c53fa4539b022c4",
+  "semantic_fidelity_status": "UNTRUSTED",
+  "semantic_manifest": {
+    "domain": "computational complexity",
+    "quantifiers": "standard class definitions and reductions must be curated before proof promotion",
+    "asymptotic_model": "polynomial-time asymptotics; exact model still requires curator capsule",
+    "computational_model": "standard complexity model; do not substitute an opaque proposition",
+    "assumptions": [
+      "The formal target must preserve the intended definitions of P, NP, reductions, and completeness.",
+      "A proof assistant acceptance is not semantic fidelity evidence by itself."
+    ],
+    "conclusion": "Target equivalence remains unpromoted until the official statement and formal target are semantically aligned."
+  },
+  "conceptual_frame": {
+    "hypothesis_id": "dimensions_of_order",
+    "statement": "A shared representation of order, relations, and certificates may reduce search and verification cost across cultural, research, and mathematical projects.",
+    "epistemic_status": "candidate",
+    "theorem_claim_excluded": true
+  },
+  "known_barriers": [
+    "relativization",
+    "natural_proofs",
+    "algebrization",
+    "semantic_fidelity_gap"
+  ],
+  "dead_routes": [
+    "opaque_P_equals_NP_proposition",
+    "placeholder_geometry_A_n_as_Unit",
+    "axiomatized_STSP_to_SAT_bridge",
+    "no_counterexample_found_promoted_to_truth"
+  ],
+  "search_policies": [
+    {
+      "policy_id": "SIMPLE",
+      "description": "Probe short structured candidates with explicit expanded cost and cheap exact falsifiers.",
+      "budget_class": "small"
+    },
+    {
+      "policy_id": "GRAVEYARD",
+      "description": "Mutate assumptions and representations around recorded failures without erasing their scope.",
+      "budget_class": "bounded"
+    },
+    {
+      "policy_id": "ALIEN",
+      "description": "Explore a high representation-distance route only after ordinary candidates produce information.",
+      "budget_class": "bounded"
+    },
+    {
+      "policy_id": "CURATOR",
+      "description": "Request semantic target review before any result can be promoted as a theorem candidate.",
+      "budget_class": "review"
+    }
+  ],
+  "cross_domain_relations": [
+    {
+      "domain": "cultura",
+      "relation": "representation_source",
+      "meaning": "Visual and symbolic ordering hypotheses are first-class candidate inputs."
+    },
+    {
+      "domain": "curatoria",
+      "relation": "fossil_record",
+      "meaning": "Rejected routes remain searchable memory with scope and mutation axes."
+    },
+    {
+      "domain": "portfolio",
+      "relation": "invariant_surface",
+      "meaning": "Relations and visual invariants can expose representation choices without becoming theorem evidence."
+    },
+    {
+      "domain": "research",
+      "relation": "claim_evidence_gate",
+      "meaning": "Every mathematical move retains source, status, validator, and uncertainty."
+    },
+    {
+      "domain": "mathematics",
+      "relation": "sealed_verification",
+      "meaning": "Proofs and counterexamples stay behind trusted verifier references."
+    }
+  ],
+  "provenance": {
+    "source_refs": [
+      "file:/home/mak/curatoria_inbox/MAK_TODO_SESION_2026-08-19/ARTIFACTS/MAK_AUDIT_P_EQUALS_NP_PEDIGREE_POLYTOPES_2026-08-19.md#lines-7-45",
+      "file:/home/mak/curatoria_inbox/MAK_TODO_SESION_2026-08-19/ARTIFACTS/MAK_MATH_KERNEL_INTEGRATION/MAK_MATH_KERNEL_INTEGRATION.md#sections-5-21",
+      "file:/home/mak/curatoria_inbox/MAK_TODO_SESION_2026-08-19/ARTIFACTS/MAK_dimensions_of_order_learning_from_disorder.md#sections-2-12",
+      "https://www.claymath.org/millennium/p-vs-np/"
+    ],
+    "producer": "MAK source-learning bridge and math-kernel MVP",
+    "status": "curator_required"
+  }
+}

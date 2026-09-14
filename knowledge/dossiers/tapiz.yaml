@@ -1,0 +1,16 @@
+id: tapiz
+kind: dossier
+project: tapiz
+title: 'Dossier: tapiz — carpet design, psychedelia, the craft today'
+subject: tapiz — carpet design, psychedelia, the craft today
+status: 'INVESTIGADO (Gemini API 2026-07-10, fuentes sin verificar) + curado al telar.
+  Method: dossier -> instrumento (projects/tapiz/vibecode) -> material -> pieza.'
+sections:
+- Research questions (from the rainstorm)
+- Gemini web prompt (paste this, one block)
+- Findings
+- Del dossier al telar (curado por Claude desde los findings)
+hard_limit: false
+source_path: projects/cultura/dossiers/tapiz.md
+content_sha256: 318ad5814aae05d8582835c41b23b48015966168fe963854c946ac4f4314c2b0
+ingested_at: '2026-07-10T23:48:48'

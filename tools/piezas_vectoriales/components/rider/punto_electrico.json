@@ -1,0 +1,1 @@
+[{ "type": "rect", "x": 0, "y": 0, "w": 90, "h": 90, "radius": 45, "fill": "white", "stroke": "blue", "stroke_width": 4 },{ "type": "text", "content": "220V", "x": 10, "y": 30, "size": 24, "fill": "blue", "weight": "bold" }]

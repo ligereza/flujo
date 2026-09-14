@@ -1,0 +1,18 @@
+{
+ "formato": "piel/1",
+ "nombre": "venue",
+ "resumen": "Una sala como polilineas medidas, orbitable. No es un render: es el as-built cotado, y por eso lo que dibuja se cuenta y lo que se recorta se declara en pantalla.",
+ "datos": [
+  {"ruta": "../../../data/venues/scd-plaza-egana.json", "obligatorio": false,
+   "para": "el venue por defecto. Con ?venue=<id> pide otro del registro; si el fetch falla, entra un respaldo minimo en vez de abrir en negro."}
+ ],
+ "medida": "typeof ESTADO !== 'undefined' && ESTADO ? ESTADO.dibujadas : -1",
+ "capas": [
+  {"nombre": "polilineas", "codifica": "lineas"},
+  {"nombre": "niveles", "codifica": "porNivel"},
+  {"nombre": "leyenda", "codifica": "venue.meta"}
+ ],
+ "gestos": ["orbitar", "acercar", "?venue=", "?dist="],
+ "degrada": "Sin el JSON del venue usa RESPALDO y lo dice; el tope de aristas se respeta siempre y el recorte se REPORTA en pantalla, nunca se recorta en silencio.",
+ "capacidades": []
+}

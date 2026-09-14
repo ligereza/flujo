@@ -1,0 +1,27 @@
+{
+  "_que_es": "Catálogo de símbolos del plano. Lo normal es agregarlos desde la app (Plano / Rider -> Símbolos Técnicos -> + Agregar); este archivo es lo que queda escrito, y podés editarlo a mano si preferís.",
+  "_como_agregar_uno": [
+    "Desde la app: Plano / Rider -> Símbolos Técnicos -> + Agregar. Nombre, color, zona y el archivo .svg. Listo.",
+    "A mano, si preferís: dejá el .svg en data/plano_simbolos/ y agregá un bloque en la lista 'simbolos' copiando el ejemplo de abajo.",
+    "Editar a mano habilita dos cosas que la app todavía no ofrece: el campo 'cuando' (en qué eventos aparece) y renombrar o recolorear uno de los 17 íconos de fábrica usando su id.",
+    "Si algo está mal, el programa avisa por pantalla y sigue con el resto: nunca desaparece un ícono en silencio.",
+    "Truco de diseño: si en el SVG usás el color 'currentColor' en vez de un color fijo, el ícono toma el color que le pongas y se ve bien tanto en el plano oscuro como en el blanco."
+  ],
+  "_campos": {
+    "id": "Nombre corto sin espacios ni acentos. Es la llave interna, no se imprime.",
+    "etiqueta": "El texto que SÍ se imprime debajo del ícono en el plano. Va en español correcto, con acentos.",
+    "color": "Color del ícono en formato #rrggbb.",
+    "svg": "Nombre del archivo dentro de data/plano_simbolos/. Si querés solo renombrar o recolorear un ícono que ya existe, dejá este campo vacío y usá su id.",
+    "zona": "En qué bloque del plano aparece: SERVICIOS, INFRAESTRUCTURA, SEGURIDAD o COORDINACION.",
+    "cuando": "En qué eventos aparece: 'siempre'; 'testeo' solo si el evento incluye testeo; 'jornada_larga' si dura más de 5 horas; 'masivo' solo en eventos masivos; 'manual' nunca por sí solo, únicamente si el evento lo pide por nombre en su lista 'simbolos_extra'."
+  },
+  "_ejemplo": {
+    "id": "hidratacion",
+    "etiqueta": "Punto de hidratación",
+    "color": "#38bdf8",
+    "svg": "hidratacion.svg",
+    "zona": "INFRAESTRUCTURA",
+    "cuando": "jornada_larga"
+  },
+  "simbolos": []
+}

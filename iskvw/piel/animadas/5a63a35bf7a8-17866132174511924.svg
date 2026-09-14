@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" data-name="5a63a35bf7a8-17866132174511924">
+<style>
+.c0{animation:k_latir 1.2s ease-in-out infinite}
+@keyframes k_latir{0%,100%{transform:scale(1)}50%{transform:scale(1.09)}}
+</style>
+<rect width="120" height="120" fill="#12120a"/>
+<g id="capa-0-protagonista" transform="translate(60,58)" data-rol="protagonista" data-gesto="latir" data-ritmo="1.2s" data-figura="red"><title>protagonista - red</title><g class="c0"><g transform="scale(22)"><line x1="0" y1="0" x2="-0.72" y2="-0.52" stroke="#d7ff2e" stroke-width=".055" opacity=".7"/><line x1="0" y1="0" x2="0.72" y2="-0.52" stroke="#d7ff2e" stroke-width=".055" opacity=".7"/><line x1="0" y1="0" x2="-0.72" y2="0.52" stroke="#d7ff2e" stroke-width=".055" opacity=".7"/><line x1="0" y1="0" x2="0.72" y2="0.52" stroke="#d7ff2e" stroke-width=".055" opacity=".7"/><line x1="0" y1="0" x2="0" y2="-0.88" stroke="#d7ff2e" stroke-width=".055" opacity=".7"/><line x1="0" y1="0" x2="0" y2="0.88" stroke="#d7ff2e" stroke-width=".055" opacity=".7"/><circle cx="0" cy="0" r="0.19" fill="#ff2e7e"/><circle cx="-0.72" cy="-0.52" r="0.12" fill="#d7ff2e"/><circle cx="0.72" cy="-0.52" r="0.12" fill="#d7ff2e"/><circle cx="-0.72" cy="0.52" r="0.12" fill="#d7ff2e"/><circle cx="0.72" cy="0.52" r="0.12" fill="#d7ff2e"/><circle cx="0" cy="-0.88" r="0.12" fill="#d7ff2e"/><circle cx="0" cy="0.88" r="0.12" fill="#d7ff2e"/></g></g></g>
+<g id="capa-1-lado_der" transform="translate(93,58)" data-rol="lado_der" data-gesto="quieto" data-ritmo="4s" data-figura="grieta"><title>lado_der - grieta</title><g class="c1"><g transform="scale(19)"><path d="M-.06,-1 L.10,-.62 L-.12,-.28 L.09,.06 L-.10,.42 L.08,.72 L-.04,1" fill="none" stroke="#ff2e7e" stroke-width=".14" stroke-linejoin="round" stroke-linecap="round"/></g></g></g>
+</svg>

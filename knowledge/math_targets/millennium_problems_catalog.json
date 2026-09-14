@@ -1,0 +1,16 @@
+{
+  "schema": "mak-millennium-problems-catalog-v1",
+  "layer": "cultural_research_first",
+  "source_ref": "file:/home/mak/curatoria_inbox/MAK_TODO_SESION_2026-08-19/ARTIFACTS/MAK_MILLENNIUM_FOSSIL_RECORD_2026-08-19.md",
+  "policy": "catalog_only_until_each_target_has_a_curated_capsule",
+  "problems": [
+    {"target_id": "MILLENNIUM-PNP-001", "short_name": "P_vs_NP", "problem_status": "open", "capsule_status": "starter_capsule"},
+    {"target_id": "MILLENNIUM-RH-001", "short_name": "Riemann_Hypothesis", "problem_status": "open", "capsule_status": "needs_curator"},
+    {"target_id": "MILLENNIUM-NS-001", "short_name": "Navier_Stokes", "problem_status": "open", "capsule_status": "needs_curator"},
+    {"target_id": "MILLENNIUM-YM-001", "short_name": "Yang_Mills_Mass_Gap", "problem_status": "open", "capsule_status": "needs_curator"},
+    {"target_id": "MILLENNIUM-HC-001", "short_name": "Hodge_Conjecture", "problem_status": "open", "capsule_status": "needs_curator"},
+    {"target_id": "MILLENNIUM-BSD-001", "short_name": "Birch_Swinnerton_Dyer", "problem_status": "open", "capsule_status": "needs_curator"},
+    {"target_id": "MILLENNIUM-PC-001", "short_name": "Poincare_Conjecture", "problem_status": "solved", "capsule_status": "catalog_only"}
+  ],
+  "guardrail": "The catalog routes work; it is not an official statement and cannot certify a solution."
+}

@@ -1,0 +1,233 @@
+# Borradura ASCII -- reporte de corrida
+
+sha (HEAD): 8c0f6f0
+archivos operativos escaneados: 11
+borraduras totales encontradas: 209
+de las cuales cambian significado (par minimo real): 0
+solo perdida de acento (sin par minimo): 209
+
+## Por archivo
+
+- CLAUDE.md: 16 borradura(s) (238 lineas)
+- context/CAPATAZ.md: 3 borradura(s) (104 lineas)
+- context/DIRECTOR_CONTRACT.md: 0 borradura(s) (0 lineas)
+- context/DOCTRINA_CLAUDE.md: 13 borradura(s) (190 lineas)
+- context/LAST_HANDOFF.md: 134 borradura(s) (1292 lineas)
+- context/MASTER_PLAN.md: 21 borradura(s) (321 lineas)
+- context/PLAN_SEMANAL_OPUS.md: 8 borradura(s) (113 lineas)
+- context/PLAN_SIGUIENTE_AGENTE.md: 4 borradura(s) (50 lineas)
+- context/PLAN_UPSCALE.md: 8 borradura(s) (82 lineas)
+- context/README.md: 0 borradura(s) (162 lineas)
+- context/WALKTHROUGH.md: 2 borradura(s) (69 lineas)
+
+## Pares minimos reales (palabra, archivo:linea, sha)
+
+- 'codigo' <- 'código' | CLAUDE.md:29 | 8c0f6f0 | solo acento
+- 'publico' <- 'público' | CLAUDE.md:44 | 8c0f6f0 | solo acento
+- 'version' <- 'versión' | CLAUDE.md:47 | 8c0f6f0 | solo acento
+- 'diseno' <- 'diseño' | CLAUDE.md:57 | 8c0f6f0 | solo acento -- diseno/disenio no son palabras propias
+- 'sesion' <- 'sesión' | CLAUDE.md:86 | 8c0f6f0 | solo acento
+- 'sesion' <- 'sesión' | CLAUDE.md:87 | 8c0f6f0 | solo acento
+- 'sesion' <- 'sesión' | CLAUDE.md:114 | 8c0f6f0 | solo acento
+- 'version' <- 'versión' | CLAUDE.md:114 | 8c0f6f0 | solo acento
+- 'version' <- 'versión' | CLAUDE.md:114 | 8c0f6f0 | solo acento
+- 'version' <- 'versión' | CLAUDE.md:115 | 8c0f6f0 | solo acento
+- 'produccion' <- 'producción' | CLAUDE.md:130 | 8c0f6f0 | solo acento
+- 'Codigo' <- 'código' | CLAUDE.md:131 | 8c0f6f0 | solo acento
+- 'version' <- 'versión' | CLAUDE.md:176 | 8c0f6f0 | solo acento
+- 'version' <- 'versión' | CLAUDE.md:176 | 8c0f6f0 | solo acento
+- 'sesion' <- 'sesión' | CLAUDE.md:225 | 8c0f6f0 | solo acento
+- 'version' <- 'versión' | CLAUDE.md:228 | 8c0f6f0 | solo acento
+- 'sesion' <- 'sesión' | context/CAPATAZ.md:47 | 8c0f6f0 | solo acento
+- 'tecnica' <- 'técnica' | context/CAPATAZ.md:50 | 8c0f6f0 | solo acento
+- 'rapido' <- 'rápido' | context/CAPATAZ.md:61 | 8c0f6f0 | solo acento
+- 'codigo' <- 'código' | context/DOCTRINA_CLAUDE.md:7 | 8c0f6f0 | solo acento
+- 'codigo' <- 'código' | context/DOCTRINA_CLAUDE.md:36 | 8c0f6f0 | solo acento
+- 'codigo' <- 'código' | context/DOCTRINA_CLAUDE.md:48 | 8c0f6f0 | solo acento
+- 'codigo' <- 'código' | context/DOCTRINA_CLAUDE.md:75 | 8c0f6f0 | solo acento
+- 'sesion' <- 'sesión' | context/DOCTRINA_CLAUDE.md:86 | 8c0f6f0 | solo acento
+- 'version' <- 'versión' | context/DOCTRINA_CLAUDE.md:87 | 8c0f6f0 | solo acento
+- 'version' <- 'versión' | context/DOCTRINA_CLAUDE.md:90 | 8c0f6f0 | solo acento
+- 'publico' <- 'público' | context/DOCTRINA_CLAUDE.md:95 | 8c0f6f0 | solo acento
+- 'codigo' <- 'código' | context/DOCTRINA_CLAUDE.md:107 | 8c0f6f0 | solo acento
+- 'codigo' <- 'código' | context/DOCTRINA_CLAUDE.md:115 | 8c0f6f0 | solo acento
+- 'codigo' <- 'código' | context/DOCTRINA_CLAUDE.md:134 | 8c0f6f0 | solo acento
+- 'rapido' <- 'rápido' | context/DOCTRINA_CLAUDE.md:141 | 8c0f6f0 | solo acento
+- 'publico' <- 'público' | context/DOCTRINA_CLAUDE.md:158 | 8c0f6f0 | solo acento
+- 'Version' <- 'versión' | context/LAST_HANDOFF.md:3 | 8c0f6f0 | solo acento
+- 'sesion' <- 'sesión' | context/LAST_HANDOFF.md:3 | 8c0f6f0 | solo acento
+- 'Sesion' <- 'sesión' | context/LAST_HANDOFF.md:6 | 8c0f6f0 | solo acento
+- 'disenio' <- 'diseño' | context/LAST_HANDOFF.md:15 | 8c0f6f0 | solo acento -- diseno/disenio no son palabras propias
+- 'version' <- 'versión' | context/LAST_HANDOFF.md:20 | 8c0f6f0 | solo acento
+- 'sesion' <- 'sesión' | context/LAST_HANDOFF.md:33 | 8c0f6f0 | solo acento
+- 'produccion' <- 'producción' | context/LAST_HANDOFF.md:47 | 8c0f6f0 | solo acento
+- 'disenio' <- 'diseño' | context/LAST_HANDOFF.md:50 | 8c0f6f0 | solo acento -- diseno/disenio no son palabras propias
+- 'Sesion' <- 'sesión' | context/LAST_HANDOFF.md:53 | 8c0f6f0 | solo acento
+- 'util' <- 'útil' | context/LAST_HANDOFF.md:77 | 8c0f6f0 | solo acento
+- 'sesion' <- 'sesión' | context/LAST_HANDOFF.md:98 | 8c0f6f0 | solo acento
+- 'disenio' <- 'diseño' | context/LAST_HANDOFF.md:110 | 8c0f6f0 | solo acento -- diseno/disenio no son palabras propias
+- 'produccion' <- 'producción' | context/LAST_HANDOFF.md:124 | 8c0f6f0 | solo acento
+- 'codigo' <- 'código' | context/LAST_HANDOFF.md:139 | 8c0f6f0 | solo acento
+- 'codigo' <- 'código' | context/LAST_HANDOFF.md:142 | 8c0f6f0 | solo acento
+- 'diseno' <- 'diseño' | context/LAST_HANDOFF.md:151 | 8c0f6f0 | solo acento -- diseno/disenio no son palabras propias
+- 'Sesion' <- 'sesión' | context/LAST_HANDOFF.md:153 | 8c0f6f0 | solo acento
+- 'sesion' <- 'sesión' | context/LAST_HANDOFF.md:155 | 8c0f6f0 | solo acento
+- 'sesion' <- 'sesión' | context/LAST_HANDOFF.md:164 | 8c0f6f0 | solo acento
+- 'PUBLICO' <- 'público' | context/LAST_HANDOFF.md:182 | 8c0f6f0 | solo acento
+- 'sesion' <- 'sesión' | context/LAST_HANDOFF.md:184 | 8c0f6f0 | solo acento
+- 'sesion' <- 'sesión' | context/LAST_HANDOFF.md:190 | 8c0f6f0 | solo acento
+- 'sesion' <- 'sesión' | context/LAST_HANDOFF.md:196 | 8c0f6f0 | solo acento
+- 'sesion' <- 'sesión' | context/LAST_HANDOFF.md:201 | 8c0f6f0 | solo acento
+- 'codigo' <- 'código' | context/LAST_HANDOFF.md:208 | 8c0f6f0 | solo acento
+- 'Codigo' <- 'código' | context/LAST_HANDOFF.md:237 | 8c0f6f0 | solo acento
+- 'sesion' <- 'sesión' | context/LAST_HANDOFF.md:238 | 8c0f6f0 | solo acento
+- 'codigo' <- 'código' | context/LAST_HANDOFF.md:246 | 8c0f6f0 | solo acento
+- 'codigo' <- 'código' | context/LAST_HANDOFF.md:265 | 8c0f6f0 | solo acento
+- 'sesion' <- 'sesión' | context/LAST_HANDOFF.md:287 | 8c0f6f0 | solo acento
+- 'codigo' <- 'código' | context/LAST_HANDOFF.md:288 | 8c0f6f0 | solo acento
+- 'Sesion' <- 'sesión' | context/LAST_HANDOFF.md:310 | 8c0f6f0 | solo acento
+- 'sesion' <- 'sesión' | context/LAST_HANDOFF.md:310 | 8c0f6f0 | solo acento
+- 'sesion' <- 'sesión' | context/LAST_HANDOFF.md:336 | 8c0f6f0 | solo acento
+- 'sesion' <- 'sesión' | context/LAST_HANDOFF.md:340 | 8c0f6f0 | solo acento
+- 'sesion' <- 'sesión' | context/LAST_HANDOFF.md:345 | 8c0f6f0 | solo acento
+- 'sesion' <- 'sesión' | context/LAST_HANDOFF.md:420 | 8c0f6f0 | solo acento
+- 'codigo' <- 'código' | context/LAST_HANDOFF.md:423 | 8c0f6f0 | solo acento
+- 'Version' <- 'versión' | context/LAST_HANDOFF.md:449 | 8c0f6f0 | solo acento
+- 'sesion' <- 'sesión' | context/LAST_HANDOFF.md:449 | 8c0f6f0 | solo acento
+- 'dia' <- 'día' | context/LAST_HANDOFF.md:449 | 8c0f6f0 | solo acento
+- 'DIA' <- 'día' | context/LAST_HANDOFF.md:451 | 8c0f6f0 | solo acento
+- 'Sesion' <- 'sesión' | context/LAST_HANDOFF.md:455 | 8c0f6f0 | solo acento
+- 'dia' <- 'día' | context/LAST_HANDOFF.md:455 | 8c0f6f0 | solo acento
+- 'Sesion' <- 'sesión' | context/LAST_HANDOFF.md:483 | 8c0f6f0 | solo acento
+- 'util' <- 'útil' | context/LAST_HANDOFF.md:512 | 8c0f6f0 | solo acento
+- 'Sesion' <- 'sesión' | context/LAST_HANDOFF.md:540 | 8c0f6f0 | solo acento
+- 'tecnica' <- 'técnica' | context/LAST_HANDOFF.md:544 | 8c0f6f0 | solo acento
+- 'codigo' <- 'código' | context/LAST_HANDOFF.md:556 | 8c0f6f0 | solo acento
+- 'sesion' <- 'sesión' | context/LAST_HANDOFF.md:591 | 8c0f6f0 | solo acento
+- 'diseno' <- 'diseño' | context/LAST_HANDOFF.md:592 | 8c0f6f0 | solo acento -- diseno/disenio no son palabras propias
+- 'util' <- 'útil' | context/LAST_HANDOFF.md:593 | 8c0f6f0 | solo acento
+- 'Sesion' <- 'sesión' | context/LAST_HANDOFF.md:608 | 8c0f6f0 | solo acento
+- 'UTIL' <- 'útil' | context/LAST_HANDOFF.md:619 | 8c0f6f0 | solo acento
+- 'Sesion' <- 'sesión' | context/LAST_HANDOFF.md:629 | 8c0f6f0 | solo acento
+- 'automatico' <- 'automático' | context/LAST_HANDOFF.md:634 | 8c0f6f0 | solo acento
+- 'logica' <- 'lógica' | context/LAST_HANDOFF.md:644 | 8c0f6f0 | solo acento
+- 'sesion' <- 'sesión' | context/LAST_HANDOFF.md:647 | 8c0f6f0 | solo acento
+- 'Sesion' <- 'sesión' | context/LAST_HANDOFF.md:649 | 8c0f6f0 | solo acento
+- 'automatico' <- 'automático' | context/LAST_HANDOFF.md:665 | 8c0f6f0 | solo acento
+- 'sesion' <- 'sesión' | context/LAST_HANDOFF.md:680 | 8c0f6f0 | solo acento
+- 'Sesion' <- 'sesión' | context/LAST_HANDOFF.md:682 | 8c0f6f0 | solo acento
+- 'version' <- 'versión' | context/LAST_HANDOFF.md:696 | 8c0f6f0 | solo acento
+- 'version' <- 'versión' | context/LAST_HANDOFF.md:697 | 8c0f6f0 | solo acento
+- 'codigo' <- 'código' | context/LAST_HANDOFF.md:698 | 8c0f6f0 | solo acento
+- 'sesion' <- 'sesión' | context/LAST_HANDOFF.md:701 | 8c0f6f0 | solo acento
+- 'Sesion' <- 'sesión' | context/LAST_HANDOFF.md:710 | 8c0f6f0 | solo acento
+- 'diseno' <- 'diseño' | context/LAST_HANDOFF.md:718 | 8c0f6f0 | solo acento -- diseno/disenio no son palabras propias
+- 'codigo' <- 'código' | context/LAST_HANDOFF.md:721 | 8c0f6f0 | solo acento
+- 'sesion' <- 'sesión' | context/LAST_HANDOFF.md:731 | 8c0f6f0 | solo acento
+- 'Sesion' <- 'sesión' | context/LAST_HANDOFF.md:738 | 8c0f6f0 | solo acento
+- 'sesion' <- 'sesión' | context/LAST_HANDOFF.md:742 | 8c0f6f0 | solo acento
+- 'Sesion' <- 'sesión' | context/LAST_HANDOFF.md:746 | 8c0f6f0 | solo acento
+- 'DIA' <- 'día' | context/LAST_HANDOFF.md:753 | 8c0f6f0 | solo acento
+- 'dia' <- 'día' | context/LAST_HANDOFF.md:766 | 8c0f6f0 | solo acento
+- 'Sesion' <- 'sesión' | context/LAST_HANDOFF.md:779 | 8c0f6f0 | solo acento
+- 'diseno' <- 'diseño' | context/LAST_HANDOFF.md:782 | 8c0f6f0 | solo acento -- diseno/disenio no son palabras propias
+- 'INFORMACION' <- 'información' | context/LAST_HANDOFF.md:783 | 8c0f6f0 | solo acento
+- 'util' <- 'útil' | context/LAST_HANDOFF.md:791 | 8c0f6f0 | solo acento
+- 'sesion' <- 'sesión' | context/LAST_HANDOFF.md:797 | 8c0f6f0 | solo acento
+- 'diseno' <- 'diseño' | context/LAST_HANDOFF.md:809 | 8c0f6f0 | solo acento -- diseno/disenio no son palabras propias
+- 'Sesion' <- 'sesión' | context/LAST_HANDOFF.md:816 | 8c0f6f0 | solo acento
+- 'codigo' <- 'código' | context/LAST_HANDOFF.md:824 | 8c0f6f0 | solo acento
+- 'util' <- 'útil' | context/LAST_HANDOFF.md:834 | 8c0f6f0 | solo acento
+- 'sesion' <- 'sesión' | context/LAST_HANDOFF.md:839 | 8c0f6f0 | solo acento
+- 'DISENO' <- 'diseño' | context/LAST_HANDOFF.md:846 | 8c0f6f0 | solo acento -- diseno/disenio no son palabras propias
+- 'diseno' <- 'diseño' | context/LAST_HANDOFF.md:846 | 8c0f6f0 | solo acento -- diseno/disenio no son palabras propias
+- 'codigo' <- 'código' | context/LAST_HANDOFF.md:849 | 8c0f6f0 | solo acento
+- 'diseno' <- 'diseño' | context/LAST_HANDOFF.md:850 | 8c0f6f0 | solo acento -- diseno/disenio no son palabras propias
+- 'sesion' <- 'sesión' | context/LAST_HANDOFF.md:851 | 8c0f6f0 | solo acento
+- 'util' <- 'útil' | context/LAST_HANDOFF.md:851 | 8c0f6f0 | solo acento
+- 'sesion' <- 'sesión' | context/LAST_HANDOFF.md:854 | 8c0f6f0 | solo acento
+- 'util' <- 'útil' | context/LAST_HANDOFF.md:858 | 8c0f6f0 | solo acento
+- 'util' <- 'útil' | context/LAST_HANDOFF.md:859 | 8c0f6f0 | solo acento
+- 'publico' <- 'público' | context/LAST_HANDOFF.md:863 | 8c0f6f0 | solo acento
+- 'codigo' <- 'código' | context/LAST_HANDOFF.md:864 | 8c0f6f0 | solo acento
+- 'Sesion' <- 'sesión' | context/LAST_HANDOFF.md:867 | 8c0f6f0 | solo acento
+- 'codigo' <- 'código' | context/LAST_HANDOFF.md:874 | 8c0f6f0 | solo acento
+- 'sesion' <- 'sesión' | context/LAST_HANDOFF.md:880 | 8c0f6f0 | solo acento
+- 'sesion' <- 'sesión' | context/LAST_HANDOFF.md:885 | 8c0f6f0 | solo acento
+- 'codigo' <- 'código' | context/LAST_HANDOFF.md:888 | 8c0f6f0 | solo acento
+- 'sesion' <- 'sesión' | context/LAST_HANDOFF.md:891 | 8c0f6f0 | solo acento
+- 'sesion' <- 'sesión' | context/LAST_HANDOFF.md:894 | 8c0f6f0 | solo acento
+- 'sesion' <- 'sesión' | context/LAST_HANDOFF.md:897 | 8c0f6f0 | solo acento
+- 'sesion' <- 'sesión' | context/LAST_HANDOFF.md:900 | 8c0f6f0 | solo acento
+- 'ademas' <- 'además' | context/LAST_HANDOFF.md:900 | 8c0f6f0 | solo acento
+- 'sesion' <- 'sesión' | context/LAST_HANDOFF.md:922 | 8c0f6f0 | solo acento
+- 'version' <- 'versión' | context/LAST_HANDOFF.md:923 | 8c0f6f0 | solo acento
+- 'INFORMACION' <- 'información' | context/LAST_HANDOFF.md:941 | 8c0f6f0 | solo acento
+- 'diseno' <- 'diseño' | context/LAST_HANDOFF.md:943 | 8c0f6f0 | solo acento -- diseno/disenio no son palabras propias
+- 'Diseno' <- 'diseño' | context/LAST_HANDOFF.md:956 | 8c0f6f0 | solo acento -- diseno/disenio no son palabras propias
+- 'diseno' <- 'diseño' | context/LAST_HANDOFF.md:957 | 8c0f6f0 | solo acento -- diseno/disenio no son palabras propias
+- 'sesion' <- 'sesión' | context/LAST_HANDOFF.md:989 | 8c0f6f0 | solo acento
+- 'sesion' <- 'sesión' | context/LAST_HANDOFF.md:991 | 8c0f6f0 | solo acento
+- 'SESION' <- 'sesión' | context/LAST_HANDOFF.md:1001 | 8c0f6f0 | solo acento
+- 'ademas' <- 'además' | context/LAST_HANDOFF.md:1019 | 8c0f6f0 | solo acento
+- 'SESION' <- 'sesión' | context/LAST_HANDOFF.md:1033 | 8c0f6f0 | solo acento
+- 'codigo' <- 'código' | context/LAST_HANDOFF.md:1055 | 8c0f6f0 | solo acento
+- 'SESION' <- 'sesión' | context/LAST_HANDOFF.md:1061 | 8c0f6f0 | solo acento
+- 'SESION' <- 'sesión' | context/LAST_HANDOFF.md:1095 | 8c0f6f0 | solo acento
+- 'SESION' <- 'sesión' | context/LAST_HANDOFF.md:1117 | 8c0f6f0 | solo acento
+- 'tecnico' <- 'técnico' | context/LAST_HANDOFF.md:1122 | 8c0f6f0 | solo acento
+- 'codigo' <- 'código' | context/LAST_HANDOFF.md:1130 | 8c0f6f0 | solo acento
+- 'SESION' <- 'sesión' | context/LAST_HANDOFF.md:1137 | 8c0f6f0 | solo acento
+- 'sesion' <- 'sesión' | context/LAST_HANDOFF.md:1140 | 8c0f6f0 | solo acento
+- 'sesion' <- 'sesión' | context/LAST_HANDOFF.md:1146 | 8c0f6f0 | solo acento
+- 'util' <- 'útil' | context/LAST_HANDOFF.md:1165 | 8c0f6f0 | solo acento
+- 'Version' <- 'versión' | context/LAST_HANDOFF.md:1177 | 8c0f6f0 | solo acento
+- 'SESION' <- 'sesión' | context/LAST_HANDOFF.md:1183 | 8c0f6f0 | solo acento
+- 'sesion' <- 'sesión' | context/LAST_HANDOFF.md:1250 | 8c0f6f0 | solo acento
+- 'util' <- 'útil' | context/LAST_HANDOFF.md:1261 | 8c0f6f0 | solo acento
+- 'util' <- 'útil' | context/LAST_HANDOFF.md:1273 | 8c0f6f0 | solo acento
+- 'util' <- 'útil' | context/LAST_HANDOFF.md:1281 | 8c0f6f0 | solo acento
+- 'util' <- 'útil' | context/LAST_HANDOFF.md:1285 | 8c0f6f0 | solo acento
+- 'sesion' <- 'sesión' | context/MASTER_PLAN.md:4 | 8c0f6f0 | solo acento
+- 'tecnico' <- 'técnico' | context/MASTER_PLAN.md:33 | 8c0f6f0 | solo acento
+- 'tecnico' <- 'técnico' | context/MASTER_PLAN.md:41 | 8c0f6f0 | solo acento
+- 'Codigo' <- 'código' | context/MASTER_PLAN.md:49 | 8c0f6f0 | solo acento
+- 'codigo' <- 'código' | context/MASTER_PLAN.md:62 | 8c0f6f0 | solo acento
+- 'sesion' <- 'sesión' | context/MASTER_PLAN.md:78 | 8c0f6f0 | solo acento
+- 'codigo' <- 'código' | context/MASTER_PLAN.md:86 | 8c0f6f0 | solo acento
+- 'codigo' <- 'código' | context/MASTER_PLAN.md:118 | 8c0f6f0 | solo acento
+- 'produccion' <- 'producción' | context/MASTER_PLAN.md:128 | 8c0f6f0 | solo acento
+- 'dia' <- 'día' | context/MASTER_PLAN.md:144 | 8c0f6f0 | solo acento
+- 'version' <- 'versión' | context/MASTER_PLAN.md:151 | 8c0f6f0 | solo acento
+- 'sesion' <- 'sesión' | context/MASTER_PLAN.md:170 | 8c0f6f0 | solo acento
+- 'codigo' <- 'código' | context/MASTER_PLAN.md:171 | 8c0f6f0 | solo acento
+- 'numero' <- 'número' | context/MASTER_PLAN.md:190 | 8c0f6f0 | solo acento
+- 'codigo' <- 'código' | context/MASTER_PLAN.md:195 | 8c0f6f0 | solo acento
+- 'publico' <- 'público' | context/MASTER_PLAN.md:220 | 8c0f6f0 | solo acento
+- 'RAPIDO' <- 'rápido' | context/MASTER_PLAN.md:238 | 8c0f6f0 | solo acento
+- 'dia' <- 'día' | context/MASTER_PLAN.md:239 | 8c0f6f0 | solo acento
+- 'codigo' <- 'código' | context/MASTER_PLAN.md:240 | 8c0f6f0 | solo acento
+- 'numero' <- 'número' | context/MASTER_PLAN.md:248 | 8c0f6f0 | solo acento
+- 'sesion' <- 'sesión' | context/MASTER_PLAN.md:255 | 8c0f6f0 | solo acento
+- 'dia' <- 'día' | context/PLAN_SEMANAL_OPUS.md:5 | 8c0f6f0 | solo acento
+- 'dia' <- 'día' | context/PLAN_SEMANAL_OPUS.md:6 | 8c0f6f0 | solo acento
+- 'dia' <- 'día' | context/PLAN_SEMANAL_OPUS.md:7 | 8c0f6f0 | solo acento
+- 'DIA' <- 'día' | context/PLAN_SEMANAL_OPUS.md:11 | 8c0f6f0 | solo acento
+- 'sesion' <- 'sesión' | context/PLAN_SEMANAL_OPUS.md:22 | 8c0f6f0 | solo acento
+- 'automatico' <- 'automático' | context/PLAN_SEMANAL_OPUS.md:27 | 8c0f6f0 | solo acento
+- 'dia' <- 'día' | context/PLAN_SEMANAL_OPUS.md:39 | 8c0f6f0 | solo acento
+- 'util' <- 'útil' | context/PLAN_SEMANAL_OPUS.md:69 | 8c0f6f0 | solo acento
+- 'publico' <- 'público' | context/PLAN_SIGUIENTE_AGENTE.md:20 | 8c0f6f0 | solo acento
+- 'sesion' <- 'sesión' | context/PLAN_SIGUIENTE_AGENTE.md:25 | 8c0f6f0 | solo acento
+- 'tecnico' <- 'técnico' | context/PLAN_SIGUIENTE_AGENTE.md:30 | 8c0f6f0 | solo acento
+- 'dia' <- 'día' | context/PLAN_SIGUIENTE_AGENTE.md:47 | 8c0f6f0 | solo acento
+- 'sesion' <- 'sesión' | context/PLAN_UPSCALE.md:9 | 8c0f6f0 | solo acento
+- 'version' <- 'versión' | context/PLAN_UPSCALE.md:31 | 8c0f6f0 | solo acento
+- 'diseno' <- 'diseño' | context/PLAN_UPSCALE.md:39 | 8c0f6f0 | solo acento -- diseno/disenio no son palabras propias
+- 'diseno' <- 'diseño' | context/PLAN_UPSCALE.md:40 | 8c0f6f0 | solo acento -- diseno/disenio no son palabras propias
+- 'util' <- 'útil' | context/PLAN_UPSCALE.md:44 | 8c0f6f0 | solo acento
+- 'publico' <- 'público' | context/PLAN_UPSCALE.md:61 | 8c0f6f0 | solo acento
+- 'sesion' <- 'sesión' | context/PLAN_UPSCALE.md:63 | 8c0f6f0 | solo acento
+- 'sesion' <- 'sesión' | context/PLAN_UPSCALE.md:77 | 8c0f6f0 | solo acento
+- 'version' <- 'versión' | context/WALKTHROUGH.md:5 | 8c0f6f0 | solo acento
+- 'version' <- 'versión' | context/WALKTHROUGH.md:59 | 8c0f6f0 | solo acento

@@ -1,0 +1,340 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="768" height="1662" viewBox="0 0 768 1662" role="img">
+  <title>void_animado</title>
+  <desc>void_animado: las tres morfologias del vacio animado -- espaciado (el hueco respira), zigzag_vertical (el hilo teje, el color fluye), raices (circuito rectangular que crece hacia abajo) -- direccion tapiz 2026-07-12, tejidas sobre la muestra canonica de vibecode/spaces.py</desc>
+  <rect width="768" height="1662" fill="#1f2a24"/>
+  <text x="24" y="46" font-family="monospace" font-size="18" fill="#f8f1e3" font-weight="bold">espaciado</text>
+  <text x="24" y="62" font-family="monospace" font-size="11" fill="#675f55">espaciado: el hueco entre caracteres respira -- abre y cierra; el vacio mismo es la figura que se mueve (direccion tapiz 2026-07-12)</text>
+  <svg x="0" y="80" width="768" height="468" viewBox="0 0 768 468">
+    <title>void_animado/espaciado</title>
+  <desc>espaciado: el hueco entre caracteres respira -- abre y cierra; el vacio mismo es la figura que se mueve (direccion tapiz 2026-07-12)</desc>
+  <rect width="768" height="468" fill="#1f2a24"/>
+  <g>
+    <rect x="33.6" y="25.6" width="9.6" height="16.0" fill="#675f55" opacity="0.85"><animate attributeName="width" values="9.6;16.3;1.7;9.6" dur="7.0s" begin="-0.35s" repeatCount="indefinite"/><animate attributeName="x" values="33.6;30.2;37.5;33.6" dur="7.0s" begin="-0.35s" repeatCount="indefinite"/></rect>
+    <rect x="72.0" y="25.6" width="9.6" height="16.0" fill="#675f55" opacity="0.85"><animate attributeName="width" values="9.6;16.3;1.7;9.6" dur="5.0s" begin="-1.75s" repeatCount="indefinite"/><animate attributeName="x" values="72.0;68.6;75.9;72.0" dur="5.0s" begin="-1.75s" repeatCount="indefinite"/></rect>
+    <rect x="168.0" y="25.6" width="9.6" height="16.0" fill="#675f55" opacity="0.85"><animate attributeName="width" values="9.6;16.3;1.7;9.6" dur="5.0s" begin="-0.25s" repeatCount="indefinite"/><animate attributeName="x" values="168.0;164.6;171.9;168.0" dur="5.0s" begin="-0.25s" repeatCount="indefinite"/></rect>
+    <rect x="196.8" y="25.6" width="9.6" height="16.0" fill="#675f55" opacity="0.85"><animate attributeName="width" values="9.6;16.3;1.7;9.6" dur="6.0s" begin="-0.30s" repeatCount="indefinite"/><animate attributeName="x" values="196.8;193.4;200.7;196.8" dur="6.0s" begin="-0.30s" repeatCount="indefinite"/></rect>
+    <rect x="235.2" y="25.6" width="9.6" height="16.0" fill="#675f55" opacity="0.85"><animate attributeName="width" values="9.6;16.3;1.7;9.6" dur="9.0s" begin="-7.70s" repeatCount="indefinite"/><animate attributeName="x" values="235.2;231.8;239.1;235.2" dur="9.0s" begin="-7.70s" repeatCount="indefinite"/></rect>
+    <rect x="350.4" y="25.6" width="9.6" height="16.0" fill="#675f55" opacity="0.85"><animate attributeName="width" values="9.6;16.3;1.7;9.6" dur="8.0s" begin="-3.90s" repeatCount="indefinite"/><animate attributeName="x" values="350.4;347.0;354.3;350.4" dur="8.0s" begin="-3.90s" repeatCount="indefinite"/></rect>
+    <rect x="369.6" y="25.6" width="9.6" height="16.0" fill="#675f55" opacity="0.85"><animate attributeName="width" values="9.6;16.3;1.7;9.6" dur="7.0s" begin="-5.60s" repeatCount="indefinite"/><animate attributeName="x" values="369.6;366.2;373.5;369.6" dur="7.0s" begin="-5.60s" repeatCount="indefinite"/></rect>
+    <rect x="475.2" y="25.6" width="9.6" height="16.0" fill="#675f55" opacity="0.85"><animate attributeName="width" values="9.6;16.3;1.7;9.6" dur="9.0s" begin="-7.45s" repeatCount="indefinite"/><animate attributeName="x" values="475.2;471.8;479.1;475.2" dur="9.0s" begin="-7.45s" repeatCount="indefinite"/></rect>
+    <rect x="52.8" y="65.6" width="9.6" height="16.0" fill="#675f55" opacity="0.85"><animate attributeName="width" values="9.6;16.3;1.7;9.6" dur="7.0s" begin="-2.85s" repeatCount="indefinite"/><animate attributeName="x" values="52.8;49.4;56.7;52.8" dur="7.0s" begin="-2.85s" repeatCount="indefinite"/></rect>
+    <rect x="302.4" y="65.6" width="9.6" height="16.0" fill="#675f55" opacity="0.85"><animate attributeName="width" values="9.6;16.3;1.7;9.6" dur="9.0s" begin="-2.95s" repeatCount="indefinite"/><animate attributeName="x" values="302.4;299.0;306.3;302.4" dur="9.0s" begin="-2.95s" repeatCount="indefinite"/></rect>
+    <rect x="24.0" y="85.6" width="38.4" height="16.0" fill="#675f55" opacity="0.85"><animate attributeName="width" values="38.4;65.3;6.9;38.4" dur="9.0s" begin="-2.70s" repeatCount="indefinite"/><animate attributeName="x" values="24.0;10.6;39.7;24.0" dur="9.0s" begin="-2.70s" repeatCount="indefinite"/></rect>
+    <rect x="158.4" y="85.6" width="9.6" height="16.0" fill="#675f55" opacity="0.85"><animate attributeName="width" values="9.6;16.3;1.7;9.6" dur="7.0s" begin="-0.60s" repeatCount="indefinite"/><animate attributeName="x" values="158.4;155.0;162.3;158.4" dur="7.0s" begin="-0.60s" repeatCount="indefinite"/></rect>
+    <rect x="177.6" y="85.6" width="9.6" height="16.0" fill="#675f55" opacity="0.85"><animate attributeName="width" values="9.6;16.3;1.7;9.6" dur="6.0s" begin="-2.30s" repeatCount="indefinite"/><animate attributeName="x" values="177.6;174.2;181.5;177.6" dur="6.0s" begin="-2.30s" repeatCount="indefinite"/></rect>
+    <rect x="24.0" y="105.6" width="38.4" height="16.0" fill="#675f55" opacity="0.85"><animate attributeName="width" values="38.4;65.3;6.9;38.4" dur="7.0s" begin="-3.60s" repeatCount="indefinite"/><animate attributeName="x" values="24.0;10.6;39.7;24.0" dur="7.0s" begin="-3.60s" repeatCount="indefinite"/></rect>
+    <rect x="91.2" y="105.6" width="9.6" height="16.0" fill="#675f55" opacity="0.85"><animate attributeName="width" values="9.6;16.3;1.7;9.6" dur="6.0s" begin="-0.05s" repeatCount="indefinite"/><animate attributeName="x" values="91.2;87.8;95.1;91.2" dur="6.0s" begin="-0.05s" repeatCount="indefinite"/></rect>
+    <rect x="139.2" y="105.6" width="9.6" height="16.0" fill="#675f55" opacity="0.85"><animate attributeName="width" values="9.6;16.3;1.7;9.6" dur="6.0s" begin="-1.80s" repeatCount="indefinite"/><animate attributeName="x" values="139.2;135.8;143.1;139.2" dur="6.0s" begin="-1.80s" repeatCount="indefinite"/></rect>
+    <rect x="168.0" y="105.6" width="9.6" height="16.0" fill="#675f55" opacity="0.85"><animate attributeName="width" values="9.6;16.3;1.7;9.6" dur="7.0s" begin="-1.85s" repeatCount="indefinite"/><animate attributeName="x" values="168.0;164.6;171.9;168.0" dur="7.0s" begin="-1.85s" repeatCount="indefinite"/></rect>
+    <rect x="24.0" y="125.6" width="76.8" height="16.0" fill="#c2410f" opacity="0.85"><animate attributeName="width" values="76.8;130.6;13.8;76.8" dur="5.0s" begin="-4.50s" repeatCount="indefinite"/><animate attributeName="x" values="24.0;-2.9;55.5;24.0" dur="5.0s" begin="-4.50s" repeatCount="indefinite"/></rect>
+    <rect x="196.8" y="125.6" width="9.6" height="16.0" fill="#675f55" opacity="0.85"><animate attributeName="width" values="9.6;16.3;1.7;9.6" dur="6.0s" begin="-4.80s" repeatCount="indefinite"/><animate attributeName="x" values="196.8;193.4;200.7;196.8" dur="6.0s" begin="-4.80s" repeatCount="indefinite"/></rect>
+    <rect x="216.0" y="125.6" width="9.6" height="16.0" fill="#675f55" opacity="0.85"><animate attributeName="width" values="9.6;16.3;1.7;9.6" dur="5.0s" begin="-1.50s" repeatCount="indefinite"/><animate attributeName="x" values="216.0;212.6;219.9;216.0" dur="5.0s" begin="-1.50s" repeatCount="indefinite"/></rect>
+    <rect x="312.0" y="125.6" width="9.6" height="16.0" fill="#675f55" opacity="0.85"><animate attributeName="width" values="9.6;16.3;1.7;9.6" dur="5.0s" begin="-0.00s" repeatCount="indefinite"/><animate attributeName="x" values="312.0;308.6;315.9;312.0" dur="5.0s" begin="-0.00s" repeatCount="indefinite"/></rect>
+    <rect x="331.2" y="125.6" width="9.6" height="16.0" fill="#675f55" opacity="0.85"><animate attributeName="width" values="9.6;16.3;1.7;9.6" dur="9.0s" begin="-6.70s" repeatCount="indefinite"/><animate attributeName="x" values="331.2;327.8;335.1;331.2" dur="9.0s" begin="-6.70s" repeatCount="indefinite"/></rect>
+    <rect x="350.4" y="125.6" width="9.6" height="16.0" fill="#675f55" opacity="0.85"><animate attributeName="width" values="9.6;16.3;1.7;9.6" dur="8.0s" begin="-0.40s" repeatCount="indefinite"/><animate attributeName="x" values="350.4;347.0;354.3;350.4" dur="8.0s" begin="-0.40s" repeatCount="indefinite"/></rect>
+    <rect x="379.2" y="125.6" width="9.6" height="16.0" fill="#675f55" opacity="0.85"><animate attributeName="width" values="9.6;16.3;1.7;9.6" dur="9.0s" begin="-8.45s" repeatCount="indefinite"/><animate attributeName="x" values="379.2;375.8;383.1;379.2" dur="9.0s" begin="-8.45s" repeatCount="indefinite"/></rect>
+    <rect x="417.6" y="125.6" width="9.6" height="16.0" fill="#675f55" opacity="0.85"><animate attributeName="width" values="9.6;16.3;1.7;9.6" dur="7.0s" begin="-4.85s" repeatCount="indefinite"/><animate attributeName="x" values="417.6;414.2;421.5;417.6" dur="7.0s" begin="-4.85s" repeatCount="indefinite"/></rect>
+    <rect x="446.4" y="125.6" width="9.6" height="16.0" fill="#675f55" opacity="0.85"><animate attributeName="width" values="9.6;16.3;1.7;9.6" dur="8.0s" begin="-3.90s" repeatCount="indefinite"/><animate attributeName="x" values="446.4;443.0;450.3;446.4" dur="8.0s" begin="-3.90s" repeatCount="indefinite"/></rect>
+    <rect x="465.6" y="125.6" width="9.6" height="16.0" fill="#675f55" opacity="0.85"><animate attributeName="width" values="9.6;16.3;1.7;9.6" dur="7.0s" begin="-6.60s" repeatCount="indefinite"/><animate attributeName="x" values="465.6;462.2;469.5;465.6" dur="7.0s" begin="-6.60s" repeatCount="indefinite"/></rect>
+    <rect x="494.4" y="125.6" width="9.6" height="16.0" fill="#675f55" opacity="0.85"><animate attributeName="width" values="9.6;16.3;1.7;9.6" dur="8.0s" begin="-5.65s" repeatCount="indefinite"/><animate attributeName="x" values="494.4;491.0;498.3;494.4" dur="8.0s" begin="-5.65s" repeatCount="indefinite"/></rect>
+    <rect x="590.4" y="125.6" width="9.6" height="16.0" fill="#675f55" opacity="0.85"><animate attributeName="width" values="9.6;16.3;1.7;9.6" dur="8.0s" begin="-1.15s" repeatCount="indefinite"/><animate attributeName="x" values="590.4;587.0;594.3;590.4" dur="8.0s" begin="-1.15s" repeatCount="indefinite"/></rect>
+    <rect x="24.0" y="145.6" width="76.8" height="16.0" fill="#c2410f" opacity="0.85"><animate attributeName="width" values="76.8;130.6;13.8;76.8" dur="8.0s" begin="-5.40s" repeatCount="indefinite"/><animate attributeName="x" values="24.0;-2.9;55.5;24.0" dur="8.0s" begin="-5.40s" repeatCount="indefinite"/></rect>
+    <rect x="120.0" y="145.6" width="9.6" height="16.0" fill="#675f55" opacity="0.85"><animate attributeName="width" values="9.6;16.3;1.7;9.6" dur="8.0s" begin="-0.90s" repeatCount="indefinite"/><animate attributeName="x" values="120.0;116.6;123.9;120.0" dur="8.0s" begin="-0.90s" repeatCount="indefinite"/></rect>
+    <rect x="273.6" y="145.6" width="9.6" height="16.0" fill="#675f55" opacity="0.85"><animate attributeName="width" values="9.6;16.3;1.7;9.6" dur="5.0s" begin="-4.50s" repeatCount="indefinite"/><animate attributeName="x" values="273.6;270.2;277.5;273.6" dur="5.0s" begin="-4.50s" repeatCount="indefinite"/></rect>
+    <rect x="292.8" y="145.6" width="9.6" height="16.0" fill="#675f55" opacity="0.85"><animate attributeName="width" values="9.6;16.3;1.7;9.6" dur="9.0s" begin="-6.20s" repeatCount="indefinite"/><animate attributeName="x" values="292.8;289.4;296.7;292.8" dur="9.0s" begin="-6.20s" repeatCount="indefinite"/></rect>
+    <rect x="24.0" y="165.6" width="115.2" height="16.0" fill="#2d5a4a" opacity="0.85"><animate attributeName="width" values="115.2;195.8;20.7;115.2" dur="6.0s" begin="-0.30s" repeatCount="indefinite"/><animate attributeName="x" values="24.0;-16.3;71.2;24.0" dur="6.0s" begin="-0.30s" repeatCount="indefinite"/></rect>
+    <rect x="24.0" y="185.6" width="38.4" height="16.0" fill="#675f55" opacity="0.85"><animate attributeName="width" values="38.4;65.3;6.9;38.4" dur="9.0s" begin="-7.20s" repeatCount="indefinite"/><animate attributeName="x" values="24.0;10.6;39.7;24.0" dur="9.0s" begin="-7.20s" repeatCount="indefinite"/></rect>
+    <rect x="120.0" y="185.6" width="9.6" height="16.0" fill="#675f55" opacity="0.85"><animate attributeName="width" values="9.6;16.3;1.7;9.6" dur="9.0s" begin="-1.70s" repeatCount="indefinite"/><animate attributeName="x" values="120.0;116.6;123.9;120.0" dur="9.0s" begin="-1.70s" repeatCount="indefinite"/></rect>
+    <rect x="33.6" y="225.6" width="9.6" height="16.0" fill="#675f55" opacity="0.85"><animate attributeName="width" values="9.6;16.3;1.7;9.6" dur="7.0s" begin="-2.35s" repeatCount="indefinite"/><animate attributeName="x" values="33.6;30.2;37.5;33.6" dur="7.0s" begin="-2.35s" repeatCount="indefinite"/></rect>
+    <rect x="129.6" y="225.6" width="9.6" height="16.0" fill="#675f55" opacity="0.85"><animate attributeName="width" values="9.6;16.3;1.7;9.6" dur="7.0s" begin="-5.85s" repeatCount="indefinite"/><animate attributeName="x" values="129.6;126.2;133.5;129.6" dur="7.0s" begin="-5.85s" repeatCount="indefinite"/></rect>
+    <rect x="62.4" y="245.6" width="9.6" height="16.0" fill="#675f55" opacity="0.85"><animate attributeName="width" values="9.6;16.3;1.7;9.6" dur="6.0s" begin="-5.30s" repeatCount="indefinite"/><animate attributeName="x" values="62.4;59.0;66.3;62.4" dur="6.0s" begin="-5.30s" repeatCount="indefinite"/></rect>
+    <rect x="81.6" y="245.6" width="9.6" height="16.0" fill="#675f55" opacity="0.85"><animate attributeName="width" values="9.6;16.3;1.7;9.6" dur="5.0s" begin="-2.00s" repeatCount="indefinite"/><animate attributeName="x" values="81.6;78.2;85.5;81.6" dur="5.0s" begin="-2.00s" repeatCount="indefinite"/></rect>
+    <rect x="235.2" y="245.6" width="9.6" height="16.0" fill="#675f55" opacity="0.85"><animate attributeName="width" values="9.6;16.3;1.7;9.6" dur="7.0s" begin="-3.60s" repeatCount="indefinite"/><animate attributeName="x" values="235.2;231.8;239.1;235.2" dur="7.0s" begin="-3.60s" repeatCount="indefinite"/></rect>
+    <rect x="264.0" y="245.6" width="9.6" height="16.0" fill="#675f55" opacity="0.85"><animate attributeName="width" values="9.6;16.3;1.7;9.6" dur="8.0s" begin="-2.65s" repeatCount="indefinite"/><animate attributeName="x" values="264.0;260.6;267.9;264.0" dur="8.0s" begin="-2.65s" repeatCount="indefinite"/></rect>
+    <rect x="321.6" y="245.6" width="9.6" height="16.0" fill="#675f55" opacity="0.85"><animate attributeName="width" values="9.6;16.3;1.7;9.6" dur="5.0s" begin="-0.75s" repeatCount="indefinite"/><animate attributeName="x" values="321.6;318.2;325.5;321.6" dur="5.0s" begin="-0.75s" repeatCount="indefinite"/></rect>
+    <rect x="456.0" y="245.6" width="9.6" height="16.0" fill="#675f55" opacity="0.85"><animate attributeName="width" values="9.6;16.3;1.7;9.6" dur="8.0s" begin="-1.65s" repeatCount="indefinite"/><animate attributeName="x" values="456.0;452.6;459.9;456.0" dur="8.0s" begin="-1.65s" repeatCount="indefinite"/></rect>
+    <rect x="484.8" y="245.6" width="9.6" height="16.0" fill="#675f55" opacity="0.85"><animate attributeName="width" values="9.6;16.3;1.7;9.6" dur="9.0s" begin="-8.70s" repeatCount="indefinite"/><animate attributeName="x" values="484.8;481.4;488.7;484.8" dur="9.0s" begin="-8.70s" repeatCount="indefinite"/></rect>
+    <rect x="504.0" y="245.6" width="9.6" height="16.0" fill="#675f55" opacity="0.85"><animate attributeName="width" values="9.6;16.3;1.7;9.6" dur="8.0s" begin="-3.40s" repeatCount="indefinite"/><animate attributeName="x" values="504.0;500.6;507.9;504.0" dur="8.0s" begin="-3.40s" repeatCount="indefinite"/></rect>
+    <rect x="523.2" y="245.6" width="9.6" height="16.0" fill="#675f55" opacity="0.85"><animate attributeName="width" values="9.6;16.3;1.7;9.6" dur="7.0s" begin="-0.10s" repeatCount="indefinite"/><animate attributeName="x" values="523.2;519.8;527.1;523.2" dur="7.0s" begin="-0.10s" repeatCount="indefinite"/></rect>
+    <rect x="542.4" y="245.6" width="9.6" height="16.0" fill="#675f55" opacity="0.85"><animate attributeName="width" values="9.6;16.3;1.7;9.6" dur="6.0s" begin="-4.80s" repeatCount="indefinite"/><animate attributeName="x" values="542.4;539.0;546.3;542.4" dur="6.0s" begin="-4.80s" repeatCount="indefinite"/></rect>
+    <rect x="571.2" y="245.6" width="9.6" height="16.0" fill="#675f55" opacity="0.85"><animate attributeName="width" values="9.6;16.3;1.7;9.6" dur="7.0s" begin="-1.85s" repeatCount="indefinite"/><animate attributeName="x" values="571.2;567.8;575.1;571.2" dur="7.0s" begin="-1.85s" repeatCount="indefinite"/></rect>
+    <rect x="600.0" y="245.6" width="9.6" height="16.0" fill="#675f55" opacity="0.85"><animate attributeName="width" values="9.6;16.3;1.7;9.6" dur="8.0s" begin="-6.90s" repeatCount="indefinite"/><animate attributeName="x" values="600.0;596.6;603.9;600.0" dur="8.0s" begin="-6.90s" repeatCount="indefinite"/></rect>
+    <rect x="72.0" y="285.6" width="9.6" height="16.0" fill="#675f55" opacity="0.85"><animate attributeName="width" values="9.6;16.3;1.7;9.6" dur="9.0s" begin="-4.45s" repeatCount="indefinite"/><animate attributeName="x" values="72.0;68.6;75.9;72.0" dur="9.0s" begin="-4.45s" repeatCount="indefinite"/></rect>
+    <rect x="24.0" y="305.6" width="38.4" height="16.0" fill="#675f55" opacity="0.85"><animate attributeName="width" values="38.4;65.3;6.9;38.4" dur="7.0s" begin="-5.60s" repeatCount="indefinite"/><animate attributeName="x" values="24.0;10.6;39.7;24.0" dur="7.0s" begin="-5.60s" repeatCount="indefinite"/></rect>
+    <rect x="91.2" y="305.6" width="9.6" height="16.0" fill="#675f55" opacity="0.85"><animate attributeName="width" values="9.6;16.3;1.7;9.6" dur="6.0s" begin="-3.05s" repeatCount="indefinite"/><animate attributeName="x" values="91.2;87.8;95.1;91.2" dur="6.0s" begin="-3.05s" repeatCount="indefinite"/></rect>
+    <rect x="235.2" y="305.6" width="9.6" height="16.0" fill="#675f55" opacity="0.85"><animate attributeName="width" values="9.6;16.3;1.7;9.6" dur="6.0s" begin="-2.30s" repeatCount="indefinite"/><animate attributeName="x" values="235.2;231.8;239.1;235.2" dur="6.0s" begin="-2.30s" repeatCount="indefinite"/></rect>
+    <rect x="24.0" y="325.6" width="76.8" height="16.0" fill="#c2410f" opacity="0.85"><animate attributeName="width" values="76.8;130.6;13.8;76.8" dur="5.0s" begin="-3.50s" repeatCount="indefinite"/><animate attributeName="x" values="24.0;-2.9;55.5;24.0" dur="5.0s" begin="-3.50s" repeatCount="indefinite"/></rect>
+    <rect x="196.8" y="325.6" width="9.6" height="16.0" fill="#675f55" opacity="0.85"><animate attributeName="width" values="9.6;16.3;1.7;9.6" dur="6.0s" begin="-1.80s" repeatCount="indefinite"/><animate attributeName="x" values="196.8;193.4;200.7;196.8" dur="6.0s" begin="-1.80s" repeatCount="indefinite"/></rect>
+    <rect x="216.0" y="325.6" width="9.6" height="16.0" fill="#675f55" opacity="0.85"><animate attributeName="width" values="9.6;16.3;1.7;9.6" dur="5.0s" begin="-0.50s" repeatCount="indefinite"/><animate attributeName="x" values="216.0;212.6;219.9;216.0" dur="5.0s" begin="-0.50s" repeatCount="indefinite"/></rect>
+    <rect x="24.0" y="365.6" width="38.4" height="16.0" fill="#675f55" opacity="0.85"><animate attributeName="width" values="38.4;65.3;6.9;38.4" dur="6.0s" begin="-3.30s" repeatCount="indefinite"/><animate attributeName="x" values="24.0;10.6;39.7;24.0" dur="6.0s" begin="-3.30s" repeatCount="indefinite"/></rect>
+    <rect x="91.2" y="365.6" width="9.6" height="16.0" fill="#675f55" opacity="0.85"><animate attributeName="width" values="9.6;16.3;1.7;9.6" dur="5.0s" begin="-2.75s" repeatCount="indefinite"/><animate attributeName="x" values="91.2;87.8;95.1;91.2" dur="5.0s" begin="-2.75s" repeatCount="indefinite"/></rect>
+    <rect x="225.6" y="365.6" width="9.6" height="16.0" fill="#675f55" opacity="0.85"><animate attributeName="width" values="9.6;16.3;1.7;9.6" dur="8.0s" begin="-6.65s" repeatCount="indefinite"/><animate attributeName="x" values="225.6;222.2;229.5;225.6" dur="8.0s" begin="-6.65s" repeatCount="indefinite"/></rect>
+    <rect x="24.0" y="385.6" width="76.8" height="16.0" fill="#c2410f" opacity="0.85"><animate attributeName="width" values="76.8;130.6;13.8;76.8" dur="9.0s" begin="-7.20s" repeatCount="indefinite"/><animate attributeName="x" values="24.0;-2.9;55.5;24.0" dur="9.0s" begin="-7.20s" repeatCount="indefinite"/></rect>
+    <rect x="129.6" y="385.6" width="9.6" height="16.0" fill="#675f55" opacity="0.85"><animate attributeName="width" values="9.6;16.3;1.7;9.6" dur="6.0s" begin="-2.05s" repeatCount="indefinite"/><animate attributeName="x" values="129.6;126.2;133.5;129.6" dur="6.0s" begin="-2.05s" repeatCount="indefinite"/></rect>
+    <rect x="177.6" y="385.6" width="9.6" height="16.0" fill="#675f55" opacity="0.85"><animate attributeName="width" values="9.6;16.3;1.7;9.6" dur="6.0s" begin="-3.80s" repeatCount="indefinite"/><animate attributeName="x" values="177.6;174.2;181.5;177.6" dur="6.0s" begin="-3.80s" repeatCount="indefinite"/></rect>
+    <rect x="206.4" y="385.6" width="9.6" height="16.0" fill="#675f55" opacity="0.85"><animate attributeName="width" values="9.6;16.3;1.7;9.6" dur="7.0s" begin="-1.85s" repeatCount="indefinite"/><animate attributeName="x" values="206.4;203.0;210.3;206.4" dur="7.0s" begin="-1.85s" repeatCount="indefinite"/></rect>
+    <rect x="24.0" y="405.6" width="115.2" height="16.0" fill="#2d5a4a" opacity="0.85"><animate attributeName="width" values="115.2;195.8;20.7;115.2" dur="7.0s" begin="-3.10s" repeatCount="indefinite"/><animate attributeName="x" values="24.0;-16.3;71.2;24.0" dur="7.0s" begin="-3.10s" repeatCount="indefinite"/></rect>
+    <rect x="148.8" y="405.6" width="9.6" height="16.0" fill="#675f55" opacity="0.85"><animate attributeName="width" values="9.6;16.3;1.7;9.6" dur="8.0s" begin="-5.65s" repeatCount="indefinite"/><animate attributeName="x" values="148.8;145.4;152.7;148.8" dur="8.0s" begin="-5.65s" repeatCount="indefinite"/></rect>
+    <rect x="168.0" y="405.6" width="9.6" height="16.0" fill="#675f55" opacity="0.85"><animate attributeName="width" values="9.6;16.3;1.7;9.6" dur="7.0s" begin="-1.35s" repeatCount="indefinite"/><animate attributeName="x" values="168.0;164.6;171.9;168.0" dur="7.0s" begin="-1.35s" repeatCount="indefinite"/></rect>
+    <rect x="24.0" y="425.6" width="76.8" height="16.0" fill="#c2410f" opacity="0.85"><animate attributeName="width" values="76.8;130.6;13.8;76.8" dur="5.0s" begin="-3.00s" repeatCount="indefinite"/><animate attributeName="x" values="24.0;-2.9;55.5;24.0" dur="5.0s" begin="-3.00s" repeatCount="indefinite"/></rect>
+    <rect x="158.4" y="425.6" width="9.6" height="16.0" fill="#675f55" opacity="0.85"><animate attributeName="width" values="9.6;16.3;1.7;9.6" dur="8.0s" begin="-6.90s" repeatCount="indefinite"/><animate attributeName="x" values="158.4;155.0;162.3;158.4" dur="8.0s" begin="-6.90s" repeatCount="indefinite"/></rect>
+  </g>
+  <g font-family="monospace" font-size="16" opacity="0.55">
+    <text x="24.0" y="40.0" xml:space="preserve" fill="#4a554e">#</text>
+    <text x="43.2" y="40.0" xml:space="preserve" fill="#4a554e">---</text>
+    <text x="81.6" y="40.0" xml:space="preserve" fill="#4a554e">Topología</text>
+    <text x="177.6" y="40.0" xml:space="preserve" fill="#4a554e">de</text>
+    <text x="206.4" y="40.0" xml:space="preserve" fill="#4a554e">IA:</text>
+    <text x="244.8" y="40.0" xml:space="preserve" fill="#4a554e">indentación</text>
+    <text x="360.0" y="40.0" xml:space="preserve" fill="#4a554e">y</text>
+    <text x="379.2" y="40.0" xml:space="preserve" fill="#4a554e">one-liners</text>
+    <text x="484.8" y="40.0" xml:space="preserve" fill="#4a554e">---</text>
+    <text x="24.0" y="80.0" xml:space="preserve" fill="#4a554e">def</text>
+    <text x="62.4" y="80.0" xml:space="preserve" fill="#4a554e">procesar_tensores(matriz,</text>
+    <text x="312.0" y="80.0" xml:space="preserve" fill="#4a554e">factores):</text>
+    <text x="62.4" y="100.0" xml:space="preserve" fill="#4a554e">resultados</text>
+    <text x="168.0" y="100.0" xml:space="preserve" fill="#4a554e">=</text>
+    <text x="187.2" y="100.0" xml:space="preserve" fill="#4a554e">[]</text>
+    <text x="62.4" y="120.0" xml:space="preserve" fill="#4a554e">for</text>
+    <text x="100.8" y="120.0" xml:space="preserve" fill="#4a554e">fila</text>
+    <text x="148.8" y="120.0" xml:space="preserve" fill="#4a554e">in</text>
+    <text x="177.6" y="120.0" xml:space="preserve" fill="#4a554e">matriz:</text>
+    <text x="100.8" y="140.0" xml:space="preserve" fill="#4a554e">activacion</text>
+    <text x="206.4" y="140.0" xml:space="preserve" fill="#4a554e">=</text>
+    <text x="225.6" y="140.0" xml:space="preserve" fill="#4a554e">[max(0.0,</text>
+    <text x="321.6" y="140.0" xml:space="preserve" fill="#4a554e">x</text>
+    <text x="340.8" y="140.0" xml:space="preserve" fill="#4a554e">*</text>
+    <text x="360.0" y="140.0" xml:space="preserve" fill="#4a554e">f)</text>
+    <text x="388.8" y="140.0" xml:space="preserve" fill="#4a554e">for</text>
+    <text x="427.2" y="140.0" xml:space="preserve" fill="#4a554e">x,</text>
+    <text x="456.0" y="140.0" xml:space="preserve" fill="#4a554e">f</text>
+    <text x="475.2" y="140.0" xml:space="preserve" fill="#4a554e">in</text>
+    <text x="504.0" y="140.0" xml:space="preserve" fill="#4a554e">zip(fila,</text>
+    <text x="600.0" y="140.0" xml:space="preserve" fill="#4a554e">factores)]</text>
+    <text x="100.8" y="160.0" xml:space="preserve" fill="#4a554e">if</text>
+    <text x="129.6" y="160.0" xml:space="preserve" fill="#4a554e">sum(activacion)</text>
+    <text x="283.2" y="160.0" xml:space="preserve" fill="#4a554e">&gt;</text>
+    <text x="302.4" y="160.0" xml:space="preserve" fill="#4a554e">100.5:</text>
+    <text x="139.2" y="180.0" xml:space="preserve" fill="#4a554e">resultados.append(activacion)</text>
+    <text x="62.4" y="200.0" xml:space="preserve" fill="#4a554e">return</text>
+    <text x="129.6" y="200.0" xml:space="preserve" fill="#4a554e">resultados</text>
+    <text x="24.0" y="240.0" xml:space="preserve" fill="#4a554e">#</text>
+    <text x="43.2" y="240.0" xml:space="preserve" fill="#4a554e">One-liner</text>
+    <text x="139.2" y="240.0" xml:space="preserve" fill="#4a554e">denso</text>
+    <text x="24.0" y="260.0" xml:space="preserve" fill="#4a554e">data</text>
+    <text x="72.0" y="260.0" xml:space="preserve" fill="#4a554e">=</text>
+    <text x="91.2" y="260.0" xml:space="preserve" fill="#4a554e">list(map(lambda</text>
+    <text x="244.8" y="260.0" xml:space="preserve" fill="#4a554e">x:</text>
+    <text x="273.6" y="260.0" xml:space="preserve" fill="#4a554e">x**2,</text>
+    <text x="331.2" y="260.0" xml:space="preserve" fill="#4a554e">filter(lambda</text>
+    <text x="465.6" y="260.0" xml:space="preserve" fill="#4a554e">y:</text>
+    <text x="494.4" y="260.0" xml:space="preserve" fill="#4a554e">y</text>
+    <text x="513.6" y="260.0" xml:space="preserve" fill="#4a554e">%</text>
+    <text x="532.8" y="260.0" xml:space="preserve" fill="#4a554e">2</text>
+    <text x="552.0" y="260.0" xml:space="preserve" fill="#4a554e">==</text>
+    <text x="580.8" y="260.0" xml:space="preserve" fill="#4a554e">0,</text>
+    <text x="609.6" y="260.0" xml:space="preserve" fill="#4a554e">range(1000))))</text>
+    <text x="24.0" y="300.0" xml:space="preserve" fill="#4a554e">class</text>
+    <text x="81.6" y="300.0" xml:space="preserve" fill="#4a554e">Modelo:</text>
+    <text x="62.4" y="320.0" xml:space="preserve" fill="#4a554e">def</text>
+    <text x="100.8" y="320.0" xml:space="preserve" fill="#4a554e">__init__(self,</text>
+    <text x="244.8" y="320.0" xml:space="preserve" fill="#4a554e">capas):</text>
+    <text x="100.8" y="340.0" xml:space="preserve" fill="#4a554e">self.capas</text>
+    <text x="206.4" y="340.0" xml:space="preserve" fill="#4a554e">=</text>
+    <text x="225.6" y="340.0" xml:space="preserve" fill="#4a554e">capas</text>
+    <text x="62.4" y="380.0" xml:space="preserve" fill="#4a554e">def</text>
+    <text x="100.8" y="380.0" xml:space="preserve" fill="#4a554e">forward(self,</text>
+    <text x="235.2" y="380.0" xml:space="preserve" fill="#4a554e">x):</text>
+    <text x="100.8" y="400.0" xml:space="preserve" fill="#4a554e">for</text>
+    <text x="139.2" y="400.0" xml:space="preserve" fill="#4a554e">capa</text>
+    <text x="187.2" y="400.0" xml:space="preserve" fill="#4a554e">in</text>
+    <text x="216.0" y="400.0" xml:space="preserve" fill="#4a554e">self.capas:</text>
+    <text x="139.2" y="420.0" xml:space="preserve" fill="#4a554e">x</text>
+    <text x="158.4" y="420.0" xml:space="preserve" fill="#4a554e">=</text>
+    <text x="177.6" y="420.0" xml:space="preserve" fill="#4a554e">capa(x)</text>
+    <text x="100.8" y="440.0" xml:space="preserve" fill="#4a554e">return</text>
+    <text x="168.0" y="440.0" xml:space="preserve" fill="#4a554e">x</text>
+  </g>
+  </svg>
+  <text x="24" y="588" font-family="monospace" font-size="18" fill="#f8f1e3" font-weight="bold">zigzag_vertical</text>
+  <text x="24" y="604" font-family="monospace" font-size="11" fill="#675f55">zigzag_vertical: hilos en zigzag tejen el vacio hacia abajo; el color fluye por el hilo fijo, no el hilo (direccion tapiz 2026-07-12)</text>
+  <svg x="0" y="622" width="768" height="468" viewBox="0 0 768 468">
+    <title>void_animado/zigzag_vertical</title>
+  <desc>zigzag_vertical: hilos en zigzag tejen el vacio hacia abajo; el color fluye por el hilo fijo, no el hilo (direccion tapiz 2026-07-12)</desc>
+  <rect width="768" height="468" fill="#1f2a24"/>
+  <g font-family="monospace" font-size="16">
+    <g fill="#2d5a4a" opacity="1.0">
+      <text x="72.0" y="40.0" xml:space="preserve">·</text>
+      <text x="91.2" y="120.0" xml:space="preserve">·</text>
+      <text x="120.0" y="200.0" xml:space="preserve">·</text>
+      <text x="235.2" y="320.0" xml:space="preserve">·</text>
+      <text x="62.4" y="440.0" xml:space="preserve">··</text>
+      <animate attributeName="fill" values="#2d5a4a;#675f55;#c2410f;#f8f1e3;#2d5a4a" dur="6s" repeatCount="indefinite"/>
+    </g>
+    <g fill="#675f55" opacity="1.0">
+      <text x="91.2" y="140.0" xml:space="preserve">·</text>
+      <text x="504.0" y="260.0" xml:space="preserve">·</text>
+      <text x="216.0" y="340.0" xml:space="preserve">·</text>
+      <text x="91.2" y="380.0" xml:space="preserve">·</text>
+      <animate attributeName="fill" values="#675f55;#c2410f;#f8f1e3;#2d5a4a;#675f55" dur="8s" repeatCount="indefinite"/>
+    </g>
+    <g fill="#c2410f" opacity="1.0">
+      <text x="235.2" y="40.0" xml:space="preserve">·</text>
+      <text x="129.6" y="240.0" xml:space="preserve">·</text>
+      <text x="72.0" y="400.0" xml:space="preserve">··</text>
+      <animate attributeName="fill" values="#c2410f;#f8f1e3;#2d5a4a;#675f55;#c2410f" dur="10s" repeatCount="indefinite"/>
+    </g>
+    <g fill="#f8f1e3" opacity="1.0">
+      <text x="100.8" y="180.0" xml:space="preserve">··</text>
+      <text x="91.2" y="340.0" xml:space="preserve">·</text>
+      <text x="72.0" y="420.0" xml:space="preserve">·</text>
+      <animate attributeName="fill" values="#f8f1e3;#2d5a4a;#675f55;#c2410f;#f8f1e3" dur="12s" repeatCount="indefinite"/>
+    </g>
+    <g fill="#28332c" opacity="0.16">
+      <text x="33.6" y="40.0" xml:space="preserve">·</text>
+      <text x="168.0" y="40.0" xml:space="preserve">·</text>
+      <text x="196.8" y="40.0" xml:space="preserve">·</text>
+      <text x="350.4" y="40.0" xml:space="preserve">·</text>
+      <text x="369.6" y="40.0" xml:space="preserve">·</text>
+      <text x="475.2" y="40.0" xml:space="preserve">·</text>
+      <text x="52.8" y="80.0" xml:space="preserve">·</text>
+      <text x="302.4" y="80.0" xml:space="preserve">·</text>
+      <text x="24.0" y="100.0" xml:space="preserve">····</text>
+      <text x="158.4" y="100.0" xml:space="preserve">·</text>
+      <text x="177.6" y="100.0" xml:space="preserve">·</text>
+      <text x="24.0" y="120.0" xml:space="preserve">····</text>
+      <text x="139.2" y="120.0" xml:space="preserve">·</text>
+      <text x="168.0" y="120.0" xml:space="preserve">·</text>
+      <text x="24.0" y="140.0" xml:space="preserve">·······</text>
+      <text x="196.8" y="140.0" xml:space="preserve">·</text>
+      <text x="216.0" y="140.0" xml:space="preserve">·</text>
+      <text x="312.0" y="140.0" xml:space="preserve">·</text>
+      <text x="331.2" y="140.0" xml:space="preserve">·</text>
+      <text x="350.4" y="140.0" xml:space="preserve">·</text>
+      <text x="379.2" y="140.0" xml:space="preserve">·</text>
+      <text x="417.6" y="140.0" xml:space="preserve">·</text>
+      <text x="446.4" y="140.0" xml:space="preserve">·</text>
+      <text x="465.6" y="140.0" xml:space="preserve">·</text>
+      <text x="494.4" y="140.0" xml:space="preserve">·</text>
+      <text x="590.4" y="140.0" xml:space="preserve">·</text>
+      <text x="24.0" y="160.0" xml:space="preserve">········</text>
+      <text x="120.0" y="160.0" xml:space="preserve">·</text>
+      <text x="273.6" y="160.0" xml:space="preserve">·</text>
+      <text x="292.8" y="160.0" xml:space="preserve">·</text>
+      <text x="24.0" y="180.0" xml:space="preserve">········</text>
+      <text x="120.0" y="180.0" xml:space="preserve">··</text>
+      <text x="24.0" y="200.0" xml:space="preserve">····</text>
+      <text x="33.6" y="240.0" xml:space="preserve">·</text>
+      <text x="62.4" y="260.0" xml:space="preserve">·</text>
+      <text x="81.6" y="260.0" xml:space="preserve">·</text>
+      <text x="235.2" y="260.0" xml:space="preserve">·</text>
+      <text x="264.0" y="260.0" xml:space="preserve">·</text>
+      <text x="321.6" y="260.0" xml:space="preserve">·</text>
+      <text x="456.0" y="260.0" xml:space="preserve">·</text>
+      <text x="484.8" y="260.0" xml:space="preserve">·</text>
+      <text x="523.2" y="260.0" xml:space="preserve">·</text>
+      <text x="542.4" y="260.0" xml:space="preserve">·</text>
+      <text x="571.2" y="260.0" xml:space="preserve">·</text>
+      <text x="600.0" y="260.0" xml:space="preserve">·</text>
+      <text x="72.0" y="300.0" xml:space="preserve">·</text>
+      <text x="24.0" y="320.0" xml:space="preserve">····</text>
+      <text x="91.2" y="320.0" xml:space="preserve">·</text>
+      <text x="24.0" y="340.0" xml:space="preserve">·······</text>
+      <text x="196.8" y="340.0" xml:space="preserve">·</text>
+      <text x="24.0" y="380.0" xml:space="preserve">····</text>
+      <text x="225.6" y="380.0" xml:space="preserve">·</text>
+      <text x="24.0" y="400.0" xml:space="preserve">·····</text>
+      <text x="91.2" y="400.0" xml:space="preserve">·</text>
+      <text x="129.6" y="400.0" xml:space="preserve">·</text>
+      <text x="177.6" y="400.0" xml:space="preserve">·</text>
+      <text x="206.4" y="400.0" xml:space="preserve">·</text>
+      <text x="24.0" y="420.0" xml:space="preserve">·····</text>
+      <text x="81.6" y="420.0" xml:space="preserve">······</text>
+      <text x="148.8" y="420.0" xml:space="preserve">·</text>
+      <text x="168.0" y="420.0" xml:space="preserve">·</text>
+      <text x="24.0" y="440.0" xml:space="preserve">····</text>
+      <text x="81.6" y="440.0" xml:space="preserve">··</text>
+      <text x="158.4" y="440.0" xml:space="preserve">·</text>
+    </g>
+  </g>
+  </svg>
+  <text x="24" y="1130" font-family="monospace" font-size="18" fill="#f8f1e3" font-weight="bold">raices</text>
+  <text x="24" y="1146" font-family="monospace" font-size="11" fill="#675f55">raices: formas rectangulares -- raiz de circuito, angulo recto, no organica -- crecen y se ramifican hacia abajo (direccion tapiz 2026-07-12)</text>
+  <svg x="0" y="1164" width="768" height="468" viewBox="0 0 768 468">
+    <title>void_animado/raices</title>
+  <desc>raices: formas rectangulares -- raiz de circuito, angulo recto, no organica -- crecen y se ramifican hacia abajo (direccion tapiz 2026-07-12)</desc>
+  <rect width="768" height="468" fill="#1f2a24"/>
+  <g font-family="monospace" font-size="16">
+    <g fill="#2d5a4a">
+      <text x="52.8" y="80.0" xml:space="preserve">·</text>
+      <animate attributeName="opacity" values="0;1;1;0.35;0.35" keyTimes="0;0.04;0.5;0.7;1" dur="14s" begin="-0.00s" repeatCount="indefinite"/>
+    </g>
+    <g fill="#2d5a4a">
+      <text x="52.8" y="100.0" xml:space="preserve">·</text>
+      <animate attributeName="opacity" values="0;1;1;0.35;0.35" keyTimes="0;0.04;0.5;0.7;1" dur="14s" begin="-0.58s" repeatCount="indefinite"/>
+    </g>
+    <g fill="#2d5a4a">
+      <text x="52.8" y="120.0" xml:space="preserve">·</text>
+      <text x="52.8" y="140.0" xml:space="preserve">·</text>
+      <animate attributeName="opacity" values="0;1;1;0.35;0.35" keyTimes="0;0.04;0.5;0.7;1" dur="14s" begin="-1.17s" repeatCount="indefinite"/>
+    </g>
+    <g fill="#2d5a4a">
+      <text x="52.8" y="160.0" xml:space="preserve">·</text>
+      <animate attributeName="opacity" values="0;1;1;0.35;0.35" keyTimes="0;0.04;0.5;0.7;1" dur="14s" begin="-1.75s" repeatCount="indefinite"/>
+    </g>
+    <g fill="#2d5a4a">
+      <text x="52.8" y="180.0" xml:space="preserve">·</text>
+      <text x="52.8" y="200.0" xml:space="preserve">·</text>
+      <animate attributeName="opacity" values="0;1;1;0.35;0.35" keyTimes="0;0.04;0.5;0.7;1" dur="14s" begin="-2.33s" repeatCount="indefinite"/>
+    </g>
+    <g fill="#2d5a4a">
+      <text x="24.0" y="100.0" xml:space="preserve">·</text>
+      <text x="24.0" y="120.0" xml:space="preserve">·</text>
+      <animate attributeName="opacity" values="0;1;1;0.35;0.35" keyTimes="0;0.04;0.5;0.7;1" dur="14s" begin="-5.83s" repeatCount="indefinite"/>
+    </g>
+    <g fill="#2d5a4a">
+      <text x="24.0" y="140.0" xml:space="preserve">·</text>
+      <animate attributeName="opacity" values="0;1;1;0.35;0.35" keyTimes="0;0.04;0.5;0.7;1" dur="14s" begin="-6.42s" repeatCount="indefinite"/>
+    </g>
+    <g fill="#2d5a4a">
+      <text x="24.0" y="160.0" xml:space="preserve">·</text>
+      <text x="24.0" y="180.0" xml:space="preserve">·</text>
+      <animate attributeName="opacity" values="0;1;1;0.35;0.35" keyTimes="0;0.04;0.5;0.7;1" dur="14s" begin="-7.00s" repeatCount="indefinite"/>
+    </g>
+    <g fill="#2d5a4a">
+      <text x="24.0" y="200.0" xml:space="preserve">·</text>
+      <animate attributeName="opacity" values="0;1;1;0.35;0.35" keyTimes="0;0.04;0.5;0.7;1" dur="14s" begin="-7.58s" repeatCount="indefinite"/>
+    </g>
+    <g fill="#2d5a4a">
+      <text x="91.2" y="320.0" xml:space="preserve">·</text>
+      <animate attributeName="opacity" values="0;1;1;0.35;0.35" keyTimes="0;0.04;0.5;0.7;1" dur="14s" begin="-8.17s" repeatCount="indefinite"/>
+    </g>
+    <g fill="#2d5a4a">
+      <text x="91.2" y="340.0" xml:space="preserve">·</text>
+      <animate attributeName="opacity" values="0;1;1;0.35;0.35" keyTimes="0;0.04;0.5;0.7;1" dur="14s" begin="-8.75s" repeatCount="indefinite"/>
+    </g>
+    <g fill="#2d5a4a">
+      <text x="91.2" y="380.0" xml:space="preserve">·</text>
+      <animate attributeName="opacity" values="0;1;1;0.35;0.35" keyTimes="0;0.04;0.5;0.7;1" dur="14s" begin="-9.33s" repeatCount="indefinite"/>
+    </g>
+    <g fill="#2d5a4a">
+      <text x="91.2" y="400.0" xml:space="preserve">·</text>
+      <animate attributeName="opacity" values="0;1;1;0.35;0.35" keyTimes="0;0.04;0.5;0.7;1" dur="14s" begin="-9.92s" repeatCount="indefinite"/>
+    </g>
+    <g fill="#2d5a4a">
+      <text x="91.2" y="420.0" xml:space="preserve">·</text>
+      <text x="91.2" y="440.0" xml:space="preserve">·</text>
+      <animate attributeName="opacity" values="0;1;1;0.35;0.35" keyTimes="0;0.04;0.5;0.7;1" dur="14s" begin="-10.50s" repeatCount="indefinite"/>
+    </g>
+    <g fill="#2d5a4a">
+      <text x="120.0" y="160.0" xml:space="preserve">·</text>
+      <animate attributeName="opacity" values="0;1;1;0.35;0.35" keyTimes="0;0.04;0.5;0.7;1" dur="14s" begin="-11.08s" repeatCount="indefinite"/>
+    </g>
+    <g fill="#2d5a4a">
+      <text x="120.0" y="180.0" xml:space="preserve">·</text>
+      <text x="120.0" y="200.0" xml:space="preserve">·</text>
+      <animate attributeName="opacity" values="0;1;1;0.35;0.35" keyTimes="0;0.04;0.5;0.7;1" dur="14s" begin="-11.67s" repeatCount="indefinite"/>
+    </g>
+  </g>
+  </svg>
+</svg>

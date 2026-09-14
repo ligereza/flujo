@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" data-name="0fd5d5060dbf-18039831448636728">
+<style>
+.c0{animation:k_latir 7s ease-in-out infinite}
+@keyframes k_latir{0%,100%{transform:scale(1)}50%{transform:scale(1.09)}}
+</style>
+<rect width="120" height="120" fill="#0d0d18"/>
+<g id="capa-0-protagonista" transform="translate(60,58)" data-rol="protagonista" data-gesto="latir" data-ritmo="7s" data-figura="corazon"><title>protagonista - corazon</title><g class="c0"><g transform="scale(40)"><path d="M0,.86 C-.62,.38 -.95,.02 -.95,-.36 A.52,.52 0 0 1 0,-.60 A.52,.52 0 0 1 .95,-.36 C.95,.02 .62,.38 0,.86 Z" fill="#f2f2f5"/></g></g></g>
+<g id="capa-1-marca" transform="translate(60,104)" data-rol="marca" data-gesto="quieto" data-ritmo="4s" data-figura="rayos"><title>marca - rayos</title><g class="c1"><g transform="scale(8)"><path transform="rotate(0.0)" d="M0,0 L-.11,-1 L.11,-1 Z" fill="#f2f2f5"/><path transform="rotate(30.0)" d="M0,0 L-.11,-1 L.11,-1 Z" fill="#f2f2f5"/><path transform="rotate(60.0)" d="M0,0 L-.11,-1 L.11,-1 Z" fill="#f2f2f5"/><path transform="rotate(90.0)" d="M0,0 L-.11,-1 L.11,-1 Z" fill="#f2f2f5"/><path transform="rotate(120.0)" d="M0,0 L-.11,-1 L.11,-1 Z" fill="#f2f2f5"/><path transform="rotate(150.0)" d="M0,0 L-.11,-1 L.11,-1 Z" fill="#f2f2f5"/><path transform="rotate(180.0)" d="M0,0 L-.11,-1 L.11,-1 Z" fill="#f2f2f5"/><path transform="rotate(210.0)" d="M0,0 L-.11,-1 L.11,-1 Z" fill="#f2f2f5"/><path transform="rotate(240.0)" d="M0,0 L-.11,-1 L.11,-1 Z" fill="#f2f2f5"/><path transform="rotate(270.0)" d="M0,0 L-.11,-1 L.11,-1 Z" fill="#f2f2f5"/><path transform="rotate(300.0)" d="M0,0 L-.11,-1 L.11,-1 Z" fill="#f2f2f5"/><path transform="rotate(330.0)" d="M0,0 L-.11,-1 L.11,-1 Z" fill="#f2f2f5"/></g></g></g>
+</svg>

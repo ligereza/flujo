@@ -1,0 +1,55 @@
+{
+  "name": "OpenKlub",
+  "aliases": [
+    "OPENKLUB",
+    "Open Klub",
+    "OpenKlub",
+    "OPEN KLUB"
+  ],
+  "instagram": "",
+  "tipos_fecha": [
+    "CLUB"
+  ],
+  "logos": [
+    {
+      "id": "openklub_primary",
+      "knowledge": "PENDIENTE",
+      "estado": "no_encontrado",
+      "notas": "Sin candidato de logo en curatoría (PR #210, categoria=logo). Solo flyer de evento. FALTA."
+    }
+  ],
+  "venues": [
+    {
+      "nombre": "Central Cultural",
+      "venue_id": null,
+      "preferido": false,
+      "estado": "candidato_sin_confirmar",
+      "notas": "venue_crudo de obra_7879d3d141 (PR #210, FEBRERO/OPENKLUB.png). Confirmar si es venue real (nombre genérico, posible dato incompleto)."
+    }
+  ],
+  "confirmed": "",
+  "fuente_datos": "nombres de archivo del archivo de entregas (ENTREGA/FEBRERO), mapeo 2026-07-17; sin confirmar por humano. Complementado con PR #210 (candidatos_db.jsonl match_ratio=1.0, obra_7879d3d141, productora_cruda='OPEN KLUB').",
+  "notes": "OpenKlub es una productora/brand. Central Cultural permanece como venue raw candidato sin confirmar y no se usa como identidad de OpenKlub. Fuente: archivo de entregas (FEBRERO) + curatoría PR #210. Relación declarada por el usuario 2026-07-23: OPENKLUB es impulsado por TECHNOYOUTH y PANAL RECORDS.",
+  "relaciones": [
+    {
+      "tipo": "impulsado_por",
+      "objetivo": "TECHNOYOUTH",
+      "fuente": "palabra del usuario 2026-07-23"
+    },
+    {
+      "tipo": "impulsado_por",
+      "objetivo": "PANAL RECORDS",
+      "fuente": "palabra del usuario 2026-07-23"
+    }
+  ],
+  "eventos": [
+    {
+  "nombre": "OpenKlub (edición sin identificar)",
+  "fecha": "viernes 6 febrero, 18:00-04:00 (año no confirmado)",
+  "venue": "Central Cultural (needs_confirmation)",
+  "estado": "pasado_needs_confirmation",
+  "flyer_ref": "RD/FEBRERO/OPENKLUB.png",
+  "fuente": "PR #210 obra_7879d3d141 (ruta_rel FEBRERO/OPENKLUB.png), fecha_cruda 'VIERNES_06FEBR 18:00_04:00'"
+    }
+  ]
+}

@@ -1,0 +1,17 @@
+{
+  "name": "The Grid",
+  "aliases": ["GRID", "thegrid.club", "The Grid Club"],
+  "instagram": "thegrid.club",
+  "tipos_fecha": ["HEADLINERS", "RAVE"],
+  "logos": [
+    {"id": "thegrid_primary", "knowledge": "knowledge/logos/thegrid.yaml", "estado": "encontrado",
+     "archivo": "knowledge/logos/vector/grid_system.svg",
+     "raster": "knowledge/logos/vector/grid_system.svg",
+     "fuente": "https://the-grid.club/santiago (sitio oficial The Grid, logo SVG del header)",
+     "obtenido": "2026-07-24",
+     "notas": "Logo oficial via web anonima (PR #254): fuente ya vectorial (SVG del header), sin necesidad de vtracer. Reemplaza el estado source_needed previo."}
+  ],
+  "venues": [],
+  "confirmed": "2026-07-10 flyer real KI/KI (extraccion Gemini devolvio 'GRID'; confirmado por humano en sesion)",
+  "notes": "Primera entrada del store. El match es igualdad exacta case-insensitive contra name+aliases: mantener aqui la forma LITERAL que extrae Gemini del flyer (GRID), no solo el nombre formal. tipos_fecha HEADLINERS/RAVE inferidos del booking KI/KI (cabeza de cartel electronica); confirmar con mas fechas. venues sin confirmar todavia."
+}

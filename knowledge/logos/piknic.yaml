@@ -1,0 +1,8 @@
+id: piknic_primary
+producer_id: piknic
+status: source_needed
+source_quality: unknown
+workflow:
+  suggested_tool: logo_clean_lab
+  next_action: "og:image de piknicelectronik.cl no expuso logo via fetch anonimo (posible sitio JS-rendered); reintentar con vista renderizada o capturar de puntoticket.com/piknicelectronik"
+outputs: {}

@@ -1,0 +1,50 @@
+{
+  "_leeme": [
+    "Las librerias que el MOTOR SEMANTICO puede usar en el navegador. Este",
+    "archivo lo edita el usuario o quien justifique una entrada.",
+    "",
+    "Agregar una es agregar una entrada aca y correr:",
+    "",
+    "    py tools/vendorizar_iskvw.py --manifiesto data/motor_librerias.json --destino docs/cultura/lib",
+    "",
+    "Eso baja el paquete, lo empaqueta como un solo modulo ESM sin dependencias",
+    "externas y lo deja en docs/cultura/lib/<nombre>.js, con su README al lado.",
+    "La galeria lo importa con un import normal: es una pagina estatica, sin",
+    "build y sin CDN, y funciona sin internet.",
+    "",
+    "Por que existe SEPARADO de data/iskvw_librerias.json: el destino es otro",
+    "(la galeria de un ensayo, no la piel de iskvw) y el consumidor es otro. El",
+    "vendorizador es el mismo y no hizo falta tocarlo: ya aceptaba --manifiesto",
+    "y --destino.",
+    "",
+    "'version' se fija a proposito. Una libreria que cambia sola debajo de una",
+    "pieza es una pieza que se rompe sin que nadie haya tocado nada.",
+    "",
+    "'para' no es decoracion: es la razon por la que la libreria esta aca. El",
+    "indice que un agente lee ANTES de escribir un generador desde cero es la",
+    "seccion 6 de CAPACIDADES.md, y tests/test_thing_registro.py la ratifica."
+  ],
+  "librerias": [
+    {
+      "nombre": "hiccup",
+      "paquete": "@thi.ng/hiccup",
+      "version": "5.4.13",
+      "exporta": "*",
+      "para": "Serializar una estructura de datos a markup. Es la mitad de abajo de hiccup-svg y hace falta explicita para `serialize`."
+    },
+    {
+      "nombre": "hiccup-svg",
+      "paquete": "@thi.ng/hiccup-svg",
+      "version": "5.6.21",
+      "exporta": "*",
+      "para": "Datos a SVG: retira la concatenacion de f-strings del compilador cuando el mismo spec se compila en el navegador. Es la #5 del ranking de 15 (prioridad muy alta) y la que se solapa de verdad con este motor."
+    },
+    {
+      "nombre": "color",
+      "paquete": "@thi.ng/color",
+      "version": "5.8.31",
+      "exporta": "*",
+      "para": "Contraste WCAG y manejo de paletas. El compilador Python calcula la luminancia relativa a mano (`_lum`); del lado del navegador esa cuenta la hace la libreria, que ademas trae conversiones que no tenemos."
+    }
+  ]
+}

@@ -1,0 +1,6 @@
+Marca: Panal Records
+Fuente: https://panalrecords.bandcamp.com/ (foto de perfil del sello, og:image)
+URL directa: https://f4.bcbits.com/img/0023502510_23.jpg
+Como se encontro: WebSearch "Panal Records Chile logo" -> panalrecords.bandcamp.com (perfil oficial del sello) -> scrape og:image (misma imagen en home y discografia, usada como identidad visual del sello).
+Fecha: 2026-07-24
+Tier: perfil oficial (bandcamp), no es un logo vectorial de marca sino la imagen de perfil del sello

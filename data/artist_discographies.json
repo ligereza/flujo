@@ -1,0 +1,697 @@
+{
+  "schema": "mak-artist-discographies-v1",
+  "purpose": "Local cache of the artist_discography authority declared in data/ordering_features.json. A folder name under a client container is only allowed to decide a track identity when this authority is consulted, so the authority has to be durable, auditable and carry the URL of every datum. Absence from this file is NOT evidence that a name is not a track: it means the lookup has not been done.",
+  "collected": "2026-08-27",
+  "collected_by": "read-only discovery workflow wmff24999, 7 identity agents, targeted DREF/BAH research",
+  "how_to_extend": "Re-run the identity probe for a container and append. Never add a track without a source_url: a date with no source is exactly the kind of datum this authority exists to refuse.",
+  "containers": {
+    "DREFMOVISTAR": {
+      "kind": "event",
+      "canonical_name": "DrefQuila — \"The Kun Talent Show\" en Movistar Arena (Santiago, Chile)",
+      "confidence": "confirmed",
+      "evidence_urls": [
+        "https://www.movistararena.cl/movistar/nuestra-cartelera/conciertos/drefquila",
+        "https://los40.cl/2025/10/31/drefquila-en-movistar-arena-2025-horarios-apertura-de-puertas-y-objetos-prohibidos/",
+        "https://los40.cl/2025/10/30/drefquila-en-movistar-arena-2025-estas-son-las-entradas-para-el-innovador-show-del-artista/",
+        "https://www.setlist.fm/setlist/drefquila/2025/movistar-arena-santiago-chile-7b4e0640.html",
+        "https://www.puntoticket.com/drefquila-2025"
+      ],
+      "why": "MEDIDO por WebSearch/WebFetch: la pista del operador ('DrefQuila mas Movistar') corresponde a un concierto real y fechado: DrefQuila (rapero/trapero chileno) se presento en el Movistar Arena de Santiago el domingo 2 de noviembre de 2025, 20:00 hrs (apertura de puertas 18:00), con un show titulado 'The Kun Talent Show' -confirmado tanto por la pagina oficial movistararena.cl como por LOS40 Chile y setlist.fm. Segun LOS40 (30-31 oct 2025), el show repasaba su discografia ('9 albumes, 4 EPs y mas de 44 singles') incluyendo material de su ultimo album 'Despues Del Sol'. Este concierto habia sido reprogramado (anuncio original en feb 2025; se movio a nov 2025 tras el lanzamiento del album, segun un post de LOS40 Chile en Threads, no verificado con URL propia). INFERIDO (interpretacion mia, no medido directamente): el contenedor DREFMOVISTAR del SSD del operador MAK corresponde al trabajo de VJ/diseno de escenografia y video-mapping que MAK hizo PARA ESE concierto especifico (no para un track individual), dado que el contenido real de las carpetas (ver 'notes') es utileria y mapping 3D de escenario, no material organizado por cancion.",
+      "tracks": [],
+      "tracks_dropped_for_missing_source": 0,
+      "notes": "DISCO (medido, solo lectura, query SQL provista): el proyecto raiz 'DREFMOVISTAR' tiene 590 assets / 52,098,987,425 bytes / dimensionality='mixto'. Hay un unico sub-proyecto indexado con project_path propio: 'DREFMOVISTAR/3D Animated Hoodie' (5 assets, 253,751,150 bytes, mixto) -> es un modelo 3D de una polera con capucha (hoodie) animada, probablemente vestuario/utileria virtual para pantalla, NO una cancion. Ademas consulte relative_path de los 595 assets del contenedor (join assets/project_members/projects) y conte carpetas de primer nivel bajo DREFMOVISTAR: 'CLOTHH' (205 archivos), 'pill' (100), 'Textures' (97), 'Almacenamiento automatico de Adobe After Effects' (13), 'Architectural_Material_Carpet_05' (5), '3D Animated Hoodie' (5), 'templates' (4), y el resto son archivos sueltos en la raiz (1 c/u): PILLSOL.blend/.blend1/.glb, PODIO.glb, PAREDALFOMBRADA*.glb (pared alfombrada = carpeted wall), CORTINAS.glb (cortinas), DREF3D.glb/DREF4D.glb, DECIMATE*.blend/.blend1/.glb, LOW*.glb/.obj/.mtl, BEEE*.blend/.blend1/.glb, RENDERCENTRO*.png (renders de escenario centrado), COLORPODIOS.png, ARREGLO.png, FADE.png, y notablemente 'MAPPINMOVISTAR SIINPISO.aep' (proyecto After Effects: 'mapping Movistar sin piso' = video-mapping para el Movistar Arena, version sin considerar el piso del escenario). NINGUN nombre de carpeta o archivo corresponde a un titulo de cancion de DrefQuila; son todos elementos de escenografia/utileria/mapping 3D (ropa tipo hoodie, pildoras 'pill', alfombra, podio, cortinas, renders de centro de escenario). CONCLUSION: a diferencia de otros contenedores del operador organizados por TRACK (una carpeta = una cancion), DREFMOVISTAR se organiza por PIEZA DE ESCENOGRAFIA/MAPPING para UN EVENTO completo (el concierto 'The Kun Talent Show' de DrefQuila en Movistar Arena, 2-nov-2025). Por eso 'tracks' se devuelve vacio: no encontre ninguna correspondencia carpeta<->cancion respaldada por una fuente con URL, y siguiendo la regla de no inventar prefiero declarar esto como 'unknown/no aplica' en vez de asignar carpetas a titulos de 'Despues Del Sol' sin evidencia. Proximo paso sugerido (fuera de alcance aqui): abrir los .aep/.glb/.png para ver si hay nombres de escena/timestamps que calcen con el setlist real de esa noche (ver setlist.fm arriba). Dato adicional visto en la busqueda pero NO usado para la identidad (evento distinto, no verificado con URL propia mas alla del snippet de busqueda): DrefQuila tambien aparecio como invitado en el 'Trampa al Tiempo Tour' de YSY A en el mismo recinto el 1-abr-2026; el volumen (52GB de assets 3D/mapping propios) es mas compatible con produccion de un show principal que con una participacion como invitado, por lo que la atribucion al show del 2-nov-2025 es la mas consistente con la evidencia."
+    },
+    "FELINA": {
+      "kind": "unknown",
+      "canonical_name": "FELINA",
+      "confidence": "unknown",
+      "evidence_urls": [],
+      "why": "Disco: el contenedor FELINA (41.4GB total) esta compuesto casi enteramente por FELINA/LOGO (2199 assets, 41.2GB, dimensionality='mixto') que contiene assets/materials y assets/models de RENDER 3D — oro, metal dorado, plata, diamantes en varios cortes (pear, heart, baguette, lozenge), cadena, un 'fantasy-gold-pen' — es decir, el armado 3D de un logo/joya dorada, no visuales de una cancion. El resto (proyecto base 'FELINA', 37 assets, 152MB, 2D) son archivos de diseno 2D: ARREGLO.psd/png, DEFINITIVO FELINA.png, ORO.png, TITULO.jpg, PRIMERCAPA.png, TOTAL.png, INV.png, un efecto de texto vectorial 'yakuza-vector-text-effect...samurai' (tipografia estilo yakuza/samurai para el wordmark), IMG_6464.ai, y fotos retocadas con IA (Hailuo) de un rostro real (IMG_9508.jpg/png, 'make thinner face') — consistente con disenar una marca/logo personal a partir de una foto real. NO hay ninguna subcarpeta con estructura de TRACK (una carpeta por cancion) bajo FELINA, que es la unidad que el operador usa cuando trabaja visuales para un artista musical -> estructuralmente esto no luce como trabajo de VJ para una cancion, sino como un proyecto de LOGO/branding (2D -> payoff 3D en oro y diamantes). Busqueda web: no se encontro ninguna cancion, artista o banda chilena llamada 'Felina' con perfil en Apple Music/Spotify/Deezer/prensa chilena que calce con esta estetica (oro, diamantes, tipografia yakuza). Los resultados web solo devolvieron: una cancion 'Felina' de Hector & Tito (reggaeton puertorriqueno, 2002, sin relacion aparente), una 'Chilena Felina' de Virgilio Diaz (musica folclorica chilena instrumental, no encaja con el material grafico), un artista generico 'Felina' en Apple Music (id 1423315975, sin corroborar nacionalidad ni relacion), y marcas internacionales no chilenas llamadas Felina (lenceria EEUU, joyeria mexicana) que tampoco se pudieron vincular con evidencia solida al contenido del disco. MusicaPopular.cl devolvio 403 al intentar consultarlo. Busque tambien 'felina' dentro del export de Instagram (/home/mak/portfolio_media/media) y no hubo ninguna coincidencia (0 archivos). Conclusion: no hay evidencia con URL que permita afirmar que FELINA es una cancion, un artista real identificado, o una marca especifica -> se reporta como unknown en vez de inventar. La pista mas fuerte disponible es que es un proyecto de diseno de LOGO (posible marca propia de MAK o de un cliente/artista no identificado) con motivo de oro/diamantes y letras estilo yakuza, cuyo render 3D vive en la carpeta hermana FELINA/LOGO.",
+      "tracks": [],
+      "tracks_dropped_for_missing_source": 0,
+      "notes": "MEDIDO (SQL sobre /home/mak/labs/portable-ssd-index-20260813/archivo_index.sqlite, solo lectura): select project_path, asset_count, bytes, dimensionality from projects where container_root='FELINA' order by bytes desc -> ('FELINA/LOGO', 2199, 41217986627 bytes ~41.4GB, 'mixto') y ('FELINA', 37, 152697438 bytes ~152MB, '2d'). No existe NINGUNA otra fila bajo el container 'FELINA' que no sea LOGO o el proyecto base (verificado con project_path not like 'FELINA/LOGO%'): es decir, el contenedor NO tiene subcarpetas de tipo TRACK (una por cancion) como las que MAK usa para trabajo de VJ con artistas musicales. Esto es un dato clave: si FELINA fuera una cancion o disco trabajado como VJ, esperariamos carpetas de temas/tracks; en cambio hay solo dos niveles: diseno 2D del logo (FELINA/) y su produccion 3D en oro/diamantes (FELINA/LOGO/assets/{materials,models}/...). Listado completo de los 37 archivos de FELINA/ (medido via join assets-project_members-projects) incluye PSD/AI de trabajo, iteraciones con nombre 'Ilustracion_sin_titulo (1..6).PNG', capas 'PRIMERCAPA.png'/'TOTAL.png'/'INV.png'/'ARREGLO(2).png', un archivo 'yakuza-vector-text-effect-editable-alphabet-japanese-asian-samurai...' (tipografia comprada/stock para el wordmark), y dos subcarpetas 'FIN/' y 'FOTOS/' con renders finales de pantallas ('SRGB.PANTALLAS.PNG') y fotos de una persona real retocadas con IA generativa Hailuo (adelgazar rostro). No pude determinar quien es esa persona ni si es un artista musical, un cliente de branding, o el propio MAK -> lo dejo explicito como no resuelto en vez de asumir. INFERIDO (no confirmado): la combinacion oro+diamantes+tipografia yakuza+retoque de rostro real sugiere fuertemente un proyecto de identidad visual/logo para una persona o alter-ego (posiblemente un artista musical usando 'Felina' como nombre artistico, dado el gusto de MAK por trabajar con musicos), pero esto es una hipotesis de diseno, NO una identificacion confirmada -- no encontre esa persona en fuentes con URL. Busque especificamente en LOS40 Chile, La Cuarta, Emol, MusicaPopular.cl (403 forbidden), Wikipedia, Apple Music y Spotify (via WebSearch) sin exito. Recomendacion para seguir investigando (fuera del alcance de esta tarea): revisar metadatos EXIF de IMG_9508.jpg/IMG_6464 o preguntar directamente a MAK quien es la persona retratada en FELINA/FOTOS, ya que el rostro retocado es probablemente la pista mas directa a la identidad real."
+    },
+    "MARLONLOLLA": {
+      "kind": "music_artist",
+      "canonical_name": "Marlon Breeze",
+      "confidence": "confirmed",
+      "evidence_urls": [
+        "https://www.t13.cl/amp/noticia/tendencias/lollapalooza-dia-2-artistas-se-presentan-hoy-sabado-14-marzo-14-3-2026",
+        "https://www.latercera.com/culto/noticia/lollapalooza-dia-2-el-protagonismo-de-los-musicos-chilenos-la-locura-por-katseye-y-el-cierre-con-los-bunkers/",
+        "https://www.biobiochile.cl/biobiotv/programas/la-ruta-del-pulsar/2026/01/06/marlon-breeze-el-pionero-del-trap-chileno-llega-a-la-ruta-del-pulsar.shtml",
+        "https://www.biobiochile.cl/noticias/artes-y-cultura/musica/2025/07/07/de-ana-tijoux-a-gepe-y-marlon-breeze-los-ganadores-de-los-premios-pulsar-y-el-homenaje-a-tommy-rey.shtml",
+        "https://premiospulsar.cl/sitio/categorias-musicales/marlon-breeze/"
+      ],
+      "why": "Marlon Breeze es un pionero/icono del trap chileno, con mas de 15 anos de carrera. Toco en Lollapalooza Chile 2026 (Dia 2, sabado 14 de marzo, set de tarde), lo que confirma la pista del operador (Marlon + Lollapalooza). Gano Mejor Album Urbano en Premios Pulsar 2025 con 'Le Trap 4'. La evidencia de disco corrobora la identidad de forma independiente: la carpeta MARLONLOLLA/LT26 contiene 'COVERLT4_-scaled.jpg' (portada de Le Trap 4), un audio '(1) WOKI TOKI LIVE ARRANGEMENT W INTRO (LOLLAPALOOZA REFF) (FX & IMPACTS).wav', y archivos 'MARLON.aep' / 'MARLONSHOW.aep' (proyectos de After Effects para el show de Marlon en Lollapalooza).",
+      "tracks": [
+        {
+          "title": "Demerol",
+          "release_date": "2021",
+          "album": "",
+          "features": [
+            "Kid Lucilfer",
+            "Tane",
+            "Jamez Manuel"
+          ],
+          "source_url": "https://open.spotify.com/track/0bXJnqLtYTnrxvzEN2Ze4b"
+        },
+        {
+          "title": "Shorty en Wimbledon",
+          "release_date": "2021-09-17",
+          "album": "Le Trap III",
+          "features": [],
+          "source_url": "https://music.apple.com/us/song/shorty-en-wimbledon/1585884648"
+        },
+        {
+          "title": "Veneno de Mamba",
+          "release_date": "2021-09-17",
+          "album": "Le Trap III",
+          "features": [
+            "Trucone",
+            "King Romex"
+          ],
+          "source_url": "https://music.apple.com/us/song/veneno-de-mamba/1585884323"
+        },
+        {
+          "title": "Woki Toki",
+          "release_date": "2024-11-14",
+          "album": "Le Trap 4",
+          "features": [],
+          "source_url": "https://music.apple.com/us/song/woki-toki/1776909593"
+        }
+      ],
+      "tracks_dropped_for_missing_source": 0,
+      "notes": "METODO: (1) WebSearch/WebFetch para identidad y discografia con fecha (Apple Music, Spotify, BioBioChile, La Tercera, T13, Premios Pulsar). (2) Query de solo lectura al indice SQLite del SSD para ver los nombres de carpeta reales bajo el container_root='MARLONLOLLA'.\n\nDISCOGRAFIA MEDIDA (con URL, fecha de plataforma): 'Le Trap Part.1' (2016-06-07, Deezer: https://www.deezer.com/mx/album/425857197), 'Le Trap 2' (2018-05-04, Deezer: https://www.deezer.com/mx/album/167438252), 'Le Trap III' (2021-09-17, Apple Music: https://music.apple.com/cl/album/le-trap-iii/1585884319), 'Le Trap 4' (2024-11-14, Apple Music: https://music.apple.com/mx/album/le-trap-4/1776909590, 22 tracks, gano Mejor Album Urbano Premios Pulsar 2025). No pude extraer el tracklist completo cancion-por-cancion de Le Trap III ni Le Trap 4 desde Apple Music via WebFetch (la pagina no expone el listado en el texto extraido) ni desde RateYourMusic (HTTP 403). Solo reporto en 'tracks' las canciones individuales que aparecieron en resultados de busqueda con URL propia verificable.\n\nDISCO - ESTRUCTURA REAL bajo MARLONLOLLA (subproyectos indexados por bytes, columna dimensionality entre parentesis): MARLONLOLLA raiz (mixto, 108 assets, 34.94 GB); MARLONLOLLA/show anterior/MAPA/MB (motion, 16 assets, 7.28 GB); MARLONLOLLA/LT26/letrap3 (2d, 414 assets, 6.47 GB) — es una secuencia de frames PNG renderizados (0000.png...0198.png, etc.), NO una carpeta con nombres de canciones; MARLONLOLLA/LT26 (motion, 35 assets, 3.58 GB) — el proyecto visual del show de Lollapalooza 2026, con MARLON.aep, MARLONSHOW.aep, COVERLT4_-scaled.jpg, el wav de referencia 'WOKI TOKI ... LOLLAPALOOZA REFF', y clips sueltos (AIRPORT, CAMION, CHINA, GROSERY, VEGAS1-4.mp4, INTROLOL11.mp4) cuya cancion asociada NO pude confirmar una por una en fuentes publicas — son elementos visuales/escenograficos, no titulos de tema confirmados; MARLONLOLLA/IA (2d, 22 assets, 335 MB) — imagenes generadas con IA (Gemini_Generated_Image...) para ideas de escenografia/vestuario, no son canciones; MARLONLOLLA/show anterior/WIMBLEDON (motion, 8 assets, 304 MB) — visual de un show anterior ligado a la cancion 'Shorty en Wimbledon' (confirmada arriba).\n\nNOMBRES DE CARPETA QUE **NO** PUDE CONFIRMAR COMO CANCIONES (no los invento, quedan como 'unknown'): dentro de 'show anterior' hay escenas/archivos MECHE, ZAZAYLEAN/ZAZAYYLEAN, ALFA/ALFAPIL, SHISHH/SHISHH2, jesus/jesusalfa, MAPA — busque cada uno junto a 'Marlon Breeze' y no encontre una cancion publicada con ese titulo; podrian ser nombres de escenas/efectos visuales internos del operador, no titulos de tema. 'MAMBA' y 'DEMEROL' SI corresponden a canciones confirmadas (Veneno de Mamba, Demerol) — el patron carpeta=track que describe el operador se cumple para esos dos, no para el resto.\n\nHALLAZGO NOTABLE, NO VERIFICADO EN FUENTE PUBLICA: existe la carpeta 'MARLONLOLLA/Marlon Breeze - Las Vegas ft. Maksi/' (con un .rar del proyecto y un .rar de assets de calle/ciudad). Busque en la web una cancion de Marlon Breeze titulada 'Las Vegas' (sola o feat.) y NO encontre ningun resultado en Spotify/Apple Music/YouTube con ese nombre. 'Maksi' es el propio operador (alias de MAK), asi que esto probablemente es un feature/colaboracion visual o musical privada/inedita, no confirmable con URL publica — lo marco como unknown/no encontrado, no como cancion inventada.\n\nTambien hay carpetas no relacionadas a canciones: 'idea ropa' (disenos de poleras/merch, incluye 'letrap4.jpeg'), 'aduana' (fotos de referencia de aeropuerto/customs, probablemente inspiracion para los clips AIRPORT*.mp4 de LT26), y archivos sueltos de redes sociales/prensa (fotos .jpg/.webp de persa Bio-Bio, capturas de Instagram) que no corresponden a ninguna cancion.\n\nLa suma de bytes de los 6 registros de proyecto devueltos por la query (34.94+7.28+6.47+3.58+0.34+0.30 GB ~ 52.9 GB) coincide con el tamano de 52.9 GB mencionado por el operador para el contenedor completo."
+    },
+    "LYON": {
+      "kind": "music_artist",
+      "canonical_name": "Lyon La F",
+      "confidence": "confirmed",
+      "evidence_urls": [
+        "https://music.apple.com/cl/artist/lyon-la-f/1658402941",
+        "https://www.deezer.com/us/artist/192568087",
+        "https://open.spotify.com/intl-es/artist/55gv2ZtVnRE0Hd8LwvXTye",
+        "https://www.letras.com/lyon-la-f/",
+        "https://www.radioactiva.cl/2025/12/lyon-la-f-habla-de-su-momento-en-la-musica-y-revela-que-comando-estelar-estuvo-un-ano-guardada-teniamos-muchos-proyectos/",
+        "https://lahora.cl/entretencion/2025/12/10/lyon-la-f-marca-un-nuevo-hito-en-su-carrera-con-el-lanzamiento-de-merecedora"
+      ],
+      "why": "Artista urbano/reggaeton chileno confirmado por el propio operador como cliente activo de VJ. Se corrobora cruzando 5 nombres de carpeta del contenedor LYON contra singles reales del mismo artista con fecha 2025: MERECEDORA -> 'La Merecedora' (04-12-2025, Apple Music/Deezer/La Hora), NEBULA -> 'NEBULA' (09-10-2025, Apple Music), COMANDO -> 'Comando Estelar' (14-08-2025, Apple Music/RadioActiva), DEJA -> 'Deja Que El Mundo Se Acabe' (06-06-2025, Apple Music/Shazam), Pajsaera -> 'Pasajero' (13-11-2025, Apple Music; nombre de carpeta es un typo de 'Pasajero'). Coincidencia perfecta de 5/5 confirma que el contenedor LYON es el archivo de trabajo de VJ para este artista, organizado por track (una carpeta por cancion).",
+      "tracks": [
+        {
+          "title": "COMO TÚ",
+          "release_date": "2024-06-06",
+          "album": "COMO TÚ - Single",
+          "features": [],
+          "source_url": "https://music.apple.com/cd/album/como-t%C3%BA-single/1866184151"
+        },
+        {
+          "title": "DESEO",
+          "release_date": "2025-05-02",
+          "album": "DESEO - Single",
+          "features": [],
+          "source_url": "https://music.apple.com/us/album/deseo-single/1811869468"
+        },
+        {
+          "title": "Deja Que El Mundo Se Acabe",
+          "release_date": "2025-06-06",
+          "album": "DEJA QUE EL MUNDO SE ACABE (feat. Melodia del Hampa) - Single",
+          "features": [
+            "Lamelodiadelhampa"
+          ],
+          "source_url": "https://music.apple.com/us/album/deja-que-el-mundo-se-acabe-feat-melodia-del-hampa-single/1818699133"
+        },
+        {
+          "title": "Molly",
+          "release_date": "2025-07-18",
+          "album": "Molly - Single",
+          "features": [
+            "Andrew White"
+          ],
+          "source_url": "https://www.shazam.com/song/1827791359/molly"
+        },
+        {
+          "title": "Welcome to the Party",
+          "release_date": "2025-07-25",
+          "album": "Welcome to the Party - Single",
+          "features": [],
+          "source_url": "https://music.apple.com/us/album/welcome-to-the-party-single/1825801445"
+        },
+        {
+          "title": "Comando Estelar",
+          "release_date": "2025-08-14",
+          "album": "Comando Estelar - Single",
+          "features": [
+            "Germanini",
+            "JhonAlex",
+            "Nacho G Flow"
+          ],
+          "source_url": "https://music.apple.com/us/album/comando-estelar-single/1829769618"
+        },
+        {
+          "title": "NEBULA",
+          "release_date": "2025-10-09",
+          "album": "NEBULA - Single",
+          "features": [
+            "Nacho G Flow"
+          ],
+          "source_url": "https://music.apple.com/sn/album/nebula-single/1843745102"
+        },
+        {
+          "title": "Te Vas",
+          "release_date": "2025-10-30",
+          "album": "Te Vas - Single",
+          "features": [
+            "Tobal Mj",
+            "Nacho G Flow",
+            "Daimi"
+          ],
+          "source_url": "https://music.apple.com/us/song/te-vas/1849227672"
+        },
+        {
+          "title": "Pasajero",
+          "release_date": "2025-11-13",
+          "album": "Pasajero - Single",
+          "features": [
+            "King Savagge",
+            "Katteyes",
+            "Lewis Somes"
+          ],
+          "source_url": "https://music.apple.com/us/album/pasajero-single/1851589162"
+        },
+        {
+          "title": "La Merecedora",
+          "release_date": "2025-12-04",
+          "album": "La Merecedora - Single",
+          "features": [
+            "Nacho G Flow"
+          ],
+          "source_url": "https://music.apple.com/cd/album/la-merecedora-single/1853248112"
+        },
+        {
+          "title": "Noche Loca",
+          "release_date": "2025-12-11",
+          "album": "Noche Loca - Single",
+          "features": [],
+          "source_url": "https://www.deezer.com/us/artist/192568087"
+        },
+        {
+          "title": "Dime Que Esperas",
+          "release_date": "2025-12-18",
+          "album": "Dime Que Esperas - Single",
+          "features": [],
+          "source_url": "https://www.deezer.com/us/artist/192568087"
+        },
+        {
+          "title": "VAMOS AL PARTY",
+          "release_date": "2026-01-15",
+          "album": "VAMOS AL PARTY - Single",
+          "features": [],
+          "source_url": "https://www.deezer.com/us/artist/192568087"
+        },
+        {
+          "title": "Por Ti",
+          "release_date": "2026-01-29",
+          "album": "Por Ti - Single",
+          "features": [
+            "Flackoloyal"
+          ],
+          "source_url": "https://magazine.indajausmusic.cl/2026/01/29/lyon-la-f-presenta-por-ti-el-single-que-marca-el-inicio-de-una-nueva-etapa-musical/"
+        },
+        {
+          "title": "Marbella",
+          "release_date": "2026-02-05",
+          "album": "Marbella - Single",
+          "features": [],
+          "source_url": "https://www.deezer.com/us/artist/192568087"
+        },
+        {
+          "title": "Can Am",
+          "release_date": "2026-02-19",
+          "album": "Can Am - Single",
+          "features": [],
+          "source_url": "https://www.deezer.com/us/artist/192568087"
+        },
+        {
+          "title": "UNA SEÑAL",
+          "release_date": "2026-04-30",
+          "album": "UNA SEÑAL - Single",
+          "features": [],
+          "source_url": "https://www.deezer.com/us/artist/192568087"
+        },
+        {
+          "title": "MITI MITI",
+          "release_date": "2026-05-21",
+          "album": "MITI MITI - Single",
+          "features": [],
+          "source_url": "https://www.deezer.com/us/artist/192568087"
+        },
+        {
+          "title": "La Actual",
+          "release_date": "2026-05-28",
+          "album": "La Actual - Single",
+          "features": [],
+          "source_url": "https://www.deezer.com/us/artist/192568087"
+        },
+        {
+          "title": "Sueño Realidad",
+          "release_date": "2026-05-28",
+          "album": "Sueño Realidad - Single",
+          "features": [],
+          "source_url": "https://www.deezer.com/us/artist/192568087"
+        },
+        {
+          "title": "Ven Conmigo",
+          "release_date": "2026-06-26",
+          "album": "Ven Conmigo - Single",
+          "features": [],
+          "source_url": "https://www.deezer.com/us/artist/192568087"
+        },
+        {
+          "title": "SEXY LOBA",
+          "release_date": "2026-07-16",
+          "album": "SEXY LOBA - Single",
+          "features": [],
+          "source_url": "https://nuevaprensa.web.ve/lyon-la-f-impulsa-su-proyeccion-internacional-con-el-lanzamiento-de-sexy-loba/"
+        },
+        {
+          "title": "Espejo",
+          "release_date": "2026-08-06",
+          "album": "Espejo - Single",
+          "features": [],
+          "source_url": "https://www.deezer.com/us/artist/192568087"
+        },
+        {
+          "title": "Ausencia (EP)",
+          "release_date": "2026-08-20",
+          "album": "Ausencia - EP",
+          "features": [],
+          "source_url": "https://www.radioactiva.cl/2026/08/lyon-la-f-lanzo-su-nuevo-ep-ausencia-y-adelanta-sus-nuevas-metas-ahora-ya-nos-vamos-a-ir-a-lo-mundial"
+        }
+      ],
+      "tracks_dropped_for_missing_source": 0,
+      "notes": "DISCO (solo lectura, query real sobre archivo_index.sqlite con container_root='LYON'): carpetas de primer nivel bajo LYON = Pajsaera (84.4GB), MERECEDORA (28.5GB), COMANDO (24.6GB), DEJA (15.5GB), NEBULA (14.0GB), LOGO ENTREGA (5.9GB), golden (0.20GB), mas tres carpetas numeradas \"1\",\"2\",\"3\" que a su vez contienen: 1/CIUDAD (12.0GB), 2/CORAZON (4.0GB), 3/la ferrari (6.6GB). Tambien hay LOGO (0.34GB) y assets sueltos en la raiz de LYON.\n\n5 de 5 carpetas con nombre de cancion (Pajsaera, MERECEDORA, COMANDO, DEJA, NEBULA) coinciden exactamente con singles reales de Lyon La F de 2025, confirmando que el contenedor es el archivo VJ para este artista y que la unidad de trabajo es efectivamente el track.\n\nSobre los 4 nombres a resolver -- busque en Apple Music, Deezer, Spotify (via kworb, listado de 30 tracks), Letras.com y YouTube (canal oficial + busquedas de \"video oficial\"), y NINGUNO de los cuatro aparece como titulo de cancion de Lyon La F en ninguna fuente:\n\n- \"la ferrari\" (carpeta LYON/3/la ferrari, 6.6GB, dimensionalidad 3d): el contenido del propio indice lo delata como un ASSET, no una cancion -- son modelos y escenas 3D de un auto (\"hypercar-on-icy\", \"car-cinematic-sc\", \"uploads_files_2475145_la+ferrari\", \"lamborghini-aven...\"). Es un modelo 3D de un Ferrari usado como elemento visual (probablemente para un video/set de otra cancion o para un show), no el nombre de una pista. NO es cancion -- unknown si corresponde a algun track especifico, no encontrado.\n\n- \"CIUDAD\" (carpeta LYON/1/CIUDAD, 12.0GB, dimensionalidad 3d): sin ningun resultado de cancion \"Ciudad\" de Lyon La F en ninguna plataforma. Es probablemente un proyecto o escena visual generica (ciudad/urbano), no una pista. NO confirmado como cancion.\n\n- \"CORAZON\" (carpeta LYON/2/CORAZON, 4.0GB, dimensionalidad motion, solo 19 assets): sin cancion \"Corazon\" de Lyon La F en ninguna fuente (solo aparecen resultados de TikTok sobre \"Finges Tener Corazon\" y \"Dejame Entrar a Tu Corazon\", que no son titulos oficiales verificados ni aparecen en Apple Music/Deezer/Spotify de este artista). NO confirmado como cancion -- posible working title o proyecto visual motion, no track de catalogo.\n\n- \"golden\" (carpeta LYON/golden, 0.20GB, dimensionalidad motion, contiene una subcarpeta \"(Material de archivo)/ae-LYON copia 2 capas\" que sugiere un proyecto de After Effects archivado): sin ninguna cancion \"golden\" de Lyon La F en ningun catalogo digital ni en YouTube. NO confirmado como cancion -- parece un proyecto visual/motion archivado, tamaño pequeño consistente con material de respaldo mas que con un track completo.\n\nEn resumen: de los 4 nombres, CERO corresponden a canciones publicadas de Lyon La F segun toda fuente consultada (Apple Music, Deezer, Spotify/kworb, Letras.com, YouTube oficial, prensa chilena). Se recomienda no tratarlos como tracks musicales en el archivo; probablemente son proyectos visuales/de marca (posiblemente para otro cliente, para contenido generico de VJ, o carpetas de trabajo con nombres provisionales) bajo el mismo contenedor de cliente. \"LOGO\" y \"LOGO ENTREGA\" tampoco son canciones -- por nombre y contenido (dimensionalidad mixta con escenas tipo \"mini-stage\", \"convention-theat...\") son material de branding/identidad visual del artista, no tracks.\n\nDiscografia completa: se listaron 24 lanzamientos con fecha verificada desde Apple Music (fuente primaria para fechas exactas) y complementados con Deezer para el tramo 2026 mas reciente (paginas de discografia con fechas en formato DD-MM-AAAA convertidas a ISO). Cobertura 2024-06 a 2026-08. Pueden existir features adicionales de terceros (ej. \"Demenor\", \"Candy\", \"Tranquila\", featuring Lyon La F en canciones de otros artistas) que NO se incluyeron en \"tracks\" por no ser lanzamientos propios/principales del artista."
+    },
+    "DREFGIRA": {
+      "kind": "music_artist",
+      "canonical_name": "DrefQuila",
+      "confidence": "confirmed",
+      "evidence_urls": [
+        "https://es.wikipedia.org/wiki/DrefQuila",
+        "https://music.apple.com/us/artist/drefquila/1424620452",
+        "https://www.deezer.com/mx/album/831478711",
+        "https://www.musicapopular.cl/artista/drefquila/",
+        "https://www.youtube.com/watch?v=qHq9GSkcgqo",
+        "https://www.letras.com/drefquila/discografia/despues-del-sol-2025/",
+        "https://los40.cl/2025/09/02/drefquila-revela-nueva-fecha-de-su-show-en-movistar-arena-2025-cuando-es-el-concierto/",
+        "https://rdn.cl/2025/05/20/drefquila-reprograma-su-show-del-movistar-arena-de-junio-a-noviembre/"
+      ],
+      "why": "DrefQuila (Andres Salazar), rapero/cantante urbano chileno. Su sexto album 'Despues del Sol' (BAH Music) salio el 2025-10-02 (Deezer), con 'La Ciudad del Reggaeton' como corte de avance ya verificado por el operador como track 01 (CDR). El show de gira en Movistar Arena, originalmente en junio 2025, fue reprogramado a noviembre de 2025 (LOS40, rdn.cl) -- esto calza exactamente con la pista del operador de que 'la GIRA fue noviembre 2025'. Por lo tanto DREFGIRA = material de VJ/pantallas de MAK para la gira 'Despues del Sol' de DrefQuila, noviembre 2025.",
+      "tracks": [
+        {
+          "title": "Ultimo Dia",
+          "release_date": "2024",
+          "album": "Los Sentimientos de un Robot (track 01)",
+          "features": [],
+          "source_url": "https://www.musicapopular.cl/artista/drefquila/"
+        },
+        {
+          "title": "2000's",
+          "release_date": "2024",
+          "album": "Los Sentimientos de un Robot (track 02)",
+          "features": [
+            "YSY A",
+            "Ovyze"
+          ],
+          "source_url": "https://www.musicapopular.cl/artista/drefquila/"
+        },
+        {
+          "title": "Un Call",
+          "release_date": "2024",
+          "album": "Los Sentimientos de un Robot (track 03)",
+          "features": [
+            "Red Fingers",
+            "FUKA"
+          ],
+          "source_url": "https://www.musicapopular.cl/artista/drefquila/"
+        },
+        {
+          "title": "Lo Deberias Pensar",
+          "release_date": "2024",
+          "album": "Los Sentimientos de un Robot (track 04)",
+          "features": [
+            "Jonas Sanche"
+          ],
+          "source_url": "https://www.musicapopular.cl/artista/drefquila/"
+        },
+        {
+          "title": "La Receta",
+          "release_date": "2024",
+          "album": "Los Sentimientos de un Robot (track 05)",
+          "features": [
+            "Kidd Voodoo",
+            "Easykid",
+            "Ovyze"
+          ],
+          "source_url": "https://www.musicapopular.cl/artista/drefquila/"
+        },
+        {
+          "title": "Bossa Lova",
+          "release_date": "2024",
+          "album": "Los Sentimientos de un Robot (track 06)",
+          "features": [
+            "Joe Vasconcellos",
+            "Ovyze",
+            "Andy Lamur"
+          ],
+          "source_url": "https://www.musicapopular.cl/artista/drefquila/"
+        },
+        {
+          "title": "2+1",
+          "release_date": "2024",
+          "album": "Los Sentimientos de un Robot (track 07)",
+          "features": [
+            "Young High"
+          ],
+          "source_url": "https://www.musicapopular.cl/artista/drefquila/"
+        },
+        {
+          "title": "Pego Fuerte",
+          "release_date": "2024-05-16",
+          "album": "Los Sentimientos de un Robot (track 08)",
+          "features": [
+            "Harry Nach",
+            "Young High"
+          ],
+          "source_url": "https://www.youtube.com/watch?v=qHq9GSkcgqo"
+        },
+        {
+          "title": "Las Flores Que Te Gustan",
+          "release_date": "2024",
+          "album": "Los Sentimientos de un Robot (track 09)",
+          "features": [
+            "Gloria Simonetti",
+            "Fran C"
+          ],
+          "source_url": "https://www.musicapopular.cl/artista/drefquila/"
+        },
+        {
+          "title": "Despertador",
+          "release_date": "2024",
+          "album": "Los Sentimientos de un Robot (track 10)",
+          "features": [
+            "Fran C"
+          ],
+          "source_url": "https://www.musicapopular.cl/artista/drefquila/"
+        },
+        {
+          "title": "Botero Freestyle",
+          "release_date": "2024",
+          "album": "Los Sentimientos de un Robot (track 11)",
+          "features": [
+            "Ovyze"
+          ],
+          "source_url": "https://www.musicapopular.cl/artista/drefquila/"
+        },
+        {
+          "title": "Llama A Tu Amiga",
+          "release_date": "2024",
+          "album": "Los Sentimientos de un Robot (track 12)",
+          "features": [
+            "ITHAN NY",
+            "Ovyze"
+          ],
+          "source_url": "https://www.musicapopular.cl/artista/drefquila/"
+        },
+        {
+          "title": "Pinky",
+          "release_date": "2024",
+          "album": "Los Sentimientos de un Robot (track 13)",
+          "features": [
+            "Cobuz & Bustta"
+          ],
+          "source_url": "https://www.musicapopular.cl/artista/drefquila/"
+        },
+        {
+          "title": "Escarlata (Remix)",
+          "release_date": "2024-11-11",
+          "album": "Celestial (single de eleven1.1, con DrefQuila como feature)",
+          "features": [
+            "eleven1.1",
+            "Kidd Voodoo",
+            "Harry Nach",
+            "SOULFIA"
+          ],
+          "source_url": "https://music.apple.com/us/song/escarlata-remix/1776672488"
+        },
+        {
+          "title": "CHAMPAGNE",
+          "release_date": "2025",
+          "album": "CHAMPAGNE - Single",
+          "features": [
+            "Plox"
+          ],
+          "source_url": "https://open.spotify.com/track/5v8FIJrD4bGNpj96B4sCsA"
+        },
+        {
+          "title": "Misionar",
+          "release_date": "2025-02-06",
+          "album": "Despues del Sol (track 11, single previo)",
+          "features": [
+            "Pablo Chill-E",
+            "Kidd Voodoo",
+            "Lidanza"
+          ],
+          "source_url": "https://music.apple.com/us/album/misionar-single/1790900963"
+        },
+        {
+          "title": "3000's",
+          "release_date": "2025-06",
+          "album": "Despues del Sol (track 09, adelanto/single previo)",
+          "features": [],
+          "source_url": "https://los40.cl/2025/06/28/drefquila-viaja-al-futuro-con-los-3000s-su-nuevo-single/"
+        },
+        {
+          "title": "La Ciudad del Reggaeton",
+          "release_date": "2025-07-24",
+          "album": "Despues del Sol (track 01, adelanto/single previo)",
+          "features": [
+            "SuperSerius"
+          ],
+          "source_url": "https://music.apple.com/us/song/la-ciudad-del-reggaet%C3%B3n/1842206367"
+        },
+        {
+          "title": "Bound 4",
+          "release_date": "2025-10-02",
+          "album": "Despues del Sol (track 02)",
+          "features": [],
+          "source_url": "https://www.deezer.com/mx/album/831478711"
+        },
+        {
+          "title": "Converse con el cielo",
+          "release_date": "2025-10-02",
+          "album": "Despues del Sol (track 04)",
+          "features": [],
+          "source_url": "https://www.deezer.com/mx/album/831478711"
+        },
+        {
+          "title": "L.T.B",
+          "release_date": "2025-10-02",
+          "album": "Despues del Sol (track 06)",
+          "features": [],
+          "source_url": "https://www.deezer.com/mx/album/831478711"
+        },
+        {
+          "title": "Lokoyo",
+          "release_date": "2025-10-02",
+          "album": "Despues del Sol (track 07)",
+          "features": [
+            "Bryartz"
+          ],
+          "source_url": "https://www.letras.com/drefquila/discografia/despues-del-sol-2025/"
+        },
+        {
+          "title": "Madrid 7AM",
+          "release_date": "2025-10-02",
+          "album": "Despues del Sol (track 08)",
+          "features": [
+            "La Pantera"
+          ],
+          "source_url": "https://www.letras.com/drefquila/discografia/despues-del-sol-2025/"
+        },
+        {
+          "title": "Otra Vez",
+          "release_date": "2025-10-02",
+          "album": "Despues del Sol (track 10)",
+          "features": [],
+          "source_url": "https://www.deezer.com/mx/album/831478711"
+        },
+        {
+          "title": "Primer Dia",
+          "release_date": "2025-10-02",
+          "album": "Despues del Sol (track 12)",
+          "features": [],
+          "source_url": "https://www.deezer.com/mx/album/831478711"
+        },
+        {
+          "title": "Quedate",
+          "release_date": "2025-10-02",
+          "album": "Despues del Sol (track 03)",
+          "features": [],
+          "source_url": "https://www.deezer.com/mx/album/831478711"
+        },
+        {
+          "title": "Radiosex",
+          "release_date": "2025-10-02",
+          "album": "Despues del Sol (track 05)",
+          "features": [],
+          "source_url": "https://www.deezer.com/mx/album/831478711"
+        },
+        {
+          "title": "HARAKIRI",
+          "release_date": "2025-12-25",
+          "album": "HARAKIRI - Single",
+          "features": [
+            "Plox"
+          ],
+          "source_url": "https://music.apple.com/us/song/harakiri/1862513782"
+        },
+        {
+          "title": "No Kiero Ser 2",
+          "release_date": "2026",
+          "album": "Diablo Santo 2",
+          "features": [
+            "FaceBrooklyn"
+          ],
+          "source_url": "https://www.youtube.com/watch?v=tGBq8BTXH5E"
+        },
+        {
+          "title": "Sensacion de Calor",
+          "release_date": "2026",
+          "album": "Diablo Santo 2",
+          "features": [],
+          "source_url": "https://www.youtube.com/watch?v=toSIEMCrbTo"
+        }
+      ],
+      "tracks_dropped_for_missing_source": 0,
+      "notes": "MEDIDO (SSD, solo lectura) via:\n/home/mak/flujo/.venv/bin/python -c \"... select project_path, asset_count, bytes, dimensionality from projects where container_root='DREFGIRA' ...\"\nResultado (8 filas bajo DREFGIRA, 80.52 GB total en la raiz del contenedor):\n- DREFGIRA (raiz): 364 assets, 80.52 GB, dimensionality='mixto'\n- DREFGIRA/OPCIONES: 44 assets, 13.63 GB, 'motion'\n- DREFGIRA/BLOQUE 02 CLASICOS/NUEVAS: 32 assets, 7.24 GB, 'mixto'\n- DREFGIRA/misionar: 21 assets, 0.86 GB, 'motion'\n- DREFGIRA/assets/scenes/hand-of-god_...: 1 asset, 0.35 GB, '3d'\n- DREFGIRA/assets/scenes/ocean-waves-anim_...: 1 asset, 3.6 MB, '3d'\n- DREFGIRA/IMPORT CLAUDIO: 3 assets, ~1 MB, 'unknown'\n- DREFGIRA/assets/models/simple-waves-oce_...: 1 asset, ~0.5 MB, '3d'\n\nDe estos nombres de carpeta, SOLO \"misionar\" corresponde a una cancion real y verificada con URL: \"Misionar\" (feat. Pablo Chill-E, Kidd Voodoo [y Lidanza en el credito del single]), single del 2025-02-06 que luego paso a ser el track 11 de \"Despues del Sol\". Esto es la unica coincidencia directa carpeta<->track encontrada.\n\nLos demas nombres de carpeta NO corresponden a canciones de DrefQuila -- no los inflo como tracks:\n- \"OPCIONES\" = carpeta de variantes/opciones de trabajo del VJ, no un titulo de cancion.\n- \"BLOQUE 02 CLASICOS/NUEVAS\" = organizacion interna de set (posible bloque de \"clasicos\" del show + material \"nuevo\"), no es nombre de tema.\n- \"IMPORT CLAUDIO\" = probablemente una importacion de material de una persona llamada Claudio (colaborador/tecnico), no un track.\n- \"assets/scenes/hand-of-god\", \"assets/scenes/ocean-waves-anim\", \"assets/models/simple-waves-oce...\" = libreria de assets 3D genericos (escenas/modelos reutilizables tipo \"mano de dios\", \"olas de oceano\"), tampoco son canciones.\n\nIDENTIDAD Y GIRA: \"Despues del Sol\" es el 6to album de DrefQuila (BAH Music), lanzado 2025-10-02 (Deezer). El track 1 \"La Ciudad del Reggaeton\" ya habia sido confirmado por el operador como CDR, y aqui se verifica con URL (Apple Music, LOS40/La Cuarta) que fue el single de avance del 2025-07-24. El show de gira en Movistar Arena fue reprogramado de junio a noviembre de 2025 (LOS40, rdn.cl) -- coincide con la pista del operador de \"GIRA noviembre 2025\", asi que DREFGIRA = \"gira\" (tour) de este album, no el album en si.\n\nTRACKLIST COMPLETO 2025 (12 tracks, con fecha de single previo cuando existe, si no fecha de album 2025-10-02): La Ciudad del Reggaeton, Bound 4, Quedate, Converse con el cielo, Radiosex, L.T.B, Lokoyo (feat. Bryartz), Madrid 7AM (feat. La Pantera), 3000's, Otra Vez, Misionar (feat. Pablo Chill-E y Kidd Voodoo), Primer Dia -- fuente: letras.com + Deezer (URLs en tracks[]).\n\nSINGLES/COLABORACIONES 2024-2026 verificados con URL: Escarlata (Remix) [feat. eleven1.1 (lead), Kidd Voodoo, Harry Nach, SOULFIA] 2024-11-11 (Apple Music); HARAKIRI (feat. Plox) 2025-12-25 (Apple Music); CHAMPAGNE (feat. Plox) 2025, fecha exacta no confirmada (Spotify); dos cortes del album 2026 \"Diablo Santo 2\" -- \"No Kiero Ser 2\" (feat. FaceBrooklyn) y \"Sensacion de Calor\" -- verificados via visualizers oficiales en YouTube, sin fecha exacta de dia (album Apple Music indica ~agosto 2026 segun listado del artista, no confirmado con fecha exacta puntual).\n\nNO VERIFICADO / DESCARTADO por falta de URL confiable (mencionado en snippets de busqueda pero sin fuente directa que lo sostenga, asi que NO va en tracks[]): \"DARLE EL ALMA\" (feat. Juseph), y singles 2026 \"SI SON DOS\", \"Yoseke\", \"TANTAS MUJERES\", \"MATA LA LIGA\" -- aparecieron solo en un resumen de albumoftheyear.org al que no pude acceder (HTTP 403) y en una pagina agregadora (miklacmusic) sin fecha puntual verificable con URL de plataforma oficial. Tambien se menciono \"Los Sentimientos De un Robot\" (album 2024) y \"Los 4F: El Origen\" (2024, colaborativo con Young Cister, Kidd Voodoo, Easykid) via miklacmusic.cl, pero sin fecha exacta de dia, por eso no entraron en tracks[] (serian pre-gira de todos modos, no pertenecen al ciclo de \"Despues del Sol\").\n\n\"unknown\": no se determino la fecha exacta de dia para CHAMPAGNE, ni para el album \"Diablo Santo 2\" completo (solo referencias relativas/aproximadas encontradas)."
+    },
+    "HARRY": {
+      "kind": "music_artist",
+      "canonical_name": "Harry Nach (Harold Ignacio González Morales)",
+      "confidence": "confirmed",
+      "evidence_urls": [
+        "https://historia-biografia.com/harry-nach/",
+        "https://www.letras.com/harry-nach/discografia/",
+        "https://www.latercera.com/culto/2020/06/25/harry-nach-el-chileno-que-aventaja-a-mon-laferte-y-pablo-chill-e-en-spotify-me-siento-casi-un-elegido/",
+        "https://fleek.25gramos.com/frio-lleva-a-harry-nach-a-una-etapa-nueva/",
+        "https://rdn.cl/2025/10/13/harry-nach-vuelve-al-trap-con-gta-sixxx-y-prepara-su-primer-show-en-solitario-en-el-teatro-coliseo/"
+      ],
+      "why": "Cantante/trapero chileno (La Pintana, n. 8-jun-2000), confirmado por multiples fuentes de prensa y discografia. El contenedor HARRY (segundo mas grande del disco, 4946 assets segun el operador) corresponde a su material visual de VJ: la carpeta HARRY/TITI (30 assets, motion, 7.3GB) coincide con el single real 'TITI' (Diablo, Lil Xan, Harry Nach, 2020) y HARRY/gta (21 assets, motion, 1.38GB) coincide con el single real 'GTA SIXXX' (2025). Ademas, la nota La Tercera/Fleek confirma que los VISUALIZERS del album 'FRIO' (2022) fueron grabados en las montanas de Chillan, con tematica de nieve -- lo que explica tanto el contenedor separado 'HARRY CHILLAN' (10.5GB) como la carpeta HARRY/show/SNOW/source/SNOWY_ROAD_HAIRPIN (1883 assets, 3d) dentro de este mismo contenedor HARRY. Esto matiza la hipotesis del operador: no hay evidencia de que 'harry.xml' y 'CHILLAN.xml' sean el mismo SHOW EN VIVO 'Harry Nach en Chillan' -- la busqueda web no encontro ningun concierto de Harry Nach en la ciudad de Chillan. Lo que si esta confirmado es que Chillan es la locacion donde se filmaron los visuals/visualizers del disco FRIO, tematica que coincide con los assets de nieve del proyecto. No pude verificar independientemente el nombre de show que el operador asocia a los .xml de Resolume.",
+      "tracks": [
+        {
+          "title": "Modo Avión",
+          "release_date": "2017-03",
+          "album": "single",
+          "features": [],
+          "source_url": "https://historia-biografia.com/harry-nach/"
+        },
+        {
+          "title": "El Dizzy Boy (incl. Contrabando, Aqui Te Espero)",
+          "release_date": "2018",
+          "album": "El Dizzy Boy (mixtape)",
+          "features": [],
+          "source_url": "https://www.letras.com/harry-nach/discografia/"
+        },
+        {
+          "title": "Onward",
+          "release_date": "2019",
+          "album": "Onward (EP)",
+          "features": [],
+          "source_url": "https://www.letras.com/harry-nach/discografia/"
+        },
+        {
+          "title": "TITI",
+          "release_date": "2020",
+          "album": "single",
+          "features": [
+            "Diablo",
+            "Lil Xan"
+          ],
+          "source_url": "https://open.spotify.com/track/2P5BCkpKnpjXwoudEe7y5d"
+        },
+        {
+          "title": "Moods",
+          "release_date": "2020-07-25",
+          "album": "Moods (album)",
+          "features": [],
+          "source_url": "https://cooperativa.cl/noticias/magazine/musica/musica-chilena/harry-nach-lanzo-moods-su-primer-album-de-estudio/2020-07-23/212840.html"
+        },
+        {
+          "title": "AWITA (incl. Airdrop)",
+          "release_date": "2021",
+          "album": "AWITA (EP)",
+          "features": [
+            "Duki"
+          ],
+          "source_url": "https://www.letras.com/harry-nach/discografia/"
+        },
+        {
+          "title": "FRÍO",
+          "release_date": "2022-08-04",
+          "album": "FRÍO (album)",
+          "features": [],
+          "source_url": "https://music.apple.com/mx/album/fr%C3%ADo/1635668944"
+        },
+        {
+          "title": "Flints",
+          "release_date": "2024-03-21",
+          "album": "Flints (album)",
+          "features": [
+            "Soto Asa",
+            "Julianno Sosa"
+          ],
+          "source_url": "https://los40.cl/2024/flints-el-nuevo-album-de-harry-nach-sale-a-la-luz-179704.html"
+        },
+        {
+          "title": "Harryto's",
+          "release_date": "2025-02-12",
+          "album": "Harryto's (album)",
+          "features": [
+            "Standly",
+            "Kidd Voodoo",
+            "Swift 047"
+          ],
+          "source_url": "https://www.letras.com/harry-nach/discografia/harrytos-2025/"
+        },
+        {
+          "title": "GTA SIXXX",
+          "release_date": "2025-10",
+          "album": "single",
+          "features": [
+            "Asap Kid"
+          ],
+          "source_url": "https://open.spotify.com/intl-id/track/0Bh2oOmFHl4YTUYMhxUSf2"
+        }
+      ],
+      "tracks_dropped_for_missing_source": 0,
+      "notes": "MEDICION (disco, solo lectura) -- query ejecutada:\n/home/mak/flujo/.venv/bin/python -c \"... select project_path, asset_count, bytes, dimensionality from projects where container_root='HARRY' order by bytes desc limit 60\"\nResultado (top carpetas bajo HARRY):\n- HARRY/show/Harry Nach Visuales -> 115 assets, 33.98GB, motion\n- HARRY/show -> 1012 assets, 21.42GB, mixto\n- HARRY (raiz) -> 1130 assets, 18.81GB, mixto\n- HARRY/show/SNOW/source/SNOWY_ROAD_HAIRPIN -> 1883 assets, 11.80GB, 3d\n- HARRY/TITI -> 30 assets, 7.34GB, motion\n- HARRY/show/3d/viña -> 603 assets, 4.58GB, 3d\n- HARRY/show/3d -> 100 assets, 2.26GB, mixto\n- HARRY/gta -> 21 assets, 1.38GB, motion\n- HARRY/show/1 -> 11 assets, 1.04GB, motion\n- HARRY/show/VIÑA -> 11 assets, 0.60GB, motion\n- HARRY/PROYECTO EMPAQUETADO -> 17 assets, 66MB, mixto\n- HARRY/show/SNOW -> 2 assets, 60MB, 3d\n- HARRY/ACTIVACIONABRRILL -> 2 assets, motion (incluye LOLLAMARLO2026.aep_AME)\n(resto son sub-assets 3d individuales de librerias genericas: playing-card, wood, brown-polished, rainbow-blend, rotating-card -- material stock, no relacionados a canciones)\n\nRESOLUCION de nombres de carpeta (lo que SI y NO corresponde a canciones, con evidencia web):\n- HARRY/TITI -> SI corresponde a una cancion real: \"TITI\" (Diablo, Lil Xan, Harry Nach, 2020). Confirmado.\n- HARRY/gta -> SI corresponde a una cancion real: \"GTA SIXXX\" (single 2025, sello Only Perk, regreso al trap). Confirmado.\n- HARRY/show/SNOW y HARRY/show/SNOW/source/SNOWY_ROAD_HAIRPIN -> NO es una cancion llamada \"Snow\". Es contenido 3D de un \"camino nevado / hairpin\" (curva de montaña nevada). La evidencia web (Fleek Mag) indica que los VISUALIZERS de todo el album FRIO (2022) se filmaron en las montañas de Chillan y el proyecto cierra \"con una pelicula ambientada en la nieve\" -- esto explica el asset 3D nevado dentro de show/SNOW y probablemente conecta con el contenedor separado \"HARRY CHILLAN\" (10.5GB). NO se debe registrar como track \"Snow\".\n- HARRY/show/3d/viña y HARRY/show/VIÑA -> NO es una cancion. \"Viña\" se identifica con el Festival de Viña del Mar (evento/venue chileno, edicion 2026 confirmada en fechas 22-27 feb 2026 en Quinta Vergara), no con un titulo de tema de Harry Nach. Se encontro un reel de Instagram de \"Harry Nach habla del festival\" pero no se pudo confirmar fecha/edicion exacta de su participacion -- queda como \"unknown\" si realmente toco en Viña o solo comento sobre el festival.\n- HARRY/show, HARRY/show/Harry Nach Visuales, HARRY/show/1, HARRY/PROYECTO EMPAQUETADO, HARRY/ACTIVACIONABRRILL, HARRY/ACTIVACIONABRRILL/LOLLAMARLO2026.aep_AME -> son carpetas de PRODUCCION/proyecto de VJ (visuales generales del show, activaciones de marca tipo \"Lollapalooza 2026\"?, empaquetado de proyecto), NO nombres de canciones. No se inventaron como tracks.\n- Los sub-assets 3d individuales (playing-card, wood, rainbow-blend, brown-polished, rotating-card, desert-storm) son ASSETS DE STOCK/libreria 3D generica, sin relacion aparente con titulos de canciones de Harry Nach.\n\nSOBRE \"HARRY CHILLAN\" (10.5GB) y harry.xml/CHILLAN.xml: no se verifico independientemente en la web que exista un concierto en vivo llamado \"Harry Nach en Chillan\". Lo unico confirmado por prensa es que los VISUALIZERS del disco FRIO se grabaron en las montañas de Chillan (tema nieve). Es plausible -pero no confirmado- que \"HARRY CHILLAN\" sea el paquete de visuales de ese rodaje/disco usado luego como material de VJ en shows en vivo, y que harry.xml/CHILLAN.xml sean el mismo ScreenSetup de Resolume reutilizando ese material -- pero esto es INFERENCIA del operador, no un hecho verificado por fuente externa. Declarado explicitamente como no confirmado.\n\nDiscografia general de Harry Nach (para contexto, con fecha y URL): Modo Avion (single, mar-2017), El Dizzy Boy (mixtape, 2018, incl. Contrabando/Aqui Te Espero), Onward (EP, 2019), Taki Taki Tak (single viral 2019, sin URL con fecha exacta verificada -> no incluido en tracks), TITI (single, 2020), Moods (album, 25-jul-2020), AWITA (EP, 2021, incl. Airdrop feat. Duki), Titirititi (single, 2021, sin fecha exacta verificada con URL -> no incluido en tracks), FRIO (album, 4-ago-2022), Flints (album, 21-mar-2024), Harryto's (album, 12-feb-2025), GTA SIXXX (single, oct-2025, dia exacto no confirmado -> se registro como \"2025-10\")."
+    },
+    "SCD": {
+      "kind": "venue",
+      "canonical_name": "Salas SCD — red de salas de conciertos de la Sociedad Chilena del Derecho de Autor (evidencia apunta a Sala SCD Plaza Egaña y/o Sala SCD Bellavista, no a un artista musical)",
+      "confidence": "probable",
+      "evidence_urls": [
+        "https://salasscd.cl/sitio/sala-egana/",
+        "https://salasscd.cl/sitio/sala-bellavista/",
+        "https://scd.cl/sitio/salas-scd/",
+        "https://www.rockaxis.com/chile/noticia/45339/sala-scd-plaza-egana-iniciara-el-2025-con-puro-rock/",
+        "https://www.chillanonline.cl/V7/2024/12/23/sala-scd-egana-inaugura-el-2025-con-dos-emocionantes-ciclos-de-musica-y-cultura/",
+        "https://www.portaldisc.com/cartelera/scd-egana"
+      ],
+      "why": "SCD en Chile es la Sociedad Chilena del Derecho de Autor, que opera una red de venues llamados 'Salas SCD' (Plaza Egaña, Bellavista, entre otras) usados para conciertos de artistas nacionales. El repo del operador ya tiene data/venues/scd-plaza-egana.json y un tools/venue_geometria_scd.py, y el propio expediente interno del operador (scd-fondart.json, generado por otra herramienta automatica, NO por mi) enlaza el proyecto 'SCD' del SSD con exactamente esos dos archivos (venue_geometria_scd.py y scd-plaza-egana.json) mas con flujo/projects/plano/plano_stands.py y referencia_plano_teatro.py -- es decir, tooling de planos/geometria de teatro, no de discografia. El contenido real de la carpeta (ver 'notes') es un proyecto de render 3D de escenografia/arquitectura (truss, sillas de teatro, microfono, muros, edificios) con un subfolder 'FINAL BELLA' cuyos renders (MURALLA.png, STAGE212-214.png) encajan con 'Sala Bellavista', otra sala de la red Salas SCD -- no con una cancion ni un artista llamado 'Bella'. No encontre en la web ningun artista musical, banda o disco cuyo nombre sea 'SCD'.",
+      "tracks": [],
+      "tracks_dropped_for_missing_source": 0,
+      "notes": "MEDIDO (SQL contra /home/mak/labs/portable-ssd-index-20260813/archivo_index.sqlite, comando ejecutado y mostrado arriba): el project_path raiz 'SCD' tiene 334 assets / 11,462,824,690 bytes (~10.68 GiB / 11.46 GB), dimensionality 'mixto'. OJO: esto es ~11.46GB medidos por el indice, no los 15.1GB mencionados en el enunciado -- posible diferencia por archivos del contenedor que el indexador no asocio a un 'project' (p.ej. sueltos fuera de subcarpetas indexadas), o por unidades (GB vs GiB). No pude conciliar esa diferencia con los datos disponibles; lo dejo como 'unknown'.\n\nEstructura real bajo SCD (159 project rows), NO es una estructura de track-por-cancion:\n1) SCD/assets/models/* y SCD/assets/materials/* (grueso del peso: ~10GB): decenas de carpetas con nombre_UUID (patron tipico de descargas de librerias de assets 3D tipo BlenderKit/Poly), con nombres genericos de props de escenografia y arquitectura: 'truss-x40-400', 'thomas-truss-300' (trusses de iluminacion de concierto), 'theater-chair', 'shure-55sh-micro' (microfono Shure 55SH), 'latino-tower', 'high-rise-building', 'skyscraper-building', 'old-brick-02', 'office-ceiling', 'electric-pole', 'scan-street-road' (fotogrametria de calle), 'fashion-mannequin', '2/3/4-jackets-on-a-hanger', vidrios/materiales varios (glass, diamond, fabric, concrete...), y 'the-bbeatles' (un asset 3D decorativo, NO una cancion ni referencia a The Beatles como discografia). Estos son bloques de construccion de una escena 3D (probablemente una maqueta/render de teatro o sala de conciertos), no canciones.\n2) SCD/FINAL BELLA (20 assets, ~915MB) y SCD/FINAL BELLA/2 (4 assets, ~80MB): archivos de render final -- MURALLA.png, MURALLA2.png (muro/mural), RENDER0011/0012/00122/00131 (png/tif), STAGE212/213/214.png, estesi*.png/psd, Sin-titulo-1.psd, Untitled*.png. 'BELLA' aqui coincide con 'Sala Bellavista' (otra sala de la red Salas SCD, ver salasscd.cl/sitio/sala-bellavista/) mas que con un nombre de cancion o artista -- no encontre ninguna fuente que confirme una cancion llamada 'Bella' asociada a este proyecto, asi que NO la reporto como track.\n\nNo hay ninguna carpeta con nombre de cancion, ni con nombre de artista claramente identificable como cliente musical dentro de SCD. Por eso 'tracks' queda vacio: no hay ninguna cancion respaldada por una fuente con URL. Si el operador confirma que 'FINAL BELLA' corresponde a un show real en Sala SCD Bellavista, valdria la pena revisar cartelera historica de esa sala (salasscd.cl/sitio/calendario/, songkick.com/venues/789791-sala-scd-bellavista, concertarchives.org/venues/sala-scd-bellavista) para identificar el artista y fecha exactos -- no lo hice porque implicaria adivinar cual show sin dato adicional (fecha, factura, contrato) que lo ancle.\n\nArchivo de expediente interno usado como pista (NO es fuente web, es un artefacto generado por otra herramienta automatica del propio operador, lo cito solo como evidencia de enlaces internos, no como verdad de identidad): /home/mak/research/intake/portable-ssd-20260813-scd-r4/applications/scd-fondart.json y scd-fondart.html -- confirman relacion con /home/mak/flujo/tools/venue_geometria_scd.py, /home/mak/flujo/data/venues/scd-plaza-egana.json, /home/mak/flujo/projects/plano/plano_stands.py y referencia_plano_teatro.py."
+    }
+  }
+}

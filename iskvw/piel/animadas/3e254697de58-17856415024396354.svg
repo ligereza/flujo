@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" data-name="3e254697de58-17856415024396354">
+<style>
+.c0{animation:k_temblar 12s steps(1) infinite}
+@keyframes k_temblar{0%,88%{transform:translate(0,0)}91%{transform:translate(-2px,1px)}
+94%{transform:translate(2px,-1px)}97%{transform:translate(-1px,0)}}
+</style>
+<rect width="120" height="120" fill="#0d0d18"/>
+<g id="capa-0-protagonista" transform="translate(60,58)" data-rol="protagonista" data-gesto="temblar" data-ritmo="12s" data-figura="documento"><title>protagonista - documento</title><g class="c0"><g transform="scale(22)"><rect x="-.72" y="-.95" width="1.44" height="1.9" fill="#22222e" stroke="#f2f2f5" stroke-width=".08"/><rect x="-.52" y="-0.520" width="1.020" height=".09" fill="#f2f2f5" opacity=".55"/><rect x="-.52" y="-0.220" width="0.740" height=".09" fill="#f2f2f5" opacity=".55"/><rect x="-.52" y="0.080" width="1.020" height=".09" fill="#f2f2f5" opacity=".55"/><rect x="-.52" y="0.380" width="0.740" height=".09" fill="#f2f2f5" opacity=".55"/><rect x="-.52" y="0.680" width="1.020" height=".09" fill="#f2f2f5" opacity=".55"/></g></g></g>
+<g id="capa-1-lado_der" transform="translate(93,58)" data-rol="lado_der" data-gesto="quieto" data-ritmo="4s" data-figura="estrella"><title>lado_der - estrella</title><g class="c1"><g transform="scale(19)"><path d="M0,-1 L.26,-.26 L1,0 L.26,.26 L0,1 L-.26,.26 L-1,0 L-.26,-.26 Z" fill="#f2f2f5"/></g></g></g>
+</svg>

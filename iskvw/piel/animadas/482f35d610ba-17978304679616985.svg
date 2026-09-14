@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" data-name="482f35d610ba-17978304679616985">
+<style>
+.c0{animation:k_latir 12s ease-in-out infinite}
+@keyframes k_latir{0%,100%{transform:scale(1)}50%{transform:scale(1.09)}}
+</style>
+<rect width="120" height="120" fill="#0d0d18"/>
+<g id="capa-0-protagonista" transform="translate(60,56)" data-rol="protagonista" data-gesto="latir" data-ritmo="12s" data-figura="grieta"><title>protagonista - grieta</title><g class="c0"><g transform="scale(30)"><path d="M-.06,-1 L.10,-.62 L-.12,-.28 L.09,.06 L-.10,.42 L.08,.72 L-.04,1" fill="none" stroke="#ff3b30" stroke-width=".14" stroke-linejoin="round" stroke-linecap="round"/></g></g></g>
+<g id="capa-1-satelite_4" transform="translate(96,86)" data-rol="satelite_4" data-gesto="quieto" data-ritmo="4s" data-figura="anillo"><title>satelite_4 - anillo</title><g class="c1"><g transform="scale(13)"><circle r=".82" fill="none" stroke="#f2f2f5" stroke-width=".16"/></g></g></g>
+</svg>

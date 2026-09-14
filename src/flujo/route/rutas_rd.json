@@ -1,0 +1,62 @@
+{
+  "_meta": {
+    "descripcion": "Indice de rutas REALES de C:\\rd. El router resuelve 'donde esta / donde va' SIN MOVER NADA. Division por contenido: EVENTOS / SUPLEMENTOS. AUTOMATIZACION es la cuna (donde todo se produce).",
+    "version": "1.0",
+    "fecha": "2026-06-28",
+    "base": "C:\\rd",
+    "no_mover": true
+  },
+
+  "cuna": {
+    "carpeta": "AUTOMATIZACION",
+    "ruta": "C:\\rd\\AUTOMATIZACION",
+    "descripcion": "Origen del repo. Aqui se produce/trabaja antes de entregar.",
+    "archivos_pipeline": {
+      "input_ig": "C:\\rd\\AUTOMATIZACION\\input_ig.jpg",
+      "palette_ig_png": "C:\\rd\\AUTOMATIZACION\\palette_ig.png",
+      "palette_ig_json": "C:\\rd\\AUTOMATIZACION\\palette_ig.json",
+      "droplet_flyer": "C:\\rd\\AUTOMATIZACION\\Droplet_Flyer.exe",
+      "historia_psd": "C:\\rd\\AUTOMATIZACION\\historia.psd",
+      "cartelera_blend": "C:\\rd\\AUTOMATIZACION\\cartelera.blend",
+      "preview_cartelera": "C:\\rd\\AUTOMATIZACION\\preview_cartelera.png",
+      "entrega": "C:\\rd\\AUTOMATIZACION\\ENTREGA",
+      "post": "C:\\rd\\AUTOMATIZACION\\POST"
+    }
+  },
+
+  "areas": {
+    "EVENTOS": {
+      "descripcion": "Para fiestas/eventos.",
+      "piezas": {
+        "flyer":    {"buscar_en": ["C:\\rd\\FEBRERO", "C:\\rd\\CREAMFIELDS", "C:\\rd\\FLYER", "C:\\rd\\flyernuevo", "C:\\rd\\HISTORIAS"], "trabajar_en": "C:\\rd\\AUTOMATIZACION", "entregar_en": "C:\\rd\\AUTOMATIZACION\\ENTREGA"},
+        "reel":     {"buscar_en": ["C:\\rd\\flyernuevo\\LSD", "C:\\rd\\FLYER"], "trabajar_en": "C:\\rd\\AUTOMATIZACION", "entregar_en": "C:\\rd\\AUTOMATIZACION\\ENTREGA"},
+        "historia": {"buscar_en": ["C:\\rd\\HISTORIAS"], "trabajar_en": "C:\\rd\\AUTOMATIZACION", "entregar_en": "C:\\rd\\AUTOMATIZACION\\ENTREGA"},
+        "post":     {"buscar_en": ["C:\\rd\\AUTOMATIZACION\\POST"], "trabajar_en": "C:\\rd\\AUTOMATIZACION", "entregar_en": "C:\\rd\\AUTOMATIZACION\\POST"},
+        "render":   {"buscar_en": ["C:\\rd\\AUTOMATIZACION"], "trabajar_en": "C:\\rd\\AUTOMATIZACION", "entregar_en": "C:\\rd\\AUTOMATIZACION\\ENTREGA"},
+        "cartelera":{"buscar_en": ["C:\\rd\\AUTOMATIZACION"], "trabajar_en": "C:\\rd\\AUTOMATIZACION\\cartelera.blend", "entregar_en": "C:\\rd\\AUTOMATIZACION\\ENTREGA"}
+      }
+    },
+
+    "SUPLEMENTOS": {
+      "descripcion": "Para la linea de productos (reactivos + suplementos).",
+      "piezas": {
+        "etiqueta": {"buscar_en": ["C:\\rd\\suplementos\\etiquetas\\elegidos", "C:\\rd\\suplementos\\etiquetas"], "trabajar_en": "C:\\rd\\suplementos\\etiquetas\\elegidos", "entregar_en": "C:\\rd\\suplementos\\etiquetas\\elegidos\\export"},
+        "gotario":  {"buscar_en": ["C:\\rd\\gotario"], "trabajar_en": "C:\\rd\\gotario", "entregar_en": "C:\\rd\\gotario"},
+        "reactivo": {"buscar_en": ["C:\\rd\\gotario", "C:\\rd\\prep"], "trabajar_en": "C:\\rd\\gotario", "entregar_en": "C:\\rd\\gotario"},
+        "pendon":   {"buscar_en": ["C:\\rd\\suplementos\\entrega\\pendon"], "trabajar_en": "C:\\rd\\suplementos\\entrega\\pendon", "entregar_en": "C:\\rd\\suplementos\\entrega\\pendon"},
+        "banner":   {"buscar_en": ["C:\\rd\\suplementos\\entrega\\pendon"], "trabajar_en": "C:\\rd\\suplementos\\entrega\\pendon", "entregar_en": "C:\\rd\\suplementos\\entrega\\pendon"},
+        "tabla":    {"buscar_en": ["C:\\rd"], "trabajar_en": "C:\\rd", "entregar_en": "C:\\rd"},
+        "post":     {"buscar_en": ["C:\\rd\\AUTOMATIZACION\\POST"], "trabajar_en": "C:\\rd\\AUTOMATIZACION", "entregar_en": "C:\\rd\\AUTOMATIZACION\\POST"},
+        "comercial":{"buscar_en": ["C:\\rd\\suplementos"], "trabajar_en": "C:\\rd\\suplementos", "entregar_en": "C:\\rd\\suplementos"},
+        "render":   {"buscar_en": ["C:\\rd\\suplementos", "C:\\rd\\recursos"], "trabajar_en": "C:\\rd\\suplementos", "entregar_en": "C:\\rd\\suplementos"},
+        "flyer":    {"buscar_en": ["C:\\rd\\suplementos\\etiquetas\\elegidos\\export\\ENTREGA_FLYERS"], "trabajar_en": "C:\\rd\\AUTOMATIZACION", "entregar_en": "C:\\rd\\suplementos\\etiquetas\\elegidos\\export\\ENTREGA_FLYERS"}
+      }
+    }
+  },
+
+  "transversales": {
+    "branding": {"piezas": ["logo", "sello", "paleta"], "buscar_en": ["C:\\rd\\recursos"], "trabajar_en": "C:\\rd\\recursos"},
+    "library":  {"piezas": ["textura", "mockup", "hdri", "asset", "material"], "buscar_en": ["C:\\rd\\assets", "C:\\rd\\AUTOMATIZACION\\textures"], "trabajar_en": "C:\\rd\\assets"},
+    "business": {"piezas": ["propuesta", "cotizacion", "brief"], "buscar_en": ["C:\\rd"], "trabajar_en": "C:\\rd"}
+  }
+}

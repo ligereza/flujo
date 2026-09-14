@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" data-name="5f6fbb3a285d-17843328659444328">
+<style>
+.c0{animation:k_girar 2.2s linear infinite}
+@keyframes k_girar{to{transform:rotate(360deg)}}
+</style>
+<rect width="120" height="120" fill="#f4f1e8"/>
+<g id="capa-0-protagonista" transform="translate(60,56)" data-rol="protagonista" data-gesto="girar" data-ritmo="2.2s" data-figura="puerta"><title>protagonista - puerta</title><g class="c0"><g transform="scale(30)"><path d="M-.78,.92 V-.10 a.78,.78 0 0 1 1.56,0 V.92 Z" fill="none" stroke="#1f2430" stroke-width=".14"/><path d="M-.30,.92 V.18 a.30,.30 0 0 1 .60,0 V.92 Z" fill="#ff6b2c"/></g></g></g>
+<g id="capa-1-marca" transform="translate(60,110)" data-rol="marca" data-gesto="quieto" data-ritmo="4s" data-figura="figura"><title>marca - figura</title><g class="c1"><g transform="scale(6)"><circle cy="-.42" r=".30" fill="#1f2430"/><path d="M-.42,1 V.05 a.42,.42 0 0 1 .84,0 V1 Z" fill="#1f2430"/></g></g></g>
+</svg>

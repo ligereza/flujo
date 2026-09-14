@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" data-name="b7db44844c69-17869689289853974">
+<style>
+.c0{animation:k_temblar 4s steps(1) infinite}
+@keyframes k_temblar{0%,88%{transform:translate(0,0)}91%{transform:translate(-2px,1px)}
+94%{transform:translate(2px,-1px)}97%{transform:translate(-1px,0)}}
+</style>
+<rect width="120" height="120" fill="#12120a"/>
+<g id="capa-0-protagonista" transform="translate(60,58)" data-rol="protagonista" data-gesto="temblar" data-ritmo="4s" data-figura="puerta"><title>protagonista - puerta</title><g class="c0"><g transform="scale(22)"><path d="M-.78,.92 V-.10 a.78,.78 0 0 1 1.56,0 V.92 Z" fill="none" stroke="#d7ff2e" stroke-width=".14"/><path d="M-.30,.92 V.18 a.30,.30 0 0 1 .60,0 V.92 Z" fill="#ff2e7e"/></g></g></g>
+<g id="capa-1-lado_izq" transform="translate(27,58)" data-rol="lado_izq" data-gesto="quieto" data-ritmo="4s" data-figura="sello"><title>lado_izq - sello</title><g class="c1"><g transform="scale(19)"><circle r=".88" fill="none" stroke="#ff2e7e" stroke-width=".15"/><circle r=".68" fill="none" stroke="#ff2e7e" stroke-width=".05"/><rect x="-.62" y="-.11" width="1.24" height=".22" fill="#ff2e7e"/></g></g></g>
+</svg>

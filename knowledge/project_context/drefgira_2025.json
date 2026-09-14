@@ -1,0 +1,315 @@
+{
+  "schema": "mak-project-context-v1",
+  "context_id": "drefgira-despues-del-sol-chile-2025",
+  "title": "DREFGIRA / Después del Sol / Chile noviembre 2025",
+  "scope": "Context graph for a visual VJ project, artist, album and candidate Chilean tour dates.",
+  "unknowns": [
+    "formal_tour_scope_not_independently_verified",
+    "antofagasta_show_needs_independent_confirmation",
+    "album_release_date_not_normalized_across_sources",
+    "operator_contract_not_verified"
+  ],
+  "entities": [
+    {
+      "entity_id": "operator-mak-vj",
+      "kind": "operator",
+      "display_name": "MAK VJ operator",
+      "status": "human_attested",
+      "purpose": "Visual operation and VJ work context.",
+      "idea": "Connect visual production evidence to artist and show context without claiming a legal contract.",
+      "origin": "operator_attestation"
+    },
+    {
+      "entity_id": "artist-drefquila",
+      "kind": "artist",
+      "display_name": "DrefQuila",
+      "status": "observed",
+      "purpose": "Artist identity attached to the DREFGIRA visual project context.",
+      "idea": "Artist, album and live show are separate entities joined by evidence.",
+      "origin": "external_sources_and_operator_attestation"
+    },
+    {
+      "entity_id": "brand-bah-bees-and-honey",
+      "kind": "brand_party_context",
+      "display_name": "BAH / Bees and Honey",
+      "status": "human_attested",
+      "purpose": "Brand and party context associated by the operator, not merged with the artist.",
+      "idea": "Preserve BAH as a separate producer/brand context.",
+      "origin": "operator_attestation"
+    },
+    {
+      "entity_id": "project-drefgira-2025",
+      "kind": "visual_project",
+      "display_name": "DREFGIRA",
+      "status": "human_attested",
+      "purpose": "Visual project reconstructed from the portable SSD index and operator context.",
+      "idea": "Album-specific visual assets remain review_required until the physical source is mounted.",
+      "origin": "portable_ssd_reconstruction"
+    },
+    {
+      "entity_id": "album-despues-del-sol-2025",
+      "kind": "album",
+      "display_name": "Después del Sol",
+      "status": "observed",
+      "purpose": "Album context for the visual project and November presentations.",
+      "idea": "Keep release-date disagreement as raw evidence instead of forcing one date.",
+      "origin": "music_press_and_industry_sources"
+    },
+    {
+      "entity_id": "tour-despues-del-sol-chile-nov-2025",
+      "kind": "tour_scope",
+      "display_name": "Presentaciones Chile / Después del Sol / noviembre 2025",
+      "status": "candidate",
+      "purpose": "Candidate grouping for album presentations in Chile during November 2025.",
+      "idea": "A tour grouping needs independent evidence; a shared month and album are not enough.",
+      "origin": "operator_attestation_and_event_sources"
+    },
+    {
+      "entity_id": "show-kun-talent-show-2025-11-02",
+      "kind": "show",
+      "display_name": "The Kun Talent Show",
+      "status": "observed",
+      "purpose": "Confirmed November 2025 DrefQuila show anchor.",
+      "idea": "Use venue and ticket evidence as the strongest date/location anchor.",
+      "origin": "official_venue_and_ticket_sources"
+    },
+    {
+      "entity_id": "venue-movistar-arena-santiago",
+      "kind": "venue",
+      "display_name": "Movistar Arena",
+      "status": "verified",
+      "purpose": "Venue in Santiago for the 2025-11-02 show.",
+      "idea": "Venue is a reusable RD/VJ entity, independent from one event.",
+      "origin": "official_venue_and_ticket_sources"
+    },
+    {
+      "entity_id": "show-drefquila-antofagasta-2025-11-28",
+      "kind": "show",
+      "display_name": "DrefQuila en Antofagasta",
+      "status": "candidate",
+      "purpose": "Candidate November 2025 album presentation.",
+      "idea": "Keep this event visible but do not promote it to the formal tour without a second source.",
+      "origin": "single_event_listing"
+    },
+    {
+      "entity_id": "venue-club-montecarlo-antofagasta",
+      "kind": "venue",
+      "display_name": "Club Montecarlo",
+      "status": "candidate",
+      "purpose": "Candidate venue for the Antofagasta event.",
+      "idea": "Venue identity and event membership remain candidate until corroborated.",
+      "origin": "single_event_listing"
+    }
+  ],
+  "sources": [
+    {
+      "source_id": "conversation-drefgira-operator",
+      "source_type": "conversation",
+      "independence_group": "operator_attestation",
+      "locator": "/home/mak/.claude/projects/-home-mak-Escritorio/3428381a-02ad-4101-9da5-8176cf72c147.jsonl#L1729",
+      "claim": "Operator states they are a VJ, worked with DrefQuila and BAH Party, and DREFGIRA is related to the November 2025 album tour Después del Sol.",
+      "status": "human_attested",
+      "metadata": {"visibility": "private", "raw_excerpt_retained": false}
+    },
+    {
+      "source_id": "local-drefgira-reconstruction",
+      "source_type": "local_reconstruction",
+      "independence_group": "local_index",
+      "locator": "/home/mak/curatoria_inbox/project_reconstruction/2026-08-21/drefgira/reconstruction.json",
+      "claim": "DREFGIRA is a reconstructed project unit with subprojects and 467 indexed artifacts; physical source mount remains unverified.",
+      "status": "observed",
+      "metadata": {"index_fingerprint": "d3afb072fe1633125ac20da82aa1d3c7514f763cb8cac28655f19216ac53d8df"}
+    },
+    {
+      "source_id": "web-movistar-arena-drefquila",
+      "source_type": "web_official_venue",
+      "independence_group": "official_venue",
+      "locator": "https://www.movistararena.cl/movistar/nuestra-cartelera/conciertos/drefquila",
+      "claim": "Movistar Arena lists DrefQuila on 2025-11-02 at 20:00 in Santiago.",
+      "status": "observed",
+      "metadata": {"retrieved": "2026-08-21", "producer": "Lotus"}
+    },
+    {
+      "source_id": "web-puntoticket-drefquila-2025",
+      "source_type": "web_ticketing",
+      "independence_group": "ticketing",
+      "locator": "https://www.puntoticket.com/drefquila-2025",
+      "claim": "PuntoTicket lists DrefQuila at Movistar Arena on 2025-11-02 at 20:00.",
+      "status": "observed",
+      "metadata": {"retrieved": "2026-08-21", "producer": "LTS Servicios de Produccion SpA"}
+    },
+    {
+      "source_id": "web-los40-kun-talent-show",
+      "source_type": "web_media",
+      "independence_group": "media_los40",
+      "locator": "https://los40.cl/2025/11/03/asi-fue-el-the-kun-talent-show-en-el-movistar-arena-2025-invitados-setlist-y-ganador-del-show/",
+      "claim": "Post-show coverage confirms the 2025-11-02 Movistar Arena event and connects it to Después del Sol.",
+      "status": "observed",
+      "metadata": {"retrieved": "2026-08-21"}
+    },
+    {
+      "source_id": "web-los40-album-tracklist",
+      "source_type": "web_media",
+      "independence_group": "media_los40",
+      "locator": "https://los40.cl/2025/09/04/drefquila-revela-los-titulos-y-el-sonido-de-las-canciones-de-su-proximo-album-despues-del-sol/",
+      "claim": "Coverage identifies Después del Sol, its 12-song tracklist and the 2025-11-02 Movistar Arena presentation.",
+      "status": "observed",
+      "metadata": {"retrieved": "2026-08-21", "track_count": 12}
+    },
+    {
+      "source_id": "web-musica-chilena-despues-del-sol",
+      "source_type": "web_music_press",
+      "independence_group": "musicachilena",
+      "locator": "https://www.musicachilena.cl/v2/drefquila-lanza-despues-del-sol-su-nuevo-album-conceptual-y-mas-intimo/",
+      "claim": "Musica Chilena describes Después del Sol as a conceptual and intimate album launched in October 2025.",
+      "status": "observed",
+      "metadata": {"retrieved": "2026-08-21", "release_date_raw": "2025-10-06"}
+    },
+    {
+      "source_id": "web-scd-pais-de-musicos-2025",
+      "source_type": "web_industry_pdf",
+      "independence_group": "scd_industry_report",
+      "locator": "https://scd.cl/sitio/wp-content/uploads/2026/04/Pais-de-Musicos-2025-VF.pdf",
+      "claim": "SCD industry material lists DrefQuila and Después del sol as a Chilean LP reference.",
+      "status": "observed",
+      "metadata": {"retrieved": "2026-08-21", "format": "LP"}
+    },
+    {
+      "source_id": "web-evently-antofagasta",
+      "source_type": "web_event_listing",
+      "independence_group": "evently_la_isla",
+      "locator": "https://laisla.evently.cl/Drefquila-en-Antofagasta-28-11-2025",
+      "claim": "Event listing places DrefQuila at Club Montecarlo, Antofagasta, on 2025-11-28 and describes the new album presentation.",
+      "status": "candidate",
+      "metadata": {"retrieved": "2026-08-21", "promoter": "La Isla Producciones"}
+    }
+  ],
+  "relations": [
+    {
+      "subject": "artist-drefquila",
+      "predicate": "created_album",
+      "object": "album-despues-del-sol-2025",
+      "status": "verified",
+      "source_ids": ["web-los40-album-tracklist", "web-musica-chilena-despues-del-sol", "web-scd-pais-de-musicos-2025"]
+    },
+    {
+      "subject": "artist-drefquila",
+      "predicate": "performed_at",
+      "object": "show-kun-talent-show-2025-11-02",
+      "status": "verified",
+      "source_ids": ["web-movistar-arena-drefquila", "web-puntoticket-drefquila-2025"]
+    },
+    {
+      "subject": "show-kun-talent-show-2025-11-02",
+      "predicate": "held_at",
+      "object": "venue-movistar-arena-santiago",
+      "status": "verified",
+      "source_ids": ["web-movistar-arena-drefquila", "web-puntoticket-drefquila-2025"]
+    },
+    {
+      "subject": "show-kun-talent-show-2025-11-02",
+      "predicate": "presented_album",
+      "object": "album-despues-del-sol-2025",
+      "status": "verified",
+      "source_ids": ["web-los40-kun-talent-show", "web-los40-album-tracklist"]
+    },
+    {
+      "subject": "show-kun-talent-show-2025-11-02",
+      "predicate": "candidate_member_of",
+      "object": "tour-despues-del-sol-chile-nov-2025",
+      "status": "candidate",
+      "source_ids": ["web-movistar-arena-drefquila", "web-puntoticket-drefquila-2025"]
+    },
+    {
+      "subject": "show-drefquila-antofagasta-2025-11-28",
+      "predicate": "held_at",
+      "object": "venue-club-montecarlo-antofagasta",
+      "status": "candidate",
+      "source_ids": ["web-evently-antofagasta"]
+    },
+    {
+      "subject": "show-drefquila-antofagasta-2025-11-28",
+      "predicate": "presented_album",
+      "object": "album-despues-del-sol-2025",
+      "status": "verified",
+      "source_ids": ["web-evently-antofagasta"]
+    },
+    {
+      "subject": "show-drefquila-antofagasta-2025-11-28",
+      "predicate": "candidate_member_of",
+      "object": "tour-despues-del-sol-chile-nov-2025",
+      "status": "candidate",
+      "source_ids": ["web-evently-antofagasta"]
+    },
+    {
+      "subject": "project-drefgira-2025",
+      "predicate": "visual_project_for_album",
+      "object": "album-despues-del-sol-2025",
+      "status": "human_attested",
+      "source_ids": ["conversation-drefgira-operator", "local-drefgira-reconstruction"]
+    },
+    {
+      "subject": "project-drefgira-2025",
+      "predicate": "visual_project_for_tour_scope",
+      "object": "tour-despues-del-sol-chile-nov-2025",
+      "status": "human_attested",
+      "source_ids": ["conversation-drefgira-operator", "local-drefgira-reconstruction"]
+    },
+    {
+      "subject": "operator-mak-vj",
+      "predicate": "visual_services_for",
+      "object": "artist-drefquila",
+      "status": "human_attested",
+      "source_ids": ["conversation-drefgira-operator"]
+    },
+    {
+      "subject": "artist-drefquila",
+      "predicate": "associated_with",
+      "object": "brand-bah-bees-and-honey",
+      "status": "human_attested",
+      "source_ids": ["conversation-drefgira-operator"]
+    }
+  ],
+  "projects": [
+    {
+      "project_id": "project-6f330efb18a0c55ac588",
+      "title": "DREFGIRA",
+      "role": "visual_project_root",
+      "service_role": "vj_visual_project_for_album_and_tour_scope",
+      "status": "review_required",
+      "entity_ids": {"artist": "artist-drefquila", "album": "album-despues-del-sol-2025", "tour": "tour-despues-del-sol-chile-nov-2025"}
+    },
+    {
+      "project_id": "project-a5d486d01f6ae2209f24",
+      "title": "DREFGIRA/BLOQUE 02 CLASICOS/NUEVAS",
+      "role": "visual_subproject",
+      "service_role": "vj_visual_asset_for_album_project",
+      "status": "review_required",
+      "entity_ids": {"artist": "artist-drefquila", "album": "album-despues-del-sol-2025", "tour": "tour-despues-del-sol-chile-nov-2025"}
+    },
+    {
+      "project_id": "project-ede6496686da9a116480",
+      "title": "DREFGIRA/IMPORT CLAUDIO",
+      "role": "visual_subproject",
+      "service_role": "vj_visual_asset_for_album_project",
+      "status": "review_required",
+      "entity_ids": {"artist": "artist-drefquila", "album": "album-despues-del-sol-2025", "tour": "tour-despues-del-sol-chile-nov-2025"}
+    },
+    {
+      "project_id": "project-0fee46198efa2966ec34",
+      "title": "DREFGIRA/OPCIONES",
+      "role": "visual_subproject",
+      "service_role": "vj_visual_asset_for_album_project",
+      "status": "review_required",
+      "entity_ids": {"artist": "artist-drefquila", "album": "album-despues-del-sol-2025", "tour": "tour-despues-del-sol-chile-nov-2025"}
+    },
+    {
+      "project_id": "project-2ba211eae10af3a18d6e",
+      "title": "DREFGIRA/misionar",
+      "role": "visual_subproject",
+      "service_role": "vj_visual_asset_for_album_project",
+      "status": "review_required",
+      "entity_ids": {"artist": "artist-drefquila", "album": "album-despues-del-sol-2025", "tour": "tour-despues-del-sol-chile-nov-2025"}
+    }
+  ]
+}

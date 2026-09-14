@@ -1,0 +1,17 @@
+id: precursor
+kind: dossier
+project: precursor
+title: 'Dossier: precursor — the CULTURE of drug design (descriptive layer only)'
+subject: precursor — the CULTURE of drug design (descriptive layer only)
+status: INVESTIGADO (Gemini API 2026-07-10) + spot-check de fuentes 2026-07-10 (WebSearch)
+  + curado a instrumentos.
+sections:
+- Research questions (from the rainstorm)
+- Gemini web prompt (paste, one block)
+- Findings
+- Verificacion de fuentes (spot-check 2026-07-10, WebSearch)
+- Del dossier a la pieza (curado por Claude desde los findings)
+hard_limit: true
+source_path: projects/cultura/dossiers/precursor.md
+content_sha256: 7e7d25d7ef11e59e328aa41fca255eab3c5afad94fc755c4eb4b6c82b7f1559f
+ingested_at: '2026-07-10T23:48:48'

@@ -1,0 +1,46 @@
+{
+  "claim": {
+    "evidence_refs": [
+      "C05/source_blend/sha256=acafc1db0088016139921b1ea2c9d7a5310247658117fa7021662e13e907ce86",
+      "C05/export_script/sha256=976182451c074632732808b35c2ec332787edb1b0f4d4fd7c75883f8ac76d120",
+      "C05/export_marker/sha256=70e53d71d56e6269acc904fe8145443256550256c1f99464a3a8fa258821f746",
+      "C05/output_glb/sha256=dfa70c3248a739959e8366dbc0eb4382ce17f97592114e51fb6bbb67ae565042",
+      "C02/blender_endpoint/snapshot.json#/snapshot/native/scenes/0/objects"
+    ],
+    "reason": "complete_supported_export_witness",
+    "status": "supported"
+  },
+  "decision_policy": {
+    "filesystem_scan": false,
+    "hidden_truth": false,
+    "status_override": false,
+    "unknown_on_missing_or_conflicting_witness": true
+  },
+  "edges": [
+    {
+      "claim_limit": "export event only; no final-delivery, artistic-intent, authorship, or post-publication claim",
+      "evidence_refs": [
+        "C05/source_blend/sha256=acafc1db0088016139921b1ea2c9d7a5310247658117fa7021662e13e907ce86",
+        "C05/export_script/sha256=976182451c074632732808b35c2ec332787edb1b0f4d4fd7c75883f8ac76d120",
+        "C05/export_marker/sha256=70e53d71d56e6269acc904fe8145443256550256c1f99464a3a8fa258821f746",
+        "C05/output_glb/sha256=dfa70c3248a739959e8366dbc0eb4382ce17f97592114e51fb6bbb67ae565042",
+        "C02/blender_endpoint/snapshot.json#/snapshot/native/scenes/0/objects"
+      ],
+      "relation": "EXPORTS_TO",
+      "source_ref": "authoring:blend:ARICA/RAYU.blend",
+      "status": "supported",
+      "target_ref": "artifact:glb:rayu_resources.glb"
+    }
+  ],
+  "nodes": [
+    {
+      "id": "authoring:blend:ARICA/RAYU.blend",
+      "kind": "authoring"
+    },
+    {
+      "id": "artifact:glb:rayu_resources.glb",
+      "kind": "artifact"
+    }
+  ],
+  "schema": "mak-cycle-c06-export-graph-v1"
+}

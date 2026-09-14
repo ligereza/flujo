@@ -1,0 +1,157 @@
+{
+ "schema": "mak-portfolio-format-v1",
+ "format_id": "F1-trayectoria",
+ "family": "trayectoria",
+ "vertical_grammar": "ecosistema",
+ "title": "Registro de trayectoria",
+ "purpose": "Establecer que ocurrio: fechas, lugares, contextos y actores, de forma verificable y con baja exigencia autoral. Alimenta la seccion de antecedentes de cualquier postulacion.",
+ "consumer": {
+  "kind": "seccion_antecedentes",
+  "examples": [
+   "formulario de fondo publico",
+   "CV",
+   "presentacion institucional",
+   "renovacion de contrato"
+  ],
+  "decision_it_supports": "acreditar continuidad y alcance de una practica",
+  "does_not_support": [
+   "acreditar autoria de una obra",
+   "afirmar calidad artistica"
+  ]
+ },
+ "language": "es",
+ "limits": {
+  "max_items_total": 60,
+  "max_bytes": 2000000,
+  "max_slots_rendered": 4
+ },
+ "declared_claims": [
+  "ocurrio"
+ ],
+ "forbidden_claims": [
+  "es_mio",
+  "significa",
+  "hice_esta_parte"
+ ],
+ "forbidden_inferences": [
+  "una fecha de archivo no es una fecha de evento",
+  "un nombre de contenedor no es un nombre de cliente confirmado",
+  "adyacencia temporal no implica pertenencia al mismo encargo"
+ ],
+ "slots": [
+  {
+   "slot_id": "contextos",
+   "title": "Contextos de trabajo",
+   "count": {
+    "min": 3,
+    "max": 30
+   },
+   "claim": "ocurrio",
+   "layer": "context",
+   "min_state": "observed",
+   "min_permission": "unnamed",
+   "caption_grammar": "{context_label} — {kind}, {span}",
+   "allowed_caption_fields": [
+    "context_label",
+    "kind",
+    "span",
+    "year"
+   ],
+   "required": true,
+   "evidence_kinds": [
+    "container_root",
+    "external_authority",
+    "dated_publication",
+    "mtime_span"
+   ],
+   "prefer_scope": "container"
+  },
+  {
+   "slot_id": "colaboraciones",
+   "title": "Colaboraciones y terceros",
+   "count": {
+    "min": 0,
+    "max": 12
+   },
+   "claim": "ocurrio",
+   "layer": "context",
+   "min_state": "candidate",
+   "min_permission": "unnamed",
+   "caption_grammar": "{context_label} ↔ {counterpart} — {relation_note}",
+   "allowed_caption_fields": [
+    "context_label",
+    "counterpart",
+    "relation_note",
+    "year"
+   ],
+   "required": false,
+   "evidence_kinds": [
+    "external_authority",
+    "shared_context",
+    "credit"
+   ]
+  },
+  {
+   "slot_id": "publicaciones",
+   "title": "Manifestaciones publicas",
+   "count": {
+    "min": 0,
+    "max": 20
+   },
+   "claim": "ocurrio",
+   "layer": "context",
+   "min_state": "observed",
+   "min_permission": "public",
+   "caption_grammar": "{platform} — {count} registros, {span}",
+   "allowed_caption_fields": [
+    "platform",
+    "count",
+    "span"
+   ],
+   "required": false,
+   "evidence_kinds": [
+    "dated_publication",
+    "platform_locator"
+   ]
+  },
+  {
+   "slot_id": "tecnicas_por_periodo",
+   "title": "Tecnicas por periodo",
+   "count": {
+    "min": 0,
+    "max": 10
+   },
+   "claim": "ocurrio",
+   "layer": "process",
+   "min_state": "observed",
+   "min_permission": "unnamed",
+   "caption_grammar": "{span}: {technique}",
+   "allowed_caption_fields": [
+    "span",
+    "technique",
+    "artifact_count"
+   ],
+   "required": false,
+   "evidence_kinds": [
+    "media_kind_distribution",
+    "native_project_file",
+    "mtime_span"
+   ]
+  }
+ ],
+ "invalid_if": [
+  "una ranura obligatoria queda bajo su count minimo",
+  "una afirmacion excede su min_state declarado",
+  "un epigrafe usa un campo fuera de allowed_caption_fields",
+  "una pieza con permission=prohibited o aggregate_only aparece por caso",
+  "el documento afirma es_mio o hice_esta_parte en cualquier ranura",
+  "una fecha de evento se deriva unicamente de mtime sin una segunda ruta"
+ ],
+ "control": {
+  "publication": false,
+  "submission": false,
+  "signed_document": false,
+  "authorship_claimed": false,
+  "training_permitted": false
+ }
+}

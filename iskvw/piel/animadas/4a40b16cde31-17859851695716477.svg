@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" data-name="4a40b16cde31-17859851695716477">
+<style>
+.c0{animation:k_latir 4s ease-in-out infinite}
+@keyframes k_latir{0%,100%{transform:scale(1)}50%{transform:scale(1.09)}}
+</style>
+<rect width="120" height="120" fill="#2b1055"/>
+<g id="capa-0-protagonista" transform="translate(60,56)" data-rol="protagonista" data-gesto="latir" data-ritmo="4s" data-figura="documento"><title>protagonista - documento</title><g class="c0"><g transform="scale(30)"><rect x="-.72" y="-.95" width="1.44" height="1.9" fill="#4a1c6e" stroke="#ffe259" stroke-width=".08"/><rect x="-.52" y="-0.520" width="1.020" height=".09" fill="#ffe259" opacity=".55"/><rect x="-.52" y="-0.220" width="0.740" height=".09" fill="#ffe259" opacity=".55"/><rect x="-.52" y="0.080" width="1.020" height=".09" fill="#ffe259" opacity=".55"/><rect x="-.52" y="0.380" width="0.740" height=".09" fill="#ffe259" opacity=".55"/><rect x="-.52" y="0.680" width="1.020" height=".09" fill="#ffe259" opacity=".55"/></g></g></g>
+<g id="capa-1-marca" transform="translate(60,110)" data-rol="marca" data-gesto="quieto" data-ritmo="4s" data-figura="anillo"><title>marca - anillo</title><g class="c1"><g transform="scale(6)"><circle r=".82" fill="none" stroke="#ffe259" stroke-width=".16"/></g></g></g>
+</svg>

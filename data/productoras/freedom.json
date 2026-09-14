@@ -1,0 +1,46 @@
+{
+  "name": "Freedom",
+  "tipo": "spot",
+  "aliases": [
+    "FREEDOM",
+    "Freedom",
+    "spot.freedom",
+    "Club Freedom"
+  ],
+  "instagram": "spot.freedom",
+  "nombre_mapas": "Club Freedom",
+  "tipos_fecha": [],
+  "logos": [
+    {
+      "id": "freedom_primary",
+      "knowledge": "knowledge/logos/club_freedom.yaml",
+      "estado": "encontrado",
+      "archivo": "knowledge/logos/vector/club_freedom.svg",
+      "raster": "knowledge/logos/descargas/club_freedom.png",
+      "fuente": "https://www.facebook.com/clubfreedomlive/ (foto de perfil oficial, og:image)",
+      "obtenido": "2026-07-24",
+      "notas": "Logo oficial via web anonima (PR #254): pagina oficial de Facebook clubfreedomlive, og:image de foto de perfil (720x720). Reemplaza el estado no_encontrado previo."
+    }
+  ],
+  "venues": [
+    {
+      "nombre": "Club Freedom",
+      "venue_id": null,
+      "preferido": true,
+      "estado": "confirmado_usuario_2026-07-23",
+      "notas": "Freedom es un SPOT (lugar), no una productora clasica -- confirmado por el usuario 2026-07-23. En Google Maps figura como 'Club Freedom'. Alias IG: spot.freedom."
+    }
+  ],
+  "confirmed": "2026-07-23 palabra del usuario: tipo=spot, handle IG spot.freedom, nombre_mapas Club Freedom.",
+  "fuente_datos": "Alta directa por palabra del usuario 2026-07-23 (sin research adicional, ver CLAUDE.md regla de gasto).",
+  "notes": "No es productora clasica: es el lugar/venue donde ocurre el evento Festival Sentir (ver eventos).",
+  "eventos": [
+    {
+      "nombre": "Festival Sentir",
+      "fecha": "needs_confirmation",
+      "venue": "Club Freedom (spot.freedom) -- confirmado por el usuario",
+      "estado": "confirmado_usuario_needs_confirmation_fecha",
+      "fuente": "reel Instagram https://www.instagram.com/reel/DZ3bAdGhp7y/ + palabra del usuario 2026-07-23 (video renderizandose como flyer el mismo dia)"
+    }
+  ]
+}

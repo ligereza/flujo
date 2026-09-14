@@ -1,0 +1,4 @@
+# Install from the repository root.
+-r ../../../requirements.txt
+
+# Portfolio static surfaces have no mandatory provider dependency.

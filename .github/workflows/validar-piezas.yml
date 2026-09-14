@@ -1,0 +1,44 @@
+name: Validar piezas (el molde)
+# Revision sin revision: ninguna pieza grafica invalida puede entrar a main.
+# El validador corre solo, en cada push/PR que toque SVGs. Si el molde dice
+# OK, no hay nada que auditar despues.
+permissions:
+  contents: read
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'svg/**'
+      - 'src/flujo/comercial/**'
+      - 'projects/piezas_vectoriales/suplementos_rd/**'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'svg/**'
+      - 'src/flujo/comercial/**'
+      - 'projects/piezas_vectoriales/suplementos_rd/**'
+  workflow_dispatch: {}
+
+jobs:
+  validar:
+    name: validate SVG suplementos
+    runs-on: ubuntu-latest
+    env:
+      PYTHONIOENCODING: utf-8
+      PYTHONUTF8: "1"
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97 # v7.0.0
+        with:
+          python-version: '3.11'
+          cache: 'pip'
+      - run: python -m pip install -e ".[dev]"
+      # Antes se validaban cuatro carpetas -- 02_editables_svg, 05_dark_neon,
+      # 03_final_vectorizado_svg y 06_dark_vectorizado_svg -- que se retiraron
+      # el 2026-07-26 por no corresponder al diseno aprobado. Lo que se imprime
+      # y se entrega vive en 09_contraportadas_dark, y eso es lo que se valida.
+      - name: Validar contraportadas aprobadas (09)
+        run: python -m flujo suplementos validate svg/suplementos_rd/09_contraportadas_dark/*.svg
+      - name: Resumen
+        if: success()
+        run: echo "MOLDE OK - todas las piezas pasan el validador; nada que auditar."

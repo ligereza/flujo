@@ -1,0 +1,32 @@
+{
+ "schema": "mak-ssd-evidence-manifest-v1",
+ "purpose": "Copia durable de los insumos de evidencia que vivian en un directorio scratch de job. Se copian en solo lectura para que la cadena de portafolio no dependa de un tmp que se limpia. El original sigue siendo la procedencia; esta copia no es una autoridad nueva.",
+ "copied_at": "2026-08-28",
+ "source_dir": "/home/mak/.claude/jobs/3428381a/tmp",
+ "files": [
+  {
+   "name": "declared_inputs.json",
+   "source_ref": "/home/mak/.claude/jobs/3428381a/tmp/declared_inputs.json",
+   "sha256": "14b72bac2b373757a698e246c42ecbbc37256d46d8ff358abd5ac5a773bc2636",
+   "copy_sha256": "14b72bac2b373757a698e246c42ecbbc37256d46d8ff358abd5ac5a773bc2636",
+   "identical": true,
+   "bytes": 72752
+  },
+  {
+   "name": "blend_dependency_targets.json",
+   "source_ref": "/home/mak/.claude/jobs/3428381a/tmp/blend_dependency_targets.json",
+   "sha256": "eece35722a458f5598eb52d2f805e455e020c33bfbb8fafe5b3c741444153f7f",
+   "copy_sha256": "eece35722a458f5598eb52d2f805e455e020c33bfbb8fafe5b3c741444153f7f",
+   "identical": true,
+   "bytes": 3390
+  },
+  {
+   "name": "ties_full.db",
+   "source_ref": "/home/mak/.claude/jobs/3428381a/tmp/ties_full.db",
+   "sha256": "f08bd5ffad6518595721ef5f073fdb539c234d8cd1b19795f272a068773a5fd4",
+   "copy_sha256": "f08bd5ffad6518595721ef5f073fdb539c234d8cd1b19795f272a068773a5fd4",
+   "identical": true,
+   "bytes": 3436544
+  }
+ ]
+}

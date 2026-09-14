@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" data-name="b9e64fd64603-17882155144429191">
+<style>
+.c0{animation:k_latir 2.2s ease-in-out infinite}
+@keyframes k_latir{0%,100%{transform:scale(1)}50%{transform:scale(1.09)}}
+</style>
+<rect width="120" height="120" fill="#0d0d18"/>
+<g id="capa-0-protagonista" transform="translate(60,54)" data-rol="protagonista" data-gesto="latir" data-ritmo="2.2s" data-figura="onda"><title>protagonista - onda</title><g class="c0"><g transform="scale(34)"><circle r="0.34" fill="none" stroke="#f2f2f5" stroke-width=".10" opacity="1.00"/><circle r="0.58" fill="none" stroke="#f2f2f5" stroke-width=".10" opacity="0.78"/><circle r="0.82" fill="none" stroke="#f2f2f5" stroke-width=".10" opacity="0.56"/></g></g></g>
+<g id="capa-1-flanco_izq" transform="translate(18,60)" data-rol="flanco_izq" data-gesto="quieto" data-ritmo="4s" data-figura="estrella"><title>flanco_izq - estrella</title><g class="c1"><g transform="scale(10)"><path d="M0,-1 L.26,-.26 L1,0 L.26,.26 L0,1 L-.26,.26 L-1,0 L-.26,-.26 Z" fill="#f2f2f5"/></g></g></g>
+</svg>

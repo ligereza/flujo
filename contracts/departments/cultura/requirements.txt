@@ -1,0 +1,5 @@
+# Install from the repository root.
+-r ../../../requirements.txt
+
+# Optional provider clients must remain optional and documented at the call
+# site. Do not install Firecrawl/Tavily/Crawl4AI merely to run offline tools.

@@ -1,0 +1,264 @@
+<!-- This file is generated - DO NOT EDIT! -->
+<!-- Please see: https://codeberg.org/thi.ng/umbrella/src/branch/develop/CONTRIBUTING.md#changes-to-readme-files -->
+# ![@thi.ng/rstream-gestures](https://codeberg.org/thi.ng/umbrella/media/branch/develop/assets/banners/thing-rstream-gestures.svg?6cd449bb)
+
+[![npm version](https://img.shields.io/npm/v/@thi.ng/rstream-gestures.svg)](https://www.npmjs.com/package/@thi.ng/rstream-gestures)
+![npm downloads](https://img.shields.io/npm/dm/@thi.ng/rstream-gestures.svg)
+[![Mastodon Follow](https://img.shields.io/mastodon/follow/109331703950160316?domain=https%3A%2F%2Fmastodon.thi.ng&style=social)](https://mastodon.thi.ng/@toxi)
+
+> [!NOTE]
+
+> This is one of 216 standalone projects. LLM-free, human-made and
+> cared for software, maintained as part of the
+> [@thi.ng/umbrella](https://codeberg.org/thi.ng/umbrella/) ecosystem and
+> anti-framework.
+>
+> 🚀 Please help me to work full-time on these projects by [sponsoring
+> me](https://codeberg.org/thi.ng/umbrella/src/branch/develop/CONTRIBUTING.md#donations).
+> Thank you! ❤️
+
+- [About](#about)
+- [Status](#status)
+  - [Breaking changes](#breaking-changes)
+    - [v3.0.0](#v300)
+    - [v2.0.0](#v200)
+- [Related packages](#related-packages)
+- [Installation](#installation)
+- [Dependencies](#dependencies)
+- [Usage examples](#usage-examples)
+- [API](#api)
+  - [GestureType](#gesturetype)
+  - [GestureEvent](#gestureevent)
+  - [GestureStreamOpts](#gesturestreamopts)
+  - [Basic usage](#basic-usage)
+  - [Resettable zoom](#resettable-zoom)
+- [Authors](#authors)
+- [License](#license)
+
+## About
+
+Unified mouse, mouse wheel & multi-touch event stream abstraction. This is a support package for [@thi.ng/rstream](https://codeberg.org/thi.ng/umbrella/src/branch/develop/packages/rstream).
+
+## Status
+
+**STABLE** - used in production
+
+[Search or submit any issues for this package](https://codeberg.org/thi.ng/umbrella/issues?q=%5Brstream-gestures%5D)
+
+### Breaking changes
+
+#### v3.0.0
+
+The `gestureStream()` now supports external zoom control/resetting via providing
+a subscription as `zoom` option. That itself isn't a breaking change, however a
+result of this is that the `GestureEvent`s emitted by the stream do not *always*
+contain the original [DOM
+event](https://docs.thi.ng/umbrella/rstream-gestures/interfaces/GestureEvent.html#event)
+anymore (i.e. not in the case when the zoom factor is being reset via attached
+subscription).
+
+#### v2.0.0
+Multi-touch support has been added in v2.0.0, resulting in a complete
+rewrite of `gestureStream()` and new event data formats.
+
+## Related packages
+
+- [@thi.ng/hdom](https://codeberg.org/thi.ng/umbrella/src/branch/develop/packages/hdom) - Lightweight vanilla ES6 UI component trees with customizable branch-local behaviors
+- [@thi.ng/rdom](https://codeberg.org/thi.ng/umbrella/src/branch/develop/packages/rdom) - Lightweight, reactive, VDOM-less UI/DOM components with async lifecycle and [@thi.ng/hiccup](https://codeberg.org/thi.ng/umbrella/src/branch/develop/packages/hiccup) compatible
+
+## Installation
+
+```bash
+yarn add @thi.ng/rstream-gestures
+```
+
+ESM import:
+
+```ts
+import * as gest from "@thi.ng/rstream-gestures";
+```
+
+Browser ESM import:
+
+```html
+<script type="module" src="https://esm.run/@thi.ng/rstream-gestures"></script>
+```
+
+[JSDelivr documentation](https://www.jsdelivr.com/)
+
+For Node.js REPL:
+
+```js
+const gest = await import("@thi.ng/rstream-gestures");
+```
+
+Package sizes (brotli'd, pre-treeshake): ESM: 1.20 KB
+
+## Dependencies
+
+- [@thi.ng/api](https://codeberg.org/thi.ng/umbrella/src/branch/develop/packages/api)
+- [@thi.ng/checks](https://codeberg.org/thi.ng/umbrella/src/branch/develop/packages/checks)
+- [@thi.ng/math](https://codeberg.org/thi.ng/umbrella/src/branch/develop/packages/math)
+- [@thi.ng/rstream](https://codeberg.org/thi.ng/umbrella/src/branch/develop/packages/rstream)
+- [@thi.ng/transducers](https://codeberg.org/thi.ng/umbrella/src/branch/develop/packages/transducers)
+
+Note: @thi.ng/api is in _most_ cases a type-only import (not used at runtime)
+
+## Usage examples
+
+18 projects in this repo's
+[/examples](https://codeberg.org/thi.ng/umbrella/src/branch/develop/examples)
+directory are using this package:
+
+| Screenshot                                                                                                                  | Description                                                       | Live demo                                                 | Source                                                                                         |
+|:----------------------------------------------------------------------------------------------------------------------------|:------------------------------------------------------------------|:----------------------------------------------------------|:-----------------------------------------------------------------------------------------------|
+| <img src="https://codeberg.org/thi.ng/umbrella/media/branch/develop/assets/examples/canvas-dial.png" width="240"/>          | Canvas based dial widget                                          | [Demo](https://demo.thi.ng/umbrella/canvas-dial/)         | [Source](https://codeberg.org/thi.ng/umbrella/src/branch/develop/examples/canvas-dial)         |
+| <img src="https://codeberg.org/thi.ng/umbrella/media/branch/develop/assets/examples/ellipse-proximity.png" width="240"/>    | Interactive visualization of closest points on ellipses           | [Demo](https://demo.thi.ng/umbrella/ellipse-proximity/)   | [Source](https://codeberg.org/thi.ng/umbrella/src/branch/develop/examples/ellipse-proximity)   |
+| <img src="https://codeberg.org/thi.ng/umbrella/media/branch/develop/assets/examples/fft-synth.png" width="240"/>            | Interactive inverse FFT toy synth                                 | [Demo](https://demo.thi.ng/umbrella/fft-synth/)           | [Source](https://codeberg.org/thi.ng/umbrella/src/branch/develop/examples/fft-synth)           |
+| <img src="https://codeberg.org/thi.ng/umbrella/media/branch/develop/assets/examples/geom-knn.jpg" width="240"/>             | Doodle w/ K-nearest neighbor search result visualization          | [Demo](https://demo.thi.ng/umbrella/geom-knn/)            | [Source](https://codeberg.org/thi.ng/umbrella/src/branch/develop/examples/geom-knn)            |
+| <img src="https://codeberg.org/thi.ng/umbrella/media/branch/develop/assets/examples/geom-knn-hash.jpg" width="240"/>        | K-nearest neighbor search in an hash grid                         | [Demo](https://demo.thi.ng/umbrella/geom-knn-hash/)       | [Source](https://codeberg.org/thi.ng/umbrella/src/branch/develop/examples/geom-knn-hash)       |
+| <img src="https://codeberg.org/thi.ng/umbrella/media/branch/develop/assets/examples/gesture-analysis.png" width="240"/>     | Mouse gesture / stroke analysis, simplification, corner detection | [Demo](https://demo.thi.ng/umbrella/gesture-analysis/)    | [Source](https://codeberg.org/thi.ng/umbrella/src/branch/develop/examples/gesture-analysis)    |
+| <img src="https://codeberg.org/thi.ng/umbrella/media/branch/develop/assets/examples/hdom-canvas-draw.jpg" width="240"/>     | Interactive pattern drawing demo using transducers                | [Demo](https://demo.thi.ng/umbrella/hdom-canvas-draw/)    | [Source](https://codeberg.org/thi.ng/umbrella/src/branch/develop/examples/hdom-canvas-draw)    |
+| <img src="https://codeberg.org/thi.ng/umbrella/media/branch/develop/assets/imgui/imgui-all.png" width="240"/>               | Canvas based Immediate Mode GUI components                        | [Demo](https://demo.thi.ng/umbrella/imgui/)               | [Source](https://codeberg.org/thi.ng/umbrella/src/branch/develop/examples/imgui)               |
+| <img src="https://codeberg.org/thi.ng/umbrella/media/branch/develop/assets/examples/imgui-basics.png" width="240"/>         | Minimal IMGUI usage example                                       | [Demo](https://demo.thi.ng/umbrella/imgui-basics/)        | [Source](https://codeberg.org/thi.ng/umbrella/src/branch/develop/examples/imgui-basics)        |
+| <img src="https://codeberg.org/thi.ng/umbrella/media/branch/develop/assets/examples/mandelbrot.jpg" width="240"/>           | Worker based, interactive Mandelbrot visualization                | [Demo](https://demo.thi.ng/umbrella/mandelbrot/)          | [Source](https://codeberg.org/thi.ng/umbrella/src/branch/develop/examples/mandelbrot)          |
+|                                                                                                                             | Basic rstream-gestures multi-touch demo                           | [Demo](https://demo.thi.ng/umbrella/multitouch/)          | [Source](https://codeberg.org/thi.ng/umbrella/src/branch/develop/examples/multitouch)          |
+| <img src="https://codeberg.org/thi.ng/umbrella/media/branch/develop/assets/examples/rs-dflow.png" width="240"/>             | Minimal rstream dataflow graph                                    | [Demo](https://demo.thi.ng/umbrella/rstream-dataflow/)    | [Source](https://codeberg.org/thi.ng/umbrella/src/branch/develop/examples/rstream-dataflow)    |
+| <img src="https://codeberg.org/thi.ng/umbrella/media/branch/develop/assets/examples/scenegraph-pan-zoom.avif" width="240"/> | Basic 2D scenegraph example with pan/zoom functionality           | [Demo](https://demo.thi.ng/umbrella/scenegraph-pan-zoom/) | [Source](https://codeberg.org/thi.ng/umbrella/src/branch/develop/examples/scenegraph-pan-zoom) |
+| <img src="https://codeberg.org/thi.ng/umbrella/media/branch/develop/assets/examples/shader-graph.jpg" width="240"/>         | Minimal shader graph developed during livestream #2               | [Demo](https://demo.thi.ng/umbrella/shader-graph/)        | [Source](https://codeberg.org/thi.ng/umbrella/src/branch/develop/examples/shader-graph)        |
+| <img src="https://codeberg.org/thi.ng/umbrella/media/branch/develop/assets/examples/trace-bitmap.jpg" width="240"/>         | Multi-layer vectorization & dithering of bitmap images            | [Demo](https://demo.thi.ng/umbrella/trace-bitmap/)        | [Source](https://codeberg.org/thi.ng/umbrella/src/branch/develop/examples/trace-bitmap)        |
+| <img src="https://codeberg.org/thi.ng/umbrella/media/branch/develop/assets/examples/webgl-cube.png" width="240"/>           | 3D arcball controller to rotate the camera view of a colored cube | [Demo](https://demo.thi.ng/umbrella/webgl-arcball/)       | [Source](https://codeberg.org/thi.ng/umbrella/src/branch/develop/examples/webgl-arcball)       |
+| <img src="https://codeberg.org/thi.ng/umbrella/media/branch/develop/assets/examples/webgl-channel-mixer.jpg" width="240"/>  | rdom & WebGL-based image channel editor                           | [Demo](https://demo.thi.ng/umbrella/webgl-channel-mixer/) | [Source](https://codeberg.org/thi.ng/umbrella/src/branch/develop/examples/webgl-channel-mixer) |
+| <img src="https://codeberg.org/thi.ng/umbrella/media/branch/develop/assets/examples/webgl-obj.avif" width="240"/>           | Basic 3D OBJ model loading & interactive arcball camera control   | [Demo](https://demo.thi.ng/umbrella/webgl-obj/)           | [Source](https://codeberg.org/thi.ng/umbrella/src/branch/develop/examples/webgl-obj)           |
+
+## API
+
+[Generated API docs](https://docs.thi.ng/umbrella/rstream-gestures/)
+
+### GestureType
+
+All native events are abstracted into one of the following event types:
+
+- `move` - movemove
+- `start` - mousedown / touchstart
+- `drag` - mousemove (whilst dragging) / touchmove
+- `end` - mouseup / touchend / touchcancel
+- `zoom` -  wheel
+
+### GestureEvent
+
+The stream emits
+[`GestureEvent`](https://codeberg.org/thi.ng/umbrella/src/branch/develop/packages/rstream-gestures/src/api.ts#L37)
+objects of:
+
+- **type** - Current translated/abstracted event type (`GestureType`)
+- **event** - Original DOM event
+- **pos** - Event position (transformed as per
+  [`GestureStreamOpts`](#gesturestreamopts))
+- **active** - Active cursors (i.e. ongoing drag / touch gestures)
+- **buttons** - Mouse button bitmask (same as in standard `MouseEvent`),
+  or, if `isTouch` is true, number of `active` touches.
+- **zoom** - Current zoom factor (as per
+  [`GestureStreamOpts`](#gesturestreamopts) config)
+- **zoomDelta** - Last `WheelEvent`'s transformed `deltaY`,
+  `wheelDeltaY`
+- **isTouch** - True, if original event was a `TouchEvent`
+
+```ts
+// example mouse gesture event
+{
+  "type": "drag"
+  "event": MouseEvent,
+  "pos": [254, 169],
+  "active": [
+    {
+      "id": 0, // always 0 for mouse gestures
+      "start": [443, 37],
+      "pos": [254, 169],
+      "delta": [-189, 132]
+    }
+  ],
+  "buttons": 2, // right button pressed
+  "zoom": 1,
+  "zoomDelta": 0,
+  "isTouch": false
+}
+```
+
+### GestureStreamOpts
+
+See the
+[`GestureStreamOpts`](https://codeberg.org/thi.ng/umbrella/src/branch/develop/packages/rstream-gestures/src/api.ts#L74)
+config options for further details.
+
+### Basic usage
+
+```ts
+import { gestureStream } from "@thi.ng/rstream-gestures";
+import { trace } from "@thi.ng/rstream";
+import { comp, dedupe, filter, map, pluck } from "@thi.ng/transducers";
+
+// create event stream with custom options
+const gestures = gestureStream(document.body, { smooth: 0.01 });
+
+// subscription logging zoom value changes
+gestures.subscribe(
+    // trace is simply logging received values to console
+    trace("zoom"),
+    // composed transducer, `dedupe` ensures only changed values are received
+    comp(pluck("zoom"), dedupe())
+);
+
+// another subscription computing & logging drag gesture distance(s)
+gestures.subscribe(
+    trace("distance"),
+    comp(
+        filter((e) => e.type === "drag"),
+        map((e) => e.active.map((g) => Math.hypot(...g.delta)))
+    )
+);
+```
+
+### Resettable zoom
+
+For some applications (e.g. graphical editors), it can be helpful to reset the
+zoom value. This can be done by supplying a stream/subscription as part of the
+config options:
+
+```ts
+import { reactive } from "@thi.ng/rstream";
+import { gestureStream } from "@thi.ng/rstream-gestures";
+
+// create stream for initial zoom value & for resetting
+const zoomReset = reactive(1);
+
+// create gesture stream w/ zoom subscription
+const gestures = gestureStream(document.body, {
+    smooth: 0.01,
+    zoom: zoomReset
+});
+
+// ... then to reset the zoom at some point (e.g to zoom=2)
+zoomReset.next(2);
+```
+
+## Authors
+
+- [Karsten Schmidt](https://thi.ng) (Main author)
+- [Arthur Carabott](https://github.com/acarabott)
+- [Matei Adriel](https://github.com/Mateiadrielrafael)
+
+If this project contributes to an academic publication, please cite it as:
+
+```bibtex
+@misc{thing-rstream-gestures,
+  title = "@thi.ng/rstream-gestures",
+  author = "Karsten Schmidt and others",
+  note = "https://thi.ng/rstream-gestures",
+  year = 2018
+}
+```
+
+## License
+
+&copy; 2018 - 2026 Karsten Schmidt // Apache License 2.0

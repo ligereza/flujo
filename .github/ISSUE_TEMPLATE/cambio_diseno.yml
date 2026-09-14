@@ -1,0 +1,51 @@
+name: Cambio / corrección de diseño
+description: Pedir ajuste sobre un pedido o pieza existente
+title: "[Cambio] "
+labels: ["cambio", "estado/por-revisar"]
+body:
+  - type: input
+    id: referencia
+    attributes:
+      label: Pedido, issue, job o archivo a cambiar
+      placeholder: "Ej: #123, jobs/2026-..., config.json, flyer Festival..."
+    validations:
+      required: true
+  - type: dropdown
+    id: tipo_cambio
+    attributes:
+      label: Tipo de cambio
+      options:
+        - texto
+        - color / estilo
+        - imagen / logo
+        - medida / proporción
+        - resolución / pixelado
+        - entrega / formato
+        - otro
+    validations:
+      required: true
+  - type: textarea
+    id: detalle
+    attributes:
+      label: Qué hay que cambiar
+      placeholder: "Cambiar fecha..., subir logo..., adaptar a 14x10 cm..."
+    validations:
+      required: true
+  - type: input
+    id: medida_nueva
+    attributes:
+      label: Nueva medida si aplica
+      placeholder: "Ej: 14 x 10 cm, 300 dpi, 1080x1920"
+  - type: dropdown
+    id: urgencia
+    attributes:
+      label: Urgencia
+      options:
+        - normal
+        - esta semana
+        - urgente 24-48h
+        - fecha fija
+  - type: textarea
+    id: notas
+    attributes:
+      label: Notas / adjuntos / referencias

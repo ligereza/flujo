@@ -1,0 +1,10 @@
+# Shared base: only the packages BOTH branches actually import, measured by
+# AST over every tracked .py file of each branch. pydantic, typer, rich and
+# requests moved to requirements-flujo.txt because the MAK branch imports
+# none of them, and a monolithic base forced the box to install the portable
+# motor's CLI stack.
+matplotlib>=3.10.9
+pyyaml>=6.0.3
+Pillow>=12.3.0
+jsonschema>=4.26.0
+numpy>=2.1.0

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" data-name="8033b0656077-17992005898201864">
+<style>
+.c0{animation:k_girari 4s linear infinite}
+@keyframes k_girari{to{transform:rotate(-360deg)}}
+</style>
+<rect width="120" height="120" fill="#0d0d18"/>
+<g id="capa-0-protagonista" transform="translate(60,42)" data-rol="protagonista" data-gesto="girar_inverso" data-ritmo="4s" data-figura="figura"><title>protagonista - figura</title><g class="c0"><g transform="scale(20)"><circle cy="-.42" r=".30" fill="#f2f2f5"/><path d="M-.42,1 V.05 a.42,.42 0 0 1 .84,0 V1 Z" fill="#f2f2f5"/></g></g></g>
+<g id="capa-1-marca" transform="translate(60,112)" data-rol="marca" data-gesto="quieto" data-ritmo="4s" data-figura="onda"><title>marca - onda</title><g class="c1"><g transform="scale(6)"><circle r="0.34" fill="none" stroke="#f2f2f5" stroke-width=".10" opacity="1.00"/><circle r="0.58" fill="none" stroke="#f2f2f5" stroke-width=".10" opacity="0.78"/><circle r="0.82" fill="none" stroke="#f2f2f5" stroke-width=".10" opacity="0.56"/></g></g></g>
+</svg>

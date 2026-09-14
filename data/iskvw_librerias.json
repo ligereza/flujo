@@ -1,0 +1,55 @@
+{
+  "_leeme": [
+    "Las librerías que la cara visible de iskvw puede usar. Este archivo lo editás vos.",
+    "",
+    "Agregar una es agregar una entrada acá y correr:",
+    "",
+    "    py tools/vendorizar_iskvw.py",
+    "",
+    "Eso baja el paquete, lo empaqueta como un solo módulo ESM sin dependencias",
+    "externas y lo deja en iskvw/piel/lib/<nombre>.js. La piel lo importa con",
+    "un import normal y el sitio sigue siendo estático: no hay build al publicar,",
+    "no hay CDN, y funciona sin internet. Si algún día se saca una entrada de acá,",
+    "el archivo vendorizado queda huérfano y el script lo dice.",
+    "",
+    "'version' se fija a propósito. Una librería que cambia sola debajo de una",
+    "pieza es una pieza que se rompe sin que nadie haya tocado nada.",
+    "",
+    "'para' no es decoración: es la razón por la que la librería está acá. Si no",
+    "se puede escribir para qué sirve, no entra.",
+    "",
+    "thi.ng son ~350 proyectos de Karsten Schmidt (thi.ng/#tags). Las cuatro de",
+    "abajo se eligieron porque cada una retira trabajo escrito a mano en este",
+    "repo, medido el 2026-07-27, no porque suenen bien."
+  ],
+  "librerias": [
+    {
+      "nombre": "tsne",
+      "paquete": "@thi.ng/tsne",
+      "version": "0.1.73",
+      "exporta": "*",
+      "para": "Proyectar muchas dimensiones a 2 conservando vecindad. Hoy la hace scikit-learn, y por eso el generador del campo SOLO corre en Windows: con esto la caja puede proyectar sola, que es el norte del repo (mejorable sin PC)."
+    },
+    {
+      "nombre": "trazo",
+      "paquete": "@thi.ng/geom-trace-bitmap",
+      "version": "0.3.192",
+      "exporta": "*",
+      "para": "Imagen a vector de línea. El trazador del plano está afinado para iconos de alto contraste; sobre fotografías hubo que afinarlo a mano (13,5% -> 60% legible). Esto está hecho para este trabajo."
+    },
+    {
+      "nombre": "gestos",
+      "paquete": "@thi.ng/rstream-gestures",
+      "version": "5.0.179",
+      "exporta": "*",
+      "para": "Mouse, rueda y MULTI-TOUCH como un solo stream. El gesto del diafragma en el teléfono es el riesgo abierto del campo y nunca se midió."
+    },
+    {
+      "nombre": "distancia",
+      "paquete": "@thi.ng/distance-transform",
+      "version": "1.0.46",
+      "exporta": "*",
+      "para": "Campo de distancia desde una imagen binaria. Es el paso previo para engrosar, erosionar o derretir un trazo sin volver al bitmap."
+    }
+  ]
+}

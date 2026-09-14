@@ -1,0 +1,22 @@
+{
+  "intake_version": "1.0",
+  "pedido": {
+    "id_externo": "WA-2026-06-19-003",
+    "solicitante": {
+      "nombre": "Juan Pérez",
+      "canal": "whatsapp"
+    },
+    "tipo_pieza": "etiqueta",
+    "contenido": {
+      "titulo": "MIEL ORGÁNICA"
+    },
+    "modificacion": {
+      "pieza_existente": "projects/piezas_vectoriales/miel-organica/config.json",
+      "tipo_cambio": ["proporcion", "resolucion"],
+      "proporcion": { "ancho_cm": 14, "alto_cm": 10 },
+      "resolucion": { "dpi": 300, "motivo": "se veía pixelado en la prueba de imprenta" },
+      "detalle": "Cambiar a formato 14x10 y asegurar 300 DPI para imprenta."
+    },
+    "notas": "Mantener exactos lote y contenido neto."
+  }
+}

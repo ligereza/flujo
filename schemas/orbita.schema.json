@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/ligereza/vibecodeine/schemas/orbita.schema.json",
+  "title": "Órbita -- un recorrido de cámara como dato",
+  "description": "Un recorrido de camara sobre una sala es un DATO, no codigo: keyframes {giro, alto, dist} que el visor interpola linealmente sobre la cantidad de cuadros. Lo consumen iskvw/piel/venue/ (secuencia) y tools/venue_secuencia.mjs (--orbita). La vuelta por defecto del visor es ella misma una orbita de dos keyframes cerrada, asi que un archivo con esta forma puede reproducirla cuadro por cuadro -- y el smoke lo comprueba. Angulos en radianes, distancias en metros: las mismas unidades que la camara del visor, sin conversion escondida.",
+  "type": "object",
+  "required": ["puntos"],
+  "additionalProperties": false,
+  "properties": {
+    "nota": {
+      "type": "string",
+      "description": "que recorrido es y para que sirve. La lee un humano."
+    },
+    "cuadros": {
+      "type": "integer", "minimum": 1, "maximum": 100000,
+      "description": "cantidad de cuadros sugerida. La linea de comando puede pisarla."
+    },
+    "lado": {
+      "type": "integer", "minimum": 64, "maximum": 8192,
+      "description": "lado en pixeles de cada cuadro exportado. Tambien pisable."
+    },
+    "cerrar": {
+      "type": "boolean",
+      "description": "true = el recorrido es un loop: el ultimo keyframe NO se emite como cuadro, para que el cuadro 0 lo siga sin salto. false (el default) = camino abierto: el primer y el ultimo cuadro caen exactamente en el primer y el ultimo keyframe."
+    },
+    "puntos": {
+      "type": "array",
+      "minItems": 2,
+      "description": "los keyframes, repartidos parejos en el tiempo. giro es obligatorio; alto y dist ausentes heredan el valor con que se invoca la secuencia (hoy: la inclinacion pedida y la distancia de encuadre automatico).",
+      "items": {
+        "type": "object",
+        "required": ["giro"],
+        "additionalProperties": false,
+        "properties": {
+          "giro": {
+            "type": "number", "minimum": -100, "maximum": 100,
+            "description": "azimut en radianes. Mas de 2*pi = mas de una vuelta, a proposito permitido."
+          },
+          "alto": {
+            "type": "number", "minimum": -1.45, "maximum": 1.45,
+            "description": "inclinacion en radianes, con los mismos topes que el gesto de arrastre del visor."
+          },
+          "dist": {
+            "type": "number", "exclusiveMinimum": 0, "maximum": 4000,
+            "description": "distancia de camara en metros, con el mismo techo que el plano lejano del visor."
+          }
+        }
+      }
+    }
+  }
+}

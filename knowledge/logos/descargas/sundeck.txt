@@ -1,0 +1,6 @@
+Marca: Sundeck (serie de fiestas Espacio Riesco)
+Fuente: https://www.sundeck.cl/ (og logo asset)
+URL directa: https://cdn.prod.website-files.com/6266b3520215f67747170742/62681ee4beb1b5bb68596812_Asset%201.png
+Como se encontro: WebSearch "Sundeck Espacio Riesco fiesta logo" -> sitio oficial sundeck.cl -> WebFetch extrajo logo del header (Webflow CDN).
+Fecha: 2026-07-24
+Tier: sitio oficial

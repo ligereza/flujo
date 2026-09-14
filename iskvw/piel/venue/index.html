@@ -1,0 +1,505 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Cpath d='M4 24h24M8 24V12l8-5 8 5v12' fill='none' stroke='%23e8e4da' stroke-width='2'/%3E%3C/svg%3E">
+<title>ISKVW · sala</title>
+<style>
+  /* ── Misma piel que el campo: fondo casi negro, monoespaciada, sin menu.
+       La sala no se explica: se orbita. ── */
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{height:100%;overflow:hidden;background:#08080a;overscroll-behavior:none}
+  body{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;color:#e8e4da;
+       touch-action:none;-webkit-user-select:none;user-select:none;cursor:grab}
+  body.arrastrando{cursor:grabbing}
+  canvas{position:fixed;inset:0;width:100%;height:100%;display:block}
+
+  .hud{position:fixed;font-size:.63rem;letter-spacing:.09em;line-height:1.7;
+       color:#8a857a;pointer-events:none;text-transform:uppercase}
+  #ficha{top:16px;left:18px;max-width:60vw}
+  #ficha b{display:block;font-size:.86rem;letter-spacing:-.01em;color:#e8e4da;
+           font-weight:600;text-transform:none;margin-bottom:3px}
+  #ficha .demo{color:#c9a227}
+  #medidor{top:16px;right:18px;text-align:right}
+  #medidor .cuenta{color:#e8e4da;font-size:.72rem}
+  #medidor .recorte{color:#c9a227}
+  /* La leyenda es lo unico clickeable: cada nivel se puede apagar, y su
+     cuenta queda a la vista para que apagar nunca sea desaparecer. */
+  #leyenda{bottom:18px;left:18px;pointer-events:auto}
+  #leyenda div{cursor:pointer;white-space:nowrap;transition:opacity .2s ease}
+  #leyenda div.apagado{opacity:.35;text-decoration:line-through}
+  #leyenda i{display:inline-block;width:26px;height:0;vertical-align:middle;
+             margin-right:8px;border-top-width:2px}
+  #pista{bottom:18px;right:18px;text-align:right;transition:opacity 1.4s ease}
+  #pista.ido{opacity:0}
+  #volver{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);
+          font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;
+          color:#4a463f;text-decoration:none;border-bottom:1px solid #26241f}
+  #volver:hover{color:#8a857a}
+  @media (max-width:560px){
+    .hud{font-size:.58rem}
+    #ficha{max-width:52vw}
+    #leyenda i{width:18px;margin-right:6px}
+    #volver{display:none}
+  }
+</style>
+</head>
+<body>
+<canvas id="c"></canvas>
+<div class="hud" id="ficha"></div>
+<div class="hud" id="medidor"></div>
+<div class="hud" id="leyenda"></div>
+<div class="hud" id="pista">arrastrar para orbitar · rueda o pellizco para acercar</div>
+<a id="volver" href="../campo/">campo</a>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════════
+   ISKVW · sala
+
+   Una sala es un conjunto de POLILINEAS MEDIDAS, no una malla, ni una foto,
+   ni un splat. Solo lineas: es lo unico que un laser puede dibujar y lo unico
+   que un rider puede citar. El mismo JSON que se orbita aca alimenta despues
+   el presupuesto ILDA y la ficha tecnica.
+
+   Tres reglas que ordenan el visor:
+
+   1. La CONFIANZA se ve. medido = solido, ajustado = segmentado, aportado =
+      punteado, citado = raya-punto, no_verificado = tenue. Un dibujo limpio
+      que no distingue lo medido de lo supuesto es un dibujo que miente.
+   2. El PRESUPUESTO de aristas se declara y se reporta. Si la sala no cabe,
+      se recorta por confianza (primero lo que nadie respalda) y se dice en
+      pantalla cuantas quedaron fuera. Recortar en silencio es la unica falta
+      grave: el que mira creeria que vio la sala entera.
+   3. Nada de librerias. La proyeccion son cuatro matrices de 4x4 escritas a
+      mano; el resto es canvas 2D. Una sala de 500 aristas no necesita WebGL,
+      y lo que no depende de nadie sigue abriendo en diez anios.
+   ═══════════════════════════════════════════════════════════════════ */
+
+/* ── respaldo: si el fetch falla (file://, ruta mala), el visor NO abre en
+      negro. Muestra un contorno de referencia que se declara como tal. ── */
+const RESPALDO = {
+  nombre: "sin datos", ciudad: "—", tipo: "—",
+  geometria: {unidad: "m", polilineas: [
+    {puntos: [[-5,0,0],[5,0,0],[5,3.6,0],[-5,3.6,0],[-5,0,0]],
+     confianza: "no_verificado", etiqueta: "contorno de referencia", capa: "vacio"}
+  ]}
+};
+
+const PARAM = new URLSearchParams(location.search);
+/* ?venue= takes a bare id from the registry (data/venues/<id>.json) or a full
+   path. The id form is what a link, a QR or the sequence tool can carry without
+   knowing where this page lives. */
+const PEDIDO = PARAM.get("venue") || "";
+const RUTA = !PEDIDO ? "../../../data/venues/scd-plaza-egana.json"
+  : (/[/.]/.test(PEDIDO) ? PEDIDO : `../../../data/venues/${PEDIDO}.json`);
+/* El tope existe para que 60 fps sea una promesa y no una esperanza. Se puede
+   bajar por URL (?aristas=120) justamente para VER como avisa el recorte. */
+const TOPE = Math.max(1, parseInt(PARAM.get("aristas"), 10) || 800);
+/* The starting camera is DATA, not code: ?giro=&alto=&dist= override it per
+   link, and the defaults are exactly the values that shipped. dist is in
+   metres and 0 means "let the auto-framing decide", which is the default. */
+const numParam = (clave, porDefecto) => {
+  const v = parseFloat(PARAM.get(clave));
+  return Number.isFinite(v) ? v : porDefecto;
+};
+const DIST_URL = numParam("dist", 0);
+
+/* Orden de sacrificio: lo primero que se va es lo que nadie respalda. */
+const ORDEN = ["medido", "citado", "ajustado", "aportado", "no_verificado"];
+const ESTILO = {
+  medido:        {color: "#e8e4da", raya: [],           grosor: 1.3,  nombre: "medido"},
+  citado:        {color: "#8fa8b4", raya: [9,3,2,3],    grosor: 1.1,  nombre: "citado"},
+  ajustado:      {color: "#b9b4a8", raya: [5,4],        grosor: 1.05, nombre: "ajustado"},
+  aportado:      {color: "#8a857a", raya: [2,4],        grosor: 1.0,  nombre: "aportado"},
+  no_verificado: {color: "#3f3c36", raya: [1,5],        grosor: 1.0,  nombre: "no verificado"}
+};
+
+/* ═══ matrices 4x4, columna primero (la convencion de WebGL, sin WebGL) ═══ */
+const M = {
+  mul(a, b) {                                   // a·b
+    const o = new Array(16);
+    for (let c = 0; c < 4; c++) for (let r = 0; r < 4; r++)
+      o[c*4+r] = a[r]*b[c*4] + a[4+r]*b[c*4+1] + a[8+r]*b[c*4+2] + a[12+r]*b[c*4+3];
+    return o;
+  },
+  perspectiva(fov, asp, cerca, lejos) {
+    const f = 1 / Math.tan(fov / 2);
+    return [f/asp,0,0,0, 0,f,0,0, 0,0,(lejos+cerca)/(cerca-lejos),-1,
+            0,0,2*lejos*cerca/(cerca-lejos),0];
+  },
+  rotX(a) { const c = Math.cos(a), s = Math.sin(a);
+            return [1,0,0,0, 0,c,s,0, 0,-s,c,0, 0,0,0,1]; },
+  rotY(a) { const c = Math.cos(a), s = Math.sin(a);
+            return [c,0,-s,0, 0,1,0,0, s,0,c,0, 0,0,0,1]; },
+  mover(x, y, z) { return [1,0,0,0, 0,1,0,0, 0,0,1,0, x,y,z,1]; },
+  /* La sala tiene z hacia arriba (es una planta con altura); la camara tiene
+     y hacia arriba. Ese cambio de ejes es una matriz mas, no un caso especial
+     repartido por el codigo. */
+  ejes: [1,0,0,0, 0,0,-1,0, 0,1,0,0, 0,0,0,1],
+  aplicar(m, p) {                               // punto -> clip (x,y,z,w)
+    const [x, y, z] = p;
+    return [m[0]*x + m[4]*y + m[8]*z + m[12],
+            m[1]*x + m[5]*y + m[9]*z + m[13],
+            m[2]*x + m[6]*y + m[10]*z + m[14],
+            m[3]*x + m[7]*y + m[11]*z + m[15]];
+  }
+};
+
+/* ═══ estado ═══ */
+const CAM = {giro: numParam("giro", -0.45),
+             alto: Math.max(-1.45, Math.min(1.45, numParam("alto", 0.62))),
+             dist: 40, foco: [0, 0, 0]};
+const ESTADO = {
+  venue: null, lineas: [], aristas: 0, dibujadas: 0, omitidas: 0,
+  porNivel: {}, apagados: {}, fps: 0, cuadros: 0, t0: 0, mvp: null
+};
+
+const cv = document.getElementById("c");
+const cx = cv.getContext("2d", {alpha: false});
+let ancho = 0, alto = 0, dpr = 1;
+
+function dimensionar() {
+  dpr = Math.min(window.devicePixelRatio || 1, 2);
+  ancho = window.innerWidth; alto = window.innerHeight;
+  cv.width = Math.round(ancho * dpr); cv.height = Math.round(alto * dpr);
+  cv.style.width = ancho + "px"; cv.style.height = alto + "px";
+}
+
+/* ═══ presupuesto: se reparte por confianza, y lo que no entra se REPORTA ═══ */
+function presupuestar(polilineas) {
+  const orden = [...polilineas].map((pl, i) => ({pl, i}))
+    .sort((a, b) => (ORDEN.indexOf(a.pl.confianza) - ORDEN.indexOf(b.pl.confianza))
+                    || (a.i - b.i));
+  const dentro = [], porNivel = {};
+  let usadas = 0, omitidas = 0;
+  for (const {pl} of orden) {
+    const n = Math.max(0, (pl.puntos || []).length - 1);
+    const nivel = ESTILO[pl.confianza] ? pl.confianza : "no_verificado";
+    porNivel[nivel] = porNivel[nivel] || {dentro: 0, fuera: 0};
+    if (usadas + n <= TOPE) { dentro.push({pl, nivel}); usadas += n; porNivel[nivel].dentro += n; }
+    else { omitidas += n; porNivel[nivel].fuera += n; }
+  }
+  return {dentro, usadas, omitidas, porNivel};
+}
+
+function cargar(v) {
+  ESTADO.venue = v;
+  const g = (v && v.geometria) || {polilineas: []};
+  const p = presupuestar(g.polilineas || []);
+  ESTADO.lineas = p.dentro;
+  ESTADO.dibujadas = p.usadas;
+  ESTADO.omitidas = p.omitidas;
+  ESTADO.porNivel = p.porNivel;
+  ESTADO.aristas = p.usadas + p.omitidas;
+  encuadrar();
+  pintarFicha();
+  pintarLeyenda();
+}
+
+/* La camara se encuadra sola sobre lo que hay: una sala de 10 m y una de 40
+   entran igual, sin numero magico por sala. */
+function encuadrar() {
+  let mn = [1e9, 1e9, 1e9], mx = [-1e9, -1e9, -1e9];
+  let hay = false;
+  for (const {pl} of ESTADO.lineas) for (const q of pl.puntos) {
+    hay = true;
+    for (let k = 0; k < 3; k++) { if (q[k] < mn[k]) mn[k] = q[k]; if (q[k] > mx[k]) mx[k] = q[k]; }
+  }
+  if (!hay) { mn = [-5, 0, 0]; mx = [5, 5, 3]; }
+  const c = [0, 1, 2].map(k => (mn[k] + mx[k]) / 2);
+  CAM.foco = [c[0], c[2], -c[1]];               // al espacio de camara (y arriba)
+  const radio = Math.max(1, Math.hypot(mx[0]-mn[0], mx[1]-mn[1], mx[2]-mn[2]) / 2);
+  CAM.dist = CAM.destino = radio / Math.tan(0.525) * 1.15;
+  CAM.min = radio * 0.04; CAM.max = radio * 6;   // el minimo deja ENTRAR a la sala
+  // an explicit ?dist= wins over the auto-framing, clamped to the same rails
+  // the wheel obeys -- a link cannot park the camera where a hand cannot go
+  if (DIST_URL > 0) CAM.dist = CAM.destino = Math.max(CAM.min, Math.min(CAM.max, DIST_URL));
+}
+
+/* FOV ancho a proposito: la referencia del artista es un panorama
+   equirectangular mirado desde adentro, no una maqueta mirada desde afuera.
+   Con 60 grados y la distancia minima chica, acercarse es ENTRAR. */
+function camara(giro = CAM.giro, alto_ = CAM.alto, dist = CAM.dist) {
+  const asp = Math.max(0.2, ancho / Math.max(1, alto));
+  const P = M.perspectiva(1.05, asp, 0.1, 4000);
+  const V = M.mul(M.mul(M.mover(0, 0, -dist), M.rotX(alto_)),
+                  M.mul(M.rotY(giro), M.mover(-CAM.foco[0], -CAM.foco[1], -CAM.foco[2])));
+  return M.mul(M.mul(P, V), M.ejes);
+}
+
+/* Proyeccion a pixeles. w <= CERCA es "detras del ojo": ese punto no existe en
+   pantalla, y el segmento se corta contra el plano en vez de saltar. */
+const CERCA = 0.08;
+function proyectar(mvp, p) {
+  const c = M.aplicar(mvp, p);
+  if (c[3] <= CERCA) return null;
+  return [(c[0] / c[3] * 0.5 + 0.5) * ancho, (0.5 - c[1] / c[3] * 0.5) * alto, c[3]];
+}
+function cortar(mvp, a, b) {                     // a fuera, b dentro
+  const ca = M.aplicar(mvp, a), cb = M.aplicar(mvp, b);
+  const t = (CERCA - ca[3]) / (cb[3] - ca[3]);
+  if (!(t > 0 && t < 1)) return null;
+  return proyectar(mvp, [a[0] + (b[0]-a[0])*t, a[1] + (b[1]-a[1])*t, a[2] + (b[2]-a[2])*t]);
+}
+
+/* El recorrido de un nivel de confianza, con el corte contra el plano cercano
+   incluido. Lo usan el canvas y la exportacion a SVG: una sola proyeccion, dos
+   salidas. Si esto se duplicara, la secuencia exportada podria dibujar una sala
+   distinta de la que se orbita, y nadie lo notaria hasta el show. */
+function recorrer(mvp, nivel, mover, trazar) {
+  let algo = false;
+  for (const {pl, nivel: n} of ESTADO.lineas) {
+    if (n !== nivel) continue;
+    const ps = pl.puntos;
+    let previo = proyectar(mvp, ps[0]);
+    if (previo) { mover(previo); algo = true; }
+    for (let i = 1; i < ps.length; i++) {
+      const actual = proyectar(mvp, ps[i]);
+      if (actual && previo) { trazar(actual); algo = true; }
+      else if (actual && !previo) {
+        const q = cortar(mvp, ps[i-1], ps[i]);
+        if (q) { mover(q); trazar(actual); algo = true; }
+        else mover(actual);
+      } else if (!actual && previo) {
+        const q = cortar(mvp, ps[i], ps[i-1]);
+        if (q) { trazar(q); algo = true; }
+      }
+      previo = actual;
+    }
+  }
+  return algo;
+}
+
+function dibujar() {
+  const mvp = camara();
+  ESTADO.mvp = mvp;
+  cx.setTransform(dpr, 0, 0, dpr, 0, 0);
+  cx.fillStyle = "#08080a";
+  cx.fillRect(0, 0, ancho, alto);
+  cx.lineJoin = "round"; cx.lineCap = "round";
+
+  /* Un trazo por nivel de confianza: cinco estilos, cinco stroke() por cuadro.
+     Ahi esta el presupuesto de 60 fps, no en la cantidad de lineas. */
+  for (const nivel of ORDEN) {
+    if (ESTADO.apagados[nivel]) continue;
+    const e = ESTILO[nivel];
+    cx.beginPath();
+    const algo = recorrer(mvp, nivel,
+                          p => cx.moveTo(p[0], p[1]), p => cx.lineTo(p[0], p[1]));
+    if (!algo) continue;
+    cx.strokeStyle = e.color; cx.lineWidth = e.grosor;
+    cx.setLineDash(e.raya); cx.stroke();
+  }
+  cx.setLineDash([]);
+}
+
+/* ═══ la secuencia: el mismo dibujo, congelado en N angulos fijos ═══
+
+   El artista ya habia falseado un visor 360 a mano, cuadro por cuadro, sobre
+   una referencia real. Esto industrializa esa tecnica sin abandonarla: N
+   angulos DETERMINISTAS de la misma sala, cada uno un SVG de puras lineas.
+   Sirve para un reel, para un plotter y para el laser -- que no sabe rasterizar
+   pero sabe seguir una polilinea. Se llama desde node (tools/venue_secuencia.mjs)
+   o desde la consola del navegador; no hay boton, porque no es una funcion del
+   visor sino una salida del mismo dato. */
+function svgDeCuadro(giro, alto_, w = 1080, h = 1080, dist = CAM.dist) {
+  const wPrevio = ancho, hPrevio = alto;
+  ancho = w; alto = h;                       // proyectar() lee estas dos
+  const mvp = camara(giro, alto_, dist);
+  const capas = [];
+  for (const nivel of ORDEN) {
+    if (ESTADO.apagados[nivel]) continue;
+    const e = ESTILO[nivel];
+    const d = [];
+    const n = v => Math.round(v * 100) / 100;
+    const algo = recorrer(mvp, nivel,
+                          p => d.push(`M${n(p[0])} ${n(p[1])}`),
+                          p => d.push(`L${n(p[0])} ${n(p[1])}`));
+    if (!algo) continue;
+    capas.push(`<g data-confianza="${nivel}" fill="none" stroke="${e.color}" ` +
+               `stroke-width="${e.grosor}" stroke-linecap="round" stroke-linejoin="round"` +
+               (e.raya.length ? ` stroke-dasharray="${e.raya.join(' ')}"` : "") +
+               `><path d="${d.join("")}"/></g>`);
+  }
+  ancho = wPrevio; alto = hPrevio;
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${w} ${h}" width="${w}" ` +
+         `height="${h}"><rect width="${w}" height="${h}" fill="#08080a"/>${capas.join("")}</svg>`;
+}
+
+/* A camera path is DATA: keyframes {giro, alto?, dist?} lerped over the frame
+   count (schemas/orbita.schema.json; --orbita in tools/venue_secuencia.mjs).
+   `cerrar` treats the path as a loop -- the endpoint frame is not emitted, so
+   frame 0 follows the last one seamlessly. The default full turn is itself a
+   two-keyframe closed path through this same code, which is why an orbit FILE
+   can reproduce it frame for frame and the smoke can prove that it does. */
+function interpolarRuta(ruta, t) {
+  const n = ruta.length;
+  if (n === 1 || t <= 0) return ruta[0];
+  if (t >= 1) return ruta[n - 1];             // exact endpoint, no float drift
+  const s = t * (n - 1), i = Math.floor(s), f = s - i;
+  const a = ruta[i], b = ruta[i + 1], mez = (x, y) => x + (y - x) * f;
+  return {giro: mez(a.giro, b.giro), alto: mez(a.alto, b.alto),
+          dist: mez(a.dist, b.dist)};
+}
+
+function secuencia(cuadros = 120, opciones = {}) {
+  const {alto_: incl = CAM.alto, w = 1080, h = 1080, dist = CAM.dist,
+         desde = 0, ruta = null, cerrar = !(ruta && ruta.length)} = opciones;
+  const camino = (ruta && ruta.length
+    ? ruta
+    : [{giro: desde}, {giro: desde + 2 * Math.PI}])   // the default turn, as data
+    .map(k => ({
+      giro: Number.isFinite(+k.giro) ? +k.giro : 0,
+      alto: Number.isFinite(+k.alto) ? +k.alto : incl,
+      dist: Number.isFinite(+k.dist) && +k.dist > 0 ? +k.dist : dist,
+    }));
+  const salida = [];
+  for (let i = 0; i < cuadros; i++) {
+    const t = cuadros === 1 ? 0 : i / (cerrar ? cuadros : cuadros - 1);
+    const k = interpolarRuta(camino, t);
+    salida.push(svgDeCuadro(k.giro, k.alto, w, h, k.dist));
+  }
+  return salida;
+}
+
+/* ═══ los numeros a la vista ═══ */
+function pintarFicha() {
+  const v = ESTADO.venue || {};
+  const demo = /DEMO/.test(v.notas || "") || /DEMO/.test((v.geometria || {}).nota || "");
+  const firma = v.firmado_por ? "firmado por " + v.firmado_por : "sin firma";
+  document.getElementById("ficha").innerHTML =
+    `<b>${v.nombre || "sala"}</b>${[v.ciudad, v.comuna, v.tipo].filter(Boolean).join(" · ")}<br>` +
+    `${firma}${demo ? ' · <span class="demo">demo · cotas pendientes</span>' : ""}`;
+}
+
+function pintarLeyenda() {
+  const L = document.getElementById("leyenda");
+  L.innerHTML = ORDEN.filter(n => ESTADO.porNivel[n]).map(n => {
+    const e = ESTILO[n], c = ESTADO.porNivel[n];
+    const fuera = c.fuera ? ` (+${c.fuera} fuera)` : "";
+    const raya = e.raya.length ? "dashed" : "solid";
+    return `<div data-n="${n}" class="${ESTADO.apagados[n] ? "apagado" : ""}">` +
+           `<i style="border-top:2px ${raya} ${e.color}"></i>${e.nombre} · ${c.dentro}${fuera}</div>`;
+  }).join("") || "<div>sin geometría</div>";
+  L.querySelectorAll("div[data-n]").forEach(d => d.onclick = () => {
+    const n = d.dataset.n;
+    ESTADO.apagados[n] = !ESTADO.apagados[n];
+    pintarLeyenda(); pintarMedidor();
+  });
+}
+
+function pintarMedidor() {
+  const apagadas = ORDEN.reduce((s, n) => s + (ESTADO.apagados[n] && ESTADO.porNivel[n]
+                                               ? ESTADO.porNivel[n].dentro : 0), 0);
+  const vistas = ESTADO.dibujadas - apagadas;
+  // Antes de la primera medicion no hay fps: decir "0 fps" seria inventar un
+  // numero, y el HUD de este visor existe justamente para no hacer eso.
+  let h = `<span class="cuenta">${vistas}/${TOPE} aristas</span><br>` +
+          (ESTADO.fps ? `${ESTADO.fps} fps` : "midiendo…");
+  if (ESTADO.omitidas)
+    h += `<br><span class="recorte">${ESTADO.omitidas} fuera del tope</span>`;
+  if (apagadas) h += `<br>${apagadas} apagadas a mano`;
+  document.getElementById("medidor").innerHTML = h;
+}
+
+/* ═══ el gesto ═══ */
+const punteros = new Map();
+let pinza = 0, movido = false;
+
+cv.addEventListener("pointerdown", e => {
+  CAM.vGiro = CAM.vAlto = 0;                     // agarrar la sala la detiene
+  punteros.set(e.pointerId, [e.clientX, e.clientY]);
+  cv.setPointerCapture(e.pointerId);
+  document.body.classList.add("arrastrando");
+});
+cv.addEventListener("pointermove", e => {
+  const p = punteros.get(e.pointerId);
+  if (!p) return;
+  const dx = e.clientX - p[0], dy = e.clientY - p[1];
+  punteros.set(e.pointerId, [e.clientX, e.clientY]);
+  if (punteros.size >= 2) {
+    const [a, b] = [...punteros.values()];
+    const d = Math.hypot(a[0]-b[0], a[1]-b[1]);
+    if (pinza) acercar(pinza / Math.max(1, d));
+    pinza = d;
+  } else {
+    orbitar(dx, dy);
+  }
+  if (!movido && (Math.abs(dx) + Math.abs(dy)) > 2) {
+    movido = true;
+    document.getElementById("pista").classList.add("ido");
+  }
+});
+const soltar = e => {
+  punteros.delete(e.pointerId);
+  if (punteros.size < 2) pinza = 0;
+  if (!punteros.size) document.body.classList.remove("arrastrando");
+};
+cv.addEventListener("pointerup", soltar);
+cv.addEventListener("pointercancel", soltar);
+cv.addEventListener("wheel", e => {
+  e.preventDefault();
+  acercar(Math.exp(e.deltaY * 0.0012));
+}, {passive: false});
+window.addEventListener("resize", dimensionar);
+
+/* El tacto del visor de 360: el arrastre no termina cuando el dedo se levanta,
+   sigue con inercia y frena solo. Sin eso la sala se siente un plano que salta;
+   con eso se siente un lugar donde uno gira la cabeza. */
+const ROCE = 0.92;            // cuanto conserva por cuadro (60 fps)
+const QUIETO = 0.00025;       // bajo esto se detiene: nada de deriva eterna
+const SUAVE = !(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+
+function orbitar(dx, dy) {
+  CAM.giro += dx * 0.006;
+  CAM.alto = Math.max(-1.45, Math.min(1.45, CAM.alto + dy * 0.006));
+  CAM.vGiro = dx * 0.006;
+  CAM.vAlto = dy * 0.006;
+}
+function acercar(f) {
+  const d = Math.max(CAM.min || 1, Math.min(CAM.max || 400, (CAM.destino || CAM.dist) * f));
+  CAM.destino = d;
+  if (!SUAVE) CAM.dist = d;
+}
+function inercia() {
+  // el zoom persigue su destino; el giro se sigue solo, cada vez menos
+  if (SUAVE && CAM.destino) CAM.dist += (CAM.destino - CAM.dist) * 0.18;
+  if (!SUAVE || punteros.size) return;
+  const g = CAM.vGiro || 0, a = CAM.vAlto || 0;
+  if (Math.abs(g) < QUIETO && Math.abs(a) < QUIETO) { CAM.vGiro = CAM.vAlto = 0; return; }
+  CAM.giro += g;
+  CAM.alto = Math.max(-1.45, Math.min(1.45, CAM.alto + a));
+  CAM.vGiro = g * ROCE; CAM.vAlto = a * ROCE;
+}
+
+/* ═══ el lazo ═══ */
+function cuadro(t) {
+  inercia();
+  dibujar();
+  ESTADO.cuadros++;
+  if (!ESTADO.t0) ESTADO.t0 = t;
+  if (t - ESTADO.t0 >= 500) {
+    ESTADO.fps = Math.round(ESTADO.cuadros * 1000 / (t - ESTADO.t0));
+    ESTADO.cuadros = 0; ESTADO.t0 = t;
+    pintarMedidor();
+  }
+  requestAnimationFrame(cuadro);
+}
+
+async function arrancar() {
+  dimensionar();
+  let v = RESPALDO;
+  try {
+    const r = await fetch(RUTA);
+    if (r.ok) v = await r.json();
+    else console.warn("venue no encontrado:", RUTA);
+  } catch (e) { console.warn("venue no legible:", RUTA, e && e.message); }
+  cargar(v);
+  pintarMedidor();
+  requestAnimationFrame(cuadro);
+}
+arrancar();
+</script>
+</body>
+</html>

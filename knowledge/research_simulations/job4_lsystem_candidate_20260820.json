@@ -1,0 +1,18 @@
+{
+  "schema": "mak-research-simulation-manifest-v1",
+  "simulation_id": "job4-lsystem-visual-grammar-candidate-20260820",
+  "project_id": "mak-research-capture-job4-20260820",
+  "domain": "visual_growth_grammar",
+  "axiom": "A",
+  "rules": {"A": "AB", "B": "A"},
+  "iterations": 4,
+  "max_symbols": 10000,
+  "claim_scope": "visual_grammar",
+  "environment": {"projection": "symbolic_2d", "biological_claim": false},
+  "provenance": {
+    "evidence_refs": [
+      "/home/mak/research/jobs/4/verified_interpret_result.json",
+      "/home/mak/research/jobs/4/verified_result.json"
+    ]
+  }
+}

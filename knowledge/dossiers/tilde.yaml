@@ -1,0 +1,19 @@
+id: tilde
+kind: dossier
+project: tilde
+title: 'Dossier: tilde — Spanish ambiguity, literature as representation, translation
+  loss'
+subject: tilde — Spanish ambiguity, literature as representation, translation loss
+status: INVESTIGADO (Gemini API 2026-07-10) + spot-check de fuentes (Claude, WebSearch
+  2026-07-10) + curado al instrumento. `desktop/tilde_meter.py` (measures mark survival
+  when ideas are compressed).
+sections:
+- Research questions (from the rainstorm)
+- Gemini web prompt (paste, one block)
+- Findings
+- Verificacion de fuentes (spot-check por Claude, WebSearch 2026-07-10)
+- Del dossier a la pieza (curado por Claude desde los findings)
+hard_limit: false
+source_path: projects/cultura/dossiers/tilde.md
+content_sha256: 59e8ec3484722073d312b11ef960ebb33b834cfb68caafe34c4bff937e2a8a39
+ingested_at: '2026-07-10T23:48:48'

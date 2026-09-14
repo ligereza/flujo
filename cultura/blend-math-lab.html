@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Blend Mode Math Lab</title>
+<style>
+  :root{
+    --bg:#111317; --panel:#191c22; --line:#2a2e37;
+    --ink:#eef0f3; --dim:#8a90a0; --accent:#7fd1ae;
+    --r:#ff6b6b; --g:#5ee38a; --b:#6ba8ff; --warn:#ffd166;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0; background:var(--bg); color:var(--ink);
+    font-family:ui-monospace,Menlo,Consolas,monospace; padding:20px 16px 60px;}
+  h1{font-size:16px; font-weight:600; margin:0 0 4px;}
+  .sub{color:var(--dim); font-size:12px; margin-bottom:16px;}
+  select,button{background:#0e1015; color:var(--ink); border:1px solid var(--line);
+    padding:6px 8px; border-radius:6px; font-family:inherit; font-size:12px; width:100%;}
+  #mode{font-size:14px; padding:9px 10px; margin-bottom:12px;}
+  .layers{display:flex; gap:10px; margin-bottom:12px;}
+  .layer{flex:1;}
+  .layer canvas{width:100%; aspect-ratio:1; border-radius:8px; border:1px solid var(--line); display:block; background:#0e1015;}
+  .layer label{display:block; font-size:11px; color:var(--dim); margin:6px 0 4px;}
+  .formula{background:var(--panel); border:1px solid var(--line); border-radius:10px;
+    padding:11px 13px; font-size:12.5px; color:var(--accent); margin-bottom:12px; line-height:1.5; word-break:break-word;}
+  .opacity{display:flex; align-items:center; gap:10px; margin-bottom:12px; font-size:12px; color:var(--dim);}
+  .opacity input{flex:1;} .opacity .v{width:38px; text-align:right; color:var(--ink);}
+  #result{width:100%; aspect-ratio:1; border-radius:10px; border:1px solid var(--line); display:block; cursor:crosshair; background:#0e1015;}
+  .hint{font-size:11px; color:var(--dim); margin:8px 0 14px; text-align:center;}
+  .panel{background:var(--panel); border:1px solid var(--line); border-radius:10px; padding:14px; margin-bottom:12px;}
+  .panel h2{font-size:11px; text-transform:uppercase; letter-spacing:.06em; color:var(--dim); margin:0 0 10px;}
+  .probe{display:flex; gap:8px; margin-bottom:12px;}
+  .probe div{flex:1; text-align:center;}
+  .probe .sw{height:34px; border-radius:6px; border:1px solid var(--line);}
+  .probe small{display:block; font-size:10px; color:var(--dim); margin-top:4px;}
+  .mrow{display:flex; align-items:center; gap:8px; font-size:12px; padding:6px 0; border-bottom:1px dashed var(--line);}
+  .mrow:last-child{border:none;}
+  .chip{width:10px; height:10px; border-radius:3px; flex:none;}
+  .mrow .ex{color:var(--dim); flex:1;} .mrow .eq{font-weight:600;}
+  .two{display:flex; gap:10px;}
+  .two > div{flex:1; min-width:0;}
+  .two canvas{width:100%; border-radius:8px; border:1px solid var(--line); background:#0e1015; display:block;}
+  .cap{font-size:10px; color:var(--dim); text-align:center; margin-top:5px;}
+  .hist{width:100%; border-radius:8px; border:1px solid var(--line); background:#0e1015; display:block; margin-bottom:6px;}
+  table{width:100%; border-collapse:collapse; font-size:11.5px;}
+  th{color:var(--dim); font-weight:400; text-align:right; padding:4px 3px;}
+  th:first-child{text-align:left;}
+  td{text-align:right; padding:5px 3px; border-top:1px dashed var(--line);}
+  td:first-child{text-align:left; color:var(--dim);}
+  .prop{display:flex; align-items:center; gap:8px; font-size:12px; padding:7px 0; border-bottom:1px dashed var(--line);}
+  .prop:last-child{border:none;}
+  .prop .n{flex:1; color:var(--dim);}
+  .prop .v{font-weight:600;}
+  .yes{color:var(--accent);} .no{color:#ff6b6b;} .neu{color:var(--warn);}
+  .eqn{font-size:10.5px; color:#5a5f6c;}
+</style>
+</head>
+<body>
+
+<h1>Blend Mode Math Lab</h1>
+<div class="sub">f : [0,1]² → [0,1], applied per channel — surface, histogram, algebra</div>
+
+<select id="mode"></select>
+<div class="formula" id="formula"></div>
+
+<div class="layers">
+  <div class="layer"><canvas id="baseC" width="256" height="256"></canvas><label>base</label><select id="baseSrc"></select></div>
+  <div class="layer"><canvas id="blendC" width="256" height="256"></canvas><label>blend</label><select id="blendSrc"></select></div>
+</div>
+
+<div class="opacity">
+  <span>α</span><input id="op" type="range" min="0" max="1" step="0.01" value="1"><span class="v" id="opv">1.00</span>
+</div>
+
+<canvas id="result" width="256" height="256"></canvas>
+<div class="hint">drag the result to move the probe · <span id="hintxy">(128,128)</span></div>
+
+<!-- pixel math -->
+<div class="panel">
+  <h2>pixel arithmetic</h2>
+  <div class="probe">
+    <div><div class="sw" id="swBase"></div><small>base b</small></div>
+    <div><div class="sw" id="swBlend"></div><small>blend l</small></div>
+    <div><div class="sw" id="swOut"></div><small>out</small></div>
+  </div>
+  <div class="mrow"><div class="chip" style="background:var(--r)"></div><span class="ex" id="exR"></span><span class="eq" id="eqR"></span></div>
+  <div class="mrow"><div class="chip" style="background:var(--g)"></div><span class="ex" id="exG"></span><span class="eq" id="eqG"></span></div>
+  <div class="mrow"><div class="chip" style="background:var(--b)"></div><span class="ex" id="exB"></span><span class="eq" id="eqB"></span></div>
+</div>
+
+<!-- surface + slice -->
+<div class="panel">
+  <h2>transfer surface &nbsp;·&nbsp; slice at l = <span id="lfix" style="color:var(--accent)"></span></h2>
+  <div class="two">
+    <div><canvas id="surf" width="200" height="200"></canvas><div class="cap">f(b, l) — x=b, y=l, gray=out</div></div>
+    <div><canvas id="slice" width="200" height="200"></canvas><div class="cap">f(b, l_probe) vs b</div></div>
+  </div>
+</div>
+
+<!-- histograms -->
+<div class="panel">
+  <h2>luminance histograms</h2>
+  <canvas id="histB" class="hist" width="300" height="60"></canvas>
+  <canvas id="histL" class="hist" width="300" height="60"></canvas>
+  <canvas id="histO" class="hist" width="300" height="60"></canvas>
+  <table id="stats"></table>
+</div>
+
+<!-- algebra -->
+<div class="panel">
+  <h2>algebraic properties &nbsp;<span class="eqn">(tested numerically on a 33×33 grid)</span></h2>
+  <div id="props"></div>
+</div>
+
+<script>
+const S=256;
+
+const modes = {
+  normal:    {f:(b,l)=>l, t:'f = l'},
+  multiply:  {f:(b,l)=>b*l, t:'f = b·l'},
+  screen:    {f:(b,l)=>1-(1-b)*(1-l), t:'f = 1 − (1−b)(1−l)'},
+  overlay:   {f:(b,l)=> b<=0.5 ? 2*b*l : 1-2*(1-b)*(1-l), t:'f = b≤½ ? 2bl : 1−2(1−b)(1−l)'},
+  hardlight: {f:(b,l)=> l<=0.5 ? 2*b*l : 1-2*(1-b)*(1-l), t:'f = overlay(l, b) — roles swapped'},
+  softlight: {f:(b,l)=> l<=0.5 ? b-(1-2*l)*b*(1-b)
+                              : b+(2*l-1)*((b<=0.25?((16*b-12)*b+4)*b:Math.sqrt(b))-b),
+              t:'f = softened multiply/screen (W3C)'},
+  darken:    {f:(b,l)=>Math.min(b,l), t:'f = min(b, l)'},
+  lighten:   {f:(b,l)=>Math.max(b,l), t:'f = max(b, l)'},
+  colordodge:{f:(b,l)=> l>=1?1:Math.min(1,b/(1-l)), t:'f = min(1, b / (1−l))'},
+  colorburn: {f:(b,l)=> l<=0?0:1-Math.min(1,(1-b)/l), t:'f = 1 − min(1, (1−b) / l)'},
+  difference:{f:(b,l)=>Math.abs(b-l), t:'f = |b − l|'},
+  exclusion: {f:(b,l)=>b+l-2*b*l, t:'f = b + l − 2bl'},
+  linearburn:{f:(b,l)=>Math.max(0,b+l-1), t:'f = max(0, b + l − 1)'},
+  add:       {f:(b,l)=>Math.min(1,b+l), t:'f = min(1, b + l)'},
+  subtract:  {f:(b,l)=>Math.max(0,b-l), t:'f = max(0, b − l)'},
+};
+
+const sources = {
+  'sunset gradient':(c)=>{const g=c.createLinearGradient(0,0,S,S);
+    g.addColorStop(0,'#ff9d5c');g.addColorStop(.5,'#e0417a');g.addColorStop(1,'#2b1a5e');
+    c.fillStyle=g;c.fillRect(0,0,S,S);},
+  'ocean gradient':(c)=>{const g=c.createLinearGradient(0,S,S,0);
+    g.addColorStop(0,'#062b4a');g.addColorStop(.6,'#1e93b8');g.addColorStop(1,'#a8f0d8');
+    c.fillStyle=g;c.fillRect(0,0,S,S);},
+  'radial glow':(c)=>{c.fillStyle='#0a0a10';c.fillRect(0,0,S,S);
+    const g=c.createRadialGradient(S*.4,S*.35,4,S*.4,S*.35,S*.75);
+    g.addColorStop(0,'#fff4c2');g.addColorStop(.35,'#ffb347');g.addColorStop(1,'#120018');
+    c.fillStyle=g;c.fillRect(0,0,S,S);},
+  'checkerboard':(c)=>{const n=8,k=S/n;
+    for(let y=0;y<n;y++)for(let x=0;x<n;x++){c.fillStyle=(x+y)%2?'#e8e8e8':'#303038';c.fillRect(x*k,y*k,k,k);}},
+  'stripes':(c)=>{for(let x=0;x<S;x+=16){c.fillStyle=(x/16)%2?'#ff4d6d':'#101018';c.fillRect(x,0,16,S);}},
+  'noise':(c)=>{const d=c.createImageData(S,S);
+    for(let i=0;i<d.data.length;i+=4){const v=Math.random()*255;
+      d.data[i]=v*.9+20;d.data[i+1]=v;d.data[i+2]=v*1.05;d.data[i+3]=255;}
+    c.putImageData(d,0,0);},
+  'grayscale ramp':(c)=>{const g=c.createLinearGradient(0,0,S,0);
+    g.addColorStop(0,'#000');g.addColorStop(1,'#fff');c.fillStyle=g;c.fillRect(0,0,S,S);},
+  'mid gray 50%':(c)=>{c.fillStyle='#808080';c.fillRect(0,0,S,S);},
+  'white':(c)=>{c.fillStyle='#ffffff';c.fillRect(0,0,S,S);},
+  'black':(c)=>{c.fillStyle='#000000';c.fillRect(0,0,S,S);},
+  'blobs':(c)=>{c.fillStyle='#12141c';c.fillRect(0,0,S,S);
+    const cols=['#ff5c8a','#5cc8ff','#ffe066','#6bffb0'];
+    for(let i=0;i<7;i++){const x=30+Math.random()*(S-60),y=30+Math.random()*(S-60),r=25+Math.random()*55;
+      const g=c.createRadialGradient(x,y,2,x,y,r);
+      g.addColorStop(0,cols[i%cols.length]);g.addColorStop(1,'rgba(0,0,0,0)');
+      c.fillStyle=g;c.beginPath();c.arc(x,y,r,0,7);c.fill();}},
+  'rings':(c)=>{c.fillStyle='#0e1015';c.fillRect(0,0,S,S);
+    for(let r=S*.7;r>2;r-=11){c.strokeStyle=(Math.round(r/11)%2)?'#7fd1ae':'#2b2f3a';
+      c.lineWidth=6;c.beginPath();c.arc(S/2,S/2,r,0,7);c.stroke();}},
+};
+
+const $=id=>document.getElementById(id);
+const bx=$('baseC').getContext('2d',{willReadFrequently:true});
+const lx=$('blendC').getContext('2d',{willReadFrequently:true});
+const rx=$('result').getContext('2d');
+const modeSel=$('mode'), baseSrc=$('baseSrc'), blendSrc=$('blendSrc'), op=$('op');
+
+Object.keys(sources).forEach(n=>[baseSrc,blendSrc].forEach(s=>{
+  const o=document.createElement('option');o.value=n;o.textContent=n;s.appendChild(o);}));
+Object.keys(modes).forEach(m=>{const o=document.createElement('option');o.value=m;o.textContent=m;modeSel.appendChild(o);});
+baseSrc.value='sunset gradient'; blendSrc.value='rings'; modeSel.value='overlay';
+
+let baseData, blendData, outData, probe={x:128,y:128};
+const lum=(r,g,b)=>0.2126*r+0.7152*g+0.0722*b;
+
+function paintLayers(){
+  sources[baseSrc.value](bx); sources[blendSrc.value](lx);
+  baseData=bx.getImageData(0,0,S,S).data;
+  blendData=lx.getImageData(0,0,S,S).data;
+}
+
+function blendAll(){
+  const f=modes[modeSel.value].f, a=+op.value;
+  const img=rx.createImageData(S,S), d=img.data;
+  for(let i=0;i<d.length;i+=4){
+    for(let c=0;c<3;c++){
+      const b=baseData[i+c]/255, l=blendData[i+c]/255;
+      const o=b*(1-a)+f(b,l)*a;
+      d[i+c]=Math.max(0,Math.min(255,o*255));
+    }
+    d[i+3]=255;
+  }
+  rx.putImageData(img,0,0); outData=d;
+}
+
+function pixelPanel(){
+  const {x,y}=probe, i=(y*S+x)*4;
+  const bb=[baseData[i],baseData[i+1],baseData[i+2]];
+  const ll=[blendData[i],blendData[i+1],blendData[i+2]];
+  const oo=[outData[i],outData[i+1],outData[i+2]];
+  const hex=a=>'#'+a.map(v=>v.toString(16).padStart(2,'0')).join('');
+  $('hintxy').textContent=`(${x},${y})`;
+  $('swBase').style.background=hex(bb);
+  $('swBlend').style.background=hex(ll);
+  $('swOut').style.background=hex(oo);
+  ['R','G','B'].forEach((c,k)=>{
+    $('ex'+c).textContent=`f(${(bb[k]/255).toFixed(2)}, ${(ll[k]/255).toFixed(2)})`;
+    $('eq'+c).textContent=`${(oo[k]/255).toFixed(2)} → ${oo[k]}`;
+  });
+  return {bb,ll,oo};
+}
+
+// ---- surface heatmap ----
+function drawSurface(bProbe,lProbe){
+  const c=$('surf').getContext('2d'), n=$('surf').width;
+  const f=modes[modeSel.value].f;
+  const img=c.createImageData(n,n), d=img.data;
+  for(let yy=0;yy<n;yy++) for(let xx=0;xx<n;xx++){
+    const b=xx/(n-1), l=1-yy/(n-1);
+    const v=Math.max(0,Math.min(1,f(b,l)))*255;
+    const i=(yy*n+xx)*4;
+    d[i]=v; d[i+1]=v; d[i+2]=v; d[i+3]=255;
+  }
+  c.putImageData(img,0,0);
+  // iso-contours at 0.25/0.5/0.75
+  c.strokeStyle='rgba(127,209,174,.35)'; c.lineWidth=1;
+  [0.25,0.5,0.75].forEach(t=>{
+    c.beginPath(); let started=false;
+    for(let xx=0;xx<n;xx++){
+      for(let yy=1;yy<n;yy++){
+        const b=xx/(n-1);
+        const l1=1-(yy-1)/(n-1), l2=1-yy/(n-1);
+        const v1=f(b,l1), v2=f(b,l2);
+        if((v1-t)*(v2-t)<=0 && v1!==v2){
+          if(!started){c.moveTo(xx,yy);started=true;} else c.lineTo(xx,yy);
+          break;
+        }
+      }
+    }
+    c.stroke();
+  });
+  // probe crosshair
+  const px=bProbe*(n-1), py=(1-lProbe)*(n-1);
+  c.strokeStyle='#ff6b6b'; c.lineWidth=1;
+  c.beginPath(); c.moveTo(px,0); c.lineTo(px,n); c.moveTo(0,py); c.lineTo(n,py); c.stroke();
+  c.fillStyle='#ff6b6b'; c.beginPath(); c.arc(px,py,3,0,7); c.fill();
+}
+
+// ---- slice curve ----
+function drawSlice(bProbe,lProbe,outProbe){
+  const cv=$('slice'), c=cv.getContext('2d'), n=cv.width;
+  const f=modes[modeSel.value].f, a=+op.value;
+  c.clearRect(0,0,n,n);
+  c.strokeStyle='#1c1f27';
+  for(let i=0;i<=4;i++){const p=i*n/4;
+    c.beginPath();c.moveTo(0,p);c.lineTo(n,p);c.moveTo(p,0);c.lineTo(p,n);c.stroke();}
+  // identity line
+  c.strokeStyle='#333a46'; c.setLineDash([3,3]);
+  c.beginPath(); c.moveTo(0,n); c.lineTo(n,0); c.stroke(); c.setLineDash([]);
+  // curve
+  c.strokeStyle='#7fd1ae'; c.lineWidth=2; c.beginPath();
+  for(let x=0;x<=n;x++){
+    const b=x/n;
+    const v=Math.max(0,Math.min(1, b*(1-a)+f(b,lProbe)*a));
+    const y=n-v*n;
+    x===0?c.moveTo(x,y):c.lineTo(x,y);
+  }
+  c.stroke();
+  c.fillStyle='#ff6b6b';
+  c.beginPath(); c.arc(bProbe*n, n-outProbe*n, 4, 0, 7); c.fill();
+}
+
+// ---- histograms ----
+function drawHist(id, data, color, label){
+  const cv=$(id), c=cv.getContext('2d'), w=cv.width, h=cv.height;
+  const bins=new Array(64).fill(0);
+  for(let i=0;i<data.length;i+=4){
+    const L=lum(data[i],data[i+1],data[i+2])/255;
+    bins[Math.min(63,Math.floor(L*64))]++;
+  }
+  const max=Math.max(...bins)||1;
+  c.clearRect(0,0,w,h);
+  c.fillStyle=color;
+  bins.forEach((v,i)=>{
+    const bh=(v/max)*(h-14);
+    c.fillRect(i*(w/64), h-bh, w/64-1, bh);
+  });
+  c.fillStyle='#8a90a0'; c.font='10px ui-monospace,monospace';
+  c.fillText(label, 4, 11);
+  // stats
+  let sum=0,n=0,mn=1,mx=0;
+  for(let i=0;i<data.length;i+=4){
+    const L=lum(data[i],data[i+1],data[i+2])/255;
+    sum+=L; n++; if(L<mn)mn=L; if(L>mx)mx=L;
+  }
+  const mean=sum/n;
+  let vs=0;
+  for(let i=0;i<data.length;i+=4){
+    const L=lum(data[i],data[i+1],data[i+2])/255; vs+=(L-mean)**2;
+  }
+  return {mean, sd:Math.sqrt(vs/n), mn, mx};
+}
+
+function statsTable(sb,sl,so){
+  $('stats').innerHTML =
+    '<tr><th>layer</th><th>μ</th><th>σ</th><th>min</th><th>max</th></tr>' +
+    [['base',sb,'#ff8fa3'],['blend',sl,'#ffd166'],['result',so,'#7fd1ae']].map(([n,s,col])=>
+      `<tr><td style="color:${col}">${n}</td><td>${s.mean.toFixed(3)}</td><td>${s.sd.toFixed(3)}</td>`+
+      `<td>${s.mn.toFixed(2)}</td><td>${s.mx.toFixed(2)}</td></tr>`).join('');
+}
+
+// ---- algebraic properties (numeric probe) ----
+function properties(){
+  const f=modes[modeSel.value].f;
+  const G=33, e=1e-4;
+  const grid=[...Array(G).keys()].map(i=>i/(G-1));
+  let commutative=true, idempotent=true, associative=true;
+  let monoB=true, monoL=true;
+  let identityL=null, annihL=null;
+
+  for(const b of grid) for(const l of grid){
+    if(Math.abs(f(b,l)-f(l,b))>1e-3) commutative=false;
+  }
+  for(const b of grid) if(Math.abs(f(b,b)-b)>1e-3) idempotent=false;
+
+  // associativity: f(f(a,b),c) vs f(a,f(b,c)) on a coarse grid
+  const g2=[0,.25,.5,.75,1];
+  for(const a of g2) for(const b of g2) for(const c of g2){
+    if(Math.abs(f(f(a,b),c)-f(a,f(b,c)))>1e-3) associative=false;
+  }
+  // monotonicity
+  for(const l of grid) for(let i=1;i<G;i++){
+    if(f(grid[i],l) < f(grid[i-1],l)-1e-6) monoB=false;
+  }
+  for(const b of grid) for(let i=1;i<G;i++){
+    if(f(b,grid[i]) < f(b,grid[i-1])-1e-6) monoL=false;
+  }
+  // neutral blend value: l* with f(b,l*) == b for all b
+  for(const l of grid){
+    if(grid.every(b=>Math.abs(f(b,l)-b)<1e-3)){ identityL=l; break; }
+  }
+  // annihilator: l with f(b,l) constant for all b
+  for(const l of grid){
+    const v0=f(0,l);
+    if(grid.every(b=>Math.abs(f(b,l)-v0)<1e-3)){ annihL={l, v:v0}; break; }
+  }
+  // clipping fraction: how often f saturates
+  let clip=0, tot=0;
+  for(const b of grid) for(const l of grid){
+    const v=f(b,l); tot++;
+    if(v<=1e-6 || v>=1-1e-6) clip++;
+  }
+
+  const yn=(v)=>v?'<span class="yes">yes</span>':'<span class="no">no</span>';
+  const rows=[
+    ['commutative <span class="eqn">f(b,l)=f(l,b)</span>', yn(commutative)],
+    ['idempotent <span class="eqn">f(b,b)=b</span>', yn(idempotent)],
+    ['associative <span class="eqn">f(f(a,b),c)=f(a,f(b,c))</span>', yn(associative)],
+    ['↑ in base <span class="eqn">∂f/∂b ≥ 0</span>', yn(monoB)],
+    ['↑ in blend <span class="eqn">∂f/∂l ≥ 0</span>', yn(monoL)],
+    ['neutral l <span class="eqn">f(b,l*)=b ∀b</span>',
+      identityL===null?'<span class="neu">none</span>':`<span class="yes">l* = ${identityL.toFixed(2)}</span>`],
+    ['annihilator l <span class="eqn">f(b,l)=const</span>',
+      annihL===null?'<span class="neu">none</span>':`<span class="neu">l = ${annihL.l.toFixed(2)} → ${annihL.v.toFixed(2)}</span>`],
+    ['saturation <span class="eqn">fraction clipped at 0 or 1</span>',
+      `<span class="${clip/tot>0.25?'no':'neu'}">${(100*clip/tot).toFixed(1)}%</span>`],
+  ];
+  $('props').innerHTML = rows.map(([n,v])=>
+    `<div class="prop"><span class="n">${n}</span><span class="v">${v}</span></div>`).join('');
+}
+
+function render(){
+  $('formula').textContent = modes[modeSel.value].t + '   · per channel, b,l ∈ [0,1]';
+  $('opv').textContent=(+op.value).toFixed(2);
+  blendAll();
+  const {bb,ll,oo}=pixelPanel();
+  const bP=lum(bb[0],bb[1],bb[2])/255;
+  const lP=lum(ll[0],ll[1],ll[2])/255;
+  const oP=lum(oo[0],oo[1],oo[2])/255;
+  $('lfix').textContent=lP.toFixed(2);
+  drawSurface(bP,lP);
+  drawSlice(bP,lP,oP);
+  const sb=drawHist('histB', baseData, '#ff8fa3', 'base');
+  const sl=drawHist('histL', blendData, '#ffd166', 'blend');
+  const so=drawHist('histO', outData, '#7fd1ae', 'result');
+  statsTable(sb,sl,so);
+  properties();
+}
+function full(){ paintLayers(); render(); }
+
+function pick(e){
+  const r=$('result').getBoundingClientRect();
+  const p=e.touches?e.touches[0]:e;
+  probe={
+    x:Math.max(0,Math.min(S-1,Math.floor((p.clientX-r.left)/r.width*S))),
+    y:Math.max(0,Math.min(S-1,Math.floor((p.clientY-r.top)/r.height*S)))
+  };
+  const {bb,ll,oo}=pixelPanel();
+  const bP=lum(...bb)/255, lP=lum(...ll)/255, oP=lum(...oo)/255;
+  $('lfix').textContent=lP.toFixed(2);
+  drawSurface(bP,lP); drawSlice(bP,lP,oP);
+  e.preventDefault();
+}
+let down=false;
+$('result').addEventListener('pointerdown',e=>{down=true;pick(e);});
+$('result').addEventListener('pointermove',e=>{if(down)pick(e);});
+window.addEventListener('pointerup',()=>down=false);
+
+[baseSrc,blendSrc].forEach(s=>s.addEventListener('input',full));
+modeSel.addEventListener('input',render);
+op.addEventListener('input',render);
+full();
+</script>
+</body>
+</html>

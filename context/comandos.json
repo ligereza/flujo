@@ -1,0 +1,907 @@
+{
+ "formato": "comandos/1",
+ "total": 98,
+ "grupos": [
+  "airdrop",
+  "autonomia",
+  "brief",
+  "datadrop",
+  "eventos",
+  "hub",
+  "intake",
+  "job",
+  "knowledge",
+  "laser",
+  "micelio",
+  "privacy",
+  "rd-datos",
+  "rd-db",
+  "render",
+  "resolume",
+  "suplementos"
+ ],
+ "comandos": [
+  {
+   "cmd": "tapiz",
+   "invocacion": "py -m flujo tapiz",
+   "grupo": "",
+   "desc": "Ecosistema Tapiz<->Psicosis<->Fungi: pipeline generativo (tools/compete_engine.py).",
+   "requiere": "",
+   "estado": "listo",
+   "destructivo": null
+  },
+  {
+   "cmd": "health",
+   "invocacion": "py -m flujo health",
+   "grupo": "",
+   "desc": "Chequeo general del repo.",
+   "requiere": "",
+   "estado": "listo",
+   "destructivo": null
+  },
+  {
+   "cmd": "ai-prompt",
+   "invocacion": "py -m flujo ai-prompt",
+   "grupo": "",
+   "desc": "Genera un prompt listo para copiar en una IA web y convertir pedidos en briefs/cotizaciones.",
+   "requiere": "",
+   "estado": "listo",
+   "destructivo": null
+  },
+  {
+   "cmd": "github-sync",
+   "invocacion": "py -m flujo github-sync",
+   "grupo": "",
+   "desc": "Sincroniza el repo local con GitHub de forma simple y segura.",
+   "requiere": "",
+   "estado": "listo",
+   "destructivo": null
+  },
+  {
+   "cmd": "doctor",
+   "invocacion": "py -m flujo doctor",
+   "grupo": "",
+   "desc": "Diagnóstico humano del entorno local: Python, Git, encoding, index, hub y airdrop.",
+   "requiere": "",
+   "estado": "listo",
+   "destructivo": null
+  },
+  {
+   "cmd": "diagnose",
+   "invocacion": "py -m flujo diagnose",
+   "grupo": "",
+   "desc": "Genera un reporte local, sanitizado y copiable para otro agente.",
+   "requiere": "",
+   "estado": "listo",
+   "destructivo": null
+  },
+  {
+   "cmd": "route",
+   "invocacion": "py -m flujo route",
+   "grupo": "",
+   "desc": "Selecciona el packet minimo para una idea sin leer todo el repo.",
+   "requiere": "",
+   "estado": "listo",
+   "destructivo": null
+  },
+  {
+   "cmd": "verify",
+   "invocacion": "py -m flujo verify",
+   "grupo": "",
+   "desc": "Verificación integral local/CI: compileall, tests, health, version y hub smoke.",
+   "requiere": "",
+   "estado": "listo",
+   "destructivo": null
+  },
+  {
+   "cmd": "version",
+   "invocacion": "py -m flujo version",
+   "grupo": "",
+   "desc": "Muestra versión y changelog.",
+   "requiere": "",
+   "estado": "listo",
+   "destructivo": null
+  },
+  {
+   "cmd": "delegate",
+   "invocacion": "py -m flujo delegate",
+   "grupo": "",
+   "desc": "Genera prompt preciso para delegar a agente especializado (5 roles; soporta paralelo via hub o clones). Salida lista para copiar a otra sesión IA. Ideal para multi-agente workflow.",
+   "requiere": "",
+   "estado": "listo",
+   "destructivo": null
+  },
+  {
+   "cmd": "flyer-import",
+   "invocacion": "py -m flujo flyer-import",
+   "grupo": "",
+   "desc": "Importar flyers desde correo con links de Instagram.",
+   "requiere": "casilla de correo: `FLUJO_IMAP_HOST`, `FLUJO_IMAP_USER`, `FLUJO_IMAP_PASSWORD`, `FLUJO_IMAP_ALLOWED_SENDERS`",
+   "estado": "falta: casilla de correo: `FLUJO_IMAP_HOST`, `FLUJO_IMAP_USER`, `FLUJO_IMAP_PASSWORD`, `FLUJO_IMAP_ALLOWED_SENDERS`",
+   "destructivo": true
+  },
+  {
+   "cmd": "ig-redownload",
+   "invocacion": "py -m flujo ig-redownload",
+   "grupo": "",
+   "desc": "Reintentar descarga de posts de Instagram que fallaron.",
+   "requiere": "`pip install parth-dl`",
+   "estado": "falta: `pip install parth-dl`",
+   "destructivo": true
+  },
+  {
+   "cmd": "analyze",
+   "invocacion": "py -m flujo analyze",
+   "grupo": "",
+   "desc": "Analizar colores dominantes y OCR de un proyecto flyer.",
+   "requiere": "",
+   "estado": "listo",
+   "destructivo": null
+  },
+  {
+   "cmd": "export",
+   "invocacion": "py -m flujo export",
+   "grupo": "",
+   "desc": "Exportar ZIP listo para tus herramientas (AI / PS / Blender).",
+   "requiere": "",
+   "estado": "listo",
+   "destructivo": null
+  },
+  {
+   "cmd": "index",
+   "invocacion": "py -m flujo index",
+   "grupo": "",
+   "desc": "Reconstruir o consultar el índice SQLite de flyers.",
+   "requiere": "`FLUJO_RD_ROOT` apuntando al arbol de material",
+   "estado": "falta: `FLUJO_RD_ROOT` apuntando al arbol de material",
+   "destructivo": true
+  },
+  {
+   "cmd": "code-index",
+   "invocacion": "py -m flujo code-index",
+   "grupo": "",
+   "desc": "Crear un índice AST consultable sin incluir texto fuente.",
+   "requiere": "",
+   "estado": "listo",
+   "destructivo": null
+  },
+  {
+   "cmd": "flyer-list",
+   "invocacion": "py -m flujo flyer-list",
+   "grupo": "",
+   "desc": "Listar flyers indexados.",
+   "requiere": "",
+   "estado": "listo",
+   "destructivo": null
+  },
+  {
+   "cmd": "daily",
+   "invocacion": "py -m flujo daily",
+   "grupo": "",
+   "desc": "Generar reporte diario (md + html).",
+   "requiere": "",
+   "estado": "listo",
+   "destructivo": null
+  },
+  {
+   "cmd": "plano",
+   "invocacion": "py -m flujo plano",
+   "grupo": "",
+   "desc": "Generar plano SVG, rider o costos de stands desde un JSON de evento.",
+   "requiere": "",
+   "estado": "listo",
+   "destructivo": null
+  },
+  {
+   "cmd": "cotizaciones",
+   "invocacion": "py -m flujo cotizaciones",
+   "grupo": "",
+   "desc": "Genera cotización dual integrada con flujo.",
+   "requiere": "",
+   "estado": "listo",
+   "destructivo": null
+  },
+  {
+   "cmd": "serve",
+   "invocacion": "py -m flujo serve",
+   "grupo": "",
+   "desc": "Iniciar el workspace local: el hub, que es la entrada diaria.",
+   "requiere": "",
+   "estado": "listo",
+   "destructivo": null
+  },
+  {
+   "cmd": "app",
+   "invocacion": "py -m flujo app",
+   "grupo": "",
+   "desc": "Alias de serve. Lanza la nueva app (hub pro workspace recomendado como entrada diaria). Real backend + parse/create jobs live cuando activo.",
+   "requiere": "",
+   "estado": "listo",
+   "destructivo": null
+  },
+  {
+   "cmd": "package",
+   "invocacion": "py -m flujo package",
+   "grupo": "",
+   "desc": "Empaqueta el hub pro como aplicación de escritorio real .exe (Windows).",
+   "requiere": "solo Windows; empaqueta un .exe",
+   "estado": "falta: solo Windows; empaqueta un .exe",
+   "destructivo": null
+  },
+  {
+   "cmd": "clean",
+   "invocacion": "py -m flujo clean",
+   "grupo": "",
+   "desc": "Limpiar archivos temporales del repo.",
+   "requiere": "",
+   "estado": "listo",
+   "destructivo": null
+  },
+  {
+   "cmd": "init",
+   "invocacion": "py -m flujo init",
+   "grupo": "",
+   "desc": "Inicializa carpetas del repo/workspace (jobs/_template, data, inbox, datadrops).",
+   "requiere": "",
+   "estado": "listo",
+   "destructivo": null
+  },
+  {
+   "cmd": "job new",
+   "invocacion": "py -m flujo job new",
+   "grupo": "job",
+   "desc": "Crear un nuevo job desde un nombre (y opcionalmente texto fuente).",
+   "requiere": "",
+   "estado": "listo",
+   "destructivo": null
+  },
+  {
+   "cmd": "job prepare",
+   "invocacion": "py -m flujo job prepare",
+   "grupo": "job",
+   "desc": "Pipeline: privacidad → brief → estado.",
+   "requiere": "",
+   "estado": "listo",
+   "destructivo": null
+  },
+  {
+   "cmd": "job list",
+   "invocacion": "py -m flujo job list",
+   "grupo": "job",
+   "desc": "Listar jobs y sus estados.",
+   "requiere": "",
+   "estado": "listo",
+   "destructivo": null
+  },
+  {
+   "cmd": "job status",
+   "invocacion": "py -m flujo job status",
+   "grupo": "job",
+   "desc": "Estado detallado de un job.",
+   "requiere": "",
+   "estado": "listo",
+   "destructivo": null
+  },
+  {
+   "cmd": "job next",
+   "invocacion": "py -m flujo job next",
+   "grupo": "job",
+   "desc": "Próximas acciones sugeridas para cada job.",
+   "requiere": "",
+   "estado": "listo",
+   "destructivo": null
+  },
+  {
+   "cmd": "job activate",
+   "invocacion": "py -m flujo job activate",
+   "grupo": "job",
+   "desc": "brief → proyecto en projects/piezas_vectoriales/.",
+   "requiere": "",
+   "estado": "listo",
+   "destructivo": null
+  },
+  {
+   "cmd": "job report",
+   "invocacion": "py -m flujo job report",
+   "grupo": "job",
+   "desc": "Generar reporte detallado de un job.",
+   "requiere": "",
+   "estado": "listo",
+   "destructivo": null
+  },
+  {
+   "cmd": "privacy scan",
+   "invocacion": "py -m flujo privacy scan",
+   "grupo": "privacy",
+   "desc": "Escanear un texto en busca de datos personales.",
+   "requiere": "",
+   "estado": "listo",
+   "destructivo": null
+  },
+  {
+   "cmd": "privacy sanitize",
+   "invocacion": "py -m flujo privacy sanitize",
+   "grupo": "privacy",
+   "desc": "Sanitizar texto reemplazando PII por placeholders.",
+   "requiere": "",
+   "estado": "listo",
+   "destructivo": null
+  },
+  {
+   "cmd": "privacy check",
+   "invocacion": "py -m flujo privacy check",
+   "grupo": "privacy",
+   "desc": "Escanear pedido_original.txt de un job + sanitizar.",
+   "requiere": "",
+   "estado": "listo",
+   "destructivo": null
+  },
+  {
+   "cmd": "brief extract",
+   "invocacion": "py -m flujo brief extract",
+   "grupo": "brief",
+   "desc": "Re-extraer brief desde el texto del job.",
+   "requiere": "",
+   "estado": "listo",
+   "destructivo": null
+  },
+  {
+   "cmd": "brief to-project",
+   "invocacion": "py -m flujo brief to-project",
+   "grupo": "brief",
+   "desc": "Convertir brief.yaml en proyecto en projects/piezas_vectoriales/.",
+   "requiere": "",
+   "estado": "listo",
+   "destructivo": null
+  },
+  {
+   "cmd": "brief paquete-cotizacion",
+   "invocacion": "py -m flujo brief paquete-cotizacion",
+   "grupo": "brief",
+   "desc": "Generar brief imagen/texto + cotización base para flyer/etiqueta/pendón/post IG.",
+   "requiere": "",
+   "estado": "listo",
+   "destructivo": null
+  },
+  {
+   "cmd": "brief show",
+   "invocacion": "py -m flujo brief show",
+   "grupo": "brief",
+   "desc": "Mostrar brief en formato legible.",
+   "requiere": "",
+   "estado": "listo",
+   "destructivo": null
+  },
+  {
+   "cmd": "intake json",
+   "invocacion": "py -m flujo intake json",
+   "grupo": "intake",
+   "desc": "Validar intake JSON 1.0, crear job, brief y acuse de recibo.",
+   "requiere": "",
+   "estado": "listo",
+   "destructivo": null
+  },
+  {
+   "cmd": "eventos flyer-auto",
+   "invocacion": "py -m flujo eventos flyer-auto",
+   "grupo": "eventos",
+   "desc": "EVENTOS: descargar Instagram, crear palette_ig y opcionalmente lanzar Photoshop/Blender.",
+   "requiere": "`pip install parth-dl`; para render tambien Blender",
+   "estado": "falta: `pip install parth-dl`; para render tambien Blender",
+   "destructivo": true
+  },
+  {
+   "cmd": "resolume automatizar",
+   "invocacion": "py -m flujo resolume automatizar",
+   "grupo": "resolume",
+   "desc": "Generar XML pre-flight Chataigne/OSC para Resolume desde un setlist SMPTE.",
+   "requiere": "Chataigne y Resolume abiertos en la maquina del show",
+   "estado": "falta: Chataigne y Resolume abiertos en la maquina del show",
+   "destructivo": true
+  },
+  {
+   "cmd": "laser estado",
+   "invocacion": "py -m flujo laser estado",
+   "grupo": "laser",
+   "desc": "Que parte de la cadena vpype esta instalada, medido ejecutandola.",
+   "requiere": "",
+   "estado": "listo",
+   "destructivo": null
+  },
+  {
+   "cmd": "laser hatched",
+   "invocacion": "py -m flujo laser hatched",
+   "grupo": "laser",
+   "desc": "Zonas oscuras a rayado: un logo solido deja de llegar hueco al laser.",
+   "requiere": "",
+   "estado": "listo",
+   "destructivo": null
+  },
+  {
+   "cmd": "laser flow",
+   "invocacion": "py -m flujo laser flow",
+   "grupo": "laser",
+   "desc": "La imagen se vuelve trazos largos de campo de flujo, casi sin saltos.",
+   "requiere": "",
+   "estado": "listo",
+   "destructivo": null
+  },
+  {
+   "cmd": "laser lote",
+   "invocacion": "py -m flujo laser lote",
+   "grupo": "laser",
+   "desc": "Deriva una pieza laser por imagen y escribe el manifiesto del archivo.",
+   "requiere": "",
+   "estado": "listo",
+   "destructivo": null
+  },
+  {
+   "cmd": "laser medir",
+   "invocacion": "py -m flujo laser medir",
+   "grupo": "laser",
+   "desc": "Los numeros reales del frame: puntos, trazos, dibujo y viaje apagado.",
+   "requiere": "",
+   "estado": "listo",
+   "destructivo": null
+  },
+  {
+   "cmd": "laser ild",
+   "invocacion": "py -m flujo laser ild",
+   "grupo": "laser",
+   "desc": "SVG a ILDA Type 5 (RGB): el formato que QuickShow SI importa.",
+   "requiere": "",
+   "estado": "listo",
+   "destructivo": null
+  },
+  {
+   "cmd": "render run",
+   "invocacion": "py -m flujo render run",
+   "grupo": "render",
+   "desc": "Renderizar un proyecto piezas_vectoriales.",
+   "requiere": "Blender instalado",
+   "estado": "falta: Blender instalado",
+   "destructivo": true
+  },
+  {
+   "cmd": "render illustrator",
+   "invocacion": "py -m flujo render illustrator",
+   "grupo": "render",
+   "desc": "Preparar un paquete listo para abrir en Illustrator desde uno o varios SVG.",
+   "requiere": "Adobe Illustrator (solo Windows/macOS)",
+   "estado": "falta: Adobe Illustrator (solo Windows/macOS)",
+   "destructivo": true
+  },
+  {
+   "cmd": "render bridge",
+   "invocacion": "py -m flujo render bridge",
+   "grupo": "render",
+   "desc": "Generar un script JSX para Illustrator a partir de un JSON de entrada.",
+   "requiere": "Adobe Illustrator (solo Windows/macOS)",
+   "estado": "falta: Adobe Illustrator (solo Windows/macOS)",
+   "destructivo": true
+  },
+  {
+   "cmd": "render validate",
+   "invocacion": "py -m flujo render validate",
+   "grupo": "render",
+   "desc": "Validar un config.json sin renderizar.",
+   "requiere": "",
+   "estado": "listo",
+   "destructivo": null
+  },
+  {
+   "cmd": "render formats",
+   "invocacion": "py -m flujo render formats",
+   "grupo": "render",
+   "desc": "Listar, filtrar o sugerir formatos/plantillas.",
+   "requiere": "",
+   "estado": "listo",
+   "destructivo": null
+  },
+  {
+   "cmd": "render rescale",
+   "invocacion": "py -m flujo render rescale",
+   "grupo": "render",
+   "desc": "Reescalar proporción (medida cm) o resolución (DPI) de un config.json.",
+   "requiere": "",
+   "estado": "listo",
+   "destructivo": null
+  },
+  {
+   "cmd": "airdrop status",
+   "invocacion": "py -m flujo airdrop status",
+   "grupo": "airdrop",
+   "desc": "Muestra la versión actual del sistema flujo.",
+   "requiere": "",
+   "estado": "listo",
+   "destructivo": null
+  },
+  {
+   "cmd": "airdrop list",
+   "invocacion": "py -m flujo airdrop list",
+   "grupo": "airdrop",
+   "desc": "Lista los archivos pendientes de aplicar en _airdrop/.",
+   "requiere": "",
+   "estado": "listo",
+   "destructivo": null
+  },
+  {
+   "cmd": "airdrop dry-run",
+   "invocacion": "py -m flujo airdrop dry-run",
+   "grupo": "airdrop",
+   "desc": "Simula la aplicación del airdrop sin realizar cambios.",
+   "requiere": "",
+   "estado": "listo",
+   "destructivo": null
+  },
+  {
+   "cmd": "airdrop sign",
+   "invocacion": "py -m flujo airdrop sign",
+   "grupo": "airdrop",
+   "desc": "Genera el manifiesto SHA-256 y la firma HMAC del payload de _airdrop/.",
+   "requiere": "",
+   "estado": "listo",
+   "destructivo": null
+  },
+  {
+   "cmd": "airdrop verify",
+   "invocacion": "py -m flujo airdrop verify",
+   "grupo": "airdrop",
+   "desc": "Verifica la firma HMAC y los hashes SHA-256 del payload de _airdrop/.",
+   "requiere": "",
+   "estado": "listo",
+   "destructivo": null
+  },
+  {
+   "cmd": "airdrop apply",
+   "invocacion": "py -m flujo airdrop apply",
+   "grupo": "airdrop",
+   "desc": "Aplica los archivos de _airdrop/, crea backup y dispara checkpoint + push.",
+   "requiere": "",
+   "estado": "listo",
+   "destructivo": null
+  },
+  {
+   "cmd": "airdrop rollback",
+   "invocacion": "py -m flujo airdrop rollback",
+   "grupo": "airdrop",
+   "desc": "Revierte los cambios al último backup de airdrop.",
+   "requiere": "",
+   "estado": "listo",
+   "destructivo": null
+  },
+  {
+   "cmd": "airdrop finish",
+   "invocacion": "py -m flujo airdrop finish",
+   "grupo": "airdrop",
+   "desc": "Finaliza el proceso de airdrop (estatus y sugerencias).",
+   "requiere": "",
+   "estado": "listo",
+   "destructivo": null
+  },
+  {
+   "cmd": "datadrop list",
+   "invocacion": "py -m flujo datadrop list",
+   "grupo": "datadrop",
+   "desc": "Lista datadrops (fotos reales de entregados) desde workspace/datadrops/.",
+   "requiere": "",
+   "estado": "listo",
+   "destructivo": null
+  },
+  {
+   "cmd": "datadrop scan",
+   "invocacion": "py -m flujo datadrop scan",
+   "grupo": "datadrop",
+   "desc": "Escanea la carpeta datadrops/incoming/ y procesa las fotos convirtiéndolas en datadrops.",
+   "requiere": "",
+   "estado": "listo",
+   "destructivo": null
+  },
+  {
+   "cmd": "datadrop ingest",
+   "invocacion": "py -m flujo datadrop ingest",
+   "grupo": "datadrop",
+   "desc": "Importar un PDF o imagen como datadrop de referencia real.",
+   "requiere": "",
+   "estado": "listo",
+   "destructivo": null
+  },
+  {
+   "cmd": "datadrop prepare",
+   "invocacion": "py -m flujo datadrop prepare",
+   "grupo": "datadrop",
+   "desc": "Genera paquete de revisión persistente (_review_package.txt) con manifests + notas 'for_future_ai'. Para que otra IA (linea_editorial) lea y sepa exactamente qué buscar en trabajos reales terminados.",
+   "requiere": "",
+   "estado": "listo",
+   "destructivo": true
+  },
+  {
+   "cmd": "micelio formato",
+   "invocacion": "py -m flujo micelio formato",
+   "grupo": "micelio",
+   "desc": "Imprime el formato para PEGARSELO al modelo web antes de contarle la idea.",
+   "requiere": "",
+   "estado": "listo",
+   "destructivo": null
+  },
+  {
+   "cmd": "micelio validar",
+   "invocacion": "py -m flujo micelio validar",
+   "grupo": "micelio",
+   "desc": "Dice si el sobre sirve, y si no, QUE le falta -- en castellano, para poder pegarle la respuesta de vuelta al modelo que lo escribio.",
+   "requiere": "",
+   "estado": "listo",
+   "destructivo": null
+  },
+  {
+   "cmd": "micelio fruto",
+   "invocacion": "py -m flujo micelio fruto",
+   "grupo": "micelio",
+   "desc": "Mide un dataset y arma un fruto que CABE en una ventana de chat.",
+   "requiere": "",
+   "estado": "listo",
+   "destructivo": null
+  },
+  {
+   "cmd": "micelio verificar",
+   "invocacion": "py -m flujo micelio verificar",
+   "grupo": "micelio",
+   "desc": "Corre el criterio y devuelve VERDE o ROJO. Es el semaforo del ciclo.",
+   "requiere": "",
+   "estado": "listo",
+   "destructivo": null
+  },
+  {
+   "cmd": "micelio cosechar",
+   "invocacion": "py -m flujo micelio cosechar",
+   "grupo": "micelio",
+   "desc": "Corre el criterio y devuelve el SOBRE de vuelta: fruto si crecio, hongo si no.",
+   "requiere": "",
+   "estado": "listo",
+   "destructivo": null
+  },
+  {
+   "cmd": "micelio depositar",
+   "invocacion": "py -m flujo micelio depositar",
+   "grupo": "micelio",
+   "desc": "Mete el sobre en la cola de trabajo del organismo.",
+   "requiere": "",
+   "estado": "listo",
+   "destructivo": null
+  },
+  {
+   "cmd": "autonomia status",
+   "invocacion": "py -m flujo autonomia status",
+   "grupo": "autonomia",
+   "desc": "Mide si el circuito remoto/local -> juez local -> ledger esta listo.",
+   "requiere": "",
+   "estado": "listo",
+   "destructivo": null
+  },
+  {
+   "cmd": "autonomia run",
+   "invocacion": "py -m flujo autonomia run",
+   "grupo": "autonomia",
+   "desc": "Ejecuta tandas controladas; por defecto corre providers/Ollama en MAK.",
+   "requiere": "La ejecucion remota esta fuera de este entorno; `--executor local` solo para pruebas/dry-run con autoridad explicita",
+   "estado": "falta: La ejecucion remota esta fuera de este entorno; `--executor local` solo para pruebas/dry-run con autoridad explicita",
+   "destructivo": null
+  },
+  {
+   "cmd": "suplementos list",
+   "invocacion": "py -m flujo suplementos list",
+   "grupo": "suplementos",
+   "desc": "Listar suplementos disponibles.",
+   "requiere": "",
+   "estado": "listo",
+   "destructivo": null
+  },
+  {
+   "cmd": "suplementos contraportada",
+   "invocacion": "py -m flujo suplementos contraportada",
+   "grupo": "suplementos",
+   "desc": "Regenerar las contraportadas desde la plantilla aprobada.",
+   "requiere": "",
+   "estado": "listo",
+   "destructivo": null
+  },
+  {
+   "cmd": "suplementos validate",
+   "invocacion": "py -m flujo suplementos validate",
+   "grupo": "suplementos",
+   "desc": "Validar SVGs de suplementos antes de revisar/exportar en Illustrator.",
+   "requiere": "",
+   "estado": "listo",
+   "destructivo": null
+  },
+  {
+   "cmd": "suplementos illustrator",
+   "invocacion": "py -m flujo suplementos illustrator",
+   "grupo": "suplementos",
+   "desc": "Preparar un paquete Illustrator con varias contraportadas de suplementos.",
+   "requiere": "Adobe Illustrator (solo Windows/macOS)",
+   "estado": "falta: Adobe Illustrator (solo Windows/macOS)",
+   "destructivo": null
+  },
+  {
+   "cmd": "rd-db build",
+   "invocacion": "py -m flujo rd-db build",
+   "grupo": "rd-db",
+   "desc": "Construye la proyección portable o promueve una fuente RD completa.",
+   "requiere": "fuentes de datos en `data/` (la DB se regenera, no se versiona)",
+   "estado": "falta: fuentes de datos en `data/` (la DB se regenera, no se versiona)",
+   "destructivo": null
+  },
+  {
+   "cmd": "rd-db reactivo",
+   "invocacion": "py -m flujo rd-db reactivo",
+   "grupo": "rd-db",
+   "desc": "Consulta la colorimetria presuntiva. El test es PRESUNTIVO: indica familia posible, no identifica ni mide pureza.",
+   "requiere": "",
+   "estado": "listo",
+   "destructivo": null
+  },
+  {
+   "cmd": "rd-db packs",
+   "invocacion": "py -m flujo rd-db packs",
+   "grupo": "rd-db",
+   "desc": "Lista los packs de servicio con precio e inclusiones.",
+   "requiere": "",
+   "estado": "listo",
+   "destructivo": null
+  },
+  {
+   "cmd": "rd-db eventos",
+   "invocacion": "py -m flujo rd-db eventos",
+   "grupo": "rd-db",
+   "desc": "Lista los eventos registrados con su pack sugerido.",
+   "requiere": "",
+   "estado": "listo",
+   "destructivo": null
+  },
+  {
+   "cmd": "rd-db testeos",
+   "invocacion": "py -m flujo rd-db testeos",
+   "grupo": "rd-db",
+   "desc": "Show only the internal summary of imported testing evidence.",
+   "requiere": "",
+   "estado": "listo",
+   "destructivo": null
+  },
+  {
+   "cmd": "rd-db productora",
+   "invocacion": "py -m flujo rd-db productora",
+   "grupo": "rd-db",
+   "desc": "Perfil completo: instagram, aliases, tipos de fecha, venues (preferido marcado) y logos.",
+   "requiere": "",
+   "estado": "listo",
+   "destructivo": null
+  },
+  {
+   "cmd": "rd-db venues",
+   "invocacion": "py -m flujo rd-db venues",
+   "grupo": "rd-db",
+   "desc": "Venues canonicos con preset recomendado y voluntarios minimos.",
+   "requiere": "",
+   "estado": "listo",
+   "destructivo": null
+  },
+  {
+   "cmd": "rd-db por-tipo",
+   "invocacion": "py -m flujo rd-db por-tipo",
+   "grupo": "rd-db",
+   "desc": "Que productoras hacen fechas de un tipo dado.",
+   "requiere": "",
+   "estado": "listo",
+   "destructivo": null
+  },
+  {
+   "cmd": "rd-db lookup",
+   "invocacion": "py -m flujo rd-db lookup",
+   "grupo": "rd-db",
+   "desc": "Consulta de operador en terreno: reactivos que marcan la familia + packs que incluyen testeo + disclaimer, en una sola vista (JOIN reactivos+packs).",
+   "requiere": "",
+   "estado": "listo",
+   "destructivo": null
+  },
+  {
+   "cmd": "rd-datos ingest",
+   "invocacion": "py -m flujo rd-datos ingest",
+   "grupo": "rd-datos",
+   "desc": "Ingesta un CSV de datos de campo (testeo de reactivos, atenciones o encuestas) a la DB privacy-first data/rd.db. Toda fila pasa por flujo.privacy.scan_text ANTES de persistir: RUT chileno o numero de tarjeta detectados rechazan la fila SIEMPRE (nunca se loguea el contenido).",
+   "requiere": "un CSV de campo; la DB privacy-first se crea sola",
+   "estado": "falta: un CSV de campo; la DB privacy-first se crea sola",
+   "destructivo": null
+  },
+  {
+   "cmd": "rd-datos informe",
+   "invocacion": "py -m flujo rd-datos informe",
+   "grupo": "rd-datos",
+   "desc": "Genera el informe trimestral de datos de campo RD (markdown): 3 tablas (tendencias por sustancia/mes, tasa de no-coincidencia por sustancia, atenciones por tipo) precedidas por el disclaimer obligatorio de resultados presuntivos + datos demo. Escribe el .md en --salida.",
+   "requiere": "",
+   "estado": "listo",
+   "destructivo": null
+  },
+  {
+   "cmd": "knowledge list",
+   "invocacion": "py -m flujo knowledge list",
+   "grupo": "knowledge",
+   "desc": "Lista entidades de la knowledge base.",
+   "requiere": "",
+   "estado": "listo",
+   "destructivo": null
+  },
+  {
+   "cmd": "knowledge show",
+   "invocacion": "py -m flujo knowledge show",
+   "grupo": "knowledge",
+   "desc": "Muestra una entidad YAML como JSON legible.",
+   "requiere": "",
+   "estado": "listo",
+   "destructivo": null
+  },
+  {
+   "cmd": "knowledge classify",
+   "invocacion": "py -m flujo knowledge classify",
+   "grupo": "knowledge",
+   "desc": "Clasifica un texto usando productoras/venues conocidos.",
+   "requiere": "",
+   "estado": "listo",
+   "destructivo": null
+  },
+  {
+   "cmd": "knowledge ingest-example",
+   "invocacion": "py -m flujo knowledge ingest-example",
+   "grupo": "knowledge",
+   "desc": "Copia un ejemplo real a knowledge/examples y crea manifest para IA.",
+   "requiere": "",
+   "estado": "listo",
+   "destructivo": null
+  },
+  {
+   "cmd": "knowledge logo-source",
+   "invocacion": "py -m flujo knowledge logo-source",
+   "grupo": "knowledge",
+   "desc": "Registra una fuente de logo para logo clean lab.",
+   "requiere": "",
+   "estado": "listo",
+   "destructivo": null
+  },
+  {
+   "cmd": "knowledge logo-lab",
+   "invocacion": "py -m flujo knowledge logo-lab",
+   "grupo": "knowledge",
+   "desc": "Bridge para Logo Clean Lab: prepara estructura de carpetas y manifest.",
+   "requiere": "",
+   "estado": "listo",
+   "destructivo": null
+  },
+  {
+   "cmd": "hub serve",
+   "invocacion": "py -m flujo hub serve",
+   "grupo": "hub",
+   "desc": "Levanta el servidor local del hub (HTML + /api).",
+   "requiere": "",
+   "estado": "listo",
+   "destructivo": null
+  },
+  {
+   "cmd": "hub index",
+   "invocacion": "py -m flujo hub index",
+   "grupo": "hub",
+   "desc": "Indexa el arbol de material ($FLUJO_RD_ROOT) para agentes. Pasa args tal cual al indexador. Ej: py -m flujo hub index agent-brief \"necesito la etiqueta de creatina\"",
+   "requiere": "`FLUJO_RD_ROOT` apuntando al arbol de material",
+   "estado": "falta: `FLUJO_RD_ROOT` apuntando al arbol de material",
+   "destructivo": true
+  },
+  {
+   "cmd": "hub route",
+   "invocacion": "py -m flujo hub route",
+   "grupo": "hub",
+   "desc": "Resuelve donde esta/va una pieza. Ej: py -m flujo hub route where --area eventos --pieza flyer",
+   "requiere": "`FLUJO_RD_ROOT` apuntando al arbol de material",
+   "estado": "falta: `FLUJO_RD_ROOT` apuntando al arbol de material",
+   "destructivo": null
+  }
+ ]
+}

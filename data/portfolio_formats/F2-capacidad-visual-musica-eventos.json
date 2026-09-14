@@ -1,0 +1,189 @@
+{
+ "schema": "mak-portfolio-format-v1",
+ "format_id": "F2-capacidad-visual-musica-eventos",
+ "family": "capacidad",
+ "vertical_grammar": "experiencia",
+ "title": "Capacidad · producción visual para música y eventos",
+ "purpose": "Demostrar que la práctica puede ejecutar producción visual a una escala, con unas herramientas y en unos plazos verificables.",
+ "consumer": {
+  "kind": "cliente_comercial",
+  "examples": [
+   "manager de artista",
+   "sello",
+   "productora de eventos",
+   "otro artista"
+  ],
+  "decision_it_supports": "contratar para un encargo concreto",
+  "does_not_support": [
+   "adjudicar un fondo",
+   "acreditar autoria",
+   "seleccion curatorial"
+  ]
+ },
+ "language": "es",
+ "limits": {
+  "max_items_total": 24,
+  "max_bytes": 8000000,
+  "max_slots_rendered": 5
+ },
+ "declared_claims": [
+  "puedo",
+  "ocurrio"
+ ],
+ "forbidden_claims": [
+  "es_mio",
+  "significa"
+ ],
+ "forbidden_inferences": [
+  "un archivo presente en el contenedor no implica autoria",
+  "un documento nativo no implica proceso propio",
+  "un nombre de contenedor no implica identidad de obra ni de cliente",
+  "un locator compartido no implica entrega ni publicacion"
+ ],
+ "slots": [
+  {
+   "slot_id": "tecnicas",
+   "title": "Que hago",
+   "count": {
+    "min": 3,
+    "max": 8
+   },
+   "claim": "puedo",
+   "layer": "process",
+   "min_state": "observed",
+   "min_permission": "unnamed",
+   "caption_grammar": "{technique} — {artifact_count} {scope_note}, {span}",
+   "allowed_caption_fields": [
+    "technique",
+    "artifact_count",
+    "span",
+    "tool",
+    "context_label",
+    "scope_note"
+   ],
+   "required": true,
+   "evidence_kinds": [
+    "native_project_file",
+    "export_chain",
+    "media_kind_distribution"
+   ],
+   "prefer_scope": "archive"
+  },
+  {
+   "slot_id": "escala",
+   "title": "A que escala",
+   "count": {
+    "min": 1,
+    "max": 4
+   },
+   "claim": "puedo",
+   "layer": "process",
+   "min_state": "observed",
+   "min_permission": "unnamed",
+   "caption_grammar": "{scale_metric}: {value}",
+   "allowed_caption_fields": [
+    "scale_metric",
+    "value",
+    "context_label"
+   ],
+   "required": true,
+   "evidence_kinds": [
+    "asset_count",
+    "bytes",
+    "deliverables_per_engagement",
+    "duration"
+   ],
+   "prefer_scope": "archive"
+  },
+  {
+   "slot_id": "plazos",
+   "title": "En que plazos",
+   "count": {
+    "min": 1,
+    "max": 4
+   },
+   "claim": "puedo",
+   "layer": "process",
+   "min_state": "candidate",
+   "min_permission": "unnamed",
+   "caption_grammar": "{engagement}: {first_seen} → {last_seen}",
+   "allowed_caption_fields": [
+    "engagement",
+    "first_seen",
+    "last_seen",
+    "elapsed"
+   ],
+   "required": false,
+   "evidence_kinds": [
+    "mtime_span",
+    "export_chain"
+   ],
+   "prefer_scope": "container"
+  },
+  {
+   "slot_id": "para_quien",
+   "title": "Para quien",
+   "count": {
+    "min": 1,
+    "max": 8
+   },
+   "claim": "ocurrio",
+   "layer": "context",
+   "min_state": "candidate",
+   "min_permission": "unnamed",
+   "caption_grammar": "{context_label} — {role_note}",
+   "allowed_caption_fields": [
+    "context_label",
+    "role_note",
+    "year"
+   ],
+   "required": true,
+   "evidence_kinds": [
+    "container_root",
+    "external_authority",
+    "dated_publication"
+   ],
+   "prefer_scope": "container"
+  },
+  {
+   "slot_id": "proceso",
+   "title": "Muestra de proceso",
+   "count": {
+    "min": 1,
+    "max": 4
+   },
+   "claim": "puedo",
+   "layer": "process",
+   "min_state": "observed",
+   "min_permission": "unnamed",
+   "caption_grammar": "{structure_note} · {artifact_kind}",
+   "allowed_caption_fields": [
+    "artifact_kind",
+    "structure_note",
+    "declared_input_count"
+   ],
+   "required": true,
+   "evidence_kinds": [
+    "native_project_file",
+    "declared_inputs",
+    "scene_graph"
+   ],
+   "prefer_scope": "container"
+  }
+ ],
+ "invalid_if": [
+  "una ranura obligatoria queda bajo su count minimo",
+  "una afirmacion excede su min_state declarado",
+  "un epigrafe usa un campo fuera de allowed_caption_fields",
+  "una pieza con permission=prohibited o aggregate_only aparece por caso",
+  "el documento afirma es_mio en cualquier ranura",
+  "una ranura cita una afirmacion cuya ruta de evidencia la genero y la promovio"
+ ],
+ "control": {
+  "publication": false,
+  "submission": false,
+  "signed_document": false,
+  "authorship_claimed": false,
+  "training_permitted": false
+ }
+}

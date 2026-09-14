@@ -1,0 +1,160 @@
+{
+  "name": "🧠 Autonomous Research Agent - Mistral Nemo",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "research",
+        "responseMode": "responseNode",
+        "options": {}
+      },
+      "id": "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+      "name": "🚀 Webhook: Recibir Tema",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [250, 300]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "c6a7e0e0-1234-4d56-b789-abcdef012345",
+              "name": "topic",
+              "value": "={{ $json.body.topic }}",
+              "type": "string"
+            },
+            {
+              "id": "c6a7e0e0-1234-4d56-b789-abcdef012346",
+              "name": "maxIterations",
+              "value": "={{ $json.body.max_iterations || 5 }}",
+              "type": "number"
+            },
+            {
+              "id": "c6a7e0e0-1234-4d56-b789-abcdef012347",
+              "name": "tavilyApiKey",
+              "value": "={{ $json.body.tavily_api_key || $env.TAVILY_API_KEY }}",
+              "type": "string"
+            },
+            {
+              "id": "c6a7e0e0-1234-4d56-b789-abcdef012348",
+              "name": "ollamaBaseUrl",
+              "value": "http://ollama:11434",
+              "type": "string"
+            },
+            {
+              "id": "c6a7e0e0-1234-4d56-b789-abcdef012349",
+              "name": "modelName",
+              "value": "mistral-nemo:latest",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "b2c3d4e5-f6a7-8901-bcde-f12345678901",
+      "name": "⚙️ Init: Configurar Variables",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [500, 300]
+    },
+    {
+      "parameters": {
+        "jsCode": "// ============================================================\n// 🧠 RESEARCH LOOP ORCHESTRATOR\n// ============================================================\n// Este Code node ejecuta el bucle completo de investigación:\n//   SEARCH → FETCH → ANALYZE → DECIDE → (loop back)\n// Usa Tavily para buscar, fetch para descargar, y Ollama\n// (Mistral Nemo) para analizar y decidir próximos pasos.\n// ============================================================\n\nconst topic = $input.first().json.topic;\nconst maxIterations = $input.first().json.maxIterations || 5;\nconst tavilyApiKey = $input.first().json.tavilyApiKey;\nconst ollamaBaseUrl = $input.first().json.ollamaBaseUrl || 'http://ollama:11434';\nconst modelName = $input.first().json.modelName || 'mistral-nemo:latest';\n\n// Almacén de todos los hallazgos\nlet allFindings = [];\n// Consulta inicial = tema del usuario\nlet currentQuery = topic;\n// Historial de consultas para no repetir\nconst queryHistory = [];\n\n// -------------------------------------------------------\n// FUNCIÓN: Buscar con Tavily API\n// -------------------------------------------------------\nasync function searchTavily(query, apiKey) {\n  try {\n    const response = await this.helpers.httpRequest({\n      method: 'POST',\n      url: 'https://api.tavily.com/search',\n      headers: {\n        'Authorization': `Bearer ${apiKey}`,\n        'Content-Type': 'application/json'\n      },\n      body: {\n        query: query,\n        search_depth: 'advanced',\n        max_results: 5,\n        include_answer: true,\n        include_raw_content: false,\n        topic: 'general'\n      },\n      json: true\n    });\n    return response;\n  } catch (error) {\n    console.error('❌ Error en Tavily search:', error.message);\n    return { results: [], answer: null };\n  }\n}\n\n// -------------------------------------------------------\n// FUNCIÓN: Descargar contenido de una URL\n// -------------------------------------------------------\nasync function fetchUrlContent(url) {\n  try {\n    const response = await this.helpers.httpRequest({\n      method: 'GET',\n      url: url,\n      timeout: 10000,\n      headers: {\n        'User-Agent': 'Mozilla/5.0 (ResearchBot/1.0)'\n      },\n      json: false,\n      returnFullResponse: true\n    });\n    // Extraer texto del HTML (limpieza básica)\n    let text = response.body || '';\n    // Quitar tags HTML básicos\n    text = text.replace(/<script[\\s\\S]*?<\\/script>/gi, '');\n    text = text.replace(/<style[\\s\\S]*?<\\/style>/gi, '');\n    text = text.replace(/<[^>]+>/g, ' ');\n    text = text.replace(/\\s+/g, ' ').trim();\n    // Limitar a ~4000 caracteres para no saturar a Ollama\n    return text.substring(0, 4000);\n  } catch (error) {\n    console.error('❌ Error fetching URL:', url, error.message);\n    return `[No se pudo descargar: ${error.message}]`;\n  }\n}\n\n// -------------------------------------------------------\n// FUNCIÓN: Analizar con Ollama (Mistral Nemo)\n// -------------------------------------------------------\nasync function analyzeWithOllama(prompt, systemPrompt) {\n  try {\n    const fullPrompt = systemPrompt \n      ? `${systemPrompt}\\n\\n${prompt}`\n      : prompt;\n    \n    const response = await this.helpers.httpRequest({\n      method: 'POST',\n      url: `${ollamaBaseUrl}/api/generate`,\n      body: {\n        model: modelName,\n        prompt: fullPrompt,\n        stream: false,\n        options: {\n          temperature: 0.3,\n          num_predict: 1024\n        }\n      },\n      json: true\n    });\n    return response.response || '';\n  } catch (error) {\n    console.error('❌ Error en Ollama:', error.message);\n    return `[Error de análisis: ${error.message}]`;\n  }\n}\n\n// -------------------------------------------------------\n// FUNCIÓN: Decidir si continuar y generar siguiente query\n// -------------------------------------------------------\nasync function decideNextStep(findings, topic, iteration) {\n  const decisionPrompt = `Eres un agente de investigación. Analiza los hallazgos acumulados y decide si se necesita más investigación.\n\nTEMA PRINCIPAL: \"${topic}\"\nITERACIÓN ACTUAL: ${iteration + 1}\n\nHALLAZGOS ACUMULADOS:\n${JSON.stringify(findings.slice(-5), null, 2)}\n\nINSTRUCCIONES:\n- Si la información es suficiente y completa, responde EXACTAMENTE: \"FINALIZAR: <breve razón>\"\n- Si falta información relevante, responde EXACTAMENTE: \"CONTINUAR: <nueva consulta específica>\"\n- La nueva consulta debe ser concreta y enfocada en lo que falta por investigar.\n- NO repitas consultas ya hechas. Sé creativo con ángulos nuevos.\n\nTu decisión:`;\n\n  const decision = await analyzeWithOllama(decisionPrompt, null);\n  return decision.trim();\n}\n\n// -------------------------------------------------------\n// 🌀 BUCLE PRINCIPAL DE INVESTIGACIÓN\n// -------------------------------------------------------\nconsole.log(`🔍 Iniciando investigación sobre: \"${topic}\"`);\nconsole.log(`🔄 Máximo de iteraciones: ${maxIterations}`);\n\nfor (let i = 0; i < maxIterations; i++) {\n  console.log(`\\n📍 === ITERACIÓN ${i + 1}/${maxIterations} ===`);\n  console.log(`🔎 Consulta: \"${currentQuery}\"`);\n  \n  queryHistory.push(currentQuery);\n  \n  // ---------- PASO 1: BUSCAR ----------\n  console.log('🌐 Buscando con Tavily...');\n  const searchResponse = await searchTavily(currentQuery, tavilyApiKey);\n  \n  if (!searchResponse.results || searchResponse.results.length === 0) {\n    console.log('⚠️  Sin resultados. Generando nueva consulta...');\n    const nextQuery = await analyzeWithOllama(\n      `No se encontraron resultados para \"${currentQuery}\" sobre el tema \"${topic}\". Genera una nueva consulta de búsqueda más efectiva.`,\n      'Eres un experto en formular consultas de búsqueda. Responde SOLO con la nueva consulta, sin explicaciones.'\n    );\n    currentQuery = nextQuery.trim();\n    continue;\n  }\n  \n  // Mostrar answer de Tavily si existe\n  if (searchResponse.answer) {\n    console.log(`💡 Tavily Answer: ${searchResponse.answer.substring(0, 200)}...`);\n    allFindings.push({\n      type: 'tavily_answer',\n      content: searchResponse.answer,\n      iteration: i + 1,\n      query: currentQuery\n    });\n  }\n  \n  // ---------- PASO 2: DESCARGAR Y ANALIZAR cada resultado ----------\n  const topResults = searchResponse.results.slice(0, 3);\n  \n  for (let j = 0; j < topResults.length; j++) {\n    const result = topResults[j];\n    console.log(`  📄 [${j+1}/${topResults.length}] Fetching: ${result.title?.substring(0, 80)}`);\n    \n    // Descargar contenido\n    const rawContent = await fetchUrlContent(result.url);\n    \n    // Si el contenido es muy corto, usar el snippet de Tavily\n    const contentToAnalyze = rawContent.length > 100 ? rawContent : (result.content || '');\n    \n    // ---------- PASO 3: ANALIZAR con Mistral Nemo ----------\n    const analysisPrompt = `Analiza el siguiente contenido relacionado con el tema \"${topic}\".\n\nTÍTULO: ${result.title}\nURL: ${result.url}\n\nCONTENIDO:\n${contentToAnalyze}\n\nINSTRUCCIONES:\nExtrae SOLO la información más relevante y novedosa para el tema \"${topic}\".\nResponde en formato JSON con:\n{\n  \"key_facts\": [\"hecho 1\", \"hecho 2\", ...],\n  \"relevance\": \"alta/media/baja\",\n  \"summary\": \"resumen en 2-3 frases\",\n  \"new_angles\": [\"nuevo ángulo de investigación 1\", ...]\n}`;\n\n    const analysis = await analyzeWithOllama(\n      analysisPrompt,\n      'Eres un asistente de investigación experto. Analizas contenido web y extraes información clave de forma concisa y estructurada. Responde SIEMPRE en JSON válido.'\n    );\n    \n    // Intentar parsear el JSON, si falla guardar como texto\n    let parsedAnalysis;\n    try {\n      // Limpiar posibles markdown code blocks\n      const cleanJson = analysis.replace(/```json\\n?|```\\n?/g, '').trim();\n      parsedAnalysis = JSON.parse(cleanJson);\n    } catch (e) {\n      parsedAnalysis = { raw_analysis: analysis };\n    }\n    \n    allFindings.push({\n      type: 'web_analysis',\n      title: result.title,\n      url: result.url,\n      analysis: parsedAnalysis,\n      iteration: i + 1,\n      query: currentQuery\n    });\n    \n    console.log(`  ✅ Analizado: ${result.title?.substring(0, 60)}`);\n  }\n  \n  // ---------- PASO 4: DECIDIR si continuar ----------\n  console.log('🤔 Decidiendo próximo paso...');\n  const decision = await decideNextStep(allFindings, topic, i);\n  console.log(`  📋 Decisión: ${decision.substring(0, 150)}`);\n  \n  if (decision.startsWith('FINALIZAR')) {\n    console.log('✅ Investigación completada por decisión del modelo.');\n    break;\n  } else if (decision.startsWith('CONTINUAR')) {\n    const nextQuery = decision.replace(/^CONTINUAR:\\s*/i, '').trim();\n    // Evitar repetir consultas\n    if (queryHistory.some(q => q.toLowerCase() === nextQuery.toLowerCase())) {\n      console.log('⚠️  Consulta repetida, variando...');\n      currentQuery = `${nextQuery} (ángulo alternativo)`;\n    } else {\n      currentQuery = nextQuery;\n    }\n  } else {\n    // Si el modelo no siguió el formato, generar nueva consulta automáticamente\n    const fallbackQuery = await analyzeWithOllama(\n      `Basado en todo lo investigado sobre \"${topic}\", genera UNA nueva consulta de búsqueda para profundizar en un aspecto que falte. Responde SOLO con la consulta.`,\n      'Eres un experto en investigación. Generas consultas de búsqueda concisas y efectivas.'\n    );\n    currentQuery = fallbackQuery.trim();\n  }\n}\n\nconsole.log(`\\n🏁 Investigación finalizada. Total hallazgos: ${allFindings.length}`);\n\n// -------------------------------------------------------\n// RESULTADO FINAL\n// -------------------------------------------------------\nreturn [{\n  json: {\n    topic: topic,\n    totalIterations: Math.min(queryHistory.length, maxIterations),\n    totalFindings: allFindings.length,\n    queriesUsed: queryHistory,\n    findings: allFindings,\n    completedAt: new Date().toISOString()\n  }\n}];\n"
+      },
+      "id": "c3d4e5f6-a7b8-9012-cdef-123456789012",
+      "name": "🔄 Code: Research Loop",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [750, 300]
+    },
+    {
+      "parameters": {
+        "text": "={{ JSON.stringify($json.findings, null, 2) }}"
+      },
+      "id": "x1-prep-findings",
+      "name": "📋 Prep: Formatear Hallazgos",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [1000, 450]
+    },
+    {
+      "parameters": {
+        "promptType": "define",
+        "text": "=# INSTRUCCIÓN DEL SISTEMA\n\nEres un asistente de investigación experto. Tu tarea es generar un informe de investigación COMPLETO, BIEN ESTRUCTURADO y PROFESIONAL basado en los hallazgos proporcionados.\n\n## Estructura requerida del informe:\n\n### 1. RESUMEN EJECUTIVO (3-4 frases)\nSintetiza los hallazgos principales.\n\n### 2. HALLAZGOS PRINCIPALES\nOrganiza la información en secciones temáticas con viñetas. Cada hallazgo debe incluir la fuente (URL) cuando corresponda.\n\n### 3. ANÁLISIS CRÍTICO\nInterpreta la información: ¿qué patrones emergen? ¿hay contradicciones? ¿qué nivel de confianza tienen las fuentes?\n\n### 4. LAGUNAS DE INFORMACIÓN\nQué preguntas quedan sin responder o qué información faltó.\n\n### 5. RECOMENDACIONES / PRÓXIMOS PASOS\nSugerencias para profundizar la investigación si fuera necesario.\n\n---\n\n# HALLAZGOS DE LA INVESTIGACIÓN:\n\n{{ $json.findings }}\n\n---\n\nGenera el informe en español, usando formato Markdown para títulos, negritas y viñetas."
+      },
+      "id": "d4e5f6a7-b8c9-0123-defa-234567890123",
+      "name": "🤖 LLM: Generar Informe Final (Mistral Nemo)",
+      "type": "n8n-nodes-base.llm",
+      "typeVersion": 1,
+      "position": [1250, 300],
+      "continueOnFail": true
+    },
+    {
+      "parameters": {
+        "respondWith": "json",
+        "responseBody": {
+          "text": "={{ $json.text || $json.output || JSON.stringify($json) }}"
+        }
+      },
+      "id": "e5f6a7b8-c9d0-1234-efab-345678901234",
+      "name": "📤 Responder: Devolver Informe",
+      "type": "n8n-nodes-base.respondToWebhook",
+      "typeVersion": 1,
+      "position": [1500, 300]
+    }
+  ],
+  "connections": {
+    "🚀 Webhook: Recibir Tema": {
+      "main": [
+        [
+          {
+            "node": "⚙️ Init: Configurar Variables",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "⚙️ Init: Configurar Variables": {
+      "main": [
+        [
+          {
+            "node": "🔄 Code: Research Loop",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "🔄 Code: Research Loop": {
+      "main": [
+        [
+          {
+            "node": "🤖 LLM: Generar Informe Final (Mistral Nemo)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "🤖 LLM: Generar Informe Final (Mistral Nemo)": {
+      "main": [
+        [
+          {
+            "node": "📤 Responder: Devolver Informe",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "callerPolicy": "workflowsFromSameOwner"
+  },
+  "staticData": null,
+  "versionId": "1.0.0",
+  "active": false
+}

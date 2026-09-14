@@ -1,0 +1,531 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>La Gota · Reduciendo Daño</title>
+<style>
+  :root{ --negro:#0A0A0A; --panel:#161318; --blanco:#F2F2F2; --muted:#A79FA8;
+         --magenta:#C800C8; --amarillo:#FFD21F; --line:#3A2F3D; }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html,body{height:100%; background:var(--negro); color:var(--blanco);
+    font-family:Arial, Helvetica, sans-serif; overflow:hidden;}
+  canvas{position:fixed; inset:0; width:100vw; height:100vh; display:block;}
+  #base{z-index:1;} #vivo{z-index:2;}
+  header{position:fixed; top:0; left:0; right:0; padding:14px 20px; z-index:5;
+    display:flex; justify-content:space-between; align-items:center; gap:10px;
+    background:linear-gradient(180deg, rgba(10,10,10,.85), transparent);
+    transition:opacity .4s;}
+  header .marca{font-weight:900; font-style:italic; letter-spacing:-.02em; font-size:18px;}
+  header .marca span{color:var(--amarillo);}
+  header .lema{color:var(--muted); font-size:12px;}
+  #panel{position:fixed; left:50%; bottom:18px; transform:translateX(-50%);
+    width:min(600px, calc(100vw - 24px)); z-index:6;
+    background:rgba(22,19,24,.94); border:1px solid var(--magenta);
+    border-radius:18px; padding:14px 18px;
+    box-shadow:0 0 30px -8px rgba(200,0,200,.55); transition:opacity .4s, transform .4s;}
+  #panel h2{font-size:12px; letter-spacing:.16em; color:var(--amarillo);
+    text-transform:uppercase; margin-bottom:9px; display:flex; justify-content:space-between;}
+  #panel h2 .mini{letter-spacing:0; color:var(--muted); text-transform:none; font-weight:400;}
+  .fila{display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-bottom:9px;}
+  select,button{font:inherit; font-size:13.5px; border-radius:10px; cursor:pointer;
+    border:1px solid var(--line); background:#221c26; color:var(--blanco); padding:8px 12px;}
+  button.principal{background:var(--magenta); border-color:var(--magenta); font-weight:700;}
+  button.sec{border-color:var(--amarillo); color:var(--amarillo); background:transparent;}
+  button.ico{padding:8px 10px;}
+  button:disabled{opacity:.35; cursor:default;}
+  .swatches{display:flex; gap:8px; flex-wrap:wrap;}
+  .sw{width:36px; height:36px; border-radius:10px; border:2px solid transparent;
+    cursor:pointer; position:relative; overflow:hidden;}
+  .sw i{position:absolute; inset:0; background:linear-gradient(135deg, transparent 55%, var(--c2) 55%);}
+  .sw.sel{border-color:var(--blanco); box-shadow:0 0 12px rgba(255,255,255,.5);}
+  #resultado{display:none; margin-top:6px; border-top:1px dashed var(--line); padding-top:9px;}
+  #resultado .titulo{font-weight:900; font-size:15px; color:var(--amarillo);
+    display:flex; align-items:center; gap:8px;}
+  #resultado .chip{width:16px; height:16px; border-radius:5px; display:inline-block;}
+  #resultado .cuerpo{color:var(--muted); font-size:12.5px; margin:5px 0;}
+  #resultado .aviso{font-size:11px; color:var(--amarillo);}
+  #contador{font-size:11px; color:var(--muted); margin-top:7px;}
+  #demoflag{position:fixed; top:58px; right:14px; z-index:5; font-size:10px;
+    color:var(--negro); background:var(--amarillo); border-radius:999px;
+    padding:4px 12px; font-weight:900; letter-spacing:.08em; transition:opacity .4s;}
+  video#cam{position:fixed; inset:0; width:100vw; height:100vh; object-fit:cover;
+    z-index:8; display:none;}
+  #camhint{position:fixed; bottom:24px; left:50%; transform:translateX(-50%);
+    z-index:9; display:none; background:rgba(10,10,10,.85); padding:10px 18px;
+    border-radius:999px; border:1px solid var(--amarillo); color:var(--amarillo);
+    font-size:13px; font-weight:700;}
+  #salirinst{position:fixed; top:14px; right:14px; z-index:7; display:none;
+    background:rgba(22,19,24,.7); border:1px solid var(--line); color:var(--muted);
+    border-radius:999px; padding:6px 12px; font-size:12px; cursor:pointer;}
+  body.instalacion header, body.instalacion #panel, body.instalacion #demoflag{
+    opacity:0; pointer-events:none;}
+  body.instalacion #salirinst{display:block;}
+  @media (prefers-reduced-motion: reduce){ :root{ --reduce:1; } }
+</style>
+</head>
+<body>
+<canvas id="base"></canvas>
+<canvas id="vivo"></canvas>
+<video id="cam" playsinline muted></video>
+<div id="camhint">Toca el color de tu reacción para muestrear · ✕ para salir</div>
+<button id="salirinst">salir del modo instalación</button>
+<header>
+  <div class="marca">LA GOTA <span>· Reduciendo Daño</span></div>
+  <div class="lema">Si vas a hacerlo, reduce daños.</div>
+</header>
+<div id="demoflag">TABLA DEMO — pendiente tabla oficial RD</div>
+<script>
+// Actualizar etiqueta DEMO DATA cuando corresponda
+function updateDemoFlag() {
+  const demoflag = $("demoflag");
+  if (usandoDemo) {
+    demoflag.style.display = "block";
+    demoflag.textContent = "DEMO DATA";
+    demoflag.style.background = "#FFD21F";
+  } else {
+    demoflag.style.display = "none";
+  }
+}
+</script>
+
+<div id="panel">
+  <h2>Simula tu testeo <span class="mini">cada gota queda en el lienzo de la noche</span></h2>
+  <div class="fila">
+    <label for="test" style="font-size:13px;color:var(--muted)">Reactivo:</label>
+    <select id="test"></select>
+    <button class="sec" id="btncam" title="muestrear color con la cámara">📷 Cámara</button>
+    <span style="flex:1"></span>
+    <button class="ico" id="btnaudio" title="sonido">🔊</button>
+    <button class="ico" id="btninst" title="modo instalación (proyección)">⛶</button>
+  </div>
+  <div class="fila"><div class="swatches" id="swatches"></div></div>
+  <div class="fila">
+    <button class="principal" id="soltar" disabled>Soltar la gota</button>
+    <button id="guardar" disabled>Guardar observación</button>
+    <button class="ico" id="lienzopng" title="descargar el lienzo de la noche">🎨</button>
+    <button class="ico" id="limpiar" title="limpiar lienzo">🧹</button>
+    <button class="ico" id="exportar" title="exportar datos JSON">⭳</button>
+  </div>
+  <div id="resultado">
+    <div class="titulo"><span class="chip" id="chip1"></span>→<span class="chip" id="chip2"></span><span id="rtitulo"></span></div>
+    <div class="cuerpo" id="rcuerpo"></div>
+    <div class="aviso">El testeo colorimétrico es ORIENTATIVO, nunca confirmatorio. Ningún
+    resultado indica que una sustancia sea segura. Confirma en el stand RD · reduciendodano.cl</div>
+  </div>
+  <div id="contador"></div>
+</div>
+
+<script>
+/* =====================================================================
+   CONFIGURACION DEL ENDPOINT — leer de URL param o localStorage, fallback vacio
+===================================================================== */
+function getEndpointConfig() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const urlEndpoint = urlParams.get('endpoint');
+  if (urlEndpoint !== null) return urlEndpoint;
+  try {
+    const stored = localStorage.getItem('gota_rd_endpoint');
+    if (stored !== null) return stored;
+  } catch(e) {}
+  return "";
+}
+const ENDPOINT = getEndpointConfig();
+
+/* =====================================================================
+   TABLA DE REACCIONES — *** DATOS DE DEMOSTRACIÓN ***
+   Regla editorial v4.1: NO inventar colores de reactivos como verdad.
+   Reemplazar por la carta oficial validada de RD (mismo formato).
+   evo: [color inicial, color final] — las reacciones reales EVOLUCIONAN
+   en el tiempo; el timing es parte de la lectura.
+===================================================================== */
+const TABLA_DEMO = {
+  "Marquis (demo)": [
+    {evo:["#C2571A","#3B1E4F"], nombre:"Naranja → púrpura oscuro", nota:"Evolución típica de la carta demo. Verificar SIEMPRE con la tabla oficial RD."},
+    {evo:["#7A4B1E","#1E1E1E"], nombre:"Pardo → negro rápido", nota:"Reacción intensa en la carta demo. Verificar con la tabla oficial RD."},
+    {evo:["#B8B09A","#B8B09A"], nombre:"Sin cambio de color", nota:"La ausencia de reacción también es información: consulta en el stand."}
+  ],
+  "Mecke (demo)": [
+    {evo:["#2C6E4F","#0F2B22"], nombre:"Verde → verde muy oscuro", nota:"Asociación de la carta demo. Verificar con la tabla oficial RD."},
+    {evo:["#3A57A8","#141F4B"], nombre:"Azul → azul profundo", nota:"Asociación de la carta demo. Verificar con la tabla oficial RD."},
+    {evo:["#B8B09A","#B8B09A"], nombre:"Sin cambio de color", nota:"Sin reacción visible: consulta en el stand."}
+  ],
+  "Simon's (demo)": [
+    {evo:["#5A87D6","#2A5DB0"], nombre:"Azul (positiva)", nota:"Asociación de la carta demo. Verificar con la tabla oficial RD."},
+    {evo:["#B8B09A","#B8B09A"], nombre:"Sin cambio de color", nota:"Sin reacción visible: consulta en el stand."}
+  ]
+};
+let TABLA_REAL = null;
+let usandoDemo = true;
+
+/* ---------- utilidades de color ---------- */
+const hex2rgb = h => [parseInt(h.slice(1,3),16),parseInt(h.slice(3,5),16),parseInt(h.slice(5,7),16)];
+const rgb2css = (r,g,b,a=1) => `rgba(${r|0},${g|0},${b|0},${a})`;
+const lerp = (a,b,t) => a+(b-a)*t;
+const mixHex = (h1,h2,t) => { const a=hex2rgb(h1), b=hex2rgb(h2);
+  return [lerp(a[0],b[0],t), lerp(a[1],b[1],t), lerp(a[2],b[2],t)]; };
+
+/* ---------- estado ---------- */
+let testSel = Object.keys(TABLA_DEMO)[0];
+let matchSel = null;          // entrada de la tabla
+let colorMuestra = null;      // hex muestreado (camara) o evo[1] (swatch)
+const REDUCE = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/* ---------- UI ---------- */
+const $ = id => document.getElementById(id);
+
+// Cargar tabla real desde endpoint si esta configurado
+async function cargarTablaReal() {
+  if (!ENDPOINT) {
+    usandoDemo = true;
+    return;
+  }
+  const demoflag = $("demoflag");
+  demoflag.textContent = "CARGANDO...";
+  try {
+    const res = await fetch(ENDPOINT);
+    if (!res.ok) throw new Error('HTTP ' + res.status);
+    TABLA_REAL = await res.json();
+    usandoDemo = false;
+    demoflag.style.display = "none";
+  } catch(e) {
+    console.error("Error cargando tabla real:", e);
+    usandoDemo = true;
+    demoflag.textContent = "ERROR CARGANDO — usando DEMO DATA";
+    demoflag.style.background = "#ff6b6b";
+  }
+  updateDemoFlag();
+}
+
+function getTablaActual() {
+  return usandoDemo || !TABLA_REAL ? TABLA_DEMO : TABLA_REAL;
+}
+
+const selTest = $("test");
+function renderTestOptions() {
+  selTest.innerHTML = "";
+  const tabla = getTablaActual();
+  Object.keys(tabla).forEach(t => { const o=document.createElement("option"); o.textContent=t; selTest.appendChild(o); });
+}
+function pintaSwatches(){
+  const c = $("swatches"); c.innerHTML = "";
+  getTablaActual()[testSel].forEach(r => {
+    const d = document.createElement("div");
+    d.className="sw"; d.style.background=r.evo[0]; d.style.setProperty('--c2', r.evo[1]);
+    d.innerHTML = "<i></i>"; d.title = r.nombre;
+    d.onclick = () => { [...c.children].forEach(x=>x.classList.remove("sel")); d.classList.add("sel");
+      matchSel = r; colorMuestra = r.evo[1]; $("soltar").disabled = false; };
+    c.appendChild(d);
+  });
+}
+selTest.onchange = () => { testSel = selTest.value; matchSel=null; $("soltar").disabled=true; pintaSwatches(); };
+renderTestOptions();
+pintaSwatches();
+updateDemoFlag();
+// Iniciar carga de tabla real si hay endpoint
+cargarTablaReal();
+
+function nearest(rgb){
+  let best=null, bd=1e9;
+  getTablaActual()[testSel].forEach(e=>{ const c=hex2rgb(e.evo[1]);
+    const d = 2*(rgb[0]-c[0])**2 + 4*(rgb[1]-c[1])**2 + 3*(rgb[2]-c[2])**2;
+    if(d<bd){bd=d; best=e;} });
+  return best;
+}
+
+/* ---------- camara ---------- */
+const video = $("cam"), hint = $("camhint");
+let stream = null;
+$("btncam").onclick = async () => {
+  if(stream){ cerrarCam(); return; }
+  try{ stream = await navigator.mediaDevices.getUserMedia({video:{facingMode:"environment"}});
+    video.srcObject = stream; await video.play();
+    video.style.display="block"; hint.style.display="block";
+  }catch(e){ alert("No se pudo abrir la cámara: " + e.message); }
+};
+function cerrarCam(){ if(stream){stream.getTracks().forEach(t=>t.stop()); stream=null;}
+  video.style.display="none"; hint.style.display="none"; }
+video.addEventListener("click", ev => {
+  const c = document.createElement("canvas");
+  c.width = video.videoWidth; c.height = video.videoHeight;
+  const cx = c.getContext("2d"); cx.drawImage(video,0,0);
+  const px = cx.getImageData(ev.clientX/innerWidth*c.width, ev.clientY/innerHeight*c.height,1,1).data;
+  matchSel = nearest([px[0],px[1],px[2]]);
+  colorMuestra = "#" + [px[0],px[1],px[2]].map(v=>v.toString(16).padStart(2,"0")).join("");
+  cerrarCam(); $("soltar").disabled=false;
+  [...$("swatches").children].forEach(x=>x.classList.remove("sel"));
+  soltar();
+});
+hint.onclick = cerrarCam;
+
+/* ---------- audio (sintetizado, sin assets) ---------- */
+let AC=null, mudo=false;
+$("btnaudio").onclick = () => { mudo=!mudo; $("btnaudio").textContent = mudo?"🔇":"🔊"; };
+function ping(freq=340, dur=.35, vol=.25){
+  if(mudo) return;
+  try{
+    AC = AC || new (window.AudioContext||window.webkitAudioContext)();
+    const o=AC.createOscillator(), g=AC.createGain();
+    o.type="sine"; o.frequency.setValueAtTime(freq, AC.currentTime);
+    o.frequency.exponentialRampToValueAtTime(freq*.45, AC.currentTime+dur);
+    g.gain.setValueAtTime(vol, AC.currentTime);
+    g.gain.exponentialRampToValueAtTime(.001, AC.currentTime+dur);
+    o.connect(g).connect(AC.destination); o.start(); o.stop(AC.currentTime+dur);
+  }catch(e){}
+}
+
+/* ---------- canvases ---------- */
+const base = $("base"), bctx = base.getContext("2d");
+const vivo = $("vivo"), vctx = vivo.getContext("2d");
+const DPR = Math.min(devicePixelRatio||1, 2);
+function fit(){
+  for(const c of [base, vivo]){ c.width=innerWidth*DPR; c.height=innerHeight*DPR;
+    c.getContext("2d").setTransform(DPR,0,0,DPR,0,0); }
+  fondo(); initSuperficie();
+}
+const W=()=>innerWidth, H=()=>innerHeight;
+function fondo(){
+  const g = bctx.createRadialGradient(W()/2,H()*.4,0,W()/2,H()*.4,Math.max(W(),H())*.8);
+  g.addColorStop(0,"#100c12"); g.addColorStop(1,"#070609");
+  bctx.fillStyle=g; bctx.fillRect(0,0,W(),H());
+}
+
+/* ---------- superficie de agua: resortes acoplados ---------- */
+const NIVEL = () => H()*.58;
+let S = {y:[], v:[], n:0, paso:0};
+function initSuperficie(){
+  S.n = Math.max(60, Math.floor(W()/9));
+  S.paso = W()/(S.n-1);
+  S.y = new Array(S.n).fill(0); S.v = new Array(S.n).fill(0);
+}
+function exciteSuperficie(x, fuerza){
+  const i = Math.round(x/S.paso);
+  for(let k=-2;k<=2;k++){ const j=i+k; if(j>=0&&j<S.n) S.v[j] += fuerza*(1-Math.abs(k)*.3); }
+}
+function pasoSuperficie(){
+  const k=.022, damp=.985, spread=.12;
+  for(let i=0;i<S.n;i++){ S.v[i] += -k*S.y[i]; S.v[i]*=damp; S.y[i]+=S.v[i]; }
+  for(let p=0;p<3;p++){
+    for(let i=0;i<S.n;i++){
+      if(i>0)     S.v[i] += spread*(S.y[i-1]-S.y[i])*.5;
+      if(i<S.n-1) S.v[i] += spread*(S.y[i+1]-S.y[i])*.5;
+    }
+  }
+}
+
+/* ---------- campo de flujo para la tinta ---------- */
+function flujo(x,y,t){
+  const a = Math.sin(x*.0031 + t*.35) + Math.cos(y*.0043 - t*.28)
+          + Math.sin((x+y)*.0017 + t*.15);
+  return a*1.9;
+}
+
+/* ---------- particulas ---------- */
+let tinta=[], destellos=[], ondas=[];
+function bloom(x, y, entrada){
+  const N = REDUCE? 40 : 130;
+  for(let i=0;i<N;i++){
+    const ang = Math.PI*(.15 + Math.random()*.7) ; // hacia abajo, abanico
+    const sp = .4 + Math.random()*2.2;
+    tinta.push({x:x+(Math.random()-.5)*10, y:y+2,
+      vx:Math.cos(ang)*sp*(Math.random()<.5?-1:1)*.6, vy:Math.sin(ang)*sp,
+      r:2+Math.random()*7, vida:1, decae:.0016+Math.random()*.003,
+      nace:reloj, entrada});
+  }
+  for(let i=0;i<(REDUCE?8:22);i++){ // corona de salpicadura hacia arriba
+    const ang = -Math.PI/2 + (Math.random()-.5)*1.1;
+    const sp = 2+Math.random()*4.5;
+    destellos.push({x,y, vx:Math.cos(ang)*sp, vy:Math.sin(ang)*sp, vida:1, entrada});
+  }
+  ondas.push({x, r:4, a:.85, entrada});
+  exciteSuperficie(x, 7.5);
+  ping(300+Math.random()*90);
+  if(navigator.vibrate) navigator.vibrate(24);
+}
+
+/* ---------- gotero y gota: maquina de estados ---------- */
+let gota = {estado:"reposo", x:0, y:0, vy:0, r:0, t0:0, entrada:null};
+function soltar(){
+  if(!matchSel || gota.estado!=="reposo") return;
+  const lado = Math.random()<.5 ? (0.12+Math.random()*.18) : (0.70+Math.random()*.18);
+  gota = {estado:"formando", x:W()*lado, y:86, vy:0, r:0,
+          t0:reloj, entrada:matchSel};
+  $("resultado").style.display="none";
+}
+$("soltar").onclick = soltar;
+
+function colorGotaCSS(entrada, edadMs, a=1){
+  const t = Math.min(1, edadMs/6000);          // evolucion en ~6s
+  const [r,g,b] = mixHex(entrada.evo[0], entrada.evo[1], t);
+  return rgb2css(r,g,b,a);
+}
+
+function dibujaGotero(gx){
+  vctx.save();
+  vctx.strokeStyle="rgba(242,242,242,.55)"; vctx.lineWidth=3;
+  // bulbo
+  const squeeze = gota.estado==="formando" ? 1 - .12*Math.min(1,(reloj-gota.t0)/700) : 1;
+  vctx.beginPath(); vctx.ellipse(gx, 34, 16*squeeze, 20, 0, 0, 7); vctx.stroke();
+  // cuerpo
+  vctx.beginPath(); vctx.moveTo(gx, 54); vctx.lineTo(gx, 84); vctx.stroke();
+  vctx.beginPath(); vctx.moveTo(gx-5, 84); vctx.lineTo(gx+5, 84); vctx.stroke();
+  vctx.restore();
+}
+
+/* ---------- lienzo de la noche: mancha permanente ---------- */
+function mancha(x,y,entrada){
+  const edad = 6000; // color final
+  bctx.save(); bctx.globalCompositeOperation="lighter";
+  const col = colorGotaCSS(entrada, edad, .13);
+  for(let i=0;i<10;i++){
+    const mx=x+(Math.random()-.5)*90, my=y+Math.random()*130;
+    const r=14+Math.random()*46;
+    const g=bctx.createRadialGradient(mx,my,0,mx,my,r);
+    g.addColorStop(0,col); g.addColorStop(1,"rgba(0,0,0,0)");
+    bctx.fillStyle=g; bctx.beginPath(); bctx.arc(mx,my,r,0,7); bctx.fill();
+  }
+  bctx.restore();
+}
+
+/* ---------- bucle principal ---------- */
+let tGlobal=0, reloj=0;
+function frame(ts){
+  reloj = ts || 0;
+  tGlobal += .016;
+  pasoSuperficie();
+  vctx.clearRect(0,0,W(),H());
+
+  // gotero (visible mientras se forma/cae)
+  if(gota.estado==="formando" || gota.estado==="reposo"){
+    dibujaGotero(gota.estado==="formando"? gota.x : W()/2);
+  }
+
+  // superficie del fluido
+  vctx.save();
+  const nivel = NIVEL();
+  vctx.beginPath(); vctx.moveTo(0, nivel + S.y[0]);
+  for(let i=1;i<S.n;i++) vctx.lineTo(i*S.paso, nivel + S.y[i]);
+  vctx.lineTo(W(),H()); vctx.lineTo(0,H()); vctx.closePath();
+  const gsup = vctx.createLinearGradient(0,nivel-30,0,H());
+  gsup.addColorStop(0,"rgba(200,0,200,.10)");
+  gsup.addColorStop(.25,"rgba(22,17,26,.55)");
+  gsup.addColorStop(1,"rgba(8,6,10,.85)");
+  vctx.fillStyle=gsup; vctx.fill();
+  vctx.strokeStyle="rgba(200,0,200,.5)"; vctx.lineWidth=2;
+  vctx.beginPath(); vctx.moveTo(0, nivel + S.y[0]);
+  for(let i=1;i<S.n;i++) vctx.lineTo(i*S.paso, nivel + S.y[i]);
+  vctx.stroke();
+  vctx.restore();
+
+  // estados de la gota
+  const ahora = reloj;
+  if(gota.estado==="formando"){
+    const p = Math.min(1,(ahora-gota.t0)/850);
+    gota.r = 3 + p*7.5;
+    const gy = 86 + p*10;      // cuelga y estira
+    vctx.fillStyle = colorGotaCSS(gota.entrada, 0);
+    vctx.beginPath(); vctx.ellipse(gota.x, gy, gota.r*.75, gota.r*(1+p*.5), 0, 0, 7); vctx.fill();
+    if(p>=1){ gota.estado="cayendo"; gota.y=gy; ping(560,.12,.12); }
+  } else if(gota.estado==="cayendo"){
+    gota.vy += .5; gota.y += gota.vy;
+    const col = colorGotaCSS(gota.entrada, 0);
+    const glow = vctx.createRadialGradient(gota.x,gota.y,0,gota.x,gota.y,30);
+    glow.addColorStop(0,col); glow.addColorStop(1,"rgba(0,0,0,0)");
+    vctx.globalAlpha=.6; vctx.fillStyle=glow;
+    vctx.beginPath(); vctx.arc(gota.x,gota.y,30,0,7); vctx.fill(); vctx.globalAlpha=1;
+    vctx.fillStyle=col;
+    vctx.beginPath(); vctx.ellipse(gota.x,gota.y, gota.r*.7, gota.r*(1+gota.vy*.05), 0,0,7); vctx.fill();
+    const ns = NIVEL() + S.y[Math.round(gota.x/S.paso)||0];
+    if(gota.y >= ns){
+      bloom(gota.x, ns, gota.entrada);
+      mancha(gota.x, ns+30, gota.entrada);
+      gota.estado="reposo"; gota.r=0;
+      mostrarResultado();
+    }
+  }
+
+  // ondas concentricas en la superficie
+  ondas = ondas.filter(o=>o.a>.02);
+  for(const o of ondas){
+    o.r+=3.6; o.a*=.94;
+    const yy = NIVEL() + (S.y[Math.round(o.x/S.paso)||0]||0);
+    vctx.strokeStyle = colorGotaCSS(o.entrada, ahora - (o.t0||ahora), o.a);
+    vctx.lineWidth=2.5;
+    vctx.beginPath(); vctx.ellipse(o.x, yy, o.r, o.r*.22, 0, 0, 7); vctx.stroke();
+  }
+
+  // salpicadura (sobre la superficie)
+  destellos = destellos.filter(d=>d.vida>0);
+  for(const d of destellos){
+    d.vy+=.32; d.x+=d.vx; d.y+=d.vy; d.vida-=.03;
+    vctx.fillStyle = colorGotaCSS(d.entrada, 0, Math.max(0,d.vida));
+    vctx.beginPath(); vctx.arc(d.x,d.y,2.2,0,7); vctx.fill();
+  }
+
+  // tinta difundiendo bajo la superficie (aditiva, color evolutivo)
+  vctx.save(); vctx.globalCompositeOperation="lighter";
+  tinta = tinta.filter(p=>p.vida>0);
+  for(const p of tinta){
+    const a = flujo(p.x,p.y,tGlobal);
+    p.vx = p.vx*.97 + Math.cos(a)*.09;
+    p.vy = p.vy*.985 + Math.sin(a)*.05 + .012;   // deriva y leve hundimiento
+    p.x+=p.vx; p.y+=p.vy; p.vida-=p.decae; p.r*=1.004;
+    const nsL = NIVEL() + (S.y[Math.round(p.x/S.paso)||0]||0);
+    if(p.y < nsL+2) p.y = nsL+2;
+    const edad = ahora - p.nace;
+    const g = vctx.createRadialGradient(p.x,p.y,0,p.x,p.y,p.r);
+    g.addColorStop(0, colorGotaCSS(p.entrada, edad, .30*p.vida));
+    g.addColorStop(1, "rgba(0,0,0,0)");
+    vctx.fillStyle=g; vctx.beginPath(); vctx.arc(p.x,p.y,p.r,0,7); vctx.fill();
+  }
+  vctx.restore();
+
+  requestAnimationFrame(frame);
+}
+
+/* ---------- resultado + base de datos ---------- */
+function mostrarResultado(){
+  const m = matchSel; if(!m) return;
+  $("chip1").style.background = m.evo[0];
+  $("chip2").style.background = m.evo[1];
+  $("rtitulo").textContent = " " + m.nombre + " · " + testSel;
+  $("rcuerpo").textContent = m.nota + (colorMuestra && colorMuestra!==m.evo[1] ? "  (color muestreado: " + colorMuestra + ")" : "");
+  $("resultado").style.display="block";
+  $("guardar").disabled = false;
+}
+const KEY="gota_rd_observaciones";
+const lee = () => JSON.parse(localStorage.getItem(KEY)||"[]");
+function cuenta(){ $("contador").textContent = "Gotas en el lienzo de este dispositivo: " + lee().length +
+  (ENDPOINT && !usandoDemo ? " · enviando a la base RD" : " · exporta y comparte con RD"); }
+cuenta();
+$("guardar").onclick = async () => {
+  const obs = { t:new Date().toISOString(), test:testSel, color:colorMuestra,
+    evo: matchSel?matchSel.evo:null, match: matchSel?matchSel.nombre:null,
+    fuente:"web-gota", version: usandoDemo ? "demo-v2" : "rd-oficial" };
+  const all = lee(); all.push(obs); localStorage.setItem(KEY, JSON.stringify(all));
+  if(ENDPOINT && !usandoDemo){ try{ await fetch(ENDPOINT,{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(obs)});}catch(e){} }
+  $("guardar").disabled=true; cuenta();
+};
+$("exportar").onclick = () => {
+  const blob = new Blob([JSON.stringify(lee(),null,1)],{type:"application/json"});
+  const a=document.createElement("a"); a.href=URL.createObjectURL(blob);
+  a.download="gota_rd_observaciones.json"; a.click();
+};
+$("lienzopng").onclick = () => {
+  const a=document.createElement("a"); a.href=base.toDataURL("image/png");
+  a.download="lienzo_de_la_noche_RD.png"; a.click();
+};
+$("limpiar").onclick = () => fondo();
+
+/* ---------- modo instalacion ---------- */
+$("btninst").onclick = () => { document.body.classList.add("instalacion");
+  if(document.documentElement.requestFullscreen) document.documentElement.requestFullscreen().catch(()=>{}); };
+$("salirinst").onclick = () => { document.body.classList.remove("instalacion");
+  if(document.fullscreenElement) document.exitFullscreen().catch(()=>{}); };
+
+addEventListener("resize", fit);
+fit();
+frame();
+</script>
+</body>
+</html>

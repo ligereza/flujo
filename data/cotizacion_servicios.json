@@ -1,0 +1,49 @@
+{
+  "_que_es": "Valores de la herramienta de cotización: los ítems que aparecen por defecto y los presets que se cargan con un click. Es editable a mano, igual que data/rd_packs.json.",
+
+  "_ojo": "Estos montos NO son la tarifa de los packs de servicio en terreno (esa vive en data/rd_packs.json y la lee el rider). Estos son servicios de diseño e impresión, que cambian por trabajo: cada archivo de Illustrator es distinto y su valor también. Son un PUNTO DE PARTIDA para editar en la cotización, no un precio fijo.",
+
+  "_como_editar": [
+    "Cambiá el 'precio' de un ítem, o agregá uno nuevo copiando la misma forma.",
+    "'categoria' tiene que ser una de: Diseño, Impresión, Evento, Digital, Otro.",
+    "Los textos se imprimen en la cotización que ve el cliente: van en español correcto, con acentos.",
+    "Si este archivo falta o tiene un error, la app usa los valores que trae el código y sigue funcionando."
+  ],
+
+  "items_por_defecto": [
+    { "label": "Diseño etiqueta (vector, 2 revisiones)", "qty": 1, "precio": 65000, "categoria": "Diseño" },
+    { "label": "Impresión etiqueta 16.5x6.5 cm (100 unidades)", "qty": 1, "precio": 48000, "categoria": "Impresión" },
+    { "label": "Post Instagram (3 variaciones)", "qty": 1, "precio": 30000, "categoria": "Digital" }
+  ],
+
+  "presets": [
+    {
+      "label": "Etiqueta Suplementos",
+      "items": [
+        { "label": "Diseño etiqueta vectorial (2 revisiones)", "qty": 1, "precio": 65000, "categoria": "Diseño" },
+        { "label": "Impresión 100 unidades", "qty": 1, "precio": 48000, "categoria": "Impresión" },
+        { "label": "Post Instagram", "qty": 3, "precio": 12000, "categoria": "Digital" }
+      ]
+    },
+    {
+      "label": "Kit Evento BASE",
+      "items": [
+        { "label": "Diseño flyer físico A5", "qty": 1, "precio": 45000, "categoria": "Diseño" },
+        { "label": "Impresión flyer A5 (200 unidades)", "qty": 1, "precio": 35000, "categoria": "Impresión" },
+        { "label": "Diseño plano/rider operativo", "qty": 1, "precio": 30000, "categoria": "Diseño" },
+        { "label": "Post Instagram evento", "qty": 1, "precio": 15000, "categoria": "Digital" }
+      ]
+    },
+    {
+      "label": "Kit Evento MAINSTREAM",
+      "items": [
+        { "label": "Diseño flyer físico A4 (2 idiomas)", "qty": 1, "precio": 80000, "categoria": "Diseño" },
+        { "label": "Impresión flyer A4 (500 unidades)", "qty": 1, "precio": 75000, "categoria": "Impresión" },
+        { "label": "Diseño pendón 80x180 cm", "qty": 1, "precio": 55000, "categoria": "Diseño" },
+        { "label": "Diseño cartelera digital", "qty": 1, "precio": 35000, "categoria": "Digital" },
+        { "label": "Plano/rider MAINSTREAM + SVG", "qty": 1, "precio": 45000, "categoria": "Diseño" },
+        { "label": "Pack Instagram (5 posts)", "qty": 1, "precio": 40000, "categoria": "Digital" }
+      ]
+    }
+  ]
+}

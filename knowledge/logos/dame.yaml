@@ -1,0 +1,8 @@
+id: dame_primary
+producer_id: dame
+status: source_needed
+source_quality: unknown
+workflow:
+  suggested_tool: logo_clean_lab
+  next_action: "solo se hallo perfil IG @fiestadame; foto de perfil solo 100x100 (bajo umbral 150px), URL firmada bloquea descarga sin stp; falta sitio oficial o press kit"
+outputs: {}

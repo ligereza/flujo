@@ -1,0 +1,39 @@
+{
+  "intake_version": "1.0",
+  "pedido": {
+    "id_externo": "IG-2026-06-18-007",
+    "solicitante": {
+      "nombre": "Camila (Marketing)",
+      "canal": "instagram",
+      "contacto": "@camimkt"
+    },
+    "tipo_pieza": "carrusel",
+    "formato_sugerido": "carrusel_cuadrado_1080",
+    "medidas": {
+      "ancho_cm": 10.8,
+      "alto_cm": 10.8,
+      "orientacion": "cuadrado"
+    },
+    "contenido": {
+      "titulo": "5 tips para ahorrar agua",
+      "extras": {
+        "slides": [
+          { "n": 1, "titulo": "¿Sabías que...?", "texto": "Una llave goteando pierde 30L al día." },
+          { "n": 2, "titulo": "Tip 1", "texto": "Cierra la llave al lavarte los dientes." },
+          { "n": 3, "titulo": "Tip 2", "texto": "Duchas de 5 minutos." },
+          { "n": 4, "titulo": "Tip 3", "texto": "Repara fugas a tiempo." },
+          { "n": 5, "titulo": "Cierre", "texto": "Comparte y cuida el agua.", "cta": "Síguenos @marca" }
+        ]
+      }
+    },
+    "marca": {
+      "nombre": "EcoMarca",
+      "paleta_preferida": ["#0E7C66", "#FFFFFF", "#0B3D2E"]
+    },
+    "entrega": {
+      "formatos": ["editable_svg", "zip"],
+      "destino": "digital"
+    },
+    "notas": "Tono cercano, emojis permitidos en redes pero no en el arte."
+  }
+}

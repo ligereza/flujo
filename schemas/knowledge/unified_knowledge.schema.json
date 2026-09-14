@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "mak-unified-knowledge-db-target-v1",
+  "title": "Unified logical knowledge database contract",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["logical_database_id", "engine", "namespaces", "assertion_contract"],
+  "properties": {
+    "logical_database_id": {"const": "knowledge_db"},
+    "engine": {"const": "engine_neutral"},
+    "namespaces": {
+      "type": "array",
+      "prefixItems": [
+        {"const": "core"},
+        {"const": "mak"},
+        {"const": "rd"},
+        {"const": "portfolio"},
+        {"const": "relations"},
+        {"const": "products"},
+        {"const": "audit"}
+      ],
+      "minItems": 7,
+      "maxItems": 7,
+      "uniqueItems": true
+    },
+    "assertion_contract": {
+      "type": "object",
+      "required": ["required_fields", "typed_relations"],
+      "properties": {
+        "required_fields": {
+          "type": "array",
+          "const": [
+            "source_or_evidence",
+            "producer",
+            "owner",
+            "confidence_or_status",
+            "visibility",
+            "timestamp_or_version"
+          ]
+        },
+        "typed_relations": {"const": true}
+      }
+    },
+    "portfolio": {
+      "type": "object",
+      "required": ["status"],
+      "properties": {"status": {"const": "NOT_CONFIGURED"}}
+    }
+  }
+}

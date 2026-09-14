@@ -1,0 +1,43 @@
+# VCD-07 (2026-07-29): the security diagnosis asked for two things -- pin
+# Actions to SHAs (done in the workflows, each pin keeps a `# vX` comment so
+# Dependabot can bump it) and automated dependency updates. This is the second
+# half. Weekly and capped so the PR queue stays quiet; every PR still goes
+# through the gate (green CI, human merge).
+#
+# Grouped (2026-07-29, measured the same night it went live): ungrouped, the
+# first run opened 12 PRs at once, and with strict branch protection each
+# merge stales every other PR -- an 8-cycle rebase treadmill. Worse, it
+# bumped react-dom WITHOUT react and the pair broke npm ci. One group per
+# ecosystem = one PR, coherent pairs, one CI run. Majors stay separate on
+# npm (a TypeScript/Vite major is real work, not maintenance).
+# Retirement: if the repo adopts another update mechanism.
+
+version: 2
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 3
+    groups:
+      actions:
+        patterns: ["*"]
+
+  - package-ecosystem: "npm"
+    directory: "/web"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 3
+    groups:
+      npm-menores:
+        patterns: ["*"]
+        update-types: ["minor", "patch"]
+
+  - package-ecosystem: "pip"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    open-pull-requests-limit: 3
+    groups:
+      pip:
+        patterns: ["*"]

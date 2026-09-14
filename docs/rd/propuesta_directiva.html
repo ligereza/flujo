@@ -1,0 +1,363 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Propuesta a la Directiva — Reduciendo Daño</title>
+<style>
+:root{
+  --bg:#0A0A0A; --panel:#161318; --ink:#F2F2F2; --muted:#9c98a3;
+  --magenta:#C800C8; --amarillo:#FFD21F; --linea:#2a2530;
+}
+*{box-sizing:border-box;}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family: Arial, Helvetica, sans-serif; line-height:1.55;
+}
+header.hero{
+  padding:3rem 1.5rem 2rem; text-align:center;
+  border-bottom:1px solid var(--linea);
+}
+header.hero .logo{ width:110px; height:auto; margin:0 auto 1rem; display:block; }
+header.hero h1{
+  font-size:1.6rem; letter-spacing:.04em; text-transform:uppercase;
+  color:var(--amarillo); text-shadow:0 0 18px rgba(255,210,31,.35);
+  margin:.2rem 0;
+}
+header.hero p{ color:var(--muted); max-width:680px; margin:.7rem auto 0; font-size:.92rem; }
+main{ max-width:1080px; margin:0 auto; padding:2rem 1.25rem 4rem; }
+section{ margin-top:2.75rem; }
+h2{
+  font-size:1.05rem; text-transform:uppercase; letter-spacing:.06em;
+  color:var(--amarillo); border-left:3px solid var(--magenta); padding-left:.6rem;
+  margin-bottom:1rem;
+}
+h3{ font-size:1rem; margin:.1rem 0 .4rem; }
+p{ font-size:.92rem; }
+.panel{
+  background:var(--panel); border-radius:10px; padding:1.2rem 1.4rem;
+  font-size:.9rem; color:var(--muted);
+}
+.panel b, .panel strong{ color:var(--ink); }
+.stat-row{ display:flex; gap:1rem; flex-wrap:wrap; margin-bottom:1.2rem; }
+.stat{ background:var(--panel); border-radius:8px; padding:.85rem 1.15rem; min-width:132px; }
+.stat .n{ font-size:1.6rem; color:var(--amarillo); font-weight:700; line-height:1.1; }
+.stat .l{ font-size:.72rem; color:var(--muted); text-transform:uppercase; letter-spacing:.04em; }
+.grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:1rem; }
+.card{
+  background:var(--panel); border-radius:10px; padding:1.15rem;
+  position:relative; overflow:hidden;
+}
+.card::before, .card::after{
+  content:""; position:absolute; inset:0; border-radius:10px; pointer-events:none;
+}
+.card::before{ box-shadow:inset 0 0 0 1.5px rgba(200,0,200,.16); }
+.card::after{ box-shadow:inset 0 0 0 1px rgba(200,0,200,.55); }
+.precio{ color:var(--amarillo); font-weight:700; font-size:1.05rem; margin:.2rem 0 .5rem; }
+.card ul{ margin:.4rem 0 0 1.05rem; padding:0; font-size:.83rem; color:var(--muted); }
+.card li{ margin:.25rem 0; }
+.chips{ display:flex; flex-wrap:wrap; gap:.4rem; margin-top:.4rem; }
+.chip{
+  font-size:.72rem; padding:.2rem .55rem; border-radius:12px;
+  background:#241f29; color:var(--muted);
+}
+.pide{ counter-reset:pide; }
+.pide .item{
+  background:var(--panel); border-radius:10px; padding:1.1rem 1.3rem 1.1rem 3.2rem;
+  position:relative; margin-bottom:.9rem; font-size:.9rem; color:var(--muted);
+}
+.pide .item::before{
+  counter-increment:pide; content:counter(pide);
+  position:absolute; left:1.1rem; top:1rem;
+  color:var(--amarillo); font-weight:700; font-size:1.2rem;
+}
+.pide .item b{ color:var(--ink); }
+.aviso{
+  background:#1a1416; border-left:3px solid var(--magenta);
+  border-radius:0 10px 10px 0; padding:1.1rem 1.3rem; font-size:.86rem; color:var(--muted);
+}
+.aviso b{ color:var(--ink); }
+footer{
+  text-align:center; padding:2rem 1rem; color:var(--muted); font-size:.75rem;
+  border-top:1px solid var(--linea);
+}
+footer .logo{ width:52px; height:auto; margin:0 auto .6rem; display:block; opacity:.8; }
+a{ color:var(--amarillo); }
+@media print{
+  body{ background:#fff; color:#000; }
+  .panel, .card, .stat, .pide .item{ background:#f4f4f4; color:#000; }
+  h1, h2, .stat .n, .precio{ color:#000 !important; text-shadow:none !important; }
+}
+</style>
+</head>
+<body>
+<header class="hero">
+  <svg class="logo" id="Capa_1" data-name="Capa 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1060 817.61">
+  <defs>
+    <style>
+      .cls-1, .cls-2 {
+        fill: #000;
+      }
+
+      .cls-3 {
+        fill: none;
+        stroke: #000;
+        stroke-miterlimit: 10;
+        stroke-width: .6165px;
+      }
+
+      .cls-3, .cls-2 {
+        font-family: Helvetica-Bold, Helvetica;
+        font-size: 53.4255px;
+        font-weight: 700;
+        isolation: isolate;
+      }
+    </style>
+  </defs>
+  <g id="Capa_2" data-name="Capa 2">
+    <g id="Layer_1" data-name="Layer 1">
+      <path id="Gota" fill="#ffffff" d="M942.9872,428.0881c-12.0906,10.5536-44.5076,38.1705-71.9355,61.7681-188.5593,162.0849-300.3913,231.7189-402.8204,250.6891-23.5894,4.2165-76.1519,2.8768-103.5634-3.0658-120.0842-25.4799-216.168-110.295-253.9768-223.664-14.0139-41.8034-16.3153-57.1489-16.3153-106.2511,0-47.7624,2.4658-64.834,14.5811-101.6647,34.143-104.1552,113.558-184.5318,214.8364-217.7132,38.9349-12.4687,56.9105-17.1866,100.9989-17.1866,34.9157,0,41.6884,2.4165,57.7982,6.4439,30.6909,7.6686,55.0694,16.8825,91.1193,34.7184,83.6891,41.0308,159.0437,95.5249,307.8955,222.6777,30.1156,25.7018,61.3819,52.3652,69.6258,59.2695,8.055,6.7152,14.5811,13.044,14.3838,13.8167-.3781.6-10.5453,9.8057-22.6278,20.162Z"/>
+      <path class="cls-1" d="M395.0795,304.5929c4.1012,6.408,6.9463,13.5375,8.3837,21.0086,1.5288,7.6714,1.2767,16.4222-.7562,26.2525-2.6028,11.8632-8.1097,23.5236-16.5208,34.9814-8.4111,11.4578-20.014,19.5592-34.8088,24.3045,10.5043,4.6247,17.2524,11.2002,20.2442,19.7264,2.9918,8.5262,2.6329,21.5428-1.0767,39.0499l-3.559,16.7674c-2.3672,11.4084-3.5507,19.1428-3.5507,23.2031,0,6.444,2.1452,11.1892,6.4357,14.2359l-1.1918,6.2631h-57.4448c-.4493-5.5343-.674-9.9947-.674-13.3811.1356-7.2269.9279-14.4265,2.3672-21.5099l4.5782-23.2113c3.1562-15.9235,2.5069-26.5374-1.948-31.8416-4.4549-5.3042-14.3646-7.959-29.7293-7.9645h-53.8612l-20.6716,97.9085h-50.9597l53.0228-249.6699h122.4678c17.3921.3343,30.3786,2.4795,38.9595,6.4357,8.3078,3.7306,15.3565,9.7888,20.2935,17.4414ZM254.9978,324.0727l-14.2276,67.0778h59.0887c11.7426,0,20.8332-1.3562,27.2717-4.0686,11.4084-4.7398,18.6359-14.1098,21.6826-28.1101,3.1672-15.1345.2877-25.299-8.6385-30.4937-5.0795-2.937-13.266-4.4055-24.5593-4.4055h-60.6174Z"/>
+      <path class="cls-1" d="M607.6639,286.1323c16.2578,5.759,28.1703,16.3181,35.7376,31.6772,6.1223,12.5402,9.2804,26.3198,9.2303,40.2746.1109,13.879-1.2223,27.7319-3.9782,41.3349-7.1234,33.1951-19.7729,61.3133-37.9486,84.3548-24.6196,31.0525-55.7845,46.5788-93.4947,46.5788h-107.5579l53.0146-249.6699h107.558c15.3756.2411,27.8553,2.0576,37.439,5.4494ZM503.9937,324.0727l-34.5211,162.9479h48.1077c24.6141,0,44.3761-12.1372,59.2859-36.4116,8.1317-13.3262,14.1153-29.1923,17.951-47.5981,5.4247-25.4141,5.5946-44.9213.5096-58.5215-5.085-13.6002-19.4935-20.4058-43.2254-20.4168h-48.1077Z"/>
+      <path class="cls-1" d="M690.2762,504.2976l2.4658,4.4795c6.4933,11.729,8.9426,18.3948,8.8275,24.0168-.173,1.8634-.6103,3.6927-1.2987,5.433-2.5736,5.9863-8.1306,10.1572-14.5975,10.9564-1.9183.2954-3.877.1918-5.7535-.3041-1.8432-.2815-3.6135-.9209-5.2111-1.8822-5.0601-2.8598-8.4524-7.962-9.1316-13.7345-.2936-1.8365-.2266-3.7125.1973-5.5234.1597-1.0378.4873-2.0428.9699-2.9754.7706-1.5815,1.7222-3.0682,2.8357-4.4302,3.0822-3.9699,6.7892-7.3481,15.1317-13.8167l3.8959-3.0247c.2671-.2381.5625-.4424.8795-.6082,0,0,.3371.6658.7891,1.4137Z"/>
+      <path class="cls-1" d="M685.6159,456.2804c-1.2607,6.5342,3.0143,12.8533,9.5485,14.1141,6.5343,1.2608,12.8534-3.0142,14.1141-9.5485.0345-.1787.0649-.3581.0913-.5381l8.5891-50.6721-23.762-4.0275-8.581,50.6721Z"/>
+      <path class="cls-1" d="M704.4545,500.9112l-27.5594-4.6603,2.2028-13.0112c-2.6544-1.9405-4.9752-4.3002-6.8713-6.9864-4.7869-6.6947-6.6959-15.0264-5.3015-23.1374l19.825-117.1417,61.1353,10.3728-19.8004,117.117c-1.9373,11.5292-10.2032,20.9841-21.3702,24.4442l-2.2603,13.003ZM686.372,489.5028l11.3016,1.9069,1.7343-10.2741,2.7535-.5754c9.1501-1.9216,16.1908-9.2493,17.7455-18.4688l18.4441-109.0292-44.8774-7.5864-18.4195,109.021c-1.5611,9.2177,2.6776,18.4518,10.6851,23.2771l2.4,1.4466-1.7671,10.2823Z"/>
+      <path class="cls-1" d="M764.1843,357.4267l-96.4783-16.3236,4.3645-25.7922,17.6715,2.9918,5.0713-29.9512c2.8507-16.8798,18.8455-28.2526,35.7253-25.4018,16.8798,2.8507,28.2525,18.8455,25.4018,35.7253h0l-5.0631,29.9512,17.6715,2.9918-4.3645,25.8086ZM677.2075,334.3551l80.2205,13.5783,1.6439-9.5508-17.6715-2.9918,6.4111-38.0718c2.0972-12.3948-6.2507-24.1429-18.6455-26.2402s-24.1429,6.2507-26.2402,18.6455h0l-6.444,38.0719-17.6715-2.9836-1.6028,9.5426Z"/>
+      <path class="cls-1" d="M714.589,309.7547l-8.1207-1.3726,2.9672-17.5564c.7077-4.2321,3.0744-8.0071,6.5755-10.4878h0c3.4947-2.4954,7.8422-3.4897,12.0742-2.7617l-1.3726,8.1289c-2.0709-.3601-4.1998.1255-5.9097,1.348h0c-1.7198,1.212-2.883,3.0619-3.2302,5.1371l-2.9836,17.5647Z"/>
+      <text class="cls-2" transform="translate(603.998 532.374)"><tspan x="0" y="0">®</tspan></text>
+      <text class="cls-3" transform="translate(603.998 532.374)"><tspan x="0" y="0">®</tspan></text>
+    </g>
+  </g>
+</svg>
+  <h1>Propuesta a la Directiva</h1>
+  <p>Qué ofrece Reduciendo Daño hoy, con quién trabaja, qué datos guarda y cómo los
+  protege, y qué necesita que la directiva apruebe para seguir. Documento autónomo:
+  no depende de internet ni de ningún servicio externo para abrirse.</p>
+</header>
+
+<main>
+
+<section id="resumen">
+  <h2>En una mirada</h2>
+  <div class="stat-row" id="stats"></div>
+  <div class="panel">
+    Todas las cifras de este documento se leen de la base de datos del proyecto en el
+    momento de generarlo. No hay números escritos a mano: si un dato no está en la
+    base, acá aparece como <b>sin dato</b> en vez de inventarse.
+  </div>
+</section>
+
+<section id="servicios">
+  <h2>Qué ofrecemos</h2>
+  <div class="grid" id="packs"></div>
+</section>
+
+<section id="capacidad">
+  <h2>Con qué contamos</h2>
+  <div class="grid" id="capacidad-cards"></div>
+</section>
+
+<section id="datos">
+  <h2>Qué datos guardamos y cómo los protegemos</h2>
+  <div class="panel">
+    <p><b>La identidad no se puede filtrar porque no existe.</b> La base de datos de
+    campo no tiene columnas de nombre, RUT, teléfono ni correo. No es una regla de
+    uso que alguien pueda saltarse: es el diseño de la tabla. Lo que no existe como
+    columna no se puede consultar, exportar ni filtrar por accidente.</p>
+    <p><b>La fecha se guarda sin hora.</b> Registrar la hora exacta permitiría volver
+    a identificar a una persona cruzando el dato con quién estuvo dónde. Se guarda el
+    día, que es lo que sirve para vigilancia epidemiológica, y nada más fino.</p>
+    <p><b>El texto libre pasa por un filtro antes de guardarse.</b> Si alguien escribe
+    un dato personal en una observación, el sistema lo rechaza o lo limpia antes de
+    que llegue a la base.</p>
+    <p>Este patrón es el mismo que usan las bases de datos de testeo de referencia
+    internacional. No hubo que inventarlo: ya está construido y funcionando.</p>
+  </div>
+</section>
+
+<section id="pedimos">
+  <h2>Qué necesitamos de la directiva</h2>
+  <div class="pide">
+    <div class="item">
+      <b>Un acta de acuerdo sobre datos.</b> Que la directiva apruebe formalmente qué
+      datos de campo se registran —hoy ya sin información personal por diseño— y quién
+      puede ver el panel agregado. Esto se firma antes de construir el panel, no
+      después.
+    </div>
+    <div class="item">
+      <b>Validación legal profesional.</b> Encargar a un abogado con experiencia en
+      Ley 20.000 y en ONG de salud que revise qué puede y qué no puede hacer la
+      organización en terreno. Lo que hoy tenemos sobre ese tema es un punto de
+      partida generado automáticamente, no asesoría, y así está marcado.
+    </div>
+    <div class="item">
+      <b>Definir quién mira el panel.</b> El panel para la directiva se expone de
+      forma privada, sin filas individuales sensibles y sin publicarlo al público.
+      Falta decidir quiénes son sus destinatarios y por qué vía acceden.
+    </div>
+  </div>
+</section>
+
+<section id="honestidad">
+  <h2>Nota de honestidad</h2>
+  <div class="aviso">
+    <b>Lo que este documento no es.</b> Los informes de investigación que respaldan
+    el marco legal se generaron con herramientas automáticas gratuitas que fallaron
+    por cuota durante toda la corrida. Sus fuentes son metodológicas y genéricas, no
+    normativa chilena verificada. Ningún punto de este documento reemplaza una lectura
+    de abogado. Se dice acá y no en una nota al pie porque la directiva merece saber
+    con qué calidad de información está decidiendo.
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <svg class="logo" id="Capa_1" data-name="Capa 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1060 817.61">
+  <defs>
+    <style>
+      .cls-1, .cls-2 {
+        fill: #000;
+      }
+
+      .cls-3 {
+        fill: none;
+        stroke: #000;
+        stroke-miterlimit: 10;
+        stroke-width: .6165px;
+      }
+
+      .cls-3, .cls-2 {
+        font-family: Helvetica-Bold, Helvetica;
+        font-size: 53.4255px;
+        font-weight: 700;
+        isolation: isolate;
+      }
+    </style>
+  </defs>
+  <g id="Capa_2" data-name="Capa 2">
+    <g id="Layer_1" data-name="Layer 1">
+      <path id="Gota" fill="#ffffff" d="M942.9872,428.0881c-12.0906,10.5536-44.5076,38.1705-71.9355,61.7681-188.5593,162.0849-300.3913,231.7189-402.8204,250.6891-23.5894,4.2165-76.1519,2.8768-103.5634-3.0658-120.0842-25.4799-216.168-110.295-253.9768-223.664-14.0139-41.8034-16.3153-57.1489-16.3153-106.2511,0-47.7624,2.4658-64.834,14.5811-101.6647,34.143-104.1552,113.558-184.5318,214.8364-217.7132,38.9349-12.4687,56.9105-17.1866,100.9989-17.1866,34.9157,0,41.6884,2.4165,57.7982,6.4439,30.6909,7.6686,55.0694,16.8825,91.1193,34.7184,83.6891,41.0308,159.0437,95.5249,307.8955,222.6777,30.1156,25.7018,61.3819,52.3652,69.6258,59.2695,8.055,6.7152,14.5811,13.044,14.3838,13.8167-.3781.6-10.5453,9.8057-22.6278,20.162Z"/>
+      <path class="cls-1" d="M395.0795,304.5929c4.1012,6.408,6.9463,13.5375,8.3837,21.0086,1.5288,7.6714,1.2767,16.4222-.7562,26.2525-2.6028,11.8632-8.1097,23.5236-16.5208,34.9814-8.4111,11.4578-20.014,19.5592-34.8088,24.3045,10.5043,4.6247,17.2524,11.2002,20.2442,19.7264,2.9918,8.5262,2.6329,21.5428-1.0767,39.0499l-3.559,16.7674c-2.3672,11.4084-3.5507,19.1428-3.5507,23.2031,0,6.444,2.1452,11.1892,6.4357,14.2359l-1.1918,6.2631h-57.4448c-.4493-5.5343-.674-9.9947-.674-13.3811.1356-7.2269.9279-14.4265,2.3672-21.5099l4.5782-23.2113c3.1562-15.9235,2.5069-26.5374-1.948-31.8416-4.4549-5.3042-14.3646-7.959-29.7293-7.9645h-53.8612l-20.6716,97.9085h-50.9597l53.0228-249.6699h122.4678c17.3921.3343,30.3786,2.4795,38.9595,6.4357,8.3078,3.7306,15.3565,9.7888,20.2935,17.4414ZM254.9978,324.0727l-14.2276,67.0778h59.0887c11.7426,0,20.8332-1.3562,27.2717-4.0686,11.4084-4.7398,18.6359-14.1098,21.6826-28.1101,3.1672-15.1345.2877-25.299-8.6385-30.4937-5.0795-2.937-13.266-4.4055-24.5593-4.4055h-60.6174Z"/>
+      <path class="cls-1" d="M607.6639,286.1323c16.2578,5.759,28.1703,16.3181,35.7376,31.6772,6.1223,12.5402,9.2804,26.3198,9.2303,40.2746.1109,13.879-1.2223,27.7319-3.9782,41.3349-7.1234,33.1951-19.7729,61.3133-37.9486,84.3548-24.6196,31.0525-55.7845,46.5788-93.4947,46.5788h-107.5579l53.0146-249.6699h107.558c15.3756.2411,27.8553,2.0576,37.439,5.4494ZM503.9937,324.0727l-34.5211,162.9479h48.1077c24.6141,0,44.3761-12.1372,59.2859-36.4116,8.1317-13.3262,14.1153-29.1923,17.951-47.5981,5.4247-25.4141,5.5946-44.9213.5096-58.5215-5.085-13.6002-19.4935-20.4058-43.2254-20.4168h-48.1077Z"/>
+      <path class="cls-1" d="M690.2762,504.2976l2.4658,4.4795c6.4933,11.729,8.9426,18.3948,8.8275,24.0168-.173,1.8634-.6103,3.6927-1.2987,5.433-2.5736,5.9863-8.1306,10.1572-14.5975,10.9564-1.9183.2954-3.877.1918-5.7535-.3041-1.8432-.2815-3.6135-.9209-5.2111-1.8822-5.0601-2.8598-8.4524-7.962-9.1316-13.7345-.2936-1.8365-.2266-3.7125.1973-5.5234.1597-1.0378.4873-2.0428.9699-2.9754.7706-1.5815,1.7222-3.0682,2.8357-4.4302,3.0822-3.9699,6.7892-7.3481,15.1317-13.8167l3.8959-3.0247c.2671-.2381.5625-.4424.8795-.6082,0,0,.3371.6658.7891,1.4137Z"/>
+      <path class="cls-1" d="M685.6159,456.2804c-1.2607,6.5342,3.0143,12.8533,9.5485,14.1141,6.5343,1.2608,12.8534-3.0142,14.1141-9.5485.0345-.1787.0649-.3581.0913-.5381l8.5891-50.6721-23.762-4.0275-8.581,50.6721Z"/>
+      <path class="cls-1" d="M704.4545,500.9112l-27.5594-4.6603,2.2028-13.0112c-2.6544-1.9405-4.9752-4.3002-6.8713-6.9864-4.7869-6.6947-6.6959-15.0264-5.3015-23.1374l19.825-117.1417,61.1353,10.3728-19.8004,117.117c-1.9373,11.5292-10.2032,20.9841-21.3702,24.4442l-2.2603,13.003ZM686.372,489.5028l11.3016,1.9069,1.7343-10.2741,2.7535-.5754c9.1501-1.9216,16.1908-9.2493,17.7455-18.4688l18.4441-109.0292-44.8774-7.5864-18.4195,109.021c-1.5611,9.2177,2.6776,18.4518,10.6851,23.2771l2.4,1.4466-1.7671,10.2823Z"/>
+      <path class="cls-1" d="M764.1843,357.4267l-96.4783-16.3236,4.3645-25.7922,17.6715,2.9918,5.0713-29.9512c2.8507-16.8798,18.8455-28.2526,35.7253-25.4018,16.8798,2.8507,28.2525,18.8455,25.4018,35.7253h0l-5.0631,29.9512,17.6715,2.9918-4.3645,25.8086ZM677.2075,334.3551l80.2205,13.5783,1.6439-9.5508-17.6715-2.9918,6.4111-38.0718c2.0972-12.3948-6.2507-24.1429-18.6455-26.2402s-24.1429,6.2507-26.2402,18.6455h0l-6.444,38.0719-17.6715-2.9836-1.6028,9.5426Z"/>
+      <path class="cls-1" d="M714.589,309.7547l-8.1207-1.3726,2.9672-17.5564c.7077-4.2321,3.0744-8.0071,6.5755-10.4878h0c3.4947-2.4954,7.8422-3.4897,12.0742-2.7617l-1.3726,8.1289c-2.0709-.3601-4.1998.1255-5.9097,1.348h0c-1.7198,1.212-2.883,3.0619-3.2302,5.1371l-2.9836,17.5647Z"/>
+      <text class="cls-2" transform="translate(603.998 532.374)"><tspan x="0" y="0">®</tspan></text>
+      <text class="cls-3" transform="translate(603.998 532.374)"><tspan x="0" y="0">®</tspan></text>
+    </g>
+  </g>
+</svg>
+  <div>Reduciendo Daño — documento generado por <code>tools/gen_propuesta_directiva.py</code>
+  desde <code>data/rd.db</code>. Se regenera con un comando cada vez que cambian los datos.</div>
+</footer>
+
+<script>
+const DATOS = {"packs": [{"id": "INFO", "nombre": "Informativo", "label": "Pack 1 · Informativo", "descripcion": "6 voluntarios · 1 stand 3×3 (9 m²)", "precio": 250000, "voluntarios": 6, "m2": 9, "stands": 1, "orden": 1, "inclusiones": ["Stand informativo atendido", "Material educativo + insumos preventivos", "Protectores auditivos, abanicos, suplementos", "Tests de un solo uso (opcional)"]}, {"id": "TESTEO", "nombre": "Testeo y Informativo (ambos)", "label": "Pack 2 · Testeo y Informativo", "descripcion": "6 voluntarios · 2 stands 3×3 (18 m²)", "precio": 300000, "voluntarios": 6, "m2": 18, "stands": 2, "orden": 2, "inclusiones": ["Stand informativo y stand de testeo, ambos atendidos", "Módulo de testeo de sustancias", "Análisis colorimétrico gratuito", "Reactivos incluidos"]}, {"id": "COMPLETO", "nombre": "Servicio Completo (masivo)", "label": "Pack 3 · Servicio Completo", "descripcion": "15 voluntarios · 2 stands + zona (~27 m²)", "precio": 500000, "voluntarios": 15, "m2": 27, "stands": 2, "orden": 3, "inclusiones": ["Informativo + testeo", "Intervención y contención psicológica", "Zona de descanso baja estimulación", "Coordinación operativa en terreno"]}], "reactivos": [{"id": 1, "reactivo": "Marquis", "familia": "MDMA / MDA", "reaccion": "violeta a negro", "hex": "#3b1a4a"}, {"id": 2, "reactivo": "Marquis", "familia": "anfetamina", "reaccion": "naranja a marron", "hex": "#b5651d"}, {"id": 3, "reactivo": "Marquis", "familia": "opiaceos", "reaccion": "violeta", "hex": "#5b2a6b"}, {"id": 4, "reactivo": "Marquis", "familia": "2C-B", "reaccion": "verde amarillento", "hex": "#6b8e23"}, {"id": 5, "reactivo": "Marquis", "familia": "DXM", "reaccion": "gris a negro", "hex": "#3a3a3a"}, {"id": 6, "reactivo": "Marquis", "familia": "cocaina", "reaccion": "rosa a durazno (actualizacion DanceSafe 2023)", "hex": "#e0a48c"}, {"id": 7, "reactivo": "Marquis", "familia": "sin reaccion (blanco)", "reaccion": "sin cambio", "hex": "#efe9dd"}, {"id": 8, "reactivo": "Mecke", "familia": "MDMA", "reaccion": "azul a verde a negro", "hex": "#16302a"}, {"id": 9, "reactivo": "Mecke", "familia": "opiaceos", "reaccion": "verde a azul", "hex": "#1f5a5a"}, {"id": 10, "reactivo": "Mecke", "familia": "2C-B", "reaccion": "verde", "hex": "#4a7c3a"}, {"id": 11, "reactivo": "Mandelin", "familia": "ketamina", "reaccion": "naranja", "hex": "#d47a1a"}, {"id": 12, "reactivo": "Mandelin", "familia": "MDMA", "reaccion": "azul a negro", "hex": "#14213a"}, {"id": 13, "reactivo": "Mandelin", "familia": "anfetamina", "reaccion": "verde", "hex": "#3a6b3a"}, {"id": 14, "reactivo": "Mandelin", "familia": "cocaina", "reaccion": "naranja a marron", "hex": "#a8541a"}, {"id": 15, "reactivo": "Simon", "familia": "MDMA (amina 2a)", "reaccion": "azul", "hex": "#1b3a6b"}, {"id": 16, "reactivo": "Simon", "familia": "MDA (amina 1a)", "reaccion": "gris a verde oscuro (actualizacion DanceSafe 2023; Simon distingue MDMA azul de MDA)", "hex": "#3a4a3a"}, {"id": 17, "reactivo": "Froehde", "familia": "opiaceos", "reaccion": "violeta a verde", "hex": "#3a4a2a"}, {"id": 18, "reactivo": "Froehde", "familia": "2C-x", "reaccion": "verde oliva", "hex": "#5b6b2a"}, {"id": 19, "reactivo": "Ehrlich", "familia": "LSD / indoles", "reaccion": "purpura a magenta", "hex": "#7a1f5a"}, {"id": 20, "reactivo": "Ehrlich", "familia": "triptaminas", "reaccion": "purpura", "hex": "#6b2a5a"}, {"id": 21, "reactivo": "Liebermann", "familia": "MDMA", "reaccion": "negro", "hex": "#1a1a1a"}, {"id": 22, "reactivo": "Liebermann", "familia": "cocaina", "reaccion": "amarillo", "hex": "#d4b81a"}, {"id": 23, "reactivo": "Liebermann", "familia": "cocaina cortada (levamisol / lidocaina)", "reaccion": "rojo oxido (DanceSafe: alerta de corte comun)", "hex": "#a0442a"}], "suplementos": [{"id": "01_linea_suplementos_rd", "titulo": "Línea de Suplementos RD", "tag": "Información general", "accent": "green", "descripcion": "[\"Suplementos alimenticios desarrollados por Reduciendo Daño para acompañar al organismo desde una perspectiva de reducción de daños.\", \"Cada producto tiene un perfil diferenciado de nutrientes, pensado para contextos concretos de la vida cotidiana.\"]", "section_title": "Productos", "items": "[\"Pre Fiesta: Apoya el metabolismo energético y la respuesta al estrés antes de situaciones de alta demanda. Vitaminas, Taurina, L-teanina y Rhodiola.\", \"Post Fiesta: Complementa la recuperación nutricional tras contextos de alta exigencia fisiológica. Electrolitos, vitaminas, NAC, cardo mariano y CoQ10.\", \"Impulso: Contribuye al estado de alerta y la concentración en actividades que requieren foco sostenido, sin el nerviosismo que genera la cafeína por sí sola. Cafeína, L-teanina y vitamina B12.\", \"Hongos Adaptógenos: Acompaña procesos de regulación y bienestar en rutinas exigentes. Cordyceps, melena de león, reishi, L-teanina y vitamina B12.\", \"Citrato y Bisglicinato de Magnesio: Complementa la ingesta diaria de magnesio, mineral esencial para el sistema nervioso, la función muscular y el metabolismo energético.\", \"Creatina: La molécula más estudiada en suplementación nutricional, involucrada en la producción de energía celular. Disponible en polvo (1 kg) y en gomitas.\", \"Proteína: Suplemento en polvo de proteína de suero de leche para apoyar la recuperación muscular y el aporte proteico diario.\"]"}, {"id": "02_impulso", "titulo": "IMPULSO", "tag": "Foco sostenido", "accent": "yellow", "descripcion": "[\"Suplemento alimenticio en gomitas con Cafeína y L-teanina, la combinación más respaldada para lograr foco sostenido sin el nerviosismo que genera la cafeína por sí sola.\", \"Producto diseñado específicamente para momentos de alta demanda cognitiva, que busca ser una alternativa comprobada para afrontar el estudio, trabajo o jornadas prolongadas.\"]", "section_title": "Nutrientes", "items": "[\"Cafeína anhidra: contribuye al estado de alerta y a la concentración.\", \"L-teanina: aminoácido asociado a estados de relajación sin sedación.\", \"Vitamina B12: contribuye al funcionamiento normal del sistema nervioso y al metabolismo energético.\"]"}, {"id": "03_hongos_adaptogenos", "titulo": "Hongos Adaptógenos", "tag": "Adaptógenos", "accent": "purple", "descripcion": "[\"Suplemento alimenticio en gomitas con tres hongos funcionales — Cordyceps, Melena de León y Reishi — más L-teanina y vitamina B12.\", \"Fórmula diseñada para acompañar procesos de regulación y adaptación al estrés, desde un enfoque natural y funcional, para quienes buscan apoyo en rutinas exigentes.\"]", "section_title": "Nutrientes", "items": "[\"Cordyceps: hongo tradicionalmente asociado a energía y vitalidad.\", \"Melena de León (Hericium erinaceus): relacionado con funciones cognitivas y salud neuronal.\", \"Reishi: utilizado tradicionalmente en contextos de adaptación al estrés.\", \"L-teanina: aminoácido asociado a estados de relajación sin sedación.\", \"Vitamina B12: contribuye al funcionamiento normal del sistema nervioso y al metabolismo energético.\"]"}, {"id": "04_pre_fiesta", "titulo": "PRE FIESTA", "tag": "Antes de la exigencia", "accent": "purple", "descripcion": "[\"Pre Fiesta es un suplemento en gomitas formulado para preparar tu cuerpo antes de que llegue la exigencia física, mental y/o social.\", \"Con vitaminas C y complejo B, taurina, L-teanina y extracto de rhodiola — activos que apoyan el metabolismo energético, la función neuromuscular, la claridad mental y la respuesta al estrés.\", \"Porque cuidarse antes también cuenta.\"]", "section_title": "Nutrientes", "items": "[\"Vitamina C y complejo B (B1, B6, B12): contribuyen al metabolismo energético normal y al funcionamiento del sistema nervioso.\", \"Taurina: aminoácido involucrado en múltiples procesos fisiológicos, incluyendo la función muscular y neurológica.\", \"L-teanina: asociada a estados de relajación sin sedación.\", \"Rhodiola: adaptógeno de uso tradicional en contextos de fatiga y estrés.\"]"}, {"id": "05_magnesio", "titulo": "Magnesio", "tag": "Mineral esencial", "accent": "blue", "descripcion": "[\"Suplemento alimenticio en gomitas a base de magnesio.\", \"El magnesio es un mineral esencial que participa en más de 300 procesos fisiológicos, incluyendo la función muscular, el sistema nervioso y el metabolismo energético.\"]", "section_title": "Formatos disponibles", "items": "[\"Citrato de magnesio: contribuye al funcionamiento normal del sistema nervioso y la función muscular. Favorece el sueño y puede apoyar el tránsito intestinal.\", \"Bisglicinato de magnesio: contribuye al funcionamiento normal del sistema nervioso y la función muscular. Favorece el sueño y tiene alta tolerancia digestiva.\"]"}, {"id": "06_creatina_monohidratada", "titulo": "Creatina Monohidratada", "tag": "Polvo y gomitas", "accent": "red", "descripcion": "[\"Suplemento alimenticio de creatina monohidratada, la molécula más estudiada en suplementación nutricional. Involucrada en la producción de energía celular en tejidos de alta demanda como el músculo esquelético y el sistema nervioso.\", \"Disponible en dos formatos para adaptarse a cualquier rutina: polvo para quien prefiere dosificar con precisión, y gomitas para quien busca practicidad sin preparación.\"]", "section_title": "Formatos disponibles", "items": "[\"En polvo — 1 kg: 5 g por porción (1 scoop). Permite ajustar la dosificación según necesidad. Para su consumo, mezclar en agua u otro líquido.\", \"En gomitas — 60 gomitas: 5 g por porción (2 gomitas). Formato práctico, sin preparación, fácil de incorporar a la rutina diaria.\"]"}, {"id": "07_proteina", "titulo": "Proteína", "tag": "Proteína en polvo", "accent": "green", "descripcion": "[\"Suplemento alimenticio en polvo de proteína de suero de leche (whey), diseñado para apoyar la recuperación muscular y complementar el aporte proteico diario.\", \"Disponible en dos versiones con distintos perfiles de procesamiento, para adaptarse a diferentes objetivos y tolerancias digestivas.\"]", "section_title": null, "items": "[]"}, {"id": "08_post_fiesta", "titulo": "POST FIESTA", "tag": "Recuperación post", "accent": "orange", "descripcion": "[\"Suplemento alimenticio diseñado para complementar la alimentación en contextos de alta exigencia fisiológica, donde el organismo puede requerir apoyo en su equilibrio y funcionamiento normal.\", \"Una alternativa práctica dentro de un enfoque de autocuidado, orientado a acompañar al organismo en momentos de mayor demanda.\"]", "section_title": "Nutrientes", "items": "[\"Electrolitos (sodio, potasio, magnesio y calcio): reponen minerales esenciales.\", \"Vitamina C: apoya la función inmune y tiene efecto antioxidante.\", \"Vitaminas del complejo B (B1, B6, B12): contribuyen al metabolismo energético.\", \"N-acetilcisteína (NAC): precursor del glutatión para la detoxificación.\", \"Cardo mariano (silimarina): tradicionalmente asociado a la salud hepática.\", \"Coenzima Q10: antioxidante clave en la producción de energía celular.\"]"}], "productoras": [{"slug": "amelie", "nombre": "Amelie", "instagram": "", "aliases": "[\"AMELIE\", \"Amelie\"]", "confirmado": "", "notas": "Marca de fiesta (variantes AMELIE.CLARO/AMELIE.ENTEL = sponsors). Fuente: archivo de entregas (ENTREGA)."}, {"slug": "cachorros", "nombre": "Cachorros", "instagram": "", "aliases": "[\"CACHORROS\", \"CACHORROSPNG\", \"Cachorros\"]", "confirmado": "", "notas": "Marca de fiesta (aparece en combos triple con Dame/Piknic). tipos sin confirmar. Fuente: archivo de entregas (FEBRERO)."}, {"slug": "creamfields", "nombre": "Creamfields", "instagram": "creamfieldscl", "aliases": "[\"CREAMFIELDS\", \"creamfields.cl\", \"Creamfields Chile\"]", "confirmado": "", "notas": "Marca de festival EDM masivo. tipos_fecha son definicionales (festival de cabezas de cartel). El logo canónico existe en knowledge/logos/creamfields.yaml (source_needed). El venue Espacio Riesco es un ejemplo de escala, no una sede confirmada. Complementado con PR #210 (candidatos_db.jsonl match_ratio=1.0, obra_0304b8fe9a)."}, {"slug": "dame", "nombre": "Dame", "instagram": "", "aliases": "[\"DAME\", \"DAMEFLYER\", \"Dame\"]", "confirmado": "", "notas": "Marca de fiesta (combos con Cachorros/Piknic). Fuente: archivo de entregas (FEBRERO) + IG 2026-07-23."}, {"slug": "frvr", "nombre": "FRVR", "instagram": "", "aliases": "[\"FRVR\"]", "confirmado": "", "notas": "FRVR es el artista/DJ headliner, no la productora. La imagen muestra Sala Metronomo como venue y Paralelo 86 en el lineup. El filename contiene una etiqueta inconsistente. La productora organizadora sigue sin confirmar; conectar con la cola de tools/triangular_fichas.py."}, {"slug": "freedom", "nombre": "Freedom", "instagram": "spot.freedom", "aliases": "[\"FREEDOM\", \"Freedom\", \"spot.freedom\", \"Club Freedom\"]", "confirmado": "2026-07-23 palabra del usuario: tipo=spot, handle IG spot.freedom, nombre_mapas Club Freedom.", "notas": "No es productora clasica: es el lugar/venue donde ocurre el evento Festival Sentir (ver eventos)."}, {"slug": "gridsystem", "nombre": "GRID System", "instagram": "", "aliases": "[\"GRID SYSTEM\", \"Grid System\", \"GRIDSYSTEM\"]", "confirmado": "", "notas": "Productora nueva declarada por el usuario. Campos sin confirmar quedan needs_confirmation."}, {"slug": "glovox", "nombre": "Glovox", "instagram": "", "aliases": "[\"GLOVOX\", \"Glovox\"]", "confirmado": "", "notas": "Productora nueva declarada por el usuario."}, {"slug": "impulsefest", "nombre": "Impulse Fest", "instagram": "", "aliases": "[\"impulsefest\", \"Impulse Fest\", \"Impulsefest\"]", "confirmado": "", "notas": "Festival (fest). Fuente: archivo de entregas (ENTREGA)."}, {"slug": "livejam", "nombre": "LiveJam", "instagram": "", "aliases": "[\"LIVEJAM\", \"Live Jam\", \"LiveJam\"]", "confirmado": "", "notas": "Marca de fiesta. Fuente: archivo de entregas (ENTREGA)."}, {"slug": "nebula", "nombre": "Nebula", "instagram": "", "aliases": "[\"NEBULA\", \"Nebula\"]", "confirmado": "", "notas": "Marca de fiesta (aparece en combos triple). Fuente: archivo de entregas (ENTREGA)."}, {"slug": "openklub", "nombre": "OpenKlub", "instagram": "", "aliases": "[\"OPENKLUB\", \"Open Klub\", \"OpenKlub\", \"OPEN KLUB\"]", "confirmado": "", "notas": "Nombre klub -> tipo CLUB. Posible venue también; confirmar si es promotora o sede. Fuente: archivo de entregas (FEBRERO) + curatoría PR #210. Relación declarada por el usuario 2026-07-23: OPENKLUB es impulsado por TECHNOYOUTH y PANAL RECORDS."}, {"slug": "panalrecords", "nombre": "Panal Records", "instagram": "", "aliases": "[\"PANAL RECORDS\", \"Panal Records\", \"PANALRECORDS\"]", "confirmado": "", "notas": "Sello/colectivo declarado por el usuario. Relacion declarada: PANAL RECORDS impulsa OPENKLUB junto con TECHNOYOUTH."}, {"slug": "piknic", "nombre": "Piknic Electronik", "instagram": "", "aliases": "[\"PIKNIC\", \"PIKNICMARZO\", \"Piknic\", \"Piknic Electronik\"]", "confirmado": "", "notas": "Serie open-air/day electrónica. tipos definicionales. Fuente: nombres de archivo del archivo de entregas (FEBRERO, ENTREGA) + curatoría PR #210 + IG 2026-07-23."}, {"slug": "psiquiatrico", "nombre": "Psiquiatrico", "instagram": "", "aliases": "[\"PSIQUIATRICO\", \"Psiquiatrico\"]", "confirmado": "", "notas": "Fiesta tematica. Fuente: archivo de entregas (FEBRERO)."}, {"slug": "streetmachine", "nombre": "Street Machine", "instagram": "", "aliases": "[\"STREET MACHINE\", \"STREETMACHINE\", \"Street Machine\"]", "confirmado": "", "notas": "Productora nueva declarada por el usuario."}, {"slug": "sundeck", "nombre": "Sundeck", "instagram": "", "aliases": "[\"SUNDECK\", \"Sundeck\", \"Sundeck 21 años\"]", "confirmado": "", "notas": "Formato rooftop/day (sundeck) -> OPEN_AIR. Fuente: archivo de entregas (ENTREGA) + curatoría PR #210 (2 obras match canónico)."}, {"slug": "tycircle", "nombre": "TY Circle", "instagram": "", "aliases": "[\"TY\", \"TYCIRCLE\", \"TY Circle\", \"TY.MAYO\"]", "confirmado": "", "notas": "Marca TY / TY Circle. Fuente: archivo de entregas (ENTREGA) (TY.MAYO.png) + FEBRERO (TYCIRCLE.ai)."}, {"slug": "technoyouth", "nombre": "Techno Youth", "instagram": "", "aliases": "[\"TECHNOYOUTH\", \"Techno Youth\", \"cl-technoyouthchile\"]", "confirmado": "", "notas": "Colectivo/fiesta techno. tipos inferidos del nombre. Fuente: archivo de entregas (FEBRERO, root webp). Relacion declarada por el usuario 2026-07-23: TECHNOYOUTH impulsa OPENKLUB junto con PANAL RECORDS."}, {"slug": "thegrid", "nombre": "The Grid", "instagram": "thegrid.club", "aliases": "[\"GRID\", \"thegrid.club\", \"The Grid Club\"]", "confirmado": "2026-07-10 flyer real KI/KI (extraccion Gemini devolvio 'GRID'; confirmado por humano en sesion)", "notas": "Primera entrada del store. El match es igualdad exacta case-insensitive contra name+aliases: mantener aqui la forma LITERAL que extrae Gemini del flyer (GRID), no solo el nombre formal. tipos_fecha HEADLINERS/RAVE inferidos del booking KI/KI (cabeza de cartel electronica); confirmar con mas fechas. venues sin confirmar todavia."}], "venues": [{"id": "espacio_riesco", "nombre": "Espacio Riesco", "tipo": "convention_center", "escala": "mainstream", "capacidad": "high", "preset_reco": "mainstream", "voluntarios_min": 8, "requisitos": "{\"volunteers_min\": 8, \"tables_min\": 3, \"chairs_min\": 8, \"electricity\": \"2 puntos electricos o circuito dedicado\", \"light\": \"iluminacion dedicada para stand, testeo y lectura nocturna\"}", "notas": "[\"Usar MAINSTREAM por defecto salvo instruccion contraria.\"]"}], "productora_eventos": [{"id": 1, "productora_slug": "creamfields", "nombre": "Creamfields Chile 2025", "fecha": "11-12 octubre 2025", "venue": "Club Hípico, Santiago", "estado": "pasado", "fuente": "PR #210 obra_0304b8fe9a (ruta_rel FLYER/SEGUNDOTRIPLE.mp4), fecha_cruda '11 - 12 Octubre 2025', match_ratio 1.0", "fuentes_primarias": "[]", "sin_fuente_primaria": 1}, {"id": 2, "productora_slug": "dame", "nombre": "Dame -- Jeff Mills 30 years", "fecha": "20 noviembre 2026", "venue": "Basel Venue Santiago", "estado": "activo_anunciado", "fuente": "post IG 2026-07-23, descarga IG DbI68vBCSTc.jpg, captado en esta sesión", "fuentes_primarias": "[]", "sin_fuente_primaria": 1}, {"id": 3, "productora_slug": "freedom", "nombre": "Festival Sentir", "fecha": "needs_confirmation", "venue": "Club Freedom (spot.freedom) -- confirmado por el usuario", "estado": "confirmado_usuario_needs_confirmation_fecha", "fuente": "reel Instagram https://www.instagram.com/reel/DZ3bAdGhp7y/ + palabra del usuario 2026-07-23 (video renderizandose como flyer el mismo dia)", "fuentes_primarias": "[\"https://www.instagram.com/reel/DZ3bAdGhp7y/\"]", "sin_fuente_primaria": 0}, {"id": 4, "productora_slug": "openklub", "nombre": "OpenKlub (edición sin identificar)", "fecha": "viernes 6 febrero, 18:00-04:00 (año no confirmado)", "venue": "Central Cultural (needs_confirmation)", "estado": "pasado_needs_confirmation", "fuente": "PR #210 obra_7879d3d141 (ruta_rel FEBRERO/OPENKLUB.png), fecha_cruda 'VIERNES_06FEBR 18:00_04:00'", "fuentes_primarias": "[]", "sin_fuente_primaria": 1}, {"id": 5, "productora_slug": "piknic", "nombre": "Piknic Electronik Santiago -- lineup PARTIBOI69 (co-org GLOVOX)", "fecha": "12 septiembre 2026", "venue": "Parque Padre Hurtado", "estado": "activo_venta", "fuente": "post IG 2026-07-23, descarga IG DbG7Z2qCPrl_2.jpg (imagen + paleta), captado en esta sesión", "fuentes_primarias": "[]", "sin_fuente_primaria": 1}, {"id": 6, "productora_slug": "piknic", "nombre": "Piknic (edición sin identificar)", "fecha": "MAR 28 (año no confirmado)", "venue": "Santiago", "estado": "pasado_needs_confirmation", "fuente": "PR #210 obra_25745a1c93 (FEBRERO/ULTIMA/PIKNIC.png), fecha_cruda sin normalizar", "fuentes_primarias": "[]", "sin_fuente_primaria": 1}, {"id": 7, "productora_slug": "sundeck", "nombre": "Sundeck 21 años", "fecha": "17 enero 2026", "venue": "needs_confirmation", "estado": "pasado", "fuente": "PR #210 obra_b94c5571dc / obra_99ef9a1f8a (ruta_rel HISTORIAS/SUNDECK.17.2.png, HISTORIAS/SUNDECK.17.png), match_ratio 0.636/1.0", "fuentes_primarias": "[]", "sin_fuente_primaria": 1}], "logos": [{"id": 1, "productora_slug": "creamfields", "logo_id": "creamfields_primary", "knowledge": "knowledge/logos/creamfields.yaml", "estado": "encontrado"}, {"id": 2, "productora_slug": "dame", "logo_id": "dame_primary", "knowledge": "PENDIENTE", "estado": "no_encontrado"}, {"id": 3, "productora_slug": "freedom", "logo_id": "freedom_primary", "knowledge": "knowledge/logos/club_freedom.yaml", "estado": "encontrado"}, {"id": 4, "productora_slug": "glovox", "logo_id": "glovox_primary", "knowledge": "PENDIENTE", "estado": "no_encontrado"}, {"id": 5, "productora_slug": "gridsystem", "logo_id": "gridsystem_primary", "knowledge": "PENDIENTE", "estado": "no_encontrado"}, {"id": 6, "productora_slug": "openklub", "logo_id": "openklub_primary", "knowledge": "PENDIENTE", "estado": "no_encontrado"}, {"id": 7, "productora_slug": "panalrecords", "logo_id": "panalrecords_primary", "knowledge": "knowledge/logos/panal_records.yaml", "estado": "encontrado"}, {"id": 8, "productora_slug": "piknic", "logo_id": "piknic_primary", "knowledge": "PENDIENTE", "estado": "candidato_sin_copiar"}, {"id": 9, "productora_slug": "streetmachine", "logo_id": "streetmachine_primary", "knowledge": "knowledge/logos/street_machine.yaml", "estado": "encontrado"}, {"id": 10, "productora_slug": "sundeck", "logo_id": "sundeck_primary", "knowledge": "knowledge/logos/sundeck.yaml", "estado": "encontrado"}, {"id": 11, "productora_slug": "thegrid", "logo_id": "thegrid_primary", "knowledge": "knowledge/logos/thegrid.yaml", "estado": "encontrado"}]};
+
+function stat(n, l){
+  return `<div class="stat"><div class="n">${n}</div><div class="l">${l}</div></div>`;
+}
+
+function texto(v, alt){
+  if (v === null || v === undefined || v === "") return alt || "sin dato";
+  return v;
+}
+
+// La tabla `reactivos` guarda un par reactivo x familia por fila: 23 filas NO son
+// 23 reactivos distintos, son 23 reacciones registradas sobre ~7 reactivos. Contar
+// filas y llamarlas "reactivos" seria afirmar un dato que la base no dice.
+function reactivosUnicos(){
+  const vistos = new Map();
+  for (const r of DATOS.reactivos){
+    const nombre = r.reactivo;
+    if (!nombre) continue;
+    vistos.set(nombre, (vistos.get(nombre) || 0) + 1);
+  }
+  return [...vistos.entries()].map(([nombre, familias]) => ({ nombre, familias }));
+}
+
+function pintarStats(){
+  const el = document.getElementById("stats");
+  const eventosSinFuentePrimaria = DATOS.productora_eventos.filter(e => Number(e.sin_fuente_primaria || 0) === 1).length;
+  el.innerHTML = [
+    stat(DATOS.packs.length, "paquetes de servicio"),
+    stat(DATOS.productoras.length, "productoras y spots"),
+    stat(DATOS.venues.length, "venues registrados"),
+    stat(reactivosUnicos().length, "reactivos en catálogo"),
+    stat(DATOS.reactivos.length, "reacciones registradas"),
+    stat(DATOS.suplementos.length, "suplementos"),
+    stat(DATOS.logos.length, "logos oficiales"),
+    stat(DATOS.productora_eventos.length, "eventos registrados"),
+    stat(eventosSinFuentePrimaria, "eventos sin fuente primaria")
+  ].join("");
+}
+
+function pintarPacks(){
+  const el = document.getElementById("packs");
+  if (!DATOS.packs.length){
+    el.innerHTML = '<div class="panel">La base no tiene paquetes cargados todavía.</div>';
+    return;
+  }
+  el.innerHTML = DATOS.packs.map(p => {
+    const nombre = texto(p.label || p.nombre, "Paquete sin nombre");
+    const precio = p.precio ? Number(p.precio).toLocaleString("es-CL") : null;
+    const vol = p.voluntarios ? `${p.voluntarios} voluntarios` : null;
+    let h = `<h3>${nombre}</h3>`;
+    h += precio ? `<div class="precio">$${precio} CLP</div>`
+                : `<div class="precio">Precio sin registrar</div>`;
+    if (p.descripcion) h += `<div>${p.descripcion}</div>`;
+    if (p.inclusiones && p.inclusiones.length){
+      h += "<ul>" + p.inclusiones.filter(Boolean).map(i => `<li>${i}</li>`).join("") + "</ul>";
+    }
+    if (vol) h += `<div class="chips"><span class="chip">${vol}</span></div>`;
+    return `<div class="card">${h}</div>`;
+  }).join("");
+}
+
+function pintarCapacidad(){
+  const el = document.getElementById("capacidad-cards");
+  const reactivos = reactivosUnicos().map(r =>
+    r.familias > 1 ? `${r.nombre} (${r.familias} familias)` : r.nombre);
+  const suplementos = DATOS.suplementos.map(s => texto(s.titulo, "")).filter(Boolean);
+  const productoras = DATOS.productoras.map(p => texto(p.nombre, "")).filter(Boolean);
+
+  function tarjeta(titulo, items, nota){
+    let h = `<h3>${titulo}</h3>`;
+    h += `<div class="precio">${items.length}</div>`;
+    if (items.length){
+      h += '<div class="chips">' + items.slice(0, 24).map(i => `<span class="chip">${i}</span>`).join("") + '</div>';
+      if (items.length > 24) h += `<div class="chips"><span class="chip">y ${items.length - 24} más</span></div>`;
+    } else {
+      h += "<div>Sin datos cargados todavía.</div>";
+    }
+    if (nota) h += `<ul><li>${nota}</li></ul>`;
+    return `<div class="card">${h}</div>`;
+  }
+
+  const eventos = DATOS.productora_eventos.map(e => {
+    const cuando = e.fecha && !String(e.fecha).includes("needs_confirmation") ? ` · ${e.fecha}` : " · fecha sin confirmar";
+    const fuente = Number(e.sin_fuente_primaria || 0) === 1 ? " · sin fuente primaria" : " · fuente primaria";
+    return `${e.nombre}${cuando}${fuente}`;
+  });
+
+  el.innerHTML = [
+    tarjeta("Productoras y spots", productoras,
+      "Cada ficha guarda de dónde salió el dato. Lo no confirmado queda marcado como pendiente, no se da por cierto."),
+    tarjeta("Eventos registrados", eventos,
+      "Eventos reales de las productoras, con su fuente. No son ejemplos de cotización: eso se cuenta aparte."),
+    tarjeta("Reactivos", reactivos,
+      "Reactivos colorimétricos con los que se trabaja en terreno. Entre paréntesis, sobre cuántas familias de sustancias hay reacción registrada."),
+    tarjeta("Suplementos", suplementos,
+      "Línea de suplementos con sus fichas y contraportadas.")
+  ].join("");
+}
+
+pintarStats();
+pintarPacks();
+pintarCapacidad();
+</script>
+</body>
+</html>

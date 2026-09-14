@@ -1,0 +1,8 @@
+{
+  "nota": "La vuelta completa que el visor hace por defecto, escrita como dato: mismo giro, cerrada como loop. Sirve de plantilla — copiar, cambiar los keyframes y pasarla con --orbita a tools/venue_secuencia.mjs. El smoke del visor comprueba que este archivo reproduce la vuelta por defecto cuadro por cuadro.",
+  "cerrar": true,
+  "puntos": [
+    {"giro": 0},
+    {"giro": 6.283185307179586}
+  ]
+}

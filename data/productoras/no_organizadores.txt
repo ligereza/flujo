@@ -1,0 +1,13 @@
+# Entidades que aparecen en un flyer sin organizar el evento.
+# Una linea por nombre; `#` comenta. Definir aca es mas barato que perseguir
+# una regla que lo deduzca: un nombre listado no vuelve a proponerse como
+# cliente potencial.
+#
+# Patrocinadores vistos en el corpus real (2026-08-21): el OCR los levanta del
+# flyer como si fueran la productora.
+Banco de Chile
+Red Bull
+Schweppes
+CoolBet
+# Marcas de equipamiento: aparecen en el cartel como argumento tecnico.
+Funktion-One

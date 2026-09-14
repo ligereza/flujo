@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TAPIZ :: three projection</title>
+<!--
+  TAPIZ THREE RENDERER (WO-1) - Ecosystem: Tapiz <-> Psicosis <-> Fungi
+  3D projection of dist/system_status.json produced by tools/compete_engine.py,
+  following the contract in tools/system_map.py (API_CONTRACT_SCHEMA).
+
+  Run:
+    py tools/compete_engine.py --demo     (writes tools/dist/system_status.json)
+    open tools/tapiz_three.html with a double click (file://) and point the
+    file-picker at tools/dist/system_status.json, OR serve over http
+    (py -m http.server 8137 from repo root) so fetch works and the picker hides.
+
+  3D mapping:
+    luminous_mesh  -> instanced cube grid, emission = f(1 - pressure),
+                      instance count = f(throttle)
+    chromatic_mask -> scene fog + background tint (CLEAR/CAUTION/CRITICAL),
+                      no EffectComposer
+    chronological  -> subtle camera shake proportional to collision_count
+    payloads       -> spore spheres, raycaster click -> decode -> HTML overlay
+    sigil          -> DOM HUD text
+
+  Requires internet for the Three.js r160 CDN module (unpkg). Respects
+  prefers-reduced-motion: reduce (static render, no loop, no shake, no pulse).
+-->
+<script type="importmap">{"imports":{"three":"https://unpkg.com/three@0.160.0/build/three.module.js"}}</script>
+<style>
+  :root {
+    --ink: #b7ffd9;
+    --ink-dim: #3f6b54;
+    --alarm: #ff5577;
+    --void: #030507;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    background: var(--void);
+    color: var(--ink);
+    font-family: "Cascadia Code", Consolas, monospace;
+    overflow: hidden;
+  }
+  #stage { position: fixed; inset: 0; z-index: 0; }
+  #hud {
+    position: fixed; z-index: 2; inset: 0;
+    display: flex; flex-direction: column; justify-content: space-between;
+    padding: 3vmin; pointer-events: none;
+  }
+  #hud header h1 {
+    font-size: clamp(1rem, 3vmin, 1.5rem);
+    font-weight: normal; letter-spacing: 0.4em;
+  }
+  #hud header .sub { color: var(--ink-dim); font-size: 0.72rem; letter-spacing: 0.2em; }
+  #hud #statuses { margin-top: 0.9em; font-size: 0.72rem; line-height: 1.7; }
+  #hud #statuses span.val { margin-right: 1.6em; }
+  .status-STABLE, .status-SYNCHRONIZED, .status-CLEAR { color: var(--ink); }
+  .status-OVERLOADED, .status-TEMPORAL_DEGRADED, .status-CRITICAL { color: var(--alarm); }
+  .status-CAUTION { color: #ffd166; }
+  #hud footer {
+    font-size: 0.65rem; color: var(--ink-dim);
+    letter-spacing: 0.12em; word-break: break-all;
+    display: flex; gap: 1.5em; align-items: baseline;
+  }
+  #reopen {
+    pointer-events: auto; cursor: pointer;
+    background: none; border: 1px solid var(--ink-dim); color: var(--ink-dim);
+    font: inherit; padding: 0.2em 0.7em; letter-spacing: 0.1em;
+  }
+  #reopen:hover { color: var(--ink); border-color: var(--ink); }
+  #picker {
+    position: fixed; z-index: 6;
+    top: 50%; left: 50%; transform: translate(-50%, -50%);
+    display: none; flex-direction: column; gap: 1em; align-items: center;
+    border: 1px solid var(--ink-dim);
+    background: rgba(3, 5, 7, 0.94);
+    padding: 2em 2.5em;
+    color: var(--ink-dim); font-size: 0.78rem; letter-spacing: 0.08em;
+    max-width: 80vw; text-align: center;
+  }
+  #picker.open { display: flex; }
+  #picker input { color: var(--ink); font: inherit; max-width: 70vw; }
+  #picker .err { color: var(--alarm); min-height: 1em; }
+  #overlay {
+    position: fixed; inset: 0; z-index: 8;
+    background: rgba(2, 4, 3, 0.92);
+    display: none;
+    align-items: center; justify-content: center;
+    padding: 5vmin;
+  }
+  #overlay.open { display: flex; }
+  #overlay .box {
+    max-width: 80ch; max-height: 80vh; overflow: auto;
+    border: 1px solid var(--ink);
+    padding: 2em; background: var(--void);
+  }
+  #overlay .box h3 { font-weight: normal; letter-spacing: 0.3em; margin-bottom: 0.4em; }
+  #overlay .box .intent { color: var(--ink-dim); font-size: 0.75rem; margin-bottom: 1.2em; }
+  #overlay pre { font-size: 0.7rem; line-height: 1.15; white-space: pre-wrap; word-break: break-word; }
+  #overlay .hint { color: var(--ink-dim); font-size: 0.6rem; margin-top: 1.4em; letter-spacing: 0.15em; }
+</style>
+</head>
+<body>
+<div id="stage"></div>
+<div id="hud">
+  <header>
+    <h1>TAPIZ</h1>
+    <div class="sub">three projection :: psicosis / fungi diagnostics</div>
+    <div id="statuses">
+      <span class="val">mesh <span id="st-mesh" class="status-STABLE">--</span></span>
+      <span class="val">mask <span id="st-mask" class="status-CLEAR">--</span></span>
+      <span class="val">chronology <span id="st-chrono" class="status-SYNCHRONIZED">--</span></span>
+      <span class="val">spores <span id="st-spores">0</span></span>
+    </div>
+  </header>
+  <footer>
+    <span id="sigil">awaiting compilation...</span>
+    <button id="reopen" type="button">load json</button>
+  </footer>
+</div>
+<div id="picker" class="open">
+  <div>select tools/dist/system_status.json<br>(fetch of dist/system_status.json is attempted; on file:// it fails and this picker stays)</div>
+  <input type="file" id="picker-input" accept=".json,application/json">
+  <div class="err" id="picker-err"></div>
+</div>
+<div id="overlay"><div class="box"><h3 id="ov-name"></h3><div class="intent" id="ov-intent"></div><pre id="ov-content"></pre><div class="hint">click outside or press Escape to close</div></div></div>
+
+<script type="module">
+import * as THREE from "three";
+
+// module scripts are strict by default
+const STATUS_URL = "dist/system_status.json"; // relative to tools/, where compete_engine.py writes
+const POLL_MS = 30000;
+const REDUCED = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+const COLOR_BRIGHT = new THREE.Color(0xb7ffd9);
+const COLOR_DIM = new THREE.Color(0x3f6b54);
+const COLOR_ALARM = new THREE.Color(0xff5577);
+const COLOR_VOID = new THREE.Color(0x030507);
+
+let lastSigil = null;
+
+/* ---- chunk decoding (protocol Base64_Shift42_Chunked, corrected reference) ---- */
+function decodeChunk(chunks, shiftKey = 42) {
+    const combined = chunks.join('');
+    const shiftedBytes = Uint8Array.from(atob(combined), c => c.charCodeAt(0));
+    let b64 = '';
+    for (const b of shiftedBytes) b64 += String.fromCharCode((b - shiftKey + 256) % 256);
+    const utf8 = Uint8Array.from(atob(b64), c => c.charCodeAt(0));
+    return new TextDecoder('utf-8').decode(utf8);
+}
+
+/* ---- helpers for defensive reads (missing sections -> defaults) ---- */
+function num(v, fallback) { return (typeof v === "number" && isFinite(v)) ? v : fallback; }
+function clamp(v, lo, hi) { return Math.min(hi, Math.max(lo, v)); }
+
+/* ---- three.js scene ---- */
+const stage = document.getElementById("stage");
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.setSize(window.innerWidth, window.innerHeight);
+stage.appendChild(renderer.domElement);
+
+const scene = new THREE.Scene();
+scene.background = COLOR_VOID.clone();
+scene.fog = new THREE.FogExp2(COLOR_VOID.getHex(), 0.012);
+
+const camera = new THREE.PerspectiveCamera(55, window.innerWidth / window.innerHeight, 0.1, 200);
+const CAM_BASE = new THREE.Vector3(0, 14, 30);
+camera.position.copy(CAM_BASE);
+camera.lookAt(0, 1, 0);
+
+addEventListener("resize", () => {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+  renderOnce();
+});
+
+/* ---- luminous mesh: instanced cube grid (density = throttle, emission = 1 - pressure) ---- */
+const GRID = 44;                 // GRID x GRID instances max
+const SPACING = 1.15;
+const gridGroup = new THREE.Group();
+scene.add(gridGroup);
+
+// deterministic shuffle of cell indices so lowering the count thins uniformly
+const cellOrder = (() => {
+  const order = Array.from({ length: GRID * GRID }, (_, i) => i);
+  let seed = 42;
+  const rand = () => { seed = (seed * 1664525 + 1013904223) >>> 0; return seed / 4294967296; };
+  for (let i = order.length - 1; i > 0; i--) {
+    const j = Math.floor(rand() * (i + 1));
+    [order[i], order[j]] = [order[j], order[i]];
+  }
+  return order;
+})();
+
+const cubeGeo = new THREE.BoxGeometry(0.32, 0.32, 0.32);
+const cubeMat = new THREE.MeshBasicMaterial({ color: COLOR_BRIGHT.clone(), transparent: true, opacity: 0.85 });
+const grid = new THREE.InstancedMesh(cubeGeo, cubeMat, GRID * GRID);
+grid.frustumCulled = false;
+{
+  const m = new THREE.Matrix4();
+  const half = (GRID - 1) / 2;
+  for (let k = 0; k < cellOrder.length; k++) {
+    const idx = cellOrder[k];
+    const x = (idx % GRID - half) * SPACING;
+    const z = (Math.floor(idx / GRID) - half) * SPACING;
+    m.makeTranslation(x, 0, z);
+    grid.setMatrixAt(k, m);
+  }
+  grid.instanceMatrix.needsUpdate = true;
+}
+gridGroup.add(grid);
+
+/* ---- spores: clickable spheres ---- */
+const sporeGroup = new THREE.Group();
+scene.add(sporeGroup);
+const sporeGeo = new THREE.SphereGeometry(0.9, 24, 18);
+
+function rebuildSpores(payloads) {
+  while (sporeGroup.children.length) {
+    const s = sporeGroup.children[0];
+    sporeGroup.remove(s);
+    s.material.dispose();
+  }
+  const entries = Object.entries(payloads);
+  const n = entries.length;
+  entries.forEach(([aid, p], i) => {
+    const mat = new THREE.MeshBasicMaterial({ color: COLOR_DIM.clone().lerp(COLOR_BRIGHT, 0.45), transparent: true, opacity: 0.9 });
+    const sphere = new THREE.Mesh(sporeGeo, mat);
+    const angle = (n > 0 ? i / n : 0) * Math.PI * 2 - Math.PI / 2;
+    const radius = n > 1 ? 9 : 0;
+    sphere.position.set(Math.cos(angle) * radius, 4.2, Math.sin(angle) * radius * 0.55);
+    sphere.userData = { aid, payload: (p && typeof p === "object") ? p : {} };
+    sporeGroup.add(sphere);
+  });
+  document.getElementById("st-spores").textContent = String(n);
+}
+
+/* ---- render state driven by the contract ---- */
+const state = { lum: 1, shakeAmp: 0, glitch: 0, phase: 0 };
+
+function setStatus(id, v) {
+  const el = document.getElementById(id);
+  el.textContent = v;
+  el.className = "status-" + v;
+}
+
+const MASK_LEVELS = {
+  CLEAR:    { tint: 0.0,  density: 0.012 },
+  CAUTION:  { tint: 0.14, density: 0.024 },
+  CRITICAL: { tint: 0.34, density: 0.04 }
+};
+
+function apply(data) {
+  data = (data && typeof data === "object") ? data : {};
+  const mesh = data.luminous_mesh_densities || {};
+  const vars = mesh.css_variables || {};
+  const mask = data.chromatic_frequency_masks || {};
+  const chrono = data.chronological_collision_buffers || {};
+  const enc = data.encoded_asset_payloads || {};
+  const meta = data.meta || {};
+
+  // mesh: emission and density
+  const pressure = clamp(num(mesh.global_pressure, 0), 0, 1);
+  const throttle = clamp(num(mesh.throttle_ratio, num(vars["--mesh-density-throttle"], 1)), 0.05, 1);
+  state.lum = Math.max(0.06, 1 - pressure);
+  state.glitch = Math.max(0, num(vars["--mesh-glitch-frequency"], 0));
+  grid.count = Math.max(1, Math.round(GRID * GRID * throttle));
+  cubeMat.color.copy(COLOR_DIM).lerp(COLOR_BRIGHT, state.lum);
+  cubeMat.opacity = 0.15 + 0.75 * state.lum;
+  setStatus("st-mesh", typeof mesh.status === "string" ? mesh.status : "STABLE");
+
+  // chromatic mask: fog + background tint (no EffectComposer)
+  const intensity = MASK_LEVELS[mask.mask_intensity] ? mask.mask_intensity : "CLEAR";
+  const lvl = MASK_LEVELS[intensity];
+  const risk = clamp(num(mask.max_risk_score, 0), 0, 100);
+  const tint = COLOR_VOID.clone().lerp(COLOR_ALARM, lvl.tint * (0.5 + 0.5 * risk / 100));
+  scene.background.copy(tint);
+  scene.fog.color.copy(tint);
+  scene.fog.density = lvl.density;
+  setStatus("st-mask", intensity);
+
+  // chronology: subtle camera shake proportional to collision_count
+  const collisions = Math.max(0, Math.floor(num(chrono.collision_count, 0)));
+  state.shakeAmp = Math.min(collisions, 12) * 0.02;
+  setStatus("st-chrono", typeof chrono.status === "string" ? chrono.status : "SYNCHRONIZED");
+
+  // spores
+  rebuildSpores((enc && typeof enc.payloads === "object" && enc.payloads) ? enc.payloads : {});
+
+  // sigil in DOM HUD
+  document.getElementById("sigil").textContent =
+    "sigil " + (meta.integrity_sigil || "?") + " :: v" + (meta.ecosystem_version || "?");
+
+  renderOnce();
+}
+
+/* ---- animation (skipped entirely under prefers-reduced-motion) ---- */
+function renderOnce() { renderer.render(scene, camera); }
+
+if (!REDUCED) {
+  const animate = (t) => {
+    requestAnimationFrame(animate);
+    state.phase = t;
+    // slow drift of the grid
+    gridGroup.rotation.y = Math.sin(t / 26000) * 0.18;
+    // pulse of the mesh emission, plus glitch flicker
+    let pulse = 0.8 + 0.2 * Math.sin(t / 1400);
+    if (state.glitch > 0 && Math.random() < state.glitch / 120) pulse *= 0.35;
+    cubeMat.opacity = (0.15 + 0.75 * state.lum) * pulse;
+    // spore breathing
+    sporeGroup.children.forEach((s, i) => {
+      const k = 1 + 0.06 * Math.sin(t / 900 + i * 1.7);
+      s.scale.setScalar(k);
+    });
+    // camera shake proportional to collision_count
+    camera.position.set(
+      CAM_BASE.x + (Math.random() - 0.5) * state.shakeAmp,
+      CAM_BASE.y + (Math.random() - 0.5) * state.shakeAmp,
+      CAM_BASE.z + (Math.random() - 0.5) * state.shakeAmp
+    );
+    camera.lookAt(0, 1, 0);
+    renderer.render(scene, camera);
+  };
+  requestAnimationFrame(animate);
+}
+
+/* ---- raycaster: click a spore -> decode -> overlay ---- */
+const raycaster = new THREE.Raycaster();
+const pointer = new THREE.Vector2();
+
+function pick(ev) {
+  pointer.x = (ev.clientX / window.innerWidth) * 2 - 1;
+  pointer.y = -(ev.clientY / window.innerHeight) * 2 + 1;
+  raycaster.setFromCamera(pointer, camera);
+  const hits = raycaster.intersectObjects(sporeGroup.children, false);
+  return hits.length ? hits[0].object : null;
+}
+
+renderer.domElement.addEventListener("pointerdown", (ev) => {
+  const hit = pick(ev);
+  if (!hit) return;
+  const { aid, payload } = hit.userData;
+  let content;
+  try {
+    if (!Array.isArray(payload.data_chunks)) throw new Error("data_chunks missing");
+    content = decodeChunk(payload.data_chunks, num(payload.decode_shift_key, 42));
+  } catch (e) {
+    content = "[decode failure: " + e.message + "]";
+  }
+  document.getElementById("ov-name").textContent = payload.name || aid;
+  document.getElementById("ov-intent").textContent = payload.intent || "";
+  document.getElementById("ov-content").textContent = content;
+  document.getElementById("overlay").classList.add("open");
+});
+
+renderer.domElement.addEventListener("pointermove", (ev) => {
+  renderer.domElement.style.cursor = pick(ev) ? "pointer" : "default";
+});
+
+document.getElementById("overlay").addEventListener("click", (e) => {
+  if (e.target.id === "overlay") e.target.classList.remove("open");
+});
+addEventListener("keydown", (e) => {
+  if (e.key === "Escape") document.getElementById("overlay").classList.remove("open");
+});
+
+/* ---- acquisition: picker always visible at start; fetch hides it on success ---- */
+const picker = document.getElementById("picker");
+const pickerErr = document.getElementById("picker-err");
+
+async function poll() {
+  try {
+    const res = await fetch(STATUS_URL, { cache: "no-store" });
+    if (!res.ok) throw new Error("HTTP " + res.status);
+    const matrix = await res.json();
+    const sigil = (matrix.meta || {}).integrity_sigil;
+    if (sigil !== lastSigil) { lastSigil = sigil; apply(matrix); }
+    picker.classList.remove("open");
+  } catch (err) {
+    /* file:// or server absent: picker stays visible, scene keeps defaults */
+  }
+}
+
+document.getElementById("picker-input").addEventListener("change", (ev) => {
+  const f = ev.target.files[0];
+  if (!f) return;
+  f.text().then((txt) => {
+    let matrix;
+    try { matrix = JSON.parse(txt); }
+    catch (e) { pickerErr.textContent = "invalid JSON: " + e.message; return; }
+    pickerErr.textContent = "";
+    lastSigil = (matrix.meta || {}).integrity_sigil;
+    apply(matrix);
+    picker.classList.remove("open");
+  }).catch((e) => { pickerErr.textContent = "read failure: " + e.message; });
+});
+
+document.getElementById("reopen").addEventListener("click", () => {
+  picker.classList.add("open");
+});
+
+apply({});           // defaults so the void is alive before any data
+poll();              // fetch attempt; on success hides the picker
+setInterval(poll, POLL_MS);   // re-render on sigil change
+</script>
+</body>
+</html>

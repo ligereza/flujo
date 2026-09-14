@@ -1,0 +1,34 @@
+{
+  "name": "Panal Records",
+  "aliases": [
+    "PANAL RECORDS",
+    "Panal Records",
+    "PANALRECORDS"
+  ],
+  "instagram": "",
+  "tipos_fecha": [],
+  "logos": [
+    {
+      "id": "panalrecords_primary",
+      "knowledge": "knowledge/logos/panal_records.yaml",
+      "estado": "encontrado",
+      "archivo": "knowledge/logos/vector/panal_records.svg",
+      "raster": "knowledge/logos/descargas/panal_records.jpg",
+      "fuente": "https://panalrecords.bandcamp.com/ (foto de perfil oficial del sello, og:image)",
+      "obtenido": "2026-07-24",
+      "notas": "Logo oficial via web anonima (PR #254): perfil bandcamp oficial del sello (no es un logo vectorial de marca, es la imagen de perfil usada como identidad visual). Reemplaza el estado no_encontrado previo."
+    }
+  ],
+  "venues": [],
+  "confirmed": "",
+  "fuente_datos": "Alta directa por palabra del usuario 2026-07-23 (sin research adicional, ver CLAUDE.md regla de gasto).",
+  "notes": "Sello/colectivo declarado por el usuario. Relacion declarada: PANAL RECORDS impulsa OPENKLUB junto con TECHNOYOUTH.",
+  "relaciones": [
+    {
+      "tipo": "impulsa",
+      "objetivo": "OPENKLUB",
+      "fuente": "palabra del usuario 2026-07-23"
+    }
+  ],
+  "eventos": []
+}

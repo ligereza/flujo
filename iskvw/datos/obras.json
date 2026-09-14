@@ -1,0 +1,204 @@
+[
+  {
+    "id": "vola",
+    "title": "VOLÁ · lo visible y lo invisible",
+    "category": "Animación",
+    "year": 2026,
+    "placeholder": false,
+    "description": "El vaso que el humano ve y el vacío que se anima: figura y fondo de la misma imagen. El nombre lleva su propia tilde — volá / vola decide quién vuela.",
+    "descriptionLong": "VOLÁ junta dos piezas como las dos caras del vaso de Rubin. El VASO (visible) toma el double cup de vibecodeine y lo hace digerir: el líquido se metaboliza, las filas del glifo suben y bajan como una respiración lentísima, al umbral de percepción — la figura que el humano ve y el agente, que solo lee markup estático, no puede percibir. El VACÍO (invisible) anima el espacio negativo del código: los espacios respiran, hilos quebrados bajan por el negativo, raíces rectangulares crecen por los corredores de blanco. Se anima el vacío, no el código. Bajo todo, una pregunta: cómo entiende un LLM lo que es sentirse high — el signo de la sustancia cruza entero (codeína, lean, el double cup), el estado sentido no cruza nada. El modelo digiere la palabra, nunca la sustancia. Hasta el nombre lo demuestra: dobla la tilde y 'volá' (te hablo, hay alguien) se vuelve 'vola' (ello vuela, sin nadie).",
+    "image": "assets/works/vola-vaso.svg",
+    "gallery": [
+      "assets/works/vola-vaso.svg",
+      "assets/works/vola-void.svg"
+    ],
+    "video": null,
+    "tags": [
+      "generativo",
+      "animación",
+      "smil",
+      "visible-invisible",
+      "tilde"
+    ],
+    "technique": "SVG animado (SMIL/CSS, sin JS) · instrumento propio de espacios",
+    "mediaType": "image",
+    "src": "assets/works/vola-vaso.svg",
+    "poster": null,
+    "createdAt": "2026-07-12T00:00:00.000Z"
+  },
+  {
+    "id": "campo-motor-diagnostico",
+    "title": "Campo · Motor de Diagnóstico",
+    "category": "Generative",
+    "year": 2026,
+    "placeholder": false,
+    "description": "El código que audita el sistema, tejido como campo repetido. La telemetría vuelta alfombra.",
+    "descriptionLong": "Pieza tejida con un instrumento propio: cada archivo de código real se convierte en trama, sin dibujo a mano. El motor de diagnóstico del repo (el mismo que mide su propia salud) fue tejido en modo campo — un patrón tipo gul que se repite mientras el código avanza línea por línea. El color y la posición de cada nodo salen directo de los tokens del archivo fuente: nada se inventa por fuera de lo que el código ya dice.",
+    "image": "assets/works/campo-motor-diagnostico.svg",
+    "gallery": [
+      "assets/works/campo-motor-diagnostico.svg"
+    ],
+    "video": null,
+    "tags": [
+      "generativo",
+      "código-tejido",
+      "field"
+    ],
+    "technique": "Instrumento propio · tejido de código (modo field / gul)",
+    "mediaType": "image",
+    "src": "assets/works/campo-motor-diagnostico.svg",
+    "poster": null,
+    "createdAt": "2026-07-11T00:00:00.000Z"
+  },
+  {
+    "id": "cenefa-dossier",
+    "title": "Cenefa · Dossier",
+    "category": "2D",
+    "year": 2026,
+    "placeholder": false,
+    "description": "Una investigación escrita tejida como borde: el texto que enmarca la obra se vuelve el marco mismo.",
+    "descriptionLong": "Segunda salida del mismo instrumento, esta vez en modo cenefa (boteh): el archivo tejido no es código sino un dossier de investigación. La lectura literal del texto define la trama del borde, línea por línea, mientras el centro queda libre. El resultado es un motivo textil formal cuya fuente es completamente legible si se abre el archivo original.",
+    "image": "assets/works/cenefa-dossier.svg",
+    "gallery": [
+      "assets/works/cenefa-dossier.svg"
+    ],
+    "video": null,
+    "tags": [
+      "generativo",
+      "código-tejido",
+      "border"
+    ],
+    "technique": "Instrumento propio · tejido de código (modo border / boteh)",
+    "mediaType": "image",
+    "src": "assets/works/cenefa-dossier.svg",
+    "poster": null,
+    "createdAt": "2026-07-11T00:00:00.000Z"
+  },
+  {
+    "id": "wip-malla-reactiva",
+    "title": "Malla Reactiva",
+    "category": "3D",
+    "year": 2026,
+    "placeholder": false,
+    "description": "Geometría que responde al cursor y al scroll. WebGL en vivo.",
+    "descriptionLong": "Pieza interactiva. Una superficie plana es recorrida por ruido Simplex; el espectador la deforma con su propio movimiento. La obra solo existe mientras se la mira.",
+    "image": "assets/works/malla-reactiva-cover.svg",
+    "gallery": [
+      "assets/works/malla-reactiva-cover.svg"
+    ],
+    "video": null,
+    "tags": [
+      "interactivo",
+      "webgl",
+      "tiempo-real"
+    ],
+    "technique": "Three.js · Simplex Noise",
+    "mediaType": "image",
+    "template": "3d-immersion",
+    "src": "assets/works/malla-reactiva-cover.svg",
+    "poster": null,
+    "createdAt": "2026-01-20T00:00:00.000Z"
+  },
+  {
+    "id": "sala-flujo-3d",
+    "title": "sala flujo — portafolio 3D",
+    "category": "3D",
+    "year": 2026,
+    "placeholder": false,
+    "description": "Una galeria a oscuras: las piezas dan la luz. Telar, cauce en rotonda-zootropo, ecosistema, tilde -- recorrida en WebGL + CSS3D, no en fotos de la galeria.",
+    "descriptionLong": "sala flujo -- portafolio 3D. Galeria real en WebGL (Three.js) + CSS3D, sin fotos ni video pregrabado: el recorrido ocurre en vivo, en el navegador. Cuatro salas navegables con flechas o botones -- telar, cauce en rotonda-zootropo (con controles de giro y estrobo), ecosistema y tilde -- mas una sala de entrada. Arrastra para mirar alrededor; click en una pieza para acercarte. La sala de ecosistema tiene esporas clickeables que decodifican su propio payload (el mismo lenguaje de decaimiento Tapiz/Psicosis/Fungi que aparece en TAPIZ). Tema unico oscuro por diseno: la bioluminiscencia de las piezas exige el vacio.",
+    "image": "assets/works/sala-3d-cover.png",
+    "gallery": [
+      "assets/works/sala-3d-cover.png"
+    ],
+    "video": null,
+    "tags": [
+      "interactivo",
+      "webgl",
+      "css3d",
+      "3d",
+      "tiempo-real"
+    ],
+    "technique": "Three.js · CSS3DRenderer · galeria navegable en vivo",
+    "mediaType": "image",
+    "template": "sala-3d",
+    "src": "assets/works/sala-3d-cover.png",
+    "poster": null,
+    "createdAt": "2026-07-12T00:00:00.000Z"
+  },
+  {
+    "id": "tapiz-system-projection",
+    "title": "TAPIZ :: system projection",
+    "category": "Generative",
+    "year": 2026,
+    "placeholder": false,
+    "description": "system projection :: psicosis / fungi diagnostics :: calm compilation. Panel en vivo (luminous mesh, chromatic mask, chronology) con esporas clickeables que decodifican assets en decadencia.",
+    "descriptionLong": "TAPIZ :: system projection. Demo real de tools/tapiz_renderer.html con salida --demo inlineada: un panel de diagnostico que lee el mismo ecosistema Tapiz -> Psicosis -> Fungi y lo proyecta como mesh bioluminiscente sobre malla canvas. Tres paneles en vivo -- luminous mesh (presion, throttle), chromatic mask (riesgo maximo, categorias) y chronology (colisiones, assets afectados) -- mas esporas clickeables (Psicosis, Fungi) que decodifican su payload real al hacer click. Tres modos: calm (compilacion estable), stress (sobrecarga, mascara critica) y live. Tema unico oscuro por diseno -- pieza de arte comprometida (vacio + mesh bioluminiscente), no se adapta a modo claro.",
+    "image": "assets/works/tapiz-cover.png",
+    "gallery": [
+      "assets/works/tapiz-cover.png"
+    ],
+    "video": null,
+    "tags": [
+      "interactivo",
+      "canvas",
+      "generativo",
+      "psicosis",
+      "diagnostico"
+    ],
+    "technique": "Canvas mesh en vivo · paneles de diagnostico · esporas clickeables",
+    "mediaType": "image",
+    "template": "tapiz",
+    "src": "assets/works/tapiz-cover.png",
+    "poster": null,
+    "createdAt": "2026-07-12T00:00:00.000Z"
+  },
+  {
+    "id": "cauce-sala3d",
+    "title": "Cauce · Sala 3D",
+    "category": "Animación",
+    "year": 2026,
+    "placeholder": false,
+    "description": "El build de una galería 3D leído por el cauce: mismo token, mismo color, patrón reconocido y no impuesto.",
+    "descriptionLong": "Tercera salida del instrumento: modo cauce, animado con SMIL nativo (sin video, sin canvas). Cada token que se repite en el archivo fuente recibe el mismo color por hash — el patrón queda reconocido, no decidido de antemano. Las marcas fuera del alfabeto normal (acentos, signos) nunca decaen, así que sobreviven a toda la animación como puntos fijos.",
+    "image": "assets/works/cauce-sala3d.svg",
+    "gallery": [
+      "assets/works/cauce-sala3d.svg"
+    ],
+    "video": null,
+    "tags": [
+      "generativo",
+      "animación",
+      "smil"
+    ],
+    "technique": "Instrumento propio · tejido de código, animación SMIL (modo cauce)",
+    "mediaType": "image",
+    "src": "assets/works/cauce-sala3d.svg",
+    "poster": null,
+    "createdAt": "2026-07-11T00:00:00.000Z"
+  },
+  {
+    "id": "medallon-entrada",
+    "title": "Medallón · Entrada",
+    "category": "Generative",
+    "year": 2026,
+    "placeholder": false,
+    "description": "La puerta del instrumento tejida como medallón mínimo: casi vacía, porque entrar es solo delegar.",
+    "descriptionLong": "Cuarta salida: el propio punto de entrada del instrumento tejido sobre sí mismo, en modo medallón. Es la pieza más pequeña de la serie porque el archivo que la origina apenas tiene lógica propia — delega todo a los módulos reales. El medallón queda casi vacío por esa razón, no por decisión estética: la forma sigue exactamente al contenido.",
+    "image": "assets/works/medallon-entrada.svg",
+    "gallery": [
+      "assets/works/medallon-entrada.svg"
+    ],
+    "video": null,
+    "tags": [
+      "generativo",
+      "código-tejido",
+      "medallion"
+    ],
+    "technique": "Instrumento propio · tejido de código (modo medallion)",
+    "mediaType": "image",
+    "src": "assets/works/medallon-entrada.svg",
+    "poster": null,
+    "createdAt": "2026-07-11T00:00:00.000Z"
+  }
+]

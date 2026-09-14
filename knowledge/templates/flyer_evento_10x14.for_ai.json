@@ -1,0 +1,14 @@
+{
+  "type": "flyer_evento_10x14",
+  "task": "Analiza flyer impreso/promocional de evento. En RD todo flyer impreso debe aterrizar a vertical 10x14 cm e Illustrator/SVG.",
+  "expected_output": {
+    "format": {"id": "flyer_impreso_10x14_vertical", "tool": "illustrator_svg", "medium": "impresion", "size_cm": "10x14", "orientation": "vertical"},
+    "producer": {"id": "", "name_visible": "", "logo_candidates": [], "confidence": 0.0},
+    "event": {"name": "", "date": "", "venue": "", "price": "", "ticketing": ""},
+    "layout": {"hierarchy": [], "logo_positions": [], "qr_position": "", "safe_margins": ""},
+    "style": {"background": "", "contrast": "", "density": "", "typography": "", "effects": [], "color_palette": []},
+    "editable_fields": ["fecha", "venue", "precio", "lineup", "qr", "sponsors"],
+    "event_scale_signals": [],
+    "notes": ""
+  }
+}

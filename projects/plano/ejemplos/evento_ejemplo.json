@@ -1,0 +1,11 @@
+{
+  "nombre": "Festival Ejemplo 2026",
+  "duracion_horas": 6,
+  "voluntarios": 7,
+  "asistentes_estimados": 2500,
+  "incluye_testeo": true,
+  "masivo": true,
+  "ubicacion": "Aire libre",
+  "layout_mode": "grid_2x",
+  "notas": "Demo de layout_mode grid_2x + reglas de rider. Cambia a 'row' para el layout clásico en fila."
+}

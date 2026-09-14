@@ -1,0 +1,51 @@
+{
+  "name": "Piknic Electronik",
+  "aliases": [
+    "PIKNIC",
+    "PIKNICMARZO",
+    "Piknic",
+    "Piknic Electronik"
+  ],
+  "instagram": "",
+  "tipos_fecha": [
+    "OPEN_AIR",
+    "FESTIVAL"
+  ],
+  "logos": [
+    {
+      "id": "piknic_primary",
+      "knowledge": "PENDIENTE",
+      "estado": "candidato_sin_copiar",
+      "notas": "2 candidatos en curatoría (PR #210, categoria=logo, sin copiar a knowledge/logos/ todavía): FLYER/logo-piknic.png (obra_bd9fc5daf8) y piknic.png (obra_5add3c6113). Falta: elegir uno, vectorizar, registrar yaml en knowledge/logos/piknic.yaml."
+    }
+  ],
+  "venues": [
+    {
+      "nombre": "Parque Padre Hurtado",
+      "venue_id": null,
+      "preferido": true,
+      "estado": "confirmado_ig_2026-07-23",
+      "notas": "Fuente: post IG hoy (descarga IG DbG7Z2qCPrl_2.jpg), evento 12 SEP 2026."
+    }
+  ],
+  "confirmed": "",
+  "fuente_datos": "nombres de archivo del archivo de entregas (ENTREGA/FEBRERO), mapeo 2026-07-17; sin confirmar por humano. Complementado con PR #210 (candidatos_db.jsonl match_ratio=1.0, obra_25745a1c93, ruta_rel FEBRERO/ULTIMA/PIKNIC.png) y post IG del 2026-07-23 (input_ig_DbG7Z2qCPrl_2.jpg).",
+  "notes": "Serie open-air/day electrónica. tipos definicionales. Fuente: nombres de archivo del archivo de entregas (FEBRERO, ENTREGA) + curatoría PR #210 + IG 2026-07-23.",
+  "eventos": [
+    {
+      "nombre": "Piknic Electronik Santiago -- lineup PARTIBOI69 (co-org GLOVOX)",
+      "fecha": "12 septiembre 2026",
+      "venue": "Parque Padre Hurtado",
+      "estado": "activo_venta",
+      "fuente": "post IG 2026-07-23, descarga IG DbG7Z2qCPrl_2.jpg (imagen + paleta), captado en esta sesión"
+    },
+    {
+      "nombre": "Piknic (edición sin identificar)",
+      "fecha": "MAR 28 (año no confirmado)",
+      "venue": "Santiago",
+      "estado": "pasado_needs_confirmation",
+      "flyer_ref": "RD/FEBRERO/ULTIMA/PIKNIC.png",
+      "fuente": "PR #210 obra_25745a1c93 (FEBRERO/ULTIMA/PIKNIC.png), fecha_cruda sin normalizar"
+    }
+  ]
+}

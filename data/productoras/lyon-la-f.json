@@ -1,0 +1,18 @@
+{
+  "name": "LYON LA F",
+  "tipo": "artist_dj",
+  "rd_scope": false,
+  "aliases": [
+    "LYON",
+    "LyonLaF",
+    "Lyon La F"
+  ],
+  "instagram": "",
+  "tipos_fecha": [],
+  "logos": [],
+  "venues": [],
+  "eventos": [],
+  "confirmed": "cliente activo de VJ, atestiguado por el operador 2026-08-21",
+  "fuente_datos": "Atestacion del operador: LYON LA F es un cliente ACTIVO de su trabajo de VJ. Lo demas es medicion del indice del SSD portable-ssd-index-20260813 (fingerprint d3afb072fe1633125ac20da82aa1d3c7): el contenedor LYON tiene 15.055 assets y 250,9 GB, el mayor del disco. El handle @LyonLaF aparece dentro de un nombre de archivo (COMO TU - @LyonLaF (AUDIO OFICIAL) [PROD.NACHO G FLOW].wav), lo que es evidencia de nombre y NO una cuenta verificada: por eso instagram queda vacio.",
+  "notes": "CLIENTE DE VJ, no una productora ni una entidad sacada de un flyer del corpus RD. Esta ficha vive aca porque este directorio ya cataloga artistas (ver frvr.json, tipo artist_dj), no porque LYON organice eventos. Consecuencia a tener presente: al estar aca, el fuzzy-match de extraccion_db.py puede resolver un 'LYON' leido por OCR en un flyer contra esta ficha. Es correcto si el artista aparece en un cartel, pero no confirma que lo haga.\n\nActividad medida por mtime, no afirmada: 14.039 assets de 2025 y 899 de 2026, contra 60 de 2016 y menos de 40 por ano entre 2020 y 2024. El cuerpo de obra es reciente.\n\nReconstruccion persistida en curatoria_inbox/project_reconstruction/2026-08-21/lyon/: 387 filas del escaneo por carpetas se reconstruyeron en 1 unidad, 24 subproyectos, 314 dependencias de biblioteca y 48 recursos compartidos, con los 15.055 assets reconciliados y cero sin asignar. Las obras nombradas mas grandes son Pajsaera (84,4 GB), MERECEDORA (28,5), COMANDO (24,6), DEJA (15,5), NEBULA (14,0), CIUDAD (12,0), la ferrari (6,6), LOGO ENTREGA (5,9) y CORAZON (4,0).\n\nADVERTENCIA sobre esas 24: al menos 8 NO son obras sino artefactos de herramienta que el escaneo por carpetas no distingue -- Adobe After Effects Auto-Save, LYIONGIF.aep_AME, (Material de archivo), blenderkit/blendfiles y modelos descargados como uploads_files_2475145_la+ferrari y nissan-skyline-gt-r34-1999. Se midio que en TODO el indice solo 8 filas de 917 caen en ese patron, asi que no se codifico una regla: seis regex para ocho filas es sobreajuste. Quedan marcadas aca para que una persona las confirme.\n\nLos 25 registros Project IR derivados quedaron en review_required y sus 25 rutas en abstain: la maquina cataloga el material y no afirma nada sobre el hasta que un humano lo revise.\n\nLYON comparte 48 items de biblioteca con otros contenedores del disco (BAHPARTY, bah, SCD, 'descargas hasta RDFLYER 2050'): son assets comprados o descargados reutilizados entre trabajos, no material del cliente. No confundir con las 543 copias entre contenedores, que son otra cosa y estan documentadas aparte."
+}

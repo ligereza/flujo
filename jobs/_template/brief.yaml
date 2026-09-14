@@ -1,0 +1,34 @@
+id: YYYY-MM-DD_nombre_pedido
+estado: borrador
+origen: correo_jefe
+cliente:
+proyecto:
+tipo_pieza:
+
+medidas:
+  ancho_cm:
+  alto_cm:
+  orientacion:
+  sangrado_mm:
+  area_segura_mm:
+
+entrega:
+  editable_svg: true
+  vectorizado_svg: true
+  pdf_impresion: false
+  zip: true
+  otro:
+
+productos: []
+
+contenido:
+  fuente: correo_original
+  texto_aprobado: false
+  notas:
+
+restricciones:
+  no_inventar_claims: true
+  texto_vectorizado: true
+  editable_para_illustrator: true
+
+pendientes: []

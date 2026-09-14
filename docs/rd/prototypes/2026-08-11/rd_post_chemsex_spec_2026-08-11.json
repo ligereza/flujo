@@ -1,0 +1,331 @@
+{
+  "schema_version": "rd-post-spec-v0.1",
+  "generated_at": "2026-08-11",
+  "language": "es",
+  "status": "source_preserving_post_spec",
+  "post_id": "post-chemsex-revco",
+  "source_document": "CARRUSEL CHEMSEX RevCO.pdf",
+  "source_sha256": "32980f6e09df56f0773393868578694263cbfe78c3fc401734680a755ba3dd48",
+  "source_page_count": 3,
+  "source_integrity": {
+    "source_order_preserved": true,
+    "text_blocks_preserved_verbatim": true,
+    "source_reinterpretation": false,
+    "semantic_links_are_additive": true
+  },
+  "post_policy": {
+    "default_slide_count": 7,
+    "interaction_slide_can_expand": true,
+    "expansion_rule": "Keep each source interaction card intact; split only by card boundary when the visual format needs more slides.",
+    "no_rewrite_rule": "Do not paraphrase or reorder source text during semantic linking.",
+    "semantic_link_rule": "Entity and relation references annotate the text; they do not replace it.",
+    "unlinked_topic_rule": "A source topic without a graph relation remains visible as needs_graph_relation and is not auto-promoted to a scientific claim."
+  },
+  "integration_sources": {
+    "graph": "rd_grafo_relaciones_2026-08-11.json",
+    "relation_index": "rd_indice_integracion_relaciones_2026-08-11.json"
+  },
+  "slides": [
+    {
+      "slide_id": "s01_cover",
+      "sequence": 1,
+      "source_pages": [
+        1
+      ],
+      "role": "cover",
+      "title": "CHEMSEX",
+      "text_blocks": [
+        "Orgullo es cuidarnos en comunidad",
+        "El chemsex es una realidad en nuestra comunidad, dentro y fuera de los espacios de fiesta. Empezar a hablar de esto es el primer paso para protegernos.",
+        "Desliza para encontrar más información ->"
+      ],
+      "entity_refs": [],
+      "relation_refs": [],
+      "layout_policy": "title_then_short_intro_then_navigation_prompt"
+    },
+    {
+      "slide_id": "s02_definition_and_harm_reduction",
+      "sequence": 2,
+      "source_pages": [
+        1
+      ],
+      "role": "definition",
+      "title": "¿Qué es el chemsex? / Reducción de daños",
+      "text_blocks": [
+        "¿Qué es el chemsex?",
+        "Es el uso de sustancias psicoactivas en contextos sexuales con la finalidad de alterar o potenciar la experiencia.",
+        "Reducción de daños",
+        "Es una actividad que implica múltiples formas de cuidado:",
+        "Prevenir los riesgos asociados al consumo de drogas",
+        "Cuidar de infecciones de transmisión sexual y otros daños físicos relacionados",
+        "Proteger la salud mental durante y después de las sesiones"
+      ],
+      "entity_refs": [],
+      "relation_refs": [],
+      "layout_policy": "preserve_heading_order_and_bullets"
+    },
+    {
+      "slide_id": "s03_chile_context_and_substances",
+      "sequence": 3,
+      "source_pages": [
+        1
+      ],
+      "role": "context_and_entity_inventory",
+      "title": "El contexto en Chile",
+      "text_blocks": [
+        "El contexto en Chile",
+        "En Chile es más frecuente en contextos de:",
+        "Fiestas privadas y orgías",
+        "Cruising, sexo en lugares públicos",
+        "Encuentros coordinados por aplicaciones",
+        "El contexto en Chile",
+        "Entre las sustancias utilizadas comúnmente se encuentran:",
+        "Éxtasis (pasti o pilas)",
+        "MDMA",
+        "Marihuana",
+        "Popper",
+        "Cocaína",
+        "Ketamina",
+        "Metanfetamina (cristal)",
+        "GHB"
+      ],
+      "entity_refs": [
+        "mdma",
+        "cannabis",
+        "alkyl_nitrites",
+        "cocaine",
+        "ketamine",
+        "methamphetamine",
+        "ghb_gbl"
+      ],
+      "relation_refs": [],
+      "layout_policy": "merge_context_and_substance_inventory_without_reordering_source_blocks"
+    },
+    {
+      "slide_id": "s04_general_risks",
+      "sequence": 4,
+      "source_pages": [
+        1
+      ],
+      "role": "risk_map",
+      "title": "Riesgos generales del chemsex",
+      "text_blocks": [
+        "Riesgos generales del chemsex",
+        "Al combinar diversas prácticas, esta actividad se asocia a algunos riesgos como:",
+        "Riesgos asociados al uso de drogas como sobredosis, mezclas peligrosas y complicaciones cardiovasculares.",
+        "El Viagra (sildenafilo, tadalafilo, otros) es utilizado en contextos sexuales y presenta interacciones riesgosas con drogas.",
+        "Riesgos relacionados a las actividades sexuales como VIH/ITS en sesiones con múltiples parejas.",
+        "Riesgos de salud mental: crisis post-sesión (“comedown”), conductas autolesivas y dependencia."
+      ],
+      "entity_refs": [
+        "erectile_dysfunction_medications"
+      ],
+      "relation_refs": [],
+      "layout_policy": "one_risk_block_per_visual_group"
+    },
+    {
+      "slide_id": "s05_care_actions",
+      "sequence": 5,
+      "source_pages": [
+        2
+      ],
+      "role": "care_actions",
+      "title": "Cómo cuidarnos",
+      "text_blocks": [
+        "Cómo cuidarnos",
+        "Busca mantenerte hidratado, idealmente usando bebidas isotónicas o agua.",
+        "Evita compartir pipas o jeringas.",
+        "Busca información sobre las drogas que consumirás y testéalas para conocer su composición.",
+        "Mantén información sobre cómo acceder a PrEP , PEP y doxyPEP",
+        "Conversa con las otras personas sobre cómo cuidarse mutuamente. Si algún participante experimenta problemas de salud graves, no duden en llevarlo a un centro asistencial rápidamente.",
+        "En contextos de chemsex, hay mayor riesgo de problemas con el consentimiento y la autonomía, respeta los límites de las otras personas y mantén una comunicación constante para prevenir esto."
+      ],
+      "entity_refs": [
+        "prep_pep_doxypep"
+      ],
+      "relation_refs": [],
+      "layout_policy": "preserve_each_action_as_a_separate_text_group"
+    },
+    {
+      "slide_id": "s06_riskier_interactions",
+      "sequence": 6,
+      "source_pages": [
+        2
+      ],
+      "role": "interaction_cards",
+      "title": "Interacciones más riesgosas",
+      "text_blocks": [
+        "Interacciones más riesgosas (pueden ser varias láminas)"
+      ],
+      "entity_refs": [
+        "ghb_gbl",
+        "alcohol",
+        "cocaine",
+        "erectile_dysfunction_medications",
+        "methamphetamine",
+        "alkyl_nitrites",
+        "ritonavir_cobicistat"
+      ],
+      "relation_refs": [
+        {
+          "relation_ref": "rel-ghb-alcohol-interaction",
+          "status": "linked",
+          "relation_type": "interaction"
+        },
+        {
+          "relation_ref": "rel-poppers-erectile-medications",
+          "status": "linked",
+          "relation_type": "medication_interaction"
+        }
+      ],
+      "claim_refs": [
+        "claim-i02-cocaine-erectile-medications",
+        "claim-i03-stimulants-poppers",
+        "claim-i05-substances-antiretroviral"
+      ],
+      "interaction_cards": [
+        {
+          "card_id": "i01_ghb_alcohol",
+          "title": "GHB/GBL + Alcohol",
+          "text": "Ambos son potentes depresores del Sistema Nervioso Central (SNC). Riesgo crítico de sobredosis, depresión respiratoria, coma y muerte. Es la combinación más riesgosa.",
+          "entity_refs": [
+            "ghb_gbl",
+            "alcohol"
+          ],
+          "relation_ref": "rel-ghb-alcohol-interaction"
+        },
+        {
+          "card_id": "i02_cocaine_viagra",
+          "title": "Cocaína + Viagra (Sildenafilo o Tadalafilo)",
+          "text": "Los efectos de ambas drogas sobre el sistema cardiovascular aumentan el riesgo de infartos debido al aumento de la presión arterial y ritmo cardiaco.",
+          "entity_refs": [
+            "cocaine",
+            "erectile_dysfunction_medications"
+          ],
+          "claim_ref": "claim-i02-cocaine-erectile-medications",
+          "semantic_link": {
+            "status": "claim_only",
+            "relation_ref": null,
+            "claim_ref": "claim-i02-cocaine-erectile-medications"
+          }
+        },
+        {
+          "card_id": "i03_stimulants_poppers",
+          "title": "Estimulantes (Metanfetamina/Cocaína/Otros) + Popper",
+          "text": "Ambos aumentan el ritmo cardíaco y causan vasodilatación. Riesgo de hipotensión grave, mareos, accidente cerebrovascular o infarto.",
+          "entity_refs": [
+            "methamphetamine",
+            "cocaine",
+            "alkyl_nitrites"
+          ],
+          "claim_ref": "claim-i03-stimulants-poppers",
+          "semantic_link": {
+            "status": "claim_only",
+            "relation_ref": null,
+            "claim_ref": "claim-i03-stimulants-poppers"
+          }
+        },
+        {
+          "card_id": "i04_viagra_poppers",
+          "title": "Viagra (Sildenafilo o Tadalafilo) + Popper",
+          "text": "Esta combinación es particularmente riesgosa por su efecto en la presión, existe elevado riesgo de accidente cerebrovascular o infarto.",
+          "entity_refs": [
+            "erectile_dysfunction_medications",
+            "alkyl_nitrites"
+          ],
+          "relation_ref": "rel-poppers-erectile-medications"
+        },
+        {
+          "card_id": "i05_antiretroviral",
+          "title": "Drogas + Terapia Antirretroviral (Ritonavir o Cobicistat)",
+          "text": "Existen diversas interacciones entre sustancias psicoactivas y fármacos para terapia antirretroviral. Consulta con tu médico si tienes dudas.",
+          "entity_refs": [
+            "ritonavir_cobicistat"
+          ],
+          "claim_ref": "claim-i05-substances-antiretroviral",
+          "semantic_link": {
+            "status": "claim_only",
+            "relation_ref": null,
+            "claim_ref": "claim-i05-substances-antiretroviral"
+          }
+        }
+      ],
+      "layout_policy": "default_compact_card_or_expand_to_one_card_per_slide"
+    },
+    {
+      "slide_id": "s07_conclusion",
+      "sequence": 7,
+      "source_pages": [
+        3
+      ],
+      "role": "conclusion_and_call_to_action",
+      "title": "Cuidarnos es una decisión",
+      "text_blocks": [
+        "Cuidarnos es una decisión",
+        "El estigma aísla y mata; la información comunitaria nos empodera y nos mantiene seguros.",
+        "Si tienes dudas sobre dosificación, mezclas o quieres testear tus sustancias, escríbenos.",
+        "Guarda este post para revisarlo cuando lo necesites y compártelo con tu red de confianza."
+      ],
+      "entity_refs": [],
+      "relation_refs": [],
+      "layout_policy": "conclusion_then_contact_then_save_and_share_prompt"
+    }
+  ],
+  "content_claims": [
+    {
+      "claim_id": "claim-i02-cocaine-erectile-medications",
+      "source_slide": "s06_riskier_interactions",
+      "source_card": "i02_cocaine_viagra",
+      "source_text_preserved": true,
+      "entity_refs": [
+        "cocaine",
+        "erectile_dysfunction_medications"
+      ],
+      "claim_status": "source_preserved_needs_external_verification",
+      "required_relation_type": "medication_interaction",
+      "public_rule": "Keep the source wording attributed to RD; do not convert it into a graph relation until an external source supports the exact claim."
+    },
+    {
+      "claim_id": "claim-i03-stimulants-poppers",
+      "source_slide": "s06_riskier_interactions",
+      "source_card": "i03_stimulants_poppers",
+      "source_text_preserved": true,
+      "entity_refs": [
+        "methamphetamine",
+        "cocaine",
+        "alkyl_nitrites"
+      ],
+      "claim_status": "source_preserved_needs_external_verification",
+      "required_relation_type": "interaction",
+      "public_rule": "Keep the source wording attributed to RD; do not create a general stimulant relation from the text alone."
+    },
+    {
+      "claim_id": "claim-i05-substances-antiretroviral",
+      "source_slide": "s06_riskier_interactions",
+      "source_card": "i05_antiretroviral",
+      "source_text_preserved": true,
+      "entity_refs": [
+        "ritonavir_cobicistat"
+      ],
+      "claim_status": "source_preserved_needs_external_verification",
+      "required_relation_type": "medication_interaction",
+      "public_rule": "The source itself directs the reader to a doctor; preserve that boundary and do not generate a generic interaction list."
+    }
+  ],
+  "audit": {
+    "relation_refs_in_spec": [
+      "rel-ghb-alcohol-interaction",
+      "rel-poppers-erectile-medications"
+    ],
+    "existing_relation_refs": [
+      "rel-ghb-alcohol-interaction",
+      "rel-poppers-erectile-medications"
+    ],
+    "unlinked_relation_refs": [],
+    "claim_only_refs": [
+      "claim-i02-cocaine-erectile-medications",
+      "claim-i03-stimulants-poppers",
+      "claim-i05-substances-antiretroviral"
+    ]
+  }
+}

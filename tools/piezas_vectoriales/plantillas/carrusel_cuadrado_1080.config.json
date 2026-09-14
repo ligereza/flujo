@@ -1,0 +1,19 @@
+{
+  "project": { "name": "Carrusel cuadrado", "slug": "carrusel_cuadrado", "brand": "Marca", "website": "", "note": "Plantilla cuadrada para carrusel digital." },
+  "canvas": { "width": 1080, "height": 1080, "real_size_cm": { "width": 10.8, "height": 10.8 }, "safe_margin_px": 70 },
+  "palette": { "cream": "#F6EFE3", "paper": "#FFF8ED", "white": "#FFFFFF", "ink": "#161513", "muted": "#675F55", "line": "#D9CEC0", "accent": "#173F2F" },
+  "background": "cream",
+  "global_elements": [
+    { "type": "rect", "x": 45, "y": 45, "w": 990, "h": 990, "radius": 44, "fill": "none", "stroke": "line", "stroke_width": 3 },
+    { "type": "text", "content": "{brand}", "x": 70, "y": 70, "size": 28, "fill": "ink", "weight": "bold" }
+  ],
+  "documents": [{
+    "id": "01_slide_base",
+    "title": "Slide base",
+    "elements": [
+      { "type": "text", "content": "TÍTULO", "x": 70, "y": 240, "size": 74, "fill": "ink", "weight": "bold", "max_width": 900 },
+      { "type": "paragraph", "content": "Texto principal del slide.", "x": 76, "y": 430, "size": 42, "fill": "muted", "max_width": 850, "line_height": 56 },
+      { "type": "text", "content": "01", "x": 850, "y": 900, "size": 52, "fill": "accent", "weight": "bold" }
+    ]
+  }]
+}

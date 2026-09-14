@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TAPIZ :: system projection</title>
+<!--
+  TAPIZ RENDERER - Ecosystem: Tapiz <-> Psicosis <-> Fungi
+  Consumes dist/system_status.json produced by tools/compete_engine.py,
+  following the contract in tools/system_map.py (API_CONTRACT_SCHEMA +
+  FRONTEND_RENDERING_DIRECTIVES).
+
+  Run:
+    py tools/compete_engine.py --demo     (writes tools/dist/system_status.json)
+    py -m http.server 8137                (from repo root)
+    open http://localhost:8137/tools/tapiz_renderer.html
+
+  Direct file:// open also works: fetch fails, a file-picker appears,
+  point it at tools/dist/system_status.json.
+
+  Layers (in order, per directives): void -> mesh -> content -> animations
+  -> encoded payloads -> sigil. Polls every 30s, re-renders on sigil change.
+  Respects prefers-reduced-motion.
+-->
+<style>
+  :root {
+    --mesh-luminosity: 1.0;
+    --mesh-density-throttle: 1.0;
+    --mesh-glitch-frequency: 0.0;
+    --ink: #b7ffd9;
+    --ink-dim: #3f6b54;
+    --alarm: #ff5577;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { height: 100%; }
+  body {
+    background: #030507; /* the void */
+    color: var(--ink);
+    font-family: "Cascadia Code", Consolas, monospace;
+    overflow: hidden;
+  }
+  #mesh {
+    position: fixed; inset: 0; z-index: 0;
+    opacity: var(--mesh-luminosity);
+  }
+  main {
+    position: relative; z-index: 1;
+    height: 100%;
+    display: flex; flex-direction: column;
+    padding: 4vmin;
+    gap: 2vmin;
+  }
+  header h1 {
+    font-size: clamp(1rem, 3vmin, 1.6rem);
+    font-weight: normal;
+    letter-spacing: 0.4em;
+  }
+  header .sub { color: var(--ink-dim); font-size: 0.75rem; letter-spacing: 0.2em; }
+  #panels {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 1.5vmin;
+  }
+  .panel {
+    border: 1px solid var(--ink-dim);
+    padding: 1.2em;
+    background: rgba(3, 10, 7, 0.72);
+    backdrop-filter: blur(2px);
+    min-height: 8em;
+  }
+  .panel h2 {
+    font-size: 0.7rem; font-weight: normal;
+    letter-spacing: 0.25em; color: var(--ink-dim);
+    margin-bottom: 0.9em; text-transform: uppercase;
+  }
+  .panel .big { font-size: 1.9rem; }
+  .panel .row { display: flex; justify-content: space-between; font-size: 0.78rem; margin-top: 0.45em; }
+  .panel .row span:last-child { color: var(--ink-dim); }
+  .status-STABLE, .status-SYNCHRONIZED, .status-CLEAR { color: var(--ink); }
+  .status-OVERLOADED, .status-TEMPORAL_DEGRADED, .status-CRITICAL { color: var(--alarm); }
+  .status-CAUTION { color: #ffd166; }
+  #spores {
+    display: flex; flex-wrap: wrap; gap: 1.2em;
+    margin-top: auto; padding-bottom: 1em;
+  }
+  .spore {
+    border: 1px dashed var(--ink-dim);
+    border-radius: 50%;
+    width: 5.5em; height: 5.5em;
+    display: flex; align-items: center; justify-content: center;
+    text-align: center; font-size: 0.62rem;
+    color: var(--ink-dim);
+    cursor: pointer;
+    background: radial-gradient(circle at 35% 30%, rgba(183,255,217,0.10), transparent 65%);
+    transition: color 0.4s, border-color 0.4s, transform 0.4s;
+  }
+  .spore:hover { color: var(--ink); border-color: var(--ink); transform: scale(1.08); }
+  #sigil {
+    font-size: 0.65rem; color: var(--ink-dim);
+    letter-spacing: 0.12em; word-break: break-all;
+  }
+  #overlay {
+    position: fixed; inset: 0; z-index: 5;
+    background: rgba(2, 4, 3, 0.92);
+    display: none;
+    align-items: center; justify-content: center;
+    padding: 5vmin;
+  }
+  #overlay.open { display: flex; }
+  #overlay .box {
+    max-width: 80ch; max-height: 80vh; overflow: auto;
+    border: 1px solid var(--ink);
+    padding: 2em; background: #030507;
+  }
+  #overlay .box h3 { font-weight: normal; letter-spacing: 0.3em; margin-bottom: 0.4em; }
+  #overlay .box .intent { color: var(--ink-dim); font-size: 0.75rem; margin-bottom: 1.2em; }
+  #overlay pre { font-size: 0.7rem; line-height: 1.15; white-space: pre; }
+  #picker {
+    position: fixed; inset: 0; z-index: 9;
+    display: none; align-items: center; justify-content: center;
+    flex-direction: column; gap: 1em;
+    background: #030507; color: var(--ink-dim); font-size: 0.8rem;
+  }
+  #picker.open { display: flex; }
+  .tear { /* class applied to affected panels when temporal collisions exist */ }
+  @media (prefers-reduced-motion: reduce) {
+    .tear { animation: none !important; }
+  }
+</style>
+</head>
+<body>
+<canvas id="mesh"></canvas>
+<main id="wrapper">
+  <header>
+    <h1>TAPIZ</h1>
+    <div class="sub">system projection :: psicosis / fungi diagnostics</div>
+  </header>
+  <section id="panels">
+    <div class="panel" id="p-mesh">
+      <h2>luminous mesh</h2>
+      <div class="big" id="mesh-status">--</div>
+      <div class="row"><span>pressure</span><span id="mesh-pressure">--</span></div>
+      <div class="row"><span>throttle</span><span id="mesh-throttle">--</span></div>
+    </div>
+    <div class="panel" id="p-mask">
+      <h2>chromatic mask</h2>
+      <div class="big" id="mask-status">--</div>
+      <div class="row"><span>max risk</span><span id="mask-risk">--</span></div>
+      <div class="row"><span>categories</span><span id="mask-cats">--</span></div>
+    </div>
+    <div class="panel" id="p-chrono">
+      <h2>chronology</h2>
+      <div class="big" id="chrono-status">--</div>
+      <div class="row"><span>collisions</span><span id="chrono-count">--</span></div>
+      <div class="row"><span>affected</span><span id="chrono-affected">--</span></div>
+    </div>
+  </section>
+  <section id="spores"></section>
+  <footer id="sigil">awaiting compilation...</footer>
+</main>
+<div id="overlay"><div class="box"><h3 id="ov-name"></h3><div class="intent" id="ov-intent"></div><pre id="ov-content"></pre></div></div>
+<div id="picker">
+  <div>fetch failed (file:// context?) -- select dist/system_status.json</div>
+  <input type="file" id="picker-input" accept=".json">
+</div>
+
+<script>
+"use strict";
+const STATUS_URL = "dist/system_status.json"; // relative to tools/, where compete_engine.py writes
+const POLL_MS = 30000;
+const REDUCED = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+let lastSigil = null;
+let meshState = { pressure: 0, throttle: 1, glitch: 0 };
+
+/* ---- chunk decoding (protocol Base64_Shift42_Chunked) ----
+   Note: the reference snippet in system_map.py had a spurious btoa/atob
+   round-trip that returned base64 text instead of content; corrected here. */
+function decodeChunk(chunks, shiftKey = 42) {
+  const combined = chunks.join("");
+  const shiftedBytes = Uint8Array.from(atob(combined), c => c.charCodeAt(0));
+  let b64 = "";
+  for (const b of shiftedBytes) b64 += String.fromCharCode((b - shiftKey + 256) % 256);
+  const utf8 = Uint8Array.from(atob(b64), c => c.charCodeAt(0));
+  return new TextDecoder("utf-8").decode(utf8);
+}
+
+/* ---- layer 2: bioluminescent mesh (canvas) ---- */
+const canvas = document.getElementById("mesh");
+const ctx = canvas.getContext("2d");
+function resizeMesh() { canvas.width = innerWidth; canvas.height = innerHeight; }
+addEventListener("resize", resizeMesh);
+resizeMesh();
+
+function drawMesh(t) {
+  const { pressure, throttle, glitch } = meshState;
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  const step = Math.max(28, Math.floor(28 / Math.max(throttle, 0.15))); // throttle thins the grid
+  const lum = Math.max(0.06, 1 - pressure);
+  for (let x = step / 2; x < canvas.width; x += step) {
+    for (let y = step / 2; y < canvas.height; y += step) {
+      const pulse = REDUCED ? 0.5 : 0.5 + 0.5 * Math.sin(t / 1400 + (x + y) * 0.01);
+      let dx = 0, dy = 0;
+      if (!REDUCED && glitch > 0 && Math.sin(t / 90 + x * y) > 1 - glitch / 60) {
+        dx = (Math.sin(x + t) * 6) * (glitch / 5);
+        dy = (Math.cos(y - t) * 4) * (glitch / 5);
+      }
+      ctx.fillStyle = `rgba(120, 235, 180, ${(0.05 + 0.22 * pulse) * lum})`;
+      ctx.fillRect(x + dx, y + dy, 2, 2);
+    }
+  }
+  if (!REDUCED) requestAnimationFrame(drawMesh);
+}
+requestAnimationFrame(drawMesh);
+if (REDUCED) setInterval(() => drawMesh(performance.now()), 2000);
+
+/* ---- render from matrix ---- */
+function setText(id, v) { document.getElementById(id).textContent = v; }
+function setStatus(id, v) {
+  const el = document.getElementById(id);
+  el.textContent = v;
+  el.className = "big status-" + v;
+}
+
+function render(matrix) {
+  const mesh = matrix.luminous_mesh_densities || {};
+  const mask = matrix.chromatic_frequency_masks || {};
+  const chrono = matrix.chronological_collision_buffers || {};
+  const enc = matrix.encoded_asset_payloads || {};
+  const meta = matrix.meta || {};
+
+  // mesh: bind css variables per rendering_directive
+  const vars = mesh.css_variables || {};
+  for (const [k, v] of Object.entries(vars)) document.documentElement.style.setProperty(k, v);
+  meshState = {
+    pressure: mesh.global_pressure || 0,
+    throttle: vars["--mesh-density-throttle"] != null ? vars["--mesh-density-throttle"] : 1,
+    glitch: vars["--mesh-glitch-frequency"] || 0,
+  };
+  setStatus("mesh-status", mesh.status || "--");
+  setText("mesh-pressure", (mesh.global_pressure != null ? mesh.global_pressure : "--"));
+  setText("mesh-throttle", (mesh.throttle_ratio != null ? mesh.throttle_ratio : "--"));
+
+  // chromatic mask: css filter on main wrapper
+  document.getElementById("wrapper").style.filter =
+    (mask.css_filter_string && mask.css_filter_string !== "none") ? mask.css_filter_string : "";
+  setStatus("mask-status", mask.mask_intensity || "--");
+  setText("mask-risk", (mask.max_risk_score != null ? mask.max_risk_score : "--"));
+  setText("mask-cats", (mask.triggered_categories || []).join(", ") || "none");
+
+  // chronological tears: inject keyframes, apply to affected panels
+  const old = document.getElementById("tear-kf");
+  if (old) old.remove();
+  document.querySelectorAll(".panel").forEach(p => { p.style.animation = ""; });
+  if (chrono.css_keyframes_payload && !REDUCED) {
+    const style = document.createElement("style");
+    style.id = "tear-kf";
+    style.textContent = chrono.css_keyframes_payload;
+    document.head.appendChild(style);
+    const anim = (chrono.animation_class || "").replace(/^animation:\s*/, "").replace(/;$/, "");
+    if (anim) document.querySelectorAll(".panel").forEach(p => { p.style.animation = anim; });
+  }
+  setStatus("chrono-status", chrono.status || "--");
+  setText("chrono-count", (chrono.collision_count != null ? chrono.collision_count : "--"));
+  setText("chrono-affected", (chrono.affected_assets || []).join(", ") || "none");
+
+  // encoded payloads: spores, decode on interaction
+  const spores = document.getElementById("spores");
+  spores.textContent = "";
+  for (const [aid, p] of Object.entries(enc.payloads || {})) {
+    const el = document.createElement("div");
+    el.className = "spore";
+    el.textContent = p.name || aid;
+    el.title = p.intent || "";
+    el.addEventListener("click", () => {
+      let content;
+      try { content = decodeChunk(p.data_chunks, p.decode_shift_key); }
+      catch (e) { content = "[decode failure: " + e.message + "]"; }
+      document.getElementById("ov-name").textContent = p.name || aid;
+      document.getElementById("ov-intent").textContent = p.intent || "";
+      document.getElementById("ov-content").textContent = content;
+      document.getElementById("overlay").classList.add("open");
+    });
+    spores.appendChild(el);
+  }
+
+  // sigil
+  setText("sigil", "sigil " + (meta.integrity_sigil || "?") + " :: v" + (meta.ecosystem_version || "?"));
+}
+
+document.getElementById("overlay").addEventListener("click", e => {
+  if (e.target.id === "overlay") e.target.classList.remove("open");
+});
+addEventListener("keydown", e => {
+  if (e.key === "Escape") document.getElementById("overlay").classList.remove("open");
+});
+
+/* ---- acquisition: fetch with file-picker fallback, 30s poll on sigil change ---- */
+async function poll() {
+  try {
+    const res = await fetch(STATUS_URL, { cache: "no-store" });
+    if (!res.ok) throw new Error("HTTP " + res.status);
+    const matrix = await res.json();
+    const sigil = (matrix.meta || {}).integrity_sigil;
+    if (sigil !== lastSigil) { lastSigil = sigil; render(matrix); }
+  } catch (err) {
+    if (lastSigil === null) document.getElementById("picker").classList.add("open");
+  }
+}
+document.getElementById("picker-input").addEventListener("change", ev => {
+  const f = ev.target.files[0];
+  if (!f) return;
+  f.text().then(txt => {
+    const matrix = JSON.parse(txt);
+    lastSigil = (matrix.meta || {}).integrity_sigil;
+    render(matrix);
+    document.getElementById("picker").classList.remove("open");
+  });
+});
+poll();
+setInterval(poll, POLL_MS);
+</script>
+</body>
+</html>

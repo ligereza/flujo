@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" data-name="2ab727377783-17926121515293459">
+<style>
+.c0{animation:k_latir 7s ease-in-out infinite}
+@keyframes k_latir{0%,100%{transform:scale(1)}50%{transform:scale(1.09)}}
+</style>
+<rect width="120" height="120" fill="#15151a"/>
+<g id="capa-0-protagonista" transform="translate(60,56)" data-rol="protagonista" data-gesto="latir" data-ritmo="7s" data-figura="horizonte"><title>protagonista - horizonte</title><g class="c0"><g transform="scale(30)"><path d="M-1,.9 C-.6,.35 -.3,.62 0,.42 C.35,.2 .65,.55 1,.32 V1 H-1 Z" fill="#8d8d9c"/><path d="M-1,1 H1" stroke="#ff3b30" stroke-width=".06"/></g></g></g>
+<g id="capa-1-marca" transform="translate(60,110)" data-rol="marca" data-gesto="quieto" data-ritmo="4s" data-figura="vinilo"><title>marca - vinilo</title><g class="c1"><g transform="scale(6)"><circle r=".92" fill="#8d8d9c"/><circle r="0.72" fill="none" stroke="#26262e" stroke-width=".03" opacity=".5"/><circle r="0.58" fill="none" stroke="#26262e" stroke-width=".03" opacity=".5"/><circle r="0.44" fill="none" stroke="#26262e" stroke-width=".03" opacity=".5"/><circle r=".22" fill="#ff3b30"/><circle r=".05" fill="#26262e"/></g></g></g>
+</svg>

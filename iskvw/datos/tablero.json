@@ -1,0 +1,73 @@
+{
+ "_doc": "El tablero de mejoras: que features de iskvw estan encendidas. Una clave por mejora, valor true/false. Lo escriben los agentes que traen la mejora y lo prende o apaga el artista desde iskvw/editor.html (encender -> descargar -> commit). Una clave ausente es una mejora que todavia no existe, no una apagada: quien la lee decide su propio default.",
+ "version": 1,
+ "mejoras": {
+  "venue3d": true,
+  "patch_efectos": true,
+  "nodo_glifo": true
+ },
+ "_nodo_glifo": "Cada nodo del campo se dibuja como GLIFO en vez de como circulo, con la misma materia que ya usa la obra cuando resuelve: la rampa, el campo que evoluciona y el vocabulario de la pieza. La tecnica y su causa estan en iskvw/piel/campo/ASCII_REFERENCIA.md, en palabras del artista mirando Safari. Apagada, la piel dibuja exactamente igual que antes. Encendida, deja de crear dos gradientes por nodo y por cuadro, asi que ademas sale mas barata.",
+ "_patch": "El cableado de la mejora `patch_efectos`: la obra no se exhibe en el campo, lo deforma, y lo deforma con lo que ella misma mide. Cada fila conecta un DATO de la pieza con un EFECTO que ejerce sobre lo que tiene alrededor, como un patch de sintetizador modular. Si la obra no trae el dato, el efecto vale cero: no se inventa nada. La llave de arriba manda; apagada, la piel dibuja exactamente igual que antes.",
+ "_llaves": "Cada efecto tiene además su propia llave, aquí abajo en `efectos`. La maestra manda: con ella apagada nada suena. Con la maestra encendida, un efecto en false queda mudo —coeficiente exactamente cero— y los demás siguen sonando. Una llave ausente es un efecto encendido: el default conserva el comportamiento de siempre.",
+ "efectos": {
+  "pulso": true,
+  "curvatura": true,
+  "sangrado": true,
+  "desgarro": true,
+  "gravedad": true,
+  "luz": true
+ },
+ "patch": [
+  {
+   "dato": "tilde",
+   "efecto": "pulso",
+   "ganancia": 1.0
+  },
+  {
+   "dato": "trazo",
+   "efecto": "curvatura",
+   "ganancia": 1.0
+  },
+  {
+   "dato": "color",
+   "efecto": "sangrado",
+   "ganancia": 1.0
+  },
+  {
+   "dato": "etiqueta",
+   "efecto": "desgarro",
+   "ganancia": 1.0
+  },
+  {
+   "dato": "peso",
+   "efecto": "gravedad",
+   "ganancia": 1.0
+  },
+  {
+   "dato": "tilde",
+   "efecto": "luz",
+   "ganancia": 1.0
+  }
+ ],
+ "_datos": {
+  "tilde": "Las marcas diacríticas que la obra carga (proyecto tilde). El archivo llega hasta 6.",
+  "trazo": "Los subtrazos de su vector. Mediana 22, percentil 90 en 83.",
+  "color": "Qué proporción de lo que la percepción vio tiene tono. Negro, blanco y gris no lo tienen.",
+  "etiqueta": "La curaduría marcó la pieza como quebrada: glitch, reactiva, error, ruido, psicosis, quiebre, fallo.",
+  "peso": "La materia de la pieza: el campo `peso` del contrato y, si no viene, los puntos medidos de su vector."
+ },
+ "_efectos": {
+  "pulso": "Dilata y contrae el tiempo de los glifos vecinos, oscilando. No los acelera: los hace respirar.",
+  "curvatura": "Gira a los vecinos alrededor de la obra. Dobla el espacio, no lo estira.",
+  "sangrado": "Corre el color de los vecinos hacia el tono de la obra, por el camino corto del círculo.",
+  "desgarro": "Corta los glifos por filas, como una cinta que salta de pista.",
+  "gravedad": "La obra tira de la lectura al pasar cerca. Con tope: tira, nunca atrapa.",
+  "luz": "Dilata a los vecinos sin moverlos ni tenirlos. Es el unico efecto que toca el TAMANO: deja posicion y color intactos y crece el radio hasta un 40%."
+ },
+ "_reglas": [
+  "Una fila que nombre un dato o un efecto que la piel no conoce se descarta entera: adivinar sería inventar una intención que no está escrita.",
+  "La ganancia es un número mayor que cero; por encima de 8 se recorta.",
+  "Dos filas al mismo efecto se suman, como dos cables a la misma entrada.",
+  "En cada cuadro emiten como mucho las tres obras más cercanas a la lectura, y sólo alcanzan a lo que está dentro del alcance del diafragma. Es lo que mantiene los 60 cuadros por segundo."
+ ]
+}

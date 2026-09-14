@@ -1,0 +1,1140 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1104" height="1928" viewBox="0 0 1104 1928" role="img">
+  <title>tools/sala3d/build.js</title>
+  <desc>cauce: los rios entre espacios; la recurrencia se reconoce, no se impone; las marcas sobreviven la digestion (puente tilde)</desc>
+  <rect width="1104" height="1928" fill="#1f2a24"/>
+  <g stroke="#b7ffd9" stroke-opacity="0.1" stroke-width="12.0" stroke-linecap="round" fill="none">
+    <path class="cauce-river" d="M28.8 488.0L28.8 582.0"/>
+    <path class="cauce-river" d="M28.8 648.0L28.8 1002.0"/>
+    <path class="cauce-river" d="M28.8 1068.0L28.8 1142.0"/>
+    <path class="cauce-river" d="M28.8 1208.0L28.8 1842.0"/>
+    <path class="cauce-river" d="M38.4 488.0L38.4 582.0"/>
+    <path class="cauce-river" d="M38.4 648.0L38.4 1002.0"/>
+    <path class="cauce-river" d="M38.4 1068.0L38.4 1142.0"/>
+    <path class="cauce-river" d="M38.4 1208.0L38.4 1842.0"/>
+    <path class="cauce-river" d="M48.0 28.0L48.0 82.0"/>
+    <path class="cauce-river" d="M48.0 108.0L48.0 162.0"/>
+    <path class="cauce-river" d="M48.0 728.0L48.0 982.0"/>
+    <path class="cauce-river" d="M48.0 1528.0L48.0 1602.0"/>
+    <path class="cauce-river" d="M57.6 728.0L57.6 982.0"/>
+    <path class="cauce-river" d="M57.6 1528.0L57.6 1602.0"/>
+    <path class="cauce-river" d="M67.2 748.0L67.2 962.0"/>
+    <path class="cauce-river" d="M67.2 1708.0L67.2 1762.0"/>
+    <path class="cauce-river" d="M76.8 188.0L76.8 442.0"/>
+    <path class="cauce-river" d="M76.8 748.0L76.8 962.0"/>
+    <path class="cauce-river" d="M76.8 1168.0L76.8 1242.0"/>
+    <path class="cauce-river" d="M86.4 848.0L86.4 942.0"/>
+    <path class="cauce-river" d="M96.0 848.0L96.0 942.0"/>
+    <path class="cauce-river" d="M96.0 1388.0L96.0 1442.0"/>
+    <path class="cauce-river" d="M105.6 108.0L105.6 162.0"/>
+    <path class="cauce-river" d="M115.2 108.0L115.2 162.0"/>
+    <path class="cauce-river" d="M124.8 248.0L124.8 302.0"/>
+    <path class="cauce-river" d="M144.0 248.0L144.0 302.0"/>
+    <path class="cauce-river" d="M144.0 428.0L144.0 482.0"/>
+    <path class="cauce-river" d="M144.0 1208.0L144.0 1262.0"/>
+    <path class="cauce-river" d="M144.0 1468.0L144.0 1522.0"/>
+    <path class="cauce-river" d="M153.6 1388.0L153.6 1442.0"/>
+    <path class="cauce-river" d="M172.8 368.0L172.8 442.0"/>
+    <path class="cauce-river" d="M172.8 1388.0L172.8 1442.0"/>
+    <path class="cauce-river" d="M192.0 368.0L192.0 462.0"/>
+    <path class="cauce-river" d="M249.6 1748.0L249.6 1802.0"/>
+    <path class="cauce-river" d="M326.4 608.0L326.4 662.0"/>
+    <path class="cauce-river" d="M518.4 1228.0L518.4 1282.0"/>
+    <path class="cauce-river" d="M566.4 1708.0L566.4 1762.0"/>
+    <path class="cauce-river" d="M624.0 1208.0L624.0 1262.0"/>
+  </g>
+  <g font-family="monospace" font-size="16">
+    <g class="cauce-hapax" fill="#9b5746">
+      <text x="52.8" y="40.0" xml:space="preserve">Compila</text>
+      <text x="705.6" y="40.0" xml:space="preserve">reales</text>
+      <text x="235.2" y="140.0" xml:space="preserve">internet</text>
+      <text x="763.2" y="160.0" xml:space="preserve">aca</text>
+      <text x="638.4" y="420.0" xml:space="preserve">renderers</text>
+      <text x="43.2" y="560.0" xml:space="preserve">__ART_MIHRAB__</text>
+      <text x="446.4" y="1080.0" xml:space="preserve">from</text>
+      <text x="523.2" y="1260.0" xml:space="preserve">existe</text>
+      <text x="715.2" y="1260.0" xml:space="preserve">generarlo</text>
+      <text x="715.2" y="1460.0" xml:space="preserve">dejo</text>
+      <text x="158.4" y="1660.0" xml:space="preserve">includes</text>
+      <text x="168.0" y="1820.0" xml:space="preserve">OK</text>
+      <text x="91.2" y="1900.0" xml:space="preserve">catch</text>
+      <text x="360.0" y="1900.0" xml:space="preserve">FALLO</text>
+      <animate attributeName="opacity" values="0;1;1;0.12;0.12" keyTimes="0;0.08;0.55;0.8;1" dur="12s" begin="-0.01s" repeatCount="indefinite"/>
+    </g>
+    <g class="cauce-hapax" fill="#9b5b46">
+      <text x="273.6" y="40.0" xml:space="preserve">sala</text>
+      <text x="638.4" y="40.0" xml:space="preserve">piezas</text>
+      <text x="148.8" y="60.0" xml:space="preserve">Salida</text>
+      <text x="571.2" y="60.0" xml:space="preserve">autocontenida</text>
+      <text x="100.8" y="80.0" xml:space="preserve">publicarse</text>
+      <text x="254.4" y="80.0" xml:space="preserve">artifact</text>
+      <text x="379.2" y="80.0" xml:space="preserve">con</text>
+      <text x="417.6" y="80.0" xml:space="preserve">CSP</text>
+      <text x="52.8" y="120.0" xml:space="preserve">Uso</text>
+      <text x="52.8" y="140.0" xml:space="preserve">Deps</text>
+      <text x="561.6" y="140.0" xml:space="preserve">r149</text>
+      <text x="43.2" y="540.0" xml:space="preserve">__ART_MEDALLION__</text>
+      <text x="302.4" y="860.0" xml:space="preserve">200</text>
+      <text x="72.0" y="1260.0" xml:space="preserve">dataset</text>
+      <text x="225.6" y="1320.0" xml:space="preserve">falta</text>
+      <text x="600.0" y="1320.0" xml:space="preserve">correr</text>
+      <text x="820.8" y="1320.0" xml:space="preserve">compete_engine</text>
+      <text x="283.2" y="1460.0" xml:space="preserve">b</text>
+      <text x="148.8" y="1580.0" xml:space="preserve">startsWith</text>
+      <text x="523.2" y="1660.0" xml:space="preserve">ausente</text>
+      <text x="417.6" y="1720.0" xml:space="preserve">de</text>
+      <text x="676.8" y="1740.0" xml:space="preserve">quedaron</text>
+      <text x="427.2" y="1840.0" xml:space="preserve">svgs</text>
+      <text x="561.6" y="1900.0" xml:space="preserve">process</text>
+      <text x="638.4" y="1900.0" xml:space="preserve">exit</text>
+      <text x="686.4" y="1900.0" xml:space="preserve">1</text>
+      <animate attributeName="opacity" values="0;1;1;0.12;0.12" keyTimes="0;0.08;0.55;0.8;1" dur="12s" begin="-0.07s" repeatCount="indefinite"/>
+    </g>
+    <g class="cauce-hapax" fill="#9b6046">
+      <text x="321.6" y="40.0" xml:space="preserve">flujo</text>
+      <text x="600.0" y="40.0" xml:space="preserve">las</text>
+      <text x="715.2" y="60.0" xml:space="preserve">apta</text>
+      <text x="552.0" y="80.0" xml:space="preserve">todo</text>
+      <text x="120.0" y="140.0" xml:space="preserve">solo</text>
+      <text x="427.2" y="140.0" xml:space="preserve">vez</text>
+      <text x="436.8" y="160.0" xml:space="preserve">via</text>
+      <text x="33.6" y="180.0" xml:space="preserve">use</text>
+      <text x="148.8" y="280.0" xml:space="preserve">__dirname</text>
+      <text x="52.8" y="460.0" xml:space="preserve">pieza</text>
+      <text x="43.2" y="500.0" xml:space="preserve">__ART_FIELD__</text>
+      <text x="523.2" y="540.0" xml:space="preserve">medallion_loom</text>
+      <text x="484.8" y="580.0" xml:space="preserve">cauce_cauce</text>
+      <text x="552.0" y="760.0" xml:space="preserve">302</text>
+      <text x="158.4" y="920.0" xml:space="preserve">data</text>
+      <text x="235.2" y="1260.0" xml:space="preserve">ecosistema</text>
+      <text x="600.0" y="1580.0" xml:space="preserve">parece</text>
+      <text x="177.6" y="1680.0" xml:space="preserve">split</text>
+      <text x="350.4" y="1720.0" xml:space="preserve">dentro</text>
+      <text x="763.2" y="1740.0" xml:space="preserve">tokens</text>
+      <text x="292.8" y="1820.0" xml:space="preserve">statSync</text>
+      <text x="120.0" y="1840.0" xml:space="preserve">match</text>
+      <animate attributeName="opacity" values="0;1;1;0.12;0.12" keyTimes="0;0.08;0.55;0.8;1" dur="12s" begin="-0.08s" repeatCount="indefinite"/>
+    </g>
+    <g class="cauce-hapax" fill="#9b6446">
+      <text x="158.4" y="40.0" xml:space="preserve">galeria</text>
+      <text x="52.8" y="80.0" xml:space="preserve">para</text>
+      <text x="206.4" y="80.0" xml:space="preserve">como</text>
+      <text x="340.8" y="80.0" xml:space="preserve">web</text>
+      <text x="350.4" y="140.0" xml:space="preserve">primera</text>
+      <text x="715.2" y="160.0" xml:space="preserve">crea</text>
+      <text x="494.4" y="520.0" xml:space="preserve">border_validate_airdrop</text>
+      <text x="120.0" y="900.0" xml:space="preserve">setEncoding</text>
+      <text x="158.4" y="940.0" xml:space="preserve">end</text>
+      <text x="244.8" y="1120.0" xml:space="preserve">nconst</text>
+      <text x="91.2" y="1380.0" xml:space="preserve">parse</text>
+      <text x="302.4" y="1460.0" xml:space="preserve">m</text>
+      <text x="609.6" y="1460.0" xml:space="preserve">wrap</text>
+      <text x="91.2" y="1740.0" xml:space="preserve">__ART_</text>
+      <text x="868.8" y="1740.0" xml:space="preserve">reemplazar</text>
+      <text x="120.0" y="1820.0" xml:space="preserve">log</text>
+      <animate attributeName="opacity" values="0;1;1;0.12;0.12" keyTimes="0;0.08;0.55;0.8;1" dur="12s" begin="-0.04s" repeatCount="indefinite"/>
+    </g>
+    <g class="cauce-hapax" fill="#9b6946">
+      <text x="235.2" y="40.0" xml:space="preserve">3D</text>
+      <text x="388.8" y="40.0" xml:space="preserve">desde</text>
+      <text x="456.0" y="80.0" xml:space="preserve">estricta</text>
+      <text x="638.4" y="140.0" xml:space="preserve">cachea</text>
+      <text x="72.0" y="180.0" xml:space="preserve">strict</text>
+      <text x="494.4" y="560.0" xml:space="preserve">mihrab_spaces</text>
+      <text x="302.4" y="780.0" xml:space="preserve">headers</text>
+      <text x="686.4" y="860.0" xml:space="preserve">HTTP</text>
+      <text x="504.0" y="1120.0" xml:space="preserve">Quaternion</text>
+      <text x="619.2" y="1120.0" xml:space="preserve">Vector3</text>
+      <text x="350.4" y="1260.0" xml:space="preserve">usa</text>
+      <text x="667.2" y="1320.0" xml:space="preserve">antes</text>
+      <text x="168.0" y="1720.0" xml:space="preserve">vive</text>
+      <text x="216.0" y="1720.0" xml:space="preserve">legitimamente</text>
+      <text x="580.8" y="1720.0" xml:space="preserve">window</text>
+      <text x="427.2" y="1820.0" xml:space="preserve">size</text>
+      <text x="494.4" y="1820.0" xml:space="preserve">bytes</text>
+      <text x="340.8" y="1840.0" xml:space="preserve">length</text>
+      <animate attributeName="opacity" values="0;1;1;0.12;0.12" keyTimes="0;0.08;0.55;0.8;1" dur="12s" begin="-0.05s" repeatCount="indefinite"/>
+    </g>
+    <g class="cauce-hapax" fill="#9b6d46">
+      <text x="609.6" y="160.0" xml:space="preserve">aplica</text>
+      <text x="513.6" y="420.0" xml:space="preserve">examples</text>
+      <text x="600.0" y="420.0" xml:space="preserve">jsm</text>
+      <text x="484.8" y="500.0" xml:space="preserve">field_compete_engine</text>
+      <text x="43.2" y="520.0" xml:space="preserve">__ART_BORDER__</text>
+      <text x="43.2" y="580.0" xml:space="preserve">__ART_CAUCE__</text>
+      <text x="302.4" y="760.0" xml:space="preserve">301</text>
+      <text x="379.2" y="780.0" xml:space="preserve">location</text>
+      <text x="321.6" y="1120.0" xml:space="preserve">Matrix4</text>
+      <text x="408.0" y="1120.0" xml:space="preserve">Object3D</text>
+      <text x="24.0" y="1200.0" xml:space="preserve">async</text>
+      <text x="657.6" y="1260.0" xml:space="preserve">exige</text>
+      <text x="1012.8" y="1320.0" xml:space="preserve">demo</text>
+      <text x="830.4" y="1740.0" xml:space="preserve">sin</text>
+      <text x="244.8" y="1840.0" xml:space="preserve">g</text>
+      <text x="465.6" y="1900.0" xml:space="preserve">message</text>
+      <animate attributeName="opacity" values="0;1;1;0.12;0.12" keyTimes="0;0.08;0.55;0.8;1" dur="12s" begin="-1.09s" repeatCount="indefinite"/>
+    </g>
+    <g class="cauce-marks" fill="#b7ffd9">
+      <text x="24.0" y="40.0" xml:space="preserve">//</text>
+      <text x="264.0" y="40.0" xml:space="preserve">(</text>
+      <text x="369.6" y="40.0" xml:space="preserve">)</text>
+      <text x="523.2" y="40.0" xml:space="preserve">.</text>
+      <text x="580.8" y="40.0" xml:space="preserve">+</text>
+      <text x="24.0" y="60.0" xml:space="preserve">//</text>
+      <text x="129.6" y="60.0" xml:space="preserve">.</text>
+      <text x="206.4" y="60.0" xml:space="preserve">:</text>
+      <text x="273.6" y="60.0" xml:space="preserve">/</text>
+      <text x="321.6" y="60.0" xml:space="preserve">/</text>
+      <text x="388.8" y="60.0" xml:space="preserve">.</text>
+      <text x="446.4" y="60.0" xml:space="preserve">(</text>
+      <text x="552.0" y="60.0" xml:space="preserve">,</text>
+      <text x="696.0" y="60.0" xml:space="preserve">,</text>
+      <text x="24.0" y="80.0" xml:space="preserve">//</text>
+      <text x="532.8" y="80.0" xml:space="preserve">:</text>
+      <text x="657.6" y="80.0" xml:space="preserve">).</text>
+      <text x="24.0" y="100.0" xml:space="preserve">//</text>
+      <text x="24.0" y="120.0" xml:space="preserve">//</text>
+      <text x="81.6" y="120.0" xml:space="preserve">:</text>
+      <text x="216.0" y="120.0" xml:space="preserve">/</text>
+      <text x="283.2" y="120.0" xml:space="preserve">/</text>
+      <text x="340.8" y="120.0" xml:space="preserve">.</text>
+      <text x="24.0" y="140.0" xml:space="preserve">//</text>
+      <text x="91.2" y="140.0" xml:space="preserve">:</text>
+      <text x="216.0" y="140.0" xml:space="preserve">+</text>
+      <text x="465.6" y="140.0" xml:space="preserve">(</text>
+      <text x="523.2" y="140.0" xml:space="preserve">.</text>
+      <text x="24.0" y="160.0" xml:space="preserve">//</text>
+      <text x="168.0" y="160.0" xml:space="preserve">/</text>
+      <text x="235.2" y="160.0" xml:space="preserve">/.</text>
+      <text x="302.4" y="160.0" xml:space="preserve">/,</text>
+      <text x="523.2" y="160.0" xml:space="preserve">/</text>
+      <text x="667.2" y="160.0" xml:space="preserve">:</text>
+      <text x="792.0" y="160.0" xml:space="preserve">).</text>
+      <text x="24.0" y="180.0" xml:space="preserve">&#x27;</text>
+      <text x="129.6" y="180.0" xml:space="preserve">&#x27;;</text>
+      <text x="110.4" y="200.0" xml:space="preserve">=</text>
+      <text x="196.8" y="200.0" xml:space="preserve">(&#x27;</text>
+      <text x="235.2" y="200.0" xml:space="preserve">&#x27;);</text>
+      <text x="129.6" y="220.0" xml:space="preserve">=</text>
+      <text x="216.0" y="220.0" xml:space="preserve">(&#x27;</text>
+      <text x="273.6" y="220.0" xml:space="preserve">&#x27;);</text>
+      <text x="139.2" y="240.0" xml:space="preserve">=</text>
+      <text x="225.6" y="240.0" xml:space="preserve">(&#x27;</text>
+      <text x="292.8" y="240.0" xml:space="preserve">&#x27;);</text>
+      <text x="129.6" y="280.0" xml:space="preserve">=</text>
+      <text x="235.2" y="280.0" xml:space="preserve">;</text>
+      <text x="129.6" y="300.0" xml:space="preserve">=</text>
+      <text x="187.2" y="300.0" xml:space="preserve">.</text>
+      <text x="264.0" y="300.0" xml:space="preserve">(</text>
+      <text x="312.0" y="300.0" xml:space="preserve">,</text>
+      <text x="331.2" y="300.0" xml:space="preserve">&#x27;..&#x27;,</text>
+      <text x="388.8" y="300.0" xml:space="preserve">&#x27;..&#x27;);</text>
+      <text x="139.2" y="320.0" xml:space="preserve">=</text>
+      <text x="196.8" y="320.0" xml:space="preserve">.</text>
+      <text x="244.8" y="320.0" xml:space="preserve">(</text>
+      <text x="292.8" y="320.0" xml:space="preserve">,</text>
+      <text x="312.0" y="320.0" xml:space="preserve">&#x27;.</text>
+      <text x="379.2" y="320.0" xml:space="preserve">&#x27;);</text>
+      <text x="158.4" y="340.0" xml:space="preserve">=</text>
+      <text x="216.0" y="340.0" xml:space="preserve">.</text>
+      <text x="264.0" y="340.0" xml:space="preserve">(</text>
+      <text x="312.0" y="340.0" xml:space="preserve">,</text>
+      <text x="331.2" y="340.0" xml:space="preserve">&#x27;</text>
+      <text x="388.8" y="340.0" xml:space="preserve">&#x27;,</text>
+      <text x="417.6" y="340.0" xml:space="preserve">&#x27;</text>
+      <text x="465.6" y="340.0" xml:space="preserve">&#x27;);</text>
+      <text x="120.0" y="360.0" xml:space="preserve">=</text>
+      <text x="177.6" y="360.0" xml:space="preserve">.</text>
+      <text x="225.6" y="360.0" xml:space="preserve">(</text>
+      <text x="302.4" y="360.0" xml:space="preserve">,</text>
+      <text x="321.6" y="360.0" xml:space="preserve">&#x27;</text>
+      <text x="388.8" y="360.0" xml:space="preserve">.</text>
+      <text x="436.8" y="360.0" xml:space="preserve">&#x27;);</text>
+      <text x="177.6" y="400.0" xml:space="preserve">=</text>
+      <text x="196.8" y="400.0" xml:space="preserve">&#x27;</text>
+      <text x="254.4" y="400.0" xml:space="preserve">://</text>
+      <text x="331.2" y="400.0" xml:space="preserve">.</text>
+      <text x="369.6" y="400.0" xml:space="preserve">/</text>
+      <text x="427.2" y="400.0" xml:space="preserve">@</text>
+      <text x="446.4" y="400.0" xml:space="preserve">.</text>
+      <text x="484.8" y="400.0" xml:space="preserve">.</text>
+      <text x="504.0" y="400.0" xml:space="preserve">/</text>
+      <text x="561.6" y="400.0" xml:space="preserve">/</text>
+      <text x="619.2" y="400.0" xml:space="preserve">.</text>
+      <text x="657.6" y="400.0" xml:space="preserve">.</text>
+      <text x="686.4" y="400.0" xml:space="preserve">&#x27;;</text>
+      <text x="177.6" y="420.0" xml:space="preserve">=</text>
+      <text x="196.8" y="420.0" xml:space="preserve">&#x27;</text>
+      <text x="254.4" y="420.0" xml:space="preserve">://</text>
+      <text x="331.2" y="420.0" xml:space="preserve">.</text>
+      <text x="369.6" y="420.0" xml:space="preserve">/</text>
+      <text x="427.2" y="420.0" xml:space="preserve">@</text>
+      <text x="446.4" y="420.0" xml:space="preserve">.</text>
+      <text x="484.8" y="420.0" xml:space="preserve">.</text>
+      <text x="504.0" y="420.0" xml:space="preserve">/</text>
+      <text x="590.4" y="420.0" xml:space="preserve">/</text>
+      <text x="628.8" y="420.0" xml:space="preserve">/</text>
+      <text x="724.8" y="420.0" xml:space="preserve">/</text>
+      <text x="859.2" y="420.0" xml:space="preserve">.</text>
+      <text x="888.0" y="420.0" xml:space="preserve">&#x27;;</text>
+      <text x="24.0" y="460.0" xml:space="preserve">//</text>
+      <text x="196.8" y="460.0" xml:space="preserve">-&gt;</text>
+      <text x="129.6" y="480.0" xml:space="preserve">=</text>
+      <text x="148.8" y="480.0" xml:space="preserve">{</text>
+      <text x="168.0" y="500.0" xml:space="preserve">:</text>
+      <text x="187.2" y="500.0" xml:space="preserve">&#x27;</text>
+      <text x="273.6" y="500.0" xml:space="preserve">/</text>
+      <text x="331.2" y="500.0" xml:space="preserve">/</text>
+      <text x="475.2" y="500.0" xml:space="preserve">/</text>
+      <text x="676.8" y="500.0" xml:space="preserve">.</text>
+      <text x="715.2" y="500.0" xml:space="preserve">&#x27;,</text>
+      <text x="177.6" y="520.0" xml:space="preserve">:</text>
+      <text x="196.8" y="520.0" xml:space="preserve">&#x27;</text>
+      <text x="283.2" y="520.0" xml:space="preserve">/</text>
+      <text x="340.8" y="520.0" xml:space="preserve">/</text>
+      <text x="484.8" y="520.0" xml:space="preserve">/</text>
+      <text x="715.2" y="520.0" xml:space="preserve">.</text>
+      <text x="753.6" y="520.0" xml:space="preserve">&#x27;,</text>
+      <text x="206.4" y="540.0" xml:space="preserve">:</text>
+      <text x="225.6" y="540.0" xml:space="preserve">&#x27;</text>
+      <text x="312.0" y="540.0" xml:space="preserve">/</text>
+      <text x="369.6" y="540.0" xml:space="preserve">/</text>
+      <text x="513.6" y="540.0" xml:space="preserve">/</text>
+      <text x="657.6" y="540.0" xml:space="preserve">.</text>
+      <text x="696.0" y="540.0" xml:space="preserve">&#x27;,</text>
+      <text x="177.6" y="560.0" xml:space="preserve">:</text>
+      <text x="196.8" y="560.0" xml:space="preserve">&#x27;</text>
+      <text x="283.2" y="560.0" xml:space="preserve">/</text>
+      <text x="340.8" y="560.0" xml:space="preserve">/</text>
+      <text x="484.8" y="560.0" xml:space="preserve">/</text>
+      <text x="619.2" y="560.0" xml:space="preserve">.</text>
+      <text x="657.6" y="560.0" xml:space="preserve">&#x27;,</text>
+      <text x="168.0" y="580.0" xml:space="preserve">:</text>
+      <text x="187.2" y="580.0" xml:space="preserve">&#x27;</text>
+      <text x="273.6" y="580.0" xml:space="preserve">/</text>
+      <text x="331.2" y="580.0" xml:space="preserve">/</text>
+      <text x="475.2" y="580.0" xml:space="preserve">/</text>
+      <text x="590.4" y="580.0" xml:space="preserve">.</text>
+      <text x="628.8" y="580.0" xml:space="preserve">&#x27;,</text>
+      <text x="24.0" y="600.0" xml:space="preserve">};</text>
+      <text x="216.0" y="640.0" xml:space="preserve">(</text>
+      <text x="254.4" y="640.0" xml:space="preserve">,</text>
+      <text x="312.0" y="640.0" xml:space="preserve">)</text>
+      <text x="331.2" y="640.0" xml:space="preserve">{</text>
+      <text x="148.8" y="660.0" xml:space="preserve">=</text>
+      <text x="206.4" y="660.0" xml:space="preserve">.</text>
+      <text x="254.4" y="660.0" xml:space="preserve">(</text>
+      <text x="312.0" y="660.0" xml:space="preserve">,</text>
+      <text x="369.6" y="660.0" xml:space="preserve">);</text>
+      <text x="72.0" y="680.0" xml:space="preserve">(</text>
+      <text x="100.8" y="680.0" xml:space="preserve">.</text>
+      <text x="206.4" y="680.0" xml:space="preserve">(</text>
+      <text x="254.4" y="680.0" xml:space="preserve">))</text>
+      <text x="417.6" y="680.0" xml:space="preserve">.</text>
+      <text x="494.4" y="680.0" xml:space="preserve">(</text>
+      <text x="523.2" y="680.0" xml:space="preserve">.</text>
+      <text x="648.0" y="680.0" xml:space="preserve">(</text>
+      <text x="696.0" y="680.0" xml:space="preserve">,</text>
+      <text x="715.2" y="680.0" xml:space="preserve">&#x27;</text>
+      <text x="763.2" y="680.0" xml:space="preserve">&#x27;));</text>
+      <text x="62.4" y="700.0" xml:space="preserve">.</text>
+      <text x="158.4" y="700.0" xml:space="preserve">(</text>
+      <text x="216.0" y="700.0" xml:space="preserve">,</text>
+      <text x="235.2" y="700.0" xml:space="preserve">{</text>
+      <text x="340.8" y="700.0" xml:space="preserve">:</text>
+      <text x="408.0" y="700.0" xml:space="preserve">});</text>
+      <text x="216.0" y="720.0" xml:space="preserve">((</text>
+      <text x="302.4" y="720.0" xml:space="preserve">,</text>
+      <text x="379.2" y="720.0" xml:space="preserve">)</text>
+      <text x="398.4" y="720.0" xml:space="preserve">=&gt;</text>
+      <text x="427.2" y="720.0" xml:space="preserve">{</text>
+      <text x="110.4" y="740.0" xml:space="preserve">.</text>
+      <text x="148.8" y="740.0" xml:space="preserve">(</text>
+      <text x="187.2" y="740.0" xml:space="preserve">,</text>
+      <text x="244.8" y="740.0" xml:space="preserve">=&gt;</text>
+      <text x="273.6" y="740.0" xml:space="preserve">{</text>
+      <text x="110.4" y="760.0" xml:space="preserve">(</text>
+      <text x="148.8" y="760.0" xml:space="preserve">.</text>
+      <text x="264.0" y="760.0" xml:space="preserve">===</text>
+      <text x="340.8" y="760.0" xml:space="preserve">||</text>
+      <text x="398.4" y="760.0" xml:space="preserve">.</text>
+      <text x="513.6" y="760.0" xml:space="preserve">===</text>
+      <text x="580.8" y="760.0" xml:space="preserve">)</text>
+      <text x="600.0" y="760.0" xml:space="preserve">{</text>
+      <text x="216.0" y="780.0" xml:space="preserve">.</text>
+      <text x="254.4" y="780.0" xml:space="preserve">(</text>
+      <text x="292.8" y="780.0" xml:space="preserve">.</text>
+      <text x="369.6" y="780.0" xml:space="preserve">.</text>
+      <text x="456.0" y="780.0" xml:space="preserve">,</text>
+      <text x="504.0" y="780.0" xml:space="preserve">=&gt;</text>
+      <text x="571.2" y="780.0" xml:space="preserve">(</text>
+      <text x="600.0" y="780.0" xml:space="preserve">)).</text>
+      <text x="648.0" y="780.0" xml:space="preserve">(&#x27;</text>
+      <text x="715.2" y="780.0" xml:space="preserve">&#x27;,</text>
+      <text x="801.6" y="780.0" xml:space="preserve">);</text>
+      <text x="81.6" y="800.0" xml:space="preserve">}</text>
+      <text x="120.0" y="820.0" xml:space="preserve">(</text>
+      <text x="158.4" y="820.0" xml:space="preserve">);</text>
+      <text x="206.4" y="840.0" xml:space="preserve">(</text>
+      <text x="225.6" y="840.0" xml:space="preserve">)</text>
+      <text x="244.8" y="840.0" xml:space="preserve">{</text>
+      <text x="129.6" y="860.0" xml:space="preserve">(</text>
+      <text x="148.8" y="860.0" xml:space="preserve">.</text>
+      <text x="264.0" y="860.0" xml:space="preserve">!==</text>
+      <text x="331.2" y="860.0" xml:space="preserve">)</text>
+      <text x="475.2" y="860.0" xml:space="preserve">(</text>
+      <text x="571.2" y="860.0" xml:space="preserve">(</text>
+      <text x="619.2" y="860.0" xml:space="preserve">+</text>
+      <text x="638.4" y="860.0" xml:space="preserve">&#x27;</text>
+      <text x="657.6" y="860.0" xml:space="preserve">-&gt;</text>
+      <text x="734.4" y="860.0" xml:space="preserve">&#x27;</text>
+      <text x="753.6" y="860.0" xml:space="preserve">+</text>
+      <text x="782.4" y="860.0" xml:space="preserve">.</text>
+      <text x="888.0" y="860.0" xml:space="preserve">));</text>
+      <text x="187.2" y="880.0" xml:space="preserve">=</text>
+      <text x="206.4" y="880.0" xml:space="preserve">&#x27;&#x27;;</text>
+      <text x="110.4" y="900.0" xml:space="preserve">.</text>
+      <text x="225.6" y="900.0" xml:space="preserve">(&#x27;</text>
+      <text x="283.2" y="900.0" xml:space="preserve">&#x27;);</text>
+      <text x="110.4" y="920.0" xml:space="preserve">.</text>
+      <text x="139.2" y="920.0" xml:space="preserve">(&#x27;</text>
+      <text x="196.8" y="920.0" xml:space="preserve">&#x27;,</text>
+      <text x="244.8" y="920.0" xml:space="preserve">=&gt;</text>
+      <text x="273.6" y="920.0" xml:space="preserve">{</text>
+      <text x="340.8" y="920.0" xml:space="preserve">+=</text>
+      <text x="379.2" y="920.0" xml:space="preserve">;</text>
+      <text x="398.4" y="920.0" xml:space="preserve">});</text>
+      <text x="110.4" y="940.0" xml:space="preserve">.</text>
+      <text x="139.2" y="940.0" xml:space="preserve">(&#x27;</text>
+      <text x="187.2" y="940.0" xml:space="preserve">&#x27;,</text>
+      <text x="216.0" y="940.0" xml:space="preserve">()</text>
+      <text x="244.8" y="940.0" xml:space="preserve">=&gt;</text>
+      <text x="273.6" y="940.0" xml:space="preserve">{</text>
+      <text x="312.0" y="940.0" xml:space="preserve">.</text>
+      <text x="446.4" y="940.0" xml:space="preserve">(</text>
+      <text x="494.4" y="940.0" xml:space="preserve">,</text>
+      <text x="552.0" y="940.0" xml:space="preserve">);</text>
+      <text x="648.0" y="940.0" xml:space="preserve">(</text>
+      <text x="696.0" y="940.0" xml:space="preserve">);</text>
+      <text x="724.8" y="940.0" xml:space="preserve">});</text>
+      <text x="81.6" y="960.0" xml:space="preserve">}</text>
+      <text x="62.4" y="980.0" xml:space="preserve">}).</text>
+      <text x="110.4" y="980.0" xml:space="preserve">(&#x27;</text>
+      <text x="177.6" y="980.0" xml:space="preserve">&#x27;,</text>
+      <text x="264.0" y="980.0" xml:space="preserve">);</text>
+      <text x="43.2" y="1000.0" xml:space="preserve">});</text>
+      <text x="24.0" y="1020.0" xml:space="preserve">}</text>
+      <text x="196.8" y="1060.0" xml:space="preserve">(</text>
+      <text x="235.2" y="1060.0" xml:space="preserve">)</text>
+      <text x="254.4" y="1060.0" xml:space="preserve">{</text>
+      <text x="100.8" y="1080.0" xml:space="preserve">=</text>
+      <text x="148.8" y="1080.0" xml:space="preserve">.</text>
+      <text x="225.6" y="1080.0" xml:space="preserve">(/</text>
+      <text x="302.4" y="1080.0" xml:space="preserve">\</text>
+      <text x="321.6" y="1080.0" xml:space="preserve">*\{[^}]*\}\</text>
+      <text x="436.8" y="1080.0" xml:space="preserve">*</text>
+      <text x="484.8" y="1080.0" xml:space="preserve">\</text>
+      <text x="504.0" y="1080.0" xml:space="preserve">*&#x27;</text>
+      <text x="571.2" y="1080.0" xml:space="preserve">&#x27;;/,</text>
+      <text x="619.2" y="1080.0" xml:space="preserve">&#x27;&#x27;);</text>
+      <text x="62.4" y="1100.0" xml:space="preserve">=</text>
+      <text x="91.2" y="1100.0" xml:space="preserve">.</text>
+      <text x="168.0" y="1100.0" xml:space="preserve">(/</text>
+      <text x="244.8" y="1100.0" xml:space="preserve">\</text>
+      <text x="264.0" y="1100.0" xml:space="preserve">*\{[^}]*\};?/,</text>
+      <text x="408.0" y="1100.0" xml:space="preserve">&#x27;&#x27;);</text>
+      <text x="110.4" y="1120.0" xml:space="preserve">&#x27;(</text>
+      <text x="206.4" y="1120.0" xml:space="preserve">(){\</text>
+      <text x="312.0" y="1120.0" xml:space="preserve">{</text>
+      <text x="388.8" y="1120.0" xml:space="preserve">,</text>
+      <text x="484.8" y="1120.0" xml:space="preserve">,</text>
+      <text x="600.0" y="1120.0" xml:space="preserve">,</text>
+      <text x="686.4" y="1120.0" xml:space="preserve">}</text>
+      <text x="705.6" y="1120.0" xml:space="preserve">=</text>
+      <text x="772.8" y="1120.0" xml:space="preserve">;\</text>
+      <text x="801.6" y="1120.0" xml:space="preserve">&#x27;</text>
+      <text x="820.8" y="1120.0" xml:space="preserve">+</text>
+      <text x="859.2" y="1120.0" xml:space="preserve">+</text>
+      <text x="62.4" y="1140.0" xml:space="preserve">&#x27;\</text>
+      <text x="148.8" y="1140.0" xml:space="preserve">.</text>
+      <text x="273.6" y="1140.0" xml:space="preserve">=</text>
+      <text x="398.4" y="1140.0" xml:space="preserve">;\</text>
+      <text x="484.8" y="1140.0" xml:space="preserve">.</text>
+      <text x="628.8" y="1140.0" xml:space="preserve">=</text>
+      <text x="772.8" y="1140.0" xml:space="preserve">;\</text>
+      <text x="801.6" y="1140.0" xml:space="preserve">})();&#x27;;</text>
+      <text x="24.0" y="1160.0" xml:space="preserve">}</text>
+      <text x="206.4" y="1200.0" xml:space="preserve">()</text>
+      <text x="235.2" y="1200.0" xml:space="preserve">{</text>
+      <text x="129.6" y="1220.0" xml:space="preserve">=</text>
+      <text x="168.0" y="1220.0" xml:space="preserve">.</text>
+      <text x="292.8" y="1220.0" xml:space="preserve">(</text>
+      <text x="340.8" y="1220.0" xml:space="preserve">.</text>
+      <text x="388.8" y="1220.0" xml:space="preserve">(</text>
+      <text x="436.8" y="1220.0" xml:space="preserve">,</text>
+      <text x="456.0" y="1220.0" xml:space="preserve">&#x27;</text>
+      <text x="542.4" y="1220.0" xml:space="preserve">.</text>
+      <text x="590.4" y="1220.0" xml:space="preserve">&#x27;),</text>
+      <text x="628.8" y="1220.0" xml:space="preserve">&#x27;</text>
+      <text x="676.8" y="1220.0" xml:space="preserve">&#x27;);</text>
+      <text x="43.2" y="1260.0" xml:space="preserve">//</text>
+      <text x="331.2" y="1260.0" xml:space="preserve">:</text>
+      <text x="436.8" y="1260.0" xml:space="preserve">/</text>
+      <text x="580.8" y="1260.0" xml:space="preserve">,</text>
+      <text x="187.2" y="1280.0" xml:space="preserve">=</text>
+      <text x="244.8" y="1280.0" xml:space="preserve">.</text>
+      <text x="292.8" y="1280.0" xml:space="preserve">(</text>
+      <text x="340.8" y="1280.0" xml:space="preserve">,</text>
+      <text x="360.0" y="1280.0" xml:space="preserve">&#x27;</text>
+      <text x="417.6" y="1280.0" xml:space="preserve">&#x27;,</text>
+      <text x="446.4" y="1280.0" xml:space="preserve">&#x27;</text>
+      <text x="494.4" y="1280.0" xml:space="preserve">&#x27;,</text>
+      <text x="523.2" y="1280.0" xml:space="preserve">&#x27;</text>
+      <text x="657.6" y="1280.0" xml:space="preserve">.</text>
+      <text x="705.6" y="1280.0" xml:space="preserve">&#x27;);</text>
+      <text x="72.0" y="1300.0" xml:space="preserve">(!</text>
+      <text x="110.4" y="1300.0" xml:space="preserve">.</text>
+      <text x="216.0" y="1300.0" xml:space="preserve">(</text>
+      <text x="302.4" y="1300.0" xml:space="preserve">))</text>
+      <text x="331.2" y="1300.0" xml:space="preserve">{</text>
+      <text x="206.4" y="1320.0" xml:space="preserve">(&#x27;</text>
+      <text x="331.2" y="1320.0" xml:space="preserve">/</text>
+      <text x="379.2" y="1320.0" xml:space="preserve">/</text>
+      <text x="513.6" y="1320.0" xml:space="preserve">.</text>
+      <text x="571.2" y="1320.0" xml:space="preserve">--</text>
+      <text x="715.2" y="1320.0" xml:space="preserve">:</text>
+      <text x="811.2" y="1320.0" xml:space="preserve">/</text>
+      <text x="955.2" y="1320.0" xml:space="preserve">.</text>
+      <text x="993.6" y="1320.0" xml:space="preserve">--</text>
+      <text x="1051.2" y="1320.0" xml:space="preserve">&#x27;);</text>
+      <text x="43.2" y="1340.0" xml:space="preserve">}</text>
+      <text x="148.8" y="1360.0" xml:space="preserve">=</text>
+      <text x="187.2" y="1360.0" xml:space="preserve">.</text>
+      <text x="312.0" y="1360.0" xml:space="preserve">(</text>
+      <text x="398.4" y="1360.0" xml:space="preserve">,</text>
+      <text x="417.6" y="1360.0" xml:space="preserve">&#x27;</text>
+      <text x="465.6" y="1360.0" xml:space="preserve">&#x27;);</text>
+      <text x="81.6" y="1380.0" xml:space="preserve">.</text>
+      <text x="139.2" y="1380.0" xml:space="preserve">(</text>
+      <text x="187.2" y="1380.0" xml:space="preserve">);</text>
+      <text x="158.4" y="1420.0" xml:space="preserve">=</text>
+      <text x="340.8" y="1420.0" xml:space="preserve">(</text>
+      <text x="436.8" y="1420.0" xml:space="preserve">,</text>
+      <text x="456.0" y="1420.0" xml:space="preserve">&#x27;</text>
+      <text x="513.6" y="1420.0" xml:space="preserve">.</text>
+      <text x="552.0" y="1420.0" xml:space="preserve">.</text>
+      <text x="580.8" y="1420.0" xml:space="preserve">&#x27;);</text>
+      <text x="158.4" y="1440.0" xml:space="preserve">=</text>
+      <text x="264.0" y="1440.0" xml:space="preserve">(</text>
+      <text x="436.8" y="1440.0" xml:space="preserve">(</text>
+      <text x="532.8" y="1440.0" xml:space="preserve">,</text>
+      <text x="552.0" y="1440.0" xml:space="preserve">&#x27;</text>
+      <text x="686.4" y="1440.0" xml:space="preserve">.</text>
+      <text x="724.8" y="1440.0" xml:space="preserve">&#x27;));</text>
+      <text x="72.0" y="1460.0" xml:space="preserve">(/^\</text>
+      <text x="120.0" y="1460.0" xml:space="preserve">*(</text>
+      <text x="196.8" y="1460.0" xml:space="preserve">|</text>
+      <text x="264.0" y="1460.0" xml:space="preserve">)\</text>
+      <text x="292.8" y="1460.0" xml:space="preserve">/</text>
+      <text x="312.0" y="1460.0" xml:space="preserve">.</text>
+      <text x="360.0" y="1460.0" xml:space="preserve">(</text>
+      <text x="417.6" y="1460.0" xml:space="preserve">))</text>
+      <text x="590.4" y="1460.0" xml:space="preserve">(&#x27;</text>
+      <text x="820.8" y="1460.0" xml:space="preserve">/</text>
+      <text x="888.0" y="1460.0" xml:space="preserve">&#x27;);</text>
+      <text x="148.8" y="1500.0" xml:space="preserve">=</text>
+      <text x="168.0" y="1500.0" xml:space="preserve">{</text>
+      <text x="273.6" y="1500.0" xml:space="preserve">:</text>
+      <text x="340.8" y="1500.0" xml:space="preserve">,</text>
+      <text x="446.4" y="1500.0" xml:space="preserve">:</text>
+      <text x="513.6" y="1500.0" xml:space="preserve">,</text>
+      <text x="657.6" y="1500.0" xml:space="preserve">:</text>
+      <text x="724.8" y="1500.0" xml:space="preserve">};</text>
+      <text x="81.6" y="1520.0" xml:space="preserve">(</text>
+      <text x="148.8" y="1520.0" xml:space="preserve">[</text>
+      <text x="187.2" y="1520.0" xml:space="preserve">,</text>
+      <text x="235.2" y="1520.0" xml:space="preserve">]</text>
+      <text x="340.8" y="1520.0" xml:space="preserve">.</text>
+      <text x="417.6" y="1520.0" xml:space="preserve">(</text>
+      <text x="465.6" y="1520.0" xml:space="preserve">))</text>
+      <text x="494.4" y="1520.0" xml:space="preserve">{</text>
+      <text x="139.2" y="1540.0" xml:space="preserve">=</text>
+      <text x="196.8" y="1540.0" xml:space="preserve">.</text>
+      <text x="244.8" y="1540.0" xml:space="preserve">(</text>
+      <text x="292.8" y="1540.0" xml:space="preserve">,</text>
+      <text x="340.8" y="1540.0" xml:space="preserve">);</text>
+      <text x="158.4" y="1560.0" xml:space="preserve">=</text>
+      <text x="196.8" y="1560.0" xml:space="preserve">.</text>
+      <text x="321.6" y="1560.0" xml:space="preserve">(</text>
+      <text x="340.8" y="1560.0" xml:space="preserve">,</text>
+      <text x="360.0" y="1560.0" xml:space="preserve">&#x27;</text>
+      <text x="408.0" y="1560.0" xml:space="preserve">&#x27;);</text>
+      <text x="91.2" y="1580.0" xml:space="preserve">(!</text>
+      <text x="139.2" y="1580.0" xml:space="preserve">.</text>
+      <text x="244.8" y="1580.0" xml:space="preserve">(&#x27;&lt;</text>
+      <text x="302.4" y="1580.0" xml:space="preserve">&#x27;))</text>
+      <text x="484.8" y="1580.0" xml:space="preserve">(</text>
+      <text x="532.8" y="1580.0" xml:space="preserve">+</text>
+      <text x="552.0" y="1580.0" xml:space="preserve">&#x27;</text>
+      <text x="696.0" y="1580.0" xml:space="preserve">&#x27;);</text>
+      <text x="100.8" y="1600.0" xml:space="preserve">[</text>
+      <text x="139.2" y="1600.0" xml:space="preserve">]</text>
+      <text x="158.4" y="1600.0" xml:space="preserve">=</text>
+      <text x="206.4" y="1600.0" xml:space="preserve">;</text>
+      <text x="43.2" y="1620.0" xml:space="preserve">}</text>
+      <text x="81.6" y="1640.0" xml:space="preserve">(</text>
+      <text x="148.8" y="1640.0" xml:space="preserve">[</text>
+      <text x="187.2" y="1640.0" xml:space="preserve">,</text>
+      <text x="235.2" y="1640.0" xml:space="preserve">]</text>
+      <text x="340.8" y="1640.0" xml:space="preserve">.</text>
+      <text x="417.6" y="1640.0" xml:space="preserve">(</text>
+      <text x="465.6" y="1640.0" xml:space="preserve">))</text>
+      <text x="494.4" y="1640.0" xml:space="preserve">{</text>
+      <text x="91.2" y="1660.0" xml:space="preserve">(!</text>
+      <text x="148.8" y="1660.0" xml:space="preserve">.</text>
+      <text x="235.2" y="1660.0" xml:space="preserve">(</text>
+      <text x="273.6" y="1660.0" xml:space="preserve">))</text>
+      <text x="446.4" y="1660.0" xml:space="preserve">(&#x27;</text>
+      <text x="705.6" y="1660.0" xml:space="preserve">:</text>
+      <text x="724.8" y="1660.0" xml:space="preserve">&#x27;</text>
+      <text x="744.0" y="1660.0" xml:space="preserve">+</text>
+      <text x="792.0" y="1660.0" xml:space="preserve">);</text>
+      <text x="110.4" y="1680.0" xml:space="preserve">=</text>
+      <text x="168.0" y="1680.0" xml:space="preserve">.</text>
+      <text x="225.6" y="1680.0" xml:space="preserve">(</text>
+      <text x="264.0" y="1680.0" xml:space="preserve">).</text>
+      <text x="321.6" y="1680.0" xml:space="preserve">(</text>
+      <text x="360.0" y="1680.0" xml:space="preserve">);</text>
+      <text x="43.2" y="1700.0" xml:space="preserve">}</text>
+      <text x="43.2" y="1720.0" xml:space="preserve">//</text>
+      <text x="494.4" y="1720.0" xml:space="preserve">.</text>
+      <text x="532.8" y="1720.0" xml:space="preserve">.</text>
+      <text x="571.2" y="1720.0" xml:space="preserve">(</text>
+      <text x="638.4" y="1720.0" xml:space="preserve">.</text>
+      <text x="734.4" y="1720.0" xml:space="preserve">)</text>
+      <text x="72.0" y="1740.0" xml:space="preserve">(/</text>
+      <text x="148.8" y="1740.0" xml:space="preserve">|</text>
+      <text x="244.8" y="1740.0" xml:space="preserve">|</text>
+      <text x="379.2" y="1740.0" xml:space="preserve">/.</text>
+      <text x="436.8" y="1740.0" xml:space="preserve">(</text>
+      <text x="484.8" y="1740.0" xml:space="preserve">))</text>
+      <text x="657.6" y="1740.0" xml:space="preserve">(&#x27;</text>
+      <text x="964.8" y="1740.0" xml:space="preserve">&#x27;);</text>
+      <text x="62.4" y="1780.0" xml:space="preserve">.</text>
+      <text x="158.4" y="1780.0" xml:space="preserve">(</text>
+      <text x="235.2" y="1780.0" xml:space="preserve">,</text>
+      <text x="254.4" y="1780.0" xml:space="preserve">{</text>
+      <text x="360.0" y="1780.0" xml:space="preserve">:</text>
+      <text x="427.2" y="1780.0" xml:space="preserve">});</text>
+      <text x="62.4" y="1800.0" xml:space="preserve">.</text>
+      <text x="196.8" y="1800.0" xml:space="preserve">(</text>
+      <text x="235.2" y="1800.0" xml:space="preserve">,</text>
+      <text x="292.8" y="1800.0" xml:space="preserve">);</text>
+      <text x="110.4" y="1820.0" xml:space="preserve">.</text>
+      <text x="148.8" y="1820.0" xml:space="preserve">(&#x27;</text>
+      <text x="187.2" y="1820.0" xml:space="preserve">&#x27;,</text>
+      <text x="244.8" y="1820.0" xml:space="preserve">,</text>
+      <text x="283.2" y="1820.0" xml:space="preserve">.</text>
+      <text x="369.6" y="1820.0" xml:space="preserve">(</text>
+      <text x="408.0" y="1820.0" xml:space="preserve">).</text>
+      <text x="465.6" y="1820.0" xml:space="preserve">,</text>
+      <text x="484.8" y="1820.0" xml:space="preserve">&#x27;</text>
+      <text x="542.4" y="1820.0" xml:space="preserve">,&#x27;,</text>
+      <text x="62.4" y="1840.0" xml:space="preserve">(</text>
+      <text x="110.4" y="1840.0" xml:space="preserve">.</text>
+      <text x="168.0" y="1840.0" xml:space="preserve">(/&lt;</text>
+      <text x="235.2" y="1840.0" xml:space="preserve">/</text>
+      <text x="254.4" y="1840.0" xml:space="preserve">)</text>
+      <text x="273.6" y="1840.0" xml:space="preserve">||</text>
+      <text x="302.4" y="1840.0" xml:space="preserve">[]).</text>
+      <text x="398.4" y="1840.0" xml:space="preserve">,</text>
+      <text x="417.6" y="1840.0" xml:space="preserve">&#x27;</text>
+      <text x="532.8" y="1840.0" xml:space="preserve">&#x27;);</text>
+      <text x="24.0" y="1860.0" xml:space="preserve">}</text>
+      <text x="62.4" y="1900.0" xml:space="preserve">().</text>
+      <text x="139.2" y="1900.0" xml:space="preserve">(</text>
+      <text x="168.0" y="1900.0" xml:space="preserve">=&gt;</text>
+      <text x="196.8" y="1900.0" xml:space="preserve">{</text>
+      <text x="283.2" y="1900.0" xml:space="preserve">.</text>
+      <text x="340.8" y="1900.0" xml:space="preserve">(&#x27;</text>
+      <text x="408.0" y="1900.0" xml:space="preserve">:&#x27;,</text>
+      <text x="456.0" y="1900.0" xml:space="preserve">.</text>
+      <text x="532.8" y="1900.0" xml:space="preserve">);</text>
+      <text x="628.8" y="1900.0" xml:space="preserve">.</text>
+      <text x="676.8" y="1900.0" xml:space="preserve">(</text>
+      <text x="696.0" y="1900.0" xml:space="preserve">);</text>
+      <text x="724.8" y="1900.0" xml:space="preserve">});</text>
+      <animate attributeName="opacity" values="1;0.85;1" dur="10s" repeatCount="indefinite"/>
+    </g>
+    <g class="cauce-rare" fill="#c9de5e">
+      <text x="273.6" y="640.0" xml:space="preserve">name</text>
+      <text x="331.2" y="660.0" xml:space="preserve">name</text>
+      <text x="120.0" y="740.0" xml:space="preserve">get</text>
+      <text x="225.6" y="780.0" xml:space="preserve">get</text>
+      <text x="321.6" y="940.0" xml:space="preserve">writeFileSync</text>
+      <text x="168.0" y="1200.0" xml:space="preserve">main</text>
+      <text x="494.4" y="1260.0" xml:space="preserve">si</text>
+      <text x="600.0" y="1260.0" xml:space="preserve">si</text>
+      <text x="360.0" y="1500.0" xml:space="preserve">__CSS3D__</text>
+      <text x="206.4" y="1640.0" xml:space="preserve">val</text>
+      <text x="331.2" y="1680.0" xml:space="preserve">val</text>
+      <text x="158.4" y="1740.0" xml:space="preserve">__CSS3D__</text>
+      <text x="72.0" y="1800.0" xml:space="preserve">writeFileSync</text>
+      <text x="24.0" y="1900.0" xml:space="preserve">main</text>
+      <animate attributeName="opacity" values="0;1;1;0.45;0.45" keyTimes="0;0.08;0.6;0.85;1" dur="12s" begin="-3.77s" repeatCount="indefinite"/>
+    </g>
+    <g class="cauce-rare" fill="#d7de5e">
+      <text x="600.0" y="80.0" xml:space="preserve">inline</text>
+      <text x="475.2" y="780.0" xml:space="preserve">r2</text>
+      <text x="580.8" y="780.0" xml:space="preserve">r2</text>
+      <text x="110.4" y="1060.0" xml:space="preserve">wrapCss3d</text>
+      <text x="158.4" y="1080.0" xml:space="preserve">replace</text>
+      <text x="100.8" y="1100.0" xml:space="preserve">replace</text>
+      <text x="81.6" y="1140.0" xml:space="preserve">nwindow</text>
+      <text x="417.6" y="1140.0" xml:space="preserve">nwindow</text>
+      <text x="177.6" y="1440.0" xml:space="preserve">wrapCss3d</text>
+      <text x="321.6" y="1460.0" xml:space="preserve">test</text>
+      <text x="120.0" y="1540.0" xml:space="preserve">p</text>
+      <text x="331.2" y="1560.0" xml:space="preserve">p</text>
+      <text x="398.4" y="1740.0" xml:space="preserve">test</text>
+      <text x="475.2" y="1840.0" xml:space="preserve">inline</text>
+      <text x="148.8" y="1900.0" xml:space="preserve">e</text>
+      <text x="446.4" y="1900.0" xml:space="preserve">e</text>
+      <animate attributeName="opacity" values="0;1;1;0.45;0.45" keyTimes="0;0.08;0.6;0.85;1" dur="12s" begin="-0.56s" repeatCount="indefinite"/>
+    </g>
+    <g class="cauce-rare" fill="#deab5e">
+      <text x="129.6" y="40.0" xml:space="preserve">la</text>
+      <text x="91.2" y="60.0" xml:space="preserve">repo</text>
+      <text x="456.0" y="60.0" xml:space="preserve">gitignored</text>
+      <text x="120.0" y="120.0" xml:space="preserve">node</text>
+      <text x="168.0" y="140.0" xml:space="preserve">node</text>
+      <text x="321.6" y="140.0" xml:space="preserve">la</text>
+      <text x="331.2" y="160.0" xml:space="preserve">gitignored</text>
+      <text x="340.8" y="400.0" xml:space="preserve">com</text>
+      <text x="456.0" y="400.0" xml:space="preserve">149</text>
+      <text x="340.8" y="420.0" xml:space="preserve">com</text>
+      <text x="456.0" y="420.0" xml:space="preserve">149</text>
+      <text x="148.8" y="460.0" xml:space="preserve">repo</text>
+      <text x="225.6" y="460.0" xml:space="preserve">token</text>
+      <text x="465.6" y="1660.0" xml:space="preserve">token</text>
+      <text x="43.2" y="1820.0" xml:space="preserve">console</text>
+      <text x="216.0" y="1900.0" xml:space="preserve">console</text>
+      <animate attributeName="opacity" values="0;1;1;0.45;0.45" keyTimes="0;0.08;0.6;0.85;1" dur="12s" begin="-0.02s" repeatCount="indefinite"/>
+    </g>
+    <g class="cauce-rare" fill="#deb95e">
+      <text x="292.8" y="120.0" xml:space="preserve">build</text>
+      <text x="705.6" y="140.0" xml:space="preserve">en</text>
+      <text x="513.6" y="400.0" xml:space="preserve">build</text>
+      <text x="81.6" y="420.0" xml:space="preserve">CSS3D_URL</text>
+      <text x="81.6" y="480.0" xml:space="preserve">ARTS</text>
+      <text x="72.0" y="700.0" xml:space="preserve">mkdirSync</text>
+      <text x="360.0" y="700.0" xml:space="preserve">true</text>
+      <text x="792.0" y="1120.0" xml:space="preserve">n</text>
+      <text x="792.0" y="1140.0" xml:space="preserve">n</text>
+      <text x="446.4" y="1440.0" xml:space="preserve">CSS3D_URL</text>
+      <text x="532.8" y="1500.0" xml:space="preserve">__CALM_JSON__</text>
+      <text x="427.2" y="1520.0" xml:space="preserve">ARTS</text>
+      <text x="600.0" y="1660.0" xml:space="preserve">en</text>
+      <text x="254.4" y="1740.0" xml:space="preserve">__CALM_JSON__</text>
+      <text x="72.0" y="1780.0" xml:space="preserve">mkdirSync</text>
+      <text x="379.2" y="1780.0" xml:space="preserve">true</text>
+      <animate attributeName="opacity" values="0;1;1;0.45;0.45" keyTimes="0;0.08;0.6;0.85;1" dur="12s" begin="-0.69s" repeatCount="indefinite"/>
+    </g>
+    <g class="cauce-rare" fill="#dec85e">
+      <text x="283.2" y="400.0" xml:space="preserve">unpkg</text>
+      <text x="283.2" y="420.0" xml:space="preserve">unpkg</text>
+      <text x="254.4" y="700.0" xml:space="preserve">recursive</text>
+      <text x="532.8" y="1280.0" xml:space="preserve">system_status</text>
+      <text x="388.8" y="1320.0" xml:space="preserve">system_status</text>
+      <text x="734.4" y="1320.0" xml:space="preserve">py</text>
+      <text x="964.8" y="1320.0" xml:space="preserve">py</text>
+      <text x="177.6" y="1420.0" xml:space="preserve">await</text>
+      <text x="273.6" y="1440.0" xml:space="preserve">await</text>
+      <text x="254.4" y="1520.0" xml:space="preserve">of</text>
+      <text x="283.2" y="1520.0" xml:space="preserve">Object</text>
+      <text x="254.4" y="1640.0" xml:space="preserve">of</text>
+      <text x="283.2" y="1640.0" xml:space="preserve">Object</text>
+      <text x="273.6" y="1780.0" xml:space="preserve">recursive</text>
+      <animate attributeName="opacity" values="0;1;1;0.45;0.45" keyTimes="0;0.08;0.6;0.85;1" dur="12s" begin="-2.21s" repeatCount="indefinite"/>
+    </g>
+    <g class="cauce-rare" fill="#ded65e">
+      <text x="609.6" y="140.0" xml:space="preserve">se</text>
+      <text x="686.4" y="160.0" xml:space="preserve">se</text>
+      <text x="81.6" y="400.0" xml:space="preserve">THREE_URL</text>
+      <text x="110.4" y="680.0" xml:space="preserve">existsSync</text>
+      <text x="350.4" y="680.0" xml:space="preserve">Promise</text>
+      <text x="148.8" y="720.0" xml:space="preserve">Promise</text>
+      <text x="225.6" y="920.0" xml:space="preserve">d</text>
+      <text x="369.6" y="920.0" xml:space="preserve">d</text>
+      <text x="158.4" y="1140.0" xml:space="preserve">CSS3DObject</text>
+      <text x="292.8" y="1140.0" xml:space="preserve">CSS3DObject</text>
+      <text x="120.0" y="1300.0" xml:space="preserve">existsSync</text>
+      <text x="350.4" y="1420.0" xml:space="preserve">THREE_URL</text>
+      <text x="43.2" y="1520.0" xml:space="preserve">for</text>
+      <text x="350.4" y="1520.0" xml:space="preserve">entries</text>
+      <text x="43.2" y="1640.0" xml:space="preserve">for</text>
+      <text x="350.4" y="1640.0" xml:space="preserve">entries</text>
+      <animate attributeName="opacity" values="0;1;1;0.45;0.45" keyTimes="0;0.08;0.6;0.85;1" dur="12s" begin="-0.90s" repeatCount="indefinite"/>
+    </g>
+    <g class="cauce-recurrent" fill="#56d27f">
+      <text x="254.4" y="160.0" xml:space="preserve">cache</text>
+      <text x="81.6" y="320.0" xml:space="preserve">CACHE</text>
+      <text x="331.2" y="320.0" xml:space="preserve">cache</text>
+      <text x="24.0" y="640.0" xml:space="preserve">function</text>
+      <text x="264.0" y="660.0" xml:space="preserve">CACHE</text>
+      <text x="168.0" y="700.0" xml:space="preserve">CACHE</text>
+      <text x="110.4" y="720.0" xml:space="preserve">new</text>
+      <text x="158.4" y="760.0" xml:space="preserve">statusCode</text>
+      <text x="408.0" y="760.0" xml:space="preserve">statusCode</text>
+      <text x="628.8" y="780.0" xml:space="preserve">on</text>
+      <text x="81.6" y="840.0" xml:space="preserve">function</text>
+      <text x="158.4" y="860.0" xml:space="preserve">statusCode</text>
+      <text x="484.8" y="860.0" xml:space="preserve">new</text>
+      <text x="792.0" y="860.0" xml:space="preserve">statusCode</text>
+      <text x="139.2" y="880.0" xml:space="preserve">body</text>
+      <text x="120.0" y="920.0" xml:space="preserve">on</text>
+      <text x="292.8" y="920.0" xml:space="preserve">body</text>
+      <text x="120.0" y="940.0" xml:space="preserve">on</text>
+      <text x="513.6" y="940.0" xml:space="preserve">body</text>
+      <text x="657.6" y="940.0" xml:space="preserve">body</text>
+      <text x="91.2" y="980.0" xml:space="preserve">on</text>
+      <text x="24.0" y="1060.0" xml:space="preserve">function</text>
+      <text x="206.4" y="1060.0" xml:space="preserve">mjs</text>
+      <text x="120.0" y="1080.0" xml:space="preserve">mjs</text>
+      <text x="129.6" y="1120.0" xml:space="preserve">function</text>
+      <text x="81.6" y="1200.0" xml:space="preserve">function</text>
+      <text x="667.2" y="1280.0" xml:space="preserve">json</text>
+      <text x="120.0" y="1320.0" xml:space="preserve">new</text>
+      <text x="523.2" y="1320.0" xml:space="preserve">json</text>
+      <text x="43.2" y="1380.0" xml:space="preserve">JSON</text>
+      <text x="696.0" y="1440.0" xml:space="preserve">mjs</text>
+      <text x="504.0" y="1460.0" xml:space="preserve">new</text>
+      <text x="398.4" y="1580.0" xml:space="preserve">new</text>
+      <text x="360.0" y="1660.0" xml:space="preserve">new</text>
+      <text x="571.2" y="1740.0" xml:space="preserve">new</text>
+      <animate attributeName="opacity" values="0;1;1" keyTimes="0;0.08;1" dur="12s" begin="-1.00s" repeatCount="indefinite"/>
+      <animate attributeName="fill" values="#56d27f;#56d28a;#56d2b5;#56d27f" dur="15s" begin="-4s" repeatCount="indefinite"/>
+    </g>
+    <g class="cauce-recurrent" fill="#56d28a">
+      <text x="52.8" y="60.0" xml:space="preserve">del</text>
+      <text x="283.2" y="60.0" xml:space="preserve">dist</text>
+      <text x="532.8" y="160.0" xml:space="preserve">dist</text>
+      <text x="196.8" y="300.0" xml:space="preserve">resolve</text>
+      <text x="427.2" y="340.0" xml:space="preserve">dist</text>
+      <text x="110.4" y="460.0" xml:space="preserve">del</text>
+      <text x="283.2" y="460.0" xml:space="preserve">del</text>
+      <text x="196.8" y="500.0" xml:space="preserve">projects</text>
+      <text x="206.4" y="520.0" xml:space="preserve">projects</text>
+      <text x="235.2" y="540.0" xml:space="preserve">projects</text>
+      <text x="206.4" y="560.0" xml:space="preserve">projects</text>
+      <text x="196.8" y="580.0" xml:space="preserve">projects</text>
+      <text x="283.2" y="680.0" xml:space="preserve">return</text>
+      <text x="427.2" y="680.0" xml:space="preserve">resolve</text>
+      <text x="724.8" y="680.0" xml:space="preserve">utf8</text>
+      <text x="43.2" y="720.0" xml:space="preserve">return</text>
+      <text x="235.2" y="720.0" xml:space="preserve">resolve</text>
+      <text x="100.8" y="780.0" xml:space="preserve">return</text>
+      <text x="216.0" y="840.0" xml:space="preserve">r</text>
+      <text x="139.2" y="860.0" xml:space="preserve">r</text>
+      <text x="350.4" y="860.0" xml:space="preserve">return</text>
+      <text x="772.8" y="860.0" xml:space="preserve">r</text>
+      <text x="100.8" y="880.0" xml:space="preserve">let</text>
+      <text x="100.8" y="900.0" xml:space="preserve">r</text>
+      <text x="244.8" y="900.0" xml:space="preserve">utf8</text>
+      <text x="100.8" y="920.0" xml:space="preserve">r</text>
+      <text x="100.8" y="940.0" xml:space="preserve">r</text>
+      <text x="580.8" y="940.0" xml:space="preserve">resolve</text>
+      <text x="43.2" y="1080.0" xml:space="preserve">let</text>
+      <text x="244.8" y="1080.0" xml:space="preserve">import</text>
+      <text x="43.2" y="1120.0" xml:space="preserve">return</text>
+      <text x="43.2" y="1220.0" xml:space="preserve">let</text>
+      <text x="638.4" y="1220.0" xml:space="preserve">utf8</text>
+      <text x="196.8" y="1260.0" xml:space="preserve">del</text>
+      <text x="446.4" y="1260.0" xml:space="preserve">dist</text>
+      <text x="456.0" y="1280.0" xml:space="preserve">dist</text>
+      <text x="340.8" y="1320.0" xml:space="preserve">dist</text>
+      <text x="427.2" y="1360.0" xml:space="preserve">utf8</text>
+      <text x="100.8" y="1440.0" xml:space="preserve">css3d</text>
+      <text x="139.2" y="1460.0" xml:space="preserve">import</text>
+      <text x="369.6" y="1460.0" xml:space="preserve">css3d</text>
+      <text x="657.6" y="1460.0" xml:space="preserve">CSS3D</text>
+      <text x="763.2" y="1460.0" xml:space="preserve">import</text>
+      <text x="187.2" y="1500.0" xml:space="preserve">__THREE__</text>
+      <text x="465.6" y="1500.0" xml:space="preserve">css3d</text>
+      <text x="206.4" y="1520.0" xml:space="preserve">rel</text>
+      <text x="312.0" y="1540.0" xml:space="preserve">rel</text>
+      <text x="369.6" y="1560.0" xml:space="preserve">utf8</text>
+      <text x="494.4" y="1580.0" xml:space="preserve">rel</text>
+      <text x="72.0" y="1720.0" xml:space="preserve">__THREE__</text>
+      <text x="648.0" y="1720.0" xml:space="preserve">__THREE__</text>
+      <animate attributeName="opacity" values="0;1;1" keyTimes="0;0.08;1" dur="12s" begin="-0.21s" repeatCount="indefinite"/>
+      <animate attributeName="fill" values="#56d28a;#56d295;#56d27f;#56d28a" dur="8s" begin="-6s" repeatCount="indefinite"/>
+    </g>
+    <g class="cauce-recurrent" fill="#56d295">
+      <text x="331.2" y="60.0" xml:space="preserve">sala3d</text>
+      <text x="225.6" y="120.0" xml:space="preserve">sala3d</text>
+      <text x="177.6" y="160.0" xml:space="preserve">sala3d</text>
+      <text x="129.6" y="200.0" xml:space="preserve">require</text>
+      <text x="148.8" y="220.0" xml:space="preserve">require</text>
+      <text x="158.4" y="240.0" xml:space="preserve">require</text>
+      <text x="81.6" y="280.0" xml:space="preserve">HERE</text>
+      <text x="273.6" y="300.0" xml:space="preserve">HERE</text>
+      <text x="254.4" y="320.0" xml:space="preserve">HERE</text>
+      <text x="81.6" y="340.0" xml:space="preserve">OUT_DIR</text>
+      <text x="235.2" y="360.0" xml:space="preserve">OUT_DIR</text>
+      <text x="331.2" y="360.0" xml:space="preserve">sala3d</text>
+      <text x="628.8" y="400.0" xml:space="preserve">min</text>
+      <text x="100.8" y="660.0" xml:space="preserve">file</text>
+      <text x="216.0" y="680.0" xml:space="preserve">file</text>
+      <text x="657.6" y="680.0" xml:space="preserve">file</text>
+      <text x="456.0" y="940.0" xml:space="preserve">file</text>
+      <text x="187.2" y="1100.0" xml:space="preserve">export</text>
+      <text x="398.4" y="1220.0" xml:space="preserve">HERE</text>
+      <text x="523.2" y="1420.0" xml:space="preserve">min</text>
+      <text x="206.4" y="1460.0" xml:space="preserve">export</text>
+      <text x="830.4" y="1460.0" xml:space="preserve">export</text>
+      <text x="158.4" y="1520.0" xml:space="preserve">tok</text>
+      <text x="110.4" y="1600.0" xml:space="preserve">tok</text>
+      <text x="158.4" y="1640.0" xml:space="preserve">tok</text>
+      <text x="244.8" y="1660.0" xml:space="preserve">tok</text>
+      <text x="763.2" y="1660.0" xml:space="preserve">tok</text>
+      <text x="235.2" y="1680.0" xml:space="preserve">tok</text>
+      <text x="504.0" y="1720.0" xml:space="preserve">min</text>
+      <text x="168.0" y="1780.0" xml:space="preserve">OUT_DIR</text>
+      <animate attributeName="opacity" values="0;1;1" keyTimes="0;0.08;1" dur="12s" begin="-0.32s" repeatCount="indefinite"/>
+      <animate attributeName="fill" values="#56d295;#56d29f;#56d28a;#56d295" dur="13s" begin="-3s" repeatCount="indefinite"/>
+    </g>
+    <g class="cauce-recurrent" fill="#56d29f">
+      <text x="81.6" y="240.0" xml:space="preserve">https</text>
+      <text x="244.8" y="240.0" xml:space="preserve">https</text>
+      <text x="206.4" y="400.0" xml:space="preserve">https</text>
+      <text x="206.4" y="420.0" xml:space="preserve">https</text>
+      <text x="283.2" y="500.0" xml:space="preserve">tapiz</text>
+      <text x="292.8" y="520.0" xml:space="preserve">tapiz</text>
+      <text x="321.6" y="540.0" xml:space="preserve">tapiz</text>
+      <text x="292.8" y="560.0" xml:space="preserve">tapiz</text>
+      <text x="283.2" y="580.0" xml:space="preserve">tapiz</text>
+      <text x="110.4" y="640.0" xml:space="preserve">fetchCached</text>
+      <text x="321.6" y="720.0" xml:space="preserve">reject</text>
+      <text x="62.4" y="740.0" xml:space="preserve">https</text>
+      <text x="168.0" y="780.0" xml:space="preserve">https</text>
+      <text x="532.8" y="780.0" xml:space="preserve">pipe</text>
+      <text x="744.0" y="780.0" xml:space="preserve">reject</text>
+      <text x="81.6" y="820.0" xml:space="preserve">pipe</text>
+      <text x="168.0" y="840.0" xml:space="preserve">pipe</text>
+      <text x="417.6" y="860.0" xml:space="preserve">reject</text>
+      <text x="206.4" y="980.0" xml:space="preserve">reject</text>
+      <text x="62.4" y="1320.0" xml:space="preserve">throw</text>
+      <text x="235.2" y="1420.0" xml:space="preserve">fetchCached</text>
+      <text x="331.2" y="1440.0" xml:space="preserve">fetchCached</text>
+      <text x="446.4" y="1460.0" xml:space="preserve">throw</text>
+      <text x="340.8" y="1580.0" xml:space="preserve">throw</text>
+      <text x="302.4" y="1660.0" xml:space="preserve">throw</text>
+      <text x="513.6" y="1740.0" xml:space="preserve">throw</text>
+      <animate attributeName="opacity" values="0;1;1" keyTimes="0;0.08;1" dur="12s" begin="-1.39s" repeatCount="indefinite"/>
+      <animate attributeName="fill" values="#56d29f;#56d2aa;#56d295;#56d29f" dur="8s" begin="-1s" repeatCount="indefinite"/>
+    </g>
+    <g class="cauce-recurrent" fill="#56d2aa">
+      <text x="446.4" y="40.0" xml:space="preserve">template</text>
+      <text x="436.8" y="400.0" xml:space="preserve">0</text>
+      <text x="494.4" y="400.0" xml:space="preserve">0</text>
+      <text x="436.8" y="420.0" xml:space="preserve">0</text>
+      <text x="494.4" y="420.0" xml:space="preserve">0</text>
+      <text x="734.4" y="420.0" xml:space="preserve">CSS3DRenderer</text>
+      <text x="321.6" y="460.0" xml:space="preserve">template</text>
+      <text x="225.6" y="640.0" xml:space="preserve">url</text>
+      <text x="532.8" y="680.0" xml:space="preserve">readFileSync</text>
+      <text x="158.4" y="740.0" xml:space="preserve">url</text>
+      <text x="580.8" y="860.0" xml:space="preserve">url</text>
+      <text x="494.4" y="1140.0" xml:space="preserve">CSS3DRenderer</text>
+      <text x="648.0" y="1140.0" xml:space="preserve">CSS3DRenderer</text>
+      <text x="177.6" y="1220.0" xml:space="preserve">readFileSync</text>
+      <text x="465.6" y="1220.0" xml:space="preserve">template</text>
+      <text x="148.8" y="1260.0" xml:space="preserve">calm</text>
+      <text x="100.8" y="1280.0" xml:space="preserve">calmPath</text>
+      <text x="225.6" y="1300.0" xml:space="preserve">calmPath</text>
+      <text x="100.8" y="1360.0" xml:space="preserve">calm</text>
+      <text x="196.8" y="1360.0" xml:space="preserve">readFileSync</text>
+      <text x="321.6" y="1360.0" xml:space="preserve">calmPath</text>
+      <text x="148.8" y="1380.0" xml:space="preserve">calm</text>
+      <text x="561.6" y="1440.0" xml:space="preserve">CSS3DRenderer</text>
+      <text x="676.8" y="1500.0" xml:space="preserve">calm</text>
+      <text x="206.4" y="1560.0" xml:space="preserve">readFileSync</text>
+      <text x="628.8" y="1660.0" xml:space="preserve">template</text>
+      <animate attributeName="opacity" values="0;1;1" keyTimes="0;0.08;1" dur="12s" begin="-0.12s" repeatCount="indefinite"/>
+      <animate attributeName="fill" values="#56d2aa;#56d2b5;#56d29f;#56d2aa" dur="9s" begin="-1s" repeatCount="indefinite"/>
+    </g>
+    <g class="cauce-recurrent" fill="#56d2b5">
+      <text x="350.4" y="120.0" xml:space="preserve">js</text>
+      <text x="532.8" y="140.0" xml:space="preserve">js</text>
+      <text x="580.8" y="160.0" xml:space="preserve">no</text>
+      <text x="81.6" y="300.0" xml:space="preserve">ROOT</text>
+      <text x="273.6" y="340.0" xml:space="preserve">ROOT</text>
+      <text x="81.6" y="360.0" xml:space="preserve">OUT</text>
+      <text x="667.2" y="400.0" xml:space="preserve">js</text>
+      <text x="868.8" y="420.0" xml:space="preserve">js</text>
+      <text x="340.8" y="500.0" xml:space="preserve">piezas_curadas</text>
+      <text x="350.4" y="520.0" xml:space="preserve">piezas_curadas</text>
+      <text x="379.2" y="540.0" xml:space="preserve">piezas_curadas</text>
+      <text x="350.4" y="560.0" xml:space="preserve">piezas_curadas</text>
+      <text x="340.8" y="580.0" xml:space="preserve">piezas_curadas</text>
+      <text x="206.4" y="740.0" xml:space="preserve">res</text>
+      <text x="120.0" y="760.0" xml:space="preserve">res</text>
+      <text x="369.6" y="760.0" xml:space="preserve">res</text>
+      <text x="264.0" y="780.0" xml:space="preserve">res</text>
+      <text x="129.6" y="820.0" xml:space="preserve">res</text>
+      <text x="628.8" y="1260.0" xml:space="preserve">no</text>
+      <text x="302.4" y="1280.0" xml:space="preserve">ROOT</text>
+      <text x="561.6" y="1420.0" xml:space="preserve">js</text>
+      <text x="100.8" y="1500.0" xml:space="preserve">repl</text>
+      <text x="254.4" y="1540.0" xml:space="preserve">ROOT</text>
+      <text x="571.2" y="1580.0" xml:space="preserve">no</text>
+      <text x="62.4" y="1600.0" xml:space="preserve">repl</text>
+      <text x="427.2" y="1640.0" xml:space="preserve">repl</text>
+      <text x="542.4" y="1720.0" xml:space="preserve">js</text>
+      <text x="206.4" y="1800.0" xml:space="preserve">OUT</text>
+      <text x="216.0" y="1820.0" xml:space="preserve">OUT</text>
+      <text x="379.2" y="1820.0" xml:space="preserve">OUT</text>
+      <animate attributeName="opacity" values="0;1;1" keyTimes="0;0.08;1" dur="12s" begin="-0.71s" repeatCount="indefinite"/>
+      <animate attributeName="fill" values="#56d2b5;#56d27f;#56d2aa;#56d2b5" dur="12s" begin="-4s" repeatCount="indefinite"/>
+    </g>
+    <g class="cauce-structural" fill="#407251">
+      <text x="532.8" y="40.0" xml:space="preserve">html</text>
+      <text x="398.4" y="60.0" xml:space="preserve">html</text>
+      <text x="398.4" y="360.0" xml:space="preserve">html</text>
+      <text x="667.2" y="780.0" xml:space="preserve">error</text>
+      <text x="523.2" y="860.0" xml:space="preserve">Error</text>
+      <text x="129.6" y="980.0" xml:space="preserve">error</text>
+      <text x="81.6" y="1080.0" xml:space="preserve">s</text>
+      <text x="312.0" y="1080.0" xml:space="preserve">s</text>
+      <text x="427.2" y="1080.0" xml:space="preserve">s</text>
+      <text x="494.4" y="1080.0" xml:space="preserve">s</text>
+      <text x="43.2" y="1100.0" xml:space="preserve">s</text>
+      <text x="81.6" y="1100.0" xml:space="preserve">s</text>
+      <text x="254.4" y="1100.0" xml:space="preserve">s</text>
+      <text x="840.0" y="1120.0" xml:space="preserve">s</text>
+      <text x="81.6" y="1220.0" xml:space="preserve">html</text>
+      <text x="552.0" y="1220.0" xml:space="preserve">html</text>
+      <text x="158.4" y="1320.0" xml:space="preserve">Error</text>
+      <text x="110.4" y="1460.0" xml:space="preserve">s</text>
+      <text x="542.4" y="1460.0" xml:space="preserve">Error</text>
+      <text x="436.8" y="1580.0" xml:space="preserve">Error</text>
+      <text x="110.4" y="1660.0" xml:space="preserve">html</text>
+      <text x="398.4" y="1660.0" xml:space="preserve">Error</text>
+      <text x="62.4" y="1680.0" xml:space="preserve">html</text>
+      <text x="129.6" y="1680.0" xml:space="preserve">html</text>
+      <text x="446.4" y="1740.0" xml:space="preserve">html</text>
+      <text x="609.6" y="1740.0" xml:space="preserve">Error</text>
+      <text x="254.4" y="1800.0" xml:space="preserve">html</text>
+      <text x="72.0" y="1840.0" xml:space="preserve">html</text>
+      <text x="292.8" y="1900.0" xml:space="preserve">error</text>
+      <animate attributeName="opacity" values="0;1;1" keyTimes="0;0.08;1" dur="12s" begin="-0.14s" repeatCount="indefinite"/>
+      <animate attributeName="fill" values="#407251;#407255;#407263;#407251" dur="15s" begin="-4s" repeatCount="indefinite"/>
+    </g>
+    <g class="cauce-structural" fill="#407258">
+      <text x="24.0" y="200.0" xml:space="preserve">const</text>
+      <text x="81.6" y="200.0" xml:space="preserve">fs</text>
+      <text x="216.0" y="200.0" xml:space="preserve">fs</text>
+      <text x="24.0" y="220.0" xml:space="preserve">const</text>
+      <text x="24.0" y="240.0" xml:space="preserve">const</text>
+      <text x="24.0" y="280.0" xml:space="preserve">const</text>
+      <text x="24.0" y="300.0" xml:space="preserve">const</text>
+      <text x="24.0" y="320.0" xml:space="preserve">const</text>
+      <text x="24.0" y="340.0" xml:space="preserve">const</text>
+      <text x="24.0" y="360.0" xml:space="preserve">const</text>
+      <text x="24.0" y="400.0" xml:space="preserve">const</text>
+      <text x="24.0" y="420.0" xml:space="preserve">const</text>
+      <text x="24.0" y="480.0" xml:space="preserve">const</text>
+      <text x="686.4" y="500.0" xml:space="preserve">svg</text>
+      <text x="724.8" y="520.0" xml:space="preserve">svg</text>
+      <text x="667.2" y="540.0" xml:space="preserve">svg</text>
+      <text x="628.8" y="560.0" xml:space="preserve">svg</text>
+      <text x="600.0" y="580.0" xml:space="preserve">svg</text>
+      <text x="43.2" y="660.0" xml:space="preserve">const</text>
+      <text x="81.6" y="680.0" xml:space="preserve">fs</text>
+      <text x="504.0" y="680.0" xml:space="preserve">fs</text>
+      <text x="43.2" y="700.0" xml:space="preserve">fs</text>
+      <text x="292.8" y="940.0" xml:space="preserve">fs</text>
+      <text x="148.8" y="1220.0" xml:space="preserve">fs</text>
+      <text x="43.2" y="1280.0" xml:space="preserve">const</text>
+      <text x="91.2" y="1300.0" xml:space="preserve">fs</text>
+      <text x="43.2" y="1360.0" xml:space="preserve">const</text>
+      <text x="168.0" y="1360.0" xml:space="preserve">fs</text>
+      <text x="43.2" y="1420.0" xml:space="preserve">const</text>
+      <text x="43.2" y="1440.0" xml:space="preserve">const</text>
+      <text x="43.2" y="1500.0" xml:space="preserve">const</text>
+      <text x="91.2" y="1520.0" xml:space="preserve">const</text>
+      <text x="62.4" y="1540.0" xml:space="preserve">const</text>
+      <text x="62.4" y="1560.0" xml:space="preserve">const</text>
+      <text x="120.0" y="1560.0" xml:space="preserve">svg</text>
+      <text x="177.6" y="1560.0" xml:space="preserve">fs</text>
+      <text x="110.4" y="1580.0" xml:space="preserve">svg</text>
+      <text x="273.6" y="1580.0" xml:space="preserve">svg</text>
+      <text x="667.2" y="1580.0" xml:space="preserve">SVG</text>
+      <text x="177.6" y="1600.0" xml:space="preserve">svg</text>
+      <text x="91.2" y="1640.0" xml:space="preserve">const</text>
+      <text x="43.2" y="1780.0" xml:space="preserve">fs</text>
+      <text x="43.2" y="1800.0" xml:space="preserve">fs</text>
+      <text x="264.0" y="1820.0" xml:space="preserve">fs</text>
+      <text x="196.8" y="1840.0" xml:space="preserve">svg</text>
+      <animate attributeName="opacity" values="0;1;1" keyTimes="0;0.08;1" dur="12s" begin="-1.21s" repeatCount="indefinite"/>
+      <animate attributeName="fill" values="#407258;#40725c;#407255;#407258" dur="12s" begin="-10s" repeatCount="indefinite"/>
+    </g>
+    <g class="cauce-structural" fill="#40725c">
+      <text x="225.6" y="60.0" xml:space="preserve">tools</text>
+      <text x="168.0" y="120.0" xml:space="preserve">tools</text>
+      <text x="120.0" y="160.0" xml:space="preserve">tools</text>
+      <text x="475.2" y="160.0" xml:space="preserve">tools</text>
+      <text x="206.4" y="320.0" xml:space="preserve">join</text>
+      <text x="225.6" y="340.0" xml:space="preserve">join</text>
+      <text x="340.8" y="340.0" xml:space="preserve">tools</text>
+      <text x="187.2" y="360.0" xml:space="preserve">join</text>
+      <text x="216.0" y="660.0" xml:space="preserve">join</text>
+      <text x="43.2" y="680.0" xml:space="preserve">if</text>
+      <text x="81.6" y="760.0" xml:space="preserve">if</text>
+      <text x="100.8" y="860.0" xml:space="preserve">if</text>
+      <text x="350.4" y="1220.0" xml:space="preserve">join</text>
+      <text x="388.8" y="1260.0" xml:space="preserve">tools</text>
+      <text x="254.4" y="1280.0" xml:space="preserve">join</text>
+      <text x="369.6" y="1280.0" xml:space="preserve">tools</text>
+      <text x="43.2" y="1300.0" xml:space="preserve">if</text>
+      <text x="283.2" y="1320.0" xml:space="preserve">tools</text>
+      <text x="763.2" y="1320.0" xml:space="preserve">tools</text>
+      <text x="43.2" y="1460.0" xml:space="preserve">if</text>
+      <text x="206.4" y="1540.0" xml:space="preserve">join</text>
+      <text x="62.4" y="1580.0" xml:space="preserve">if</text>
+      <text x="62.4" y="1660.0" xml:space="preserve">if</text>
+      <text x="283.2" y="1680.0" xml:space="preserve">join</text>
+      <text x="43.2" y="1740.0" xml:space="preserve">if</text>
+      <animate attributeName="opacity" values="0;1;1" keyTimes="0;0.08;1" dur="12s" begin="-0.27s" repeatCount="indefinite"/>
+      <animate attributeName="fill" values="#40725c;#407260;#407258;#40725c" dur="14s" begin="-1s" repeatCount="indefinite"/>
+    </g>
+    <g class="cauce-structural" fill="#407260">
+      <text x="475.2" y="140.0" xml:space="preserve">three</text>
+      <text x="379.2" y="400.0" xml:space="preserve">three</text>
+      <text x="571.2" y="400.0" xml:space="preserve">three</text>
+      <text x="379.2" y="420.0" xml:space="preserve">three</text>
+      <text x="523.2" y="1080.0" xml:space="preserve">three</text>
+      <text x="724.8" y="1120.0" xml:space="preserve">THREE</text>
+      <text x="100.8" y="1420.0" xml:space="preserve">three</text>
+      <text x="465.6" y="1420.0" xml:space="preserve">three</text>
+      <text x="292.8" y="1500.0" xml:space="preserve">three</text>
+      <text x="446.4" y="1720.0" xml:space="preserve">three</text>
+      <animate attributeName="opacity" values="0;1;1" keyTimes="0;0.08;1" dur="12s" begin="-0.86s" repeatCount="indefinite"/>
+      <animate attributeName="fill" values="#407260;#407263;#40725c;#407260" dur="15s" begin="-10s" repeatCount="indefinite"/>
+    </g>
+    <g class="cauce-structural" fill="#407263">
+      <text x="81.6" y="220.0" xml:space="preserve">path</text>
+      <text x="235.2" y="220.0" xml:space="preserve">path</text>
+      <text x="148.8" y="300.0" xml:space="preserve">path</text>
+      <text x="158.4" y="320.0" xml:space="preserve">path</text>
+      <text x="177.6" y="340.0" xml:space="preserve">path</text>
+      <text x="139.2" y="360.0" xml:space="preserve">path</text>
+      <text x="168.0" y="660.0" xml:space="preserve">path</text>
+      <text x="302.4" y="1220.0" xml:space="preserve">path</text>
+      <text x="206.4" y="1280.0" xml:space="preserve">path</text>
+      <text x="158.4" y="1540.0" xml:space="preserve">path</text>
+      <animate attributeName="opacity" values="0;1;1" keyTimes="0;0.08;1" dur="12s" begin="-1.31s" repeatCount="indefinite"/>
+      <animate attributeName="fill" values="#407263;#407251;#407260;#407263" dur="11s" begin="-2s" repeatCount="indefinite"/>
+    </g>
+  </g>
+</svg>

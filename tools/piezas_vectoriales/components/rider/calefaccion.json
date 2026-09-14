@@ -1,0 +1,1 @@
+[{ "type": "rect", "x": 0, "y": 0, "w": 110, "h": 90, "radius": 18, "fill": "orange", "stroke": "line", "stroke_width": 3, "opacity": 0.85 },{ "type": "text", "content": "Calor", "x": 16, "y": 28, "size": 22, "fill": "white", "weight": "bold" }]

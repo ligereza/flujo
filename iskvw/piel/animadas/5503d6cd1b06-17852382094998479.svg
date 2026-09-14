@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" data-name="5503d6cd1b06-17852382094998479">
+<style>
+.c0{animation:k_girar 1.2s linear infinite}
+@keyframes k_girar{to{transform:rotate(360deg)}}
+</style>
+<rect width="120" height="120" fill="#0b1030"/>
+<g id="capa-0-protagonista" transform="translate(60,58)" data-rol="protagonista" data-gesto="girar" data-ritmo="1.2s" data-figura="red"><title>protagonista - red</title><g class="c0"><g transform="scale(22)"><line x1="0" y1="0" x2="-0.72" y2="-0.52" stroke="#8fe0b0" stroke-width=".055" opacity=".7"/><line x1="0" y1="0" x2="0.72" y2="-0.52" stroke="#8fe0b0" stroke-width=".055" opacity=".7"/><line x1="0" y1="0" x2="-0.72" y2="0.52" stroke="#8fe0b0" stroke-width=".055" opacity=".7"/><line x1="0" y1="0" x2="0.72" y2="0.52" stroke="#8fe0b0" stroke-width=".055" opacity=".7"/><line x1="0" y1="0" x2="0" y2="-0.88" stroke="#8fe0b0" stroke-width=".055" opacity=".7"/><line x1="0" y1="0" x2="0" y2="0.88" stroke="#8fe0b0" stroke-width=".055" opacity=".7"/><circle cx="0" cy="0" r="0.19" fill="#d7ff2e"/><circle cx="-0.72" cy="-0.52" r="0.12" fill="#8fe0b0"/><circle cx="0.72" cy="-0.52" r="0.12" fill="#8fe0b0"/><circle cx="-0.72" cy="0.52" r="0.12" fill="#8fe0b0"/><circle cx="0.72" cy="0.52" r="0.12" fill="#8fe0b0"/><circle cx="0" cy="-0.88" r="0.12" fill="#8fe0b0"/><circle cx="0" cy="0.88" r="0.12" fill="#8fe0b0"/></g></g></g>
+<g id="capa-1-lado_izq" transform="translate(27,58)" data-rol="lado_izq" data-gesto="quieto" data-ritmo="4s" data-figura="anillo"><title>lado_izq - anillo</title><g class="c1"><g transform="scale(19)"><circle r=".82" fill="none" stroke="#8fe0b0" stroke-width=".16"/></g></g></g>
+</svg>

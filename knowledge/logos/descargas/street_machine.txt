@@ -1,0 +1,6 @@
+Marca: Street Machine (productora eventos Chile)
+Fuente: https://www.streetmachine.cl/ (og:image / Shopify CDN)
+URL directa: http://www.streetmachine.cl/cdn/shop/files/logo-black_1_61761f36-a4cd-42a6-a347-3368f07444e7.png?v=1763060141
+Como se encontro: WebSearch "Street Machine productora eventos Chile logo" -> streetmachine.cl (sitio oficial) -> scrape og:image.
+Fecha: 2026-07-24
+Tier: sitio oficial

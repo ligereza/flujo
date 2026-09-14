@@ -1,0 +1,180 @@
+{
+ "schema": "mak-portfolio-format-v1",
+ "format_id": "F2-capacidad-barberia",
+ "family": "capacidad",
+ "vertical_grammar": "transformacion",
+ "title": "Capacidad · barberia",
+ "purpose": "Formato adversarial de generalizacion. No pertenece a este archivo: existe para probar que el mecanismo de ranuras sirve a un rubro con evidencia y permiso completamente distintos, sin tocar codigo. Si requiere una excepcion en el validador o en el renderizador, el mecanismo esta sobreajustado al caso audiovisual.",
+ "consumer": {
+  "kind": "cliente_comercial",
+  "examples": [
+   "cliente nuevo",
+   "local que contrata",
+   "marca de productos"
+  ],
+  "decision_it_supports": "reservar un servicio o contratar en un local",
+  "does_not_support": [
+   "acreditar autoria de un diseno",
+   "adjudicar un fondo"
+  ]
+ },
+ "language": "es",
+ "limits": {
+  "max_items_total": 20,
+  "max_bytes": 6000000,
+  "max_slots_rendered": 5
+ },
+ "declared_claims": [
+  "puedo",
+  "ocurrio"
+ ],
+ "forbidden_claims": [
+  "es_mio",
+  "significa"
+ ],
+ "forbidden_inferences": [
+  "una foto de resultado no prueba quien la ejecuto",
+  "un antes/despues sin fecha no prueba una secuencia",
+  "un cliente recurrente no autoriza mostrar su rostro"
+ ],
+ "slots": [
+  {
+   "slot_id": "tecnicas",
+   "title": "Que hago",
+   "count": {
+    "min": 3,
+    "max": 8
+   },
+   "claim": "puedo",
+   "layer": "process",
+   "min_state": "observed",
+   "min_permission": "unnamed",
+   "caption_grammar": "{technique} — {artifact_count} {scope_note}, {span}",
+   "allowed_caption_fields": [
+    "technique",
+    "artifact_count",
+    "span",
+    "tool",
+    "context_label",
+    "scope_note"
+   ],
+   "required": true,
+   "evidence_kinds": [
+    "before_after_pair",
+    "dated_photo",
+    "tool_inventory"
+   ],
+   "prefer_scope": "archive"
+  },
+  {
+   "slot_id": "escala",
+   "title": "A que escala",
+   "count": {
+    "min": 1,
+    "max": 4
+   },
+   "claim": "puedo",
+   "layer": "process",
+   "min_state": "observed",
+   "min_permission": "aggregate_only",
+   "caption_grammar": "{scale_metric}: {value}",
+   "allowed_caption_fields": [
+    "scale_metric",
+    "value",
+    "context_label"
+   ],
+   "required": true,
+   "evidence_kinds": [
+    "appointment_count",
+    "service_duration",
+    "recurrence_rate"
+   ],
+   "prefer_scope": "archive"
+  },
+  {
+   "slot_id": "consistencia",
+   "title": "Consistencia",
+   "count": {
+    "min": 1,
+    "max": 6
+   },
+   "claim": "puedo",
+   "layer": "process",
+   "min_state": "candidate",
+   "min_permission": "aggregate_only",
+   "caption_grammar": "{technique}: {value} en {span}",
+   "allowed_caption_fields": [
+    "technique",
+    "value",
+    "span"
+   ],
+   "required": true,
+   "evidence_kinds": [
+    "repeat_client_series",
+    "before_after_pair"
+   ]
+  },
+  {
+   "slot_id": "para_quien",
+   "title": "Donde trabaje",
+   "count": {
+    "min": 1,
+    "max": 6
+   },
+   "claim": "ocurrio",
+   "layer": "context",
+   "min_state": "candidate",
+   "min_permission": "unnamed",
+   "caption_grammar": "{context_label} — {role_note}",
+   "allowed_caption_fields": [
+    "context_label",
+    "role_note",
+    "year"
+   ],
+   "required": true,
+   "evidence_kinds": [
+    "venue_record",
+    "employment_span",
+    "dated_photo"
+   ]
+  },
+  {
+   "slot_id": "proceso",
+   "title": "Muestra de proceso",
+   "count": {
+    "min": 1,
+    "max": 4
+   },
+   "claim": "puedo",
+   "layer": "process",
+   "min_state": "observed",
+   "min_permission": "unnamed",
+   "caption_grammar": "{structure_note} · {artifact_kind}",
+   "allowed_caption_fields": [
+    "artifact_kind",
+    "structure_note",
+    "declared_input_count"
+   ],
+   "required": true,
+   "evidence_kinds": [
+    "before_during_after_sequence",
+    "tool_inventory"
+   ]
+  }
+ ],
+ "invalid_if": [
+  "una ranura obligatoria queda bajo su count minimo",
+  "una afirmacion excede su min_state declarado",
+  "un epigrafe usa un campo fuera de allowed_caption_fields",
+  "una pieza con permission=prohibited o aggregate_only aparece por caso",
+  "el documento afirma es_mio en cualquier ranura",
+  "un rostro identificable aparece sin permiso public"
+ ],
+ "control": {
+  "publication": false,
+  "submission": false,
+  "signed_document": false,
+  "authorship_claimed": false,
+  "training_permitted": false
+ }
+}

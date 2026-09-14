@@ -1,0 +1,1 @@
+[{ "type": "rect", "x": 0, "y": 0, "w": 300, "h": 120, "radius": 12, "fill": "paper", "stroke": "accent", "stroke_width": 4 },{ "type": "text", "content": "Mesa", "x": 82, "y": 36, "size": 30, "fill": "accent", "weight": "bold" }]

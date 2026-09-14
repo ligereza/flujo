@@ -1,0 +1,13 @@
+{
+  "_doc": "Contrato de cambios que el agente devuelve. Guardar como ~/Desktop/ai_illustrator/ops.json y correr el bridge en MODE=apply. 'target' = nombre de la capa/frame de texto (por eso hay que nombrar las capas). Colores en #RRGGBB. x/y en pt (mismos que state.json).",
+  "ops": [
+    { "op": "setText", "target": "titulo", "content": "POST FIESTA" },
+    { "op": "setSize", "target": "titulo", "size": 80 },
+    { "op": "setFill", "target": "titulo", "fill": "#FFD21F" },
+    { "op": "setFont", "target": "titulo", "font": "Arial-BoldMT" },
+    { "op": "move",    "target": "titulo", "x": 1000, "y": 470 },
+    { "op": "setText", "target": "descripcion", "content": "Nuevo parrafo completo aqui." },
+    { "op": "setText", "find": "WWW.", "content": "www.reduciendodano.cl", "_nota": "target por CONTENIDO actual (find): util cuando muchos frames comparten capa/nombre, ej. plantilla CAMBIOS" },
+    { "op": "addText", "name": "nota_nueva", "content": "Texto nuevo", "x": 200, "y": 2600, "size": 40, "font": "Arial-BoldMT", "fill": "#141414" }
+  ]
+}
