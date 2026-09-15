@@ -1,16 +1,15 @@
 # STATUS — FLUJO autonomo
 
-Fecha de corte: 2026-09-15T20:08:48-03:00 — separación venue 2D→3D
+Fecha de corte: 2026-09-15T20:17:40-03:00 — separación venue 2D→3D publicada
 
 ## Estado
 
 - Separacion completada y publicada en `https://github.com/ligereza/flujo.git`.
 - Commit de migracion: `e28038c9458ebc58699d3fc929c0a722414c8e35`.
-- El checkout local está deliberadamente sucio por esta corrección: el venue
-  2D, la geometría SCD y el visor 3D se mantienen dentro de `tools/`; no se
-  han mezclado con el portafolio ni se ha hecho push de estos cambios.
-- El worktree queda con 22 cambios rastreados y 3 no rastreados; el remoto
-  `origin/main` sigue 0/0 respecto del checkout local publicado.
+- El venue 2D, la geometría SCD y el visor 3D se mantienen dentro de `tools/`;
+  no se mezclan con el portafolio y están publicados en `main` como
+  `48ca1d4`.
+- El worktree está limpio y `origin/main` coincide 0/0 con el checkout local.
 - `main` es la unica rama permanente de este repositorio.
 - El remoto puede mostrar ramas temporales `dependabot/*` generadas por
   GitHub; no son ramas permanentes ni de dominio.
@@ -34,8 +33,9 @@ este checkout no depende de esa copia ni de una ruta local vecina.
 
 ## Verificacion local
 
-- `PYTHONPATH=src python -m pytest -o addopts='' -m flujo`: `1631 passed`;
-  los skips corresponden a dependencias o entornos no disponibles.
+- `PYTHONPATH=src python -m pytest -q -o addopts='' -m flujo`: `1572 passed`,
+  `59 skipped`, `202 deselected`; los skips corresponden a dependencias o
+  entornos no disponibles.
 - Hub `:8765`: ping, summary/topics RD, read-only context, RD panel, VJ/ISKVW
   context, dashboard y SVG respondieron correctamente.
 - La base RD local no se versiona. Para compartir la única proyección del host
