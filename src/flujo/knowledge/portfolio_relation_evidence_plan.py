@@ -30,9 +30,20 @@ def build_relation_evidence_plan(review_context: Mapping[str, Any]) -> dict[str,
     relation = review_context.get("relation")
     if not isinstance(project, Mapping) or not isinstance(relation, Mapping):
         raise ValueError("review_context_project_relation_invalid")
-    project_id = _text(project.get("project_id"), "project.project_id")
-    title = _text(project.get("title"), "project.title")
-    state = _text(project.get("state"), "project.state")
+    project_id_value = project.get("project_id")
+    title_value = project.get("title")
+    state_value = project.get("state")
+    unbound = project_id_value is None or not str(project_id_value).strip()
+    if unbound:
+        project_id = None
+        title = None
+        state = None
+    else:
+        project_id = _text(project_id_value, "project.project_id")
+        title = (_text(title_value, "project.title")
+                 if title_value is not None else None)
+        state = (_text(state_value, "project.state")
+                 if state_value is not None else None)
     unknowns = project.get("unknowns")
     evidence = project.get("evidence")
     if not isinstance(unknowns, list) or any(not isinstance(item, str) or not item.strip() for item in unknowns):
@@ -70,15 +81,18 @@ def build_relation_evidence_plan(review_context: Mapping[str, Any]) -> dict[str,
             "observed_evidence_count": len(observed),
         },
         "relation": {
-            "status": _text(relation.get("status"), "relation.status"),
+            "status": "unbound" if unbound else _text(
+                relation.get("status"), "relation.status"),
             "typed_relation_present": False,
             "selection_effect": "none",
             "evidence_refs": [],
         },
-        "requirements": requirements,
-        "observed_evidence": observed,
-        "unresolved_count": len(requirements),
-        "next_action": "human_review_relation_requirements_and_supply_source_refs",
+        "requirements": [] if unbound else requirements,
+        "observed_evidence": [] if unbound else observed,
+        "unresolved_count": 0 if unbound else len(requirements),
+        "next_action": ("select_project_id_before_planning_relation_evidence"
+                        if unbound else
+                        "human_review_relation_requirements_and_supply_source_refs"),
         "control": {
             "database_write": False,
             "decision_write": False,
@@ -110,14 +124,28 @@ def validate_relation_evidence_plan(payload: Mapping[str, Any]) -> bool:
     project = payload["project"]
     if set(project) != {"project_id", "title", "state", "unknown_count", "observed_evidence_count"}:
         raise ValueError("relation_evidence_plan_project_invalid")
-    for field in ("project_id", "title", "state"):
-        _text(project[field], f"project.{field}")
     for field in ("unknown_count", "observed_evidence_count"):
         if not isinstance(project[field], int) or project[field] < 0:
             raise ValueError(f"project.{field}_invalid")
     relation = payload["relation"]
-    if relation != {"status": "needs_evidence", "typed_relation_present": False, "selection_effect": "none", "evidence_refs": []}:
+    if not isinstance(relation, Mapping) or set(relation) != {
+        "status", "typed_relation_present", "selection_effect", "evidence_refs"
+    } or relation["status"] not in {"needs_evidence", "unbound"} \
+            or relation["typed_relation_present"] is not False \
+            or relation["selection_effect"] != "none" \
+            or relation["evidence_refs"] != []:
         raise ValueError("relation_evidence_plan_relation_invalid")
+    unbound = relation["status"] == "unbound"
+    if unbound:
+        if project["project_id"] is not None:
+            _text(project["project_id"], "project.project_id")
+        if project["title"] is not None or project["state"] is not None:
+            raise ValueError("relation_evidence_plan_unbound_project_invalid")
+        if project["unknown_count"] != 0 or project["observed_evidence_count"] != 0:
+            raise ValueError("relation_evidence_plan_unbound_counts_invalid")
+    else:
+        for field in ("project_id", "title", "state"):
+            _text(project[field], f"project.{field}")
     requirements = payload["requirements"]
     if not isinstance(requirements, list) or len(requirements) != project["unknown_count"]:
         raise ValueError("relation_evidence_plan_requirements_invalid")
