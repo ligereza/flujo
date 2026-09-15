@@ -1,14 +1,14 @@
 # STATUS — FLUJO autonomo
 
-Fecha de corte: 2026-09-15T20:18:56-03:00 — separación venue 2D→3D publicada
+Fecha de corte: 2026-09-15T20:20:41-03:00 — separación venue 2D→3D publicada
 
 ## Estado
 
 - Separacion completada y publicada en `https://github.com/ligereza/flujo.git`.
 - Commit de migracion: `e28038c9458ebc58699d3fc929c0a722414c8e35`.
 - El venue 2D, la geometría SCD y el visor 3D se mantienen dentro de `tools/`;
-  no se mezclan con el portafolio y están publicados en `main` como
-  `48ca1d4`.
+  no se mezclan con el portafolio y están publicados en `main`, verificado
+  contra `origin/main`.
 - El worktree está limpio y `origin/main` coincide 0/0 con el checkout local.
 - `main` es la unica rama permanente de este repositorio.
 - El remoto puede mostrar ramas temporales `dependabot/*` generadas por
@@ -20,8 +20,8 @@ Fecha de corte: 2026-09-15T20:18:56-03:00 — separación venue 2D→3D publicad
 - El prototipo SCD no es una piel: la cadena canónica es
   `tools/venue2d/referencia_plano_teatro.py` →
   `tools/venue_geometria_scd.py` → `data/venues/*.json` →
-  `tools/venue3d/index.html`. El estado publicado actualiza este contrato en
-  `f2be9c0`. Gaussian splat no está implementado y no se
+  `tools/venue3d/index.html`. El estado publicado actualiza este contrato y
+  Gaussian splat no está implementado ni se
   trata como escala métrica.
 - La proyeccion SQLite no se versiona en este repositorio. En la instalacion
   conjunta actual, FLUJO y XIO-RD deben usar `FLUJO_RD_DB=/home/mak/data/rd.db`;
