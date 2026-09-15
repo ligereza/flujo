@@ -155,7 +155,7 @@ def sembrar(ruta: Path) -> int:
 
 
 # --------------------------------------------------------------------------- geometria
-# The viewer's declared default edge budget (iskvw/piel/venue/index.html, TOPE).
+# The viewer's declared default edge budget (tools/venue3d/index.html, TOPE).
 # A venue over it still renders, but the viewer will crop it -- loudly. The
 # number lives here too so `geometria`/`validar` can say it BEFORE anyone opens
 # a browser.

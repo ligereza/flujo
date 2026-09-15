@@ -301,7 +301,7 @@ def rd_cultura_relations(root: Path) -> dict[str, Any]:
         "consumers": [
             {"name": "rd_panel", "path": "src/flujo/rd/panel.py"},
             {"name": "research_router", "path": "cultura/mak_plataforma/research_router.py"},
-            {"name": "portfolio_venue_surface", "path": "iskvw/piel/venue"},
+            {"name": "venue_3d_tool", "path": "tools/venue3d"},
         ],
     }
 

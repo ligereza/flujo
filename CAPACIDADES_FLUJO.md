@@ -13,7 +13,7 @@ movil de XIO.
 | RD | `src/flujo/rd/` | eventos, venues, cotizacion, pedidos y lectura de datos |
 | ISKVW/VJ | `src/flujo/vj/`, `web/`, `iskvw/` | contexto visual, show kit y portafolio |
 | Contratos | `contracts/`, `schemas/` | intercambio tipado y validacion |
-| Herramientas | `tools/` | generadores, validadores y comprobaciones deterministas |
+| Herramientas | `tools/` | generadores, validadores y comprobaciones deterministas; incluye la cadena venue 2D→3D |
 
 ## Perfiles de aplicacion
 

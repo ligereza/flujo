@@ -8,7 +8,7 @@
  "fecha_captura": "2026-07-30",
  "fuente_datos": "documento",
  "licencia": "ODbL-1.0",
- "notas": "DEMO. La geometría de este archivo está DERIVADA del generador de referencia projects/plano/referencia_plano_teatro.py (v3.4, valores por defecto), no de una visita con instrumento: nadie la firma y ninguna cota se levantó en sala. Sirve para que el visor 3D tenga material real de trabajo y para mostrar cómo se dibuja cada nivel de confianza. Pendiente: cotas reales. Cuando existan, este archivo se reemplaza entero.",
+ "notas": "DEMO. La geometría de este archivo está DERIVADA del generador de referencia tools/venue2d/referencia_plano_teatro.py (v3.4, valores por defecto), no de una visita con instrumento: nadie la firma y ninguna cota se levantó en sala. Sirve para que el visor 3D tenga material real de trabajo y para mostrar cómo se dibuja cada nivel de confianza. Pendiente: cotas reales. Cuando existan, este archivo se reemplaza entero.",
  "escenario": {
   "ancho": {
    "m": 10.0,

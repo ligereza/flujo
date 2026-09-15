@@ -1,5 +1,5 @@
-// Smoke-run of the venue skin's inline JS with DOM stubs. Same reason as
-// tools/iskvw_piel_smoke.mjs: a skin whose JS nobody executes ships dead with
+// Smoke-run of the FLUJO venue 3D tool's inline JS with DOM stubs. Same reason
+// as a portfolio smoke: code nobody executes can ship dead with
 // a green CI (PR #403). This one goes further because the viewer's whole job
 // is arithmetic: it also checks that the hand-rolled 4x4 projection actually
 // MOVES when the camera orbits, and that a cap smaller than the venue crops

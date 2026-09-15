@@ -64,7 +64,7 @@ const aristas = arg("aristas", "");
 const salida = join(RAIZ, arg("salida", "_logs/venue_secuencia"));
 
 const query = [
-  venue ? `venue=../../../data/venues/${venue}.json` : "",
+  venue ? `venue=../../data/venues/${venue}.json` : "",
   aristas ? `aristas=${aristas}` : "",
 ].filter(Boolean).join("&");
 

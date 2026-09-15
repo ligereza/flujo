@@ -51,7 +51,7 @@
 <div class="hud" id="medidor"></div>
 <div class="hud" id="leyenda"></div>
 <div class="hud" id="pista">arrastrar para orbitar · rueda o pellizco para acercar</div>
-<a id="volver" href="../campo/">campo</a>
+<a id="volver" href="../../iskvw/piel/campo/">portafolio</a>
 
 <script>
 /* ═══════════════════════════════════════════════════════════════════
@@ -91,8 +91,8 @@ const PARAM = new URLSearchParams(location.search);
    path. The id form is what a link, a QR or the sequence tool can carry without
    knowing where this page lives. */
 const PEDIDO = PARAM.get("venue") || "";
-const RUTA = !PEDIDO ? "../../../data/venues/scd-plaza-egana.json"
-  : (/[/.]/.test(PEDIDO) ? PEDIDO : `../../../data/venues/${PEDIDO}.json`);
+const RUTA = !PEDIDO ? "../../data/venues/scd-plaza-egana.json"
+  : (/[/.]/.test(PEDIDO) ? PEDIDO : `../../data/venues/${PEDIDO}.json`);
 /* El tope existe para que 60 fps sea una promesa y no una esperanza. Se puede
    bajar por URL (?aristas=120) justamente para VER como avisa el recorte. */
 const TOPE = Math.max(1, parseInt(PARAM.get("aristas"), 10) || 800);

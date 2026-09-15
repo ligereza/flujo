@@ -3,7 +3,7 @@
 """Geometria DEMO de la sala radial SCD Plaza Egana -> data/venues/.
 
 Que es y que NO es. Es una geometria DERIVADA del generador de referencia
-`projects/plano/referencia_plano_teatro.py` (v3.4, valores por defecto): el
+`tools/venue2d/referencia_plano_teatro.py` (v3.4, valores por defecto): el
 mismo modelo radial -- cuerda 10 m, sagita 0,9 m, radio 14,34 m -- proyectado a
 polilineas 3D para que el visor tenga con que arrancar. NO es una visita con
 instrumento: nadie firma este archivo y ninguna cota se levanto en sala.
@@ -235,7 +235,7 @@ def documento() -> dict:
         "licencia": "ODbL-1.0",
         "notas": (
             "DEMO. La geometría de este archivo está DERIVADA del generador de "
-            "referencia projects/plano/referencia_plano_teatro.py (v3.4, valores por "
+            "referencia tools/venue2d/referencia_plano_teatro.py (v3.4, valores por "
             "defecto), no de una visita con instrumento: nadie la firma y ninguna cota "
             "se levantó en sala. Sirve para que el visor 3D tenga material real de "
             "trabajo y para mostrar cómo se dibuja cada nivel de confianza. Pendiente: "

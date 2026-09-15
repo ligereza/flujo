@@ -13,7 +13,7 @@ a mano.
 > Antecedente: el dueño ya construyó (en otro chat) un generador de planos de
 > **teatro/sala** con geometría **radial** real (fórmula de la sagita para el
 > escenario curvo, bloques de butacas con alineación radial, balcón). Ese código
-> está en `referencia_plano_teatro.py` como base/inspiración. Aquí lo
+> está en `tools/venue2d/referencia_plano_teatro.py` como base/inspiración. Aquí lo
 > generalizamos a **stands de intervención en terreno** (la ONG Reduciendo Daño).
 
 ## Constantes de realidad (la clave del enfoque)
@@ -47,14 +47,22 @@ flyers, pero para documentos operativos.
 ## Arquitectura propuesta (modular)
 
 ```
-projects/plano/
+projects/plano/                         # planos/riders operativos
 ├── README.md                      # este archivo
 ├── feedback.md                    # qué refinar (para la próxima IA)
-├── referencia_plano_teatro.py     # generador radial original (base, requiere customtkinter)
 ├── plano_stands.py                # NUEVO: motor headless de stands (sin GUI) — prototipo
 ├── ejemplos/
 │   └── evento_ejemplo.json        # parámetros de un evento + reglas
 └── (futuro) plano_editor.html     # editor visual web, estilo de los editores HTML de flujo
+```
+
+La cadena teatral vive junto a las herramientas de venue:
+
+```
+tools/venue2d/referencia_plano_teatro.py  # referencia 2D radial, GUI
+tools/venue_geometria_scd.py              # proyección 2D→3D declarativa
+tools/venue3d/                            # visor 3D y su contrato
+data/venues/*.json                        # registros fuente
 ```
 
 Diseño en capas (modular, para crecer):

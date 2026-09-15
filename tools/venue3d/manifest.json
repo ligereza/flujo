@@ -1,9 +1,9 @@
 {
- "formato": "piel/1",
- "nombre": "venue",
- "resumen": "Una sala como polilineas medidas, orbitable. No es un render: es el as-built cotado, y por eso lo que dibuja se cuenta y lo que se recorta se declara en pantalla.",
+ "formato": "venue3d/1",
+ "nombre": "venue3d",
+ "resumen": "Primer prototipo FLUJO de una sala SCD en 3D: recibe polilineas declarativas derivadas del plano 2D, es orbitable y declara qué se dibuja y qué se recorta. No es un render ni un levantamiento certificado.",
  "datos": [
-  {"ruta": "../../../data/venues/scd-plaza-egana.json", "obligatorio": false,
+  {"ruta": "../../data/venues/scd-plaza-egana.json", "obligatorio": false,
    "para": "el venue por defecto. Con ?venue=<id> pide otro del registro; si el fetch falla, entra un respaldo minimo en vez de abrir en negro."}
  ],
  "medida": "typeof ESTADO !== 'undefined' && ESTADO ? ESTADO.dibujadas : -1",

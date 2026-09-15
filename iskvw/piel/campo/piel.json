@@ -22,10 +22,9 @@
   {"nombre": "curvatura", "codifica": "extra.trazo", "llave": "patch_efectos"},
   {"nombre": "sangrado", "codifica": "extra.colores", "llave": "patch_efectos"},
   {"nombre": "desgarro", "codifica": "etiquetas", "llave": "patch_efectos"},
-  {"nombre": "gravedad", "codifica": "peso", "llave": "patch_efectos"},
-  {"nombre": "sala", "codifica": "venue", "llave": "venue3d"}
+  {"nombre": "gravedad", "codifica": "peso", "llave": "patch_efectos"}
  ],
  "gestos": ["rueda", "pellizco", "quedarse quieto", "semilla en el hash"],
- "degrada": "Sin archivo.json cae a campo.json y despues a obras.json, dibujando siempre. Una pieza sin posicion medida se reparte por hash DENTRO del campo medido, nunca fuera. Sin tablero no hay efectos ni sala.",
- "capacidades": ["posiciones_medidas", "patch_efectos", "capa_venue"]
+ "degrada": "Sin archivo.json cae a campo.json y despues a obras.json, dibujando siempre. Una pieza sin posicion medida se reparte por hash DENTRO del campo medido, nunca fuera. Sin tablero no hay efectos.",
+ "capacidades": ["posiciones_medidas", "patch_efectos"]
 }

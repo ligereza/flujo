@@ -21,9 +21,9 @@ import { dirname, join } from "node:path";
 const raiz = join(dirname(fileURLToPath(import.meta.url)), "..");
 
 // Which skin. It used to be the literal string "campo", and that is why
-// `terminal` (772 lines) and `venue` (505) had NO verification at all: this
-// tool and the meter both pointed at one of the three skins, so two of them
-// could have been broken for months and nothing would have said so. `campo`
+// `terminal` had NO verification at all: this tool and the meter both pointed
+// at one of the two portfolio skins, so the second one could have been broken
+// for months and nothing would have said so. `campo`
 // stays the default so CI and every existing invocation keep working.
 //   node tools/iskvw_piel_smoke.mjs [piel]
 const PIEL = process.argv[2] || "campo";
@@ -173,8 +173,7 @@ async function correr({ tablero = null, cuadros = 30, caminar = true, antes = nu
   // else -- which is exactly why this battery could never be pointed at another
   // skin. Measured 2026-07-31 the moment it was: `terminal` died on
   // `canvas.getContext is not a function` (its canvas has a different id) and
-  // `venue` on `L.querySelectorAll is not a function` (element-level query was
-  // not stubbed at all). Neither was a defect of the skin: the instrument was
+  // Neither was a defect of the skin: the instrument was
   // shaped like one skin and called that a verification.
   //
   // So every element can be a canvas and every element answers the DOM surface
@@ -230,10 +229,10 @@ async function correr({ tablero = null, cuadros = 30, caminar = true, antes = nu
           : { ok: false, json: async () => ({}) };
       }
       // Any repo-relative path, not just `datos/*.json`. The first version
-      // matched three filenames by name, so the `venue` skin -- which asks for
-      // `../../../data/venues/scd-plaza-egana.json` -- got a 404 from the
-      // instrument and its loader was never exercised. A battery that only
-      // serves the files one skin happens to want is not a battery.
+      // matched two filenames by name, so any portfolio skin with another
+      // source path got a 404 from the instrument and its loader was never
+      // exercised. A battery that only serves the files one skin happens to
+      // want is not a battery.
       // `..` segments are resolved and then REFUSED if they escape the repo:
       // this reads real files, and a skin should not be able to make it read
       // outside the checkout.
@@ -324,9 +323,6 @@ async function correr({ tablero = null, cuadros = 30, caminar = true, antes = nu
     pos: leer("typeof E !== 'undefined' ? E.pos : null", null),
     emisores: leer("typeof EMIS !== 'undefined' ? EMIS.n : -1", -1),
     patchOn: leer("typeof PATCH !== 'undefined' ? PATCH.on : null", null),
-    // The venue layer's observables: whether the sala link exists after boot,
-    // and a hatch to call capaVenue() again inside this run's sandbox.
-    salaVisible: leer("typeof SALA_VISIBLE !== 'undefined' ? SALA_VISIBLE : null", null),
     evaluar: (expr, porDefecto) => leer(expr, porDefecto),
   };
 }
@@ -350,9 +346,8 @@ if (base.failed) morir(base.failed);
 // es el modo clasico de sonda verde que no probo nada.
 //
 // `trabajoDeNodo` NO sirve aca aunque lo parezca: cuenta gradientes y glifos,
-// que es como dibuja `campo`. Medido al apuntar la bateria a la tercera piel:
-// `venue` dibuja polilineas -- moveTo/lineTo/stroke, ni un gradiente -- y daba
-// cero. La metrica tambien estaba con forma de una sola piel.
+// que es como dibuja `campo`. Las pieles con una geometria distinta declaran
+// su propia medida y prueba, en lugar de entrar en esta bateria por accidente.
 if (!base.traza.length)
   morir(new Error("la piel no dibujo una sola marca: arranco sin material"));
 
@@ -460,31 +455,6 @@ if (!igual(base, conArchivo)) {
     + `(${base.traza.length} -> ${conArchivo.traza.length} marcas), que es lo que `
     + `sus llaves encendidas afirman hacer`);
 }
-
-// ── 2b. the venue layer, behind its own flag on the SAME tablero fetch ─────
-// Ported from the venue branch's smoke into this architecture: the shipped
-// boot above ran against the REAL tablero.json, so the sala link must mirror
-// exactly what mejoras.venue3d says; forcing the flag on must create it, and
-// a flag whose consumer vanished must fail here, not at the show.
-if (conArchivo.evaluar("typeof capaVenue === 'function'", false) !== true)
-  morir(new Error("capaVenue is missing: mejoras.venue3d has no consumer again"));
-if (!conArchivo.pedidos.some(u => /tablero\.json$/.test(u)))
-  morir(new Error("boot never asked for tablero.json: the flag is read by nobody"));
-const flagReal = tableroReal.mejoras.venue3d;
-if (conArchivo.salaVisible !== (flagReal === true))
-  morir(new Error(`venue layer visible=${conArchivo.salaVisible} with venue3d=${flagReal}: the flag does not gate`));
-if (base.salaVisible !== false)
-  morir(new Error(`no board and the venue layer is visible=${base.salaVisible}`));
-const conSala = await correr({
-  tablero: { ...tableroReal, mejoras: { ...tableroReal.mejoras, venue3d: true } },
-});
-if (conSala.failed) morir(conSala.failed);
-if (conSala.salaVisible !== true)
-  morir(new Error("forcing venue3d=true did not enable the venue layer"));
-if (conSala.evaluar("capaVenue({mejoras:{venue3d:false}})", null) !== false)
-  morir(new Error("capaVenue reports on for a tablero that says off"));
-console.log(`OK: venue layer gates on venue3d -- shipped ${flagReal === true ? "on" : "off"} `
-  + `(visible=${conArchivo.salaVisible}), forced on creates the sala link`);
 
 // ── 3. the patch on, with gains loud enough to be unambiguous ─────────────
 // The board's own routing, only louder, plus one node forced to carry the

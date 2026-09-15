@@ -2,7 +2,7 @@
 
 > Notas de dirección para seguir desarrollando este proyecto satélite.
 > Estado actual: **prototipo funcional headless** (`plano_stands.py`) + base de
-> referencia radial (`referencia_plano_teatro.py`). Falta editor visual y afinar
+> referencia radial (`tools/venue2d/referencia_plano_teatro.py`). Falta editor visual y afinar
 > constantes con medidas reales.
 
 ## Lo que ya funciona (v0 prototipo)
@@ -29,7 +29,7 @@ tocar código).
 
 ### 3. Layout más realista
 - Posicionar respecto a **escenario / accesos / baños / zona médica** (no solo
-  fila). Reusar la idea radial de `referencia_plano_teatro.py` cuando aplique.
+  fila). Reusar la idea radial de `tools/venue2d/referencia_plano_teatro.py` cuando aplique.
 - Evitar solapamientos con un solver simple (grid o packing).
 - Cotas/medidas dibujadas (estilo plano arquitectónico).
 
@@ -50,7 +50,7 @@ podría emitir también un **desglose de costos** derivado de las mismas reglas
 (personal × horas, testeo sí/no, alimentación si >5h, etc.). Ver pendiente de
 cotización en `backlog_suplementos.md`.
 
-## Nota sobre `referencia_plano_teatro.py`
+## Nota sobre `tools/venue2d/referencia_plano_teatro.py`
 Es el generador original del dueño (teatro SCD Plaza Egaña): GUI customtkinter +
 matplotlib, geometría **radial** con fórmula de la sagita
 `radio = (sagita² + (ancho/2)²) / (2·sagita)`, bloques de butacas con alineación

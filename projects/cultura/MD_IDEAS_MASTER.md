@@ -115,7 +115,7 @@ Fuentes y superficies:
 - `docs/HERRAMIENTAS_VISUALES.md`
 - `linea_editorial/v4.1.md`
 - `docs/rd/DB_PRODUCTORAS_ESTADO.md`
-- `projects/plano/referencia_plano_teatro.py`
+- `tools/venue2d/referencia_plano_teatro.py`
 - `tools/venue_geometria_scd.py`
 
 Estado: esta es una linea activa con consumidores reales. El plano/rider,

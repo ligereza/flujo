@@ -2,7 +2,6 @@
  "_doc": "El tablero de mejoras: que features de iskvw estan encendidas. Una clave por mejora, valor true/false. Lo escriben los agentes que traen la mejora y lo prende o apaga el artista desde iskvw/editor.html (encender -> descargar -> commit). Una clave ausente es una mejora que todavia no existe, no una apagada: quien la lee decide su propio default.",
  "version": 1,
  "mejoras": {
-  "venue3d": true,
   "patch_efectos": true,
   "nodo_glifo": true
  },

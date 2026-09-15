@@ -424,7 +424,7 @@ def add_known_mak_links(con_out: sqlite3.Connection, run_id: str, project_id: st
     root = DEFAULT_MAK_DB.parent.parent
     known = [
         root / "projects/plano/plano_stands.py",
-        root / "projects/plano/referencia_plano_teatro.py",
+        root / "tools/venue2d/referencia_plano_teatro.py",
         root / "tools/venue_geometria_scd.py",
         root / "data/venues/scd-plaza-egana.json",
         root / "schemas/venue.schema.json",

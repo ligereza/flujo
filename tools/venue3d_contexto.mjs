@@ -1,4 +1,4 @@
-// Boots the venue skin's inline JS in node with DOM stubs, and hands back its
+// Boots the FLUJO venue 3D tool's inline JS in node with DOM stubs, and hands back its
 // live scope. Shared by tools/venue3d_smoke.mjs (which asserts on it) and
 // tools/venue_secuencia.mjs (which exports frames from it) so that BOTH run the
 // same projection the browser runs -- an exported sequence that drew a slightly
@@ -7,6 +7,7 @@ import { readFileSync } from "node:fs";
 import vm from "node:vm";
 import { fileURLToPath } from "node:url";
 import { dirname, join } from "node:path";
+import { scriptsDePiel } from "./lib/piel_scripts.mjs";
 
 export const RAIZ = join(dirname(fileURLToPath(import.meta.url)), "..");
 
@@ -14,9 +15,9 @@ const noop = () => {};
 
 export async function correr(search = "", opciones = {}) {
   const { ancho = 900, alto = 600, cuadros = 10 } = opciones;
-  const html = readFileSync(join(RAIZ, "iskvw", "piel", "venue", "index.html"), "utf8");
-  const scripts = [...html.matchAll(/<script>([\s\S]*?)<\/script>/g)].map(m => m[1]);
-  if (!scripts.length) throw new Error("no inline <script> found in the venue skin");
+  const rutaHtml = join(RAIZ, "tools", "venue3d", "index.html");
+  const html = readFileSync(rutaHtml, "utf8");
+  const scripts = scriptsDePiel(html, rutaHtml);
 
   const conteo = { segmentos: 0, trazos: 0 };   // lineTo / stroke actually issued
   const ctx2d = new Proxy({}, {

@@ -47,8 +47,8 @@ if (!archivoPath) {
   if (existsSync(porDefecto)) archivoPath = porDefecto;
 }
 
-// Que piel se mide. Era el literal "campo", y por eso `terminal` y `venue`
-// nunca tuvieron una medicion de costo: no habia como pedirsela.
+// Que piel se mide. Era el literal "campo", y por eso `terminal` nunca tuvo
+// una medicion de costo: no habia como pedirsela.
 //   node tools/iskvw_piel_medir.mjs [--piel terminal]
 const PIEL = pielPedida || "campo";
 const rutaPiel = join(raiz, "iskvw", "piel", PIEL, "index.html");
@@ -101,7 +101,7 @@ function arrancarPiel({ substrate, hash }) {
   });
   // Stubs compartidos con la sonda (tools/lib/piel_dom.mjs): cada herramienta
   // tenia su copia y las dos tenian la forma de `campo`, que es como dos de
-  // tres pieles quedaron sin medicion. Un arreglo duplicado es el mismo defecto
+  // dos pieles quedaron sin medicion. Un arreglo duplicado es el mismo defecto
   // que un padron de proveedores escrito a mano dos veces.
   const canvas = elementoGenerico(ctx2d);
   const el = () => elementoGenerico(ctx2d);

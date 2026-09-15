@@ -81,14 +81,6 @@
          color:#4a463f;letter-spacing:.18em;text-transform:uppercase;
          pointer-events:none;transition:opacity 1.4s ease}
   #pista.ido{opacity:0}
-  /* The venue-layer link. It only EXISTS when the artist turns mejoras.venue3d
-     on in datos/tablero.json; the stroke mirrors the "campo" link the venue
-     viewer already carries back to here, so the pair reads as one gesture. */
-  #sala{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);
-        font-size:.6rem;letter-spacing:.18em;text-transform:uppercase;
-        color:#4a463f;text-decoration:none;border-bottom:1px solid #26241f;
-        pointer-events:auto}
-  #sala:hover{color:#8a857a}
   @media (prefers-reduced-motion:reduce){#aire{animation:none;opacity:.8}}
 </style>
 </head>
@@ -1408,23 +1400,6 @@ function escribirSemilla(){
   }, 400);   // el gesto termina antes de que la URL se escriba
 }
 
-/* ── the venue layer, behind its flag ──────────────────────────────────
-   mejoras.venue3d in datos/tablero.json is the switch PR #418 shipped with no
-   consumer; this is the consumer. Off (or absent, or unreadable): the field
-   does not change by one pixel. On: a link to ../venue/ appears, in the same
-   stroke as the "campo" link the viewer already carries back to here. The
-   function is named and idempotent so the smoke can exercise BOTH branches. */
-let SALA_VISIBLE = false;
-function capaVenue(tablero){
-  const encendida = !!(tablero && tablero.mejoras && tablero.mejoras.venue3d === true);
-  if (!encendida || SALA_VISIBLE) return encendida;
-  const a = document.createElement('a');
-  a.id = 'sala'; a.href = '../venue/'; a.textContent = 'sala';
-  document.body.appendChild(a);
-  SALA_VISIBLE = true;
-  return true;
-}
-
 /* ── datos: fetch si hay servidor, respaldo incrustado si no ── */
 async function arrancar(){
   medir();
@@ -1449,19 +1424,16 @@ async function arrancar(){
       }
     }
   } catch(e){ /* sin servidor se usa el respaldo, sin decir nada */ }
-  // 3. El TABLERO: se pide UNA vez y alimenta a sus DOS consumidores -- el
-  //    patch de efectos (`aplicarTablero`, llave `patch_efectos`) y la capa de
-  //    sala (`capaVenue`, llave `venue3d`). Que no este es el caso normal y no
-  //    es un error: sin tablero no hay patch, `capaVenue(null)` deja la sala
-  //    apagada, y la piel dibuja como siempre.
+  // 3. El TABLERO: se pide una vez y alimenta al consumidor real del campo,
+  //    el patch de efectos. La geometría de venues pertenece a FLUJO y se
+  //    abre desde sus herramientas, no desde la piel del portafolio.
   try {
     const rt = await fetch('../../datos/tablero.json');
     if (rt.ok){
       const t = await rt.json();
       aplicarTablero(t);
-      capaVenue(t);
     }
-  } catch(e){ /* sin tablero: sin efectos y sin sala */ }
+  } catch(e){ /* sin tablero: sin efectos */ }
   sembrar(obras);
   // Se entra por el medio del archivo: no hay principio.
   // El `Math.max(0, ...)` de antes convertia el -1 de "no encontrado" en 0, asi

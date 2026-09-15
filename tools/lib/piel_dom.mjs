@@ -4,15 +4,14 @@
 // cost) boot a skin's own inline script inside a node `vm`. Each carried its
 // own copy of the stubs, and both copies were shaped like the `campo` skin: a
 // canvas returned only for the id "c", an element with six methods, no
-// namespaced createElement. That is why two of the three published skins had no
-// verification and no measurement at all -- pointing either tool at them died
+// namespaced createElement. That is why the second portfolio skin had no
+// verification and no measurement at all -- pointing either tool at it died
 // on the stubs, never on the skin.
 //
 // Measured 2026-07-31, the moment the battery was aimed at the other two:
 //     terminal   canvas.getContext is not a function   (canvas has another id)
-//     venue      L.querySelectorAll is not a function  (element query missing)
-// Neither was a defect of the skin. Both skins work: venue draws 503 edges,
-// terminal 3.480 marks.
+// Neither was a defect of the skin. The two portfolio skins now use the same
+// verified stubs; the FLUJO venue 3D tool has a separate battery.
 //
 // Fixing that twice, once per tool, is the same defect class this repo spent a
 // day paying for elsewhere (a provider roster written by hand in two files, so
