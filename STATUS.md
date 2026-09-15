@@ -21,7 +21,7 @@ Fecha de corte: 2026-09-15T20:18:56-03:00 — separación venue 2D→3D publicad
   `tools/venue2d/referencia_plano_teatro.py` →
   `tools/venue_geometria_scd.py` → `data/venues/*.json` →
   `tools/venue3d/index.html`. El estado publicado actualiza este contrato en
-  `5c5cb41`. Gaussian splat no está implementado y no se
+  `f2be9c0`. Gaussian splat no está implementado y no se
   trata como escala métrica.
 - La proyeccion SQLite no se versiona en este repositorio. En la instalacion
   conjunta actual, FLUJO y XIO-RD deben usar `FLUJO_RD_DB=/home/mak/data/rd.db`;
