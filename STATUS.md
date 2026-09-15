@@ -1,6 +1,6 @@
 # STATUS — FLUJO autonomo
 
-Fecha de corte: 2026-09-15T20:17:40-03:00 — separación venue 2D→3D publicada
+Fecha de corte: 2026-09-15T20:18:56-03:00 — separación venue 2D→3D publicada
 
 ## Estado
 
@@ -20,7 +20,8 @@ Fecha de corte: 2026-09-15T20:17:40-03:00 — separación venue 2D→3D publicad
 - El prototipo SCD no es una piel: la cadena canónica es
   `tools/venue2d/referencia_plano_teatro.py` →
   `tools/venue_geometria_scd.py` → `data/venues/*.json` →
-  `tools/venue3d/index.html`. Gaussian splat no está implementado y no se
+  `tools/venue3d/index.html`. El estado publicado actualiza este contrato en
+  `5c5cb41`. Gaussian splat no está implementado y no se
   trata como escala métrica.
 - La proyeccion SQLite no se versiona en este repositorio. En la instalacion
   conjunta actual, FLUJO y XIO-RD deben usar `FLUJO_RD_DB=/home/mak/data/rd.db`;
