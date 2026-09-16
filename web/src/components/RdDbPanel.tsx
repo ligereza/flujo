@@ -12,8 +12,10 @@
 // productora y se guarda junto a su URL de origen. NUNCA se recorta de un
 // flyer: un recorte es un derivado de baja calidad y sin fuente.
 
+import type { CSSProperties } from 'react';
 import { useEffect, useRef, useState } from 'react';
-import { Database, Upload, CheckCircle2, CircleDashed, MapPin, AlertTriangle, BarChart3, ChevronRight, History, Layout, Radio } from 'lucide-react';
+import { Database, Upload, CheckCircle2, CircleDashed, MapPin, AlertTriangle, BarChart3, ChevronRight, History, Layout, Radio, FlaskConical } from 'lucide-react';
+import EnsayosSection, { type Ensayos } from './EnsayosSection';
 
 interface Venue {
   nombre: string;
@@ -56,7 +58,17 @@ interface Distribucion {
   conteo: number;
   porcentaje: number;
 }
-interface Evidencia2025 {
+interface Procedencia {
+  filas_brutas: number;
+  primera_aparicion: number;
+  repetidas_en_hoja: number;
+  copiadas_de_otra_jornada: number;
+  sin_clasificar: number;
+  origenes: Record<string, number>;
+}
+interface Evidencia {
+  productora_candidata?: string | null;
+  match_candidata?: 'exacto' | 'aproximado' | 'abreviatura' | 'sin_identificar';
   event_id: string;
   hoja: string;
   indice_hoja: number;
@@ -72,6 +84,7 @@ interface Evidencia2025 {
   filas: number;
   muestra_declarada: { campo: string; total: number; distribucion: Distribucion[] };
   resultados_colorimetricos: { campos: string[]; total: number; distribucion: Distribucion[] };
+  procedencia?: Procedencia;
 }
 interface Productora {
   slug: string;
@@ -98,12 +111,48 @@ interface VenueCat {
 // existe, y ahi vale false.
 const SIN_SERVIDOR = typeof __SIN_SERVIDOR__ !== 'undefined' && __SIN_SERVIDOR__;
 
+/** Lectura colorimetrica de toda la evidencia: sustancia x reactivo x color. */
+interface Concordancia {
+  sustancia: string; reactivo: string; total: number; evaluadas: number;
+  coincide: number; sin_reaccion: number; discrepa: number;
+  esperado: string[]; reaccion_texto: string; alerta: string[];
+  top_discrepancias: Record<string, number>;
+}
+
+interface Colorimetria {
+  matriz: Record<string, Record<string, Record<string, number>>>;
+  esperado: Record<string, Record<string, { colores: string[]; notas: { familia: string; reaccion: string; hex: string }[]; alerta: unknown[] }>>;
+  concordancia: Concordancia[];
+  por_evento: Record<string, Record<string, number>>;
+  por_periodo: Record<string, Record<string, number>>;
+  muestras_por_periodo: Record<string, number>;
+  jornadas_por_periodo: Record<string, number>;
+  procedencia_por_periodo?: Record<string, Record<string, number>>;
+  por_color: Record<string, number>;
+  por_reactivo: Record<string, number>;
+  por_sustancia: Record<string, number>;
+  variantes: Record<string, Record<string, number>>;
+  estados: Record<string, number>;
+  pendientes: { crudo: string; estado: string; sin_reconocer: string[]; identidades: string[] }[];
+  pendientes_total: number;
+  muestras: number;
+  observaciones: number;
+  etiquetas: Record<string, string>;
+  etiquetas_reactivo: Record<string, string>;
+  hex: Record<string, string>;
+  paleta_rd: Record<string, { familia: string; reaccion: string; hex: string }[]>;
+  limitacion: string;
+}
+
 interface Data {
   /** true = los datos vienen dentro del archivo, no de un servidor. */
   horneado?: boolean;
+  colorimetria?: Colorimetria;
   productoras: Productora[];
   venues: VenueCat[];
-  evidencia_2025?: Evidencia2025[];
+  evidencia_periodos?: Record<string, Evidencia[]>;
+  ensayos?: Ensayos;
+  evidencia_2025?: Evidencia[];
   resumen?: {
     productoras: number;
     con_vector: number;
@@ -182,7 +231,83 @@ const ESTADO_LOGO: Record<string, string> = {
   vector: 'logo vectorial',
 };
 
+type VistaId = 'colorimetria' | 'jornadas' | 'productoras' | 'campo';
+
+const VISTAS: {
+  id: VistaId; nombre: string; icono: typeof Database;
+  cuenta?: (d: Data, r: NonNullable<Data['resumen']>) => number;
+}[] = [
+  { id: 'colorimetria', nombre: 'Ensayos', icono: FlaskConical,
+    cuenta: d => d.ensayos?.obs.length ?? Object.keys(d.colorimetria?.matriz ?? {}).length },
+  { id: 'jornadas', nombre: 'Jornadas', icono: History,
+    cuenta: d => (Object.values(d.evidencia_periodos ?? {}).reduce((n, e) => n + e.length, 0)
+      || (d.evidencia_2025?.length ?? 0)) },
+  { id: 'productoras', nombre: 'Productoras', icono: Database,
+    cuenta: (_d, r) => r.productoras },
+  { id: 'campo', nombre: 'Campo', icono: Radio,
+    cuenta: (_d, r) => r.venues },
+];
+
+/**
+ * Resumen en una franja, no en doce tarjetas.
+ *
+ * El panel abria con doce cajas grandes de metrica, cada una con titulo,
+ * numero y linea de ayuda. En un telefono eso son seis filas antes del primer
+ * dato util. Aca quedan las cuatro cifras que se miran de reojo; el resto vive
+ * dentro de la vista a la que pertenecen, que es donde significan algo.
+ */
+function ResumenCompacto({ r, c, evidencia }: {
+  r: NonNullable<Data['resumen']>;
+  c?: Colorimetria;
+  evidencia?: Record<string, Evidencia[]>;
+}) {
+  const jornadas = Object.values(evidencia ?? {}).reduce((n, e) => n + e.length, 0);
+  // `muestras propias` y no `muestras`: el total bruto incluye las filas
+  // repetidas dentro de su hoja y las copiadas de otra jornada, y ponerlo
+  // aqui arriba contradecia el conteo de la vista de Ensayos, que solo cuenta
+  // las propias. Dos cifras distintas del mismo dato en la misma pantalla son
+  // una cifra menos, no una mas.
+  const propias = Object.values(evidencia ?? {}).reduce(
+    (n, e) => n + e.reduce((m, x) => m + (x.procedencia?.primera_aparicion ?? x.filas), 0), 0);
+  const celdas = [
+    { k: 'muestras propias', v: propias || (c?.muestras ?? 0) },
+    { k: 'filas fuente', v: Object.values(evidencia ?? {}).reduce(
+        (n, e) => n + e.reduce((m, x) => m + x.filas, 0), 0) },
+    { k: 'jornadas', v: jornadas },
+    { k: 'prod.', v: r.productoras },
+  ];
+  return (
+    <div className="flex divide-x divide-zinc-800 overflow-x-auto rounded-xl border border-zinc-800 bg-zinc-900/40">
+      {celdas.map(x => (
+        <div key={x.k} className="min-w-0 flex-1 px-3 py-2.5">
+          <div className="text-lg font-bold leading-none tabular-nums text-zinc-100">{x.v.toLocaleString('es-CL')}</div>
+          <div className="mt-1 text-[10px] uppercase tracking-wider text-zinc-600">{x.k}</div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function PeriodosResumen({ evidencia }: {
+  evidencia: Record<string, Evidencia[]>;
+}) {
+  const periodos = Object.keys(evidencia).sort();
+  if (!periodos.length) return null;
+  return (
+    <div className="mt-3 flex flex-wrap items-center gap-1.5 text-[10px]">
+      <span className="mr-1 uppercase tracking-wider text-zinc-600">Períodos</span>
+      {periodos.map(periodo => (
+        <span key={periodo} className="rounded border border-zinc-800 bg-zinc-900/50 px-2 py-1 text-zinc-400">
+          {periodo} · {evidencia[periodo].length} jornadas · {evidencia[periodo].reduce((n, e) => n + e.filas, 0)} filas · {evidencia[periodo].reduce((n, e) => n + (e.procedencia?.primera_aparicion ?? e.filas), 0)} propias
+        </span>
+      ))}
+    </div>
+  );
+}
+
 export default function RdDbPanel() {
+  const [vista, setVista] = useState<VistaId>('colorimetria');
+  const [periodoActivo, setPeriodoActivo] = useState('todos');
   const [data, setData] = useState<Data | null>(null);
   const [estado, setEstado] = useState<'cargando' | 'ok' | 'error'>('cargando');
   const [subiendo, setSubiendo] = useState<string | null>(null);
@@ -310,7 +435,13 @@ export default function RdDbPanel() {
 
   const r = data?.resumen;
   const activa = data?.productoras.find(p => p.slug === productoraActiva) ?? null;
-  const evidencia = data?.evidencia_2025?.find(e => e.event_id === evidenciaActiva) ?? null;
+  const evidenciaPeriodos = data?.evidencia_periodos
+    ?? (data?.evidencia_2025 ? { '2025': data.evidencia_2025 } : {});
+  const periodos = Object.keys(evidenciaPeriodos).sort();
+  const evidenciaVisible = periodoActivo === 'todos'
+    ? periodos.flatMap(periodo => evidenciaPeriodos[periodo] ?? [])
+    : (evidenciaPeriodos[periodoActivo] ?? []);
+  const evidencia = evidenciaVisible.find(e => e.event_id === evidenciaActiva) ?? null;
   const hostEvent = hostBootstrap?.events?.find(event => event.event_id === hostEventRef) ?? null;
   const hostTests = (hostSamples?.samples || []).flatMap(sample => sample.tests || []);
   const hostColors = hostTests.reduce<Record<string, number>>((counts, test) => {
@@ -391,8 +522,8 @@ export default function RdDbPanel() {
           <h1 className="text-xl font-bold tracking-tight">Base de datos RD</h1>
           <p className="text-sm text-zinc-500">
             {data?.horneado
-              ? 'Productoras y venues, con los datos dentro de este archivo. Para editarlos hace falta la aplicación completa.'
-              : <>Productoras y venues. Fuente: <code className="text-zinc-400">data/productoras/*.json</code></>}
+              ? 'Testeos, jornadas y productoras, con los datos dentro de este archivo. Para editarlos hace falta la aplicación completa.'
+              : 'Los testeos históricos, las jornadas que los produjeron y las productoras detrás.'}
           </p>
         </div>
       </header>
@@ -412,35 +543,29 @@ export default function RdDbPanel() {
 
       {estado === 'ok' && r && (
         <>
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-            {[
-              // Los rotulos van en castellano llano: este panel se le muestra a
-              // la directiva y a gente de fuera del equipo. "Triangulables" y
-              // "fecha ISO" son jerga interna -- nadie afuera sabe que un evento
-              // triangulable es uno que ya tiene fecha Y lineup. El dato es el
-              // mismo; lo que cambia es que ahora se entiende sin traduccion.
-              { k: 'Productoras', v: r.productoras, ayuda: 'Productoras en la base' },
-              { k: 'Con logo vectorial', v: `${r.con_vector}/${r.productoras}`, ayuda: 'Tienen el logo en vector, listo para imprimir' },
-              { k: 'Confirmadas', v: `${r.confirmadas}/${r.productoras}`, ayuda: 'Confirmaron que trabajan con RD' },
-              { k: 'Venues', v: r.venues, ayuda: 'Recintos registrados' },
-              { k: 'Eventos', v: r.eventos ?? 0, ayuda: 'Eventos registrados' },
-              { k: 'Con fecha y lineup', v: r.eventos_triangulables ?? 0, ayuda: 'Tienen los datos completos para cruzarlos' },
-              { k: 'Sin fuente primaria', v: r.eventos_sin_fuente_primaria ?? 0, ayuda: 'Falta URL oficial, ticketera o venue' },
-              { k: 'Sin lineup', v: r.eventos_sin_lineup ?? 0, ayuda: 'Falta cargarles el lineup' },
-              { k: 'Sin fecha', v: r.eventos_sin_fecha_iso ?? 0, ayuda: 'Falta cargarles la fecha' },
-              { k: 'DB exacta', v: `${r.eventos_db_exactos ?? 0}/${r.eventos ?? 0}`, ayuda: 'La ficha coincide con productora_eventos en SQLite' },
-              { k: 'Venue en DB', v: `${r.eventos_venue_db_exactos ?? 0}/${r.eventos ?? 0}`, ayuda: 'El venue del evento coincide con productora_venues' },
-              { k: 'Identidad unida', v: `${r.eventos_triangulacion_completa ?? 0}/${r.eventos ?? 0}`, ayuda: 'Evento y venue coinciden con sus dos filas SQLite' },
-            ].map(c => (
-              <div key={c.k} title={c.ayuda} className="rounded-xl border border-zinc-800 bg-zinc-900/40 p-4">
-                <div className="text-[10px] font-bold uppercase tracking-widest text-zinc-600">{c.k}</div>
-                <div className="mt-1 text-2xl font-black text-zinc-100">{c.v}</div>
-                <div className="mt-1 text-[10px] leading-snug text-zinc-600">{c.ayuda}</div>
-              </div>
-            ))}
-          </div>
+          <ResumenCompacto r={r} c={data!.colorimetria} evidencia={evidenciaPeriodos} />
+          <PeriodosResumen evidencia={evidenciaPeriodos} />
 
-          {hostBootstrap && (
+          {/* Una vista a la vez. Antes el panel apilaba doce tarjetas de
+              metricas y siete secciones a ancho completo: en un telefono eso
+              son varias pantallas de scroll antes de ver un dato. */}
+          <nav className="grid grid-cols-2 gap-1 rounded-xl border border-zinc-800 bg-zinc-900/40 p-1 sm:flex">
+            {VISTAS.map(v => (
+              <button
+                key={v.id}
+                type="button"
+                onClick={() => setVista(v.id)}
+                className={`flex min-w-0 items-center gap-1.5 rounded-lg px-3 py-2 text-xs font-medium ${
+                  vista === v.id ? 'bg-zinc-800 text-zinc-100' : 'text-zinc-500 hover:text-zinc-300'}`}
+              >
+                <v.icono className="h-3.5 w-3.5 shrink-0" />
+                <span className="truncate">{v.nombre}</span>
+                {v.cuenta !== undefined && <span className="ml-auto shrink-0 text-[10px] tabular-nums text-zinc-600">{v.cuenta(data!, r)}</span>}
+              </button>
+            ))}
+          </nav>
+
+          {vista === 'campo' && hostBootstrap && (
             <section className="rounded-xl border border-sky-900/60 bg-sky-950/10 p-4 sm:p-5">
               <div className="flex flex-wrap items-start justify-between gap-3">
                 <div>
@@ -502,6 +627,7 @@ export default function RdDbPanel() {
             </section>
           )}
 
+          {vista === 'productoras' && (
           <section className="rounded-xl border border-zinc-800 bg-zinc-900/40">
             <div className="flex flex-wrap items-center gap-2 border-b border-zinc-800 px-4 py-3">
               <h2 className="text-sm font-bold">Productoras</h2>
@@ -621,7 +747,9 @@ export default function RdDbPanel() {
             </div>
           </section>
 
-          {activa && (
+          )}
+
+          {vista === 'productoras' && activa && (
             <section className="rounded-xl border border-emerald-900/60 bg-emerald-950/10 p-4 sm:p-5">
               <div className="flex flex-wrap items-start justify-between gap-3">
                 <div>
@@ -705,33 +833,42 @@ export default function RdDbPanel() {
             </section>
           )}
 
-          {(data!.evidencia_2025?.length ?? 0) > 0 && (
+          {vista === 'colorimetria' && (data!.ensayos
+            ? <EnsayosSection e={data!.ensayos} />
+            : data!.colorimetria && <ColorimetriaSection c={data!.colorimetria} />)}
+
+          {vista === 'jornadas' && evidenciaVisible.length > 0 && (
             <section className="rounded-xl border border-violet-900/50 bg-violet-950/10">
               <div className="flex flex-wrap items-start justify-between gap-3 border-b border-violet-900/40 px-4 py-4">
                 <div>
-                  <h2 className="flex items-center gap-2 text-sm font-bold text-zinc-100"><History className="h-4 w-4 text-violet-300" /> Historial de evidencia 2025</h2>
-                  <p className="mt-1 max-w-3xl text-xs leading-relaxed text-zinc-500">Fuente histórica importada. Las hojas aún no tienen enlace humano confirmado a productora o venue; se muestran por su <code>event_id</code> exacto y no se asignan automáticamente.</p>
+                  <h2 className="flex items-center gap-2 text-sm font-bold text-zinc-100"><History className="h-4 w-4 text-violet-300" /> Historial de evidencia</h2>
+                  <p className="mt-1 max-w-3xl text-xs leading-relaxed text-zinc-500">Fuente histórica importada por período. Las hojas aún no tienen enlace humano confirmado a productora o venue; se muestran por su <code>event_id</code> exacto y no se asignan automáticamente.</p>
                 </div>
-                <span className="rounded bg-violet-950/60 px-2 py-1 text-[10px] text-violet-300">{data!.evidencia_2025!.length} hojas/eventos fuente</span>
+                <span className="rounded bg-violet-950/60 px-2 py-1 text-[10px] text-violet-300">{evidenciaVisible.length} hojas/eventos fuente</span>
               </div>
-              <div className="grid gap-3 p-3 sm:grid-cols-2 lg:grid-cols-3">
-                {data!.evidencia_2025!.map(ev => (
-                  <article key={ev.event_id} className={`rounded-xl border p-3 ${evidenciaActiva === ev.event_id ? 'border-violet-500 bg-violet-950/40' : 'border-zinc-800 bg-zinc-950/40'}`}>
-                    <button type="button" onClick={() => { setEvidenciaActiva(ev.event_id); setProductoraActiva(null); }} className="w-full text-left hover:text-violet-200">
-                      <span className="flex items-center justify-between gap-2"><span className="font-medium text-zinc-200">{ev.nombre}</span><span className="rounded bg-violet-950/60 px-1.5 py-0.5 text-[9px] text-violet-300">auto</span></span>
-                      <span className="mt-1 block text-[10px] text-zinc-600"><code>{ev.event_id}</code> · {ev.fecha_iso || 'fecha no resuelta'} · {ev.filas} filas</span>
-                    </button>
-                    <div className="mt-3 grid gap-2">
-                      {!!ev.muestra_declarada.distribucion.length && <MiniDistribution label="Declaración" values={ev.muestra_declarada.distribucion} />}
-                      {!!ev.resultados_colorimetricos.distribucion.length && <MiniDistribution label="Colorimetría" values={ev.resultados_colorimetricos.distribucion} />}
-                    </div>
-                  </article>
+              <div className="flex flex-wrap gap-1.5 border-b border-violet-900/40 px-4 py-3">
+                <button type="button" onClick={() => { setPeriodoActivo('todos'); setEvidenciaActiva(null); }}
+                  className={periodoActivo === 'todos' ? 'rounded border border-violet-500 px-2.5 py-1 text-[10px] text-violet-200' : 'rounded border border-zinc-800 px-2.5 py-1 text-[10px] text-zinc-500'}>
+                  Todos · {periodos.reduce((n, p) => n + (evidenciaPeriodos[p]?.length ?? 0), 0)}
+                </button>
+                {periodos.map(periodo => (
+                  <button key={periodo} type="button" onClick={() => { setPeriodoActivo(periodo); setEvidenciaActiva(null); }}
+                    className={periodoActivo === periodo ? 'rounded border border-violet-500 px-2.5 py-1 text-[10px] text-violet-200' : 'rounded border border-zinc-800 px-2.5 py-1 text-[10px] text-zinc-500'}>
+                    {periodo} · {evidenciaPeriodos[periodo]?.length ?? 0}
+                  </button>
                 ))}
               </div>
+              <EventosEvidencia
+                eventos={evidenciaVisible}
+                colorimetria={data!.colorimetria}
+                productoras={data!.productoras}
+                activo={evidenciaActiva}
+                onSelect={id => { setEvidenciaActiva(id); setProductoraActiva(null); }}
+              />
             </section>
           )}
 
-          {evidencia && (
+          {vista === 'jornadas' && evidencia && (
             <section className="rounded-xl border border-violet-700/60 bg-zinc-950/60 p-4 sm:p-5">
               <div className="flex flex-wrap items-start justify-between gap-3">
                 <div>
@@ -745,6 +882,14 @@ export default function RdDbPanel() {
                 <DistributionCard title="Muestra declarada (campo format_raw)" total={evidencia.muestra_declarada.total} values={evidencia.muestra_declarada.distribucion} color="violet" />
                 <DistributionCard title="Resultados colorimétricos observados" total={evidencia.resultados_colorimetricos.total} values={evidencia.resultados_colorimetricos.distribucion} color="amber" />
               </div>
+              {evidencia.procedencia && (
+                <div className="mt-4 grid gap-2 text-xs sm:grid-cols-2 lg:grid-cols-4">
+                  <div className="rounded-lg border border-zinc-800 p-3"><span className="block text-[10px] uppercase tracking-wider text-zinc-600">Filas fuente</span><span className="text-zinc-300">{evidencia.procedencia.filas_brutas}</span></div>
+                  <div className="rounded-lg border border-zinc-800 p-3"><span className="block text-[10px] uppercase tracking-wider text-zinc-600">Muestras propias</span><span className="text-emerald-300">{evidencia.procedencia.primera_aparicion}</span></div>
+                  <div className="rounded-lg border border-zinc-800 p-3"><span className="block text-[10px] uppercase tracking-wider text-zinc-600">Repetidas en hoja</span><span className="text-amber-300">{evidencia.procedencia.repetidas_en_hoja}</span></div>
+                  <div className="rounded-lg border border-zinc-800 p-3"><span className="block text-[10px] uppercase tracking-wider text-zinc-600">Copiadas de otra jornada</span><span className="text-violet-300">{evidencia.procedencia.copiadas_de_otra_jornada}</span></div>
+                </div>
+              )}
               <div className="mt-4 grid gap-2 text-xs sm:grid-cols-3">
                 <div className="rounded-lg border border-zinc-800 p-3"><span className="block text-[10px] uppercase tracking-wider text-zinc-600">Productora / venue</span><span className="text-zinc-400">{evidencia.productora_fuente || 'sin enlace'} · {evidencia.venue_fuente || 'sin enlace'}</span></div>
                 <div className="rounded-lg border border-zinc-800 p-3"><span className="block text-[10px] uppercase tracking-wider text-zinc-600">Enlace</span><span className="text-zinc-400">{evidencia.estado_enlace || 'pendiente de revisión humana'}</span></div>
@@ -754,7 +899,7 @@ export default function RdDbPanel() {
             </section>
           )}
 
-          {data!.venues.length > 0 && (
+          {vista === 'campo' && data!.venues.length > 0 && (
             <section className="rounded-xl border border-zinc-800 bg-zinc-900/40">
               <div className="border-b border-zinc-800 px-4 py-3 text-sm font-bold">Venues</div>
               <div className="divide-y divide-zinc-800/60">
@@ -770,7 +915,7 @@ export default function RdDbPanel() {
             </section>
           )}
 
-          {data!.excluido_a_proposito && (
+          {vista === 'campo' && data!.excluido_a_proposito && (
             <p className="text-[11px] text-zinc-600">
               Excluido a propósito de este panel: {data!.excluido_a_proposito.join(', ')}. El endpoint usa allowlist de
               campos: un campo nuevo en el origen no se publica solo.
@@ -779,6 +924,276 @@ export default function RdDbPanel() {
         </>
       )}
     </div>
+  );
+}
+
+/**
+ * La matriz colorimetrica de todos los periodos cargados.
+ *
+ * Es lo que la planilla no dejaba ver: que color se observo con que reactivo
+ * para cada sustancia declarada. Un resultado compuesto se dibuja partido en
+ * diagonal porque son dos colores, no uno; colapsarlo al primero seria
+ * inventar una observacion que nadie hizo.
+ */
+function ColorimetriaSection({ c }: { c: Colorimetria }) {
+  const [sel, setSel] = useState<{ s: string; r: string } | null>({ s: 'mdma', r: 'marquis' });
+
+  const reactivos = Object.entries(c.por_reactivo)
+    .filter(([r, n]) => n >= 20 && r !== 'sin_reactivo').map(([r]) => r);
+  const sustancias = Object.entries(c.por_sustancia)
+    .filter(([, n]) => n >= 10).map(([s]) => s);
+  const et = (k: string) => c.etiquetas[k] ?? k;
+  const er = (k: string) => c.etiquetas_reactivo[k] ?? k.charAt(0).toUpperCase() + k.slice(1);
+  const nombreColor = (k: string) => k.toLowerCase().replace(/_/g, ' ').replace('+', ' + ');
+  // NEGRO es #1a1a1a sobre un panel casi negro: sin contorno la celda mas
+  // frecuente (1.230 observaciones) se lee como vacia. Se le agrega un borde
+  // interior claro en vez de aclarar el color, que mentiria sobre lo observado.
+  const pintar = (clave: string): CSSProperties => {
+    const oscuro = (x: string) => ['NEGRO', 'SIN_REACCION', 'NO_INTERPRETABLE'].includes(x);
+    const partes = clave.split('+');
+    const contorno = partes.some(oscuro) ? { boxShadow: 'inset 0 0 0 1px rgba(255,255,255,.28)' } : {};
+    if (partes.length === 1) return { background: c.hex[clave] ?? '#5a5a5a', ...contorno };
+    const a = c.hex[partes[0]] ?? '#888', b = c.hex[partes[1]] ?? '#888';
+    return { backgroundImage: `linear-gradient(135deg, ${a} 0 50%, ${b} 50% 100%)`, ...contorno };
+  };
+
+  const celda = sel ? c.matriz[sel.s]?.[sel.r] : undefined;
+  const orden = celda ? Object.entries(celda).sort((a, b) => b[1] - a[1]) : [];
+  const totalCelda = orden.reduce((acc, [, n]) => acc + n, 0);
+  const esperado = sel ? c.paleta_rd[sel.r] ?? [] : [];
+  const expectativa = sel ? c.esperado[sel.s]?.[sel.r] : undefined;
+  const esperadoSet = new Set(expectativa?.colores ?? []);
+  const idEnColor = c.pendientes.filter(p => p.estado === 'identidad_en_columna_de_color');
+
+  return (
+    <section className="rounded-xl border border-zinc-800 bg-zinc-900/30">
+      <div className="flex flex-wrap items-start justify-between gap-3 border-b border-zinc-800 px-4 py-4">
+        <div>
+          <h2 className="flex items-center gap-2 text-sm font-bold text-zinc-100">
+            <FlaskConical className="h-4 w-4 text-violet-300" /> Colorimetría · todos los períodos
+          </h2>
+          <p className="mt-1 max-w-3xl text-xs leading-relaxed text-zinc-500">
+            Qué color se observó con cada reactivo, por sustancia declarada. Las celdas rayadas
+            en diagonal son resultados compuestos: dos colores en una observación, conservados
+            como dos. Tocá una para ver el detalle.
+          </p>
+        </div>
+        <span className="rounded bg-zinc-800/80 px-2 py-1 text-[10px] text-zinc-400">
+          {c.muestras} muestras · {c.observaciones} observaciones
+        </span>
+      </div>
+
+      {c.concordancia.length > 0 && (
+        <div className="border-b border-zinc-800 px-4 py-4">
+          <h3 className="text-[10px] font-bold uppercase tracking-wider text-zinc-500">
+            Dónde el color observado no calza con lo declarado
+          </h3>
+          <p className="mb-3 mt-1 max-w-3xl text-[11px] leading-relaxed text-zinc-600">
+            Compara lo observado contra la reacción que el catálogo de reactivos de RD espera
+            para esa sustancia. Que no calce <b className="text-zinc-500">no dice que sea otra
+            sustancia</b>: dice que la observación merece una mirada.
+          </p>
+          <div className="space-y-2">
+            {c.concordancia.slice(0, 5).map(f => {
+              const noCalza = f.sin_reaccion + f.discrepa;
+              const pct = (noCalza / f.evaluadas) * 100;
+              const fuerte = pct >= 50;
+              return (
+                <button
+                  key={`${f.sustancia}-${f.reactivo}`}
+                  type="button"
+                  onClick={() => setSel({ s: f.sustancia, r: f.reactivo })}
+                  className="flex w-full flex-wrap items-center gap-x-3 gap-y-1 rounded-lg border border-zinc-800 bg-zinc-950/40 px-3 py-2 text-left hover:border-violet-600"
+                >
+                  <span className="text-xs font-medium text-zinc-300">{et(f.sustancia)}</span>
+                  <span className="text-[10px] uppercase tracking-wider text-zinc-600">con</span>
+                  <span className="text-xs text-zinc-400">{er(f.reactivo)}</span>
+                  <span className="flex items-center gap-1">
+                    {f.esperado.map(col => (
+                      <span key={col} className="h-3 w-3 rounded-sm border border-zinc-700" style={pintar(col)} title={`esperado: ${nombreColor(col)}`} />
+                    ))}
+                    <span className="text-[10px] text-zinc-600">esperado</span>
+                  </span>
+                  <span className="ml-auto flex items-center gap-2">
+                    <span className={`text-xs font-bold tabular-nums ${fuerte ? 'text-amber-400' : 'text-zinc-400'}`}>
+                      {pct.toFixed(0)}%
+                    </span>
+                    <span className="text-[10px] text-zinc-600">no calza · {noCalza} de {f.evaluadas}</span>
+                  </span>
+                  <span className="h-1.5 w-full overflow-hidden rounded-full bg-zinc-800">
+                    <span className={`block h-full rounded-full ${fuerte ? 'bg-amber-500' : 'bg-violet-500'}`} style={{ width: `${pct}%` }} />
+                  </span>
+                  <span className="w-full text-[10px] text-zinc-600">
+                    {f.sin_reaccion > 0 && <>sin reacción {f.sin_reaccion}</>}
+                    {f.sin_reaccion > 0 && f.discrepa > 0 && ' · '}
+                    {f.discrepa > 0 && <>otro color {f.discrepa}</>}
+                    {' · '}el catálogo espera «{f.reaccion_texto}»
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+      )}
+
+      {/* Ancho: la tabla cruzada. Angosto: una sustancia por bloque con sus
+          reactivos apilados. Una tabla de ocho columnas en un telefono obliga
+          a scrollear de lado y deja visibles tres reactivos de ocho. */}
+      <div className="hidden overflow-x-auto px-4 py-4 sm:block">
+        <table className="w-full min-w-[640px] border-collapse">
+          <thead>
+            <tr>
+              <th className="pb-2 text-left text-[10px] font-bold uppercase tracking-wider text-zinc-600">Sustancia declarada</th>
+              {reactivos.map(r => (
+                <th key={r} className="px-1 pb-2 text-left text-[10px] font-bold uppercase tracking-wider text-zinc-600">
+                  {er(r)}<span className="block font-normal normal-case tracking-normal text-zinc-700">{c.por_reactivo[r]}</span>
+                </th>
+              ))}
+            </tr>
+          </thead>
+          <tbody>
+            {sustancias.map(s => (
+              <tr key={s} className="border-t border-zinc-800/70">
+                <th scope="row" className="py-2 pr-3 text-left align-middle">
+                  <span className="text-xs font-medium text-zinc-300">{et(s)}</span>
+                  <span className="block text-[10px] text-zinc-600">{c.por_sustancia[s]} obs.</span>
+                </th>
+                {reactivos.map(r => {
+                  const cel = c.matriz[s]?.[r];
+                  if (!cel) return <td key={r} className="px-1 py-2"><div className="h-5 min-w-[70px] rounded border border-dashed border-zinc-800 opacity-40" /></td>;
+                  const tot = Object.values(cel).reduce((a, b) => a + b, 0);
+                  const segs = Object.entries(cel).sort((a, b) => b[1] - a[1]);
+                  const activa = sel?.s === s && sel?.r === r;
+                  return (
+                    <td key={r} className="px-1 py-2">
+                      <button
+                        type="button"
+                        onClick={() => setSel({ s, r })}
+                        title={`${et(s)} con ${er(r)}: ${tot} observaciones`}
+                        className={`flex h-5 w-full min-w-[70px] overflow-hidden rounded border ${activa ? 'border-violet-400' : 'border-zinc-800'} hover:border-violet-500`}
+                      >
+                        {segs.map(([clave, n]) => (
+                          <span key={clave} style={{ flex: `0 0 ${(n / tot) * 100}%`, ...pintar(clave) }} />
+                        ))}
+                      </button>
+                      <span className="mt-0.5 block text-[9px] text-zinc-600">{tot}</span>
+                    </td>
+                  );
+                })}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <div className="space-y-3 px-4 py-4 sm:hidden">
+        {sustancias.map(s => {
+          const fila = c.matriz[s] ?? {};
+          const conDato = reactivos.filter(r => fila[r]);
+          if (!conDato.length) return null;
+          return (
+            <div key={s} className="rounded-lg border border-zinc-800 bg-zinc-950/40 p-3">
+              <div className="flex items-baseline justify-between gap-2">
+                <span className="text-xs font-medium text-zinc-200">{et(s)}</span>
+                <span className="text-[10px] tabular-nums text-zinc-600">{c.por_sustancia[s]} obs.</span>
+              </div>
+              <div className="mt-2 space-y-1.5">
+                {conDato.map(r => {
+                  const cel = fila[r]!;
+                  const tot = Object.values(cel).reduce((a, b) => a + b, 0);
+                  const segs = Object.entries(cel).sort((a, b) => b[1] - a[1]);
+                  const activa = sel?.s === s && sel?.r === r;
+                  return (
+                    <button
+                      key={r}
+                      type="button"
+                      onClick={() => setSel({ s, r })}
+                      className="grid w-full grid-cols-[4.5rem_minmax(0,1fr)_2.2rem] items-center gap-2 text-left"
+                    >
+                      <span className="truncate text-[11px] text-zinc-400">{er(r)}</span>
+                      <span className={`flex h-4 overflow-hidden rounded border ${activa ? 'border-violet-400' : 'border-zinc-800'}`}>
+                        {segs.map(([clave, n]) => (
+                          <span key={clave} style={{ flex: `0 0 ${(n / tot) * 100}%`, ...pintar(clave) }} />
+                        ))}
+                      </span>
+                      <span className="text-right text-[10px] tabular-nums text-zinc-600">{tot}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      {sel && celda && (
+        <div className="mx-4 mb-4 rounded-lg border border-zinc-800 bg-zinc-900/60 p-4">
+          <div className="flex flex-wrap items-baseline justify-between gap-2">
+            <h3 className="text-xs font-bold text-zinc-200">{et(sel.s)} · {er(sel.r)}</h3>
+            <span className="text-[10px] text-zinc-600">{totalCelda} observaciones en la evidencia cargada</span>
+          </div>
+          {expectativa && (
+            <div className="mb-3 mt-2 flex flex-wrap items-center gap-2 rounded-md border border-zinc-800 bg-zinc-950/60 px-2.5 py-1.5">
+              <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-600">El catálogo espera</span>
+              {expectativa.colores.map(col => (
+                <span key={col} className="flex items-center gap-1 text-[11px] text-zinc-400">
+                  <span className="h-3 w-3 rounded-sm border border-zinc-700" style={pintar(col)} />
+                  {nombreColor(col)}
+                </span>
+              ))}
+            </div>
+          )}
+          {!expectativa && <p className="mb-3 mt-1 text-[10px] text-zinc-600">El catálogo no declara una reacción esperada para este par: no se evalúa concordancia.</p>}
+          <div className="space-y-2">
+            {orden.map(([clave, n]) => (
+              <div key={clave}>
+                <div className="flex items-center justify-between gap-3 text-[11px]">
+                  <span className="flex min-w-0 items-center gap-2 text-zinc-400">
+                    <span className="h-3 w-3 shrink-0 rounded-sm border border-zinc-700" style={pintar(clave)} />
+                    <span className="truncate">{nombreColor(clave)}</span>
+                    {expectativa && (
+                      clave.split('+').some(x => esperadoSet.has(x))
+                        ? <span className="shrink-0 rounded bg-emerald-950/60 px-1 text-[9px] text-emerald-400">calza</span>
+                        : <span className="shrink-0 rounded bg-amber-950/60 px-1 text-[9px] text-amber-400">no calza</span>
+                    )}
+                  </span>
+                  <span className="shrink-0 text-zinc-500">{n} · {((n / totalCelda) * 100).toFixed(1).replace('.0', '')}%</span>
+                </div>
+                <div className="mt-1 h-1.5 overflow-hidden rounded-full bg-zinc-800">
+                  <div className="h-full rounded-full" style={{ width: `${(n / totalCelda) * 100}%`, ...pintar(clave) }} />
+                </div>
+              </div>
+            ))}
+          </div>
+          {esperado.length > 0 && (
+            <div className="mt-4 border-t border-zinc-800 pt-3">
+              <p className="text-[10px] font-bold uppercase tracking-wider text-zinc-600">Reacción esperada de {er(sel.r)}</p>
+              <ul className="mt-1 space-y-0.5">
+                {esperado.map(x => (
+                  <li key={x.familia} className="flex items-center gap-2 text-[11px] text-zinc-500">
+                    <span className="h-2.5 w-2.5 shrink-0 rounded-sm" style={{ background: x.hex }} />
+                    <b className="text-zinc-400">{x.familia}</b> — {x.reaccion}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
+      )}
+
+      <div className="border-t border-zinc-800 px-4 py-3">
+        <p className="text-[11px] leading-relaxed text-zinc-500">
+          <AlertTriangle className="mr-1 inline h-3 w-3 text-amber-400" />
+          <b className="text-zinc-400">Un resultado colorimétrico es presuntivo.</b> {c.limitacion}.
+          {' '}{c.pendientes_total > 0 && <>Quedan <b className="text-zinc-400">{c.pendientes_total}</b> observaciones que no se pudieron leer; ninguna se descartó.</>}
+          {idEnColor.length > 0 && (
+            <> {idEnColor.length} de ellas traen un nombre de sustancia escrito en la columna de color
+            ({idEnColor.slice(0, 3).map(p => <code key={p.crudo} className="mx-0.5 rounded bg-zinc-800 px-1 text-[10px]">{p.crudo.trim()}</code>)}):
+            es una identificación puesta donde va una observación, y requiere revisión humana.</>
+          )}
+        </p>
+      </div>
+    </section>
   );
 }
 
@@ -819,15 +1234,149 @@ function DistributionCard({
   );
 }
 
-function MiniDistribution({ label, values }: { label: string; values: Distribucion[] }) {
-  const top = values.slice(0, 3);
+/**
+ * Las hojas de cada período, ordenadas por tamano.
+ *
+ * Reemplaza las tres barras moradas sin eje ni etiqueta que habia antes: eran
+ * decoracion, no informacion. Cada hoja muestra ahora los COLORES que se
+ * observaron realmente en ella, en proporcion, y cuantas muestras aporta
+ * comparada con el resto. La confianza de la fecha y el estado de enlace
+ * viajan como texto, no como adorno: las fechas deducidas
+ * del periodo y casi todas esperan un enlace humano a productora y venue.
+ */
+function EventosEvidencia({
+  eventos, colorimetria, productoras, activo, onSelect,
+}: {
+  eventos: Evidencia[];
+  colorimetria?: Colorimetria;
+  productoras: Productora[];
+  activo: string | null;
+  onSelect: (id: string) => void;
+}) {
+  const [abierto, setAbierto] = useState<string | null>('dame');
+  const hex = colorimetria?.hex ?? {};
+  const porEvento = colorimetria?.por_evento ?? {};
+  const nombreProd = new Map(productoras.map(p => [p.slug, p.nombre]));
+
+  const pintar = (clave: string) => {
+    const partes = clave.split('+');
+    if (partes.length === 1) return { background: hex[clave] ?? '#5a5a5a' };
+    const a = hex[partes[0]] ?? '#888', b = hex[partes[1]] ?? '#888';
+    return { backgroundImage: `linear-gradient(135deg, ${a} 0 50%, ${b} 50% 100%)` };
+  };
+  const tira = (conteos: Record<string, number>) => {
+    const pares = Object.entries(conteos).sort((a, b) => b[1] - a[1]);
+    const total = pares.reduce((a, [, n]) => a + n, 0);
+    return { pares, total };
+  };
+
+  // Las hojas se agrupan por la productora que su propio nombre propone. Es
+  // una propuesta, no un enlace: la fuente las marca `pending_human_link` y
+  // esto no lo cambia. Antes se mostraban planas y «Dame» aparecia catorce
+  // veces seguidas sin decir que era la misma.
+  const grupos = new Map<string, Evidencia[]>();
+  for (const ev of eventos) {
+    const k = ev.productora_candidata ?? '__sin__';
+    if (!grupos.has(k)) grupos.set(k, []);
+    grupos.get(k)!.push(ev);
+  }
+  const orden = [...grupos.entries()].sort((a, b) => {
+    if (a[0] === '__sin__') return 1;
+    if (b[0] === '__sin__') return -1;
+    return b[1].reduce((s, e) => s + e.filas, 0) - a[1].reduce((s, e) => s + e.filas, 0);
+  });
+
   return (
-    <div className="flex items-center gap-2">
-      <span className="w-16 shrink-0 text-[9px] font-bold uppercase tracking-wider text-zinc-600">{label}</span>
-      {top.length ? <div className="flex h-4 min-w-0 flex-1 items-end gap-1" title={top.map(item => `${item.valor || 'sin dato'}: ${item.porcentaje.toFixed(1)}%`).join(' · ')}>
-        {top.map(item => <span key={item.valor} className="min-w-1 flex-1 rounded-t bg-violet-400/80" style={{ height: `${Math.max(12, Math.min(100, item.porcentaje))}%` }} />)}
-      </div> : <span className="text-[9px] text-zinc-700">sin datos</span>}
-      {top[0] && <span className="w-10 shrink-0 text-right text-[9px] text-zinc-500">{top[0].porcentaje.toFixed(0)}%</span>}
+    <div className="divide-y divide-zinc-800/60">
+      {orden.map(([slug, hojas]) => {
+        const muestras = hojas.reduce((s, e) => s + e.filas, 0);
+        const colores: Record<string, number> = {};
+        for (const ev of hojas) {
+          for (const [k, n] of Object.entries(porEvento[ev.event_id] ?? {})) {
+            colores[k] = (colores[k] ?? 0) + n;
+          }
+        }
+        const { pares, total } = tira(colores);
+        const sinIdentificar = slug === '__sin__';
+        const aprox = hojas.some(h => h.match_candidata === 'aproximado');
+        // Una sigla puede ser de mas de una productora: se muestra distinto
+        // de un match exacto para que se confirme, no se asuma.
+        const sigla = hojas.some(h => h.match_candidata === 'abreviatura');
+        const open = abierto === slug;
+        return (
+          <div key={slug}>
+            <button
+              type="button"
+              onClick={() => setAbierto(open ? null : slug)}
+              className="flex w-full flex-wrap items-center gap-x-3 gap-y-2 px-4 py-3 text-left hover:bg-zinc-900/50"
+            >
+              <ChevronRight className={`h-3.5 w-3.5 shrink-0 text-zinc-600 transition-transform ${open ? 'rotate-90' : ''}`} />
+              <span className={`text-sm font-medium ${sinIdentificar ? 'text-zinc-500' : 'text-zinc-200'}`}>
+                {sinIdentificar ? 'Sin productora identificada' : nombreProd.get(slug) ?? slug}
+              </span>
+              {aprox && !sinIdentificar && (
+                <span className="rounded bg-amber-950/50 px-1.5 py-0.5 text-[9px] text-amber-500">una hoja por aproximación</span>
+              )}
+              {sigla && !sinIdentificar && (
+                <span className="rounded bg-amber-950/50 px-1.5 py-0.5 text-[9px] text-amber-500">atribuida por sigla</span>
+              )}
+                <span className="text-[11px] tabular-nums text-zinc-600">
+                {hojas.reduce((s, e) => s + (e.procedencia?.primera_aparicion ?? e.filas), 0)} propias · {muestras} filas fuente
+              </span>
+              {total > 0 && (
+                <span className="ml-auto flex h-3 w-full max-w-[280px] overflow-hidden rounded-sm border border-zinc-800"
+                      title={pares.map(([k, n]) => `${k.toLowerCase().replace(/_/g, ' ')}: ${n}`).join(' · ')}>
+                  {pares.map(([clave, n]) => (
+                    <span key={clave} style={{ flex: `0 0 ${(n / total) * 100}%`, ...pintar(clave) }} />
+                  ))}
+                </span>
+              )}
+            </button>
+
+            {open && (
+              <div className="bg-zinc-950/40 pb-1">
+                {sinIdentificar && (
+                  <p className="px-4 pb-2 pt-1 text-[10px] leading-relaxed text-zinc-600">
+                    El nombre de estas hojas no coincide con ninguna ficha de productora. No se
+                    les asigna una: la fuente las marca pendientes de enlace humano.
+                  </p>
+                )}
+                {[...hojas].sort((a, b) => b.filas - a.filas).map(ev => {
+                  const t = tira(porEvento[ev.event_id] ?? {});
+                  const sel = activo === ev.event_id;
+                  const firme = ev.estado_fecha === 'parsed_candidate';
+                  return (
+                    <button
+                      key={ev.event_id}
+                      type="button"
+                      onClick={() => onSelect(ev.event_id)}
+                      className={`grid w-full grid-cols-[minmax(0,1fr)_auto] gap-x-3 gap-y-1 px-4 py-2 pl-10 text-left ${sel ? 'bg-violet-950/30' : 'hover:bg-zinc-900/60'}`}
+                    >
+                      <span className="min-w-0 truncate text-[12px] text-zinc-300">{ev.nombre}</span>
+                      <span className="shrink-0 text-[11px] tabular-nums text-zinc-500">
+                        {ev.procedencia ? `${ev.procedencia.primera_aparicion} propias · ${ev.filas} filas` : ev.filas}
+                      </span>
+                      <span className="col-span-2 flex items-center gap-2">
+                        {t.total > 0 ? (
+                          <span className="flex h-2.5 min-w-0 flex-1 overflow-hidden rounded-sm border border-zinc-800"
+                                title={t.pares.map(([k, n]) => `${k.toLowerCase().replace(/_/g, ' ')}: ${n}`).join(' · ')}>
+                            {t.pares.map(([clave, n]) => (
+                              <span key={clave} style={{ flex: `0 0 ${(n / t.total) * 100}%`, ...pintar(clave) }} />
+                            ))}
+                          </span>
+                        ) : <span className="flex-1 text-[10px] text-zinc-700">sin color registrado</span>}
+                        <span className={`shrink-0 text-[10px] ${firme ? 'text-zinc-600' : 'text-amber-700'}`}>
+                          {ev.fecha_iso ? (firme ? ev.fecha_iso : `${ev.fecha_iso} aprox.`) : 'sin fecha'}
+                        </span>
+                      </span>
+                    </button>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        );
+      })}
     </div>
   );
 }

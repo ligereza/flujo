@@ -86,14 +86,20 @@ def test_testing_evidence_is_isolated_and_traceable(rd_db: Path):
     summary = db.testing_evidence_summary(rd_db)
     assert summary["available"] is True
     assert summary["status"] == "candidate_evidence_pending_human_review"
+    # Las cifras crecieron el 2026-09-16 al recuperar el corpus 2024: la
+    # planilla de Drive se reusa ano a ano y sus 25 jornadas se habian borrado
+    # para empezar 2025, asi que nunca entraron. Hoy la base carga tres
+    # periodos -- 2024, 2025 y las jornadas 2026 que siguen anotandose en el
+    # mismo archivo. `pending_links` son dos por jornada (venue y productora),
+    # que es lo que declara el contrato de integracion.
     assert summary["counts"] == {
-        "source_sheets": 42,
-        "events": 42,
-        "test_rows": 1831,
-        "observations": 5394,
-        "pending_links": 84,
+        "source_sheets": 67,
+        "events": 67,
+        "test_rows": 2856,
+        "observations": 8436,
+        "pending_links": 134,
         "exact_duplicate_rows_excluded_from_aggregate": 3,
-        "unresolved_substances": 2,
+        "unresolved_substances": 1,
         "unresolved_reagents": 1,
     }
     assert summary["public_claims_allowed"] is False
@@ -108,7 +114,7 @@ def test_candidate_research_is_consolidated_but_not_promoted(rd_db: Path):
         "reaction_patterns": 60,
         "relations": 52,
         "references": 230,
-        "joined_observations": 4745,
+        "joined_observations": 5389,  # tres periodos, no solo 2025
         "public_claims_allowed": False,
     }
 

@@ -1,7 +1,6 @@
 {
   "name": "TY Circle",
   "aliases": [
-    "TY",
     "TYCIRCLE",
     "TY Circle",
     "TY.MAYO"
@@ -12,5 +11,5 @@
   "venues": [],
   "confirmed": "",
   "fuente_datos": "nombres de archivo del archivo de entregas (ENTREGA/FEBRERO), mapeo 2026-07-17; sin confirmar por humano",
-  "notes": "Marca TY / TY Circle. Fuente: archivo de entregas (ENTREGA) (TY.MAYO.png) + FEBRERO (TYCIRCLE.ai)."
+  "notes": "Marca TY / TY Circle. Fuente: archivo de entregas (ENTREGA) (TY.MAYO.png) + FEBRERO (TYCIRCLE.ai). La sigla suelta `TY` se retiro el 2026-09-16: la evidencia de esta ficha son los archivos `TY.MAYO.png` y `TYCIRCLE.ai`, nunca un `TY` solo, y en las hojas de testeo RD el usuario confirmo que TY es Techno Youth."
 }

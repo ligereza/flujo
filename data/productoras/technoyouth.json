@@ -1,6 +1,7 @@
 {
   "name": "Techno Youth",
   "aliases": [
+    "TY",
     "TECHNOYOUTH",
     "Techno Youth",
     "cl-technoyouthchile"
@@ -12,9 +13,9 @@
   ],
   "logos": [],
   "venues": [],
-  "confirmed": "",
+  "confirmed": "TY = Techno Youth, palabra del usuario 2026-09-16 sobre las hojas de testeo RD 2024 (`TY 1510`, `Hotties X TY 3110`).",
   "fuente_datos": "nombres de archivo del archivo de entregas (ENTREGA/FEBRERO), mapeo 2026-07-17; sin confirmar por humano.",
-  "notes": "Colectivo/fiesta techno. tipos inferidos del nombre. Fuente: archivo de entregas (FEBRERO, root webp). Relacion declarada por el usuario 2026-07-23: TECHNOYOUTH impulsa OPENKLUB junto con PANAL RECORDS.",
+  "notes": "Colectivo/fiesta techno. tipos inferidos del nombre. Fuente: archivo de entregas (FEBRERO, root webp). Relacion declarada por el usuario 2026-07-23: TECHNOYOUTH impulsa OPENKLUB junto con PANAL RECORDS. La sigla TY estaba declarada en la ficha de TY Circle por un mapeo de nombres de archivo sin confirmar (2026-07-17); el usuario la corrigio el 2026-09-16.",
   "relaciones": [
     {
       "tipo": "impulsa",

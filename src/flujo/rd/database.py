@@ -46,6 +46,10 @@ _SUPLEMENTOS_JSON = (
 _PRODUCTORAS_DIR = _REPO / "data" / "productoras"
 _KNOWLEDGE_PRODUCTORAS_DIR = _REPO / "knowledge" / "productoras"
 _TESTING_EVIDENCE_JSON = _REPO / "data" / "rd_fuentes" / "testeo_eventos_2025_evidence.json"
+# La planilla de Drive se reusa ano a ano: cuando alguien borro las hojas de
+# 2024 para empezar 2025, esas 25 jornadas dejaron de existir para la base.
+# Por eso la evidencia se lee por periodo y no desde un archivo unico.
+_TESTING_EVIDENCE_GLOB = "testeo_eventos_*_evidence.json"
 _CANDIDATE_REGISTRIES = {
     "entity_universe_v0_1": (_REPO / "data" / "rd_fuentes" / "candidates" / "entity_universe_v0.1.json", "records"),
     "reagent_library_v0_1": (_REPO / "data" / "rd_fuentes" / "candidates" / "reagent_library_v0.1.json", "reagents"),
@@ -342,9 +346,20 @@ CREATE TABLE testeo_filas_fuente (
     extra_1_raw                     TEXT,
     source_duplicate_group_id       TEXT,
     source_duplicate_status         TEXT,
+    -- `source_duplicate_*` habla de hojas identicas ENTRE si. Esta columna es
+    -- otra cosa: una fila repetida DENTRO de su propia hoja. La planilla se
+    -- arma copiando la del evento anterior y sobrescribiendo, asi que lo que
+    -- el voluntario no alcanzo a pisar queda como muestra fantasma. Sin esta
+    -- marca, 729 filas de 2025 se contaban como testeos que nunca ocurrieron.
+    row_duplicate_status            TEXT,
+    -- Cuando la fila vino de otra jornada, de cual. Es evidencia, no una
+    -- limpieza a ciegas: deja ver que la planilla se arma copiando la hoja
+    -- anterior y que lo no sobrescrito queda como muestra que nadie testeo.
+    copied_from_sheet               TEXT,
     interpretation_policy           TEXT
 );
 CREATE INDEX idx_testeo_filas_event ON testeo_filas_fuente(event_id);
+CREATE INDEX idx_testeo_filas_dup ON testeo_filas_fuente(row_duplicate_status);
 CREATE TABLE testeo_observaciones_fuente (
     observation_id                  TEXT PRIMARY KEY,
     test_id                         TEXT NOT NULL REFERENCES testeo_filas_fuente(test_id),
@@ -625,18 +640,105 @@ def _load_testing_evidence(path: Path | None = None) -> dict[str, Any] | None:
     tests; this loader only accepts a JSON document with the expected
     collections and ignores unrecognized rows rather than inventing them.
     """
-    source_path = path if path is not None else _TESTING_EVIDENCE_JSON
-    if not source_path.exists():
+    if path is not None:
+        rutas = [path]
+    else:
+        carpeta = _TESTING_EVIDENCE_JSON.parent
+        rutas = sorted(carpeta.glob(_TESTING_EVIDENCE_GLOB)) if carpeta.is_dir() else []
+    documentos = []
+    for ruta in rutas:
+        if not ruta.exists():
+            continue
+        try:
+            doc = json.loads(ruta.read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            continue
+        if not isinstance(doc, dict) or not isinstance(doc.get("source"), dict):
+            continue
+        if not isinstance(doc.get("events"), list) or not isinstance(doc.get("observations"), list):
+            continue
+        documentos.append(doc)
+    if not documentos:
         return None
-    try:
-        doc = json.loads(source_path.read_text(encoding="utf-8"))
-    except (OSError, ValueError):
-        return None
-    if not isinstance(doc, dict) or not isinstance(doc.get("source"), dict):
-        return None
-    if not isinstance(doc.get("events"), list) or not isinstance(doc.get("observations"), list):
-        return None
-    return doc
+    if len(documentos) == 1:
+        return documentos[0]
+
+    # Varios periodos: se concatenan las colecciones. Los identificadores son
+    # hashes del nombre de hoja y su contenido, asi que dos anos distintos no
+    # colisionan; si colisionaran seria porque son la misma hoja, y entonces
+    # corresponde quedarse con una sola.
+    fusion = dict(documentos[0])
+    fusion["source"] = {
+        "file_name": ", ".join(str(d["source"].get("file_name", "")) for d in documentos),
+        # Coma y espacio, igual que `file_name` y el periodo: la columna es
+        # TEXT y un `repr()` de lista de Python en un campo sha256 no lo
+        # puede verificar nadie.
+        "sha256": ", ".join(str(d["source"].get("sha256", "")) for d in documentos),
+        "filename_period_label": ", ".join(
+            str(d["source"].get("filename_period_label", "")) for d in documentos),
+    }
+    # Los mapas de vocabulario tienen `raw_label` unico en la tabla: dos
+    # periodos que vieron "MDMA" aportan la misma etiqueta y hay que sumar sus
+    # conteos, no apilar dos filas.
+    for coleccion in ("substance_map", "reagent_map"):
+        acumulado: dict[str, dict] = {}
+        for doc in documentos:
+            for fila in doc.get(coleccion) or []:
+                if not isinstance(fila, dict):
+                    continue
+                etiqueta = str(fila.get("raw_label", ""))
+                if etiqueta in acumulado:
+                    acumulado[etiqueta]["count"] = (
+                        int(acumulado[etiqueta].get("count") or 0) + int(fila.get("count") or 0))
+                else:
+                    acumulado[etiqueta] = dict(fila)
+        fusion[coleccion] = sorted(acumulado.values(),
+                                   key=lambda f: -int(f.get("count") or 0))
+
+    for coleccion in ("source_sheets", "events", "test_rows", "observations",
+                      "link_queue", "review_queue"):
+        vistos: set = set()
+        juntos: list = []
+        for doc in documentos:
+            for fila in doc.get(coleccion) or []:
+                if not isinstance(fila, dict):
+                    continue
+                # `link_id`/`target_kind` y `kind` entran en la clave porque
+                # una jornada aporta DOS filas a `link_queue` -- venue y
+                # productora -- con el mismo `event_id`. Sin ellos la segunda
+                # se descartaba como duplicada y la cola de revision quedaba
+                # con la mitad de las preguntas, todas del mismo tipo.
+                clave = (fila.get("event_id"), fila.get("test_id"),
+                         fila.get("observation_id"), fila.get("source_sheet_name"),
+                         fila.get("raw_label"), fila.get("source_row"),
+                         fila.get("observation_ordinal"),
+                         fila.get("link_id"), fila.get("target_kind"),
+                         fila.get("kind"))
+                if clave in vistos:
+                    continue
+                vistos.add(clave)
+                juntos.append(fila)
+        fusion[coleccion] = juntos
+    # `source_sheet_index` es unico en la tabla y cada periodo numera desde 1.
+    # Se renumera de corrido y se propaga a los eventos, que lo referencian.
+    renumerado: dict[tuple, int] = {}
+    for nuevo_indice, hoja in enumerate(fusion["source_sheets"], start=1):
+        renumerado[(hoja.get("source_sheet_name"), hoja.get("source_sheet_hash"))] = nuevo_indice
+        hoja["source_sheet_index"] = nuevo_indice
+    for evento in fusion["events"]:
+        for (nombre, _huella), indice in renumerado.items():
+            if evento.get("source_sheet_name") == nombre:
+                evento["source_sheet_index"] = indice
+                break
+
+    fusion["coverage"] = {
+        "periodos": [d["source"].get("filename_period_label") for d in documentos],
+        "source_sheet_count": len(fusion["source_sheets"]),
+        "event_count": len(fusion["events"]),
+        "test_row_count_including_repeated_headers": len(fusion["test_rows"]),
+        "observation_count": len(fusion["observations"]),
+    }
+    return fusion
 
 
 def _sha256_file(path: Path) -> str:
@@ -1105,7 +1207,8 @@ def _insert_testing_evidence(conn: sqlite3.Connection, doc: dict[str, Any]) -> N
             "substance_normalized_candidate, substance_map_status, format_raw, test_1_raw, "
             "result_1_raw, test_2_raw, result_2_raw, test_3_raw, result_3_raw, test_4_raw, "
             "result_4_raw, extra_1_raw, source_duplicate_group_id, source_duplicate_status, "
-            "interpretation_policy) VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+            "row_duplicate_status, copied_from_sheet, interpretation_policy) "
+            "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
             (
                 row.get("test_id"),
                 row.get("event_id"),
@@ -1127,6 +1230,10 @@ def _insert_testing_evidence(conn: sqlite3.Connection, doc: dict[str, Any]) -> N
                 row.get("extra_1_raw"),
                 row.get("source_duplicate_group_id"),
                 row.get("source_duplicate_status"),
+                # Las importaciones viejas no traen la marca; se asume unica en
+                # vez de inventar un duplicado que nadie observo.
+                row.get("row_duplicate_status") or "first_occurrence",
+                row.get("copied_from_sheet"),
                 row.get("interpretation_policy"),
             ),
         )
@@ -1171,8 +1278,23 @@ def _insert_testing_evidence(conn: sqlite3.Connection, doc: dict[str, Any]) -> N
             ),
         )
 
-    for (raw_label, normalized_id, mapping_status), count in sorted(
-        substance_counts.items(), key=lambda item: item[0][0]
+    # `raw_label` es unico en la tabla. La misma etiqueta puede llegar con dos
+    # `mapping_status` distintos cuando se importa mas de un periodo, porque
+    # cada corpus la resolvio a su manera. Se colapsa por etiqueta y se
+    # conserva el estado mas fuerte: un "MDMA" ya canonico no se degrada a
+    # candidato porque otro ano lo haya visto sin resolver.
+    _FUERZA = {"canonical_existing_registry": 3, "candidate_alias": 2}
+    sustancias_por_etiqueta: dict[str, tuple[Any, str, int]] = {}
+    for (raw_label, normalized_id, mapping_status), count in substance_counts.items():
+        previo = sustancias_por_etiqueta.get(raw_label)
+        total = count + (previo[2] if previo else 0)
+        if previo is None or _FUERZA.get(mapping_status, 1) > _FUERZA.get(previo[1], 1):
+            sustancias_por_etiqueta[raw_label] = (normalized_id, mapping_status, total)
+        else:
+            sustancias_por_etiqueta[raw_label] = (previo[0], previo[1], total)
+
+    for raw_label, (normalized_id, mapping_status, count) in sorted(
+        sustancias_por_etiqueta.items()
     ):
         conn.execute(
             "INSERT INTO testeo_mapa_sustancias(raw_label, count, normalized_id, mapping_status) "
@@ -1185,8 +1307,17 @@ def _insert_testing_evidence(conn: sqlite3.Connection, doc: dict[str, Any]) -> N
             ),
         )
 
-    for (raw_label, normalized_id, mapping_status), count in sorted(
-        reagent_counts.items(), key=lambda item: item[0][0]
+    reactivos_por_etiqueta: dict[str, tuple[Any, str, int]] = {}
+    for (raw_label, normalized_id, mapping_status), count in reagent_counts.items():
+        previo = reactivos_por_etiqueta.get(raw_label)
+        total = count + (previo[2] if previo else 0)
+        if previo is None or _FUERZA.get(mapping_status, 1) > _FUERZA.get(previo[1], 1):
+            reactivos_por_etiqueta[raw_label] = (normalized_id, mapping_status, total)
+        else:
+            reactivos_por_etiqueta[raw_label] = (previo[0], previo[1], total)
+
+    for raw_label, (normalized_id, mapping_status, count) in sorted(
+        reactivos_por_etiqueta.items()
     ):
         conn.execute(
             "INSERT INTO testeo_mapa_reactivos(raw_label, count, normalized_id, mapping_status) "
@@ -1248,7 +1379,17 @@ def _rescatar_acumulativas(path: Path) -> dict[str, list[tuple]]:
     # Lo que la app de muestras escribe se acumula igual que los registros de
     # terreno: una muestra fotografiada en una mesa no se puede volver a
     # derivar de ninguna fuente canonica.
-    tablas = tuple(_datos.TABLAS_ACUMULATIVAS) + ("muestras", "muestra_resultados")
+    # Lo que XIO escribe desde la mesa es tan irrecuperable como lo anterior:
+    # se captura una vez, sin conexion, y no se deriva de ninguna fuente. Sin
+    # esto un `build_rd_db()` borraba en silencio la evidencia de campo; no se
+    # notaba porque las tablas estaban vacias, pero la primera jornada real que
+    # llegara por el puente se perdia en el siguiente rebuild.
+    tablas = tuple(_datos.TABLAS_ACUMULATIVAS) + (
+        "muestras", "muestra_resultados", "muestra_capturas",
+        "xio_eventos", "xio_signal_events",
+        "xio_visual_references", "xio_visual_reference_views",
+        "xio_visual_reference_reviews",
+    )
     for origen in (path, _datos.LEGACY_DB_PATH):
         if not origen.exists():
             continue
