@@ -3,11 +3,10 @@
 FLUJO es un repositorio autonomo de `ligereza/flujo`: motor portable de
 workflow, CLI, workspace web y contratos para RD e ISKVW.
 
-Si llegaste sin contexto, esta es la regla principal: este directorio no es
-VIBECODEINE/MAK y no es XIO. No busques otro checkout para decidir que posee
-este repositorio. Empieza por [`AGENTS.md`](AGENTS.md), luego
-[`STATUS.md`](STATUS.md), [`MAPA.md`](MAPA.md) y
-[`CAPACIDADES_FLUJO.md`](CAPACIDADES_FLUJO.md).
+Si llegaste sin contexto, este directorio no es VIBECODEINE/MAK y no es XIO.
+No busques otro checkout para decidir que posee este repositorio. Comprueba
+Git y el estado actual; usa `STATUS.md`, `MAPA.md` y
+`CAPACIDADES_FLUJO.md` sólo para ampliar los datos del checkout.
 
 ## Frontera del sistema
 
