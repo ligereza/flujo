@@ -12,7 +12,6 @@
 // productora y se guarda junto a su URL de origen. NUNCA se recorta de un
 // flyer: un recorte es un derivado de baja calidad y sin fuente.
 
-import type { CSSProperties } from 'react';
 import { useEffect, useRef, useState } from 'react';
 import { Database, Upload, CheckCircle2, CircleDashed, MapPin, AlertTriangle, BarChart3, ChevronRight, History, Layout, Radio, FlaskConical } from 'lucide-react';
 import EnsayosSection, { type Ensayos } from './EnsayosSection';
@@ -111,43 +110,12 @@ interface VenueCat {
 // existe, y ahi vale false.
 const SIN_SERVIDOR = typeof __SIN_SERVIDOR__ !== 'undefined' && __SIN_SERVIDOR__;
 
-/** Lectura colorimetrica de toda la evidencia: sustancia x reactivo x color. */
-interface Concordancia {
-  sustancia: string; reactivo: string; total: number; evaluadas: number;
-  coincide: number; sin_reaccion: number; discrepa: number;
-  esperado: string[]; reaccion_texto: string; alerta: string[];
-  top_discrepancias: Record<string, number>;
-}
 
-interface Colorimetria {
-  matriz: Record<string, Record<string, Record<string, number>>>;
-  esperado: Record<string, Record<string, { colores: string[]; notas: { familia: string; reaccion: string; hex: string }[]; alerta: unknown[] }>>;
-  concordancia: Concordancia[];
-  por_evento: Record<string, Record<string, number>>;
-  por_periodo: Record<string, Record<string, number>>;
-  muestras_por_periodo: Record<string, number>;
-  jornadas_por_periodo: Record<string, number>;
-  procedencia_por_periodo?: Record<string, Record<string, number>>;
-  por_color: Record<string, number>;
-  por_reactivo: Record<string, number>;
-  por_sustancia: Record<string, number>;
-  variantes: Record<string, Record<string, number>>;
-  estados: Record<string, number>;
-  pendientes: { crudo: string; estado: string; sin_reconocer: string[]; identidades: string[] }[];
-  pendientes_total: number;
-  muestras: number;
-  observaciones: number;
-  etiquetas: Record<string, string>;
-  etiquetas_reactivo: Record<string, string>;
-  hex: Record<string, string>;
-  paleta_rd: Record<string, { familia: string; reaccion: string; hex: string }[]>;
-  limitacion: string;
-}
 
 interface Data {
   /** true = los datos vienen dentro del archivo, no de un servidor. */
   horneado?: boolean;
-  colorimetria?: Colorimetria;
+  paneles?: Paneles;
   productoras: Productora[];
   venues: VenueCat[];
   evidencia_periodos?: Record<string, Evidencia[]>;
@@ -238,7 +206,7 @@ const VISTAS: {
   cuenta?: (d: Data, r: NonNullable<Data['resumen']>) => number;
 }[] = [
   { id: 'colorimetria', nombre: 'Ensayos', icono: FlaskConical,
-    cuenta: d => d.ensayos?.obs.length ?? Object.keys(d.colorimetria?.matriz ?? {}).length },
+    cuenta: d => d.ensayos?.obs.length ?? 0 },
   { id: 'jornadas', nombre: 'Jornadas', icono: History,
     cuenta: d => (Object.values(d.evidencia_periodos ?? {}).reduce((n, e) => n + e.length, 0)
       || (d.evidencia_2025?.length ?? 0)) },
@@ -258,7 +226,7 @@ const VISTAS: {
  */
 function ResumenCompacto({ r, c, evidencia }: {
   r: NonNullable<Data['resumen']>;
-  c?: Colorimetria;
+  c?: Paneles;
   evidencia?: Record<string, Evidencia[]>;
 }) {
   const jornadas = Object.values(evidencia ?? {}).reduce((n, e) => n + e.length, 0);
@@ -267,13 +235,15 @@ function ResumenCompacto({ r, c, evidencia }: {
   // aqui arriba contradecia el conteo de la vista de Ensayos, que solo cuenta
   // las propias. Dos cifras distintas del mismo dato en la misma pantalla son
   // una cifra menos, no una mas.
-  const propias = Object.values(evidencia ?? {}).reduce(
-    (n, e) => n + e.reduce((m, x) => m + (x.procedencia?.primera_aparicion ?? x.filas), 0), 0);
+  // Las dos primeras salen de la MISMA fuente que la vista de abajo -- la
+  // clasificación que la base ya resolvió -- para que el encabezado no diga
+  // una cifra y el detalle otra.
+  const res = Object.values(c?.resumen ?? {});
   const celdas = [
-    { k: 'muestras propias', v: propias || (c?.muestras ?? 0) },
+    { k: 'fiestas', v: res.reduce((n, x) => n + x.fiestas, 0) || jornadas },
+    { k: 'muestras analizadas', v: res.reduce((n, x) => n + x.muestras, 0) },
     { k: 'filas fuente', v: Object.values(evidencia ?? {}).reduce(
         (n, e) => n + e.reduce((m, x) => m + x.filas, 0), 0) },
-    { k: 'jornadas', v: jornadas },
     { k: 'prod.', v: r.productoras },
   ];
   return (
@@ -288,19 +258,39 @@ function ResumenCompacto({ r, c, evidencia }: {
   );
 }
 
-function PeriodosResumen({ evidencia }: {
-  evidencia: Record<string, Evidencia[]>;
-}) {
-  const periodos = Object.keys(evidencia).sort();
+/** El reparto por año, desde la MISMA fuente que el encabezado.
+ *
+ * Antes contaba hojas y filas por su cuenta, así que la pantalla mostraba
+ * «55 fiestas · 1.797 muestras» arriba y «26 jornadas · 758 propias» abajo:
+ * dos cifras del mismo dato, y quien las lee ya no confía en ninguna. Ahora
+ * las dos salen de la clasificación que resolvió la base.
+ */
+function PeriodosResumen({ paneles }: { paneles?: Paneles }) {
+  const res = paneles?.resumen ?? {};
+  const periodos = Object.keys(res).sort();
   if (!periodos.length) return null;
+  const nf = new Intl.NumberFormat('es-CL');
+  const totalM = periodos.reduce((n, k) => n + res[k].muestras, 0) || 1;
   return (
-    <div className="mt-3 flex flex-wrap items-center gap-1.5 text-[10px]">
-      <span className="mr-1 uppercase tracking-wider text-zinc-600">Períodos</span>
-      {periodos.map(periodo => (
-        <span key={periodo} className="rounded border border-zinc-800 bg-zinc-900/50 px-2 py-1 text-zinc-400">
-          {periodo} · {evidencia[periodo].length} jornadas · {evidencia[periodo].reduce((n, e) => n + e.filas, 0)} filas · {evidencia[periodo].reduce((n, e) => n + (e.procedencia?.primera_aparicion ?? e.filas), 0)} propias
-        </span>
-      ))}
+    <div className="mt-3 grid gap-1.5 sm:grid-cols-3">
+      {periodos.map(k => {
+        const parte = res[k].muestras / totalM * 100;
+        return (
+          <div key={k} className="rounded-lg border border-zinc-800 bg-zinc-900/40 px-3 py-2">
+            <div className="flex items-baseline justify-between">
+              <span className="text-sm font-bold text-zinc-100">{k}</span>
+              <span className="text-[11px] tabular-nums text-emerald-400">{parte.toFixed(0)}%</span>
+            </div>
+            <div className="mt-1 text-[11px] text-zinc-400">
+              <b className="tabular-nums text-zinc-200">{res[k].fiestas}</b> fiestas ·{' '}
+              <b className="tabular-nums text-zinc-200">{nf.format(res[k].muestras)}</b> muestras
+            </div>
+            <div className="mt-1.5 h-1 overflow-hidden rounded-full bg-zinc-800">
+              <div className="h-full rounded-full bg-emerald-500/70" style={{ width: `${parte}%` }} />
+            </div>
+          </div>
+        );
+      })}
     </div>
   );
 }
@@ -543,8 +533,8 @@ export default function RdDbPanel() {
 
       {estado === 'ok' && r && (
         <>
-          <ResumenCompacto r={r} c={data!.colorimetria} evidencia={evidenciaPeriodos} />
-          <PeriodosResumen evidencia={evidenciaPeriodos} />
+          <ResumenCompacto r={r} c={data!.paneles} evidencia={evidenciaPeriodos} />
+          <PeriodosResumen paneles={data!.paneles} />
 
           {/* Una vista a la vez. Antes el panel apilaba doce tarjetas de
               metricas y siete secciones a ancho completo: en un telefono eso
@@ -833,9 +823,12 @@ export default function RdDbPanel() {
             </section>
           )}
 
-          {vista === 'colorimetria' && (data!.ensayos
-            ? <EnsayosSection e={data!.ensayos} />
-            : data!.colorimetria && <ColorimetriaSection c={data!.colorimetria} />)}
+          {vista === 'colorimetria' && (
+            <div className="space-y-4">
+              {data!.ensayos && <EnsayosSection e={data!.ensayos} />}
+              {data!.paneles && <PanelesSection p={data!.paneles} />}
+            </div>
+          )}
 
           {vista === 'jornadas' && evidenciaVisible.length > 0 && (
             <section className="rounded-xl border border-violet-900/50 bg-violet-950/10">
@@ -860,7 +853,7 @@ export default function RdDbPanel() {
               </div>
               <EventosEvidencia
                 eventos={evidenciaVisible}
-                colorimetria={data!.colorimetria}
+                paneles={data!.paneles}
                 productoras={data!.productoras}
                 activo={evidenciaActiva}
                 onSelect={id => { setEvidenciaActiva(id); setProductoraActiva(null); }}
@@ -927,272 +920,124 @@ export default function RdDbPanel() {
   );
 }
 
-/**
- * La matriz colorimetrica de todos los periodos cargados.
+/** Por sustancia declarada: qué reactivo se le aplicó y qué color dio.
  *
- * Es lo que la planilla no dejaba ver: que color se observo con que reactivo
- * para cada sustancia declarada. Un resultado compuesto se dibuja partido en
- * diagonal porque son dos colores, no uno; colapsarlo al primero seria
- * inventar una observacion que nadie hizo.
+ * Reemplaza a la matriz agregada de sustancia × reactivo. Esa matriz
+ * promediaba lo que no se promedia —«Marquis negro 55%» junta MDMA, ketamina
+ * y cocaína; sobre MDMA es 65% y sobre cocaína 4%— y además marcaba «calza /
+ * no calza» contra una tabla de expectativas que solo funcionaba para MDMA.
+ * RD informa presencia, no concordancia.
+ *
+ * La clasificación no se decide acá: viene resuelta de la base
+ * (`v_testeo_muestras`). Este componente solo dibuja.
  */
-function ColorimetriaSection({ c }: { c: Colorimetria }) {
-  const [sel, setSel] = useState<{ s: string; r: string } | null>({ s: 'mdma', r: 'marquis' });
+interface Paneles {
+  periodos: Record<string, Record<string, {
+    muestras: number;
+    reactivos: Record<string, { muestras: number; colores: Record<string, number> }>;
+  }>>;
+  por_evento: Record<string, Record<string, number>>;
+  resumen: Record<string, { fiestas: number; muestras: number }>;
+  clasificacion: Record<string, number>;
+  hex: Record<string, string>;
+  etiquetas: Record<string, string>;
+  etiquetas_reactivo: Record<string, string>;
+  politica: string;
+}
 
-  const reactivos = Object.entries(c.por_reactivo)
-    .filter(([r, n]) => n >= 20 && r !== 'sin_reactivo').map(([r]) => r);
-  const sustancias = Object.entries(c.por_sustancia)
-    .filter(([, n]) => n >= 10).map(([s]) => s);
-  const et = (k: string) => c.etiquetas[k] ?? k;
-  const er = (k: string) => c.etiquetas_reactivo[k] ?? k.charAt(0).toUpperCase() + k.slice(1);
-  const nombreColor = (k: string) => k.toLowerCase().replace(/_/g, ' ').replace('+', ' + ');
-  // NEGRO es #1a1a1a sobre un panel casi negro: sin contorno la celda mas
-  // frecuente (1.230 observaciones) se lee como vacia. Se le agrega un borde
-  // interior claro en vez de aclarar el color, que mentiria sobre lo observado.
-  const pintar = (clave: string): CSSProperties => {
-    const oscuro = (x: string) => ['NEGRO', 'SIN_REACCION', 'NO_INTERPRETABLE'].includes(x);
-    const partes = clave.split('+');
-    const contorno = partes.some(oscuro) ? { boxShadow: 'inset 0 0 0 1px rgba(255,255,255,.28)' } : {};
-    if (partes.length === 1) return { background: c.hex[clave] ?? '#5a5a5a', ...contorno };
-    const a = c.hex[partes[0]] ?? '#888', b = c.hex[partes[1]] ?? '#888';
-    return { backgroundImage: `linear-gradient(135deg, ${a} 0 50%, ${b} 50% 100%)`, ...contorno };
+function PanelesSection({ p }: { p: Paneles }) {
+  const periodos = Object.keys(p.periodos).sort();
+  // Arranca en el año con más muestras, no en el último: 2026 lleva cuatro
+  // jornadas y abrir ahí muestra una sustancia y tres reactivos.
+  const [periodo, setPeriodo] = useState(
+    periodos.reduce((a, b) => ((p.resumen[b]?.muestras ?? 0) > (p.resumen[a]?.muestras ?? 0) ? b : a),
+                    periodos[0] ?? ''));
+  const nf = new Intl.NumberFormat('es-CL');
+  const et = (k: string) => p.etiquetas[k] ?? k.toLowerCase().replace(/_/g, ' ');
+  const er = (k: string) => p.etiquetas_reactivo[k] ?? k.replace('_', ':').toLowerCase();
+  const nc = (k: string) => k.toLowerCase().replace(/_/g, ' ').replace(/\+/g, ' + ');
+  // Un resultado compuesto son DOS colores y se pinta en diagonal: elegir uno
+  // sería inventar una observación que nadie hizo.
+  //
+  // Y «sin reacción» lleva textura, no color plano: sobre un panel oscuro el
+  // negro (#1a1a1a) y el gris de sin-reacción (#3a3f47) son el mismo
+  // rectángulo, y son lo contrario — uno es que el reactivo viró a negro y el
+  // otro que no viró. El rayado dice «acá no pasó nada» sin inventar un tono.
+  const pintar = (c: string) => {
+    if (c === 'SIN_REACCION')
+      return 'repeating-linear-gradient(45deg,#2b3038 0 4px,#3a4049 4px 8px)';
+    if (c === 'NO_INTERPRETABLE')
+      return 'repeating-linear-gradient(-45deg,#4a4a4a 0 3px,#5e5e5e 3px 6px)';
+    const partes = c.split('+').map(x => p.hex[x]).filter(Boolean);
+    if (!partes.length) return '#5a5a5a';
+    return partes.length === 1 ? partes[0]
+      : `linear-gradient(135deg, ${partes[0]} 0 50%, ${partes[1]} 50%)`;
   };
+  const claro = (c: string) => ['AMARILLO','BLANCO','CELESTE','ROSADO','GRIS','VERDE']
+    .includes(c.split('+')[0]);
 
-  const celda = sel ? c.matriz[sel.s]?.[sel.r] : undefined;
-  const orden = celda ? Object.entries(celda).sort((a, b) => b[1] - a[1]) : [];
-  const totalCelda = orden.reduce((acc, [, n]) => acc + n, 0);
-  const esperado = sel ? c.paleta_rd[sel.r] ?? [] : [];
-  const expectativa = sel ? c.esperado[sel.s]?.[sel.r] : undefined;
-  const esperadoSet = new Set(expectativa?.colores ?? []);
-  const idEnColor = c.pendientes.filter(p => p.estado === 'identidad_en_columna_de_color');
+  const datos = p.periodos[periodo] ?? {};
+  const r = p.resumen[periodo];
 
   return (
-    <section className="rounded-xl border border-zinc-800 bg-zinc-900/30">
-      <div className="flex flex-wrap items-start justify-between gap-3 border-b border-zinc-800 px-4 py-4">
-        <div>
-          <h2 className="flex items-center gap-2 text-sm font-bold text-zinc-100">
-            <FlaskConical className="h-4 w-4 text-violet-300" /> Colorimetría · todos los períodos
-          </h2>
-          <p className="mt-1 max-w-3xl text-xs leading-relaxed text-zinc-500">
-            Qué color se observó con cada reactivo, por sustancia declarada. Las celdas rayadas
-            en diagonal son resultados compuestos: dos colores en una observación, conservados
-            como dos. Tocá una para ver el detalle.
-          </p>
-        </div>
-        <span className="rounded bg-zinc-800/80 px-2 py-1 text-[10px] text-zinc-400">
-          {c.muestras} muestras · {c.observaciones} observaciones
-        </span>
+    <section className="space-y-3">
+      <div className="flex flex-wrap items-center gap-2 rounded-lg border border-zinc-800 bg-zinc-950/60 px-3 py-2.5">
+        {periodos.map(x => (
+          <button key={x} type="button" onClick={() => setPeriodo(x)}
+            className={`rounded-lg border px-3 py-1.5 text-xs transition-colors ${
+              x === periodo ? 'border-violet-500 bg-violet-500/10 text-violet-200'
+                            : 'border-zinc-700 text-zinc-400 hover:border-zinc-500'}`}>{x}</button>
+        ))}
+        {r && (
+          <span className="ml-auto text-[11px] text-zinc-500">
+            <b className="tabular-nums text-zinc-200">{r.fiestas}</b> fiestas ·{' '}
+            <b className="tabular-nums text-zinc-200">{nf.format(r.muestras)}</b> muestras
+          </span>
+        )}
       </div>
 
-      {c.concordancia.length > 0 && (
-        <div className="border-b border-zinc-800 px-4 py-4">
-          <h3 className="text-[10px] font-bold uppercase tracking-wider text-zinc-500">
-            Dónde el color observado no calza con lo declarado
-          </h3>
-          <p className="mb-3 mt-1 max-w-3xl text-[11px] leading-relaxed text-zinc-600">
-            Compara lo observado contra la reacción que el catálogo de reactivos de RD espera
-            para esa sustancia. Que no calce <b className="text-zinc-500">no dice que sea otra
-            sustancia</b>: dice que la observación merece una mirada.
-          </p>
-          <div className="space-y-2">
-            {c.concordancia.slice(0, 5).map(f => {
-              const noCalza = f.sin_reaccion + f.discrepa;
-              const pct = (noCalza / f.evaluadas) * 100;
-              const fuerte = pct >= 50;
-              return (
-                <button
-                  key={`${f.sustancia}-${f.reactivo}`}
-                  type="button"
-                  onClick={() => setSel({ s: f.sustancia, r: f.reactivo })}
-                  className="flex w-full flex-wrap items-center gap-x-3 gap-y-1 rounded-lg border border-zinc-800 bg-zinc-950/40 px-3 py-2 text-left hover:border-violet-600"
-                >
-                  <span className="text-xs font-medium text-zinc-300">{et(f.sustancia)}</span>
-                  <span className="text-[10px] uppercase tracking-wider text-zinc-600">con</span>
-                  <span className="text-xs text-zinc-400">{er(f.reactivo)}</span>
-                  <span className="flex items-center gap-1">
-                    {f.esperado.map(col => (
-                      <span key={col} className="h-3 w-3 rounded-sm border border-zinc-700" style={pintar(col)} title={`esperado: ${nombreColor(col)}`} />
-                    ))}
-                    <span className="text-[10px] text-zinc-600">esperado</span>
-                  </span>
-                  <span className="ml-auto flex items-center gap-2">
-                    <span className={`text-xs font-bold tabular-nums ${fuerte ? 'text-amber-400' : 'text-zinc-400'}`}>
-                      {pct.toFixed(0)}%
-                    </span>
-                    <span className="text-[10px] text-zinc-600">no calza · {noCalza} de {f.evaluadas}</span>
-                  </span>
-                  <span className="h-1.5 w-full overflow-hidden rounded-full bg-zinc-800">
-                    <span className={`block h-full rounded-full ${fuerte ? 'bg-amber-500' : 'bg-violet-500'}`} style={{ width: `${pct}%` }} />
-                  </span>
-                  <span className="w-full text-[10px] text-zinc-600">
-                    {f.sin_reaccion > 0 && <>sin reacción {f.sin_reaccion}</>}
-                    {f.sin_reaccion > 0 && f.discrepa > 0 && ' · '}
-                    {f.discrepa > 0 && <>otro color {f.discrepa}</>}
-                    {' · '}el catálogo espera «{f.reaccion_texto}»
-                  </span>
-                </button>
-              );
-            })}
+      {Object.entries(datos).map(([sus, d]) => (
+        <div key={sus} className="rounded-lg border border-zinc-800 bg-zinc-950/60 p-3">
+          <div className="mb-2.5 flex flex-wrap items-baseline gap-2">
+            <h4 className="text-sm font-bold text-zinc-100">{et(sus)}</h4>
+            <span className="text-[11px] tabular-nums text-zinc-500">
+              {nf.format(d.muestras)} muestras
+            </span>
           </div>
-        </div>
-      )}
-
-      {/* Ancho: la tabla cruzada. Angosto: una sustancia por bloque con sus
-          reactivos apilados. Una tabla de ocho columnas en un telefono obliga
-          a scrollear de lado y deja visibles tres reactivos de ocho. */}
-      <div className="hidden overflow-x-auto px-4 py-4 sm:block">
-        <table className="w-full min-w-[640px] border-collapse">
-          <thead>
-            <tr>
-              <th className="pb-2 text-left text-[10px] font-bold uppercase tracking-wider text-zinc-600">Sustancia declarada</th>
-              {reactivos.map(r => (
-                <th key={r} className="px-1 pb-2 text-left text-[10px] font-bold uppercase tracking-wider text-zinc-600">
-                  {er(r)}<span className="block font-normal normal-case tracking-normal text-zinc-700">{c.por_reactivo[r]}</span>
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {sustancias.map(s => (
-              <tr key={s} className="border-t border-zinc-800/70">
-                <th scope="row" className="py-2 pr-3 text-left align-middle">
-                  <span className="text-xs font-medium text-zinc-300">{et(s)}</span>
-                  <span className="block text-[10px] text-zinc-600">{c.por_sustancia[s]} obs.</span>
-                </th>
-                {reactivos.map(r => {
-                  const cel = c.matriz[s]?.[r];
-                  if (!cel) return <td key={r} className="px-1 py-2"><div className="h-5 min-w-[70px] rounded border border-dashed border-zinc-800 opacity-40" /></td>;
-                  const tot = Object.values(cel).reduce((a, b) => a + b, 0);
-                  const segs = Object.entries(cel).sort((a, b) => b[1] - a[1]);
-                  const activa = sel?.s === s && sel?.r === r;
-                  return (
-                    <td key={r} className="px-1 py-2">
-                      <button
-                        type="button"
-                        onClick={() => setSel({ s, r })}
-                        title={`${et(s)} con ${er(r)}: ${tot} observaciones`}
-                        className={`flex h-5 w-full min-w-[70px] overflow-hidden rounded border ${activa ? 'border-violet-400' : 'border-zinc-800'} hover:border-violet-500`}
-                      >
-                        {segs.map(([clave, n]) => (
-                          <span key={clave} style={{ flex: `0 0 ${(n / tot) * 100}%`, ...pintar(clave) }} />
-                        ))}
-                      </button>
-                      <span className="mt-0.5 block text-[9px] text-zinc-600">{tot}</span>
-                    </td>
-                  );
-                })}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-
-      <div className="space-y-3 px-4 py-4 sm:hidden">
-        {sustancias.map(s => {
-          const fila = c.matriz[s] ?? {};
-          const conDato = reactivos.filter(r => fila[r]);
-          if (!conDato.length) return null;
-          return (
-            <div key={s} className="rounded-lg border border-zinc-800 bg-zinc-950/40 p-3">
-              <div className="flex items-baseline justify-between gap-2">
-                <span className="text-xs font-medium text-zinc-200">{et(s)}</span>
-                <span className="text-[10px] tabular-nums text-zinc-600">{c.por_sustancia[s]} obs.</span>
-              </div>
-              <div className="mt-2 space-y-1.5">
-                {conDato.map(r => {
-                  const cel = fila[r]!;
-                  const tot = Object.values(cel).reduce((a, b) => a + b, 0);
-                  const segs = Object.entries(cel).sort((a, b) => b[1] - a[1]);
-                  const activa = sel?.s === s && sel?.r === r;
-                  return (
-                    <button
-                      key={r}
-                      type="button"
-                      onClick={() => setSel({ s, r })}
-                      className="grid w-full grid-cols-[4.5rem_minmax(0,1fr)_2.2rem] items-center gap-2 text-left"
-                    >
-                      <span className="truncate text-[11px] text-zinc-400">{er(r)}</span>
-                      <span className={`flex h-4 overflow-hidden rounded border ${activa ? 'border-violet-400' : 'border-zinc-800'}`}>
-                        {segs.map(([clave, n]) => (
-                          <span key={clave} style={{ flex: `0 0 ${(n / tot) * 100}%`, ...pintar(clave) }} />
-                        ))}
-                      </span>
-                      <span className="text-right text-[10px] tabular-nums text-zinc-600">{tot}</span>
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-          );
-        })}
-      </div>
-
-      {sel && celda && (
-        <div className="mx-4 mb-4 rounded-lg border border-zinc-800 bg-zinc-900/60 p-4">
-          <div className="flex flex-wrap items-baseline justify-between gap-2">
-            <h3 className="text-xs font-bold text-zinc-200">{et(sel.s)} · {er(sel.r)}</h3>
-            <span className="text-[10px] text-zinc-600">{totalCelda} observaciones en la evidencia cargada</span>
-          </div>
-          {expectativa && (
-            <div className="mb-3 mt-2 flex flex-wrap items-center gap-2 rounded-md border border-zinc-800 bg-zinc-950/60 px-2.5 py-1.5">
-              <span className="text-[10px] font-bold uppercase tracking-wider text-zinc-600">El catálogo espera</span>
-              {expectativa.colores.map(col => (
-                <span key={col} className="flex items-center gap-1 text-[11px] text-zinc-400">
-                  <span className="h-3 w-3 rounded-sm border border-zinc-700" style={pintar(col)} />
-                  {nombreColor(col)}
+          {Object.entries(d.reactivos).map(([rea, x]) => {
+            const tot = Object.values(x.colores).reduce((a, b) => a + b, 0) || 1;
+            return (
+              <div key={rea} className="mb-1.5 grid grid-cols-[minmax(0,84px)_42px_minmax(0,1fr)] items-center gap-2">
+                <span className="truncate text-[11.5px] font-medium text-zinc-300">{er(rea)}</span>
+                <span className="text-right text-[11px] tabular-nums text-zinc-500">
+                  {Math.round(x.muestras / d.muestras * 100)}%
                 </span>
-              ))}
-            </div>
-          )}
-          {!expectativa && <p className="mb-3 mt-1 text-[10px] text-zinc-600">El catálogo no declara una reacción esperada para este par: no se evalúa concordancia.</p>}
-          <div className="space-y-2">
-            {orden.map(([clave, n]) => (
-              <div key={clave}>
-                <div className="flex items-center justify-between gap-3 text-[11px]">
-                  <span className="flex min-w-0 items-center gap-2 text-zinc-400">
-                    <span className="h-3 w-3 shrink-0 rounded-sm border border-zinc-700" style={pintar(clave)} />
-                    <span className="truncate">{nombreColor(clave)}</span>
-                    {expectativa && (
-                      clave.split('+').some(x => esperadoSet.has(x))
-                        ? <span className="shrink-0 rounded bg-emerald-950/60 px-1 text-[9px] text-emerald-400">calza</span>
-                        : <span className="shrink-0 rounded bg-amber-950/60 px-1 text-[9px] text-amber-400">no calza</span>
-                    )}
-                  </span>
-                  <span className="shrink-0 text-zinc-500">{n} · {((n / totalCelda) * 100).toFixed(1).replace('.0', '')}%</span>
-                </div>
-                <div className="mt-1 h-1.5 overflow-hidden rounded-full bg-zinc-800">
-                  <div className="h-full rounded-full" style={{ width: `${(n / totalCelda) * 100}%`, ...pintar(clave) }} />
-                </div>
+                <span className="flex h-[18px] overflow-hidden rounded border border-zinc-700/70">
+                  {Object.entries(x.colores).map(([c, v]) => (
+                    <span key={c} style={{ flex: v, background: pintar(c) }}
+                      title={`${nc(c)}: ${v} de ${tot} (${(v / tot * 100).toFixed(0)}%)`}
+                      className="relative min-w-[2px]">
+                      {v / tot >= 0.16 && (
+                        <b className={`absolute inset-0 flex items-center justify-center
+                          overflow-hidden text-[9.5px] font-bold ${
+                          claro(c) ? 'text-zinc-900' : 'text-zinc-50'}`}>
+                          {Math.round(v / tot * 100)}%
+                        </b>
+                      )}
+                    </span>
+                  ))}
+                </span>
               </div>
-            ))}
-          </div>
-          {esperado.length > 0 && (
-            <div className="mt-4 border-t border-zinc-800 pt-3">
-              <p className="text-[10px] font-bold uppercase tracking-wider text-zinc-600">Reacción esperada de {er(sel.r)}</p>
-              <ul className="mt-1 space-y-0.5">
-                {esperado.map(x => (
-                  <li key={x.familia} className="flex items-center gap-2 text-[11px] text-zinc-500">
-                    <span className="h-2.5 w-2.5 shrink-0 rounded-sm" style={{ background: x.hex }} />
-                    <b className="text-zinc-400">{x.familia}</b> — {x.reaccion}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
+            );
+          })}
         </div>
-      )}
+      ))}
 
-      <div className="border-t border-zinc-800 px-4 py-3">
-        <p className="text-[11px] leading-relaxed text-zinc-500">
-          <AlertTriangle className="mr-1 inline h-3 w-3 text-amber-400" />
-          <b className="text-zinc-400">Un resultado colorimétrico es presuntivo.</b> {c.limitacion}.
-          {' '}{c.pendientes_total > 0 && <>Quedan <b className="text-zinc-400">{c.pendientes_total}</b> observaciones que no se pudieron leer; ninguna se descartó.</>}
-          {idEnColor.length > 0 && (
-            <> {idEnColor.length} de ellas traen un nombre de sustancia escrito en la columna de color
-            ({idEnColor.slice(0, 3).map(p => <code key={p.crudo} className="mx-0.5 rounded bg-zinc-800 px-1 text-[10px]">{p.crudo.trim()}</code>)}):
-            es una identificación puesta donde va una observación, y requiere revisión humana.</>
-          )}
-        </p>
-      </div>
+      <p className="px-1 text-[11px] leading-relaxed text-zinc-500">
+        La cifra gris es <b className="text-zinc-400">a qué porcentaje de esas muestras se le
+        aplicó ese reactivo</b>; el porcentaje dentro de la franja es sobre las veces que se
+        aplicó, no sobre el total. {p.politica}.
+      </p>
     </section>
   );
 }
@@ -1245,17 +1090,17 @@ function DistributionCard({
  * del periodo y casi todas esperan un enlace humano a productora y venue.
  */
 function EventosEvidencia({
-  eventos, colorimetria, productoras, activo, onSelect,
+  eventos, paneles, productoras, activo, onSelect,
 }: {
   eventos: Evidencia[];
-  colorimetria?: Colorimetria;
+  paneles?: Paneles;
   productoras: Productora[];
   activo: string | null;
   onSelect: (id: string) => void;
 }) {
   const [abierto, setAbierto] = useState<string | null>('dame');
-  const hex = colorimetria?.hex ?? {};
-  const porEvento = colorimetria?.por_evento ?? {};
+  const hex = paneles?.hex ?? {};
+  const porEvento = paneles?.por_evento ?? {};
   const nombreProd = new Map(productoras.map(p => [p.slug, p.nombre]));
 
   const pintar = (clave: string) => {

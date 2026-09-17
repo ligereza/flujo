@@ -617,7 +617,7 @@ def datos_panel(root) -> dict:
         "evidencia_periodos": evidencia_periodos,
         # Kept for older standalone bundles and consumers.
         "evidencia_2025": evidencia_periodos.get("2025", []),
-        "colorimetria": _colorimetria_periodos(root),
+        "paneles": _paneles_por_sustancia(root),
         # Las observaciones atomicas: la interfaz agrega desde aca, asi
         # que cada cifra del grafico se puede abrir hasta la celda.
         "ensayos": _ensayos_fuente(root),
@@ -644,7 +644,17 @@ def datos_panel(root) -> dict:
 
 # Etiqueta legible de la sustancia declarada. La clave sigue siendo el id
 # canonico que la fuente ya trae en `substance_normalized_candidate`.
+# Como se escribe cada sustancia en pantalla. Las claves son el vocabulario de
+# `ensayos.py` (MAYUSCULAS); las minusculas son el vocabulario viejo del
+# importador original, que sigue vivo en la vista de jornadas.
 _ETIQUETA_SUSTANCIA = {
+    "MDMA": "MDMA", "KETAMINA": "Ketamina", "COCAINA": "Cocaína",
+    "2C_B": "2C-B", "TUSI": "Tusi", "CANNABIS": "Cannabis", "GHB": "GHB",
+    "HONGOS": "Hongos", "MEFEDRONA": "Mefedrona", "LSD": "LSD", "MDA": "MDA",
+    "ANFETAMINA": "Anfetamina", "METANFETAMINA": "Metanfetamina",
+    "BENZODIACEPINA": "Benzodiacepina", "CAFEINA": "Cafeína", "DMT": "DMT",
+    "NO_DECLARA": "sin declarar", "NO_SABE": "no sabe qué es",
+    # vocabulario viejo, todavia en uso por la vista de jornadas
     "mdma": "MDMA", "ketamine": "Ketamina", "cocaine": "Cocaína",
     "two_c_b": "2C-B", "tusi": "Tusi", "ghb_gbl": "GHB / GBL",
     "mephedrone": "Mefedrona", "cannabis": "Cannabis",
@@ -655,6 +665,12 @@ _ETIQUETA_SUSTANCIA = {
 _ETIQUETA_REACTIVO = {
     "sin_reactivo": "sin reactivo", "cbd_thc": "CBD/THC",
     "fentanyl_strip": "tira fentanilo",
+    "MARQUIS": "Marquis", "SIMONS": "Simon's", "FROEHDE": "Froehde",
+    "MECKE": "Mecke", "MANDELIN": "Mandelin", "LIEBERMANN": "Liebermann",
+    "MORRIS": "Morris", "ROBADOPE": "Robadope", "ZIMMERMANN": "Zimmermann",
+    "EHRLICH": "Ehrlich", "HOFMANN": "Hofmann", "CBD_THC": "CBD:THC",
+    "TIRA_FENTANILO": "tira fentanilo", "TIRA_XYLAZINA": "tira xilazina",
+    "TIRA_BENZODIACEPINAS": "tira benzos", "TEST_GHB": "test GHB",
 }
 # Filas que son dato. `repeated_header` son encabezados de la planilla original
 # que quedaron preservados como filas: contarlos inflaria el total de muestras.
@@ -914,275 +930,102 @@ def _ensayos_fuente(root) -> dict:
     }
 
 
-def _expectativa_catalogo(conn) -> dict:
-    """Que color espera el catalogo de RD para cada sustancia x reactivo.
+def _paneles_por_sustancia(root) -> dict:
+    """Por sustancia declarada: que reactivo se le aplico y que color dio.
 
-    Se lee de la tabla `reactivos`, que es la fuente curada de la ONG, y se
-    traduce con el mismo normalizador que lee las observaciones: asi la
-    expectativa y lo observado hablan el mismo vocabulario. Una familia que no
-    esta en el mapa no genera expectativa, y eso se reporta en vez de suponerla.
+    Reemplaza a la matriz agregada de sustancia x reactivo, que tenia dos
+    defectos que no se arreglan con diseno:
+
+    - **Promediaba lo que no se promedia.** «Marquis dio negro en 55%» junta
+      MDMA, ketamina y cocaina; sobre MDMA es 65% y sobre cocaina 4%. Cada
+      droga lleva su propio panel de reactivos.
+    - **Emitia veredicto.** Marcaba «calza / no calza» contra una tabla de
+      expectativas que solo funcionaba para MDMA -- las otras familias nunca
+      estuvieron mapeadas -- y encima con una fila que la auditoria
+      internacional retracto. RD informa presencia, no concordancia.
+
+    Lee de `v_testeo_muestras`, la vista que la propia base construye al
+    clasificar. Aca no se vuelve a decidir que fila cuenta: se consulta.
     """
-    esperado: dict = {}
-    for row in conn.execute("SELECT reactivo, familia, reaccion, hex FROM reactivos"):
-        familia = (row["familia"] or "").strip().lower()
-        sustancia = _FAMILIA_A_SUSTANCIA.get(familia)
-        if not sustancia:
-            continue
-        reactivo = (row["reactivo"] or "").strip().lower()
-        # `Simon` en el catalogo, `simons` en las observaciones importadas.
-        if reactivo == "simon":
-            reactivo = "simons"
-        lectura = normalizar_color(row["reaccion"])
-        colores = lectura.get("colores") or []
-        if lectura["outcome"] == "SIN_REACCION":
-            colores = ["SIN_REACCION"]
-        if not colores:
-            continue
-        entrada = esperado.setdefault(sustancia, {}).setdefault(
-            reactivo, {"colores": [], "notas": [], "alerta": []})
-        for color in colores:
-            if color not in entrada["colores"]:
-                entrada["colores"].append(color)
-        nota = {"familia": row["familia"], "reaccion": row["reaccion"], "hex": row["hex"]}
-        entrada["notas"].append(nota)
-        if familia in _FAMILIA_ALERTA:
-            entrada["alerta"].append(nota)
-    return esperado
+    from .ensayos import normalizar_reactivo, normalizar_sustancia
 
-
-def _concordancia(matriz: dict, esperado: dict) -> list[dict]:
-    """Donde el color observado no coincide con lo que el catalogo espera.
-
-    NO dice que la sustancia sea otra. Dice que la observacion no calza con la
-    reaccion esperada de lo declarado, que es un motivo para mirar la muestra,
-    no una conclusion sobre su contenido. Un resultado colorimetrico sigue
-    siendo presuntivo aunque coincida.
-    """
-    filas: list[dict] = []
-    for sustancia, reactivos in matriz.items():
-        for reactivo, colores in reactivos.items():
-            expect = esperado.get(sustancia, {}).get(reactivo)
-            if not expect:
-                continue
-            ok = set(expect["colores"])
-            total = sum(colores.values())
-            coincide = sin_reaccion = discrepa = 0
-            discrepancias: Counter = Counter()
-            for clave, n in colores.items():
-                if clave == "NO_INTERPRETABLE":
-                    continue
-                partes = set(clave.split("+"))
-                if partes & ok:
-                    coincide += n
-                elif clave == "SIN_REACCION":
-                    sin_reaccion += n
-                    discrepancias[clave] += n
-                else:
-                    discrepa += n
-                    discrepancias[clave] += n
-            evaluadas = coincide + sin_reaccion + discrepa
-            if evaluadas < 10:
-                continue
-            filas.append({
-                "sustancia": sustancia,
-                "reactivo": reactivo,
-                "total": total,
-                "evaluadas": evaluadas,
-                "coincide": coincide,
-                "sin_reaccion": sin_reaccion,
-                "discrepa": discrepa,
-                "esperado": expect["colores"],
-                "reaccion_texto": "; ".join(n["reaccion"] for n in expect["notas"]),
-                "alerta": [n["reaccion"] for n in expect["alerta"]],
-                "top_discrepancias": dict(discrepancias.most_common(4)),
-            })
-    filas.sort(key=lambda f: -(f["sin_reaccion"] + f["discrepa"]))
-    return filas
-
-
-def _colorimetria_periodos(root) -> dict:
-    """Matriz multi-periodo de sustancia x reactivo x color observado.
-
-    Lo que esta proyeccion agrega sobre la evidencia historica: el COLOR. La fuente
-    guarda el resultado unicamente en `result_raw`, en crudo y con 136
-    variantes de escritura para unos pocos resultados reales;
-    `result_normalized_candidate` viene NULL en la gran mayoria de las filas.
-    Sin normalizar eso no hay forma de graficar nada, y por eso la pestana
-    mostraba la evidencia como texto suelto.
-
-    Reglas que se respetan aca, no por estetica sino por el dominio:
-
-    - Un resultado compuesto (`negro y naranjo`) son DOS colores y se conserva
-      como dos. Colapsarlo al primero seria inventar una observacion.
-    - El orden en que se escribio no cambia el agrupamiento: `negro y naranjo`
-      y `naranjo y negro` caen en la misma celda.
-    - Lo que no se pudo leer no se descarta: queda en `pendientes` con su valor
-      crudo, para que una persona lo resuelva.
-    - Un nombre de sustancia escrito en la columna de color se marca aparte:
-      es una identificacion presuntiva puesta donde va una observacion, y
-      contradice la politica de la propia fuente.
-    - El color de la MUESTRA no es el color del TEST. `Cupra morada` en la
-      columna de resultado es la pastilla, no un reactivo que viro a morado.
-      Las dos columnas contienen nombres de color y se confunden de vista, asi
-      que el vocabulario de troqueles se lee de `format_raw` -- del propio
-      corpus, porque cada temporada trae troqueles nuevos -- y esas celdas
-      quedan fuera de la matriz, no adentro.
-
-    Un color observado no identifica una sustancia, no mide pureza y no mide
-    dosis.
-    """
     db_path = rd_db_path(root)
     if not db_path.is_file():
         return {}
-    uri = f"file:{db_path.resolve().as_posix()}?mode=ro"
     try:
-        conn = sqlite3.connect(uri, uri=True)
+        conn = sqlite3.connect(f"file:{db_path.resolve().as_posix()}?mode=ro", uri=True)
         conn.row_factory = sqlite3.Row
-        # El periodo de cada evento: sin esto la matriz sumaba todos los anos en
-        # la misma celda y el panel mostraba 2.762 muestras como si fueran de
-        # un ano. Dos corpus distintos no se promedian en silencio.
-        # Vocabulario de troquel, sacado de la columna de formato: los tokens
-        # que NO son un color ni un matiz ni una palabra de presentacion son
-        # el nombre del sello (`cupra`, `tesla`, `gucci`). Si uno de esos
-        # aparece en la columna de resultado, la celda describe la muestra.
-        etiquetas_muestra: set[str] = set()
-        for fila in conn.execute(
-                "SELECT DISTINCT format_raw FROM testeo_filas_fuente "
-                "WHERE format_raw IS NOT NULL AND TRIM(format_raw) <> ''"):
-            for token in re.split(r"[^\wÁÉÍÓÚÑáéíóúñ]+", str(fila[0])):
-                clave = _clave_nombre(token)
-                if len(clave) < 4 or clave.isdigit():
-                    continue
-                if normalizar_color(clave)["status"] == "canonico":
-                    continue
-                # Un color mal escrito no es un troquel: `amarillos`, `blancos`
-                # y `azil` estan a una letra del vocabulario canonico. Sin este
-                # filtro entrarian a la lista de sellos y una lectura legitima
-                # se marcaria como descripcion de la muestra.
-                if any(_distancia(clave, c.lower()) <= 2 for c in COLORES):
-                    continue
-                etiquetas_muestra.add(clave)
-        etiquetas_muestra = frozenset(etiquetas_muestra)
-
-        periodo_de: dict[str, str] = {
-            r["event_id"]: (r["source_period_label"] or "sin_periodo")
-            for r in conn.execute(
-                "SELECT event_id, source_period_label FROM testeo_eventos_fuente")
-        }
-
-        filas: dict[str, dict] = {}
-        for row in conn.execute(
-            "SELECT test_id, event_id, substance_normalized_candidate, substance_raw, "
-            "row_status, row_duplicate_status "
-            "FROM testeo_filas_fuente"
-        ):
-            if row["row_status"] not in _FILAS_DATO:
-                continue
-            clave = (row["substance_normalized_candidate"] or "").strip()
-            if not clave:
-                clave = "sin_declarar" if not (row["substance_raw"] or "").strip() else "sin_mapear"
-            filas[row["test_id"]] = {"sustancia": clave, "cruda": row["substance_raw"],
-                                     "evento": row["event_id"],
-                                     "procedencia": row["row_duplicate_status"] or "sin_clasificar",
-                                     "periodo": periodo_de.get(row["event_id"], "sin_periodo")}
-
-        matriz: dict[str, dict[str, Counter]] = {}
-        por_color: Counter = Counter()
-        por_reactivo: Counter = Counter()
-        por_sustancia: Counter = Counter()
-        variantes: dict[str, Counter] = {}
-        estados: Counter = Counter()
-        pendientes: list[dict] = []
-        # Colores observados por evento: lo que alimenta la tira de cada hoja.
-        por_evento: dict[str, Counter] = {}
-        # Y por periodo, para no sumar dos anos en la misma cifra.
-        por_periodo: dict[str, Counter] = {}
-        muestras_periodo: dict[str, set] = __import__("collections").defaultdict(set)
-        jornadas_periodo: dict[str, set] = __import__("collections").defaultdict(set)
-        # Conjuntos de test_id, no contadores de observacion: una muestra deja
-        # varias observaciones (una por reactivo), asi que contar aca por
-        # observacion daba 2.131 filas "propias" en 2024 al lado de 920
-        # muestras del mismo periodo -- dos unidades distintas bajo nombres
-        # hermanos, que es como se lee una contradiccion.
-        procedencia_periodo: dict[str, dict] = __import__("collections").defaultdict(
-            lambda: __import__("collections").defaultdict(set))
-
-        for row in conn.execute(
-            "SELECT test_id, reagent_normalized_candidate, reagent_raw, result_raw "
-            "FROM testeo_observaciones_fuente "
-            "WHERE observation_status='source_observation_preserved'"
-        ):
-            fila = filas.get(row["test_id"])
-            if fila is None:
-                continue
-            lectura = normalizar_color(row["result_raw"], etiquetas_muestra)
-            estados[lectura["status"]] += 1
-            if lectura["revisar"] and lectura["status"] != "vacio":
-                pendientes.append({
-                    "crudo": lectura["raw"],
-                    "estado": lectura["status"],
-                    "sin_reconocer": lectura.get("sin_reconocer") or [],
-                    "identidades": lectura.get("identidades") or [],
-                })
-            if lectura["status"] in ("encabezado_o_reactivo", "vacio",
-                                     "descripcion_de_muestra"):
-                continue
-            reactivo = (row["reagent_normalized_candidate"]
-                        or row["reagent_raw"] or "sin_reactivo")
-            clave_color = lectura.get("clave") or lectura["outcome"]
-            sustancia = fila["sustancia"]
-            procedencia_periodo[fila["periodo"]][fila["procedencia"]].add(row["test_id"])
-            matriz.setdefault(sustancia, {}).setdefault(reactivo, Counter())[clave_color] += 1
-            por_color[clave_color] += 1
-            por_reactivo[reactivo] += 1
-            por_sustancia[sustancia] += 1
-            variantes.setdefault(sustancia, Counter())[fila["cruda"] or ""] += 1
-            por_periodo.setdefault(fila["periodo"], Counter())[clave_color] += 1
-            muestras_periodo[fila["periodo"]].add(row["test_id"])
-            if fila["evento"]:
-                jornadas_periodo[fila["periodo"]].add(fila["evento"])
-            if fila["evento"]:
-                por_evento.setdefault(fila["evento"], Counter())[clave_color] += 1
-
-        paleta: dict[str, list] = {}
-        for row in conn.execute("SELECT reactivo, familia, reaccion, hex FROM reactivos"):
-            paleta.setdefault(row["reactivo"].lower(), []).append({
-                "familia": row["familia"], "reaccion": row["reaccion"], "hex": row["hex"],
-            })
-        esperado = _expectativa_catalogo(conn)
+        etiquetas = _etiquetas_de_muestra(conn)
+        filas = list(conn.execute("SELECT * FROM v_testeo_muestras"))
+        resumen = {r["periodo"]: {"fiestas": r["fiestas"], "muestras": r["muestras"]}
+                   for r in conn.execute("SELECT * FROM v_testeo_resumen_periodo")}
+        clasificacion: Counter = Counter()
+        for r in conn.execute("SELECT clasificacion, SUM(filas) n "
+                              "FROM v_testeo_clasificacion "
+                              "WHERE clasificacion IS NOT NULL GROUP BY 1"):
+            clasificacion[r["clasificacion"]] = r["n"]
         conn.close()
     except sqlite3.Error:
         return {}
-
-    if not matriz:
+    if not filas:
         return {}
-    matriz_plana = {s: {r: dict(c) for r, c in reactivos.items()}
-                    for s, reactivos in matriz.items()}
+
+    PARES = (("test_1_raw", "result_1_raw"), ("test_2_raw", "result_2_raw"),
+             ("test_3_raw", "result_3_raw"), ("test_4_raw", "result_4_raw"))
+    # Los colores de cada jornada: es la tira que resume una noche entera.
+    por_evento: dict[str, Counter] = {}
+    for f in filas:
+        for _ct, cr in PARES:
+            lectura = normalizar_color(f[cr], etiquetas)
+            if lectura["status"] in ("encabezado_o_reactivo", "vacio",
+                                     "descripcion_de_muestra"):
+                continue
+            por_evento.setdefault(f["event_id"], Counter())[
+                lectura.get("clave") or lectura["outcome"]] += 1
+    por_periodo: dict[str, dict] = {}
+    for periodo in sorted({f["periodo"] for f in filas}):
+        del_periodo = [f for f in filas if f["periodo"] == periodo]
+        por_sustancia: dict[str, dict] = {}
+        for f in del_periodo:
+            sus = normalizar_sustancia(f["substance_raw"])["canonico"] or "NO_DECLARA"
+            entrada = por_sustancia.setdefault(sus, {"muestras": 0, "reactivos": {}})
+            entrada["muestras"] += 1
+            for ct, cr in PARES:
+                rea = normalizar_reactivo(f[ct])["canonico"]
+                if not rea:
+                    continue
+                d = entrada["reactivos"].setdefault(rea, {"muestras": 0, "colores": Counter()})
+                d["muestras"] += 1
+                lectura = normalizar_color(f[cr], etiquetas)
+                if lectura["status"] in ("encabezado_o_reactivo", "vacio",
+                                         "descripcion_de_muestra"):
+                    continue
+                d["colores"][lectura.get("clave") or lectura["outcome"]] += 1
+        por_periodo[periodo] = {
+            sus: {
+                "muestras": v["muestras"],
+                "reactivos": {
+                    k: {"muestras": r["muestras"],
+                        "colores": dict(r["colores"].most_common(7))}
+                    for k, r in sorted(v["reactivos"].items(),
+                                       key=lambda kv: -kv[1]["muestras"])
+                    if r["muestras"] >= max(3, v["muestras"] * 0.04)
+                },
+            }
+            for sus, v in sorted(por_sustancia.items(), key=lambda kv: -kv[1]["muestras"])
+            if v["muestras"] >= 10
+        }
+
     return {
-        "matriz": matriz_plana,
-        "esperado": esperado,
-        "concordancia": _concordancia(matriz_plana, esperado),
+        "periodos": por_periodo,
         "por_evento": {e: dict(c.most_common()) for e, c in por_evento.items()},
-        "por_periodo": {p: dict(c.most_common()) for p, c in por_periodo.items()},
-        "muestras_por_periodo": {p: len(v) for p, v in muestras_periodo.items()},
-        "jornadas_por_periodo": {p: len(v) for p, v in jornadas_periodo.items()},
-        "procedencia_por_periodo": {p: {k: len(v) for k, v in c.items()}
-                                    for p, c in procedencia_periodo.items()},
-        "por_color": dict(por_color.most_common()),
-        "por_reactivo": dict(por_reactivo.most_common()),
-        "por_sustancia": dict(por_sustancia.most_common()),
-        "variantes": {s: dict(v.most_common()) for s, v in variantes.items()},
-        "estados": dict(estados),
-        "pendientes": pendientes[:40],
-        "pendientes_total": len(pendientes),
-        "muestras": len(filas),
-        "observaciones": int(sum(por_color.values())),
+        "resumen": resumen,
+        "clasificacion": dict(clasificacion),
+        "hex": dict(COLOR_HEX),
         "etiquetas": _ETIQUETA_SUSTANCIA,
         "etiquetas_reactivo": _ETIQUETA_REACTIVO,
-        "hex": COLOR_HEX,
-        "paleta_rd": paleta,
-        "limitacion": ("un color observado no identifica una sustancia, "
-                       "no mide pureza ni dosis"),
+        "politica": ("un color observado no identifica una sustancia, "
+                     "no mide pureza ni dosis"),
     }
 
 

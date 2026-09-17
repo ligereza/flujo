@@ -87,17 +87,29 @@ def test_testing_evidence_is_isolated_and_traceable(rd_db: Path):
     assert summary["available"] is True
     assert summary["status"] == "candidate_evidence_pending_human_review"
     # Las cifras crecieron el 2026-09-16 al recuperar el corpus 2024: la
-    # planilla de Drive se reusa ano a ano y sus 25 jornadas se habian borrado
+    # planilla de Drive se reusa ano a ano y sus jornadas se habian borrado
     # para empezar 2025, asi que nunca entraron. Hoy la base carga tres
     # periodos -- 2024, 2025 y las jornadas 2026 que siguen anotandose en el
     # mismo archivo. `pending_links` son dos por jornada (venue y productora),
     # que es lo que declara el contrato de integracion.
+    #
+    # `observations` bajo el 2026-09-16 al mapear las columnas por el TEXTO
+    # del encabezado y no por posicion fija: las 68 hojas tienen OCHO
+    # estructuras distintas, y en `1904 Team 1` y `0308` las columnas corridas
+    # metian el color donde va el reactivo. Esas observaciones fantasma ya no
+    # se generan.
+    #
+    # El 2024 se importa desde `COPIA__PRIMERA-2025.xlsx` y no desde
+    # `COPIA__1K7STsT1.xlsx`: son la misma planilla fotografiada con dias de
+    # diferencia y la primera trae una jornada mas (`Dame 1001`, 4 muestras)
+    # que la segunda ya no tenia. Al cotejar las cinco copias y las 32
+    # revisiones de Drive contra la base, esa fue la UNICA hoja ausente.
     assert summary["counts"] == {
-        "source_sheets": 67,
-        "events": 67,
-        "test_rows": 2856,
-        "observations": 8436,
-        "pending_links": 134,
+        "source_sheets": 68,
+        "events": 68,
+        "test_rows": 2861,
+        "observations": 8361,
+        "pending_links": 136,
         "exact_duplicate_rows_excluded_from_aggregate": 3,
         "unresolved_substances": 1,
         "unresolved_reagents": 1,
@@ -108,13 +120,22 @@ def test_testing_evidence_is_isolated_and_traceable(rd_db: Path):
 def test_candidate_research_is_consolidated_but_not_promoted(rd_db: Path):
     summary = db.research_candidate_summary(rd_db)
     assert summary == {
-        "sources": 4,
+        "sources": 5,
         "entities": 48,
         "reagents": 12,
         "reaction_patterns": 60,
         "relations": 52,
         "references": 230,
-        "joined_observations": 5389,  # tres periodos, no solo 2025
+        # Auditoria internacional (DanceSafe/NUAA/UNODC), 2026-08-11: 12
+        # reactivos con evidence_status + 4 hallazgos globales del metodo.
+        "reagent_audits": 12,
+        "global_findings": 4,
+        # Subio el 2026-09-16 al completar el valor que la planilla omite por
+        # repetirse: la hoja escribe sustancia y reactivo cuando CAMBIAN y los
+        # deja en blanco abajo. Un reactivo se hereda solo si esa fila trae un
+        # resultado -- casilla y color vacios significan que no se aplico -- y
+        # cada celda completada queda marcada en `inherited_fields`.
+        "joined_observations": 5730,
         "public_claims_allowed": False,
     }
 
@@ -548,3 +569,51 @@ def test_knowledge_productoras_template_file_is_never_ingested(rd_db: Path):
     assert "rave_under_template" not in slugs
     nombres = {p["nombre"].lower() for p in db.productoras(rd_db)}
     assert not any(n.endswith("template") for n in nombres)
+
+
+def test_auditoria_reactivos_queda_sourced_y_no_reemplaza_la_carta(rd_db: Path):
+    """La auditoria (DanceSafe/NUAA/UNODC, 2026-08-11) se adjunta, no borra.
+
+    `reactivo`/`familia`/`reaccion`/`hex` siguen siendo la carta propia de RD;
+    `auditoria_estado`/`auditoria_nota` son una segunda opinion sentada al
+    lado, atribuible a su fuente via `rd_auditoria_reactivos`.
+    """
+    conn = db.connect(rd_db)
+    try:
+        fuente = conn.execute(
+            "SELECT status, schema_version FROM rd_fuentes_registro "
+            "WHERE source_id = 'reagent_audit_overlay_v0_1'"
+        ).fetchone()
+        assert fuente is not None
+        assert fuente["status"] == "candidate_pending_rd_human_review"
+        assert fuente["schema_version"] == "rd-reagent-audit-overlay-v0.1"
+
+        row = conn.execute(
+            "SELECT evidence_status, important_correction FROM rd_auditoria_reactivos "
+            "WHERE reagent_id = 'liebermann'"
+        ).fetchone()
+        assert row["evidence_status"] == "conflicting"
+        assert "levamisole" in row["important_correction"].lower()
+
+        globales = {r["finding_id"] for r in conn.execute(
+            "SELECT finding_id FROM rd_auditoria_hallazgos_globales")}
+        assert "fentanyl_boundary" in globales
+
+        # La fila retractada de la carta propia (Liebermann / cocaina cortada)
+        # sigue ahi -- no se borra -- pero ahora carga la nota de conflicto.
+        marcada = conn.execute(
+            "SELECT auditoria_estado, auditoria_nota FROM reactivos "
+            "WHERE reactivo = 'Liebermann' AND familia LIKE '%levamisol%'"
+        ).fetchone()
+        assert marcada["auditoria_estado"] == "conflicting"
+        assert marcada["auditoria_nota"]
+
+        # Marquis SI tiene auditoria cargada (partially_supported); un
+        # reactivo sin fila en rd_auditoria_reactivos quedaria en NULL, no en
+        # un estado inventado.
+        marquis = conn.execute(
+            "SELECT auditoria_estado FROM reactivos WHERE reactivo = 'Marquis' LIMIT 1"
+        ).fetchone()
+        assert marquis["auditoria_estado"] == "partially_supported"
+    finally:
+        conn.close()

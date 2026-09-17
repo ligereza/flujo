@@ -17,6 +17,8 @@ canonicos y se puede reconstruir cuando quieras sin desincronizarse.
 | `venues` | `knowledge/venues/*.yaml` |
 | `eventos` | `jobs/**/evento*.json` + `projects/plano/ejemplos/evento*.json` |
 | `testeo_*` | `data/rd_fuentes/testeo_eventos_*_evidence.json` (evidencia pendiente de revision) |
+| `rd_reactivos_candidatos` + `rd_reacciones_candidatas` | `data/rd_fuentes/candidates/reagent_library_v0.1.json` |
+| `rd_auditoria_reactivos` + `rd_auditoria_hallazgos_globales` | `docs/rd/prototypes/2026-08-11/rd_reactivos_auditoria_internacional_2026-08-11.json` |
 
 ## Los testeos historicos
 
@@ -56,21 +58,32 @@ Un ensayo es: *el reactivo X dio el color C sobre una muestra que alguien
 declaro como S*. El veredicto lo da la persona a cargo de la mesa, verbalmente,
 y no queda registrado. Ninguna capa de codigo debe inventarlo.
 
-### Trampa conocida: la tabla `reactivos` tiene filas retractadas
+### La tabla `reactivos` trae su propia auditoria al lado (desde 2026-09-16)
 
 `reactivos` (7 reactivos curados) trae la linea
 `Liebermann / cocaina cortada (levamisol o lidocaina) / rojo oxido`.
-**DanceSafe ya no recomienda usar Liebermann para eso**, y la auditoria interna
-de `docs/rd/prototypes/2026-08-11/rd_reactivos_auditoria_internacional_*.md`
-lo retracta explicitamente, junto con reglas rigidas de Marquis sobre cocaina y
-de Zimmermann sobre benzodiacepinas.
+**DanceSafe ya no recomienda usar Liebermann para eso**, y la auditoria
+internacional de
+`docs/rd/prototypes/2026-08-11/rd_reactivos_auditoria_internacional_2026-08-11.json`
+(quinta fuente en `rd_fuentes_registro`, tabla `rd_auditoria_reactivos`) lo
+dice explicitamente -- junto con reglas rigidas de Marquis sobre cocaina y de
+Zimmermann sobre benzodiacepinas, 12 reactivos en total con su
+`evidence_status` propio.
 
-Esa auditoria **no esta cargada en la base**: `rd_fuentes_registro` tiene cuatro
-fuentes y ninguna es ella. Hay ademas 12 reactivos en
-`rd_reactivos_candidatos` (Morris, Zimmermann, Robadope, Simon's, CBD:THC,
-Hofmann) que nunca se promovieron a `reactivos`, con sus reacciones en
-`rd_reacciones_candidatas` pero sin color. No trates `reactivos` como el
-catalogo completo ni como el vigente.
+La auditoria **no borra ni reemplaza** la linea de RD: `build_rd_db()` la
+cruza por reactivo (`_aplicar_auditoria_reactivos`) y agrega dos columnas,
+`auditoria_estado`/`auditoria_nota`, que quedan NULL cuando el reactivo aun no
+tiene revision -- ausencia de auditoria, no ausencia de problema. El panel de
+COLORIMETRIA la muestra aparte, como segunda opinion fechada, nunca en el
+lugar de la reaccion esperada.
+
+Lo que sigue faltando: la auditoria opina sobre los 12 reactivos de
+`rd_reactivos_candidatos`, pero `reactivos` (la carta con color, la que lee el
+panel) solo tiene 7. Morris, Zimmermann, Robadope, CBD:THC y Hofmann siguen sin
+promoverse -- sus reacciones estan en `rd_reacciones_candidatas` pero sin
+`hex`, y ninguna observacion de esos reactivos puede compararse contra una
+expectativa hasta que alguien decida ese color con la misma fuente que uso el
+resto de la carta. No trates `reactivos` como el catalogo completo.
 
 Las tablas `testeo_*` no se mezclan con `registros_testeo` de la base
 acumulativa y no habilitan afirmaciones publicas automaticas: un color es una

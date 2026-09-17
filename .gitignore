@@ -44,6 +44,11 @@ inbox/
 checkpoints/*
 !checkpoints/.gitkeep
 
+# Entregables horneados: llevan data de terreno RD adentro y se regeneran con
+# un comando (tools/gen_*.py). Se generan, no se versionan -- misma razon por
+# la que rd.db no se versiona.
+/dist_compartir/
+
 # Data that is local state, not source
 *.db
 *.db-*

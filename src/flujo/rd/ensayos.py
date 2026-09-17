@@ -54,6 +54,11 @@ _ALIAS_REACTIVO: dict[str, str] = {
     "ehrlich": "EHRLICH", "erlich": "EHRLICH",
     "hofmann": "HOFMANN", "hoffman": "HOFMANN", "hofman": "HOFMANN",
     "cbd_thc": "CBD_THC", "cbdthc": "CBD_THC", "thc_cbd": "CBD_THC",
+    # El voluntario nombra el kit por lo que testea, no por el reactivo: en la
+    # columna de reactivo escribe `Cannabis` y en la de resultado `Azul`. Es el
+    # kit CBD:THC. La proyeccion de la base ya lo traducia; este vocabulario no,
+    # y esas filas se descartaban como si no se hubiera analizado nada.
+    "cannabis": "CBD_THC",
     "fentanyl_strip": "TIRA_FENTANILO", "tira_de_fentanilo": "TIRA_FENTANILO",
     "tira_fentanilo": "TIRA_FENTANILO", "fentanilo": "TIRA_FENTANILO",
     "xylazina": "TIRA_XYLAZINA", "tira_xylazina": "TIRA_XYLAZINA",

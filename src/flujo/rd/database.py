@@ -27,7 +27,7 @@ import importlib.util
 import re
 import sqlite3
 import unicodedata
-from collections import Counter
+from collections import Counter, defaultdict
 from datetime import date
 from pathlib import Path
 from typing import Any
@@ -55,6 +55,14 @@ _CANDIDATE_REGISTRIES = {
     "reagent_library_v0_1": (_REPO / "data" / "rd_fuentes" / "candidates" / "reagent_library_v0.1.json", "reagents"),
     "relation_graph_v0_1": (_REPO / "data" / "rd_fuentes" / "candidates" / "relation_graph_v0.1.json", "relations"),
     "relation_index_v0_1": (_REPO / "data" / "rd_fuentes" / "candidates" / "relation_index_v0.1.json", "records"),
+    # External review (DanceSafe, NUAA, UNODC, scientific review material) of
+    # RD's own reagent cards, dated 2026-08-11. Registered like any other
+    # candidate source: attributable, never silently promoted to a verdict.
+    "reagent_audit_overlay_v0_1": (
+        _REPO / "docs" / "rd" / "prototypes" / "2026-08-11"
+        / "rd_reactivos_auditoria_internacional_2026-08-11.json",
+        "reagent_overrides",
+    ),
 }
 _FUENTES_PY = _REPO / "src" / "flujo" / "rd" / "source_gate.py"
 _VENUES_DIR = _REPO / "knowledge" / "venues"     # *.yaml canonicos
@@ -81,6 +89,9 @@ _EVENTOS_GLOBS = (
 # Campos minimos para considerar un json como "evento" (evita packs_servicios y otros)
 _EVENTO_MARKERS = ("voluntarios", "asistentes_estimados")
 _URL_RE = re.compile(r"https?://[^\s),;]+")
+# Filas que son dato. `repeated_header` son encabezados de la planilla que
+# quedaron guardados como filas: contarlos infla el total de muestras.
+_FILAS_DATO = ("data", "data_with_unresolved_substance")
 _FUENTES_MODULE: Any | None = None
 
 _SCHEMA = """
@@ -93,7 +104,12 @@ CREATE TABLE reactivos (
     reactivo TEXT NOT NULL,     -- Marquis, Mecke, ...
     familia  TEXT NOT NULL,     -- MDMA / MDA, anfetamina, opiaceos, ...
     reaccion TEXT NOT NULL,     -- descripcion del cambio de color
-    hex      TEXT NOT NULL      -- color de referencia estetica (#rrggbb)
+    hex      TEXT NOT NULL,     -- color de referencia estetica (#rrggbb)
+    -- Lo que dice la auditoria internacional sobre ESTE reactivo (no sobre
+    -- esta fila puntual: la auditoria opina por reactivo, no por familia).
+    -- NULL cuando el reactivo no tiene auditoria cargada.
+    auditoria_estado TEXT,
+    auditoria_nota   TEXT
 );
 CREATE INDEX idx_reactivos_familia  ON reactivos(familia);
 CREATE INDEX idx_reactivos_reactivo ON reactivos(reactivo);
@@ -165,6 +181,27 @@ CREATE TABLE rd_relacion_referencias (
 );
 CREATE INDEX idx_rd_relation_refs_source_target ON rd_relaciones_candidatas(source_ref, target_ref);
 CREATE INDEX idx_rd_relation_refs_status ON rd_relaciones_candidatas(status);
+
+-- External review of RD's own reagent cards (DanceSafe, NUAA, UNODC, scientific
+-- review material) against RD's public pages. This does NOT replace RD's
+-- reading of a color -- it is a second, sourced, dated opinion sitting next
+-- to it. `evidence_status` is the auditor's word, not this system's verdict.
+CREATE TABLE rd_auditoria_reactivos (
+    reagent_id TEXT PRIMARY KEY REFERENCES rd_reactivos_candidatos(reagent_id),
+    evidence_status TEXT NOT NULL,
+    observation_override TEXT,
+    important_correction TEXT,
+    sources TEXT NOT NULL,
+    source_id TEXT NOT NULL REFERENCES rd_fuentes_registro(source_id),
+    raw_record TEXT NOT NULL
+);
+CREATE TABLE rd_auditoria_hallazgos_globales (
+    finding_id TEXT PRIMARY KEY,
+    status TEXT NOT NULL,
+    finding TEXT NOT NULL,
+    sources TEXT NOT NULL,
+    source_id TEXT NOT NULL REFERENCES rd_fuentes_registro(source_id)
+);
 CREATE TABLE packs (
     id          TEXT PRIMARY KEY,   -- INFO | TESTEO | COMPLETO
     nombre      TEXT NOT NULL,
@@ -356,6 +393,12 @@ CREATE TABLE testeo_filas_fuente (
     -- limpieza a ciegas: deja ver que la planilla se arma copiando la hoja
     -- anterior y que lo no sobrescrito queda como muestra que nadie testeo.
     copied_from_sheet               TEXT,
+    -- Celdas que venian vacias y se completaron con el valor repetido de la
+    -- fila de arriba. La planilla omite el valor que no cambia -- sustancia y
+    -- reactivo se escriben cuando cambian, formato y color siempre -- asi que
+    -- completarlas es leer la convencion, no inventar. Se MARCA cual se
+    -- completo para poder informar «escrito» y «escrito + heredado» aparte.
+    inherited_fields                TEXT,
     interpretation_policy           TEXT
 );
 CREATE INDEX idx_testeo_filas_event ON testeo_filas_fuente(event_id);
@@ -425,6 +468,47 @@ JOIN rd_reactivos_candidatos AS candidate
   ON candidate.reagent_id = observation.reagent_normalized_candidate;
 """
 
+
+# La clasificacion se escribe en la base, no en un script que la relee. Un
+# consumidor que quiera «las muestras de 2025» consulta una vista; no vuelve a
+# decidir que fila cuenta, que es como dos lecturas terminan en dos cifras.
+_SCHEMA_CLASIFICACION = """
+ALTER TABLE testeo_filas_fuente ADD COLUMN clasificacion TEXT;
+ALTER TABLE testeo_eventos_fuente ADD COLUMN fiesta_id TEXT;
+CREATE INDEX idx_testeo_filas_clasificacion ON testeo_filas_fuente(clasificacion);
+CREATE INDEX idx_testeo_eventos_fiesta ON testeo_eventos_fuente(fiesta_id);
+
+-- Una fila por muestra analizada, con su fiesta y su origen exacto.
+CREATE VIEW v_testeo_muestras AS
+SELECT f.test_id, f.event_id, e.fiesta_id, e.source_period_label AS periodo,
+       e.date_iso_candidate AS fecha, e.source_sheet_name AS hoja, f.source_row AS fila,
+       f.substance_raw, f.format_raw,
+       f.test_1_raw, f.result_1_raw, f.test_2_raw, f.result_2_raw,
+       f.test_3_raw, f.result_3_raw, f.test_4_raw, f.result_4_raw,
+       f.inherited_fields, f.interpretation_policy
+FROM testeo_filas_fuente f
+JOIN testeo_eventos_fuente e ON e.event_id = f.event_id
+WHERE f.clasificacion = 'muestra';
+
+-- Cuantas fiestas y cuantas muestras por periodo. Una fiesta puede ocupar
+-- varias hojas -- mesas, tablas A/B, copias -- y aca cuenta una vez.
+CREATE VIEW v_testeo_resumen_periodo AS
+SELECT e.source_period_label AS periodo,
+       COUNT(DISTINCT e.fiesta_id) AS fiestas,
+       COUNT(f.test_id) AS muestras
+FROM testeo_eventos_fuente e
+LEFT JOIN testeo_filas_fuente f
+       ON f.event_id = e.event_id AND f.clasificacion = 'muestra'
+WHERE e.fiesta_id IS NOT NULL
+GROUP BY e.source_period_label;
+
+-- Que paso con cada fila, para poder auditar cualquier cifra.
+CREATE VIEW v_testeo_clasificacion AS
+SELECT e.source_period_label AS periodo, f.clasificacion, COUNT(*) AS filas
+FROM testeo_filas_fuente f
+JOIN testeo_eventos_fuente e ON e.event_id = f.event_id
+GROUP BY e.source_period_label, f.clasificacion;
+"""
 
 _SCHEMA_RELACIONES = """
 CREATE TABLE IF NOT EXISTS evento_productoras (
@@ -893,6 +977,88 @@ def _insert_candidate_registries(conn: sqlite3.Connection) -> None:
                     (relation_id, reference_kind, str(value), "relation_index_v0_1"),
                 )
 
+    audit_doc = docs.get("reagent_audit_overlay_v0_1")
+    if audit_doc is not None:
+        for row in audit_doc.get("reagent_overrides", []):
+            if not isinstance(row, dict) or not row.get("id"):
+                continue
+            # Solo referencia reactivos que ya existen en la libreria base
+            # (reagent_library_v0_1): la auditoria opina SOBRE esa libreria,
+            # no introduce reactivos nuevos por su cuenta.
+            reagent_id = str(row["id"])
+            if reagent_id not in {
+                str(r.get("id")) for r in docs.get("reagent_library_v0_1", {}).get("reagents", [])
+                if isinstance(r, dict)
+            }:
+                continue
+            conn.execute(
+                "INSERT INTO rd_auditoria_reactivos("
+                "reagent_id, evidence_status, observation_override, important_correction, "
+                "sources, source_id, raw_record) VALUES (?,?,?,?,?,?,?)",
+                (
+                    reagent_id,
+                    str(row.get("evidence_status", "")),
+                    row.get("observation_override"),
+                    row.get("important_correction"),
+                    _json(row.get("sources", [])),
+                    "reagent_audit_overlay_v0_1",
+                    _json(row),
+                ),
+            )
+        for row in audit_doc.get("global_findings", []):
+            if not isinstance(row, dict) or not row.get("id"):
+                continue
+            conn.execute(
+                "INSERT INTO rd_auditoria_hallazgos_globales("
+                "finding_id, status, finding, sources, source_id) VALUES (?,?,?,?,?)",
+                (
+                    str(row["id"]),
+                    str(row.get("status", "")),
+                    str(row.get("finding", "")),
+                    _json(row.get("sources", [])),
+                    "reagent_audit_overlay_v0_1",
+                ),
+            )
+
+
+# `reactivos.json` escribe "Simon", la libreria/auditoria escriben "simons"
+# (posesivo del nombre propio en ingles). Es la misma forma de alias que ya
+# usa `_expectativa_catalogo` en panel.py; se repite aca porque database.py
+# no importa ese modulo.
+_ALIAS_REACTIVO_AUDITORIA = {"simon": "simons"}
+
+
+def _reactivo_a_reagent_id(nombre: str) -> str:
+    clave = (nombre or "").strip().lower()
+    return _ALIAS_REACTIVO_AUDITORIA.get(clave, clave)
+
+
+def _aplicar_auditoria_reactivos(conn: sqlite3.Connection) -> None:
+    """Adjunta a cada fila de `reactivos` lo que dice la auditoria de SU reactivo.
+
+    No reescribe ni borra la carta de RD: `reactivo`, `familia`, `reaccion` y
+    `hex` quedan intactos porque son la fuente propia de la ONG. Lo que se
+    agrega es una segunda opinion, fechada y con sus fuentes, sentada al lado.
+    Un reactivo sin auditoria cargada queda con las dos columnas en NULL: la
+    ausencia de auditoria no es "sin problemas", es "no revisado todavia".
+    """
+    auditorias = {
+        reagent_id: (evidence_status, important_correction)
+        for reagent_id, evidence_status, important_correction in conn.execute(
+            "SELECT reagent_id, evidence_status, important_correction FROM rd_auditoria_reactivos"
+        )
+    }
+    if not auditorias:
+        return
+    for id_, reactivo in conn.execute("SELECT id, reactivo FROM reactivos").fetchall():
+        hallazgo = auditorias.get(_reactivo_a_reagent_id(reactivo))
+        if hallazgo is None:
+            continue
+        conn.execute(
+            "UPDATE reactivos SET auditoria_estado = ?, auditoria_nota = ? WHERE id = ?",
+            (hallazgo[0], hallazgo[1], id_),
+        )
+
 
 def _fold_source_label(value: Any) -> str:
     text = "" if value is None else str(value)
@@ -1207,8 +1373,9 @@ def _insert_testing_evidence(conn: sqlite3.Connection, doc: dict[str, Any]) -> N
             "substance_normalized_candidate, substance_map_status, format_raw, test_1_raw, "
             "result_1_raw, test_2_raw, result_2_raw, test_3_raw, result_3_raw, test_4_raw, "
             "result_4_raw, extra_1_raw, source_duplicate_group_id, source_duplicate_status, "
-            "row_duplicate_status, copied_from_sheet, interpretation_policy) "
-            "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
+            "row_duplicate_status, copied_from_sheet, inherited_fields, "
+            "interpretation_policy) "
+            "VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)",
             (
                 row.get("test_id"),
                 row.get("event_id"),
@@ -1234,6 +1401,7 @@ def _insert_testing_evidence(conn: sqlite3.Connection, doc: dict[str, Any]) -> N
                 # vez de inventar un duplicado que nadie observo.
                 row.get("row_duplicate_status") or "first_occurrence",
                 row.get("copied_from_sheet"),
+                json.dumps(row.get("inherited_fields") or [], ensure_ascii=False),
                 row.get("interpretation_policy"),
             ),
         )
@@ -1513,6 +1681,184 @@ def _mesa_desde_etiqueta(etiqueta: str) -> tuple[int | None, str | None]:
     return int(m.group(1)), m.group(0).strip()
 
 
+def _color(valor):
+    """El normalizador de color, importado al usarlo para no acoplar el modulo."""
+    from .colorimetria import normalizar
+
+    return normalizar(valor)
+
+
+def _hubo_analisis(fila) -> bool:
+    """Hubo analisis si quedo un COLOR observado o un reactivo nombrado.
+
+    En 112 filas el voluntario anoto el color y dejo vacia la casilla del
+    reactivo: el test se hizo, falta el nombre. Exigir las dos cosas
+    descartaba muestras reales como si nadie las hubiera testeado.
+    """
+    from .ensayos import normalizar_reactivo
+
+    if any(_color(fila[c])["status"] == "canonico"
+           for c in ("result_1_raw", "result_2_raw", "result_3_raw", "result_4_raw")):
+        return True
+    return any(normalizar_reactivo(fila[c])["canonico"]
+               for c in ("test_1_raw", "test_2_raw", "test_3_raw", "test_4_raw"))
+
+
+def _clasificar_muestras(conn: sqlite3.Connection) -> None:
+    """Decide, EN LA BASE, que fila es una muestra y que hoja es una fiesta.
+
+    Esto vivia en un generador aparte que releia la fuente y reimplementaba los
+    filtros. Dos lecturas de lo mismo con logica separada terminan dando dos
+    cifras distintas, asi que la clasificacion se hace una vez, aca, y queda
+    escrita: cualquier consumidor -- el panel, un export, una consulta suelta
+    -- obtiene la misma respuesta sin volver a decidir nada.
+
+    Una fila es MUESTRA si pasa cinco filtros, y cada uno salio de un patron
+    medido en `Testeo 2025`, no de una teoria:
+
+    1. Es fila de dato (no un encabezado repetido).
+    2. No es rastro de repeticion. Una fila identica repetida DENTRO de su hoja
+       viene en racha cuando es copia de plantilla, y aislada cuando es una
+       muestra real igual -- en la fiesta circula el mismo lote. Se descarta la
+       racha; se conserva la aislada que cae en medio de lo escrito, porque
+       nadie pega UNA fila en mitad de una tabla que esta llenando.
+    3. No es un tramo contiguo copiado de otra jornada.
+    4. No viene de una hoja `Copy of` repitiendo lo que ya trae su hermana.
+    5. No es un rotulo -- `Psiquiatrico 1603` lleva dos jornadas en una hoja,
+       separadas por una fila que solo dice «HABITACION DEL PANICO».
+
+    Y ademas separa la fila donde no quedo NINGUN color: esa persona paso por
+    la mesa y no se analizo nada. Es alcance, no servicio.
+
+    La fiesta tampoco es la hoja: `Fiesta Dame 504 mesa 1` y `mesa 2` son dos
+    mesas de la misma noche. Agrupar por hoja inflaba 2025 de 29 a 38.
+    """
+    conn.executescript(_SCHEMA_CLASIFICACION)
+    # `build_rd_db` abre la conexion sin row_factory y aca se lee por nombre:
+    # con tuplas, `f["event_id"]` revienta. Se repone al salir para no cambiar
+    # el comportamiento del resto de la construccion.
+    factory_previa = conn.row_factory
+    conn.row_factory = sqlite3.Row
+    filas = list(conn.execute(
+        "SELECT f.test_id, f.event_id, f.source_row, f.row_status, "
+        "f.row_duplicate_status, f.substance_raw, f.format_raw, "
+        "f.test_1_raw, f.result_1_raw, f.test_2_raw, f.result_2_raw, "
+        "f.test_3_raw, f.result_3_raw, f.test_4_raw, f.result_4_raw, "
+        "e.source_sheet_name, e.date_iso_candidate "
+        "FROM testeo_filas_fuente f "
+        "JOIN testeo_eventos_fuente e ON e.event_id = f.event_id "
+        "ORDER BY f.event_id, f.source_row"))
+    conn.row_factory = factory_previa
+    if not filas:
+        return
+
+    nombre_de = {f["event_id"]: f["source_sheet_name"] for f in filas}
+    fecha_de = {f["event_id"]: f["date_iso_candidate"] for f in filas}
+    con_dato = {f["event_id"] for f in filas if f["row_status"] in _FILAS_DATO}
+    fiesta_de = _fiesta_por_evento(nombre_de, fecha_de, con_dato)
+    for ev, (fecha, base) in fiesta_de.items():
+        conn.execute("UPDATE testeo_eventos_fuente SET fiesta_id = ? WHERE event_id = ?",
+                     (f"{fecha}|{base}", ev))
+
+    por_evento: dict[str, list] = defaultdict(list)
+    for f in filas:
+        if f["row_status"] in _FILAS_DATO:
+            por_evento[f["event_id"]].append(f)
+
+    CAMPOS = ("substance_raw", "format_raw", "test_1_raw", "result_1_raw",
+              "test_2_raw", "result_2_raw", "test_3_raw", "result_3_raw",
+              "test_4_raw", "result_4_raw")
+    firma = lambda f: tuple((f[c] or "").strip().lower() for c in CAMPOS)  # noqa: E731
+
+    veredicto: dict[str, str] = {}
+    candidatas: dict[str, list] = defaultdict(list)
+    for ev, grupo in por_evento.items():
+        ultima = max((i for i, x in enumerate(grupo)
+                      if x["row_duplicate_status"] == "first_occurrence"), default=-1)
+        i = 0
+        while i < len(grupo):
+            estado = grupo[i]["row_duplicate_status"]
+            if estado == "first_occurrence":
+                candidatas[ev].append(grupo[i]); i += 1; continue
+            if estado == "copied_from_other_sheet":
+                veredicto[grupo[i]["test_id"]] = "copiada_de_otra_jornada"; i += 1; continue
+            j = i
+            while j < len(grupo) and grupo[j]["row_duplicate_status"] == "repeat_within_sheet":
+                j += 1
+            aislada = (j - i == 1 and i < ultima)
+            for k in range(i, j):
+                if aislada:
+                    candidatas[ev].append(grupo[k])
+                else:
+                    veredicto[grupo[k]["test_id"]] = "repetida_en_racha"
+            i = j
+
+    de_la_original: dict[tuple, set] = defaultdict(set)
+    for ev in candidatas:
+        if not nombre_de[ev].strip().lower().startswith("copy of"):
+            de_la_original[fiesta_de[ev]] |= {firma(f) for f in candidatas[ev]}
+
+    for ev, grupo in candidatas.items():
+        es_copia = nombre_de[ev].strip().lower().startswith("copy of")
+        for f in grupo:
+            if es_copia and firma(f) in de_la_original[fiesta_de[ev]]:
+                veredicto[f["test_id"]] = "hoja_copy_of_duplicada"
+            elif not any((f[c] or "").strip() for c in CAMPOS[1:]):
+                # Solo el primer campo y el resto vacio: es un rotulo, no un
+                # dato. `Psiquiatrico 1603` separa asi sus dos jornadas.
+                veredicto[f["test_id"]] = "rotulo_de_sala"
+            elif not _hubo_analisis(f):
+                veredicto[f["test_id"]] = "sin_analisis"
+            else:
+                veredicto[f["test_id"]] = "muestra"
+
+    conn.executemany(
+        "UPDATE testeo_filas_fuente SET clasificacion = ? WHERE test_id = ?",
+        [(v, k) for k, v in veredicto.items()])
+    conn.execute(
+        "UPDATE testeo_filas_fuente SET clasificacion = 'encabezado_repetido' "
+        "WHERE clasificacion IS NULL AND row_status NOT IN (?, ?)", _FILAS_DATO)
+
+
+def _fiesta_por_evento(nombre_de: dict[str, str], fecha_de: dict[str, str | None],
+                       con_dato: set[str]) -> dict[str, tuple]:
+    """A que fiesta pertenece cada hoja. Una hoja no es una fiesta.
+
+    Dos reglas que el reporte oficial 2024 valida al dar exactamente 22: una
+    hoja SIN fecha hereda la de su gemela con el mismo nombre base (`Stgo
+    hardtechno A` es la mesa A de `Santiago Hardtechno B 267`), y una hoja
+    cuyo nombre es SOLO la fecha es otra tabla de la fiesta de ese dia
+    (` 2408` junto a `Dame 248 A` y `B`).
+    """
+    def base(nombre: str) -> str:
+        n = unicodedata.normalize("NFKD", nombre).encode("ascii", "ignore").decode()
+        n = n.lower().strip()
+        n = re.sub(r"^(copy of )+", "", n)
+        n = re.sub(r"\b(mesa|team)\s*\d+\b", "", n)
+        n = re.sub(r"\s+[ab]\b", "", n)
+        n = re.sub(r"\bstgo\b", "santiago", n)
+        return re.sub(r"\d+$", "", re.sub(r"[^a-z0-9]+", "", n))
+
+    vivos = [e for e in nombre_de if e in con_dato]
+    fechas_por_base: dict[str, set] = defaultdict(set)
+    for ev in vivos:
+        if fecha_de[ev]:
+            fechas_por_base[base(nombre_de[ev])].add(fecha_de[ev])
+
+    salida: dict[str, tuple] = {}
+    for ev in vivos:
+        b, fecha = base(nombre_de[ev]), fecha_de[ev]
+        if not fecha and len(fechas_por_base.get(b, ())) == 1:
+            fecha = next(iter(fechas_por_base[b]))
+        if not b:
+            hermanas = {base(nombre_de[o]) for o in vivos
+                        if fecha_de[o] == fecha and base(nombre_de[o])}
+            if len(hermanas) == 1:
+                b = next(iter(hermanas))
+        salida[ev] = (fecha or "sin fecha", b)
+    return salida
+
+
 def _vincular_eventos_de_testeo(conn: sqlite3.Connection) -> dict[str, int]:
     """Ata los 42 eventos del cuaderno 2025 al catalogo de productoras.
 
@@ -1671,6 +2017,7 @@ def build_rd_db(
             )
 
         _insert_candidate_registries(conn)
+        _aplicar_auditoria_reactivos(conn)
 
         # packs + inclusiones
         inc_id = 0
@@ -1877,6 +2224,7 @@ def build_rd_db(
         testing_doc = _load_testing_evidence()
         if testing_doc is not None:
             _insert_testing_evidence(conn, testing_doc)
+            _clasificar_muestras(conn)
         _vincular_eventos_de_testeo(conn)
         conn.commit()
     finally:
@@ -2113,6 +2461,10 @@ def research_candidate_summary(db_path: str | Path | None = None) -> dict[str, A
             "reaction_patterns": conn.execute("SELECT COUNT(*) FROM rd_reacciones_candidatas").fetchone()[0],
             "relations": conn.execute("SELECT COUNT(*) FROM rd_relaciones_candidatas").fetchone()[0],
             "references": conn.execute("SELECT COUNT(*) FROM rd_relacion_referencias").fetchone()[0],
+            "reagent_audits": conn.execute("SELECT COUNT(*) FROM rd_auditoria_reactivos").fetchone()[0],
+            "global_findings": conn.execute(
+                "SELECT COUNT(*) FROM rd_auditoria_hallazgos_globales"
+            ).fetchone()[0],
             "joined_observations": conn.execute(
                 "SELECT COUNT(*) FROM v_testeo_observaciones_reactivo"
             ).fetchone()[0],
@@ -2163,8 +2515,8 @@ def lookup_familia(familia: str, db_path: str | Path | None = None) -> dict[str,
     try:
         reacts = [
             dict(r) for r in conn.execute(
-                "SELECT reactivo, familia, reaccion, hex FROM reactivos "
-                "WHERE lower(familia) LIKE ? ORDER BY reactivo",
+                "SELECT reactivo, familia, reaccion, hex, auditoria_estado, auditoria_nota "
+                "FROM reactivos WHERE lower(familia) LIKE ? ORDER BY reactivo",
                 (f"%{familia.lower()}%",),
             ).fetchall()
         ]

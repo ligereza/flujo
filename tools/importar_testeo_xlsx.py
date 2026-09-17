@@ -39,8 +39,109 @@ POLITICA_FILA = "observed_color_only_not_identity_purity_or_dose"
 POLITICA_OBS = "contains_signal_only_no_claim_of_purity_or_dose"
 ESQUEMA = "rd-testing-source-evidence-v0.1"
 
-# Pares (test, resultado) por fila, tal como los trae la planilla.
+# Pares (test, resultado) por fila, ya en el orden canonico.
 PARES = ((2, 3), (4, 5), (6, 7), (8, 9))
+
+# Orden canonico al que se lleva cada hoja antes de leerla.
+CANONICO = ("sustancia", "formato",
+            "test_1", "resultado_test_1", "test_2", "resultado_test_2",
+            "test_3", "resultado_test_3", "test_4", "resultado_test_4",
+            "extra")
+
+
+def _heredar_repetidos(crudas: list[tuple[int, list[str]]]
+                       ) -> tuple[list[tuple[int, list[str]]], dict[int, list[str]]]:
+    """Completa el valor que la planilla omite por repetirse.
+
+    La convencion de la hoja, vista fila por fila: el FORMATO y el COLOR se
+    escriben siempre, porque cambian en cada muestra. La SUSTANCIA y el
+    REACTIVO se escriben cuando cambian, y abajo se dejan en blanco porque la
+    columna ya lo dice. En `Dame tresor 181025 B` el voluntario escribe
+    `Marquis`/`Simon` en las filas 2 y 3, los suelta en la 4, vuelve a poner
+    `Simon` en la 5 y lo suelta otra vez en la 6 -- no es una regla, es que
+    esta anotando rapido.
+
+    El limite que hace esto seguro, y que no se puede saltar: **un reactivo
+    solo se hereda si ESA fila trae un resultado**. Casilla de reactivo vacia
+    con su color tambien vacio significa que no se aplico, y rellenarlo seria
+    inventar un ensayo. Mismo criterio para la sustancia: se hereda solo si la
+    fila tiene algun dato propio.
+
+    Devuelve las filas completadas y, por numero de fila, que campos se
+    heredaron: la celda se completa PERO queda marcada, para poder informar
+    «44% escrito» y «61% contando lo heredado» y que las dos sean verificables.
+    """
+    salida: list[tuple[int, list[str]]] = []
+    marcas: dict[int, list[str]] = {}
+    ultima_sustancia = ""
+    ultimo_reactivo = ["", "", "", ""]
+    for numero, celdas in crudas:
+        fila = list(celdas)
+        if _es_encabezado(fila):
+            # Un encabezado corta la herencia: lo de arriba es otra tabla.
+            ultima_sustancia = ""
+            ultimo_reactivo = ["", "", "", ""]
+            salida.append((numero, fila))
+            continue
+
+        heredados: list[str] = []
+        tiene_dato = any(str(c or "").strip() for c in fila[1:10])
+        if str(fila[0] or "").strip():
+            ultima_sustancia = fila[0].strip()
+        elif ultima_sustancia and tiene_dato:
+            fila[0] = ultima_sustancia
+            heredados.append("substance_raw")
+
+        for orden, (ct, cr) in enumerate(PARES):
+            reactivo = str(fila[ct] or "").strip()
+            resultado = str(fila[cr] or "").strip()
+            if reactivo:
+                ultimo_reactivo[orden] = reactivo
+            elif resultado and ultimo_reactivo[orden]:
+                # Hay color: el reactivo se aplico y solo falta su nombre.
+                fila[ct] = ultimo_reactivo[orden]
+                heredados.append(f"test_{orden + 1}_raw")
+        if heredados:
+            marcas[numero] = heredados
+        salida.append((numero, fila))
+    return salida, marcas
+
+
+def _mapa_columnas(encabezado: list[str]) -> list[int] | None:
+    """De que columna de ESTA hoja sale cada campo canonico.
+
+    Las 68 hojas no comparten estructura: hay ocho distintas. `1904 Team 1`
+    trae dos columnas vacias despues de Sustancia y `0308` una de mas en medio
+    de los pares. Leyendo por posicion fija, esa hoja entrega el formato donde
+    va el primer resultado y un color donde va el tercer reactivo -- 87
+    muestras con su reactivo y su color cambiados.
+
+    Se mapea por el TEXTO del encabezado. Si el encabezado no alcanza para
+    ubicar formato y el primer par, se devuelve None y la hoja se lee por
+    posicion, que es lo que corresponde cuando la cabecera es generica
+    (`Column 1..11`) o simplemente no hay.
+    """
+    posicion: dict[str, int] = {}
+    for i, celda in enumerate(encabezado):
+        k = _clave(celda)
+        if not k:
+            continue
+        m = re.fullmatch(r"resultado_test(?:_(\d))?", k)
+        if m:
+            campo = f"resultado_test_{m.group(1) or len([x for x in posicion if x.startswith('resultado_test')]) + 1}"
+        elif (m := re.fullmatch(r"test_(\d)", k)):
+            campo = f"test_{m.group(1)}"
+        elif k.startswith("sustancia"):
+            campo = "sustancia"
+        elif k.startswith("formato"):
+            campo = "formato"
+        else:
+            continue
+        posicion.setdefault(campo, i)
+    # Sin formato ni primer par no hay nada que corregir con confianza.
+    if "formato" not in posicion or "test_1" not in posicion:
+        return None
+    return [posicion.get(campo, -1) for campo in CANONICO]
 
 
 def _id(prefijo: str, *partes: object) -> str:
@@ -200,6 +301,15 @@ def main() -> int:
                 continue
             crudas.append((numero, celdas + [""] * max(0, 11 - len(celdas))))
 
+        # Cada hoja se lleva a la estructura canonica segun SU propio
+        # encabezado, antes de que nadie lea una celda por posicion.
+        mapa = next((m for _, c in crudas[:3] if (m := _mapa_columnas(c))), None)
+        if mapa and mapa != list(range(11)):
+            crudas = [(n, [(c[i] if 0 <= i < len(c) else "") for i in mapa] + c[11:])
+                      for n, c in crudas]
+
+        crudas, heredado_por_fila = _heredar_repetidos(crudas)
+
         datos_por_hoja[nombre] = [tuple(c[:8]) for _, c in crudas
                                   if c[0] and not _es_encabezado(c)]
         orden_por_hoja[nombre] = [n for n, c in crudas
@@ -285,6 +395,10 @@ def main() -> int:
                 "row_repeat_index": repeticion,
                 "row_duplicate_status": "first_occurrence" if repeticion == 0
                                         else "repeat_within_sheet",
+                # Que celdas venian vacias y se completaron con el valor
+                # repetido de mas arriba. La celda se completa PERO se marca:
+                # sin esto no se puede separar lo escrito de lo heredado.
+                "inherited_fields": heredado_por_fila.get(numero, []),
                 "interpretation_policy": POLITICA_FILA,
             })
             if estado == "data":
