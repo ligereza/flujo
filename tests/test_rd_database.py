@@ -16,6 +16,16 @@ import pytest
 
 from flujo.rd import database as db
 
+# El corpus de testeos es registro operativo de la ONG y no se versiona (ver
+# .gitignore). En el equipo del area esta en disco y estos tests lo miden; en
+# un checkout limpio no esta, y entonces se saltan en vez de fallar: lo que
+# protegen es que las cifras no cambien sin que alguien lo note, no que el
+# repositorio traiga la data.
+_CORPUS = list((Path(db.__file__).resolve().parents[3] / "data" / "rd_fuentes")
+               .glob("testeo_eventos_*_evidence.json"))
+sin_corpus = pytest.mark.skipif(
+    not _CORPUS, reason="el corpus de testeos RD no esta en este checkout")
+
 
 @pytest.fixture()
 def rd_db(tmp_path: Path) -> Path:
@@ -55,6 +65,7 @@ def test_build_crea_las_6_tablas_con_datos(rd_db: Path):
     assert n["meta"] == 1              # disclaimer
 
 
+@sin_corpus
 def test_testing_evidence_is_isolated_and_traceable(rd_db: Path):
     conn = db.connect(rd_db)
     try:
@@ -117,6 +128,7 @@ def test_testing_evidence_is_isolated_and_traceable(rd_db: Path):
     assert summary["public_claims_allowed"] is False
 
 
+@sin_corpus
 def test_candidate_research_is_consolidated_but_not_promoted(rd_db: Path):
     summary = db.research_candidate_summary(rd_db)
     assert summary == {
@@ -153,6 +165,7 @@ def test_candidate_research_is_consolidated_but_not_promoted(rd_db: Path):
         conn.close()
 
 
+@sin_corpus
 def test_testing_observations_filter_preserves_source(rd_db: Path):
     rows = db.testing_observations(reagent_id="marquis", db_path=rd_db)
     assert rows
@@ -262,6 +275,7 @@ def test_connect_autoconstruye_si_no_existe(tmp_path: Path):
     assert p.exists()
 
 
+@sin_corpus
 def test_testing_projection_separates_obvious_column_errors(rd_db: Path):
     conn = db.connect(rd_db)
     try:
@@ -298,6 +312,7 @@ def test_testing_projection_separates_obvious_column_errors(rd_db: Path):
         conn.close()
 
 
+@sin_corpus
 def test_testing_projection_resolves_compact_dates_without_moving_years(rd_db: Path):
     conn = db.connect(rd_db)
     try:
@@ -317,6 +332,7 @@ def test_testing_projection_resolves_compact_dates_without_moving_years(rd_db: P
         conn.close()
 
 
+@sin_corpus
 def test_testing_projection_keeps_duplicate_rows_but_marks_aggregate_exclusions(rd_db: Path):
     conn = db.connect(rd_db)
     try:
@@ -571,6 +587,7 @@ def test_knowledge_productoras_template_file_is_never_ingested(rd_db: Path):
     assert not any(n.endswith("template") for n in nombres)
 
 
+@sin_corpus
 def test_auditoria_reactivos_queda_sourced_y_no_reemplaza_la_carta(rd_db: Path):
     """La auditoria (DanceSafe/NUAA/UNODC, 2026-08-11) se adjunta, no borra.
 

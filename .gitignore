@@ -113,3 +113,11 @@ Thumbs.db
 .agents/
 context-history/
 worktrees/
+
+# El corpus de testeos de RD es registro operativo de la ONG -- que jornada,
+# con que productora, que se testeo. Este repositorio es PUBLICO y el codigo
+# se publica; la data no. El importador y la base siguen funcionando: si el
+# corpus no esta, las tablas `testeo_*` quedan vacias y los tests que las
+# miden se saltan solos.
+data/rd_fuentes/testeo_eventos_*_evidence.json
+docs/rd/prototypes/**/rd_testeos_eventos_*.xlsx
